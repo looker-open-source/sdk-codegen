@@ -54,11 +54,13 @@ export const DashboardTile: React.FC = () => {
   const [saveLastRunStartTime, setSaveLastRunStartTime] = useState<
     number | undefined
   >()
+  const [runInProgress, setRunInProgress] = useState(false)
   const [value, setValue] = useState<number | undefined>()
   const [message, setMessage] = useState<string | undefined>()
 
   useEffect(() => {
     const readData = async () => {
+      setRunInProgress(true)
       setSaveLastRunStartTime(lastRunStartTime)
       try {
         const response = await coreSDK.ok(
@@ -72,19 +74,28 @@ export const DashboardTile: React.FC = () => {
             },
           })
         )
-        setValue(response[0]['users.average_age'])
-        setMessage(undefined)
+        if (response.length > 0 && response[0]['users.average_age']) {
+          setValue(response[0]['users.average_age'])
+          setMessage(undefined)
+        } else {
+          setValue(undefined)
+          setMessage('Invalid response')
+        }
       } catch (error) {
         console.error(error)
         setValue(undefined)
         setMessage('Failed to read data')
       }
+      finally {
+        setRunInProgress(false)
+      }
     }
     if (
-      !saveLastRunStartTime ||
-      lastRunStartTime !== saveLastRunStartTime ||
-      // Not required but shown here as an alternative
-      dashboardRunState === DashboardRunState.RUNNING
+      !runInProgress && (
+        !saveLastRunStartTime ||
+        lastRunStartTime !== saveLastRunStartTime ||
+        // Not required but shown here as an alternative
+        dashboardRunState === DashboardRunState.RUNNING)
     ) {
       readData()
     }
@@ -93,6 +104,7 @@ export const DashboardTile: React.FC = () => {
     saveLastRunStartTime,
     setSaveLastRunStartTime,
     dashboardRunState,
+    runInProgress
   ])
 
   const renderComplete = useCallback(() => {

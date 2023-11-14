@@ -26,8 +26,7 @@
 
 import { shallow } from 'enzyme'
 import * as React from 'react'
-import { unregisterCore31SDK } from '../../sdk/core_sdk_31'
-import { unregisterCore40SDK } from '../../sdk/core_sdk_40'
+import { unregisterCoreSDK } from '../../sdk/core_sdk'
 import { ExtensionProvider } from './ExtensionProvider'
 
 let mockFailConnection = false
@@ -55,8 +54,7 @@ describe('ExtensionProvider component', () => {
     originalConsoleError = console.error
     console.error = jest.fn()
     mockFailConnection = false
-    unregisterCore31SDK()
-    unregisterCore40SDK()
+    unregisterCoreSDK()
   })
 
   afterEach(() => {

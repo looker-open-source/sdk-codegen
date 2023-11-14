@@ -25,11 +25,9 @@
  */
 
 import type { ChattyHostConnection } from '@looker/chatty'
-import type { Looker31SDK } from '@looker/sdk'
 import { MountPoint, ExtensionNotificationType } from '../connect/types'
 import { ExtensionHostApiImpl } from '../connect/extension_host_api'
 import { LookerExtensionSDK } from './extension_sdk'
-import { LookerExtensionSDK31 } from './extension_sdk_31'
 import { LookerExtensionSDK40 } from './extension_sdk_40'
 
 describe('extension_sdk tests', () => {
@@ -39,7 +37,6 @@ describe('extension_sdk tests', () => {
 
   const getAllConnectionPayload = (
     agentTag = 'TS-SDK',
-    apiVersion = '3.1'
   ) => ({
     payload: {
       body: null,
@@ -55,7 +52,7 @@ describe('extension_sdk tests', () => {
       },
       path: '/connections',
       authenticator: undefined,
-      apiVersion,
+      apiVersion: '4.0',
     },
     type: 'INVOKE_CORE_SDK',
   })
@@ -103,7 +100,7 @@ describe('extension_sdk tests', () => {
   }
 
   it('creates client', (done) => {
-    const sdk: Looker31SDK = LookerExtensionSDK.createClient(createHostApi())
+    const sdk = LookerExtensionSDK.createClient(createHostApi())
     expect(sdk).toBeDefined()
     sdk
       .all_connections()
@@ -120,37 +117,13 @@ describe('extension_sdk tests', () => {
       })
   })
 
-  it('creates 31 client', (done) => {
-    const sdk = LookerExtensionSDK.create31Client(createHostApi())
-    expect(sdk).toBeDefined()
-    sdk.all_connections().then(() => {
-      expect(sendAndReceiveSpy).toHaveBeenCalledWith(
-        'EXTENSION_API_REQUEST',
-        getAllConnectionPayload()
-      )
-      done()
-    })
-  })
-
   it('creates 40 client', (done) => {
     const sdk = LookerExtensionSDK.create40Client(createHostApi())
     expect(sdk).toBeDefined()
     sdk.all_connections().then(() => {
       expect(sendAndReceiveSpy).toHaveBeenCalledWith(
         'EXTENSION_API_REQUEST',
-        getAllConnectionPayload('TS-SDK', '4.0')
-      )
-      done()
-    })
-  })
-
-  it('creates exclusive 31 client', (done) => {
-    const sdk = LookerExtensionSDK31.createClient(createHostApi())
-    expect(sdk).toBeDefined()
-    sdk.all_connections().then(() => {
-      expect(sendAndReceiveSpy).toHaveBeenCalledWith(
-        'EXTENSION_API_REQUEST',
-        getAllConnectionPayload()
+        getAllConnectionPayload('TS-SDK')
       )
       done()
     })
@@ -162,7 +135,7 @@ describe('extension_sdk tests', () => {
     sdk.all_connections().then(() => {
       expect(sendAndReceiveSpy).toHaveBeenCalledWith(
         'EXTENSION_API_REQUEST',
-        getAllConnectionPayload('TS-SDK', '4.0')
+        getAllConnectionPayload('TS-SDK')
       )
       done()
     })

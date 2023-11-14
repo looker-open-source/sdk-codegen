@@ -24,7 +24,7 @@
 
  */
 
-import type { IRole, IUser as ILookerUser, Looker40SDK } from '@looker/sdk'
+import type { IRole, IUser as ILookerUser, ILooker40SDK } from '@looker/sdk'
 import { TypedRows } from '@looker/wholly-artifact'
 import type { SheetData, Registration, Hackathon } from '.'
 import { User } from '.'
@@ -97,7 +97,7 @@ export class Hacker implements IHacker {
   userRecord = undefined
 
   constructor(
-    public readonly sdk?: Looker40SDK,
+    public readonly sdk?: ILooker40SDK,
     user?: ILookerUser,
     userRecord?: User
   ) {
@@ -123,7 +123,7 @@ export class Hacker implements IHacker {
   protected judgeRole?: IRole
   protected adminRole?: IRole
 
-  protected async getRoles(sdk: Looker40SDK, userId: string): Promise<void> {
+  protected async getRoles(sdk: ILooker40SDK, userId: string): Promise<void> {
     try {
       const roles = await sdk.ok(sdk.user_roles({ user_id: userId }))
       this.staffRole = roles.find((r: IRole) =>
@@ -230,7 +230,7 @@ export class Hackers extends TypedRows<Hacker> {
   staff!: Hacker[]
   admins!: Hacker[]
 
-  constructor(public sdk: Looker40SDK) {
+  constructor(public sdk: ILooker40SDK) {
     super([])
   }
 

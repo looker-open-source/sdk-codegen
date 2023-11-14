@@ -28,12 +28,13 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { ExtensionProvider } from '@looker/extension-sdk-react'
 import { ExtensionApiExplorer } from './ExtensionApiExplorer'
+import { defaultLookerSDKFactory } from '@looker/extension-sdk'
 
 window.addEventListener('DOMContentLoaded', () => {
   const root = document.createElement('div')
   document.body.appendChild(root)
   ReactDOM.render(
-    <ExtensionProvider requiredLookerVersion=">=21.3.0">
+    <ExtensionProvider requiredLookerVersion=">=21.3.0" sdkFactory={defaultLookerSDKFactory}>
       <ExtensionApiExplorer />
     </ExtensionProvider>,
     root

@@ -24,21 +24,17 @@
 
  */
 
-import type { Readable } from 'readable-stream'
 import type {
-  HttpMethod,
-  Values,
   Authenticator,
   ITransportSettings,
   IHostConnection,
 } from '@looker/sdk-rtl'
 
-import type { ExtensionHostApi, ApiVersion } from '../connect'
+import { ApiVersion, ExtensionHostApi } from '../connect'
 
 export class SdkConnection implements IHostConnection {
   constructor(
     private hostConnection: ExtensionHostApi,
-    private apiVersion: ApiVersion
   ) {}
 
   async request(
@@ -56,7 +52,7 @@ export class SdkConnection implements IHostConnection {
       body,
       undefined,
       options,
-      this.apiVersion
+      ApiVersion.sdk40
     )
   }
 
@@ -73,19 +69,7 @@ export class SdkConnection implements IHostConnection {
       path,
       params,
       body,
-      this.apiVersion
+      ApiVersion.sdk40
     )
-  }
-
-  async stream<T>(
-    _callback: (readable: Readable) => Promise<T>,
-    _method: HttpMethod,
-    _path: string,
-    _queryParams?: Values,
-    _body?: any,
-    _authenticator?: Authenticator,
-    _options?: Partial<ITransportSettings>
-  ): Promise<any> {
-    return Promise.reject(new Error('Not implemented'))
   }
 }

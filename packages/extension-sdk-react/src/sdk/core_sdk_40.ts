@@ -24,36 +24,32 @@
 
  */
 
-import type { Looker40SDK } from '@looker/sdk'
-
-let _core40SDK: Looker40SDK | undefined
+ import {
+  registerCoreSDK,
+  unregisterCoreSDK,
+  getCoreSDK,
+ } from './core_sdk'
 
 /**
- * Register the core 4.0 SDK. The ExtensionProvider will automatically
- * call this when connection with the host suceeds. An extension using
+ * Register the core SDK. The ExtensionProvider will automatically
+ * call this when connection with the host succeeds. An extension using
  * the ExtensionProvider should  never call this.
  * @param coreSDK core sdk
+ * @deprecated use registerCoreSDK
  */
-export const registerCore40SDK = (coreSDK: Looker40SDK) => {
-  if (_core40SDK) {
-    throw new Error('coreSDK can only be registered onces')
-  }
-  _core40SDK = coreSDK
-}
+export const registerCore40SDK = registerCoreSDK
 
 /**
- * Unregister the core 4.0 SDK. The ExtensionProvider will automatically
+ * Unregister the core SDK. The ExtensionProvider will automatically
  * call this when it is unloaded. An extension using
- * the ExtensionProvider should  never call this.
+ * the ExtensionProvider should never call this.
+ * @deprecated use unregisterCoreSDK
  */
-export const unregisterCore40SDK = () => (_core40SDK = undefined)
+export const unregisterCore40SDK = unregisterCoreSDK
 
 /**
- * Global access to the core40SDK. An error will be thrown if accessed prematurely.
+ * Global access to the coreSDK. An error will be thrown if accessed prematurely.
+ * @deprecated use getCoreSDK
  */
-export const getCore40SDK = () => {
-  if (!_core40SDK) {
-    throw new Error('Looker host connection not established')
-  }
-  return _core40SDK
-}
+export const getCore40SDK = getCoreSDK
+

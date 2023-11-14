@@ -37,6 +37,7 @@ import { registerCore40SDK, unregisterCore40SDK } from '../../sdk/core_sdk_40'
 
 /**
  * Extension context data
+ * @deprecated use ExtensionContextData
  */
 export interface ExtensionContextData40 extends BaseExtensionContextData {
   coreSDK: ILooker40SDK
@@ -44,18 +45,17 @@ export interface ExtensionContextData40 extends BaseExtensionContextData {
 
 /**
  * React context provider for extension API and Looker SDK 4.0.
+ * @deprecated use ExtensionContext
  */
 export const ExtensionContext40 = React.createContext<ExtensionContextData40>(
   undefined as any // no one will ever see this undefined!
 )
 
-export interface ExtensionProvider40Props extends ExtensionProviderProps {}
-
 /**
  * ExtensionProvider40 component. Provides access to the extension API and SDK (use
  * ExtensionContext40) and react routing services.
  */
-export function ExtensionProvider40(props: ExtensionProvider40Props) {
+export function ExtensionProvider40(props: ExtensionProviderProps) {
   const { children, ...rest } = props
   const [extensionData, setExtensionData] = useState<ExtensionContextData40>(
     {} as ExtensionContextData40

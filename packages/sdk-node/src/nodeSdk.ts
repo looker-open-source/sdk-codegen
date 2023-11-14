@@ -25,7 +25,7 @@
  */
 
 import type { ITransport, IApiSettings, IAuthSession } from '@looker/sdk-rtl'
-import { Looker31SDK, Looker40SDK, environmentPrefix } from '@looker/sdk'
+import { Looker40SDK, environmentPrefix } from '@looker/sdk'
 import { NodeSettingsIniFile, NodeSession, NodeTransport } from '.'
 
 /**
@@ -35,26 +35,6 @@ import { NodeSettingsIniFile, NodeSession, NodeTransport } from '.'
  *
  */
 export class LookerNodeSDK {
-  /**
-   * Creates a [[Looker31SDK]] object.
-   *
-   * @param settings Defaults to the settings from LookerIni
-   *
-   * @param transport Defaults to a `NodeTransport` object
-   *
-   * @param session Defaults to `NodeSession` which logs in the user
-   */
-  static init31(
-    settings?: IApiSettings,
-    transport?: ITransport,
-    session?: IAuthSession
-  ) {
-    settings = settings || new NodeSettingsIniFile(environmentPrefix)
-    transport = transport || new NodeTransport(settings)
-    session = session || new NodeSession(settings, transport)
-    return new Looker31SDK(session)
-  }
-
   /**
    * Creates a [[Looker40SDK]] object.
    *

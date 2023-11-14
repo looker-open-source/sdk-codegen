@@ -62,7 +62,7 @@ export const ExtensionApiExplorer: FC = () => {
 
   const extensionAdaptor = new ApixExtensionAdaptor(
     getExtensionSDK(),
-    extensionContext.core40SDK
+    extensionContext.coreSDK
   )
 
   return (

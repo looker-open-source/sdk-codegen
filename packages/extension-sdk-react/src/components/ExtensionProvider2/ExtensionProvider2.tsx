@@ -25,53 +25,44 @@
  */
 
 import React, { useState } from 'react'
+import type { ILooker40SDK } from '@looker/sdk'
 import type { ExtensionHostApi } from '@looker/extension-sdk'
-import { SdkConnection } from '@looker/extension-sdk'
-import { LookerExtensionSDK } from '@looker/sdk'
+import { LookerExtensionSDK } from '@looker/extension-sdk'
 import type {
   BaseExtensionContextData,
   ExtensionProviderProps,
 } from '../ExtensionConnector'
 import { ExtensionConnector } from '../ExtensionConnector'
-import { registerCoreSDK2, unregisterCoreSDK2 } from '../../sdk/core_sdk2'
+import { registerCoreSDK, unregisterCoreSDK } from '../../sdk/core_sdk'
 
-export interface ExtensionContextData2<T> extends BaseExtensionContextData {
-  coreSDK: T
+export interface ExtensionContextData2 extends BaseExtensionContextData {
+  coreSDK: ILooker40SDK
 }
 
 /**
  * React context provider for extension API and SDK
+ * @deprecated use ExtensionContext
  */
 export const ExtensionContext2 = React.createContext<
-  ExtensionContextData2<any>
+  ExtensionContextData2
 >(
   undefined as any // no one will ever see this undefined!
 )
 
-export interface ExtensionProvider2Props<T> extends ExtensionProviderProps {
-  type: T
-}
-
 /**
  * ExtensionProvider component. Provides access to the extension API and SDK (use
  * ExtensionContext) and react routing services.
+ * @deprecated use ExtensionProvider
  */
-export function ExtensionProvider2<T>(props: ExtensionProvider2Props<T>) {
-  const { children, type, ...rest } = props
-  const [extensionData, setExtensionData] = useState<ExtensionContextData2<T>>(
-    {} as ExtensionContextData2<T>
+export function ExtensionProvider2(props: ExtensionProviderProps) {
+  const { children, ...rest } = props
+  const [extensionData, setExtensionData] = useState<ExtensionContextData2>(
+    {} as ExtensionContextData2
   )
-  const apiVersion = (type as any).ApiVersion
 
   const connectedCallback = (extensionHost: ExtensionHostApi) => {
-    let coreSDK: any
-    if (apiVersion) {
-      coreSDK = LookerExtensionSDK.createClient(
-        new SdkConnection(extensionHost, apiVersion),
-        type as any
-      )
-    }
-    registerCoreSDK2(coreSDK)
+    const coreSDK = LookerExtensionSDK.createClient(extensionHost)
+    registerCoreSDK(coreSDK)
     const { visualizationSDK, tileSDK, lookerHostData } = extensionHost
     const { visualizationData } = visualizationSDK
     const { tileHostData } = tileSDK
@@ -90,13 +81,13 @@ export function ExtensionProvider2<T>(props: ExtensionProvider2Props<T>) {
   }
 
   const unloadedCallback = () => {
-    unregisterCoreSDK2()
+    unregisterCoreSDK()
   }
 
   const updateContextData = (
     updatedContextData: Partial<BaseExtensionContextData>
   ) => {
-    setExtensionData((previousState: ExtensionContextData2<T>) => {
+    setExtensionData((previousState: ExtensionContextData2) => {
       return {
         ...previousState,
         ...updatedContextData,
