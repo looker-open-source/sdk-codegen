@@ -34,7 +34,6 @@ import { ApiVersion } from '../connect'
 import { SdkConnection } from './sdk_connection'
 
 export class LookerExtensionSDK {
-
   /**
    * Create an SDK client that uses SDK 4.0
    * @param hostConnection extension host API

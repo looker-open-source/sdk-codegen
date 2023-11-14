@@ -30,7 +30,6 @@
  * Note: functions should be deep-linked from their 4.0/funcs path
  */
 
-
 export { ILooker40SDK } from './4.0/methodsInterface'
 export { Looker40SDK } from './4.0/methods'
 export { Looker40SDKStream } from './4.0/streams'
