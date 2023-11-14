@@ -33,6 +33,7 @@ import type {
   TileSDK,
   VisualizationSDK,
   LookerHostData,
+  LookerSDKFactory,
 } from '@looker/extension-sdk'
 
 /**
@@ -86,6 +87,10 @@ export interface RouteData {
 }
 
 export interface ExtensionProviderProps {
+  /**
+   * Factory to create the Looker SDK
+   */
+  sdkFactory?: LookerSDKFactory
   /**
    * When true, a react router MemoryRouter will be created and changes to the
    * extension route will be propagated to the host. The host will then track

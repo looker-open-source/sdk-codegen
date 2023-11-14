@@ -184,7 +184,6 @@ export interface ExtensionRequest {
 }
 
 export enum ApiVersion {
-  sdk31 = '3.1',
   sdk40 = '4.0',
 }
 

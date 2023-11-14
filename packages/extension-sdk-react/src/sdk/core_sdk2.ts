@@ -24,40 +24,31 @@
 
  */
 
-let registered = false
-let _coreSdk: any
+ import {
+  registerCoreSDK,
+  unregisterCoreSDK,
+  getCoreSDK,
+ } from './core_sdk'
 
 /**
- * Register the SDK. The ExtensionProvider will automatically
- * call this when connection is first requested.
- * @param coreSDK core sdk
- */
-export function registerCoreSDK2(coreSdk: any) {
-  if (_coreSdk) {
-    throw new Error('coreSDK can only be registered once')
-  }
-  _coreSdk = coreSdk
-  registered = true
-}
-
-/**
- * Unregister theSDK. The ExtensionProvider will automatically
- * call this when it is unloaded. An extension using
+ * Register the core SDK. The ExtensionProvider will automatically
+ * call this when connection with the host succeeds. An extension using
  * the ExtensionProvider should  never call this.
+ * @param coreSDK core sdk
+ * @deprecated use registerCoreSDK
  */
-export function unregisterCoreSDK2() {
-  registered = false
-  _coreSdk = undefined
-}
+export const registerCoreSDK2 = registerCoreSDK
+
+/**
+ * Unregister the core SDK. The ExtensionProvider will automatically
+ * call this when it is unloaded. An extension using
+ * the ExtensionProvider should never call this.
+ * @deprecated use unregisterCoreSDK
+ */
+export const unregisterCoreSDK2 = unregisterCoreSDK
 
 /**
  * Global access to the coreSDK. An error will be thrown if accessed prematurely.
- * Note that provider does not have to provide a LookerSdk type. In this case
- * this method will return undefined.
+ * @deprecated use getCoreSDK
  */
-export function getCoreSDK2<T>(): T {
-  if (!registered) {
-    throw new Error('Looker host connection not established')
-  }
-  return _coreSdk
-}
+export const getCoreSDK2 = getCoreSDK

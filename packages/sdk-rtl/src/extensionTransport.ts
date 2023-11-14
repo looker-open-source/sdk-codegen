@@ -24,10 +24,8 @@
 
  */
 
-import type { Readable } from 'readable-stream'
 import type {
   Authenticator,
-  Values,
   SDKResponse,
   ITransport,
   ITransportSettings,
@@ -54,16 +52,6 @@ export interface IHostConnection {
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
   ): Promise<any>
-
-  stream<T>(
-    callback: (readable: Readable) => Promise<T>,
-    method: HttpMethod,
-    path: string,
-    queryParams?: Values,
-    body?: any,
-    authenticator?: Authenticator,
-    options?: Partial<ITransportSettings>
-  ): Promise<T>
 }
 
 export class ExtensionTransport implements ITransport {
@@ -115,24 +103,16 @@ export class ExtensionTransport implements ITransport {
   }
 
   async stream<TSuccess>(
-    callback: (readable: any) => Promise<TSuccess>,
-    method: HttpMethod,
-    path: string,
-    queryParams?: any,
-    body?: any,
-    authenticator?: any,
+    _callback: (readable: any) => Promise<TSuccess>,
+    _method: HttpMethod,
+    _path: string,
+    _queryParams?: any,
+    _body?: any,
+    _authenticator?: any,
     options?: Partial<ITransportSettings>
   ): Promise<TSuccess> {
     options = options ? { ...this.options, ...options } : this.options
-    return this.hostConnection.stream(
-      callback,
-      method,
-      path,
-      body,
-      queryParams,
-      authenticator,
-      options
-    )
+    return Promise.reject(new Error('Not implemented'))
   }
 
   parseResponse<TSuccess, TError>(

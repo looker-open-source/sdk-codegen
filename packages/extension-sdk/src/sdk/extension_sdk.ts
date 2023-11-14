@@ -24,43 +24,34 @@
 
  */
 
+import type {
+  ILooker40SDK,
+} from '@looker/sdk'
 import {
   LookerExtensionSDK as _LookerExtensionSDK,
-  Looker31SDK,
-  Looker40SDK,
 } from '@looker/sdk'
 import type { ExtensionHostApi } from '../connect'
-import { ApiVersion } from '../connect'
-
 import { SdkConnection } from './sdk_connection'
 
+export type LookerSDKFactory = (hostConnection: ExtensionHostApi) => ILooker40SDK
+
 export class LookerExtensionSDK {
+
   /**
-   * Create an SDK client that uses SDK 3.1
+   * Creates an extension SDK client
    * @param hostConnection extension host API
+   * @deprecated use createClient
    */
-  static create31Client(hostConnection: ExtensionHostApi): Looker31SDK {
-    return _LookerExtensionSDK.createClient(
-      new SdkConnection(hostConnection, ApiVersion.sdk31),
-      Looker31SDK
-    )
+  static create40Client(hostConnection: ExtensionHostApi): ILooker40SDK {
+    return LookerExtensionSDK.createClient(hostConnection)
   }
 
   /**
-   * Create an SDK client that uses SDK 4.0
    * @param hostConnection extension host API
    */
-  static create40Client(hostConnection: ExtensionHostApi): Looker40SDK {
-    return _LookerExtensionSDK.createClient(
-      new SdkConnection(hostConnection, ApiVersion.sdk40),
-      Looker40SDK
-    )
-  }
-
-  /**
-   * Creates a [[LookerSDK]] object.
-   */
-  static createClient(hostConnection: ExtensionHostApi) {
-    return LookerExtensionSDK.create31Client(hostConnection)
+  static createClient(hostConnection: ExtensionHostApi): ILooker40SDK {
+    return _LookerExtensionSDK.createClient(new SdkConnection(hostConnection))
   }
 }
+
+export const defaultLookerSDKFactory = (hostConnection: ExtensionHostApi) => LookerExtensionSDK.createClient(hostConnection)
