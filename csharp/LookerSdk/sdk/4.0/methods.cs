@@ -161,7 +161,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       alert_id = SdkUtils.EncodeParam(alert_id);
-    return await AuthRequest<Alert, Exception>(HttpMethod.Patch, $"/alerts/{alert_id}", null,body,options);
+    return await AuthRequest<Alert, Exception>(new HttpMethod("PATCH"), $"/alerts/{alert_id}", null,body,options);
   }
 
   /// ### Delete an alert by a given alert ID
@@ -276,7 +276,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       alert_notification_id = SdkUtils.EncodeParam(alert_notification_id);
-    return await AuthRequest<AlertNotifications, Exception>(HttpMethod.Patch, $"/alert_notifications/{alert_notification_id}", null,null,options);
+    return await AuthRequest<AlertNotifications, Exception>(new HttpMethod("PATCH"), $"/alert_notifications/{alert_notification_id}", null,null,options);
   }
 
   #endregion Alert: Alert
@@ -436,8 +436,8 @@ namespace Looker.SDK.API40
     string? key = null,
     ITransportSettings? options = null)
 {  
-      namespace = SdkUtils.EncodeParam(namespace);
-    return await AuthRequest<string, Exception>(HttpMethod.Get, $"/artifact/{namespace}/value", new Values {
+      @namespace = SdkUtils.EncodeParam(@namespace);
+    return await AuthRequest<string, Exception>(HttpMethod.Get, $"/artifact/{@namespace}/value", new Values {
       { "key", key }},null,options);
   }
 
@@ -454,8 +454,8 @@ namespace Looker.SDK.API40
     string @namespace,
     ITransportSettings? options = null)
 {  
-      namespace = SdkUtils.EncodeParam(namespace);
-    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/artifact/{namespace}/purge", null,null,options);
+      @namespace = SdkUtils.EncodeParam(@namespace);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/artifact/{@namespace}/purge", null,null,options);
   }
 
   /// ### Search all key/value pairs in a namespace for matching criteria.
@@ -499,8 +499,8 @@ namespace Looker.SDK.API40
     long? offset = null,
     ITransportSettings? options = null)
 {  
-      namespace = SdkUtils.EncodeParam(namespace);
-    return await AuthRequest<Artifact[], Exception>(HttpMethod.Get, $"/artifact/{namespace}/search", new Values {
+      @namespace = SdkUtils.EncodeParam(@namespace);
+    return await AuthRequest<Artifact[], Exception>(HttpMethod.Get, $"/artifact/{@namespace}/search", new Values {
       { "fields", fields },
       { "key", key },
       { "user_ids", user_ids },
@@ -533,8 +533,8 @@ namespace Looker.SDK.API40
     long? offset = null,
     ITransportSettings? options = null)
 {  
-      namespace = SdkUtils.EncodeParam(namespace);
-    return await AuthRequest<Artifact[], Exception>(HttpMethod.Get, $"/artifact/{namespace}", new Values {
+      @namespace = SdkUtils.EncodeParam(@namespace);
+    return await AuthRequest<Artifact[], Exception>(HttpMethod.Get, $"/artifact/{@namespace}", new Values {
       { "key", key },
       { "fields", fields },
       { "limit", limit },
@@ -551,15 +551,15 @@ namespace Looker.SDK.API40
   ///
   /// <returns><c>void</c> The artifact is deleted. ()</returns>
   ///
-  /// <param name="namespace">Artifact storage namespace</param>
+  /// <param name="@namespace">Artifact storage @namespace</param>
   /// <param name="key">Comma-delimited list of keys. Wildcards not allowed.</param>
   public async Task<SdkResponse<string, Exception>> delete_artifact(
     string @namespace,
     string key,
     ITransportSettings? options = null)
 {  
-      namespace = SdkUtils.EncodeParam(namespace);
-    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/artifact/{namespace}", new Values {
+      @namespace = SdkUtils.EncodeParam(@namespace);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/artifact/{@namespace}", new Values {
       { "key", key }},null,options);
   }
 
@@ -590,11 +590,11 @@ namespace Looker.SDK.API40
   ///
   /// **Note**: The artifact storage API can only be used by Looker-built extensions.
   ///
-  /// PUT /artifacts/{namespace} -> Artifact[]
+  /// PUT /artifacts/{@namespace} -> Artifact[]
   ///
   /// <returns><c>Artifact[]</c> Created or updated artifacts (application/json)</returns>
   ///
-  /// <param name="namespace">Artifact storage namespace</param>
+  /// <param name="@namespace">Artifact storage @namespace</param>
   /// <param name="fields">Comma-delimited names of fields to return in responses. Omit for all fields</param>
   public async Task<SdkResponse<Artifact[], Exception>> update_artifacts(
     string @namespace,
@@ -602,8 +602,8 @@ namespace Looker.SDK.API40
     string? fields = null,
     ITransportSettings? options = null)
 {  
-      namespace = SdkUtils.EncodeParam(namespace);
-    return await AuthRequest<Artifact[], Exception>(HttpMethod.Put, $"/artifacts/{namespace}", new Values {
+      @namespace = SdkUtils.EncodeParam(@namespace);
+    return await AuthRequest<Artifact[], Exception>(HttpMethod.Put, $"/artifacts/{@namespace}", new Values {
       { "fields", fields }},body,options);
   }
 
@@ -890,7 +890,7 @@ namespace Looker.SDK.API40
     WriteLDAPConfig body,
     ITransportSettings? options = null)
 {  
-    return await AuthRequest<LDAPConfig, Exception>(HttpMethod.Patch, "/ldap_config", null,body,options);
+    return await AuthRequest<LDAPConfig, Exception>(new HttpMethod("PATCH"), "/ldap_config", null,body,options);
   }
 
   /// ### Test the connection settings for an LDAP configuration.
@@ -1031,7 +1031,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       device_id = SdkUtils.EncodeParam(device_id);
-    return await AuthRequest<MobileToken, Exception>(HttpMethod.Patch, $"/mobile/device/{device_id}", null,null,options);
+    return await AuthRequest<MobileToken, Exception>(new HttpMethod("PATCH"), $"/mobile/device/{device_id}", null,null,options);
   }
 
   /// ### Deregister a mobile device.
@@ -1131,7 +1131,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       client_guid = SdkUtils.EncodeParam(client_guid);
-    return await AuthRequest<OauthClientApp, Exception>(HttpMethod.Patch, $"/oauth_client_apps/{client_guid}", new Values {
+    return await AuthRequest<OauthClientApp, Exception>(new HttpMethod("PATCH"), $"/oauth_client_apps/{client_guid}", new Values {
       { "fields", fields }},body,options);
   }
 
@@ -1281,7 +1281,7 @@ namespace Looker.SDK.API40
     WriteOIDCConfig body,
     ITransportSettings? options = null)
 {  
-    return await AuthRequest<OIDCConfig, Exception>(HttpMethod.Patch, "/oidc_config", null,body,options);
+    return await AuthRequest<OIDCConfig, Exception>(new HttpMethod("PATCH"), "/oidc_config", null,body,options);
   }
 
   /// ### Get a OIDC test configuration by test_slug.
@@ -1359,7 +1359,7 @@ namespace Looker.SDK.API40
     WritePasswordConfig body,
     ITransportSettings? options = null)
 {  
-    return await AuthRequest<PasswordConfig, Exception>(HttpMethod.Patch, "/password_config", null,body,options);
+    return await AuthRequest<PasswordConfig, Exception>(new HttpMethod("PATCH"), "/password_config", null,body,options);
   }
 
   /// ### Force all credentials_email users to reset their login passwords upon their next login.
@@ -1421,7 +1421,7 @@ namespace Looker.SDK.API40
     WriteSamlConfig body,
     ITransportSettings? options = null)
 {  
-    return await AuthRequest<SamlConfig, Exception>(HttpMethod.Patch, "/saml_config", null,body,options);
+    return await AuthRequest<SamlConfig, Exception>(new HttpMethod("PATCH"), "/saml_config", null,body,options);
   }
 
   /// ### Get a SAML test configuration by test_slug.
@@ -1527,7 +1527,7 @@ namespace Looker.SDK.API40
     WriteSessionConfig body,
     ITransportSettings? options = null)
 {  
-    return await AuthRequest<SessionConfig, Exception>(HttpMethod.Patch, "/session_config", null,body,options);
+    return await AuthRequest<SessionConfig, Exception>(new HttpMethod("PATCH"), "/session_config", null,body,options);
   }
 
   /// ### Get Support Access Allowlist Users
@@ -1852,7 +1852,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       board_id = SdkUtils.EncodeParam(board_id);
-    return await AuthRequest<Board, Exception>(HttpMethod.Patch, $"/boards/{board_id}", new Values {
+    return await AuthRequest<Board, Exception>(new HttpMethod("PATCH"), $"/boards/{board_id}", new Values {
       { "fields", fields }},body,options);
   }
 
@@ -1941,7 +1941,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       board_item_id = SdkUtils.EncodeParam(board_item_id);
-    return await AuthRequest<BoardItem, Exception>(HttpMethod.Patch, $"/board_items/{board_item_id}", new Values {
+    return await AuthRequest<BoardItem, Exception>(new HttpMethod("PATCH"), $"/board_items/{board_item_id}", new Values {
       { "fields", fields }},body,options);
   }
 
@@ -2027,7 +2027,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       board_section_id = SdkUtils.EncodeParam(board_section_id);
-    return await AuthRequest<BoardSection, Exception>(HttpMethod.Patch, $"/board_sections/{board_section_id}", new Values {
+    return await AuthRequest<BoardSection, Exception>(new HttpMethod("PATCH"), $"/board_sections/{board_section_id}", new Values {
       { "fields", fields }},body,options);
   }
 
@@ -2208,7 +2208,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       collection_id = SdkUtils.EncodeParam(collection_id);
-    return await AuthRequest<ColorCollection, Exception>(HttpMethod.Patch, $"/color_collections/{collection_id}", null,body,options);
+    return await AuthRequest<ColorCollection, Exception>(new HttpMethod("PATCH"), $"/color_collections/{collection_id}", null,body,options);
   }
 
   /// ### Delete a custom color collection by id
@@ -2259,7 +2259,7 @@ namespace Looker.SDK.API40
     WriteBackupConfiguration body,
     ITransportSettings? options = null)
 {  
-    return await AuthRequest<BackupConfiguration, Exception>(HttpMethod.Patch, "/cloud_storage", null,body,options);
+    return await AuthRequest<BackupConfiguration, Exception>(new HttpMethod("PATCH"), "/cloud_storage", null,body,options);
   }
 
   /// ### Get the current status and content of custom welcome emails
@@ -2288,7 +2288,7 @@ namespace Looker.SDK.API40
     bool? send_test_welcome_email = null,
     ITransportSettings? options = null)
 {  
-    return await AuthRequest<CustomWelcomeEmail, Exception>(HttpMethod.Patch, "/custom_welcome_email", new Values {
+    return await AuthRequest<CustomWelcomeEmail, Exception>(new HttpMethod("PATCH"), "/custom_welcome_email", new Values {
       { "send_test_welcome_email", send_test_welcome_email }},body,options);
   }
 
@@ -2327,7 +2327,7 @@ namespace Looker.SDK.API40
     DigestEmails body,
     ITransportSettings? options = null)
 {  
-    return await AuthRequest<DigestEmails, Exception>(HttpMethod.Patch, "/digest_emails_enabled", null,body,options);
+    return await AuthRequest<DigestEmails, Exception>(new HttpMethod("PATCH"), "/digest_emails_enabled", null,body,options);
   }
 
   /// ### Trigger the generation of digest email records and send them to Looker's internal system. This does not send
@@ -2382,7 +2382,7 @@ namespace Looker.SDK.API40
     WriteInternalHelpResourcesContent body,
     ITransportSettings? options = null)
 {  
-    return await AuthRequest<InternalHelpResourcesContent, Exception>(HttpMethod.Patch, "/internal_help_resources_content", null,body,options);
+    return await AuthRequest<InternalHelpResourcesContent, Exception>(new HttpMethod("PATCH"), "/internal_help_resources_content", null,body,options);
   }
 
   /// ### Get and set the options for internal help resources
@@ -2407,7 +2407,7 @@ namespace Looker.SDK.API40
     WriteInternalHelpResources body,
     ITransportSettings? options = null)
 {  
-    return await AuthRequest<InternalHelpResources, Exception>(HttpMethod.Patch, "/internal_help_resources", null,body,options);
+    return await AuthRequest<InternalHelpResources, Exception>(new HttpMethod("PATCH"), "/internal_help_resources", null,body,options);
   }
 
   /// ### Get all legacy features.
@@ -2456,7 +2456,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       legacy_feature_id = SdkUtils.EncodeParam(legacy_feature_id);
-    return await AuthRequest<LegacyFeature, Exception>(HttpMethod.Patch, $"/legacy_features/{legacy_feature_id}", null,body,options);
+    return await AuthRequest<LegacyFeature, Exception>(new HttpMethod("PATCH"), $"/legacy_features/{legacy_feature_id}", null,body,options);
   }
 
   /// ### Get a list of locales that Looker supports.
@@ -2554,7 +2554,7 @@ namespace Looker.SDK.API40
     string? fields = null,
     ITransportSettings? options = null)
 {  
-    return await AuthRequest<Setting, Exception>(HttpMethod.Patch, "/setting", new Values {
+    return await AuthRequest<Setting, Exception>(new HttpMethod("PATCH"), "/setting", new Values {
       { "fields", fields }},body,options);
   }
 
@@ -2734,7 +2734,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       connection_name = SdkUtils.EncodeParam(connection_name);
-    return await AuthRequest<DBConnection, Exception>(HttpMethod.Patch, $"/connections/{connection_name}", null,body,options);
+    return await AuthRequest<DBConnection, Exception>(new HttpMethod("PATCH"), $"/connections/{connection_name}", null,body,options);
   }
 
   /// ### Delete a connection.
@@ -2937,7 +2937,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       ssh_server_id = SdkUtils.EncodeParam(ssh_server_id);
-    return await AuthRequest<SshServer, Exception>(HttpMethod.Patch, $"/ssh_server/{ssh_server_id}", null,body,options);
+    return await AuthRequest<SshServer, Exception>(new HttpMethod("PATCH"), $"/ssh_server/{ssh_server_id}", null,body,options);
   }
 
   /// ### Delete an SSH Server.
@@ -3026,7 +3026,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       ssh_tunnel_id = SdkUtils.EncodeParam(ssh_tunnel_id);
-    return await AuthRequest<SshTunnel, Exception>(HttpMethod.Patch, $"/ssh_tunnel/{ssh_tunnel_id}", null,body,options);
+    return await AuthRequest<SshTunnel, Exception>(new HttpMethod("PATCH"), $"/ssh_tunnel/{ssh_tunnel_id}", null,body,options);
   }
 
   /// ### Delete an SSH Tunnel
@@ -3238,7 +3238,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       content_metadata_id = SdkUtils.EncodeParam(content_metadata_id);
-    return await AuthRequest<ContentMeta, Exception>(HttpMethod.Patch, $"/content_metadata/{content_metadata_id}", null,body,options);
+    return await AuthRequest<ContentMeta, Exception>(new HttpMethod("PATCH"), $"/content_metadata/{content_metadata_id}", null,body,options);
   }
 
   /// ### All content metadata access records for a content metadata item.
@@ -3713,7 +3713,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       lookml_dashboard_id = SdkUtils.EncodeParam(lookml_dashboard_id);
-    return await AuthRequest<long[], Exception>(HttpMethod.Patch, $"/dashboards/{lookml_dashboard_id}/sync", new Values {
+    return await AuthRequest<long[], Exception>(new HttpMethod("PATCH"), $"/dashboards/{lookml_dashboard_id}/sync", new Values {
       { "raw_locale", raw_locale }},body,options);
   }
 
@@ -3763,7 +3763,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       dashboard_id = SdkUtils.EncodeParam(dashboard_id);
-    return await AuthRequest<Dashboard, Exception>(HttpMethod.Patch, $"/dashboards/{dashboard_id}", null,body,options);
+    return await AuthRequest<Dashboard, Exception>(new HttpMethod("PATCH"), $"/dashboards/{dashboard_id}", null,body,options);
   }
 
   /// ### Delete the dashboard with the specified id
@@ -3840,7 +3840,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       dashboard_id = SdkUtils.EncodeParam(dashboard_id);
-    return await AuthRequest<Dashboard, Exception>(HttpMethod.Patch, $"/dashboards/{dashboard_id}/move", new Values {
+    return await AuthRequest<Dashboard, Exception>(new HttpMethod("PATCH"), $"/dashboards/{dashboard_id}/move", new Values {
       { "folder_id", folder_id }},null,options);
   }
 
@@ -3999,7 +3999,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       dashboard_element_id = SdkUtils.EncodeParam(dashboard_element_id);
-    return await AuthRequest<DashboardElement, Exception>(HttpMethod.Patch, $"/dashboard_elements/{dashboard_element_id}", new Values {
+    return await AuthRequest<DashboardElement, Exception>(new HttpMethod("PATCH"), $"/dashboard_elements/{dashboard_element_id}", new Values {
       { "fields", fields }},body,options);
   }
 
@@ -4088,7 +4088,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       dashboard_filter_id = SdkUtils.EncodeParam(dashboard_filter_id);
-    return await AuthRequest<DashboardFilter, Exception>(HttpMethod.Patch, $"/dashboard_filters/{dashboard_filter_id}", new Values {
+    return await AuthRequest<DashboardFilter, Exception>(new HttpMethod("PATCH"), $"/dashboard_filters/{dashboard_filter_id}", new Values {
       { "fields", fields }},body,options);
   }
 
@@ -4174,7 +4174,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       dashboard_layout_component_id = SdkUtils.EncodeParam(dashboard_layout_component_id);
-    return await AuthRequest<DashboardLayoutComponent, Exception>(HttpMethod.Patch, $"/dashboard_layout_components/{dashboard_layout_component_id}", new Values {
+    return await AuthRequest<DashboardLayoutComponent, Exception>(new HttpMethod("PATCH"), $"/dashboard_layout_components/{dashboard_layout_component_id}", new Values {
       { "fields", fields }},body,options);
   }
 
@@ -4229,7 +4229,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       dashboard_layout_id = SdkUtils.EncodeParam(dashboard_layout_id);
-    return await AuthRequest<DashboardLayout, Exception>(HttpMethod.Patch, $"/dashboard_layouts/{dashboard_layout_id}", new Values {
+    return await AuthRequest<DashboardLayout, Exception>(new HttpMethod("PATCH"), $"/dashboard_layouts/{dashboard_layout_id}", new Values {
       { "fields", fields }},body,options);
   }
 
@@ -4356,7 +4356,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       datagroup_id = SdkUtils.EncodeParam(datagroup_id);
-    return await AuthRequest<Datagroup, Exception>(HttpMethod.Patch, $"/datagroups/{datagroup_id}", null,body,options);
+    return await AuthRequest<Datagroup, Exception>(new HttpMethod("PATCH"), $"/datagroups/{datagroup_id}", null,body,options);
   }
 
   #endregion Datagroup: Manage Datagroups
@@ -4554,7 +4554,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       folder_id = SdkUtils.EncodeParam(folder_id);
-    return await AuthRequest<Folder, Exception>(HttpMethod.Patch, $"/folders/{folder_id}", null,body,options);
+    return await AuthRequest<Folder, Exception>(new HttpMethod("PATCH"), $"/folders/{folder_id}", null,body,options);
   }
 
   /// ### Delete the folder with a specific id including any children folders.
@@ -5024,7 +5024,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       group_id = SdkUtils.EncodeParam(group_id);
-    return await AuthRequest<Group, Exception>(HttpMethod.Patch, $"/groups/{group_id}", new Values {
+    return await AuthRequest<Group, Exception>(new HttpMethod("PATCH"), $"/groups/{group_id}", new Values {
       { "fields", fields }},body,options);
   }
 
@@ -5180,7 +5180,7 @@ namespace Looker.SDK.API40
 {  
       group_id = SdkUtils.EncodeParam(group_id);
       user_attribute_id = SdkUtils.EncodeParam(user_attribute_id);
-    return await AuthRequest<UserAttributeGroupValue, Exception>(HttpMethod.Patch, $"/groups/{group_id}/attribute_values/{user_attribute_id}", null,body,options);
+    return await AuthRequest<UserAttributeGroupValue, Exception>(new HttpMethod("PATCH"), $"/groups/{group_id}/attribute_values/{user_attribute_id}", null,body,options);
   }
 
   /// ### Remove a user attribute value from a group.
@@ -5292,7 +5292,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       integration_hub_id = SdkUtils.EncodeParam(integration_hub_id);
-    return await AuthRequest<IntegrationHub, Exception>(HttpMethod.Patch, $"/integration_hubs/{integration_hub_id}", new Values {
+    return await AuthRequest<IntegrationHub, Exception>(new HttpMethod("PATCH"), $"/integration_hubs/{integration_hub_id}", new Values {
       { "fields", fields }},body,options);
   }
 
@@ -5377,7 +5377,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       integration_id = SdkUtils.EncodeParam(integration_id);
-    return await AuthRequest<Integration, Exception>(HttpMethod.Patch, $"/integrations/{integration_id}", new Values {
+    return await AuthRequest<Integration, Exception>(new HttpMethod("PATCH"), $"/integrations/{integration_id}", new Values {
       { "fields", fields }},body,options);
   }
 
@@ -5605,7 +5605,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       look_id = SdkUtils.EncodeParam(look_id);
-    return await AuthRequest<LookWithQuery, Exception>(HttpMethod.Patch, $"/looks/{look_id}", new Values {
+    return await AuthRequest<LookWithQuery, Exception>(new HttpMethod("PATCH"), $"/looks/{look_id}", new Values {
       { "fields", fields }},body,options);
   }
 
@@ -5752,7 +5752,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       look_id = SdkUtils.EncodeParam(look_id);
-    return await AuthRequest<LookWithQuery, Exception>(HttpMethod.Patch, $"/looks/{look_id}/move", new Values {
+    return await AuthRequest<LookWithQuery, Exception>(new HttpMethod("PATCH"), $"/looks/{look_id}/move", new Values {
       { "folder_id", folder_id }},null,options);
   }
 
@@ -5825,7 +5825,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       lookml_model_name = SdkUtils.EncodeParam(lookml_model_name);
-    return await AuthRequest<LookmlModel, Exception>(HttpMethod.Patch, $"/lookml_models/{lookml_model_name}", null,body,options);
+    return await AuthRequest<LookmlModel, Exception>(new HttpMethod("PATCH"), $"/lookml_models/{lookml_model_name}", null,body,options);
   }
 
   /// ### Delete a lookml model.
@@ -6457,7 +6457,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       project_id = SdkUtils.EncodeParam(project_id);
-    return await AuthRequest<Project, Exception>(HttpMethod.Patch, $"/projects/{project_id}", new Values {
+    return await AuthRequest<Project, Exception>(new HttpMethod("PATCH"), $"/projects/{project_id}", new Values {
       { "fields", fields }},body,options);
   }
 
@@ -7783,7 +7783,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       model_set_id = SdkUtils.EncodeParam(model_set_id);
-    return await AuthRequest<ModelSet, Exception>(HttpMethod.Patch, $"/model_sets/{model_set_id}", null,body,options);
+    return await AuthRequest<ModelSet, Exception>(new HttpMethod("PATCH"), $"/model_sets/{model_set_id}", null,body,options);
   }
 
   /// ### Delete the model set with a specific id.
@@ -7932,7 +7932,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       permission_set_id = SdkUtils.EncodeParam(permission_set_id);
-    return await AuthRequest<PermissionSet, Exception>(HttpMethod.Patch, $"/permission_sets/{permission_set_id}", null,body,options);
+    return await AuthRequest<PermissionSet, Exception>(new HttpMethod("PATCH"), $"/permission_sets/{permission_set_id}", null,body,options);
   }
 
   /// ### Delete the permission set with a specific id.
@@ -8156,7 +8156,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       role_id = SdkUtils.EncodeParam(role_id);
-    return await AuthRequest<Role, Exception>(HttpMethod.Patch, $"/roles/{role_id}", null,body,options);
+    return await AuthRequest<Role, Exception>(new HttpMethod("PATCH"), $"/roles/{role_id}", null,body,options);
   }
 
   /// ### Delete the role with a specific id.
@@ -8345,7 +8345,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       scheduled_plan_id = SdkUtils.EncodeParam(scheduled_plan_id);
-    return await AuthRequest<ScheduledPlan, Exception>(HttpMethod.Patch, $"/scheduled_plans/{scheduled_plan_id}", null,body,options);
+    return await AuthRequest<ScheduledPlan, Exception>(new HttpMethod("PATCH"), $"/scheduled_plans/{scheduled_plan_id}", null,body,options);
   }
 
   /// ### Delete a Scheduled Plan
@@ -8728,7 +8728,7 @@ namespace Looker.SDK.API40
     WriteApiSession body,
     ITransportSettings? options = null)
 {  
-    return await AuthRequest<ApiSession, Exception>(HttpMethod.Patch, "/session", null,body,options);
+    return await AuthRequest<ApiSession, Exception>(new HttpMethod("PATCH"), "/session", null,body,options);
   }
 
   #endregion Session: Session Information
@@ -9099,7 +9099,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       theme_id = SdkUtils.EncodeParam(theme_id);
-    return await AuthRequest<Theme, Exception>(HttpMethod.Patch, $"/themes/{theme_id}", null,body,options);
+    return await AuthRequest<Theme, Exception>(new HttpMethod("PATCH"), $"/themes/{theme_id}", null,body,options);
   }
 
   /// ### Delete a specific theme by id
@@ -9437,7 +9437,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       user_id = SdkUtils.EncodeParam(user_id);
-    return await AuthRequest<User, Exception>(HttpMethod.Patch, $"/users/{user_id}", new Values {
+    return await AuthRequest<User, Exception>(new HttpMethod("PATCH"), $"/users/{user_id}", new Values {
       { "fields", fields }},body,options);
   }
 
@@ -9566,7 +9566,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       user_id = SdkUtils.EncodeParam(user_id);
-    return await AuthRequest<CredentialsEmail, Exception>(HttpMethod.Patch, $"/users/{user_id}/credentials_email", new Values {
+    return await AuthRequest<CredentialsEmail, Exception>(new HttpMethod("PATCH"), $"/users/{user_id}/credentials_email", new Values {
       { "fields", fields }},body,options);
   }
 
@@ -10170,7 +10170,7 @@ namespace Looker.SDK.API40
 {  
       user_id = SdkUtils.EncodeParam(user_id);
       user_attribute_id = SdkUtils.EncodeParam(user_attribute_id);
-    return await AuthRequest<UserAttributeWithValue, Exception>(HttpMethod.Patch, $"/users/{user_id}/attribute_values/{user_attribute_id}", null,body,options);
+    return await AuthRequest<UserAttributeWithValue, Exception>(new HttpMethod("PATCH"), $"/users/{user_id}/attribute_values/{user_attribute_id}", null,body,options);
   }
 
   /// ### Delete a user attribute value from a user's account settings.
@@ -10343,7 +10343,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       user_attribute_id = SdkUtils.EncodeParam(user_attribute_id);
-    return await AuthRequest<UserAttribute, Exception>(HttpMethod.Patch, $"/user_attributes/{user_attribute_id}", new Values {
+    return await AuthRequest<UserAttribute, Exception>(new HttpMethod("PATCH"), $"/user_attributes/{user_attribute_id}", new Values {
       { "fields", fields }},body,options);
   }
 
