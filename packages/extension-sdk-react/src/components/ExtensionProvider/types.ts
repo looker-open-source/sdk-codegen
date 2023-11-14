@@ -34,6 +34,5 @@ export interface ExtensionContextData extends BaseExtensionContextData {
   /**
    * Looker 4.0 SDK. Note that SDK calls are made by the extension host.
    */
-  coreSDK: Looker40SDK
-
+  core40SDK: Looker40SDK
 }
