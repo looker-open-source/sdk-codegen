@@ -66,9 +66,7 @@ The `looker.ini` configuration file and environment variables are _never_ used i
 
 ### Developing with multiple API versions
 
-Please use API 4.0. API 3.1 is deprecated. To support iterative migration to API 4.0 from API 3.1, the single Looker SDK package now supports multiple API versions for the generated SDK classes. Both API 3.1 and API 4.0 are supported for Node and browser-based use.
-
-`LookerBrowserSDK.init31()` and `Looker31SDK()` initialize the API 3.1 implementation of the SDK.
+Please use API 4.0. API 3.1 is deprecated and has been removed in Looker v23.18+.
 
 `LookerBrowserSDK.init40()` and `Looker40SDK()` initialize the API 4.1 implementation of the SDK.
 

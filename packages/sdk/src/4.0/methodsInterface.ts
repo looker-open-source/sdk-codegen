@@ -3649,7 +3649,7 @@ export interface ILooker40SDK extends IAPIMethods {
    * You can use this function to change the string and integer properties of
    * a dashboard. Nested objects such as filters, dashboard elements, or dashboard layout components
    * cannot be modified by this function - use the update functions for the respective
-   * nested object types (like [update_dashboard_filter()](#!/3.1/Dashboard/update_dashboard_filter) to change a filter)
+   * nested object types (like [update_dashboard_filter()](#!/4.0/Dashboard/update_dashboard_filter) to change a filter)
    * to modify nested objects referenced by a dashboard.
    *
    * If you receive a 422 error response when updating a dashboard, be sure to look at the

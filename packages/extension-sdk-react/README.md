@@ -98,11 +98,6 @@ The following global access methods are available:
 
 There is no restriction on which SDK can be used within an extension, none, one or all of the above can be used interchangeably, context or global access. The one caveat is that it is recommended that the Looker version support SDK 4.0 if the 4.0 SDK is used (the results may be unpredictable otherwise).
 
-If you require access to SDK version 3.1, use `<ExtensionProvider/>` or `<ExtensionProvider2 type={Looker31SDK}/>`. SDK version 3.1 will then globally be available through the following methods:
-
-- `getCoreSDK()` - SDK version 3.1 (kept for backwards compatibility)
-- `getCore31SDK()` - SDK version 3.1
-
 ### Redux support
 
 The Looker SDK is available outside of the Extension provider using the `getCore40SDK` method. This means that `redux sagas` or `redux thunks` can utilize the SDK from within a `saga` or `thunk`. Note that the Looker connection MUST be established before `getCoreSDK` can be called. An error will be thrown if the method is called too soon. Note that children of the `ExtensionProvider40` will not be rendered until after the connection has been established. As such it is safe for children of the `ExtensionProvider40` to utilize `sagas` or `thunks`.
