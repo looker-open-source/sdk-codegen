@@ -118,3 +118,16 @@ def sdk40(init_sdk):
     sdk = looker_sdk.init40(filename)
     yield sdk
     sdk.auth.logout()
+
+
+@pytest.fixture(scope="session")
+def init_sdk():
+    def _sdk(api_version):
+        filename = os.getenv("LOOKERSDK_INI", "../looker.ini")
+        if api_version == 4.0:
+            sdk = looker_sdk.init40(filename)
+        elif api_version == 3.1:
+            sdk = looker_sdk.init31(filename)
+        return sdk
+
+    return _sdk
