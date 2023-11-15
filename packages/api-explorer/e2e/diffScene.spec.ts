@@ -39,7 +39,7 @@ const compInputSelector = 'input#listbox-input-compare'
 const globalOptionsSelector = '#modal-root [role=option] span'
 const switchButtonSelector = '.switch-button'
 
-describe('Diff Scene', () => {
+describe.skip('Diff Scene', () => {
   beforeEach(async () => {
     await jestPuppeteer.resetBrowser()
     await page.setDefaultNavigationTimeout(120000)

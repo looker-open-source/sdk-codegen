@@ -29,6 +29,14 @@ import type { SpecState } from '../state'
 import { defaultSpecsState } from '../state'
 
 export const specs: SpecList = {
+  '3.1': {
+    key: '3.1',
+    isDefault: false,
+    status: 'current',
+    specURL: 'https://self-signed.looker.com:19999/api/3.1/swagger.json',
+    specContent: require('../../../../spec/Looker.3.1.oas.json'),
+    version: '3.1',
+  },
   '4.0': {
     key: '4.0',
     isDefault: true,
@@ -39,12 +47,12 @@ export const specs: SpecList = {
   },
 }
 
-export const api = ApiModel.fromJson(specs['4.0'].specContent)
+export const api = ApiModel.fromJson(specs['3.1'].specContent)
 export const api40 = ApiModel.fromJson(specs['4.0'].specContent)
 
 export const getLoadedSpecs = () => {
   const loadedSpecs = { ...specs }
-  loadedSpecs['4.0'].api = api
+  loadedSpecs['3.1'].api = api
   loadedSpecs['4.0'].api = api40
   return loadedSpecs
 }
