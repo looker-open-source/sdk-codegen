@@ -72,7 +72,7 @@ module.exports = (api) => {
             esmodules: true,
           },
           useBuiltIns: false,
-          modules: process.env.BABEL_ENV === 'build_cjs' ? 'auto' : false,
+          // modules: process.env.BABEL_ENV === 'build_cjs' ? 'auto' : false,
         },
       ],
       [
