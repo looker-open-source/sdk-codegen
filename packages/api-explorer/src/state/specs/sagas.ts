@@ -49,6 +49,9 @@ function* initSaga(action: PayloadAction<InitSpecsAction>) {
     specs[currentSpecKey] = spec
     yield* put(initSpecsSuccessAction({ specs, currentSpecKey }))
   } catch (error: any) {
+    // TODO if an error occurs here extension api explorer hangs.
+    // Needs to be fixed. For now report the error.
+    console.error(error)
     yield* put(initSpecsFailureAction(new Error(error.message)))
   }
 }
@@ -70,6 +73,7 @@ function* setCurrentSpecSaga(action: PayloadAction<SetCurrentSpecAction>) {
       })
     )
   } catch (error: any) {
+    console.error(error)
     yield put(setCurrentSpecFailureAction(new Error(error.message)))
   }
 }
