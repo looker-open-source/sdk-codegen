@@ -28,7 +28,7 @@ import com.google.api.client.http.UrlEncodedContent
 
 open class AuthSession(
     open val apiSettings: ConfigurationProvider,
-    open val transport: Transport = Transport(apiSettings)
+    open val transport: Transport = Transport(apiSettings),
 ) {
 
     var authToken: AuthToken = AuthToken()
@@ -145,7 +145,7 @@ open class AuthSession(
                 unQuote(System.getProperty("${apiSettings.environmentPrefix}_CLIENT_SECRET") ?: config[client_secret])
             val params = mapOf(
                 client_id to clientId,
-                client_secret to clientSecret
+                client_secret to clientSecret,
             )
             val body = UrlEncodedContent(params)
             val token = ok<AuthToken>(
@@ -153,8 +153,8 @@ open class AuthSession(
                     HttpMethod.POST,
                     "$apiPath/login",
                     emptyMap(),
-                    body
-                )
+                    body,
+                ),
             )
             authToken = token
         }
@@ -163,7 +163,7 @@ open class AuthSession(
             val token = activeToken()
             val sudoToken = transport.request<AuthToken>(
                 HttpMethod.POST,
-                "/login/$newId"
+                "/login/$newId",
             ) { requestSettings ->
                 val headers = requestSettings.headers.toMutableMap()
                 if (token.accessToken.isNotBlank()) {
