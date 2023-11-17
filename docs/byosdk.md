@@ -230,25 +230,28 @@ export const LookerAppId = 'x-looker-appid'
 this.authSession.settings.agentTag = `${agentPrefix} ${lookerVersion}.${this.apiVersion}`
 ```
 
-Where `lookerVersion` is the version of Looker (like 23.18) and `apiVersion` is (currently) `4.0` ([Note: API 3.x has been deprecated](https://cloud.google.com/looker/docs/api-3x-deprecation)).
+Where `lookerVersion` is the version of Looker (like 23.18) and `apiVersion` is (currently) `4.0` ([Note: API 3.x has been removed](https://cloud.google.com/looker/docs/api-3x-deprecation)).
 
 This results in the agentTag appearing like `TS-SDK 22.6.4.0`.
 
 Additional attributes can be added to the agent tag by separating them with semicolons. (`;`)
 
-#### Request processing
+#### Processing requests
 
 The `rawRequest()` implementation:
+
 - constructs an HTTP request based on the properties passed into it, and returns the result of the response
 without any type conversion or error handling
 - sets the `ok` property to `true` if successful or `false` if the request fails.
 
 The `request()` implementation:
+
 - sets the error status and data of the SDKResponse structure if an error occurs
 - sets the success status and data of an SDKResponse structure if the request succeeds
 - for successful requests, the response body is deserialized into the type indicated for the success value
 
 The `stream()` implementation:
+
 - throws an error if a request error occurs
 - passes the streamable HTTP response to the stream parameter of the method
 - for successful requests, the response body is deserialized into the type indicated for the success value
@@ -296,16 +299,19 @@ Here's a TypeScript code sample for streaming the download of a query's CSV resu
 
 This section discusses how parameters should be processed by the run-time **before** submitting the HTTP request to the endpoint.
 
-**Path parameters**
+#### Path parameters
+
 - include all path parameters
 - url-encode the values for a path containing variables e.g., `/users/{user_id}`
 
-**Query parameters**
+#### Query parameters
+
 - url-encode all values
 - date values should be formatted in UTC time format like "2020-03-15T13:16:34.692-07:00"
 - skip `null` or `undefined` values
 
-**Body object**
+#### Body object
+
 - include all required properties (this is typically enforced by the declared method's interface)
 - skip properties that are optional and `null` or `undefined`
 
@@ -555,7 +561,8 @@ fun asBoolean(value: String?): Boolean? {
     return null
 }
 ```
-  - `readConfig()` overrides
+
+- `readConfig()` overrides
 
 - [HTTP parameter encoding](#request-parameter-encoding)
 
@@ -642,6 +649,7 @@ A script or command to deploy to the relevant package manager must be provided f
 The package versioning information must contain the Looker Release version.
 
 The package needs a `README` that:
+
 - introduces the SDK
 - describes how to get started
 - links to the SDK-Codegen repository

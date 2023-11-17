@@ -24,7 +24,7 @@ API and SDK support can be found at [https://cloud.google.com/looker/docs/api-sd
 This repository contains:
 
 - The [SDK code generator](packages/sdk-codegen) that generates the source code for Looker SDKs
-- Source code for the [Looker SDKs](#looker-sdks) produced by the code generator
+- Source code for the Looker SDKs produced by the code generator
 - Looker SDK source code [examples](examples)
 - the [API Explorer extension](packages/extension-api-explorer) that can be installed into a Looker instance
 - the stand-alone [API Explorer](packages/api-explorer)
@@ -65,41 +65,6 @@ The 4.0 version of the API is the current and stable version of the API. The 3.x
 For self-hosted instances on older versions of Looker, please use the corresponding release of `sdk-codegen`` to use API 3.x.
 
 Note: API credentials have not been changed between API 3.x and API 4 and may continue to be referred to as "API3" credentials in the Looker UI, docs, or elsewhere.
-
-### Looker SDKs
-
-Please review the following table for a breakdown of the options to initialize
-the desired SDK object.
-
-| SDK                        | API 4.0                                                                  | Notes                                                                                                                                                                                                                                          |
-| -------------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Python](python)           | `looker_sdk.init40()`                                                    |                                                                                                                                                            |
-| [TypeScript](packages/sdk)  `Looker40SDK()`, `LookerNodeSDK.init40()` or `LookerBrowserSDK.init40()` | **Important** - See information on the [typescript SDK dependencies](https://www.npmjs.com/package/@looker/sdk#typescript-sdk-packages) on npmjs.com |
-| [Kotlin](kotlin)           | `LookerSDK()`                                                            | Community-supported SDK. The initializer uses an unversioned name.                                                               |
-| [Swift](swift/looker)      | `Looker40SDK()`                                                          | Community-supported SDK.                                                                                                         |
-| [Look#](csharp)            | `Looker40SDK()`                                                          | Community-supported SDK.                                                                                                         |
-| [GoLook](go)               | `v4.NewLookerSDK()`                                                      | Community-supported SDK.                                                                                                        |
-
-By supporting both API versions in the same SDK package, we hope the migration
-path to the latest API is simplified. Both SDK versions can be used at the same
-time, in the same source file, which should allow for iterative work to move to
-the new API version.
-
-For example:
-
-```typescript
-import {
-  Looker40SDK,
-  NodeSession,
-  NodeSettingsIniFile,
-} from '@looker/sdk'
-
-const settings = new NodeSettingsIniFile()
-const session = new NodeSession(settings)
-const sdk = new Looker40SDK(session)
-
-const me40 = await sdk.ok(sdk.me())
-```
 
 ## Automatic URL encoding for input values
 
