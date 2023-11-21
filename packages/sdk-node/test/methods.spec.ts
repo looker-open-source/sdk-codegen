@@ -287,7 +287,7 @@ describe('LookerNodeSDK', () => {
         expect(svg).toBeDefined()
         expect(svg).toMatch(/^<\?xml/)
       },
-      fifteen
+      testTimeout
     )
   })
 
