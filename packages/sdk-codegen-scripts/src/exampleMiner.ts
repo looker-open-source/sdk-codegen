@@ -194,7 +194,7 @@ export const getPermalinkRoot = () => {
 }
 
 export class CodeMiner implements IFileMine {
-  static ignoreOps = new Set<string>(['ok', 'init31', 'init40'])
+  static ignoreOps = new Set<string>(['ok', 'init40'])
   ignoreCall(call: ISDKCall): boolean {
     if (!/sdk/i.test(call.sdk)) return true
     return CodeMiner.ignoreOps.has(call.operationId)

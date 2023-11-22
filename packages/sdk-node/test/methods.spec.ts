@@ -39,9 +39,7 @@ import {
   Looker40SDK as LookerSDK,
   ResultFormat,
   environmentPrefix,
-  Looker31SDK,
   Looker40SDK,
-  Looker31SDKStream,
   Looker40SDKStream,
 } from '@looker/sdk'
 import type { IRawResponse } from '@looker/sdk-rtl'
@@ -223,8 +221,6 @@ describe('LookerNodeSDK', () => {
   }
 
   it('assigns SDK.ApiVersion', () => {
-    expect(Looker31SDK.ApiVersion).toEqual('3.1')
-    expect(Looker31SDKStream.ApiVersion).toEqual('3.1')
     expect(Looker40SDK.ApiVersion).toEqual('4.0')
     expect(Looker40SDKStream.ApiVersion).toEqual('4.0')
   })
@@ -291,7 +287,7 @@ describe('LookerNodeSDK', () => {
         expect(svg).toBeDefined()
         expect(svg).toMatch(/^<\?xml/)
       },
-      fifteen
+      testTimeout
     )
   })
 

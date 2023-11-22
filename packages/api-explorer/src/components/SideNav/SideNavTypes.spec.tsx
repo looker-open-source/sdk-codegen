@@ -48,7 +48,7 @@ jest.mock('react-router-dom', () => {
 
 describe('SideNavTypes', () => {
   const tag = 'Dashboard'
-  const specKey = '3.1'
+  const specKey = '4.0'
   const typeTags = Object.keys(api.typeTags[tag])
 
   test('it renders provided types', () => {

@@ -38,7 +38,7 @@ import type { IAuthSession } from './authSession'
 /**
  * Creates an "sdk" to be used with the TypeScript SDK's funcs.ts file
  * @param authSession authentication session
- * @param apiVersion version of API to use (e.g. "3.1" or "4.0")
+ * @param apiVersion version of API to use (e.g. "4.0")
  * @param sdkVersion Looker release version (e.g. "21.4")
  */
 export const functionalSdk = (

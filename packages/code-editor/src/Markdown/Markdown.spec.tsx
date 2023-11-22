@@ -52,12 +52,12 @@ describe('Markdown', () => {
 
   test('it renders path links', () => {
     const input =
-      'A link to the [create_dashboard](/3.1/methods/Dashboard/create_dashboard) endpoint'
+      'A link to the [create_dashboard](/4.0/methods/Dashboard/create_dashboard) endpoint'
     renderWithTheme(<Markdown source={input} />)
     expect(screen.getByText(/A link to the/)).toBeInTheDocument()
     expect(screen.getByText('create_dashboard')).toHaveAttribute(
       'href',
-      '/3.1/methods/Dashboard/create_dashboard'
+      '/4.0/methods/Dashboard/create_dashboard'
     )
   })
 

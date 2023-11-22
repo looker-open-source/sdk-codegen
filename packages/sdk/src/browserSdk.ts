@@ -30,7 +30,6 @@ import {
   BrowserTransport,
 } from '@looker/sdk-rtl'
 
-import { Looker31SDK } from './3.1/methods'
 import { Looker40SDK } from './4.0/methods'
 
 export const BrowserSettings = (): IApiSettings => {
@@ -40,26 +39,6 @@ export const BrowserSettings = (): IApiSettings => {
 }
 
 export class LookerBrowserSDK {
-  /**
-   * Creates a [[Looker31SDK]] object.
-   *
-   * @param settings Defaults to the settings for the Browser
-   *
-   * @param transport Defaults to a `BrowserTransport` object
-   *
-   * @param session Defaults to `BrowserSession` which uses OAuth authentication flow and CORS requests
-   */
-  static init31(
-    settings?: IApiSettings,
-    transport?: ITransport,
-    session?: IAuthSession
-  ) {
-    settings = settings || BrowserSettings()
-    transport = transport || new BrowserTransport(settings)
-    session = session || new BrowserSession(settings, transport)
-    return new Looker31SDK(session)
-  }
-
   /**
    * Creates a [[Looker40SDK]] object.
    *

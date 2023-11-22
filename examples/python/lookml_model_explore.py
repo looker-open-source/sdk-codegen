@@ -8,7 +8,7 @@ import looker_sdk
 
 def get_field_values(model_name, explore_name):
 
-    sdk = looker_sdk.init31()
+    sdk = looker_sdk.init40()
 
     # API Call to pull in metadata about fields in a particular explore
     explore = sdk.lookml_model_explore(

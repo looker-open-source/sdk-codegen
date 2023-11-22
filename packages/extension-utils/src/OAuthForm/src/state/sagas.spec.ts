@@ -67,18 +67,6 @@ const mockedVersionRes = {
   },
   supported_versions: [
     {
-      version: '3.0',
-      full_version: '3.0.0',
-      status: 'legacy',
-      swagger_url: 'https://validUrl/api/3.0/swagger.json',
-    },
-    {
-      version: '3.1',
-      full_version: '3.1.0',
-      status: 'legacy',
-      swagger_url: 'https://validUrl/api/3.1/swagger.json',
-    },
-    {
       version: '4.0',
       full_version: '4.0.23.4',
       status: 'current',

@@ -74,7 +74,7 @@ jobs:
           echo "client_secret=secret" >> looker.ini
           echo "verify_ssl=False" >> looker.ini
           echo "timeout=31" >> looker.ini
-          echo "[Looker31]" >> looker.ini
+          echo "[Looker40]" >> looker.ini
           echo "base_url=https://self-signed.looker.com:19999" >> looker.ini
           echo "verify_ssl=False" >> looker.ini
           echo "timeout=30" >> looker.ini

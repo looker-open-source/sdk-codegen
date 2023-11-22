@@ -45,7 +45,7 @@ describe('DocReferences', () => {
         typesUsed={typesUsed}
         typesUsedBy={typesUsedBy}
         methodsUsedBy={methodsUsedBy}
-        specKey={'3.1'}
+        specKey={'4.0'}
         api={api}
       />
     )
@@ -54,18 +54,18 @@ describe('DocReferences', () => {
     )
     expect(screen.getByText(typesUsed[0].name).closest('a')).toHaveAttribute(
       'href',
-      buildPath(api, typesUsed[0], '3.1')
+      buildPath(api, typesUsed[0], '4.0')
     )
 
     expect(typesUsedBy).toHaveLength(1)
     expect(typesUsedBy[0].name).toEqual('Dashboard')
     expect(screen.getByText(typesUsedBy[0].name).closest('a')).toHaveAttribute(
       'href',
-      buildPath(api, typesUsedBy[0], '3.1')
+      buildPath(api, typesUsedBy[0], '4.0')
     )
     expect(
       screen.getByText(methodsUsedBy[0].name).closest('a')
-    ).toHaveAttribute('href', buildPath(api, methodsUsedBy[0], '3.1'))
+    ).toHaveAttribute('href', buildPath(api, methodsUsedBy[0], '4.0'))
   })
 
   test('it highlights text matching search pattern', () => {
@@ -76,7 +76,7 @@ describe('DocReferences', () => {
     renderWithRouterAndReduxProvider(
       <DocReferences
         typesUsed={[api.types.Dashboard]}
-        specKey={'3.1'}
+        specKey={'4.0'}
         api={api}
       />,
       undefined,
@@ -86,7 +86,7 @@ describe('DocReferences', () => {
     expect(foundRef).toContainHTML('<span class="hi">Dash</span>board')
     expect(foundRef).toHaveAttribute(
       'href',
-      buildPath(api, api.types.Dashboard, '3.1')
+      buildPath(api, api.types.Dashboard, '4.0')
     )
   })
 })

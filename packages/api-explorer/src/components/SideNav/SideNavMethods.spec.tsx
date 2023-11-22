@@ -50,7 +50,7 @@ jest.mock('react-router-dom', () => {
 describe('SideNavMethods', () => {
   const tag = 'Dashboard'
   const methods = api.tags[tag]
-  const specKey = '3.1'
+  const specKey = '4.0'
 
   beforeEach(() => {
     jest.clearAllMocks()

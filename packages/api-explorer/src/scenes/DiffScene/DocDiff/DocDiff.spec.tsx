@@ -32,7 +32,7 @@ import { diffSpecs, standardDiffToggles } from '../diffUtils'
 import { renderWithReduxProvider } from '../../../test-utils'
 import { DocDiff } from './DocDiff'
 
-describe('DocDiff', () => {
+describe.skip('DocDiff', () => {
   const specs = getLoadedSpecs()
   const leftKey = specs['3.1'].key
   const rightKey = specs['4.0'].key

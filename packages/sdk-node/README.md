@@ -76,8 +76,8 @@ Verify authentication works and that API calls will succeed with code similar to
 ```typescript
 import { LookerNodeSDK } from '@looker/sdk-node'
 (async () => {
-  // create a Node SDK object for API 3.1
-  const sdk = LookerNodeSDK.init31()
+  // create a Node SDK object for API 4.0
+  const sdk = LookerNodeSDK.init40()
   // retrieve your user account to verify correct credentials
   const me = await sdk.ok(sdk.me(
     "id, first_name, last_name, display_name, email, personal_space_id, home_space_id, group_ids, role_ids"))
@@ -101,37 +101,19 @@ import { LookerNodeSDK } from '@looker/sdk-node'
 })()
 ```
 
-**NOTE**: By default, `LookerNodeSDK.init31()` and `LookerNodeSDK.init40()` will check for environment variables. Environment variables can be ignored by passing an empty string to the NodeSettings constructor.
+**NOTE**: By default, `LookerNodeSDK.init40()` will check for environment variables. Environment variables can be ignored by passing an empty string to the NodeSettings constructor.
 
 ```typescript
 // Ignore any SDK environment variables for the node runtime
 const settings = new NodeSettingsIniFile('')
 const sdk = LookerNodeSDK.init40(settings)
-const sdk31 = LookerNodeSDK.init31(settings)
 ```
 
 ### Developing with multiple API versions
 
-Starting with Looker release 7.2, the experimental version of API 4.0 is available. To support iterative migration to API 4.0 from API 3.1, the single Looker SDK package now supports multiple API versions for the generated SDK classes. Both API 3.1 and API 4.0 are supported for Node and Browser-based use.
+Starting with Looker release 23.18, API 3.1 and 3.0 have been removed. Please use the stable and current version API 4.0 as shown below.
 
-`LookerNodeSDK.init31()` `LookerBrowserSDK.init31()` and `Looker31SDK()` all initialize the API 3.1 implementation of the SDK.
-
-`LookerNodeSDK.init40()` `LookerBrowserSDK.init40()` and `Looker40SDK()` all initialize the API 4.1 implementation of the SDK.
-
-Code similar to the following can be used to develop with both the 3.1 and 4.0 SDKs in the same source file:
-
-```typescript
-import { Looker40SDK, Looker31SDK } from '@looker/sdk'
-import { NodeSession, NodeSettingsIniFile } from '@looker/sdk-node'
-
-const settings = new NodeSettingsIniFile()
-const session = new NodeSession(settings)
-const sdk = new Looker40SDK(session)
-const sdk31 = new Looker31SDK(session)
-
-const me40 = await sdk.ok(sdk.me())
-const me31 = await sdk.ok(sdk31.me()) // or sdk31.ok(sdk31.me())
-```
+`LookerNodeSDK.init40()` `LookerBrowserSDK.init40()` and `Looker40SDK()` all initialize the API 4.0 implementation of the SDK.
 
 ## Using NodeSession for automatic authentication
 
@@ -213,7 +195,7 @@ describe('sudo', () => {
 Once the desired environment variables are set, the following code is all that's required to initialize the Looker SDK and retrieve the API credential's `User` information.
 
 ```typescript
-const sdk = LookerNodeSDK.init31(new NodeSettings())
+const sdk = LookerNodeSDK.init40(new NodeSettings())
 const me = await sdk.ok(sdk.me())
 ```
 

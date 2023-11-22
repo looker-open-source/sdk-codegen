@@ -86,7 +86,7 @@ export class KotlinGen extends CodeGen {
 
   /**
    * Return either api versioned namespace text or empty string if current API is the default
-   * @returns {string} 'api31' or '', for example
+   * @returns {string} 'api40' or '', for example
    */
   apiNamespace() {
     if (this.apiVersion === this.defaultApi) return ''

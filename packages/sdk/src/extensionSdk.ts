@@ -40,9 +40,7 @@ export class LookerExtensionSDK {
   /**
    * Creates a [[LookerSDK]] object.
    *
-   * Examples:
-   * LookerExtensionSDK.createClient(host) => constructs a Looker31SDK
-   *
+   * Example:
    * LookerExtensionSDK.createClient(host, Looker40SDK) => constructs a Looker40SDK
    */
   static createClient<T extends APIMethods>(

@@ -4,10 +4,11 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+tox = "*"
+tox-pipenv = "*"
 
 [packages]
 black = "*"
-tox = "*"
 
 [requires]
 python_version = "3.8"

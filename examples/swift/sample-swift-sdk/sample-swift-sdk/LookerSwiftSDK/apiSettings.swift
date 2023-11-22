@@ -55,7 +55,7 @@ struct DefaultSettings : IApiSettings {
         return [:]
     }
     var base_url: String? = ProcessInfo.processInfo.environment[strLookerBaseUrl] ?? ""
-    var api_version: String? = ProcessInfo.processInfo.environment[strLookerApiVersion] ?? "3.1"
+    var api_version: String? = ProcessInfo.processInfo.environment[strLookerApiVersion] ?? "4.0"
     var verify_ssl: Bool? = true
     var timeout: Int? = defaultTimeout
     var headers: Headers?

@@ -27,25 +27,25 @@ import { remapHashURL, transformURL } from './utils'
 
 describe('DocMarkdown utils', () => {
   describe('hashbang url remapping', () => {
-    test.each(['#!/methodTag', '#!/3.1/methodTag'])(
+    test.each(['#!/methodTag', '#!/4.0/methodTag'])(
       'it correctly maps %s tag urls',
       (url) => {
-        const result = remapHashURL('3.1', url)
-        expect(result).toEqual('/3.1/methods/methodTag')
+        const result = remapHashURL('4.0', url)
+        expect(result).toEqual('/4.0/methods/methodTag')
       }
     )
 
-    test.each(['#!/3.1/methodTag/methodName', '#!/methodTag/methodName'])(
+    test.each(['#!/4.0/methodTag/methodName', '#!/methodTag/methodName'])(
       'it correctly maps %s method urls ',
       (hashbangUrl) => {
-        const result = remapHashURL('3.1', hashbangUrl)
-        expect(result).toEqual('/3.1/methods/methodTag/methodName')
+        const result = remapHashURL('4.0', hashbangUrl)
+        expect(result).toEqual('/4.0/methods/methodTag/methodName')
       }
     )
 
     test('external urls are left untouched', () => {
       const url = 'https://foo.com'
-      const result = remapHashURL('3.1', url)
+      const result = remapHashURL('4.0', url)
       expect(result).toEqual(url)
     })
   })
@@ -53,18 +53,18 @@ describe('DocMarkdown utils', () => {
   describe('url transforming', () => {
     test('removes mark tags and transforms url', () => {
       const url = '#!/<mark>Dashboard</mark>/create_<mark>dashboard</mark>'
-      const result = transformURL('3.1', url)
-      expect(result).toEqual('/3.1/methods/Dashboard/create_dashboard')
+      const result = transformURL('4.0', url)
+      expect(result).toEqual('/4.0/methods/Dashboard/create_dashboard')
     })
     test('removes mark tags and transforms url', () => {
       const url = 'https://docs.looker.com/r/api/<mark>authorization</mark>'
-      const result = transformURL('3.1', url)
+      const result = transformURL('4.0', url)
       expect(result).toEqual('https://docs.looker.com/r/api/authorization')
     })
     test('removes escaped mark tags and transforms url', () => {
       const url =
         'https://docs.looker.com/r/api/%3Cmark%3Eauthorization%3Cmark%3E'
-      const result = transformURL('3.1', url)
+      const result = transformURL('4.0', url)
       expect(result).toEqual('https://docs.looker.com/r/api/authorization')
     })
   })

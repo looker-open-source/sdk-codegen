@@ -76,18 +76,6 @@ describe('ExploreType', () => {
   })
 
   describe('ExploreTypeLink', () => {
-    test('recognizes 3.1', () => {
-      const specKey = '3.1'
-      const path = `/${specKey}/methods/foo`
-      renderWithRouter(<ExploreTypeLink api={api} type={targetType} />, [path])
-
-      const actual = screen.getByText(targetType.jsonName)
-      expect(actual).toBeInTheDocument()
-      expect(actual).toHaveProperty(
-        'href',
-        `http://localhost/${specKey}/types/ColorCollection/${targetType.jsonName}`
-      )
-    })
     test('recognizes 4.0', () => {
       const specKey = '4.0'
       const path = `/${specKey}/methods/foo`

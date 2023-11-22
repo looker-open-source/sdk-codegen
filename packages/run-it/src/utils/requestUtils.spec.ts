@@ -163,7 +163,7 @@ describe('requestUtils', () => {
 
       const resp = await runRequest(
         sdk,
-        '/api/3.1',
+        '/api/4.0',
         'POST',
         '/queries/run/{result_format}',
         { result_format: 'json' },
@@ -173,7 +173,7 @@ describe('requestUtils', () => {
 
       expect(spy).toHaveBeenCalledWith(
         'POST',
-        '/api/3.1/queries/run/json',
+        '/api/4.0/queries/run/json',
         {
           fields: 'first_name, last_name',
         },
@@ -190,15 +190,15 @@ describe('requestUtils', () => {
 
   describe('createInputs', () => {
     test('converts delimarray to string', () => {
-      const method = api.methods.all_users
+      const method = api.methods.all_roles
       const actual = createInputs(api, method)
       expect(actual).toHaveLength(method.allParams.length)
-      expect(actual[4]).toEqual({
+      expect(actual[1]).toEqual({
         name: 'ids',
         location: 'query',
         type: 'string',
         required: false,
-        description: 'Optional list of ids to get specific users.',
+        description: 'Optional list of ids to get specific roles.',
       })
     })
 
@@ -210,11 +210,11 @@ describe('requestUtils', () => {
         name: 'body',
         location: 'body',
         type: {
-          query_id: 0,
+          query_id: '',
           result_format: '',
           source: '',
           deferred: false,
-          look_id: 0,
+          look_id: '',
           dashboard_id: '',
         },
         required: true,
@@ -287,7 +287,7 @@ describe('requestUtils', () => {
   })
 
   describe('request content initialization', () => {
-    test('it initialzies body params with default values', () => {
+    test('it initializes body params with default values', () => {
       const inputs = createInputs(api, api.methods.run_inline_query)
       const actual = initRequestContent(inputs)
       expect(actual).toEqual({
@@ -305,7 +305,6 @@ describe('requestUtils', () => {
           pivots: [],
           query_timezone: '',
           row_total: '',
-          runtime: 0,
           sorts: [],
           subtotals: [],
           total: false,
@@ -340,12 +339,11 @@ describe('requestUtils', () => {
       expect(pathParams).toEqual({})
       expect(queryParams).toEqual({})
       expect(body).toEqual({
-        runtime: 0,
         total: false,
       })
     })
 
-    test('does mot remove empty bodies', () => {
+    test('does not remove empty bodies', () => {
       const requestContent = { body: {} }
       const [pathParams, queryParams, body] = createRequestParams(
         inputs,

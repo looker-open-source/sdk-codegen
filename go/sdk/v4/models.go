@@ -1467,10 +1467,6 @@ type InvestigativeContentType string
 
 const InvestigativeContentType_Dashboard InvestigativeContentType = "dashboard"
 
-type JdbcInterface struct {
-	Results *string `json:"results,omitempty"` // JDBC Metadata to inflate Avatica response classes.
-}
-
 type LDAPConfig struct {
 	Can                        *map[string]bool          `json:"can,omitempty"`                            // Operations the current user is able to perform on this object
 	AlternateEmailLoginAllowed *bool                     `json:"alternate_email_login_allowed,omitempty"`  // Allow alternate email-based login via '/login/email' for admins and for specified users with the 'login_special_email' permission. This option is useful as a fallback during ldap setup, if ldap config problems occur later, or if you need to support some users who are not in your ldap directory. Looker email/password logins are always disabled for regular users when ldap is enabled.
@@ -2215,7 +2211,6 @@ type Project struct {
 	AllowWarnings                  *bool            `json:"allow_warnings,omitempty"`                     // Validation policy: If true, the project can be committed with warnings when `validation_required` is true. (`allow_warnings` does nothing if `validation_required` is false).
 	IsExample                      *bool            `json:"is_example,omitempty"`                         // If true the project is an example project and cannot be modified
 	DependencyStatus               *string          `json:"dependency_status,omitempty"`                  // Status of dependencies in your manifest & lockfile
-	DataTestsCount                 *int64           `json:"data_tests_count,omitempty"`                   // Number of data tests within project
 }
 
 type ProjectError struct {
@@ -3448,6 +3443,10 @@ type SqlInterfaceQueryCreate struct {
 	JdbcClient *bool            `json:"jdbc_client,omitempty"` // Whether the query should be run for use in a JDBC Client. This changes the formatting of some datetime based values.
 }
 
+type SqlInterfaceQueryMetadata struct {
+	Results *string `json:"results,omitempty"` // JDBC Metadata to inflate Avatica response classes.
+}
+
 type SqlQuery struct {
 	Can           *map[string]bool        `json:"can,omitempty"`           // Operations the current user is able to perform on this object
 	Slug          *string                 `json:"slug,omitempty"`          // The identifier of the SQL query
@@ -4377,7 +4376,7 @@ type WritePrivatelabelConfiguration struct {
 }
 
 // Dynamic writeable type for Project removes:
-// can, id, uses_git, is_example, data_tests_count
+// can, id, uses_git, is_example
 type WriteProject struct {
 	Name                           *string          `json:"name,omitempty"`                               // Project display name
 	GitRemoteUrl                   *string          `json:"git_remote_url,omitempty"`                     // Git remote repository url

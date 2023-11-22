@@ -20,7 +20,6 @@ These examples assume that a `looker.ini` has been created in the root of the re
 2. Run `yarn` to install the dependencies.
 3. Run the examples - `yarn {command} [other command-line options]`
    - `yarn run-dual` - runs multiple apis example.
-   - `yarn run-tiny-dual` - runs the compact multiple apis example
    - `yarn run-config` - runs custom config reader example.
    - `yarn run-sudo` - runs sudo as user example.
    - `yarn run-tile` - runs download dashboard tile example.
@@ -54,7 +53,7 @@ A very brief descriptions of the examples, and the link to the main example/proj
 
 | &nbsp;&nbsp;Example&nbsp;Topic&nbsp;&nbsp;   | Discussion                                                                                                                                                                                                                                                                                        |
 | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [multiple APIs](dual.ts)                     | A simple example that shows how to use multiple versions of the API in the same file. The goal is to make iterative migration from an older API to a newer API in existing SDK code easier.                                                                                                       |
+||
 | [custom configReader](customConfigReader.ts) | Shows how to implement a custom method of reading your configuration settings, including API credentials                                                                                                                                                                                          |
 | [SDK utilities](utils.ts)                    | This file has some SDK utility methods tasks like:<ul><li>finding a dashboard by name</li> <li>listing dashboards and ids</li> <li>finding a tile on a dashboard</li> <li>listing queryable tiles for a dashboard</li><li>a general-purpose `waitForRender` routine with progress ticks</li></ul> |
 

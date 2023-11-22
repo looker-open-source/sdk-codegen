@@ -26,7 +26,7 @@
 
 import { shallow } from 'enzyme'
 import * as React from 'react'
-import { Looker31SDK } from '@looker/sdk'
+import { Looker40SDK } from '@looker/sdk'
 import { unregisterCoreSDK2 } from '../../sdk/core_sdk2'
 import { ExtensionProvider2 } from './ExtensionProvider2'
 
@@ -42,7 +42,7 @@ jest.mock('@looker/extension-sdk', () => ({
     mockFailConnection
       ? Promise.reject(new Error('Extension failed to load'))
       : Promise.resolve(mockHost),
-  LookerExtensionSDK31: {
+  LookerExtensionSDK40: {
     createClient: () => ({}),
   },
 }))
@@ -65,7 +65,7 @@ describe('ExtensionProvider2 component', () => {
     const comp = shallow(
       <ExtensionProvider2
         loadingComponent={<span id="loading">Loading</span>}
-        type={Looker31SDK}
+        type={Looker40SDK}
       >
         <div id="extension"></div>
       </ExtensionProvider2>
