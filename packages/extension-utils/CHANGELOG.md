@@ -50,6 +50,14 @@
     * @looker/extension-sdk-react bumped from ^23.14.1 to ^23.16.0
     * @looker/sdk bumped from ^23.14.1 to ^23.16.0
 
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-sdk bumped from ^23.16.0 to ^23.18.0
+    * @looker/extension-sdk-react bumped from ^23.16.0 to ^23.18.0
+    * @looker/sdk bumped from ^23.16.0 to ^23.18.0
+
 ## [0.1.27](https://github.com/looker-open-source/sdk-codegen/compare/extension-utils-v0.1.26...extension-utils-v0.1.27) (2023-07-17)
 
 
