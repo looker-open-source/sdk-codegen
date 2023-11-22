@@ -1,5 +1,21 @@
 # Changelog
 
+## [23.18.0](https://github.com/looker-open-source/sdk-codegen/compare/embed-services-v23.16.0...embed-services-v23.18.0) (2023-11-22)
+
+
+### Miscellaneous Chores
+
+* **embed-services:** Synchronize undefined versions
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^23.16.0 to ^23.18.0
+  * devDependencies
+    * @looker/sdk-node bumped from ^23.16.0 to ^23.18.0
+
 ## [23.16.0](https://github.com/looker-open-source/sdk-codegen/compare/embed-services-v23.14.1...embed-services-v23.16.0) (2023-09-21)
 
 

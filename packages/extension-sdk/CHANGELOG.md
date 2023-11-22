@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [23.18.0](https://github.com/looker-open-source/sdk-codegen/compare/extension-sdk-v23.16.0...extension-sdk-v23.18.0) (2023-11-22)
+
+
+### Features
+
+* Allow for setting vis config in extensions ([3fbe8fd](https://github.com/looker-open-source/sdk-codegen/commit/3fbe8fd7d44611370c5fc4e608957953dabb82c0))
+* Allow for setting vis config in extensions ([#1394](https://github.com/looker-open-source/sdk-codegen/issues/1394)) ([3ea3cfc](https://github.com/looker-open-source/sdk-codegen/commit/3ea3cfcb0f40237da28de113a344f7dd0f94a355))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^23.16.0 to ^23.18.0
+
 ## [23.16.0](https://github.com/looker-open-source/sdk-codegen/compare/extension-sdk-v23.14.1...extension-sdk-v23.16.0) (2023-09-21)
 
 

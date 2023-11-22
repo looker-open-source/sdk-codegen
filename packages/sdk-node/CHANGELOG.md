@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [23.18.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-node-v23.16.0...sdk-node-v23.18.0) (2023-11-22)
+
+
+### Miscellaneous Chores
+
+* **sdk-node:** Synchronize undefined versions
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^23.16.0 to ^23.18.0
+
 ## [23.16.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-node-v23.14.1...sdk-node-v23.16.0) (2023-09-21)
 
 
