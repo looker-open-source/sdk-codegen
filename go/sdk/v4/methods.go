@@ -689,6 +689,13 @@ func (l *LookerSDK) DeleteEmbedCookielessSession(
 // The generate tokens endpoint should be called every time the Looker client asks for a token (except for the
 // first time when the tokens returned by the acquire_session endpoint should be used).
 //
+// #### Embed session expiration handling
+//
+// This endpoint does NOT return an error when the embed session expires. This is to simplify processing
+// in the caller as errors can happen for non session expiration reasons. Instead the endpoint returns
+// the session time to live in the `session_reference_token_ttl` response property. If this property
+// contains a zero, the embed session has expired.
+//
 // Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
 //
 // PUT /embed/cookieless_session/generate_tokens -> EmbedCookielessSessionGenerateTokensResponse
@@ -3043,7 +3050,7 @@ func (l *LookerSDK) Dashboard(
 // You can use this function to change the string and integer properties of
 // a dashboard. Nested objects such as filters, dashboard elements, or dashboard layout components
 // cannot be modified by this function - use the update functions for the respective
-// nested object types (like [update_dashboard_filter()](#!/4.0/Dashboard/update_dashboard_filter) to change a filter)
+// nested object types (like [update_dashboard_filter()](#!/3.1/Dashboard/update_dashboard_filter) to change a filter)
 // to modify nested objects referenced by a dashboard.
 //
 // If you receive a 422 error response when updating a dashboard, be sure to look at the
@@ -4390,7 +4397,7 @@ func (l *LookerSDK) DeleteLook(
 // | result_format | Description
 // | :-----------: | :--- |
 // | json | Plain json
-// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
 // | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
 // | csv | Comma separated values with a header
 // | txt | Tab separated values with a header
@@ -5293,7 +5300,7 @@ func (l *LookerSDK) GetAllRepositoryCredentials(
 func (l *LookerSDK) CreateQueryTask(request RequestCreateQueryTask,
 	options *rtl.ApiSettings) (QueryTask, error) {
 	var result QueryTask
-	err := l.session.Do(&result, "POST", "/4.0", "/query_tasks", map[string]interface{}{"limit": request.Limit, "apply_formatting": request.ApplyFormatting, "apply_vis": request.ApplyVis, "cache": request.Cache, "generate_drill_links": request.GenerateDrillLinks, "force_production": request.ForceProduction, "cache_only": request.CacheOnly, "path_prefix": request.PathPrefix, "rebuild_pdts": request.RebuildPdts, "server_table_calcs": request.ServerTableCalcs, "image_width": request.ImageWidth, "image_height": request.ImageHeight, "fields": request.Fields}, request.Body, options)
+	err := l.session.Do(&result, "POST", "/4.0", "/query_tasks", map[string]interface{}{"limit": request.Limit, "apply_formatting": request.ApplyFormatting, "apply_vis": request.ApplyVis, "cache": request.Cache, "generate_drill_links": request.GenerateDrillLinks, "force_production": request.ForceProduction, "cache_only": request.CacheOnly, "path_prefix": request.PathPrefix, "rebuild_pdts": request.RebuildPdts, "server_table_calcs": request.ServerTableCalcs, "fields": request.Fields}, request.Body, options)
 	return result, err
 
 }
@@ -5360,12 +5367,12 @@ func (l *LookerSDK) QueryTask(
 // will be in the message of the 400 error response, but not as detailed as expressed in `json_detail.errors`.
 // These data formats can only carry row data, and error info is not row data.
 //
-// GET /query_tasks/{query_task_id}/results -> string
+// GET /query_tasks/{query_task_id}/results -> QueryTask
 func (l *LookerSDK) QueryTaskResults(
 	queryTaskId string,
-	options *rtl.ApiSettings) (string, error) {
+	options *rtl.ApiSettings) (QueryTask, error) {
 	queryTaskId = url.PathEscape(queryTaskId)
-	var result string
+	var result QueryTask
 	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/query_tasks/%v/results", queryTaskId), nil, nil, options)
 	return result, err
 
@@ -5463,7 +5470,7 @@ func (l *LookerSDK) CreateQuery(
 // | result_format | Description
 // | :-----------: | :--- |
 // | json | Plain json
-// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
 // | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
 // | csv | Comma separated values with a header
 // | txt | Tab separated values with a header
@@ -5532,7 +5539,7 @@ func (l *LookerSDK) RunQuery(request RequestRunQuery,
 // | result_format | Description
 // | :-----------: | :--- |
 // | json | Plain json
-// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
 // | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
 // | csv | Comma separated values with a header
 // | txt | Tab separated values with a header
@@ -5600,7 +5607,7 @@ func (l *LookerSDK) RunInlineQuery(request RequestRunInlineQuery,
 // | result_format | Description
 // | :-----------: | :--- |
 // | json | Plain json
-// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
 // | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
 // | csv | Comma separated values with a header
 // | txt | Tab separated values with a header
@@ -5727,8 +5734,6 @@ func (l *LookerSDK) SqlQuery(
 // Execute a SQL Runner query in a given result_format.
 //
 // POST /sql_queries/{slug}/run/{result_format} -> string
-//
-// **Note**: Binary content may be returned by this method.
 func (l *LookerSDK) RunSqlQuery(
 	slug string,
 	resultFormat string,
@@ -6716,18 +6721,14 @@ func (l *LookerSDK) SqlInterfaceMetadata(
 // | md | Simple markdown
 // | xlsx | MS Excel spreadsheet
 // | sql | Returns the generated SQL rather than running the query
-// | png | A PNG image of the visualization of the query
-// | jpg | A JPG image of the visualization of the query
 //
-// GET /sql_interface_queries/{query_id}/run/{result_format} -> string
-//
-// **Note**: Binary content may be returned by this method.
+// GET /sql_interface_queries/{query_id}/run/{result_format} -> QueryFormats
 func (l *LookerSDK) RunSqlInterfaceQuery(
 	queryId int64,
 	resultFormat string,
-	options *rtl.ApiSettings) (string, error) {
+	options *rtl.ApiSettings) (QueryFormats, error) {
 	resultFormat = url.PathEscape(resultFormat)
-	var result string
+	var result QueryFormats
 	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/sql_interface_queries/%v/run/%v", queryId, resultFormat), nil, nil, options)
 	return result, err
 

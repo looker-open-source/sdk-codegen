@@ -158,6 +158,7 @@ import type {
   IProjectValidationCache,
   IProjectWorkspace,
   IQuery,
+  IQueryFormats,
   IQueryTask,
   IRenderTask,
   IRepositoryCredential,
@@ -1313,6 +1314,13 @@ export const delete_embed_cookieless_session = async (
  * - Navigation token.
  * The generate tokens endpoint should be called every time the Looker client asks for a token (except for the
  * first time when the tokens returned by the acquire_session endpoint should be used).
+ *
+ * #### Embed session expiration handling
+ *
+ * This endpoint does NOT return an error when the embed session expires. This is to simplify processing
+ * in the caller as errors can happen for non session expiration reasons. Instead the endpoint returns
+ * the session time to live in the `session_reference_token_ttl` response property. If this property
+ * contains a zero, the embed session has expired.
  *
  * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
  *
@@ -5330,7 +5338,7 @@ export const dashboard = async (
  * You can use this function to change the string and integer properties of
  * a dashboard. Nested objects such as filters, dashboard elements, or dashboard layout components
  * cannot be modified by this function - use the update functions for the respective
- * nested object types (like [update_dashboard_filter()](#!/4.0/Dashboard/update_dashboard_filter) to change a filter)
+ * nested object types (like [update_dashboard_filter()](#!/3.1/Dashboard/update_dashboard_filter) to change a filter)
  * to modify nested objects referenced by a dashboard.
  *
  * If you receive a 422 error response when updating a dashboard, be sure to look at the
@@ -7742,7 +7750,7 @@ export const delete_look = async (
  * | result_format | Description
  * | :-----------: | :--- |
  * | json | Plain json
- * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+ * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
  * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
  * | csv | Comma separated values with a header
  * | txt | Tab separated values with a header
@@ -8098,9 +8106,9 @@ export const connection_databases = async (
   sdk: IAPIMethods,
   connection_name: string,
   options?: Partial<ITransportSettings>
-): Promise<SDKResponse<string[], IError>> => {
+): Promise<SDKResponse<string[], IError | IValidationError>> => {
   connection_name = encodeParam(connection_name)
-  return sdk.get<string[], IError>(
+  return sdk.get<string[], IError | IValidationError>(
     `/connections/${connection_name}/databases`,
     null,
     null,
@@ -9271,8 +9279,6 @@ export const create_query_task = async (
       path_prefix: request.path_prefix,
       rebuild_pdts: request.rebuild_pdts,
       server_table_calcs: request.server_table_calcs,
-      image_width: request.image_width,
-      image_height: request.image_height,
       fields: request.fields,
     },
     request.body,
@@ -9366,7 +9372,7 @@ export const query_task = async (
  * will be in the message of the 400 error response, but not as detailed as expressed in `json_detail.errors`.
  * These data formats can only carry row data, and error info is not row data.
  *
- * GET /query_tasks/{query_task_id}/results -> string
+ * GET /query_tasks/{query_task_id}/results -> IQueryTask
  *
  * @param sdk IAPIMethods implementation
  * @param query_task_id ID of the Query Task
@@ -9377,9 +9383,9 @@ export const query_task_results = async (
   sdk: IAPIMethods,
   query_task_id: string,
   options?: Partial<ITransportSettings>
-): Promise<SDKResponse<string, IError>> => {
+): Promise<SDKResponse<IQueryTask, IError>> => {
   query_task_id = encodeParam(query_task_id)
-  return sdk.get<string, IError>(
+  return sdk.get<IQueryTask, IError>(
     `/query_tasks/${query_task_id}/results`,
     null,
     null,
@@ -9516,7 +9522,7 @@ export const create_query = async (
  * | result_format | Description
  * | :-----------: | :--- |
  * | json | Plain json
- * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+ * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
  * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
  * | csv | Comma separated values with a header
  * | txt | Tab separated values with a header
@@ -9608,7 +9614,7 @@ export const run_query = async (
  * | result_format | Description
  * | :-----------: | :--- |
  * | json | Plain json
- * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+ * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
  * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
  * | csv | Comma separated values with a header
  * | txt | Tab separated values with a header
@@ -9700,7 +9706,7 @@ export const run_inline_query = async (
  * | result_format | Description
  * | :-----------: | :--- |
  * | json | Plain json
- * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+ * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
  * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
  * | csv | Comma separated values with a header
  * | txt | Tab separated values with a header
@@ -9903,9 +9909,6 @@ export const sql_query = async (
  * Execute a SQL Runner query in a given result_format.
  *
  * POST /sql_queries/{slug}/run/{result_format} -> string
- *
- * @remarks
- * **NOTE**: Binary content may be returned by this function.
  *
  * @param sdk IAPIMethods implementation
  * @param slug slug of query
@@ -11479,13 +11482,8 @@ export const sql_interface_metadata = async (
  * | md | Simple markdown
  * | xlsx | MS Excel spreadsheet
  * | sql | Returns the generated SQL rather than running the query
- * | png | A PNG image of the visualization of the query
- * | jpg | A JPG image of the visualization of the query
  *
- * GET /sql_interface_queries/{query_id}/run/{result_format} -> string
- *
- * @remarks
- * **NOTE**: Binary content may be returned by this function.
+ * GET /sql_interface_queries/{query_id}/run/{result_format} -> IQueryFormats
  *
  * @param sdk IAPIMethods implementation
  * @param query_id Integer id of query
@@ -11498,9 +11496,9 @@ export const run_sql_interface_query = async (
   query_id: number,
   result_format: string,
   options?: Partial<ITransportSettings>
-): Promise<SDKResponse<string, IError | IValidationError>> => {
+): Promise<SDKResponse<IQueryFormats, IError | IValidationError>> => {
   result_format = encodeParam(result_format)
-  return sdk.get<string, IError | IValidationError>(
+  return sdk.get<IQueryFormats, IError | IValidationError>(
     `/sql_interface_queries/${query_id}/run/${result_format}`,
     null,
     null,
