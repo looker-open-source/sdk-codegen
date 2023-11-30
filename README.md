@@ -57,7 +57,7 @@ The Looker SDK has several parts:
   [Looker-supported](https://cloud.google.com/looker/docs/api-sdk-support-policy)
   whereas others are community-supported.
 
-## SDK multi-API-version support
+## SDK Versions
 
 The 4.0 version of the API is the current and stable version of the API. The 3.x API has now been
 [removed](https://cloud.google.com/looker/docs/api-3x-deprecation).

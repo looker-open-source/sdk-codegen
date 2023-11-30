@@ -153,6 +153,7 @@ import type {
   IProjectValidationCache,
   IProjectWorkspace,
   IQuery,
+  IQueryFormats,
   IQueryTask,
   IRenderTask,
   IRepositoryCredential,
@@ -1019,6 +1020,13 @@ export interface ILooker40SDK extends IAPIMethods {
    * - Navigation token.
    * The generate tokens endpoint should be called every time the Looker client asks for a token (except for the
    * first time when the tokens returned by the acquire_session endpoint should be used).
+   *
+   * #### Embed session expiration handling
+   *
+   * This endpoint does NOT return an error when the embed session expires. This is to simplify processing
+   * in the caller as errors can happen for non session expiration reasons. Instead the endpoint returns
+   * the session time to live in the `session_reference_token_ttl` response property. If this property
+   * contains a zero, the embed session has expired.
    *
    * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
    *
@@ -3649,7 +3657,7 @@ export interface ILooker40SDK extends IAPIMethods {
    * You can use this function to change the string and integer properties of
    * a dashboard. Nested objects such as filters, dashboard elements, or dashboard layout components
    * cannot be modified by this function - use the update functions for the respective
-   * nested object types (like [update_dashboard_filter()](#!/4.0/Dashboard/update_dashboard_filter) to change a filter)
+   * nested object types (like [update_dashboard_filter()](#!/3.1/Dashboard/update_dashboard_filter) to change a filter)
    * to modify nested objects referenced by a dashboard.
    *
    * If you receive a 422 error response when updating a dashboard, be sure to look at the
@@ -5168,7 +5176,7 @@ export interface ILooker40SDK extends IAPIMethods {
    * | result_format | Description
    * | :-----------: | :--- |
    * | json | Plain json
-   * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+   * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
    * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
    * | csv | Comma separated values with a header
    * | txt | Tab separated values with a header
@@ -5402,7 +5410,7 @@ export interface ILooker40SDK extends IAPIMethods {
   connection_databases(
     connection_name: string,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<string[], IError>>
+  ): Promise<SDKResponse<string[], IError | IValidationError>>
 
   /**
    * ### Retrieve metadata features for this connection
@@ -6228,7 +6236,7 @@ export interface ILooker40SDK extends IAPIMethods {
    * will be in the message of the 400 error response, but not as detailed as expressed in `json_detail.errors`.
    * These data formats can only carry row data, and error info is not row data.
    *
-   * GET /query_tasks/{query_task_id}/results -> string
+   * GET /query_tasks/{query_task_id}/results -> IQueryTask
    *
    * @param query_task_id ID of the Query Task
    * @param options one-time API call overrides
@@ -6237,7 +6245,7 @@ export interface ILooker40SDK extends IAPIMethods {
   query_task_results(
     query_task_id: string,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<string, IError>>
+  ): Promise<SDKResponse<IQueryTask, IError>>
 
   /**
    * ### Get a previously created query by id.
@@ -6339,7 +6347,7 @@ export interface ILooker40SDK extends IAPIMethods {
    * | result_format | Description
    * | :-----------: | :--- |
    * | json | Plain json
-   * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+   * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
    * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
    * | csv | Comma separated values with a header
    * | txt | Tab separated values with a header
@@ -6406,7 +6414,7 @@ export interface ILooker40SDK extends IAPIMethods {
    * | result_format | Description
    * | :-----------: | :--- |
    * | json | Plain json
-   * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+   * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
    * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
    * | csv | Comma separated values with a header
    * | txt | Tab separated values with a header
@@ -6475,7 +6483,7 @@ export interface ILooker40SDK extends IAPIMethods {
    * | result_format | Description
    * | :-----------: | :--- |
    * | json | Plain json
-   * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+   * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
    * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
    * | csv | Comma separated values with a header
    * | txt | Tab separated values with a header
@@ -6614,9 +6622,6 @@ export interface ILooker40SDK extends IAPIMethods {
    * Execute a SQL Runner query in a given result_format.
    *
    * POST /sql_queries/{slug}/run/{result_format} -> string
-   *
-   * @remarks
-   * **NOTE**: Binary content may be returned by this function.
    *
    * @param slug slug of query
    * @param result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "json_label"]
@@ -7712,13 +7717,8 @@ export interface ILooker40SDK extends IAPIMethods {
    * | md | Simple markdown
    * | xlsx | MS Excel spreadsheet
    * | sql | Returns the generated SQL rather than running the query
-   * | png | A PNG image of the visualization of the query
-   * | jpg | A JPG image of the visualization of the query
    *
-   * GET /sql_interface_queries/{query_id}/run/{result_format} -> string
-   *
-   * @remarks
-   * **NOTE**: Binary content may be returned by this function.
+   * GET /sql_interface_queries/{query_id}/run/{result_format} -> IQueryFormats
    *
    * @param query_id Integer id of query
    * @param result_format Format of result, options are: ["json_bi"]
@@ -7729,7 +7729,7 @@ export interface ILooker40SDK extends IAPIMethods {
     query_id: number,
     result_format: string,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<string, IError | IValidationError>>
+  ): Promise<SDKResponse<IQueryFormats, IError | IValidationError>>
 
   /**
    * ### Create a SQL interface query.

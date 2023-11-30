@@ -35,7 +35,6 @@ from looker_sdk.rtl import transport
 
 
 class Looker40SDK(api_methods.APIMethods):
-
     # region Alert: Alert
 
     # Follow an alert.
@@ -1007,6 +1006,13 @@ class Looker40SDK(api_methods.APIMethods):
     # - Navigation token.
     # The generate tokens endpoint should be called every time the Looker client asks for a token (except for the
     # first time when the tokens returned by the acquire_session endpoint should be used).
+    #
+    # #### Embed session expiration handling
+    #
+    # This endpoint does NOT return an error when the embed session expires. This is to simplify processing
+    # in the caller as errors can happen for non session expiration reasons. Instead the endpoint returns
+    # the session time to live in the `session_reference_token_ttl` response property. If this property
+    # contains a zero, the embed session has expired.
     #
     # Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
     #
@@ -4845,7 +4851,7 @@ class Looker40SDK(api_methods.APIMethods):
     # You can use this function to change the string and integer properties of
     # a dashboard. Nested objects such as filters, dashboard elements, or dashboard layout components
     # cannot be modified by this function - use the update functions for the respective
-    # nested object types (like [update_dashboard_filter()](#!/4.0/Dashboard/update_dashboard_filter) to change a filter)
+    # nested object types (like [update_dashboard_filter()](#!/3.1/Dashboard/update_dashboard_filter) to change a filter)
     # to modify nested objects referenced by a dashboard.
     #
     # If you receive a 422 error response when updating a dashboard, be sure to look at the
@@ -7286,7 +7292,7 @@ class Looker40SDK(api_methods.APIMethods):
     # | result_format | Description
     # | :-----------: | :--- |
     # | json | Plain json
-    # | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+    # | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
     # | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
     # | csv | Comma separated values with a header
     # | txt | Tab separated values with a header
@@ -8796,10 +8802,6 @@ class Looker40SDK(api_methods.APIMethods):
         rebuild_pdts: Optional[bool] = None,
         # Perform table calculations on query results
         server_table_calcs: Optional[bool] = None,
-        # DEPRECATED. Render width for image formats. Note that this parameter is always ignored by this method.
-        image_width: Optional[int] = None,
-        # DEPRECATED. Render height for image formats. Note that this parameter is always ignored by this method.
-        image_height: Optional[int] = None,
         # Requested fields
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
@@ -8821,8 +8823,6 @@ class Looker40SDK(api_methods.APIMethods):
                     "path_prefix": path_prefix,
                     "rebuild_pdts": rebuild_pdts,
                     "server_table_calcs": server_table_calcs,
-                    "image_width": image_width,
-                    "image_height": image_height,
                     "fields": fields,
                 },
                 body=body,
@@ -8912,20 +8912,20 @@ class Looker40SDK(api_methods.APIMethods):
     # will be in the message of the 400 error response, but not as detailed as expressed in `json_detail.errors`.
     # These data formats can only carry row data, and error info is not row data.
     #
-    # GET /query_tasks/{query_task_id}/results -> str
+    # GET /query_tasks/{query_task_id}/results -> mdls.QueryTask
     def query_task_results(
         self,
         # ID of the Query Task
         query_task_id: str,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> str:
+    ) -> mdls.QueryTask:
         """Get Async Query Results"""
         query_task_id = self.encode_path_param(query_task_id)
         response = cast(
-            str,
+            mdls.QueryTask,
             self.get(
                 path=f"/query_tasks/{query_task_id}/results",
-                structure=str,
+                structure=mdls.QueryTask,
                 transport_options=transport_options,
             ),
         )
@@ -9053,7 +9053,7 @@ class Looker40SDK(api_methods.APIMethods):
     # | result_format | Description
     # | :-----------: | :--- |
     # | json | Plain json
-    # | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+    # | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
     # | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
     # | csv | Comma separated values with a header
     # | txt | Tab separated values with a header
@@ -9168,7 +9168,7 @@ class Looker40SDK(api_methods.APIMethods):
     # | result_format | Description
     # | :-----------: | :--- |
     # | json | Plain json
-    # | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+    # | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
     # | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
     # | csv | Comma separated values with a header
     # | txt | Tab separated values with a header
@@ -9281,7 +9281,7 @@ class Looker40SDK(api_methods.APIMethods):
     # | result_format | Description
     # | :-----------: | :--- |
     # | json | Plain json
-    # | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+    # | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
     # | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
     # | csv | Comma separated values with a header
     # | txt | Tab separated values with a header
@@ -9466,7 +9466,7 @@ class Looker40SDK(api_methods.APIMethods):
 
     # Execute a SQL Runner query in a given result_format.
     #
-    # POST /sql_queries/{slug}/run/{result_format} -> Union[str, bytes]
+    # POST /sql_queries/{slug}/run/{result_format} -> str
     def run_sql_query(
         self,
         # slug of query
@@ -9476,15 +9476,15 @@ class Looker40SDK(api_methods.APIMethods):
         # Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.
         download: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Union[str, bytes]:
+    ) -> str:
         """Run SQL Runner Query"""
         slug = self.encode_path_param(slug)
         result_format = self.encode_path_param(result_format)
         response = cast(
-            Union[str, bytes],
+            str,
             self.post(
                 path=f"/sql_queries/{slug}/run/{result_format}",
-                structure=Union[str, bytes],  # type: ignore
+                structure=str,
                 query_params={"download": download},
                 transport_options=transport_options,
             ),
@@ -11057,10 +11057,8 @@ class Looker40SDK(api_methods.APIMethods):
     # | md | Simple markdown
     # | xlsx | MS Excel spreadsheet
     # | sql | Returns the generated SQL rather than running the query
-    # | png | A PNG image of the visualization of the query
-    # | jpg | A JPG image of the visualization of the query
     #
-    # GET /sql_interface_queries/{query_id}/run/{result_format} -> Union[str, bytes]
+    # GET /sql_interface_queries/{query_id}/run/{result_format} -> mdls.QueryFormats
     def run_sql_interface_query(
         self,
         # Integer id of query
@@ -11068,14 +11066,14 @@ class Looker40SDK(api_methods.APIMethods):
         # Format of result, options are: ["json_bi"]
         result_format: str,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Union[str, bytes]:
+    ) -> mdls.QueryFormats:
         """Run SQL Interface Query"""
         result_format = self.encode_path_param(result_format)
         response = cast(
-            Union[str, bytes],
+            mdls.QueryFormats,
             self.get(
                 path=f"/sql_interface_queries/{query_id}/run/{result_format}",
-                structure=Union[str, bytes],  # type: ignore
+                structure=mdls.QueryFormats,
                 transport_options=transport_options,
             ),
         )
@@ -13195,3 +13193,6 @@ class Looker40SDK(api_methods.APIMethods):
         return response
 
     # endregion
+
+
+LookerSDK = Looker40SDK

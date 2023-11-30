@@ -25,7 +25,7 @@
  */
 
 /**
- * 398 API models: 249 Spec, 66 Request, 61 Write, 22 Enum
+ * 404 API models: 255 Spec, 66 Request, 61 Write, 22 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl'
@@ -3343,7 +3343,7 @@ export interface IEmbedCookielessSessionAcquireResponse {
    */
   session_reference_token?: string | null
   /**
-   * Session reference token time to live in seconds. Note that this is the same as actual session.
+   * Session reference token time to live in seconds. Note that this is the same as actual embed session. The session is expired when the value is set to zero. It is important to note that the generate token endpoint does NOT return an error when the embed session has expired. If an embedding application needs to monitor expiration of embed sessions, check this property for a value of zero.
    */
   session_reference_token_ttl?: number | null
 }
@@ -4390,6 +4390,135 @@ export interface IInternalHelpResourcesContent {
  */
 export enum InvestigativeContentType {
   dashboard = 'dashboard',
+}
+
+export interface IJsonBi {
+  big_query_metadata: IJsonBiBigQueryMetadata
+  fields: IJsonBiFields
+  /**
+   * Pivots (read-only)
+   */
+  pivots: IJsonBiPivots[]
+  /**
+   * If the query has subtotals (read-only)
+   */
+  has_subtotals: boolean
+  /**
+   * If the query has totals (read-only)
+   */
+  has_totals: boolean
+  /**
+   * If the query results hit the maximum column limit and additional columns were truncated (read-only)
+   */
+  columns_truncated: string
+  /**
+   * Filter expression applied to the query results (read-only)
+   */
+  filter_expression: string | null
+  /**
+   * Filters applied to the query results (read-only)
+   */
+  filters: IDictionary<string>
+  /**
+   * Json query results (read-only)
+   */
+  data: string[]
+}
+
+export interface IJsonBiBigQueryMetadata {
+  /**
+   * Total bytes processed by the BigQuery job (read-only)
+   */
+  total_bytes_processed: number
+  /**
+   * Return whether or not query results were served from the BigQuery cache. (read-only)
+   */
+  backend_cache_hit: boolean
+}
+
+export interface IJsonBiField {
+  /**
+   * SQL expressions for the field (read-only)
+   */
+  sql: string | null
+  /**
+   * Explore name (read-only)
+   */
+  view: string
+  /**
+   * Which dimension group created this dimension (read-only)
+   */
+  dimension_group: string | null
+  /**
+   * Dimension, Measure, etc. (read-only)
+   */
+  category: string
+  /**
+   * Field Group Label (read-only)
+   */
+  field_group_label: string | null
+  /**
+   * Field Name (read-only)
+   */
+  name: string
+  /**
+   * Field Type (read-only)
+   */
+  type: string
+  /**
+   * View Label (read-only)
+   */
+  view_label: string | null
+  /**
+   * Field Label (read-only)
+   */
+  label: string
+  /**
+   * Field Group Variant (read-only)
+   */
+  field_group_variant: string
+  /**
+   * If the field is marked as hidden in the Lookml (read-only)
+   */
+  hidden: boolean
+  /**
+   * Field Description (read-only)
+   */
+  description: string | null
+}
+
+export interface IJsonBiFields {
+  /**
+   * Dimensions represent a column in a table, or a computed value based on some sort of column manipulation or combination (read-only)
+   */
+  dimensions: IJsonBiField[]
+  /**
+   * Measures are similar to aggregate functions in SQL (for example, COUNT, SUM, AVG) and represent information about multiple rows (read-only)
+   */
+  measures: IJsonBiField[]
+  /**
+   * Pivots (read-only)
+   */
+  pivots: IJsonBiField[]
+}
+
+export interface IJsonBiPivots {
+  /**
+   * Pivot Column Value (read-only)
+   */
+  key: string
+  /**
+   * Pivot Data (read-only)
+   */
+  data: IDictionary<string>
+  /**
+   * Pivot Sort Values (read-only)
+   */
+  sort_values: IDictionary<string>
+  /**
+   * If the value is a total (read-only)
+   */
+  is_total: boolean
 }
 
 export interface ILDAPConfig {
@@ -7006,6 +7135,42 @@ export interface IQuery {
   has_table_calculations?: boolean
 }
 
+export interface IQueryFormats {
+  json_bi?: IJsonBi
+  /**
+   *  (read-only)
+   */
+  json?: string | null
+  /**
+   *  (read-only)
+   */
+  json_detail?: string | null
+  /**
+   *  (read-only)
+   */
+  csv?: string | null
+  /**
+   *  (read-only)
+   */
+  txt?: string | null
+  /**
+   *  (read-only)
+   */
+  html?: string | null
+  /**
+   *  (read-only)
+   */
+  md?: string | null
+  /**
+   *  (read-only)
+   */
+  xlsx?: string | null
+  /**
+   *  (read-only)
+   */
+  sql?: string | null
+}
+
 export interface IQueryTask {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -7764,14 +7929,6 @@ export interface IRequestCreateQueryTask {
    * Perform table calculations on query results
    */
   server_table_calcs?: boolean | null
-  /**
-   * DEPRECATED. Render width for image formats. Note that this parameter is always ignored by this method.
-   */
-  image_width?: number | null
-  /**
-   * DEPRECATED. Render height for image formats. Note that this parameter is always ignored by this method.
-   */
-  image_height?: number | null
   /**
    * Requested fields
    */
@@ -10420,6 +10577,14 @@ export interface ISetting {
    */
   embed_enabled?: boolean
   embed_config?: IEmbedConfig
+  /**
+   * Login notification enabled (read-only)
+   */
+  login_notification_enabled?: boolean
+  /**
+   * Login notification text (read-only)
+   */
+  login_notification_text?: string | null
 }
 
 export interface ISmtpNodeStatus {
@@ -11222,7 +11387,7 @@ export interface IUserAttribute {
    */
   label: string | null
   /**
-   * Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")
+   * Type of user attribute ("string", "number", "datetime", "yesno", "zipcode", "advanced_filter_string", "advanced_filter_number")
    */
   type: string | null
   /**
@@ -13676,7 +13841,7 @@ export interface IWriteSessionConfig {
 
 /**
  * Dynamic writeable type for Setting removes:
- * marketplace_site, embed_enabled
+ * marketplace_site, embed_enabled, login_notification_enabled, login_notification_text
  */
 export interface IWriteSetting {
   /**
@@ -13876,7 +14041,7 @@ export interface IWriteUserAttribute {
    */
   label: string | null
   /**
-   * Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")
+   * Type of user attribute ("string", "number", "datetime", "yesno", "zipcode", "advanced_filter_string", "advanced_filter_number")
    */
   type: string | null
   /**

@@ -826,6 +826,13 @@ namespace Looker.SDK.API40
   /// The generate tokens endpoint should be called every time the Looker client asks for a token (except for the
   /// first time when the tokens returned by the acquire_session endpoint should be used).
   ///
+  /// #### Embed session expiration handling
+  ///
+  /// This endpoint does NOT return an error when the embed session expires. This is to simplify processing
+  /// in the caller as errors can happen for non session expiration reasons. Instead the endpoint returns
+  /// the session time to live in the `session_reference_token_ttl` response property. If this property
+  /// contains a zero, the embed session has expired.
+  ///
   /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
   ///
   /// PUT /embed/cookieless_session/generate_tokens -> EmbedCookielessSessionGenerateTokensResponse
@@ -3746,7 +3753,7 @@ namespace Looker.SDK.API40
   /// You can use this function to change the string and integer properties of
   /// a dashboard. Nested objects such as filters, dashboard elements, or dashboard layout components
   /// cannot be modified by this function - use the update functions for the respective
-  /// nested object types (like [update_dashboard_filter()](#!/4.0/Dashboard/update_dashboard_filter) to change a filter)
+  /// nested object types (like [update_dashboard_filter()](#!/3.1/Dashboard/update_dashboard_filter) to change a filter)
   /// to modify nested objects referenced by a dashboard.
   ///
   /// If you receive a 422 error response when updating a dashboard, be sure to look at the
@@ -5639,7 +5646,7 @@ namespace Looker.SDK.API40
   /// | result_format | Description
   /// | :-----------: | :--- |
   /// | json | Plain json
-  /// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+  /// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
   /// | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
   /// | csv | Comma separated values with a header
   /// | txt | Tab separated values with a header
@@ -6863,8 +6870,6 @@ namespace Looker.SDK.API40
   /// <param name="path_prefix">Prefix to use for drill links (url encoded).</param>
   /// <param name="rebuild_pdts">Rebuild PDTS used in query.</param>
   /// <param name="server_table_calcs">Perform table calculations on query results</param>
-  /// <param name="image_width">DEPRECATED. Render width for image formats. Note that this parameter is always ignored by this method.</param>
-  /// <param name="image_height">DEPRECATED. Render height for image formats. Note that this parameter is always ignored by this method.</param>
   /// <param name="fields">Requested fields</param>
   public async Task<SdkResponse<QueryTask, Exception>> create_query_task(
     WriteCreateQueryTask body,
@@ -6878,8 +6883,6 @@ namespace Looker.SDK.API40
     string? path_prefix = null,
     bool? rebuild_pdts = null,
     bool? server_table_calcs = null,
-    long? image_width = null,
-    long? image_height = null,
     string? fields = null,
     ITransportSettings? options = null)
 {  
@@ -6894,8 +6897,6 @@ namespace Looker.SDK.API40
       { "path_prefix", path_prefix },
       { "rebuild_pdts", rebuild_pdts },
       { "server_table_calcs", server_table_calcs },
-      { "image_width", image_width },
-      { "image_height", image_height },
       { "fields", fields }},body,options);
   }
 
@@ -6968,11 +6969,11 @@ namespace Looker.SDK.API40
   /// will be in the message of the 400 error response, but not as detailed as expressed in `json_detail.errors`.
   /// These data formats can only carry row data, and error info is not row data.
   ///
-  /// GET /query_tasks/{query_task_id}/results -> string
+  /// GET /query_tasks/{query_task_id}/results -> QueryTask
   ///
   /// <returns>
-  /// <c>string</c> The query results. (text)
-  /// <c>string</c> The query results. (application/json)
+  /// <c>QueryTask</c> query_task (text)
+  /// <c>QueryTask</c> query_task (application/json)
   /// <c>string</c> The query is not finished (text)
   /// <c>string</c> The query is not finished (application/json)
   /// </returns>
@@ -7089,7 +7090,7 @@ namespace Looker.SDK.API40
   /// | result_format | Description
   /// | :-----------: | :--- |
   /// | json | Plain json
-  /// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+  /// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
   /// | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
   /// | csv | Comma separated values with a header
   /// | txt | Tab separated values with a header
@@ -7203,7 +7204,7 @@ namespace Looker.SDK.API40
   /// | result_format | Description
   /// | :-----------: | :--- |
   /// | json | Plain json
-  /// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+  /// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
   /// | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
   /// | csv | Comma separated values with a header
   /// | txt | Tab separated values with a header
@@ -7314,7 +7315,7 @@ namespace Looker.SDK.API40
   /// | result_format | Description
   /// | :-----------: | :--- |
   /// | json | Plain json
-  /// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+  /// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
   /// | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
   /// | csv | Comma separated values with a header
   /// | txt | Tab separated values with a header
@@ -7464,13 +7465,9 @@ namespace Looker.SDK.API40
   ///
   /// POST /sql_queries/{slug}/run/{result_format} -> string
   ///
-  /// **Note**: Binary content may be returned by this method.
-  ///
   /// <returns>
   /// <c>string</c> SQL Runner Query (text)
   /// <c>string</c> SQL Runner Query (application/json)
-  /// <c>string</c> SQL Runner Query (image/png)
-  /// <c>string</c> SQL Runner Query (image/jpeg)
   /// </returns>
   ///
   /// <param name="slug">slug of query</param>
@@ -8769,18 +8766,12 @@ namespace Looker.SDK.API40
   /// | md | Simple markdown
   /// | xlsx | MS Excel spreadsheet
   /// | sql | Returns the generated SQL rather than running the query
-  /// | png | A PNG image of the visualization of the query
-  /// | jpg | A JPG image of the visualization of the query
   ///
-  /// GET /sql_interface_queries/{query_id}/run/{result_format} -> string
-  ///
-  /// **Note**: Binary content may be returned by this method.
+  /// GET /sql_interface_queries/{query_id}/run/{result_format} -> QueryFormats
   ///
   /// <returns>
-  /// <c>string</c> SQL Interface Query (text)
-  /// <c>string</c> SQL Interface Query (application/json)
-  /// <c>string</c> SQL Interface Query (image/png)
-  /// <c>string</c> SQL Interface Query (image/jpeg)
+  /// <c>QueryFormats</c> Query Formats (text)
+  /// <c>QueryFormats</c> Query Formats (application/json)
   /// </returns>
   ///
   /// <param name="query_id">Integer id of query</param>

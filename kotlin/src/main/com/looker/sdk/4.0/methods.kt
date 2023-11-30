@@ -842,6 +842,13 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * The generate tokens endpoint should be called every time the Looker client asks for a token (except for the
      * first time when the tokens returned by the acquire_session endpoint should be used).
      *
+     * #### Embed session expiration handling
+     *
+     * This endpoint does NOT return an error when the embed session expires. This is to simplify processing
+     * in the caller as errors can happen for non session expiration reasons. Instead the endpoint returns
+     * the session time to live in the `session_reference_token_ttl` response property. If this property
+     * contains a zero, the embed session has expired.
+     *
      * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
      *
      * @param {EmbedCookielessSessionGenerateTokens} body
@@ -3779,7 +3786,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * You can use this function to change the string and integer properties of
      * a dashboard. Nested objects such as filters, dashboard elements, or dashboard layout components
      * cannot be modified by this function - use the update functions for the respective
-     * nested object types (like [update_dashboard_filter()](#!/4.0/Dashboard/update_dashboard_filter) to change a filter)
+     * nested object types (like [update_dashboard_filter()](#!/3.1/Dashboard/update_dashboard_filter) to change a filter)
      * to modify nested objects referenced by a dashboard.
      *
      * If you receive a 422 error response when updating a dashboard, be sure to look at the
@@ -5763,7 +5770,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * | result_format | Description
      * | :-----------: | :--- |
      * | json | Plain json
-     * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+     * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
      * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
      * | csv | Comma separated values with a header
      * | txt | Tab separated values with a header
@@ -7001,8 +7008,6 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * @param {String} path_prefix Prefix to use for drill links (url encoded).
      * @param {Boolean} rebuild_pdts Rebuild PDTS used in query.
      * @param {Boolean} server_table_calcs Perform table calculations on query results
-     * @param {Long} image_width DEPRECATED. Render width for image formats. Note that this parameter is always ignored by this method.
-     * @param {Long} image_height DEPRECATED. Render height for image formats. Note that this parameter is always ignored by this method.
      * @param {String} fields Requested fields
      *
      * POST /query_tasks -> QueryTask
@@ -7019,8 +7024,6 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
         path_prefix: String? = null,
         rebuild_pdts: Boolean? = null,
         server_table_calcs: Boolean? = null,
-        image_width: Long? = null,
-        image_height: Long? = null,
         fields: String? = null,
     ): SDKResponse {
         return this.post<QueryTask>(
@@ -7036,8 +7039,6 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
                 "path_prefix" to path_prefix,
                 "rebuild_pdts" to rebuild_pdts,
                 "server_table_calcs" to server_table_calcs,
-                "image_width" to image_width,
-                "image_height" to image_height,
                 "fields" to fields,
             ),
             body,
@@ -7118,13 +7119,13 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      *
      * @param {String} query_task_id ID of the Query Task
      *
-     * GET /query_tasks/{query_task_id}/results -> String
+     * GET /query_tasks/{query_task_id}/results -> QueryTask
      */
     fun query_task_results(
         query_task_id: String,
     ): SDKResponse {
         val path_query_task_id = encodeParam(query_task_id)
-        return this.get<String>("/query_tasks/${path_query_task_id}/results", mapOf())
+        return this.get<QueryTask>("/query_tasks/${path_query_task_id}/results", mapOf())
     }
 
     /**
@@ -7236,7 +7237,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * | result_format | Description
      * | :-----------: | :--- |
      * | json | Plain json
-     * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+     * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
      * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
      * | csv | Comma separated values with a header
      * | txt | Tab separated values with a header
@@ -7348,7 +7349,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * | result_format | Description
      * | :-----------: | :--- |
      * | json | Plain json
-     * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+     * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
      * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
      * | csv | Comma separated values with a header
      * | txt | Tab separated values with a header
@@ -7459,7 +7460,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * | result_format | Description
      * | :-----------: | :--- |
      * | json | Plain json
-     * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+     * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
      * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
      * | csv | Comma separated values with a header
      * | txt | Tab separated values with a header
@@ -7605,8 +7606,6 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * @param {String} download Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.
      *
      * POST /sql_queries/{slug}/run/{result_format} -> String
-     *
-     * **Note**: Binary content may be returned by this method.
      */
     @JvmOverloads fun run_sql_query(
         slug: String,
@@ -8940,15 +8939,11 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * | md | Simple markdown
      * | xlsx | MS Excel spreadsheet
      * | sql | Returns the generated SQL rather than running the query
-     * | png | A PNG image of the visualization of the query
-     * | jpg | A JPG image of the visualization of the query
      *
      * @param {Long} query_id Integer id of query
      * @param {String} result_format Format of result, options are: ["json_bi"]
      *
-     * GET /sql_interface_queries/{query_id}/run/{result_format} -> String
-     *
-     * **Note**: Binary content may be returned by this method.
+     * GET /sql_interface_queries/{query_id}/run/{result_format} -> QueryFormats
      */
     fun run_sql_interface_query(
         query_id: Long,
@@ -8956,7 +8951,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
     ): SDKResponse {
         val path_query_id = encodeParam(query_id)
         val path_result_format = encodeParam(result_format)
-        return this.get<String>("/sql_interface_queries/${path_query_id}/run/${path_result_format}", mapOf())
+        return this.get<QueryFormats>("/sql_interface_queries/${path_query_id}/run/${path_result_format}", mapOf())
     }
 
     /**
