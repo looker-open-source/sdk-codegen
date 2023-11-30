@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [23.20.0](https://github.com/looker-open-source/sdk-codegen/compare/extension-sdk-react-v23.18.0...extension-sdk-react-v23.20.0) (2023-11-30)
+
+
+### Miscellaneous Chores
+
+* **extension-sdk-react:** Synchronize undefined versions
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-sdk bumped from ^23.18.0 to ^23.20.0
+    * @looker/sdk bumped from ^23.18.0 to ^23.20.0
+
 ## [23.18.0](https://github.com/looker-open-source/sdk-codegen/compare/extension-sdk-react-v23.16.0...extension-sdk-react-v23.18.0) (2023-11-22)
 
 
