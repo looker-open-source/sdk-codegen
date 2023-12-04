@@ -195,7 +195,7 @@ export const resources: Array<Resource> = [
     title: 'Blocks Documentation',
   },
   {
-    content: 'Demo video of the new visualization components.',
+    content: 'Demo video of visualization components.',
     type: ResourceType.ExampleDemo,
     tag: ResourceTag.Components,
     link: 'https://www.youtube.com/watch?v=rSWX6oAOtMs',
@@ -441,7 +441,7 @@ export const resources: Array<Resource> = [
   },
   {
     content:
-      'Repo of tools to follow best practices when developing LookML files.',
+      'Repo of tools to follow best practices when developing LookML files. (may be out of date)',
     type: ResourceType.Tooling,
     tag: ResourceTag.Lookml,
     link: 'https://github.com/ww-tech/lookml-tools',
