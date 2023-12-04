@@ -32,7 +32,6 @@ import type {
   TileSDK,
   TileError,
   DrillMenuOptions,
-  TriggerConfig,
   CrossFilterOptions,
   Filters,
   TileHostData,
@@ -72,18 +71,6 @@ export class TileSDKImpl implements TileSDK {
   clearErrors(group?: string) {
     if (this.hostApi.isDashboardMountSupported) {
       this.hostApi.send(ExtensionRequestType.TILE_CLEAR_ERRORS, { group })
-    } else {
-      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR
-    }
-  }
-
-  trigger(message: string, config: TriggerConfig[], event?: MouseEvent) {
-    if (this.hostApi.isDashboardMountSupported) {
-      this.hostApi.send(ExtensionRequestType.TILE_TRIGGER, {
-        message,
-        config,
-        event: this.sanitizeEvent(event),
-      })
     } else {
       throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR
     }

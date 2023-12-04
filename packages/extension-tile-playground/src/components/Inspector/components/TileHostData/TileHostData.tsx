@@ -67,7 +67,7 @@ export const TileHostData: React.FC = () => {
       : 'Dashboard is NOT printing'
 
   const exploringMessage =
-    isExploring && 'Extension visualization is being configured in exlore'
+    isExploring && 'Extension visualization is being configured in an explore'
 
   const dashboardEditingMessage = isDashboardEditing
     ? 'Dashboard is editing'
