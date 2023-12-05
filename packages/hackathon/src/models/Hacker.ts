@@ -265,9 +265,22 @@ export class Hackers extends TypedRows<Hacker> {
     if (!groups || groups.length === 0)
       throw new Error(`Group ${groupName} was not found`)
     const group = groups[0]
+    // With 1400 users in group, the call search_users() takes 30 seconds.
+    // Best guess of user fields used in hack app below.
+    const required_user_fields = [
+      'credentials_api3',
+      'first_name',
+      'group_ids',
+      'id',
+      'is_disabled',
+      'last_name',
+      'locale',
+      'role_ids',
+    ]
     return await this.sdk.ok(
       this.sdk.search_users({
         group_id: group.id?.toString(),
+        fields: required_user_fields.join(),
       })
     )
   }
