@@ -114,9 +114,16 @@ export const JudgingList: FC<JudgingListProps> = () => {
   const totalPages = Math.ceil(judgings.length / PAGE_SIZE)
 
   const startIdx = (currentPage - 1) * PAGE_SIZE
-  const rows = judgings
+
+  let filteredJudgings = judgings
+  if (!hacker.canAdmin) {
+    filteredJudgings = filteredJudgings.filter(
+      (judging) => judging.user_id === hacker.id
+    )
+  }
+
+  const rows = filteredJudgings
     .slice(startIdx, startIdx + PAGE_SIZE)
-    .filter((judging) => judging.user_id === hacker.id)
     .map((judging, idx) => (
       <DataTableItem
         key={idx}
