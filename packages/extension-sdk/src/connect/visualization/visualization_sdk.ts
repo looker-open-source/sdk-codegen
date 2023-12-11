@@ -165,6 +165,16 @@ export class VisualizationSDKImpl implements VisualizationSDK {
     return this._visConfig
   }
 
+  updateRowLimit(rowLimit: number) {
+    if (this.hostApi.isDashboardMountSupported) {
+      this.hostApi.send(ExtensionRequestType.TILE_ROW_LIMIT_UPDATE, {
+        rowLimit,
+      })
+    } else {
+      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR
+    }
+  }
+
   get queryResponse(): QueryResponse {
     if (!this._queryResponse) {
       this._queryResponse = new QueryResponseImpl(

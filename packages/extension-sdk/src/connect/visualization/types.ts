@@ -121,6 +121,7 @@ export interface VisualizationSDK {
   updateVisData: (rawVisData: RawVisualizationData) => void
   configureVisualization: (options: VisOptions) => void
   setVisConfig: (config: RawVisConfig) => void
+  updateRowLimit: (rowLimit: number) => void
 }
 
 export interface VisOptionValue {

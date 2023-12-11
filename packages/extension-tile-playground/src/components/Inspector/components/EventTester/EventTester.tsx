@@ -40,6 +40,7 @@ export const EventTester: React.FC = () => {
   const {
     extensionSDK,
     tileSDK,
+    visualizationSDK,
     tileHostData: { dashboardFilters },
   } = useContext(ExtensionContext40)
   const [runDashboard, setRunDashboard] = useState(false)
@@ -66,28 +67,6 @@ export const EventTester: React.FC = () => {
   const clearAllErrorsClick = useCallback(() => {
     tileSDK.clearErrors()
   }, [tileSDK])
-
-  const triggerClick = useCallback(
-    (event: MouseEvent) => {
-      // Taken from custom visualizations 2
-      const defaultColors = {
-        red: '#F36254',
-        green: '#4FBC89',
-        yellow: '#FCF758',
-        white: '#FFFFFF',
-      }
-      tileSDK.trigger(
-        'updateConfig',
-        [
-          { lowColor: defaultColors.red },
-          { midColor: defaultColors.white },
-          { highColor: defaultColors.green },
-        ],
-        event
-      )
-    },
-    [tileSDK]
-  )
 
   const toggleCrossFilterClick = useCallback(
     (event: MouseEvent) => {
@@ -135,6 +114,10 @@ export const EventTester: React.FC = () => {
     extensionSDK.updateTitle(`Update tile title ${new Date().getSeconds()}`)
   }, [extensionSDK])
 
+  const updateRowLimit = useCallback(() => {
+    visualizationSDK.updateRowLimit(100)
+  }, [visualizationSDK])
+
   return (
     <Card>
       <CardContent>
@@ -149,8 +132,8 @@ export const EventTester: React.FC = () => {
             <ButtonOutline onClick={clearAllErrorsClick} width="100%">
               Test clear all errors
             </ButtonOutline>
-            <ButtonOutline onClick={triggerClick} width="100%">
-              Test trigger
+            <ButtonOutline onClick={updateRowLimit} width="100%">
+              Test Update Row Limit
             </ButtonOutline>
             <ButtonOutline onClick={openDrillMenuClick} width="100%">
               Test open drill menu

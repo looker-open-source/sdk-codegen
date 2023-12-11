@@ -198,10 +198,6 @@ export interface CrossFilterOptions {
   row: Row
 }
 
-// TODO build out type
-export type TriggerConfig = any
-
-// TODO build out type
 export type DrillMenuOptions = any
 
 export interface Filters {
@@ -216,11 +212,6 @@ export interface TileSDK {
   tileHostDataChanged: (hostData: Partial<TileHostData>) => void
   addErrors: (...errors: TileError[]) => void
   clearErrors: (group?: string) => void
-  trigger: (
-    message: string,
-    config: TriggerConfig[],
-    event?: MouseEvent
-  ) => void
   openDrillMenu: (options: DrillMenuOptions, event?: MouseEvent) => void
   toggleCrossFilter: (options: CrossFilterOptions, event?: MouseEvent) => void
   runDashboard: () => void

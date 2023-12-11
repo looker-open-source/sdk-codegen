@@ -23,7 +23,13 @@
  SOFTWARE.
 
  */
-import React, { useContext, useEffect, useCallback, useMemo } from 'react'
+import React, {
+  useContext,
+  useEffect,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react'
 import { SpaceVertical, Text, Button } from '@looker/components'
 import { More } from '@looker/icons'
 import { ExtensionContext40 } from '@looker/extension-sdk-react'
@@ -39,6 +45,8 @@ export const VisualizationTile: React.FC = () => {
   const { visualizationData, visualizationSDK, extensionSDK } =
     useContext(ExtensionContext40)
 
+  const [visConfigured, setVisConfigured] = useState<boolean>(true)
+
   const { value, valueFormat } = useMemo(() => {
     if (visualizationData) {
       return getValueAndFormat(visualizationSDK)
@@ -47,8 +55,9 @@ export const VisualizationTile: React.FC = () => {
   }, [visualizationData, visualizationSDK])
 
   useEffect(() => {
-    if (visualizationSDK) {
+    if (visualizationSDK && !visConfigured) {
       visualizationSDK.configureVisualization(liquidFillVisOptions)
+      setVisConfigured(true)
     }
   }, [visualizationSDK])
 

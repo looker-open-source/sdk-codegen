@@ -147,18 +147,6 @@ describe('TileSDK', () => {
     expect(api.send).toBeCalledWith('TILE_CLEAR_ERRORS', { group: 'abc' })
   })
 
-  it('sends trigger message ', () => {
-    const tileSdk = makeTileSdk()
-    const config = [{ hello: 'world' }]
-    const message = 'message1'
-    tileSdk.trigger(message, config, makeEvent(config))
-    expect(api.send).toBeCalledWith('TILE_TRIGGER', {
-      message,
-      config,
-      event: makeEvent(),
-    })
-  })
-
   it('sends open drill menu message ', () => {
     const tileSdk = makeTileSdk()
     const options = { hello: 'world' }
@@ -211,7 +199,6 @@ describe('TileSDK', () => {
     method
     ${'addErrors'}
     ${'clearErrors'}
-    ${'trigger'}
     ${'openDrillMenu'}
     ${'toggleCrossFilter'}
     ${'runDashboard'}

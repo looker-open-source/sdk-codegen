@@ -140,10 +140,6 @@ export enum ExtensionRequestType {
    */
   TILE_CLEAR_ERRORS = 'TILE_CLEAR_ERRORS',
   /**
-   * Tile trigger
-   */
-  TILE_TRIGGER = 'TILE_TRIGGER',
-  /**
    * Tile open drill menu
    */
   TILE_OPEN_DRILL_MENU = 'TILE_OPEN_DRILL_MENU',
@@ -151,6 +147,10 @@ export enum ExtensionRequestType {
    * Tile toggle cross filter
    */
   TILE_TOGGLE_CROSS_FILTER = 'TILE_TOGGLE_CROSS_FILTER',
+  /**
+   * Tile update row limit
+   */
+  TILE_ROW_LIMIT_UPDATE = 'TILE_ROW_LIMIT_UPDATE',
   /**
    * Tile run dashboard. Indicates that the dashboard queries should be run.
    */
