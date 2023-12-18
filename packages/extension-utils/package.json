@@ -34,7 +34,7 @@
     "@looker/sdk-rtl": "^21.6.1",
     "@reduxjs/toolkit": "^1.9.3",
     "@styled-icons/material": "^10.47.0",
-    "react": "^16.14.0",
+    "react": "^17.0.2",
     "react-redux": "^7.2.3",
     "react-router-dom": "^5.3.4",
     "typed-redux-saga": "^1.5.0"
