@@ -40,8 +40,8 @@
   },
   "dependencies": {
     "@looker/chatty": "2.3.9",
-    "@looker/sdk": "^23.20.0",
-    "@looker/sdk-rtl": "^21.6.1",
+    "@looker/sdk": "23.20.0",
+    "@looker/sdk-rtl": "21.6.1",
     "deepmerge": "^4.2.2",
     "readable-stream": "^3.4.0",
     "request": "^2.88.0",
