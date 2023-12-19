@@ -1,5 +1,12 @@
 # Changelog
 
+## [23.21.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.20.0...sdk-codegen-all-v23.21.0) (2023-12-19)
+
+
+### Features
+
+* make update filter naming generic ([#1413](https://github.com/looker-open-source/sdk-codegen/issues/1413)) ([0fb1b5d](https://github.com/looker-open-source/sdk-codegen/commit/0fb1b5d9374b476c7aeee065207936b7cd5403fd))
+
 ## [23.20.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.18.0...sdk-codegen-all-v23.20.0) (2023-11-30)
 
 
