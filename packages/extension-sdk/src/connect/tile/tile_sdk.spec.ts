@@ -185,7 +185,7 @@ describe('TileSDK', () => {
     tileSdk.updateFilters(filters, true)
     expect(api.send).toBeCalledWith('TILE_UPDATE_FILTERS', {
       filters,
-      runDashboard: true,
+      run: true,
     })
   })
 
