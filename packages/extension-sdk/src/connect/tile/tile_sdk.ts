@@ -114,11 +114,11 @@ export class TileSDKImpl implements TileSDK {
     }
   }
 
-  updateFilters(filters: Filters, runDashboard = false) {
+  updateFilters(filters: Filters, run = false) {
     if (this.hostApi.isDashboardMountSupported) {
       this.hostApi.send(ExtensionRequestType.TILE_UPDATE_FILTERS, {
         filters,
-        runDashboard,
+        run,
       })
     } else {
       throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR
