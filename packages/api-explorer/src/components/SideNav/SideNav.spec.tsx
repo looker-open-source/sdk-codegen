@@ -47,6 +47,7 @@ describe('SideNav', () => {
 
   beforeEach(() => {
     saveLocation = globalThis.window.location
+    delete (window as any).location
     window.location = {
       ...saveLocation,
       pathname: '/4.0',
