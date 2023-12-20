@@ -73,14 +73,14 @@ describe('SideNav', () => {
     expect(tabs[1]).toHaveTextContent(`Types (${countTypes(spec.api!.types)})`)
   })
 
-  test('Methods tab is the default active tab', () => {
+  test('Methods tab is the default active tab', async () => {
     renderWithRouterAndReduxProvider(<SideNav spec={spec} />, ['/4.0/methods'])
     expect(screen.getAllByText(allTagsPattern)).toHaveLength(2)
     expect(
       screen.queryAllByRole('link', { name: allTypesPattern })
     ).toHaveLength(0) // eslint-disable-line jest-dom/prefer-in-document
 
-    userEvent.click(screen.getByRole('tab', { name: /^Types \(\d+\)$/ }))
+    await userEvent.click(screen.getByRole('tab', { name: /^Types \(\d+\)$/ }))
 
     expect(screen.queryAllByText(allTagsPattern)).toHaveLength(2)
   })
@@ -132,19 +132,17 @@ describe('Search', () => {
     )
     const input = screen.getByLabelText('Search')
     expect(input).toHaveValue(searchPattern)
-    await waitFor(() => {
-      expect(spec.api!.search).toHaveBeenCalledWith(
-        searchPattern,
-        criteriaToSet(defaultSettingsState.searchCriteria)
-      )
-      const methods = screen.getByRole('tab', { name: 'Methods (1)' })
-      userEvent.click(methods)
-      expect(
-        screen.getByText(spec.api!.tags.Auth.create_sso_embed_url.summary)
-      ).toBeInTheDocument()
-      const types = screen.getByRole('tab', { name: 'Types (1)' })
-      userEvent.click(types)
-      expect(screen.getByText('EmbedSso')).toBeInTheDocument()
-    })
+    expect(spec.api!.search).toHaveBeenCalledWith(
+      searchPattern,
+      criteriaToSet(defaultSettingsState.searchCriteria)
+    )
+    const methods = screen.getByRole('tab', { name: 'Methods (1)' })
+    await userEvent.click(methods)
+    expect(
+      screen.getByText(spec.api!.tags.Auth.create_sso_embed_url.summary)
+    ).toBeInTheDocument()
+    const types = screen.getByRole('tab', { name: 'Types (1)' })
+    await userEvent.click(types)
+    expect(screen.getByText('EmbedSso')).toBeInTheDocument()
   })
 })
