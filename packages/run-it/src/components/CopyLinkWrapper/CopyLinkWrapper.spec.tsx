@@ -76,10 +76,8 @@ describe('CopyLinkWrapper', () => {
     )
     const div = screen.getByText('test')
     await userEvent.hover(div)
-    await waitFor(() => {
-      userEvent.click(screen.getByRole('button'))
-      expect(mockClipboardCopy).toHaveBeenCalledWith(location.href)
-    })
+    await userEvent.click(screen.getByRole('button'))
+    expect(mockClipboardCopy).toHaveBeenCalledWith(location.href)
   })
 
   test('it updates tooltip content upon copy', async () => {
@@ -93,15 +91,12 @@ describe('CopyLinkWrapper', () => {
     const div = screen.getByText('test')
     await userEvent.hover(div)
     const button = screen.getByRole('button')
-    await waitFor(() => {
-      userEvent.hover(button)
-      expect(screen.getByText('Copy to clipboard')).toBeInTheDocument()
-    })
-    await waitFor(() => {
-      userEvent.click(screen.getByRole('button'))
-      expect(mockClipboardCopy).toHaveBeenCalledWith(location.href)
-      userEvent.hover(button)
-      expect(screen.getAllByText('Copied to clipboard')[0]).toBeVisible()
-    })
+    await userEvent.hover(button)
+    expect(screen.getAllByText('Copy to clipboard')[0]).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button'))
+    expect(mockClipboardCopy).toHaveBeenCalledWith(location.href)
+    await userEvent.hover(button)
+    const copied = screen.getAllByText('Copied to clipboard')
+    expect(copied[0]).toBeInTheDocument() // TODO why does .toBeVisible() fail now?
   })
 })

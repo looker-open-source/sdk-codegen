@@ -89,12 +89,10 @@ describe('DocSource', () => {
       declaration.line
     )
     expect(link.closest('a')).toHaveAttribute('href', expected)
-    await waitFor(() => {
-      userEvent.hover(link)
-      expect(screen.getByRole('tooltip')).toHaveTextContent(
-        `${declaration.sourceFile}#L${declaration.line}`
-      )
-    })
+    await userEvent.hover(link)
+    expect(screen.getByRole('tooltip')).toHaveTextContent(
+      `${declaration.sourceFile}#L${declaration.line}`
+    )
   })
 
   test('it renders a method declaration link', async () => {
@@ -108,11 +106,9 @@ describe('DocSource', () => {
       declaration.line
     )
     expect(link.closest('a')).toHaveAttribute('href', expected)
-    await waitFor(() => {
-      userEvent.hover(link)
-      expect(screen.getByRole('tooltip')).toHaveTextContent(
-        `${declaration.sourceFile}#L${declaration.line}`
-      )
-    })
+    await userEvent.hover(link)
+    expect(screen.getByRole('tooltip')).toHaveTextContent(
+      `${declaration.sourceFile}#L${declaration.line}`
+    )
   })
 })
