@@ -24,7 +24,7 @@
 
  */
 import React from 'react'
-import { screen, waitFor } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import type { IDeclarationMine } from '@looker/sdk-codegen'
 import { codeSearchLink } from '@looker/sdk-codegen'
 import userEvent from '@testing-library/user-event'

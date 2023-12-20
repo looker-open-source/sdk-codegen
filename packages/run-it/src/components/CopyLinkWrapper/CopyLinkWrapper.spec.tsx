@@ -25,7 +25,7 @@
  */
 
 import { renderWithTheme } from '@looker/components-test-utils'
-import { screen, waitFor } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import React from 'react'
 import userEvent from '@testing-library/user-event'
 import { BrowserAdaptor, registerTestEnvAdaptor } from '@looker/extension-utils'
