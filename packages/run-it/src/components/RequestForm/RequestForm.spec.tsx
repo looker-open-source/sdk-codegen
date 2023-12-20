@@ -174,7 +174,7 @@ describe('RequestForm', () => {
     )
 
     const item = screen.getByRole('switch', { name })
-    userEvent.click(item)
+    await userEvent.click(item)
     await waitFor(() => {
       expect(setRequestContent).toHaveBeenLastCalledWith({ [name]: true })
     })
@@ -205,10 +205,10 @@ describe('RequestForm', () => {
     )
 
     const calendar = screen.getByText('Open calendar')
-    userEvent.click(calendar)
+    await userEvent.click(calendar)
 
     const date = screen.getAllByText('15')[1]
-    userEvent.click(date)
+    await userEvent.click(date)
     expect(setRequestContent).toHaveBeenLastCalledWith({
       [name]: new Date('Aug 15, 2022 00:00:00 AM'),
     })
@@ -238,7 +238,7 @@ describe('RequestForm', () => {
     )
 
     const item = screen.getByRole('spinbutton', { name })
-    userEvent.type(item, '3')
+    await userEvent.type(item, '3')
     await waitFor(() => {
       expect(setRequestContent).toHaveBeenCalledWith({ [name]: 3 })
     })
@@ -267,7 +267,8 @@ describe('RequestForm', () => {
     )
 
     const item = screen.getByRole('textbox', { name: 'text_item' })
-    await userEvent.paste(item, 'some text')
+    await userEvent.click(item)
+    await userEvent.paste('some text')
     await waitFor(() => {
       expect(setRequestContent).toHaveBeenCalledWith({
         text_item: 'some text',
@@ -306,7 +307,8 @@ describe('RequestForm', () => {
     const input = screen.getByRole('textbox')
     await act(async () => {
       // TODO: make complex items requirable. i.e. expect(input).toBeRequired() should pass
-      await userEvent.paste(input, 'content')
+      await userEvent.click(input)
+      await userEvent.paste('content')
       expect(setRequestContent).toHaveBeenCalled()
       // TODO get this working again
       // await userEvent.click(screen.getByRole('button', { name: run }))
@@ -339,8 +341,10 @@ describe('RequestForm', () => {
 
     expect(screen.getByRole('textbox')).toBeInTheDocument()
     const input = screen.getByRole('textbox')
-    userEvent.paste(input, 'foo')
-    userEvent.type(input, '{enter}')
+    const ue = userEvent.setup()
+    await ue.click(input)
+    await ue.paste('foo')
+    await ue.type(input, '{enter}')
     await waitFor(() => {
       expect(setRequestContent).toHaveBeenLastCalledWith({
         id: 'foo',

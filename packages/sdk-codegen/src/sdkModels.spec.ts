@@ -922,7 +922,7 @@ describe('sdkModels', () => {
 
         it('array type uses element type as custom type', () => {
           const intType = new IntrinsicType('integer')
-          const schema = { type: 'mock' } as OAS.SchemaObject
+          const schema = { type: 'mock' } as unknown as OAS.SchemaObject
           let actual: IType = new ArrayType(intType, schema)
           expect(actual.customType).toEqual('')
           expect(actual.name).toEqual('integer[]')

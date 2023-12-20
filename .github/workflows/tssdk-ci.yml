@@ -43,7 +43,7 @@ jobs:
       matrix:
         os:
           - ubuntu
-        node-version: [16.x, 18.x]
+        node-version: [18.x, 20.x]
 
     steps:
       - name: Cancel Previous Runs
@@ -122,7 +122,7 @@ jobs:
     runs-on: ${{ matrix.os }}-latest
     strategy:
       matrix:
-        node-version: [16.x]
+        node-version: [18.x, 20.x]
         os:
           - ubuntu
         looker: ${{ fromJson(needs.setup.outputs.matrix_json) }}

@@ -109,7 +109,8 @@ describe('Search', () => {
     renderWithRouterAndReduxProvider(<SideNav spec={spec} />, ['/4.0/methods'])
     const searchPattern = 'embedsso'
     const input = screen.getByLabelText('Search')
-    await userEvent.paste(input, searchPattern)
+    await userEvent.click(input)
+    await userEvent.paste(searchPattern)
     await waitFor(() => {
       expect(mockHistoryPush).toHaveBeenCalledWith({
         pathname: '/4.0/methods',

@@ -36,11 +36,11 @@
   "devDependencies": {
     "redux-saga-tester": "^1.0.874",
     "@looker/sdk-node": "23.20.0",
-    "@testing-library/react": "^12.1.5",
+    "@testing-library/react": "^14.1.2",
     "@looker/components-test-utils": "^1.5.27",
     "react-redux": "^7.2.9",
     "@types/react-redux": "^7.1.25",
-    "@testing-library/user-event": "^14.4.3"
+    "@testing-library/user-event": "^14.5.1"
   },
   "dependencies": {
     "@looker/components": "^4.1.3",
