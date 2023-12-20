@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [23.20.1](https://github.com/looker-open-source/sdk-codegen/compare/extension-sdk-v23.20.0...extension-sdk-v23.20.1) (2023-12-19)
+
+
+### Features
+
+* make update filter naming generic ([#1413](https://github.com/looker-open-source/sdk-codegen/issues/1413)) ([0fb1b5d](https://github.com/looker-open-source/sdk-codegen/commit/0fb1b5d9374b476c7aeee065207936b7cd5403fd))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from ^23.20.0 to ^23.20.1
+
 ## [23.20.0](https://github.com/looker-open-source/sdk-codegen/compare/extension-sdk-v23.18.0...extension-sdk-v23.20.0) (2023-11-30)
 
 
