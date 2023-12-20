@@ -152,13 +152,6 @@ export const SideNav: FC<SideNavProps> = ({ headless = false, spec }) => {
     })
   }, [searchPattern, specKey, spec, searchCriteria])
 
-  useEffect(() => {
-    const { selectedIndex, onSelectTab } = tabs
-    if (defaultIndex !== selectedIndex) {
-      onSelectTab(defaultIndex)
-    }
-  }, [defaultIndex, tabs])
-
   const size = useWindowSize()
   const headlessOffset = headless ? 200 : 120
   const menuH = size.height - 16 * HEADER_REM - headlessOffset
