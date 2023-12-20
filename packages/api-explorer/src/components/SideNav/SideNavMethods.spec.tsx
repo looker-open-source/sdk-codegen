@@ -56,11 +56,11 @@ describe('SideNavMethods', () => {
     jest.clearAllMocks()
   })
 
-  test('it renders provided methods', () => {
+  test('it renders provided methods', async () => {
     renderWithRouterAndReduxProvider(
       <SideNavMethods methods={methods} tag={tag} specKey={specKey} />
     )
-    userEvent.click(screen.getByText(tag))
+    await userEvent.click(screen.getByText(tag))
     const sideNavItems = screen.getAllByRole('link')
     expect(sideNavItems).toHaveLength(Object.keys(methods).length)
     expect(sideNavItems[0]).toHaveAttribute(
@@ -69,13 +69,13 @@ describe('SideNavMethods', () => {
     )
   })
 
-  test('tag expands and displays methods after clicked', () => {
+  test('tag expands and displays methods after clicked', async () => {
     renderWithRouterAndReduxProvider(
       <SideNavMethods methods={methods} tag={tag} specKey={specKey} />
     )
     const firstMethod = Object.values(methods)[0].schema.summary
     expect(screen.queryByText(firstMethod)).not.toBeInTheDocument()
-    userEvent.click(screen.getByText(tag))
+    await userEvent.click(screen.getByText(tag))
     expect(mockHistoryPush).toHaveBeenCalledWith(`/${specKey}/methods/${tag}`)
     expect(screen.getByRole('link', { name: firstMethod })).toBeInTheDocument()
     expect(screen.getAllByRole('link')).toHaveLength(
@@ -83,7 +83,7 @@ describe('SideNavMethods', () => {
     )
   })
 
-  test('expanded tag closes when clicked', () => {
+  test('expanded tag closes when clicked', async () => {
     renderWithRouterAndReduxProvider(
       <SideNavMethods
         methods={methods}
@@ -97,13 +97,13 @@ describe('SideNavMethods', () => {
     expect(screen.getAllByRole('link')).toHaveLength(
       Object.values(methods).length
     )
-    userEvent.click(screen.getByText(tag))
+    await userEvent.click(screen.getByText(tag))
     expect(mockHistoryPush).toHaveBeenCalledWith(`/${specKey}/methods`)
     expect(screen.queryByText(firstMethod)).not.toBeInTheDocument()
     expect(screen.queryByRole('link')).not.toBeInTheDocument()
   })
 
-  test('it highlights text matching search pattern in both tag and methods', () => {
+  test('it highlights text matching search pattern in both tag and methods', async () => {
     const store = createTestStore({ settings: { searchPattern: 'dash' } })
     renderWithRouterAndReduxProvider(
       <SideNavMethods
@@ -114,7 +114,7 @@ describe('SideNavMethods', () => {
       undefined,
       store
     )
-    userEvent.click(screen.getByText('Dash'))
+    await userEvent.click(screen.getByText('Dash'))
     const matches = screen.getAllByText(/dash/i)
     expect(matches).toHaveLength(2)
     matches.forEach((match) => {

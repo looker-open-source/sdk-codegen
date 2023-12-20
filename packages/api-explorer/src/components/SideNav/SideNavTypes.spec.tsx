@@ -58,12 +58,12 @@ describe('SideNavTypes', () => {
     expect(screen.getByRole('heading', { level: 4 })).toHaveTextContent(tag)
   })
 
-  test('tag expands and displays types after clicked', () => {
+  test('tag expands and displays types after clicked', async () => {
     renderWithRouterAndReduxProvider(
       <SideNavTypes types={{ ...api.types }} tag={tag} specKey={specKey} />
     )
     expect(screen.queryByText(typeTags[0])).not.toBeInTheDocument()
-    userEvent.click(screen.getByText(tag))
+    await userEvent.click(screen.getByText(tag))
     expect(mockHistoryPush).toHaveBeenCalledWith({
       pathname: `/${specKey}/types/${tag}`,
       search: '',
@@ -71,7 +71,7 @@ describe('SideNavTypes', () => {
     expect(screen.getByRole('link', { name: typeTags[0] })).toBeInTheDocument()
   })
 
-  test('expanded tag closes when clicked', () => {
+  test('expanded tag closes when clicked', async () => {
     renderWithRouterAndReduxProvider(
       <SideNavTypes
         types={{ ...api.types }}
@@ -81,7 +81,7 @@ describe('SideNavTypes', () => {
       />
     )
     expect(screen.getByRole('link', { name: typeTags[0] })).toBeInTheDocument()
-    userEvent.click(screen.getAllByText(tag)[0])
+    await userEvent.click(screen.getAllByText(tag)[0])
     expect(mockHistoryPush).toHaveBeenCalledWith({
       pathname: `/${specKey}/types`,
       search: '',

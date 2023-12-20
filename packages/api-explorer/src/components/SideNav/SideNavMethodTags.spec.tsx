@@ -34,20 +34,20 @@ import { SideNavMethodTags } from './SideNavMethodTags'
 
 describe('SideNavTags', () => {
   const tags = pick(api.tags, ['ApiAuth', 'Dashboard'])
-  test('it renders a provided tag and its methods', () => {
+  test('it renders a provided tag and its methods', async () => {
     renderWithRouterAndReduxProvider(
       <SideNavMethodTags tags={tags} specKey={'4.0'} />
     )
     const tag = screen.getByText('Dashboard')
     const tagContent = 'Create Dashboard'
     expect(screen.queryByText(tagContent)).not.toBeInTheDocument()
-    userEvent.click(tag)
+    await userEvent.click(tag)
     expect(screen.getByText(tagContent)).toBeInTheDocument()
     const methods = screen.getAllByRole('link')
     expect(methods).toHaveLength(Object.keys(tags.Dashboard).length)
   })
 
-  test('tags are rendered initially collapsed and expand when clicked', () => {
+  test('tags are rendered initially collapsed and expand when clicked', async () => {
     renderWithRouterAndReduxProvider(
       <SideNavMethodTags tags={tags} specKey={'4.0'} />
     )
@@ -56,7 +56,7 @@ describe('SideNavTags', () => {
     expect(allTags).toHaveLength(2)
     expect(screen.queryByText('Login')).not.toBeInTheDocument()
     expect(screen.queryByText('Create Dashboard')).not.toBeInTheDocument()
-    userEvent.click(allTags[0])
+    await userEvent.click(allTags[0])
     expect(screen.getByText('Login')).toBeInTheDocument()
     expect(screen.queryByText('Create Dashboard')).not.toBeInTheDocument()
   })
