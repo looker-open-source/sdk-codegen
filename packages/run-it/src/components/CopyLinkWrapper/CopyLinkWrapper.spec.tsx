@@ -44,16 +44,16 @@ jest.mock('react-router-dom', () => {
 })
 
 describe('CopyLinkWrapper', () => {
-  test('it renders and hides button upon mouse hover', () => {
+  test('it renders and hides button upon mouse hover', async () => {
     renderWithTheme(
       <CopyLinkWrapper>
         <div>test</div>
       </CopyLinkWrapper>
     )
     const div = screen.getByText('test')
-    userEvent.hover(div)
+    await userEvent.hover(div)
     expect(screen.queryByRole('button')).toBeInTheDocument()
-    userEvent.unhover(div)
+    await userEvent.unhover(div)
     expect(screen.queryByRole('button')).not.toBeInTheDocument()
   })
 
@@ -75,7 +75,7 @@ describe('CopyLinkWrapper', () => {
       </CopyLinkWrapper>
     )
     const div = screen.getByText('test')
-    userEvent.hover(div)
+    await userEvent.hover(div)
     await waitFor(() => {
       userEvent.click(screen.getByRole('button'))
       expect(mockClipboardCopy).toHaveBeenCalledWith(location.href)
@@ -91,7 +91,7 @@ describe('CopyLinkWrapper', () => {
       </CopyLinkWrapper>
     )
     const div = screen.getByText('test')
-    userEvent.hover(div)
+    await userEvent.hover(div)
     const button = screen.getByRole('button')
     await waitFor(() => {
       userEvent.hover(button)

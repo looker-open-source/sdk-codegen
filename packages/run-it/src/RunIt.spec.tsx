@@ -118,7 +118,7 @@ describe('RunIt', () => {
         .mockResolvedValueOnce(testTextResponse)
       const button = screen.getByRole('button', { name: run })
       expect(button).toBeInTheDocument()
-      userEvent.click(button)
+      await userEvent.click(button)
       await waitFor(() => {
         expect(defaultRequestCallback).not.toHaveBeenCalled()
         expect(
