@@ -25,7 +25,7 @@
  */
 
 import React from 'react'
-import { fireEvent, screen, waitFor } from '@testing-library/react'
+import { fireEvent, screen } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import userEvent from '@testing-library/user-event'
 import { BrowserAdaptor, registerTestEnvAdaptor } from '@looker/extension-utils'
@@ -99,26 +99,22 @@ describe('ConfigForm', () => {
     expect(apiUrl).toBeInTheDocument()
     expect(apiUrl).toHaveValue('')
 
-    userEvent.type(apiUrl, 'bad')
-    await waitFor(() => {
-      const button = screen.getByRole('button', {
-        name: 'Verify',
-      }) as HTMLButtonElement
-      expect(button).toBeInTheDocument()
-      expect(button).toBeDisabled()
-      expect(screen.getByText(`'bad' is not a valid url`)).toBeInTheDocument()
-    })
+    await userEvent.type(apiUrl, 'bad')
+    let button = screen.getByRole('button', {
+      name: 'Verify',
+    }) as HTMLButtonElement
+    expect(button).toBeInTheDocument()
+    expect(button).toBeDisabled()
+    expect(screen.getByText(`'bad' is not a valid url`)).toBeInTheDocument()
 
     fireEvent.change(apiUrl, { target: { value: '' } })
-    userEvent.type(apiUrl, 'https:good')
-    await waitFor(() => {
-      expect(apiUrl).toHaveValue('https://good')
-      const button = screen.getByRole('button', {
-        name: 'Verify',
-      }) as HTMLButtonElement
-      expect(button).toBeInTheDocument()
-      expect(button).toBeEnabled()
-    })
+    await userEvent.type(apiUrl, 'https:good')
+    expect(apiUrl).toHaveValue('https://good')
+    button = screen.getByRole('button', {
+      name: 'Verify',
+    }) as HTMLButtonElement
+    expect(button).toBeInTheDocument()
+    expect(button).toBeEnabled()
   })
 
   test('it can have a custom title', () => {
@@ -153,22 +149,18 @@ describe('ConfigForm', () => {
       }) as HTMLButtonElement
       expect(remove).toBeInTheDocument()
 
-      userEvent.type(apiUrl, 'https://foo:199')
-      userEvent.click(save)
-      await waitFor(() => {
-        const value = localStorage.getItem(RunItConfigKey)
-        expect(value).toBeDefined()
-        expect(JSON.parse(value!)).toEqual({
-          base_url: 'https://foo:199',
-          looker_url: 'https://foo:99',
-        })
+      await userEvent.type(apiUrl, 'https://foo:199')
+      await userEvent.click(save)
+      const value = localStorage.getItem(RunItConfigKey)
+      expect(value).toBeDefined()
+      expect(JSON.parse(value!)).toEqual({
+        base_url: 'https://foo:199',
+        looker_url: 'https://foo:99',
       })
 
       await userEvent.click(remove)
-      await waitFor(() => {
-        const value = localStorage.getItem(RunItConfigKey)
-        expect(value).toBeEmpty()
-      })
+      const val = localStorage.getItem(RunItConfigKey)
+      expect(val).toBeEmpty()
     })
 
     test('it shows login section when configured', async () => {

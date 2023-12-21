@@ -35,20 +35,20 @@ import { SideNavTypeTags } from './SideNavTypeTags'
 
 describe('SideNavTypeTags', () => {
   const tags = pick(api.typeTags, ['ApiAuth', 'Dashboard'])
-  test('it renders a provided tag and its methods', () => {
+  test('it renders a provided tag and its methods', async () => {
     renderWithRouterAndReduxProvider(
       <SideNavTypeTags tags={tags} specKey={'4.0'} />
     )
     const tag = screen.getByText('Dashboard')
     const tagContent = 'CreateDashboardFilter'
     expect(screen.queryByText(tagContent)).not.toBeInTheDocument()
-    userEvent.click(tag)
+    await userEvent.click(tag)
     expect(screen.getByText(tagContent)).toBeInTheDocument()
     const methods = screen.getAllByRole('link')
     expect(methods).toHaveLength(Object.keys(tags.Dashboard).length)
   })
 
-  test('tags are rendered initially collapsed and expand when clicked', () => {
+  test('tags are rendered initially collapsed and expand when clicked', async () => {
     renderWithRouterAndReduxProvider(
       <SideNavTypeTags tags={tags} specKey={'4.0'} />
     )
@@ -57,7 +57,7 @@ describe('SideNavTypeTags', () => {
     expect(allTags).toHaveLength(2)
     expect(screen.queryByText('AccessToken')).not.toBeInTheDocument()
     expect(screen.queryByText('CreateDashboardFilter')).not.toBeInTheDocument()
-    userEvent.click(allTags[0])
+    await userEvent.click(allTags[0])
     expect(screen.getByText('AccessToken')).toBeInTheDocument()
     expect(screen.queryByText('CreateDashboardFilter')).not.toBeInTheDocument()
   })

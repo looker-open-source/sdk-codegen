@@ -33,7 +33,8 @@
   },
   "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/master/packages/extension-sdk",
   "devDependencies": {
-    "@testing-library/react": "^14.1.2",
+    "@testing-library/react": "12.1.5",
+    "@testing-library/jest-dom": "^6.1.5",
     "@types/enzyme": "^3.10.8",
     "@types/react": "^17.0.73",
     "@types/react-router-dom": "^5.3.3",

@@ -26,7 +26,7 @@
 
 import React from 'react'
 import { renderWithTheme } from '@looker/components-test-utils'
-import { screen, waitFor } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import type { ApiModel, IMethod } from '@looker/sdk-codegen'
 
@@ -102,13 +102,11 @@ describe('RunIt', () => {
         .mockResolvedValueOnce(testTextResponse)
       const button = screen.getByRole('button', { name: run })
       expect(button).toBeInTheDocument()
-      userEvent.click(button)
-      await waitFor(() => {
-        expect(defaultRequestCallback).toHaveBeenCalled()
-        expect(
-          screen.queryByText(testTextResponse.body.toString())
-        ).toBeInTheDocument()
-      })
+      await userEvent.click(button)
+      expect(defaultRequestCallback).toHaveBeenCalled()
+      expect(
+        screen.queryByText(testTextResponse.body.toString())
+      ).toBeInTheDocument()
     })
 
     test.skip('run_inline_query has required body parameters', async () => {
@@ -119,17 +117,15 @@ describe('RunIt', () => {
       const button = screen.getByRole('button', { name: run })
       expect(button).toBeInTheDocument()
       await userEvent.click(button)
-      await waitFor(() => {
-        expect(defaultRequestCallback).not.toHaveBeenCalled()
-        expect(
-          screen.queryByText(
-            'Error: Required properties "model, view" must be provided in the body'
-          )
-        ).toBeInTheDocument()
-        // expect(screen.queryByRole('status')).toHaveTextContent(
-        //   'Error: Required properties "model, view" must be provided in the body'
-        // )
-      })
+      expect(defaultRequestCallback).not.toHaveBeenCalled()
+      expect(
+        screen.queryByText(
+          'Error: Required properties "model, view" must be provided in the body'
+        )
+      ).toBeInTheDocument()
+      // expect(screen.queryByRole('status')).toHaveTextContent(
+      //   'Error: Required properties "model, view" must be provided in the body'
+      // )
     })
   })
 

@@ -31,10 +31,7 @@ module.exports = {
   displayName: packageName,
   name: packageName,
   rootDir: '../..',
-  setupFilesAfterEnv: [
-    ...base.setupFilesAfterEnv,
-    '@testing-library/jest-dom/extend-expect',
-  ],
+  setupFilesAfterEnv: [...base.setupFilesAfterEnv, '@testing-library/jest-dom'],
   testMatch: [`<rootDir>/packages/${packageName}/**/*.(spec|test).(ts|js)?(x)`],
   testEnvironment: 'jsdom',
 }

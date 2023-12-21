@@ -46,7 +46,7 @@ module.exports = {
   setupFilesAfterEnv: [
     // eslint-disable-next-line node/no-path-concat
     `${__dirname}/jest.setup.js`,
-    '@testing-library/jest-dom/extend-expect',
+    '@testing-library/jest-dom',
     'regenerator-runtime/runtime',
   ],
   setupFiles: ['jest-localstorage-mock'],
