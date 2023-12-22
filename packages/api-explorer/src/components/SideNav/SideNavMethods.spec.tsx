@@ -76,7 +76,10 @@ describe('SideNavMethods', () => {
     const firstMethod = Object.values(methods)[0].schema.summary
     expect(screen.queryByText(firstMethod)).not.toBeInTheDocument()
     userEvent.click(screen.getByText(tag))
-    expect(mockHistoryPush).toHaveBeenCalledWith(`/${specKey}/methods/${tag}`)
+    expect(mockHistoryPush).toHaveBeenCalledWith({
+      pathname: `/${specKey}/methods/${tag}`,
+      search: '',
+    })
     expect(screen.getByRole('link', { name: firstMethod })).toBeInTheDocument()
     expect(screen.getAllByRole('link')).toHaveLength(
       Object.values(methods).length
@@ -98,7 +101,10 @@ describe('SideNavMethods', () => {
       Object.values(methods).length
     )
     userEvent.click(screen.getByText(tag))
-    expect(mockHistoryPush).toHaveBeenCalledWith(`/${specKey}/methods`)
+    expect(mockHistoryPush).toHaveBeenCalledWith({
+      pathname: `/${specKey}/methods`,
+      search: '',
+    })
     expect(screen.queryByText(firstMethod)).not.toBeInTheDocument()
     expect(screen.queryByRole('link')).not.toBeInTheDocument()
   })

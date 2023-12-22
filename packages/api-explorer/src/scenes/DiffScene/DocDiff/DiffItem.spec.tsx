@@ -51,10 +51,9 @@ describe('DiffMethodLink', () => {
     const link = screen.getByRole('link')
     expect(link).toHaveTextContent(`${method.name} for ${specKey}`)
     fireEvent.click(link)
-    expect(pushSpy).toHaveBeenCalledWith({
-      pathname: `/${specKey}/methods/${method.schema.tags[0]}/${method.name}`,
-      search: '',
-    })
+    expect(pushSpy).toHaveBeenCalledWith(
+      `/${specKey}/methods/${method.schema.tags[0]}/${method.name}`
+    )
   })
 
   test('it renders missing method and does not navigate on click', () => {

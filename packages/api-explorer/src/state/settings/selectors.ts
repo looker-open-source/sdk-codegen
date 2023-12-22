@@ -27,6 +27,9 @@ import type { RootState } from '../store'
 
 const selectSettingsState = (state: RootState) => state.settings
 
+export const selectDiffOptions = (state: RootState) =>
+  selectSettingsState(state).diffOptions
+
 export const selectSdkLanguage = (state: RootState) =>
   selectSettingsState(state).sdkLanguage
 

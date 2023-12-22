@@ -54,9 +54,9 @@ export const SideNavTypes = styled(
       const _isOpen = !isOpen
       setIsOpen(_isOpen)
       if (_isOpen) {
-        navigate(`/${specKey}/types/${tag}`)
+        navigate(`/${specKey}/types/${tag}`, { opts: null })
       } else {
-        navigate(`/${specKey}/types`)
+        navigate(`/${specKey}/types`, { opts: null })
       }
     }
 

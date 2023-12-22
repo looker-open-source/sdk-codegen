@@ -34,6 +34,8 @@ interface QueryParamProps {
   sdk?: string | null
   /** Tag Scene Filter **/
   t?: string | null
+  /** Diff Scene Options **/
+  opts?: string | null
 }
 
 /**

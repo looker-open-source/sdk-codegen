@@ -27,7 +27,7 @@
 import type { DiffRow } from '@looker/sdk-codegen'
 import { startCount } from '@looker/sdk-codegen'
 import { api, api40 } from '../../test-data'
-import { diffToSpec } from './diffUtils'
+import { diffToSpec, getValidDiffOptions } from './diffUtils'
 
 describe('diffUtils', () => {
   test('builds a psuedo spec from diff', () => {
@@ -62,5 +62,36 @@ describe('diffUtils', () => {
     ])
     expect(Object.keys(spec.tags)).toEqual(['Query', 'Dashboard'])
     expect(Object.keys(spec.types)).toEqual([])
+  })
+
+  describe('getValidDiffOptions', () => {
+    test('returns null if provided null input', () => {
+      expect(getValidDiffOptions(null)).toHaveLength(0)
+    })
+
+    test('returns null if input contains no valid diffscene options', () => {
+      const testOptionsParam = 'INVALID,INVALID1,INVALID2'
+      expect(getValidDiffOptions(testOptionsParam)).toHaveLength(0)
+    })
+
+    test('omits invalid diffScene options given input with valid options', () => {
+      const testOptionsParam = 'INVALID,missing,INVALID,type,INVALID'
+      expect(getValidDiffOptions(testOptionsParam)).toEqual(['missing', 'type'])
+    })
+
+    test('omits duplicate diffScene options from input', () => {
+      const testOptionsParam = 'missing,missing,type,type,type'
+      expect(getValidDiffOptions(testOptionsParam)).toEqual(['missing', 'type'])
+    })
+
+    test('disregards case sensitivity of options', () => {
+      const testOptionsParam = 'mIssInG,tYpE,PARAMS,boDy'
+      expect(getValidDiffOptions(testOptionsParam)).toEqual([
+        'missing',
+        'type',
+        'params',
+        'body',
+      ])
+    })
   })
 })

@@ -27,7 +27,7 @@
 import type { FC } from 'react'
 import React, { useState, useEffect } from 'react'
 import type { ApiModel, DiffRow, SpecList } from '@looker/sdk-codegen'
-import { useRouteMatch } from 'react-router-dom'
+import { useLocation, useRouteMatch } from 'react-router-dom'
 import {
   Box,
   Flex,
@@ -41,9 +41,16 @@ import { SyncAlt } from '@styled-icons/material/SyncAlt'
 import { useSelector } from 'react-redux'
 
 import { ApixSection } from '../../components'
-import { selectCurrentSpec, selectSpecs } from '../../state'
+import {
+  selectCurrentSpec,
+  selectSpecs,
+  selectDiffOptions,
+  useSettingActions,
+  useSettingStoreState,
+} from '../../state'
 import { diffPath, getApixAdaptor, useNavigation } from '../../utils'
-import { diffSpecs, standardDiffToggles } from './diffUtils'
+import { useDiffStoreSync } from '../utils'
+import { diffSpecs, getValidDiffOptions } from './diffUtils'
 import { DocDiff } from './DocDiff'
 
 const diffToggles = [
@@ -84,6 +91,10 @@ const validateParam = (specs: SpecList, specKey = '') => {
 export const DiffScene: FC<DiffSceneProps> = ({ toggleNavigation }) => {
   const adaptor = getApixAdaptor()
   const { navigate } = useNavigation()
+  const location = useLocation()
+  const selectedDiffOptions = useSelector(selectDiffOptions)
+  const { initialized } = useSettingStoreState()
+  const { setDiffOptionsAction } = useSettingActions()
   const spec = useSelector(selectCurrentSpec)
   const specs = useSelector(selectSpecs)
   const currentSpecKey = spec.key
@@ -102,7 +113,8 @@ export const DiffScene: FC<DiffSceneProps> = ({ toggleNavigation }) => {
   const [rightApi, setRightApi] = useState<ApiModel>(() =>
     rightKey ? specs[rightKey].api! : specs[leftKey].api!
   )
-  const [toggles, setToggles] = useState<string[]>(standardDiffToggles)
+  const [toggles, setToggles] = useState<string[]>(selectedDiffOptions)
+  useDiffStoreSync()
 
   useEffect(() => {
     if (r !== rightKey) {
@@ -151,8 +163,21 @@ export const DiffScene: FC<DiffSceneProps> = ({ toggleNavigation }) => {
 
   const handleTogglesChange = (values?: string[]) => {
     const newToggles = values || []
-    setToggles(newToggles)
+    navigate(location.pathname, { opts: newToggles.join(',') })
   }
+
+  useEffect(() => {
+    if (!initialized) return
+    const searchParams = new URLSearchParams(location.search)
+    const diffOptionsParam = getValidDiffOptions(searchParams.get('opts'))
+    setDiffOptionsAction({
+      diffOptions: diffOptionsParam,
+    })
+  }, [location.search])
+
+  useEffect(() => {
+    setToggles(selectedDiffOptions)
+  }, [selectedDiffOptions])
 
   return (
     <ApixSection>
@@ -197,7 +222,7 @@ export const DiffScene: FC<DiffSceneProps> = ({ toggleNavigation }) => {
               id="options"
               name="toggles"
               placeholder="Comparison options"
-              defaultValues={toggles}
+              values={toggles}
               onChange={handleTogglesChange}
               options={diffToggles}
             />
