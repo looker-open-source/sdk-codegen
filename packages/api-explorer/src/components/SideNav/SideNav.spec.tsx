@@ -110,7 +110,7 @@ describe('Search', () => {
     const searchPattern = 'embedsso'
     const input = screen.getByLabelText('Search')
     await userEvent.click(input)
-    await userEvent.paste(searchPattern)
+    await userEvent.paste(input, searchPattern)
     await waitFor(() => {
       expect(mockHistoryPush).toHaveBeenCalledWith({
         pathname: '/4.0/methods',

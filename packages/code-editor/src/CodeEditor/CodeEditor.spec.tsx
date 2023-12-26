@@ -57,10 +57,14 @@ describe('CodeEditor', () => {
     const editPattern = '\n# This is the new code'
     const input = screen
       .getByRole('code-editor')
-      .getElementsByClassName('npm__react-simple-code-editor__textarea')[0]
+      .getElementsByClassName(
+        'npm__react-simple-code-editor__textarea'
+      )[0] as HTMLElement
     await userEvent.click(input)
-    await userEvent.pointer({ target: input, offset: pythonTestCode.length })
-    await userEvent.paste(editPattern)
+    // await userEvent.pointer({ target: input, offset: pythonTestCode.length })
+    await userEvent.paste(input, editPattern, undefined, {
+      initialSelectionEnd: pythonTestCode.length,
+    })
     expect(setState).toHaveBeenCalledWith(pythonTestCode + editPattern)
   })
 })

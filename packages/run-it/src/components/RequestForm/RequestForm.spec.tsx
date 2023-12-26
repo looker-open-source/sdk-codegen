@@ -268,7 +268,7 @@ describe('RequestForm', () => {
 
     const item = screen.getByRole('textbox', { name: 'text_item' })
     await userEvent.click(item)
-    await userEvent.paste('some text')
+    await userEvent.paste(item, 'some text')
     await waitFor(() => {
       expect(setRequestContent).toHaveBeenCalledWith({
         text_item: 'some text',
@@ -308,7 +308,7 @@ describe('RequestForm', () => {
     await act(async () => {
       // TODO: make complex items requirable. i.e. expect(input).toBeRequired() should pass
       await userEvent.click(input)
-      await userEvent.paste('content')
+      await userEvent.paste(input, 'content')
       expect(setRequestContent).toHaveBeenCalled()
       // TODO get this working again
       // await userEvent.click(screen.getByRole('button', { name: run }))
@@ -342,7 +342,7 @@ describe('RequestForm', () => {
     expect(screen.getByRole('textbox')).toBeInTheDocument()
     const input = screen.getByRole('textbox')
     await userEvent.click(input)
-    await userEvent.paste('foo')
+    await userEvent.paste(input, 'foo')
     await userEvent.type(input, '{enter}')
     await waitFor(() => {
       expect(setRequestContent).toHaveBeenLastCalledWith({
