@@ -93,34 +93,115 @@ export interface PivotConfig extends RawPivotConfig {
   [key: string]: any
 }
 
+/**
+ * Visualization configuration data.
+ */
 export interface VisualizationConfig {
+  /**
+   * Measure information
+   */
   queryFieldMeasures: Measure[]
+  /**
+   * Dimension information
+   */
   queryFieldDimensions: Dimension[]
+  /**
+   * Table calculation information
+   */
   queryFieldTableCalculations: TableCalculation[]
+  /**
+   * Pivot information
+   */
   queryFieldPivots: PivotConfig[]
+  /**
+   * Visual configuration data. This should be merged with the default
+   * configuration and applied to the visualization rendered by the
+   * extension.
+   */
   visConfig: RawVisConfig
 }
 
 export interface QueryResponse {
+  /**
+   * Row data.
+   */
   data: Row[]
+  /**
+   * Field measure information
+   */
   fieldMeasures: Measure[]
+  /**
+   * Field dimension information
+   */
   fieldDimensions: Dimension[]
+  /**
+   * Field table calculation information
+   */
   fieldTableCalculations: TableCalculation[]
+  /**
+   * Field pivot information
+   */
   fieldPivots: PivotConfig[]
+  /*
+   * A concatenated array of field measure information and table calculations
+   * that behave like measures.
+   */
   fieldMeasureLike: Measure[]
+  /*
+   * A concatenated array of field dimension information and table calculations
+   * that behave like dimensions.
+   */
   fieldDimensionLike: Dimension[]
+}
+
+/**
+ * For internal use only.
+ */
+export interface VisualizationSDKInternal extends VisualizationSDK {
+  updateVisData: (rawVisData: RawVisualizationData) => void
 }
 
 /**
  * Extension visualization SDK
  */
 export interface VisualizationSDK {
+  /**
+   * Visualization (combination of visConfig and queryResponse data)
+   */
   visualizationData?: RawVisualizationData
+  /**
+   * Visualization configuration data.
+   * - measure configurations
+   * - dimension configurations
+   * - table calculations
+   * - pivot configurations
+   * - visualization configurations. These would be used to customize
+   *   the look and feel of a visualization in an explore.
+   */
   visConfig: VisualizationConfig
+  /**
+   * Response data from query.
+   * - row data
+   * - field measures
+   * - field table calculations
+   * - field pivots
+   * - field measure like
+   * - field dimension like
+   */
   queryResponse: QueryResponse
-  updateVisData: (rawVisData: RawVisualizationData) => void
+  /**
+   * Set the default configurations for an extension visualization.
+   * The configurations will be rendered inside of the explore
+   * visualization editor. This should only be called once.
+   */
   configureVisualization: (options: VisOptions) => void
+  /**
+   * Update the visualization configuration.
+   */
   setVisConfig: (config: RawVisConfig) => void
+  /**
+   * Update the query row limit.
+   */
   updateRowLimit: (rowLimit: number) => void
 }
 

@@ -29,12 +29,12 @@ import { NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR } from '../../util/errors'
 import { ExtensionRequestType } from '../types'
 import type { ExtensionHostApiImpl } from '../extension_host_api'
 import type {
-  TileSDK,
   TileError,
   DrillMenuOptions,
   CrossFilterOptions,
   Filters,
   TileHostData,
+  TileSDKInternal,
 } from './types'
 import { DashboardRunState } from './types'
 
@@ -43,7 +43,7 @@ const defaultHostData: TileHostData = {
   dashboardRunState: DashboardRunState.UNKNOWN,
   dashboardFilters: {},
 }
-export class TileSDKImpl implements TileSDK {
+export class TileSDKImpl implements TileSDKInternal {
   hostApi: ExtensionHostApiImpl
   tileHostData: TileHostData
 
@@ -57,6 +57,26 @@ export class TileSDKImpl implements TileSDK {
     // Should never happen.
     if (this.hostApi.isDashboardMountSupported) {
       this.tileHostData = { ...this.tileHostData, ...partialHostData }
+    }
+  }
+
+  addError(error: TileError) {
+    if (this.hostApi.isDashboardMountSupported) {
+      this.hostApi.send(ExtensionRequestType.TILE_ADD_ERRORS, {
+        errors: [error],
+      })
+    } else {
+      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR
+    }
+  }
+
+  clearError() {
+    if (this.hostApi.isDashboardMountSupported) {
+      this.hostApi.send(ExtensionRequestType.TILE_CLEAR_ERRORS, {
+        group: undefined,
+      })
+    } else {
+      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR
     }
   }
 
