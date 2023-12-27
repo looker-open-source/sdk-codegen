@@ -34,11 +34,11 @@
   },
   "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/master/packages/embed-services",
   "devDependencies": {
-    "@looker/sdk-node": "^23.20.1"
+    "@looker/sdk-node": "23.20.1"
   },
   "dependencies": {
-    "@looker/sdk-rtl": "^21.6.1",
-    "@looker/sdk": "^23.20.1"
+    "@looker/sdk-rtl": "21.6.1",
+    "@looker/sdk": "23.20.1"
   },
   "keywords": [
     "Looker",

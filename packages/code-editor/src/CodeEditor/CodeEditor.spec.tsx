@@ -50,15 +50,18 @@ describe('CodeEditor', () => {
         .closest('span')
     ).toHaveClass('comment')
   })
-  test('it is edittable', () => {
+  test('it is edittable', async () => {
     renderWithTheme(
       <CodeEditor onChange={setState} code={pythonTestCode} language="python" />
     )
     const editPattern = '\n# This is the new code'
     const input = screen
       .getByRole('code-editor')
-      .getElementsByClassName('npm__react-simple-code-editor__textarea')[0]
-    userEvent.paste(input, editPattern, undefined, {
+      .getElementsByClassName(
+        'npm__react-simple-code-editor__textarea'
+      )[0] as HTMLElement
+    await userEvent.click(input)
+    await userEvent.paste(input, editPattern, undefined, {
       initialSelectionEnd: pythonTestCode.length,
     })
     expect(setState).toHaveBeenCalledWith(pythonTestCode + editPattern)

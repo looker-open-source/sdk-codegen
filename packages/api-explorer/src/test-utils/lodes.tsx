@@ -34,7 +34,7 @@ export const renderWithLode = (
   consumers: ReactElement<any>,
   examples: IExampleMine,
   declarations?: IDeclarationMine,
-  options?: Omit<RenderOptions, 'queries'>
+  options?: Omit<RenderOptions<any>, 'queries'>
 ) => {
   const store = createTestStore({ lodes: { examples, declarations } })
   return renderWithTheme(withReduxProvider(consumers, store), options)

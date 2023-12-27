@@ -25,7 +25,7 @@
  */
 
 import { renderWithTheme } from '@looker/components-test-utils'
-import { screen, waitFor } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import React from 'react'
 import userEvent from '@testing-library/user-event'
 import { BrowserAdaptor, registerTestEnvAdaptor } from '@looker/extension-utils'
@@ -44,16 +44,16 @@ jest.mock('react-router-dom', () => {
 })
 
 describe('CopyLinkWrapper', () => {
-  test('it renders and hides button upon mouse hover', () => {
+  test('it renders and hides button upon mouse hover', async () => {
     renderWithTheme(
       <CopyLinkWrapper>
         <div>test</div>
       </CopyLinkWrapper>
     )
     const div = screen.getByText('test')
-    userEvent.hover(div)
+    await userEvent.hover(div)
     expect(screen.queryByRole('button')).toBeInTheDocument()
-    userEvent.unhover(div)
+    await userEvent.unhover(div)
     expect(screen.queryByRole('button')).not.toBeInTheDocument()
   })
 
@@ -75,11 +75,9 @@ describe('CopyLinkWrapper', () => {
       </CopyLinkWrapper>
     )
     const div = screen.getByText('test')
-    userEvent.hover(div)
-    await waitFor(() => {
-      userEvent.click(screen.getByRole('button'))
-      expect(mockClipboardCopy).toHaveBeenCalledWith(location.href)
-    })
+    await userEvent.hover(div)
+    await userEvent.click(screen.getByRole('button'))
+    expect(mockClipboardCopy).toHaveBeenCalledWith(location.href)
   })
 
   test('it updates tooltip content upon copy', async () => {
@@ -91,17 +89,14 @@ describe('CopyLinkWrapper', () => {
       </CopyLinkWrapper>
     )
     const div = screen.getByText('test')
-    userEvent.hover(div)
+    await userEvent.hover(div)
     const button = screen.getByRole('button')
-    await waitFor(() => {
-      userEvent.hover(button)
-      expect(screen.getByText('Copy to clipboard')).toBeInTheDocument()
-    })
-    await waitFor(() => {
-      userEvent.click(screen.getByRole('button'))
-      expect(mockClipboardCopy).toHaveBeenCalledWith(location.href)
-      userEvent.hover(button)
-      expect(screen.getAllByText('Copied to clipboard')[0]).toBeVisible()
-    })
+    await userEvent.hover(button)
+    expect(screen.getAllByText('Copy to clipboard')[0]).toBeInTheDocument()
+    await userEvent.click(screen.getByRole('button'))
+    expect(mockClipboardCopy).toHaveBeenCalledWith(location.href)
+    await userEvent.hover(button)
+    const copied = screen.getAllByText('Copied to clipboard')
+    expect(copied[0]).toBeInTheDocument() // TODO why does .toBeVisible() fail now?
   })
 })

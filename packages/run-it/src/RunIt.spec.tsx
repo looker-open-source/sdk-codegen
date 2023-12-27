@@ -102,9 +102,9 @@ describe('RunIt', () => {
         .mockResolvedValueOnce(testTextResponse)
       const button = screen.getByRole('button', { name: run })
       expect(button).toBeInTheDocument()
-      userEvent.click(button)
+      await userEvent.click(button)
+      expect(defaultRequestCallback).toHaveBeenCalled()
       await waitFor(() => {
-        expect(defaultRequestCallback).toHaveBeenCalled()
         expect(
           screen.queryByText(testTextResponse.body.toString())
         ).toBeInTheDocument()
@@ -118,18 +118,13 @@ describe('RunIt', () => {
         .mockResolvedValueOnce(testTextResponse)
       const button = screen.getByRole('button', { name: run })
       expect(button).toBeInTheDocument()
-      userEvent.click(button)
-      await waitFor(() => {
-        expect(defaultRequestCallback).not.toHaveBeenCalled()
-        expect(
-          screen.queryByText(
-            'Error: Required properties "model, view" must be provided in the body'
-          )
-        ).toBeInTheDocument()
-        // expect(screen.queryByRole('status')).toHaveTextContent(
-        //   'Error: Required properties "model, view" must be provided in the body'
-        // )
-      })
+      await userEvent.click(button)
+      expect(defaultRequestCallback).not.toHaveBeenCalled()
+      expect(
+        screen.queryByText(
+          'Error: Required properties "model, view" must be provided in the body'
+        )
+      ).toBeInTheDocument()
     })
   })
 

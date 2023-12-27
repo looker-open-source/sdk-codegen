@@ -29,7 +29,7 @@ const Adapter = require('enzyme-adapter-react-16')
 const { configure } = require('enzyme')
 const ResizeObserver = require('resize-observer-polyfill')
 
-require('@testing-library/jest-dom/extend-expect')
+require('@testing-library/jest-dom')
 require('jest-canvas-mock')
 require('jest-styled-components')
 require('jest-environment-jsdom')

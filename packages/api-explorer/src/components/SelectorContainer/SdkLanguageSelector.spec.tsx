@@ -64,7 +64,7 @@ describe('SdkLanguageSelector', () => {
 
   test('it lists all available languages and "All" as options', async () => {
     renderWithRouterAndReduxProvider(<SdkLanguageSelector />, undefined, store)
-    userEvent.click(screen.getByRole('textbox'))
+    await userEvent.click(screen.getByRole('textbox'))
     await waitFor(() => {
       expect(screen.getAllByRole('option')).toHaveLength(
         codeGenerators.length + 1
@@ -86,7 +86,7 @@ describe('SdkLanguageSelector', () => {
         store
       )
       const selector = screen.getByRole('textbox')
-      userEvent.click(selector)
+      await userEvent.click(selector)
       await waitFor(async () => {
         await userEvent.click(screen.getByRole('option', { name: language }))
         const sdk = findSdk(language)
@@ -100,7 +100,7 @@ describe('SdkLanguageSelector', () => {
 
   test("choosing 'All' removes sdk parameter from the url", async () => {
     renderWithRouterAndReduxProvider(<SdkLanguageSelector />, undefined, store)
-    userEvent.click(screen.getByRole('textbox'))
+    await userEvent.click(screen.getByRole('textbox'))
     await waitFor(async () => {
       await userEvent.click(screen.getByRole('option', { name: 'All' }))
       expect(mockHistoryPush).toHaveBeenLastCalledWith({
