@@ -29,7 +29,7 @@
   ],
   "scripts": {
     "analyze": "export ANALYZE_MODE=static && yarn bundle",
-    "bundle": " tsc && NODE_OPTIONS=--openssl-legacy-provider webpack --config webpack.prod.config.js",
+    "bundle": "tsc && NODE_OPTIONS=--openssl-legacy-provider webpack --config webpack.prod.config.js",
     "develop": "webpack serve --hot --allowed-hosts all --port 8080 --https --config webpack.dev.config.js",
     "watch": "yarn lerna exec --scope @looker/wholly-sheet --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },

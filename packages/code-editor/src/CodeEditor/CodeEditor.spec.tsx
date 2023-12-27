@@ -61,7 +61,6 @@ describe('CodeEditor', () => {
         'npm__react-simple-code-editor__textarea'
       )[0] as HTMLElement
     await userEvent.click(input)
-    // await userEvent.pointer({ target: input, offset: pythonTestCode.length })
     await userEvent.paste(input, editPattern, undefined, {
       initialSelectionEnd: pythonTestCode.length,
     })

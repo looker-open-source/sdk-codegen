@@ -10,7 +10,7 @@
   "private": true,
   "scripts": {
     "analyze": "export ANALYZE_MODE=static && yarn bundle",
-    "bundle": "tsc && webpack --config webpack.prod.config.js",
+    "bundle": "tsc && NODE_OPTIONS=--openssl-legacy-provider webpack --config webpack.prod.config.js",
     "develop": "webpack serve --hot --allowed-hosts all --port 8080 --https --config webpack.dev.config.js"
   },
   "dependencies": {

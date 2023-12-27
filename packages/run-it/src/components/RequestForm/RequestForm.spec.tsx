@@ -310,13 +310,13 @@ describe('RequestForm', () => {
       await userEvent.click(input)
       await userEvent.paste(input, 'content')
       expect(setRequestContent).toHaveBeenCalled()
+      await userEvent.click(screen.getByRole('button', { name: run }))
       // TODO get this working again
-      // await userEvent.click(screen.getByRole('button', { name: run }))
       // expect(handleSubmit).toHaveBeenCalledTimes(1)
     })
   })
 
-  test('pressing enter ALMOST submits the request form', async () => {
+  test('pressing enter submits the request form', async () => {
     const handleSubmit = jest.fn((e) => e.preventDefault())
     renderWithTheme(
       <RequestForm
@@ -348,8 +348,7 @@ describe('RequestForm', () => {
       expect(setRequestContent).toHaveBeenLastCalledWith({
         id: 'foo',
       })
-      // TODO why isn't handleSubmit being called?
-      // expect(handleSubmit).toHaveBeenCalledTimes(1)
+      expect(handleSubmit).toHaveBeenCalledTimes(1)
     })
   })
 })

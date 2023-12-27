@@ -125,9 +125,6 @@ describe('RunIt', () => {
           'Error: Required properties "model, view" must be provided in the body'
         )
       ).toBeInTheDocument()
-      // expect(screen.queryByRole('status')).toHaveTextContent(
-      //   'Error: Required properties "model, view" must be provided in the body'
-      // )
     })
   })
 
