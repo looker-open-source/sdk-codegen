@@ -2465,6 +2465,13 @@
   dependencies:
     "@styled-icons/styled-icon" "^10.6.3"
 
+"@looker/prettier-config@1.5.1":
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/@looker/prettier-config/-/prettier-config-1.5.1.tgz#5239c197e05340bd3d8248f3767fcd863e09094c"
+  integrity sha512-x7VqsFVZVqs/+m/zMxWERVp+vdQYeD1vknSgic5aUy99qXX0pdDXIj5GyShodBRw2NkmY8mHjXu9ShQDcgdfbQ==
+  dependencies:
+    prettier ">=2.3.1"
+
 "@looker/redux@^0.0.1":
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/@looker/redux/-/redux-0.0.1.tgz#4decc5a78e207c1c63e5c114be2ecca4b3d09d44"
@@ -12425,7 +12432,7 @@ prettier-quick@^0.0.5:
   resolved "https://registry.yarnpkg.com/prettier-quick/-/prettier-quick-0.0.5.tgz#10912263ede6e99872f4d3655b6a8a205265d4ce"
   integrity sha512-5zOMSPAK7JQMNWjtxAy35XPgRN8TQY+khgpNhznQ30Zsv6V0hOIjre8X5cTrtdqa3NKZWWF1+TNS5+1LX/3a0w==
 
-prettier@^2.4.1:
+prettier@>=2.3.1, prettier@^2.4.1:
   version "2.8.5"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.8.5.tgz#3dd8ae1ebddc4f6aa419c9b64d8c8319a7e0d982"
   integrity sha512-3gzuxrHbKUePRBB4ZeU08VNkUcqEHaUaouNt0m7LGP4Hti/NuB07C7PPTM/LkWqXoJYJn2McEo5+kxPNrtQkLQ==
