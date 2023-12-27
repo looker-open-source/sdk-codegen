@@ -99,11 +99,14 @@ describe('ExtensionConnector component', () => {
       extensionSDK: mockHost,
     } as BaseExtensionContextData
   }
-  const connectedCallback = jest.fn()
-  const unloadedCallback = jest.fn()
-  const updateContextData = jest.fn()
+  let connectedCallback: jest.Mock
+  let unloadedCallback: jest.Mock
+  let updateContextData: jest.Mock
 
   beforeEach(() => {
+    connectedCallback = jest.fn()
+    unloadedCallback = jest.fn()
+    updateContextData = jest.fn()
     tileSDK.tileHostDataChanged = jest.fn()
     visualizationSDK.updateVisData = jest.fn()
     jest.spyOn(console, 'error').mockImplementation()
