@@ -13,22 +13,15 @@ fi
 
 cd "$(dirname "${0}")/.." || exit 1
 
-echo
-echo "Processing all files supported by prettier formatting"
-echo
-
 if [[ "${ARG_QUICK}" == "true" ]]; then
+  echo "Quick processing changed files supported by prettier"
   # This flag is only supported by pretty-quick
   if [[ "${ARG_STAGED}" == "true" ]]; then
     args+=("--staged")
   fi
 
-  # Ideally, someday, this will include --workspaces to match the real lint command used in CI below
-  # But it adds a lot of overhead, because it runs the linter individually in each workspace. For the sake
-  # of faster local linting, this runs repo-wide.
   npx pretty-quick "${args[@]}"
 else
-  # This is what CI runs, if you make changes here be aware
-  echo "👀 Running on your local dev machine? Consider using --quick to lint only changed files."
+  echo "👀 Running on your local dev machine? Consider using -q|--quick to check only changed files."
   npx --workspaces prettier . "${args[@]}"
 fi
