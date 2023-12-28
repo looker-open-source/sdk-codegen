@@ -51,7 +51,11 @@ export const TileExtension: React.FC = () => {
   const { lookerHostData } = useContext(ExtensionContext40)
 
   return (
-    <ComponentsProvider>
+    <ComponentsProvider
+      themeCustomizations={{
+        colors: { key: '#1A73E8' },
+      }}
+    >
       <Switch>
         <Route path="/inspect">
           <Inspector />
