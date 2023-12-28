@@ -305,15 +305,13 @@ describe('RequestForm', () => {
     );
     expect(screen.getByRole('checkbox')).toBeInTheDocument();
     const input = screen.getByRole('textbox');
-    await act(async () => {
-      // TODO: make complex items requirable. i.e. expect(input).toBeRequired() should pass
-      await userEvent.click(input);
-      await userEvent.paste(input, 'content');
-      expect(setRequestContent).toHaveBeenCalled();
-      await userEvent.click(screen.getByRole('button', { name: run }));
-      // TODO get this working again
-      // expect(handleSubmit).toHaveBeenCalledTimes(1)
-    });
+    // TODO: make complex items requirable. i.e. expect(input).toBeRequired() should pass
+    await userEvent.click(input);
+    await userEvent.paste(input, 'content');
+    expect(setRequestContent).toHaveBeenCalled();
+    await userEvent.click(screen.getByRole('button', { name: run }));
+    // TODO get this working again
+    // expect(handleSubmit).toHaveBeenCalledTimes(1)
   });
 
   test('pressing enter submits the request form', async () => {
@@ -344,11 +342,9 @@ describe('RequestForm', () => {
     await userEvent.click(input);
     await userEvent.paste(input, 'foo');
     await userEvent.type(input, '{enter}');
-    await waitFor(() => {
-      expect(setRequestContent).toHaveBeenLastCalledWith({
-        id: 'foo',
-      });
-      expect(handleSubmit).toHaveBeenCalledTimes(1);
+    expect(setRequestContent).toHaveBeenLastCalledWith({
+      id: 'foo',
     });
+    expect(handleSubmit).toHaveBeenCalledTimes(1);
   });
 });

@@ -55,7 +55,7 @@ describe('CopyLinkWrapper', () => {
     );
     const div = screen.getByText('test');
     await userEvent.hover(div);
-    expect(screen.queryByRole('button')).toBeInTheDocument();
+    expect(screen.getByRole('button')).toBeInTheDocument();
     await userEvent.unhover(div);
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });

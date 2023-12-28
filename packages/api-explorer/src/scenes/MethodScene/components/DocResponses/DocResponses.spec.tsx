@@ -138,15 +138,13 @@ See [HTTP 404 - Not Found](https://docs.looker.com/r/reference/looker-http-codes
     );
     expect(screen.getByText('Response Models')).toBeInTheDocument();
 
-    await waitFor(() => {
-      expect(screen.getByRole('tab', { name: /^404: \w+/ })).toHaveAttribute(
-        'aria-selected',
-        'true'
-      );
-      expect(
-        screen.getByRole('heading', { name: 'Description' })
-      ).toBeInTheDocument();
-    });
+    expect(screen.getByRole('tab', { name: /^404: \w+/ })).toHaveAttribute(
+      'aria-selected',
+      'true'
+    );
+    expect(
+      screen.getByRole('heading', { name: 'Description' })
+    ).toBeInTheDocument();
 
     global.fetch = fetcher;
   });

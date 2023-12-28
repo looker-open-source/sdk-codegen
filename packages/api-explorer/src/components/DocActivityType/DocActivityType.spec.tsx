@@ -25,8 +25,9 @@
  */
 import React from 'react';
 import { renderWithTheme } from '@looker/components-test-utils';
-import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 
+import userEvent from '@testing-library/user-event';
 import { api } from '../../test-data';
 import { DocActivityType } from './DocActivityType';
 
@@ -40,11 +41,9 @@ describe('DocActivityType', () => {
   test('it displays a tooltip with the right information on hover', async () => {
     renderWithTheme(<DocActivityType method={method} />);
     const costSymbol = screen.getByText('$');
-    await waitFor(() => {
-      fireEvent.mouseOver(costSymbol);
-      expect(screen.getByRole('tooltip')).toHaveTextContent(
-        'Call volume for this endpoint counts toward the "db_query" API activity category.'
-      );
-    });
+    await userEvent.hover(costSymbol);
+    expect(screen.getByRole('tooltip')).toHaveTextContent(
+      'Call volume for this endpoint counts toward the "db_query" API activity category.'
+    );
   });
 });

@@ -106,10 +106,8 @@ describe('formUtils', () => {
       handler: any
     ) => {
       await userEvent.type(input, value.toString());
-      await waitFor(() => {
-        expect(handler).toHaveBeenCalled();
-        expect(input).toHaveValue(value);
-      });
+      expect(handler).toHaveBeenCalled();
+      expect(input).toHaveValue(value);
     };
 
     describe.each(['int64', 'integer', 'float', 'double'])(
@@ -198,10 +196,8 @@ describe('formUtils', () => {
         const input = screen.getByRole('textbox', { name });
         const text = 'Text123';
         await userEvent.type(input, text);
-        await waitFor(() => {
-          expect(handleChange).toHaveBeenCalled();
-          expect(input).toHaveValue(text);
-        });
+        expect(handleChange).toHaveBeenCalled();
+        expect(input).toHaveValue(text);
       });
     });
 

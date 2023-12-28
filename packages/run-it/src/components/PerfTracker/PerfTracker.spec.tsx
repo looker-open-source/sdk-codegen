@@ -103,7 +103,7 @@ describe('PerfTracker', () => {
     PerfTimings.supported = true;
     renderWithTheme(<PerfTracker />);
     expect(
-      screen.queryByText('No performance data is loaded')
+      screen.getByText('No performance data is loaded')
     ).toBeInTheDocument();
     expect(
       screen.queryByText('Performance timing is not supported in this browser')
@@ -118,9 +118,7 @@ describe('PerfTracker', () => {
       PerfTimings.supported = false;
       renderWithTheme(<PerfTracker />);
       expect(
-        screen.queryByText(
-          'Performance timing is not supported in this browser'
-        )
+        screen.getByText('Performance timing is not supported in this browser')
       ).toBeInTheDocument();
       expect(
         screen.queryByText('No performance data is loaded')

@@ -79,6 +79,7 @@
     "watch:cjs": "lerna run --parallel watch:cjs"
   },
   "devDependencies": {
+    "@babel/eslint-parser": "7.23.3",
     "@babel/cli": "^7.13.16",
     "@babel/core": "^7.14.0",
     "@babel/plugin-proposal-class-properties": "^7.13.0",
@@ -179,6 +180,7 @@
   ],
   "eslintConfig": {
     "root": true,
+    "parser": "@typescript-eslint/parser",
     "extends": [
       "@looker/eslint-config-oss"
     ],
@@ -189,8 +191,8 @@
       "@typescript-eslint/no-unused-vars": [
         "warn",
         {
-          "args": "all",
-          "argsIgnorePattern": "^_"
+          "args": "none",
+          "varsIgnorePattern": "^_"
         }
       ],
       "sort-keys-fix/sort-keys-fix": "off",
@@ -201,7 +203,14 @@
       "import/order": "warn",
       "sort-imports": "warn",
       "import/no-duplicates": "warn",
-      "import/no-extraneous-dependencies": ["warn", {"devDependencies": false, "optionalDependencies": false, "peerDependencies": false}],
+      "import/no-extraneous-dependencies": [
+        "warn",
+        {
+          "devDependencies": false,
+          "optionalDependencies": false,
+          "peerDependencies": false
+        }
+      ],
       "no-duplicate-imports": "warn",
       "sort-keys": "off",
       "no-nested-ternary": "off",

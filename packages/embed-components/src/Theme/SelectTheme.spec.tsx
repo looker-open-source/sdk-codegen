@@ -78,17 +78,15 @@ describe('SelectTheme', () => {
     const selector = screen.getByRole('textbox');
     expect(selector).toHaveValue(lookerTheme.name);
 
-    userEvent.click(selector);
+    await userEvent.click(selector);
 
-    await waitFor(() => {
-      expect(screen.getAllByRole('option')).toHaveLength(themes.length);
-      expect(
-        screen.getByRole('option', { name: customTheme1.name })
-      ).toBeInTheDocument();
-      expect(
-        screen.getByRole('option', { name: customTheme2.name })
-      ).toBeInTheDocument();
-    });
+    expect(screen.getAllByRole('option')).toHaveLength(themes.length);
+    expect(
+      screen.getByRole('option', { name: customTheme1.name })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('option', { name: customTheme2.name })
+    ).toBeInTheDocument();
   });
 
   it('selects on select', async () => {

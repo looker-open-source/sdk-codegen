@@ -104,11 +104,9 @@ describe('RunIt', () => {
       expect(button).toBeInTheDocument();
       await userEvent.click(button);
       expect(defaultRequestCallback).toHaveBeenCalled();
-      await waitFor(() => {
-        expect(
-          screen.queryByText(testTextResponse.body.toString())
-        ).toBeInTheDocument();
-      });
+      expect(
+        screen.getByText(testTextResponse.body.toString())
+      ).toBeInTheDocument();
     });
 
     test.skip('run_inline_query has required body parameters', async () => {
@@ -121,7 +119,7 @@ describe('RunIt', () => {
       await userEvent.click(button);
       expect(defaultRequestCallback).not.toHaveBeenCalled();
       expect(
-        screen.queryByText(
+        screen.getByText(
           'Error: Required properties "model, view" must be provided in the body'
         )
       ).toBeInTheDocument();

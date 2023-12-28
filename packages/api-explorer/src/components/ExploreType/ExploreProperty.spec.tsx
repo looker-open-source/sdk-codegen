@@ -25,11 +25,12 @@
  */
 
 import React from 'react';
-import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { IdeFileManifest } from '@looker/icons';
 import { Toc } from '@styled-icons/material/Toc';
 import { Tag } from '@styled-icons/material-rounded/Tag';
 
+import userEvent from '@testing-library/user-event';
 import { api } from '../../test-data';
 import { renderWithRouter } from '../../test-utils';
 import { ExploreProperty, ExplorePropertyDetail, typeIcon } from '.';
@@ -50,13 +51,11 @@ describe('ExploreProperty', () => {
         // eslint-disable-next-line jest-dom/prefer-required
         expect(property.required).toEqual(false);
         expect(screen.getByText(property.description)).toBeInTheDocument();
-        await waitFor(() => {
-          const statusIcon = screen.getByTitle('read-only property');
-          fireEvent.mouseOver(statusIcon);
-          expect(screen.getByRole('tooltip')).toHaveTextContent(
-            'CreateDashboardFilter.id is read-only'
-          );
-        });
+        const statusIcon = screen.getByTitle('read-only property');
+        await userEvent.hover(statusIcon);
+        expect(screen.getByRole('tooltip')).toHaveTextContent(
+          'CreateDashboardFilter.id is read-only'
+        );
       });
 
       test('Shows required property and description', async () => {
@@ -70,13 +69,11 @@ describe('ExploreProperty', () => {
         // eslint-disable-next-line jest-dom/prefer-required
         expect(property.required).toEqual(true);
         expect(screen.getByText(property.description)).toBeInTheDocument();
-        await waitFor(() => {
-          const statusIcon = screen.getByTitle('required property');
-          fireEvent.mouseOver(statusIcon);
-          expect(screen.getByRole('tooltip')).toHaveTextContent(
-            'CreateDashboardFilter.dashboard_id is required'
-          );
-        });
+        const statusIcon = screen.getByTitle('required property');
+        await userEvent.hover(statusIcon);
+        expect(screen.getByRole('tooltip')).toHaveTextContent(
+          'CreateDashboardFilter.dashboard_id is required'
+        );
       });
     });
   });

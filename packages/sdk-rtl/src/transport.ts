@@ -558,9 +558,7 @@ export function safeBase64(u8: Uint8Array) {
  * @param error a value of unknown type
  * @return boolean true if the error has a `message` key of type string.
  */
-export function isErrorLike<T extends unknown>(
-  error: T
-): error is T & { message: string } {
+export function isErrorLike<T>(error: T): error is T & { message: string } {
   if (typeof error !== 'object') return false;
   if (!error) return false;
   if (!Object.prototype.hasOwnProperty.call(error, 'message')) return false;

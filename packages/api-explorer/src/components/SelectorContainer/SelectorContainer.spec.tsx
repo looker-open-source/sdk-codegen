@@ -43,28 +43,20 @@ describe('SelectorContainer', () => {
     renderWithRouterAndReduxProvider(<SelectorContainer spec={spec} />);
     const selector = screen.getByLabelText('spec selector');
     expect(selector).toHaveValue(`${spec.key}`);
-    await act(async () => {
-      await userEvent.click(selector);
-      await waitFor(() => {
-        expect(screen.getAllByRole('option')).toHaveLength(
-          Object.keys(specs).length
-        );
-      });
-    });
+    await userEvent.click(selector);
+    expect(screen.getAllByRole('option')).toHaveLength(
+      Object.keys(specs).length
+    );
   });
 
   test('it renders an sdk language selector with the correct value and options', async () => {
     renderWithRouterAndReduxProvider(<SelectorContainer spec={spec} />);
     const selector = screen.getByLabelText('sdk language selector');
     expect(selector).toHaveValue(defaultSettingsState.sdkLanguage);
-    await act(async () => {
-      await userEvent.click(selector);
-      await waitFor(() => {
-        expect(screen.getAllByRole('option')).toHaveLength(
-          codeGenerators.length + 1
-        );
-      });
-    });
+    await userEvent.click(selector);
+    expect(screen.getAllByRole('option')).toHaveLength(
+      codeGenerators.length + 1
+    );
   });
 
   test('it renders an icon button for the differ', () => {

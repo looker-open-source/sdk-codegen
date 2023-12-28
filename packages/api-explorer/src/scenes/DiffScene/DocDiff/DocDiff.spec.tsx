@@ -96,18 +96,16 @@ describe.skip('DocDiff', () => {
     ).toBeInTheDocument();
 
     // go to page 2
-    userEvent.click(
+    await userEvent.click(
       screen.getByRole('button', { name: 'Next page of results' })
     );
 
-    await waitFor(() => {
-      const row2 = delta[1];
-      expect(screen.getByText(row2.name)).toBeInTheDocument();
-      expect(screen.getByText(row2.id)).toBeInTheDocument();
-      expect(
-        screen.getByText(rightApi.methods[row2.name].summary)
-      ).toBeInTheDocument();
-    });
+    const row2 = delta[1];
+    expect(screen.getByText(row2.name)).toBeInTheDocument();
+    expect(screen.getByText(row2.id)).toBeInTheDocument();
+    expect(
+      screen.getByText(rightApi.methods[row2.name].summary)
+    ).toBeInTheDocument();
   });
 
   it('paginates with correct number of entries per page', async () => {
@@ -171,13 +169,11 @@ describe.skip('DocDiff', () => {
     ).toBeInTheDocument();
 
     // go to page 2
-    userEvent.click(
+    await userEvent.click(
       screen.getByRole('button', { name: 'Next page of results' })
     );
 
-    await waitFor(() => {
-      expect(screen.queryByText(lastPageEntry.name)).not.toBeInTheDocument();
-      expect(screen.queryByText(lastPageEntry.id)).not.toBeInTheDocument();
-    });
+    expect(screen.queryByText(lastPageEntry.name)).not.toBeInTheDocument();
+    expect(screen.queryByText(lastPageEntry.id)).not.toBeInTheDocument();
   });
 });

@@ -137,7 +137,7 @@ describe('QuickEmbed', () => {
     expect(
       screen.getByText('Apply theme to dashboard URL')
     ).toBeInTheDocument();
-    const textboxes = screen.getAllByRole('textbox');
+    let textboxes = screen.getAllByRole('textbox');
     const selector = textboxes[0];
     expect(selector).toHaveValue('custom_theme_1');
 
@@ -151,13 +151,11 @@ describe('QuickEmbed', () => {
 
     await userEvent.click(toggleSwitch);
 
-    await waitFor(() => {
-      expect(screen.getByRole('switch')).toBeChecked();
-      const textboxes = screen.getAllByRole('textbox');
-      expect(textboxes[1]).toHaveValue(
-        'https://example.com/embed/dashboards/42?foo=bar&theme=custom_theme_1'
-      );
-    });
+    expect(screen.getByRole('switch')).toBeChecked();
+    textboxes = screen.getAllByRole('textbox');
+    expect(textboxes[1]).toHaveValue(
+      'https://example.com/embed/dashboards/42?foo=bar&theme=custom_theme_1'
+    );
   });
 
   it('close button function triggers on click', async () => {

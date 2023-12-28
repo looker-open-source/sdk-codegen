@@ -39,6 +39,7 @@ class MockMessageChannel {
 
   port2: any = {};
   constructor() {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     channel = this;
   }
 }

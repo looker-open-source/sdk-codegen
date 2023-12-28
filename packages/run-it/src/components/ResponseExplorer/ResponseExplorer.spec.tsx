@@ -54,16 +54,14 @@ describe('ResponseExplorer', () => {
     const header = screen.getByText(heading);
     expect(header).toBeInTheDocument();
     await userEvent.click(header);
-    await waitFor(() => {
-      // TODO figure out a more specific selector?
-      const table = screen.getByRole('table');
-      expect(table).toHaveTextContent('content-type');
-      expect(table).toHaveTextContent('text/plain');
-      expect(table).toHaveTextContent('link');
-      expect(table).toHaveTextContent('nah, not really');
-      expect(table).toHaveTextContent('x-total-count');
-      expect(table).toHaveTextContent('0');
-    });
+    // TODO figure out a more specific selector?
+    const table = screen.getByRole('table');
+    expect(table).toHaveTextContent('content-type');
+    expect(table).toHaveTextContent('text/plain');
+    expect(table).toHaveTextContent('link');
+    expect(table).toHaveTextContent('nah, not really');
+    expect(table).toHaveTextContent('x-total-count');
+    expect(table).toHaveTextContent('0');
   });
 
   test('renders response body', async () => {

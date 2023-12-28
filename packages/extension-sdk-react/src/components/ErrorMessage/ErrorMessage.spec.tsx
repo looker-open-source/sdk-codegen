@@ -31,6 +31,6 @@ import { ErrorMessage } from './ErrorMessage';
 describe(ErrorMessage.name, () => {
   it('should show error message', () => {
     render(<ErrorMessage errorMessage="I'm a teapot" />);
-    expect(screen.queryByText("I'm a teapot")).toBeInTheDocument();
+    expect(screen.getByText("I'm a teapot")).toBeInTheDocument();
   });
 });

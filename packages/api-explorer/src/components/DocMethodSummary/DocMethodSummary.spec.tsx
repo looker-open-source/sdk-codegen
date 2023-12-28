@@ -25,8 +25,9 @@
  */
 import React from 'react';
 import { renderWithTheme } from '@looker/components-test-utils';
-import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 
+import userEvent from '@testing-library/user-event';
 import { api } from '../../test-data';
 import { DocMethodSummary } from './DocMethodSummary';
 
@@ -39,13 +40,11 @@ describe('DocMethodSummary', () => {
     ).toBeInTheDocument();
     expect(screen.getByText(method.summary)).toBeInTheDocument();
     expect(screen.getByText(method.endpoint)).toBeInTheDocument();
-    await waitFor(() => {
-      const statusIcon = screen.getByLabelText('stable item');
-      fireEvent.mouseOver(statusIcon);
-      expect(screen.getByRole('tooltip')).toHaveTextContent(
-        'This item is considered stable for this API version.'
-      );
-    });
+    const statusIcon = screen.getByLabelText('stable item');
+    await userEvent.hover(statusIcon);
+    expect(screen.getByRole('tooltip')).toHaveTextContent(
+      'This item is considered stable for this API version.'
+    );
     expect(screen.getByText('db_query')).toBeInTheDocument();
   });
 });

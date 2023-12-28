@@ -128,7 +128,7 @@ describe('ExtensionConnector component', () => {
         <MockExtension />
       </ExtensionConnector>
     );
-    expect(screen.queryByText('Loading')).toBeInTheDocument();
+    expect(screen.getByText('Loading')).toBeInTheDocument();
     expect(await screen.findByText('Mock Extension')).toBeInTheDocument();
     expect(await screen.findByText('/')).toBeInTheDocument();
     expect(connectedCallback).toHaveBeenCalled();

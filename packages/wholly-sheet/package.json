@@ -37,7 +37,7 @@
     "uuid": "9.0.1"
   },
   "devDependencies": {
-    "@looker/eslint-plugin": "1.0.0",
+    "@looker/eslint-plugin": "~1.0.0",
     "@looker/sdk-node": "23.20.1",
     "@types/uuid": "^8.3.4",
     "google-auth-library": "^6.1.0"
