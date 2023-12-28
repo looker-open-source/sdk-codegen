@@ -25,9 +25,8 @@
  */
 
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import { renderWithTheme } from '@looker/components-test-utils';
-import userEvent from '@testing-library/user-event';
 import {
   BrowserAdaptor,
   registerTestEnvAdaptor,
@@ -46,7 +45,7 @@ describe('LoginForm', () => {
     const login = screen.getByRole('button', {
       name: 'Login',
     });
-    await userEvent.hover(login);
+    fireEvent.mouseOver(login);
     expect(screen.getByRole('tooltip')).toHaveTextContent(notReadyToLogin);
   });
 
@@ -59,7 +58,7 @@ describe('LoginForm', () => {
     const login = screen.getByRole('button', {
       name: 'Login',
     });
-    await userEvent.hover(login);
+    fireEvent.mouseOver(login);
     expect(screen.getByRole('tooltip')).toHaveTextContent(readyToLogin);
   });
 });

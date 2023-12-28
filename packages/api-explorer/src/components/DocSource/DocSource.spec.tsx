@@ -24,10 +24,9 @@
 
  */
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import type { IDeclarationMine } from '@looker/sdk-codegen';
 import { codeSearchLink } from '@looker/sdk-codegen';
-import userEvent from '@testing-library/user-event';
 import { api } from '../../test-data';
 import { renderWithLode } from '../../test-utils';
 import { DocSource } from './DocSource';
@@ -89,7 +88,7 @@ describe('DocSource', () => {
       declaration.line
     );
     expect(link.closest('a')).toHaveAttribute('href', expected);
-    await userEvent.hover(link);
+    fireEvent.mouseOver(link);
     expect(screen.getByRole('tooltip')).toHaveTextContent(
       `${declaration.sourceFile}#L${declaration.line}`
     );
@@ -106,7 +105,8 @@ describe('DocSource', () => {
       declaration.line
     );
     expect(link.closest('a')).toHaveAttribute('href', expected);
-    await userEvent.hover(link);
+    // await userEvent.hover(link);
+    fireEvent.mouseOver(link);
     expect(screen.getByRole('tooltip')).toHaveTextContent(
       `${declaration.sourceFile}#L${declaration.line}`
     );
