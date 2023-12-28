@@ -25,7 +25,7 @@
  */
 
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { IdeFileManifest } from '@looker/icons';
 import { Toc } from '@styled-icons/material/Toc';
 import { Tag } from '@styled-icons/material-rounded/Tag';
@@ -51,11 +51,14 @@ describe('ExploreProperty', () => {
         // eslint-disable-next-line jest-dom/prefer-required
         expect(property.required).toEqual(false);
         expect(screen.getByText(property.description)).toBeInTheDocument();
-        const statusIcon = screen.getByTitle('read-only property');
-        await userEvent.hover(statusIcon);
-        expect(screen.getByRole('tooltip')).toHaveTextContent(
-          'CreateDashboardFilter.id is read-only'
-        );
+        await waitFor(() => {
+          const statusIcon = screen.getByTitle('read-only property');
+          // eslint-disable-next-line testing-library/no-wait-for-side-effects
+          fireEvent.mouseOver(statusIcon);
+          expect(screen.getByRole('tooltip')).toHaveTextContent(
+            'CreateDashboardFilter.id is read-only'
+          );
+        });
       });
 
       test('Shows required property and description', async () => {
@@ -69,11 +72,14 @@ describe('ExploreProperty', () => {
         // eslint-disable-next-line jest-dom/prefer-required
         expect(property.required).toEqual(true);
         expect(screen.getByText(property.description)).toBeInTheDocument();
-        const statusIcon = screen.getByTitle('required property');
-        await userEvent.hover(statusIcon);
-        expect(screen.getByRole('tooltip')).toHaveTextContent(
-          'CreateDashboardFilter.dashboard_id is required'
-        );
+        await waitFor(() => {
+          const statusIcon = screen.getByTitle('required property');
+          // eslint-disable-next-line testing-library/no-wait-for-side-effects
+          fireEvent.mouseOver(statusIcon);
+          expect(screen.getByRole('tooltip')).toHaveTextContent(
+            'CreateDashboardFilter.dashboard_id is required'
+          );
+        });
       });
     });
   });

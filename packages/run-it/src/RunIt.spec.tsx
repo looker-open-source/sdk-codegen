@@ -104,9 +104,11 @@ describe('RunIt', () => {
       expect(button).toBeInTheDocument();
       await userEvent.click(button);
       expect(defaultRequestCallback).toHaveBeenCalled();
-      expect(
-        screen.getByText(testTextResponse.body.toString())
-      ).toBeInTheDocument();
+      await waitFor(() => {
+        expect(
+          screen.getByText(testTextResponse.body.toString())
+        ).toBeInTheDocument();
+      });
     });
 
     test.skip('run_inline_query has required body parameters', async () => {

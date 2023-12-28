@@ -25,10 +25,9 @@
  */
 import React from 'react';
 import { renderWithTheme } from '@looker/components-test-utils';
-import { screen, waitFor } from '@testing-library/react';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
 import type { IEnvironmentAdaptor } from '@looker/extension-utils';
 import type { SpecList } from '@looker/sdk-codegen';
-import userEvent from '@testing-library/user-event';
 import { Banner } from './Banner';
 
 describe('Banner', () => {
@@ -53,15 +52,19 @@ describe('Banner', () => {
       />
     );
 
-    expect(
-      screen.getByText('API 4.0 moves from Beta', { exact: false })
-    ).toBeInTheDocument();
-    const link = screen.getByText('Announcement').closest('a');
-    expect(link).toHaveAttribute(
-      'href',
-      'https://developers.looker.com/api/advanced-usage/version-4-ga'
-    );
-    expect(link).toHaveAttribute('target', '_blank');
+    await waitFor(() => {
+      expect(
+        screen.getByText('API 4.0 moves from Beta', { exact: false })
+      ).toBeInTheDocument();
+      const link = screen.getByText('Announcement').closest('a');
+      // eslint-disable-next-line testing-library/no-wait-for-multiple-assertions
+      expect(link).toHaveAttribute(
+        'href',
+        'https://developers.looker.com/api/advanced-usage/version-4-ga'
+      );
+      // eslint-disable-next-line testing-library/no-wait-for-multiple-assertions
+      expect(link).toHaveAttribute('target', '_blank');
+    });
   });
 
   test('sets local storage value and unrenders on close button click', async () => {
@@ -85,7 +88,7 @@ describe('Banner', () => {
     });
 
     const closeButton = screen.getByText('Dismiss Inform').closest('button');
-    await userEvent.click(closeButton as HTMLButtonElement);
+    fireEvent.click(closeButton as HTMLButtonElement);
 
     expect(
       screen.queryByText('API 4.0 moves from Beta', { exact: false })

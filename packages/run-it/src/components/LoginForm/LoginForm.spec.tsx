@@ -30,8 +30,8 @@ import { renderWithTheme } from '@looker/components-test-utils';
 import userEvent from '@testing-library/user-event';
 import {
   BrowserAdaptor,
-  OAuthConfigProvider,
   registerTestEnvAdaptor,
+  OAuthConfigProvider,
 } from '@looker/extension-utils';
 
 import { initRunItSdk, readyToLogin } from '../..';
