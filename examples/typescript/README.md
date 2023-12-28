@@ -30,6 +30,8 @@ These examples assume that a `looker.ini` has been created in the root of the re
    - `yarn run-generate-api-credentials` - runs bulk generate api credentials example.
    - `yarn run-test-connections` - runs test connections example.
    - `yarn run-pdt-mapping` - runs pdt mapping example.
+   - `yarn run-create-slack-alert` - runs create slack alert example.
+   - `yarn bulk-delete-alerts` - runs bulk delete alerts example.
 
 Some other dependencies may be required for the projects to build and run correctly on your local clone.
 
@@ -64,12 +66,14 @@ A very brief descriptions of the examples, and the link to the main example/proj
 | [sudo as user](sudoAsUser.ts)                              | Uses several User management SDK methods and shows how to `sudo` as a different user than the default API credentials user. Once the auth session is set to that user, subsequent SDK requests will be "as user `<x>`" when submitted to the API.|
 | [bulk generate api credentials](generateApiCredentials.ts) | Allows an admin to generate api credentials in bulk given a Looker role ID as input (Ex: generate api credentials for all users with the "Developer" role).
 
-### Schedules
+### Schedules & Alerts
 
 | &nbsp;&nbsp;Example&nbsp;Topic&nbsp;&nbsp;           | Discussion                                                                                                                                                                                                                                                                                                                                              |
 | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [bulk disable schedules](bulkDisableSchedules.ts)       | This script allows an admin user to disable all user schedules OR just the schedules of a specific user. |
-| [bulk reassign schedules](bulkReassignSchedules.ts)     | This script allows allows an admin user to either reassign all user schedules OR a single user's schedules to a specified user. 
+| [bulk reassign schedules](bulkReassignSchedules.ts)     | This script allows allows an admin user to either reassign all user schedules OR a single user's schedules to a specified user. |
+| [bulk delete alerts](bulkDeleteAlerts.ts)              | This script allows an admin user to bulk delete alerts for a specific user on the instance. |
+| [create slack alert](createSlackAlert.ts)               | This script allows a user to create an alert on a tile of a given dashboard element that sends an alert message to slack when triggered. Users will need at least the `create_alerts` role to be able to run this call. Configuration variables are outlined in the script.
 
 ### Git / LookML Project Validation
 
