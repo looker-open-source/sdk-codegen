@@ -1,3 +1,8 @@
-**/node_modules/*
-packages/**/lib/
-
+*.md
+**/*.md
+**/*.mdx
+**/dist
+**/lib
+**/storybook-static
+**/test/output
+**/.eslintrc

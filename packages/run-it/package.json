@@ -65,7 +65,7 @@
     "@styled-icons/material": "^10.47.0",
     "@styled-icons/material-outlined": "^10.47.0",
     "@styled-icons/material-rounded": "^10.28.0",
-    "lodash": "^4.17.21",
+    "lodash": "4.17.21",
     "papaparse": "^5.3.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
