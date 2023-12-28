@@ -57,14 +57,14 @@ export const withReduxProvider = (
 export const renderWithReduxProvider = (
   consumers: ReactElement<any>,
   store?: Store<RootState>,
-  options?: Omit<RenderOptions, 'queries'>
+  options?: Omit<RenderOptions<any>, 'queries'>
 ) => renderWithTheme(withReduxProvider(consumers, store), options)
 
 export const renderWithRouterAndReduxProvider = (
   consumers: ReactElement<any>,
   initialEntries: string[] = ['/'],
   store?: Store<RootState>,
-  options?: Omit<RenderOptions, 'queries'>
+  options?: Omit<RenderOptions<any>, 'queries'>
 ) =>
   renderWithRouter(withReduxProvider(consumers, store), initialEntries, options)
 

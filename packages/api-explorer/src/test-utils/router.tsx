@@ -38,5 +38,5 @@ export const withRouter = (
 export const renderWithRouter = (
   children: ReactElement<any> | ReactElement[],
   initialEntries?: string[],
-  options?: Omit<RenderOptions, 'queries'>
+  options?: Omit<RenderOptions<any>, 'queries'>
 ) => renderWithTheme(withRouter(children, initialEntries), options)

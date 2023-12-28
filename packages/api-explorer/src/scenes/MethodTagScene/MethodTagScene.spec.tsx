@@ -98,7 +98,7 @@ describe('MethodTagScene', () => {
       [site]
     )
     /** Filter by GET operation */
-    userEvent.click(screen.getByRole('button', { name: 'GET' }))
+    await userEvent.click(screen.getByRole('button', { name: 'GET' }))
     await waitFor(() => {
       expect(mockHistoryPush).toHaveBeenCalledWith({
         pathname: site,
@@ -106,7 +106,7 @@ describe('MethodTagScene', () => {
       })
     })
     /** Filter by DELETE operation */
-    userEvent.click(screen.getByRole('button', { name: 'DELETE' }))
+    await userEvent.click(screen.getByRole('button', { name: 'DELETE' }))
     await waitFor(() => {
       // eslint-disable-next-line jest-dom/prefer-in-document
       expect(mockHistoryPush).toHaveBeenCalledWith({

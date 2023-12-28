@@ -35,13 +35,13 @@
     "watch": "yarn lerna exec --scope @looker/sdk-codegen --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "dependencies": {
-    "@looker/sdk-codegen-utils": "^21.0.11",
-    "@looker/sdk-rtl": "^21.6.1",
+    "@looker/sdk-codegen-utils": "21.0.11",
+    "@looker/sdk-rtl": "21.6.1",
     "blueimp-md5": "^2.13.0",
-    "openapi3-ts": "^1.3.0"
+    "openapi3-ts": "2.0.2"
   },
   "gitHead": "308cb8c61290837e71345a5ef6fb17be9285990e",
   "devDependencies": {
-    "lodash": "^4.17.20"
+    "lodash": "^4.17.21"
   }
 }

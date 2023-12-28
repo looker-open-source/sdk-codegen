@@ -25,7 +25,7 @@
  */
 
 import React from 'react'
-import { screen, waitFor } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import { renderWithTheme } from '@looker/components-test-utils'
 import userEvent from '@testing-library/user-event'
 import {
@@ -46,10 +46,8 @@ describe('LoginForm', () => {
     const login = screen.getByRole('button', {
       name: 'Login',
     })
-    await waitFor(() => {
-      userEvent.hover(login)
-      expect(screen.getByRole('tooltip')).toHaveTextContent(notReadyToLogin)
-    })
+    await userEvent.hover(login)
+    expect(screen.getByRole('tooltip')).toHaveTextContent(notReadyToLogin)
   })
 
   test('it displays a ready to login message if auth is configured', async () => {
@@ -61,9 +59,7 @@ describe('LoginForm', () => {
     const login = screen.getByRole('button', {
       name: 'Login',
     })
-    await waitFor(() => {
-      userEvent.hover(login)
-      expect(screen.getByRole('tooltip')).toHaveTextContent(readyToLogin)
-    })
+    await userEvent.hover(login)
+    expect(screen.getByRole('tooltip')).toHaveTextContent(readyToLogin)
   })
 })

@@ -100,7 +100,7 @@ describe('TypeTagScene', () => {
       [site]
     )
     /** Filter by SPECIFICATION */
-    userEvent.click(screen.getByRole('button', { name: 'SPECIFICATION' }))
+    await userEvent.click(screen.getByRole('button', { name: 'SPECIFICATION' }))
     await waitFor(() => {
       expect(mockHistoryPush).toHaveBeenCalledWith({
         pathname: site,
@@ -108,7 +108,7 @@ describe('TypeTagScene', () => {
       })
     })
     /** Filter by REQUEST */
-    userEvent.click(screen.getByRole('button', { name: 'REQUEST' }))
+    await userEvent.click(screen.getByRole('button', { name: 'REQUEST' }))
     await waitFor(() => {
       expect(mockHistoryPush).toHaveBeenCalledWith({
         pathname: site,

@@ -261,7 +261,7 @@ describe('formUtils', () => {
       )
       renderWithTheme(ComplexItem)
       expect(screen.getByText('A complex item')).toBeInTheDocument()
-      userEvent.hover(screen.getByTestId('body-param-tooltip'))
+      await userEvent.hover(screen.getByTestId('body-param-tooltip'))
       await waitFor(() => {
         expect(screen.getByText(BODY_HINT)).toBeInTheDocument()
       })
@@ -300,7 +300,7 @@ describe('formUtils', () => {
   })
 
   describe('createWarning', () => {
-    test('it creates a required checkbox with a warning label', () => {
+    test('it creates a required checkbox with a warning label', async () => {
       renderWithTheme(showDataChangeWarning())
       const warningCheckbox = screen.getByRole('checkbox')
       expect(warningCheckbox).toBeRequired()
@@ -311,7 +311,7 @@ describe('formUtils', () => {
         )
       ).toBeInTheDocument()
       expect(warningCheckbox).not.toBeChecked()
-      userEvent.click(warningCheckbox)
+      await userEvent.click(warningCheckbox)
       expect(warningCheckbox).toBeChecked()
     })
   })
