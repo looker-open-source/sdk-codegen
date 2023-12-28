@@ -28,7 +28,7 @@ import type { FC } from 'react';
 import React from 'react';
 import type { IRawResponse } from '@looker/sdk-rtl';
 
-import { pickResponseHandler, fallbackResponseHandler } from './responseUtils';
+import { fallbackResponseHandler, pickResponseHandler } from './responseUtils';
 
 interface ShowResponseProps {
   /** A basic HTTP response for "raw" HTTP requests */

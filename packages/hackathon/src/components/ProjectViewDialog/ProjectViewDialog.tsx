@@ -26,7 +26,7 @@
 
 import type { FC } from 'react';
 import React from 'react';
-import { Dialog, DialogHeader, DialogContent } from '@looker/components';
+import { Dialog, DialogContent, DialogHeader } from '@looker/components';
 import type { IProjectProps } from '../../models';
 import { ProjectView } from '../../scenes';
 

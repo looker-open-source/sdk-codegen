@@ -29,11 +29,11 @@ import React, { useState } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 import { ApiModel } from '@looker/sdk-codegen';
 import {
+  Card,
   ComponentsProvider,
+  Flex,
   Select,
   Space,
-  Card,
-  Flex,
 } from '@looker/components';
 import { RunIt } from '../src';
 

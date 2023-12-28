@@ -25,7 +25,7 @@
  */
 
 import React, { Component } from 'react';
-import type { ReactNode, ErrorInfo } from 'react';
+import type { ErrorInfo, ReactNode } from 'react';
 import { SomethingWentWrong } from './components/SomethingWentWrong';
 
 interface ErrorBoundaryProps {

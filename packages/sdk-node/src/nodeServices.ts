@@ -25,10 +25,10 @@
  */
 
 import type {
-  ICryptoHash,
   IApiSettings,
-  ITransport,
+  ICryptoHash,
   IPlatformServices,
+  ITransport,
 } from '@looker/sdk-rtl';
 import { sdkError } from '@looker/sdk-rtl';
 import { NodeCryptoHash, NodeTransport } from './nodeTransport';

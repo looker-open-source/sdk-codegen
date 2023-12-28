@@ -28,13 +28,13 @@ import type { Looker40SDK } from '@looker/sdk';
 import type { ISheet, ITabTable, SheetSDK } from '@looker/wholly-sheet';
 import { addMinutes } from '@looker/wholly-sheet';
 import {
-  SheetData,
   Hackathon,
   Hackathons,
   Hacker,
   Judging,
   Project,
   Projects,
+  SheetData,
   User,
   Users,
 } from '../models';

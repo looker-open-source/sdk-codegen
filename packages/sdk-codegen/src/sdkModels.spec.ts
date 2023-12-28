@@ -26,7 +26,7 @@
 
 import { readFileSync } from 'fs';
 import type * as OAS from 'openapi3-ts';
-import { rootFile, TestConfig } from './testUtils';
+import { TestConfig, rootFile } from './testUtils';
 import type {
   IEnumType,
   IMethod,
@@ -40,22 +40,22 @@ import type {
 import {
   ApiModel,
   ArrayType,
+  DelimArrayType,
+  EnumType,
+  IntrinsicType,
+  MetaType,
+  Method,
+  SearchAll,
+  SearchCriterion,
   camelCase,
   criteriaToSet,
-  DelimArrayType,
   describeParam,
-  EnumType,
   firstCase,
-  IntrinsicType,
   isSpecialName,
   keyValues,
   mayQuote,
-  MetaType,
-  Method,
   methodRefs,
   safeName,
-  SearchAll,
-  SearchCriterion,
   setToCriteria,
   titleCase,
   typeRefs,

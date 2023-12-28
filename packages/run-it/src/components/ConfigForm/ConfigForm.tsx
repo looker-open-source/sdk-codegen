@@ -25,18 +25,18 @@
  */
 
 import type { BaseSyntheticEvent, Dispatch, FC, FormEvent } from 'react';
-import React, { useState, useEffect } from 'react';
-import type { ValidationMessages, MessageBarIntent } from '@looker/components';
+import React, { useEffect, useState } from 'react';
+import type { MessageBarIntent, ValidationMessages } from '@looker/components';
 import {
   Button,
   ButtonTransparent,
   Divider,
-  Fieldset,
   FieldText,
+  Fieldset,
   Form,
+  Link,
   MessageBar,
   Paragraph,
-  Link,
   Space,
   SpaceVertical,
   Tooltip,
@@ -47,12 +47,12 @@ import type { ILookerVersions } from '@looker/sdk-codegen';
 
 import { useLocation } from 'react-router-dom';
 import type { RunItValues } from '../..';
-import { CollapserCard, RunItHeading, DarkSpan, readyToLogin } from '../..';
+import { CollapserCard, DarkSpan, RunItHeading, readyToLogin } from '../..';
 import {
-  getVersions,
   RunItConfigKey,
-  RunItNoConfig,
   RunItFormKey,
+  RunItNoConfig,
+  getVersions,
   validateUrl,
 } from './utils';
 

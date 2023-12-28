@@ -24,13 +24,13 @@
 
  */
 import type { RunItInput } from '../RunIt';
-import { testJsonResponse, api } from '../test-data';
+import { api, testJsonResponse } from '../test-data';
 import {
+  createInputs,
   createRequestParams,
+  initRequestContent,
   pathify,
   runRequest,
-  createInputs,
-  initRequestContent,
 } from './requestUtils';
 import { initRunItSdk } from './RunItSDK';
 

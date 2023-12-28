@@ -24,9 +24,9 @@
 
  */
 
-import type { IRole, IUser as ILookerUser, Looker40SDK } from '@looker/sdk';
+import type { IUser as ILookerUser, IRole, Looker40SDK } from '@looker/sdk';
 import { TypedRows } from '@looker/wholly-artifact';
-import type { SheetData, Registration, Hackathon } from '.';
+import type { Hackathon, Registration, SheetData } from '.';
 import { User } from '.';
 
 export type UserPermission = 'delete' | 'create' | 'update';

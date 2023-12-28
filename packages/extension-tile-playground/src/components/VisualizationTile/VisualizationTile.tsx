@@ -24,20 +24,20 @@
 
  */
 import React, {
+  useCallback,
   useContext,
   useEffect,
-  useCallback,
   useMemo,
   useState,
 } from 'react';
-import { SpaceVertical, Text, Button } from '@looker/components';
+import { Button, SpaceVertical, Text } from '@looker/components';
 import { More } from '@looker/icons';
 import { ExtensionContext40 } from '@looker/extension-sdk-react';
 import { useWindowSize } from '../../hooks/use_window_size';
 import { LiquidFillGaugeViz } from '../LiquidFillGaugeViz';
 import { Layout } from '../Layout';
 import { NavigateButton } from '../NavigateButton';
-import { liquidFillVisOptions, getValueAndFormat } from './util/liquid_fill';
+import { getValueAndFormat, liquidFillVisOptions } from './util/liquid_fill';
 
 export const VisualizationTile: React.FC = () => {
   const { height, width } = useWindowSize();

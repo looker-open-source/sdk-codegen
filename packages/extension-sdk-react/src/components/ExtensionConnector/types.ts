@@ -28,11 +28,11 @@ import type { ReactNode } from 'react';
 import type {
   ExtensionHostApi,
   ExtensionSDK,
+  LookerHostData,
   RawVisualizationData,
   TileHostData,
   TileSDK,
   VisualizationSDK,
-  LookerHostData,
 } from '@looker/extension-sdk';
 
 /**

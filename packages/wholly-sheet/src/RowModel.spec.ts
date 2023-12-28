@@ -24,7 +24,7 @@
 
  */
 import type { IRowModel } from './RowModel';
-import { nilCell, noDate, RowAction, RowModel, stringer } from './RowModel';
+import { RowAction, RowModel, nilCell, noDate, stringer } from './RowModel';
 
 export interface ITestRowProps {
   name: string;

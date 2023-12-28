@@ -27,12 +27,12 @@ import type { FC } from 'react';
 import React, { useEffect, useState } from 'react';
 import {
   DataTable,
-  DataTableItem,
   DataTableAction,
   DataTableCell,
+  DataTableItem,
+  Icon,
   Pagination,
   Tooltip,
-  Icon,
 } from '@looker/components';
 import { TextSnippet } from '@styled-icons/material-outlined/TextSnippet';
 import { Lock } from '@styled-icons/material-outlined/Lock';
@@ -41,7 +41,7 @@ import { Delete } from '@styled-icons/material-outlined/Delete';
 import { FactCheck } from '@styled-icons/material-outlined/FactCheck';
 import { Logout } from '@styled-icons/material-outlined/Logout';
 import { Login } from '@styled-icons/material-outlined/Login';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import type { IHackerProps, IProjectProps } from '../../../models';
 import { sheetCell } from '../../../models';
@@ -52,10 +52,10 @@ import {
 import { canDoProjectAction, canJoinProject } from '../../../utils';
 import { PAGE_SIZE } from '../../../constants';
 import {
-  deleteProject,
-  currentProjectsRequest,
-  updateProjectsPageNum,
   changeMembership,
+  currentProjectsRequest,
+  deleteProject,
+  updateProjectsPageNum,
 } from '../../../data/projects/actions';
 import {
   getCurrentProjectsState,

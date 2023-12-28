@@ -25,9 +25,9 @@
  */
 
 import {
+  getCore40SDK,
   registerCore40SDK,
   unregisterCore40SDK,
-  getCore40SDK,
 } from './core_sdk_40';
 
 /**

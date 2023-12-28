@@ -26,13 +26,13 @@
 import type { IUser as ILookerUser } from '@looker/sdk';
 import type {
   IHackathonProps,
-  ITechnologyProps,
   IHackerProps,
+  ITechnologyProps,
 } from '../../models';
 import type {
-  ProjectsHeadings,
   HackersHeadings,
   JudgingsHeadings,
+  ProjectsHeadings,
 } from '../types';
 import type { HackSessionAction } from './actions';
 import { Actions } from './actions';

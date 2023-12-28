@@ -25,11 +25,11 @@
  */
 import {
   mockAdmin,
+  mockHackathons,
   mockJudge,
   mockProjects,
   mockStaff,
   mockUser,
-  mockHackathons,
   mockUsers,
 } from '../test-data';
 import { Project } from './Projects';

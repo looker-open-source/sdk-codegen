@@ -25,8 +25,8 @@
  */
 import type { FC, ReactElement } from 'react';
 import React from 'react';
-import { useToggle, Accordion2, Divider, Box2 } from '@looker/components';
-import { ArrowRight, ArrowDropDown } from '@styled-icons/material';
+import { Accordion2, Box2, Divider, useToggle } from '@looker/components';
+import { ArrowDropDown, ArrowRight } from '@styled-icons/material';
 import { ConfigHeading } from './ConfigHeading';
 
 interface CollapserCardProps {

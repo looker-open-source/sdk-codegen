@@ -25,9 +25,9 @@
  */
 import type { IAPIMethods } from '@looker/sdk-rtl';
 import type { ExtensionSDK, LookerHostData } from '@looker/extension-sdk';
-import { ExtensionAdaptor } from './extensionAdaptor';
 import type { ThemeOverrides } from '@looker/extension-utils';
 import { getThemeOverrides } from '@looker/extension-utils';
+import { ExtensionAdaptor } from './extensionAdaptor';
 
 describe('ExtensionAdaptor', () => {
   test.each([

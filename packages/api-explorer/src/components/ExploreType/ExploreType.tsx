@@ -27,7 +27,7 @@
 import type { FC } from 'react';
 import React from 'react';
 import { Code, Tree, TreeItem } from '@looker/components';
-import type { IType, ApiModel } from '@looker/sdk-codegen';
+import type { ApiModel, IType } from '@looker/sdk-codegen';
 import { TypeOfType, typeOfType } from '@looker/sdk-codegen';
 import { useRouteMatch } from 'react-router-dom';
 

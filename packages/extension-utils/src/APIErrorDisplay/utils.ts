@@ -24,7 +24,7 @@
 
  */
 
-import type { LookerSDKError, IAPIMethods } from '@looker/sdk-rtl';
+import type { IAPIMethods, LookerSDKError } from '@looker/sdk-rtl';
 
 /**
  * Default the heading to 'Unknown error' if error.message is blank for any reason

@@ -25,7 +25,7 @@
  */
 
 import type { ApiModel, DiffRow, ICodeGen } from '@looker/sdk-codegen';
-import { getCodeGenerator, PseudoGen } from '@looker/sdk-codegen';
+import { PseudoGen, getCodeGenerator } from '@looker/sdk-codegen';
 
 export const diffText = (
   row: DiffRow,

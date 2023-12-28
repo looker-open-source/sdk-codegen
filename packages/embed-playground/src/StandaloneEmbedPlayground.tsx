@@ -23,14 +23,14 @@
  SOFTWARE.
 
  */
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ComponentsProvider } from '@looker/components';
 import {
   BrowserAdaptor,
-  registerEnvAdaptor,
-  OAuthScene,
   OAuthConfigProvider,
   OAuthForm,
+  OAuthScene,
+  registerEnvAdaptor,
 } from '@looker/extension-utils';
 import { Provider } from 'react-redux';
 import { useLocation } from 'react-router';

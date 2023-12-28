@@ -26,7 +26,7 @@
 
 import type { FC } from 'react';
 import React, { useEffect, useState } from 'react';
-import { initRunItSdk, RunItProvider } from '@looker/run-it';
+import { RunItProvider, initRunItSdk } from '@looker/run-it';
 import type { OAuthConfigProvider } from '@looker/extension-utils';
 import { OAuthScene } from '@looker/extension-utils';
 import { Provider } from 'react-redux';
@@ -34,7 +34,7 @@ import { useLocation } from 'react-router';
 
 import { ApiExplorer } from './ApiExplorer';
 import { store } from './state';
-import { oAuthPath, ApixAdaptor } from './utils';
+import { ApixAdaptor, oAuthPath } from './utils';
 import { Loader } from './components';
 
 export interface StandaloneApiExplorerProps {

@@ -27,14 +27,14 @@
 import type { FC } from 'react';
 import React, { useState } from 'react';
 import {
+  IconButton,
+  Span,
   Table,
   TableBody,
-  TableRow,
   TableDataCell,
-  Span,
   TableHead,
   TableHeaderCell,
-  IconButton,
+  TableRow,
 } from '@looker/components';
 import styled from 'styled-components';
 import type { IRawResponse, LookerSDKError } from '@looker/sdk-rtl';

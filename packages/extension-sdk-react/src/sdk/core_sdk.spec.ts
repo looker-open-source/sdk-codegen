@@ -26,11 +26,11 @@
 
 import type { Looker40SDK } from '@looker/sdk';
 import {
-  registerCore40SDK,
   getCore40SDK,
+  registerCore40SDK,
   unregisterCore40SDK,
 } from './core_sdk_40';
-import { registerCoreSDK2, getCoreSDK2, unregisterCoreSDK2 } from './core_sdk2';
+import { getCoreSDK2, registerCoreSDK2, unregisterCoreSDK2 } from './core_sdk2';
 
 describe('coreSDK', () => {
   beforeEach(() => {

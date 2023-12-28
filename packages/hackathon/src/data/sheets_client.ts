@@ -26,28 +26,28 @@
 import omit from 'lodash/omit';
 import type { ValidationMessages } from '@looker/components';
 import { getCore40SDK } from '@looker/extension-sdk-react';
-import { initActiveSheet, SheetData } from '../models/SheetData';
+import { SheetData, initActiveSheet } from '../models/SheetData';
 import type {
   Hacker,
-  IProjectProps,
-  IHackerProps,
   IHackathonProps,
+  IHackerProps,
   IJudgingProps,
+  IProjectProps,
   IRegistrationProps,
   ITechnologyProps,
 } from '../models';
 import {
+  Hackers,
+  Judging,
   Project,
   Projects,
-  Hackers,
-  sheetHeader,
-  Judging,
   Registration,
+  sheetHeader,
 } from '../models';
 import type {
-  ProjectsHeadings,
   HackersHeadings,
   JudgingsHeadings,
+  ProjectsHeadings,
 } from './types';
 
 /**

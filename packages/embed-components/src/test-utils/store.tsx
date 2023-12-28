@@ -24,9 +24,9 @@
 
  */
 import { createStore } from '@looker/redux';
-import { factorySlice, defaultFactoryState } from '../GlobalStore';
-import type { RootState, FactoryState } from '../GlobalStore';
-import { themesSlice, defaultThemesState } from '../Theme';
+import { defaultFactoryState, factorySlice } from '../GlobalStore';
+import type { FactoryState, RootState } from '../GlobalStore';
+import { defaultThemesState, themesSlice } from '../Theme';
 import type { ThemesState } from '../Theme';
 
 type DeepPartial<T> = {

@@ -27,8 +27,8 @@
 import {
   ApiConfigMap,
   ApiSettings,
-  strBadConfiguration,
   ValueSettings,
+  strBadConfiguration,
 } from './apiSettings';
 import { defaultTimeout } from './transport';
 

@@ -23,22 +23,22 @@
  SOFTWARE.
 
  */
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ComponentsProvider,
   Dialog,
-  IconButton,
   Flex,
   FlexItem,
   Heading,
+  IconButton,
 } from '@looker/components';
 import type { IEnvironmentAdaptor } from '@looker/extension-utils';
 import { me } from '@looker/sdk';
 import {
+  QuickEmbed,
   useFactoryActions,
   useFactoryStoreState,
   useThemesStoreState,
-  QuickEmbed,
 } from '@looker/embed-components';
 import { FlashOn } from '@styled-icons/material';
 

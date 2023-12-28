@@ -24,18 +24,18 @@
 
  */
 
-import type { ILookerVersions, SpecItem } from "@looker/sdk-codegen";
+import type { ILookerVersions, SpecItem } from '@looker/sdk-codegen';
 import {
   ApiModel,
   codeGenerators,
   findGenerator,
   getSpecsFromVersions,
   upgradeSpecObject,
-} from "@looker/sdk-codegen";
-import { log } from "@looker/sdk-codegen-utils";
-import { createJsonFile, readFileSync } from "./nodeUtils";
-import type { ISDKConfigProps } from "./sdkConfig";
-import { SDKConfig } from "./sdkConfig";
+} from '@looker/sdk-codegen';
+import { log } from '@looker/sdk-codegen-utils';
+import { createJsonFile, readFileSync } from './nodeUtils';
+import type { ISDKConfigProps } from './sdkConfig';
+import { SDKConfig } from './sdkConfig';
 import {
   authGetUrl,
   fetchLookerVersion,
@@ -43,11 +43,11 @@ import {
   openApiFileName,
   specPath,
   swaggerFileName,
-} from "./fetchSpec";
+} from './fetchSpec';
 
 export const apiVersions = (props: any) => {
-  const versions = props.api_versions ?? "3.1,4.0";
-  return versions.split(",");
+  const versions = props.api_versions ?? '3.1,4.0';
+  return versions.split(',');
 };
 
 export interface IGenProps {
@@ -86,7 +86,7 @@ const generatorHelp = () => {
 
     # reads specs from './versions.json' and generates TypeScript and Python SDKs
     yarn gen ts -v ./versions.json py
-`,
+`
   );
   process.exit(0);
 };
@@ -100,31 +100,31 @@ export const doArgs = (args: string[]) => {
   let noStreams = false;
 
   const langs: string[] = [];
-  if (args.length > 0 && args.toString().toLowerCase() !== "all") {
+  if (args.length > 0 && args.toString().toLowerCase() !== 'all') {
     let i = 0;
     while (i < args.length) {
       const arg = args[i].toLowerCase();
       switch (arg) {
-        case "-v":
-        case "--versions":
+        case '-v':
+        case '--versions':
           {
             i++;
             const content = readFileSync(args[i]);
             versions = JSON.parse(content);
           }
           break;
-        case "-h":
-        case "--help":
+        case '-h':
+        case '--help':
           generatorHelp();
           break;
-        case "-n":
-        case "--nostreams":
+        case '-n':
+        case '--nostreams':
           noStreams = true;
           break;
         default:
           {
-            const values = arg.split(",").filter((v) => v.trim());
-            if (values[0] !== "all") {
+            const values = arg.split(',').filter((v) => v.trim());
+            if (values[0] !== 'all') {
               values.forEach((v) => {
                 const gen = findGenerator(v.trim());
                 if (gen) {
@@ -171,7 +171,7 @@ export const prepGen = async (args: string[]): Promise<IGenProps> => {
   const { languages, versions, noStreams } = doArgs(args);
   const { name, props } = loadConfig();
   let lookerVersions;
-  let lookerVersion = "";
+  let lookerVersion = '';
   try {
     if (versions) {
       lookerVersions = versions;
@@ -179,7 +179,7 @@ export const prepGen = async (args: string[]): Promise<IGenProps> => {
       lookerVersions = await fetchLookerVersions(props);
       createJsonFile(
         `${specPath}/versions.json`,
-        JSON.stringify(lookerVersions, null, 2),
+        JSON.stringify(lookerVersions, null, 2)
       );
     }
     lookerVersion = await fetchLookerVersion(props, lookerVersions);
@@ -188,20 +188,20 @@ export const prepGen = async (args: string[]): Promise<IGenProps> => {
     lookerVersions = {
       supported_versions: [
         {
-          version: "3.1",
-          status: "stable",
-          full_version: "",
+          version: '3.1',
+          status: 'stable',
+          full_version: '',
           swagger_url: `https://${props.base_url}/api/3.1/swagger.json`,
         },
         {
-          version: "4.0",
-          status: "experimental",
-          full_version: "",
+          version: '4.0',
+          status: 'experimental',
+          full_version: '',
           swagger_url: `https://${props.base_url}/api/4.0/swagger.json`,
         },
       ],
     };
-    lookerVersion = "";
+    lookerVersion = '';
   }
   // Iterate through all specified API versions
   const apis = apiVersions(props);
@@ -230,7 +230,7 @@ export const loadSpecs = async (config: IGenProps, fetch = true) => {
     if (!spec.specURL) return undefined;
     const p = { ...config.props, ...{ api_version: spec.version } };
     let source = await authGetUrl(p, spec.specURL);
-    if (typeof source === "string") source = JSON.parse(source);
+    if (typeof source === 'string') source = JSON.parse(source);
     const upgrade = upgradeSpecObject(source);
     spec.api = ApiModel.fromJson(upgrade);
     if (/^http[s]?:\/\//i.test(spec.specURL)) {

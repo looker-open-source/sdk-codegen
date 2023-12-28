@@ -41,7 +41,7 @@ import type {
   ITransportSettings,
   Values,
 } from './transport';
-import { readFile, TestConfig } from './testUtils';
+import { TestConfig, readFile } from './testUtils';
 
 const config = TestConfig();
 const errorIndex = `${config.testPath}errorCodesIndex.json`;

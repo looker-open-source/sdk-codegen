@@ -23,12 +23,12 @@
  SOFTWARE.
 
  */
-import { takeEvery, call, put, select } from 'typed-redux-saga';
+import { call, put, select, takeEvery } from 'typed-redux-saga';
 
 import { getEnvAdaptor } from '@looker/extension-utils';
 import { StoreConstants } from '@looker/run-it';
 import type { RootState } from '../store';
-import { settingActions, defaultSettings } from './slice';
+import { defaultSettings, settingActions } from './slice';
 
 /**
  * Serializes state to local storage

@@ -24,7 +24,7 @@
 
  */
 
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import type { TagList, TypeList } from '@looker/sdk-codegen';
 
 export const useDebounce = <T>(value: T, delay: number): T => {

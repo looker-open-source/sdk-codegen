@@ -28,11 +28,11 @@ import type { FC } from 'react';
 import React from 'react';
 import styled from 'styled-components';
 import {
-  Icon,
-  Space,
-  IconButton,
   Heading,
+  Icon,
+  IconButton,
   Header as SemanticHeader,
+  Space,
 } from '@looker/components';
 import { LookerLogo } from '@looker/icons';
 import { Menu } from '@styled-icons/material/Menu';

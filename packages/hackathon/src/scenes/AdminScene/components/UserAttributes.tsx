@@ -26,12 +26,12 @@
 
 import type { FC } from 'react';
 import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Form, Fieldset, FieldText, Button, Space } from '@looker/components';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button, FieldText, Fieldset, Form, Space } from '@looker/components';
 import {
   loadUserAttributesRequest,
-  updateAttributeValues,
   saveUserAttributesRequest,
+  updateAttributeValues,
 } from '../../../data/admin/actions';
 import { getUserAttributesState } from '../../../data/admin/selectors';
 import { isLoadingState } from '../../../data/common/selectors';

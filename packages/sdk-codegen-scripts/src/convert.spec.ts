@@ -27,21 +27,21 @@
 import { readFileSync } from 'fs';
 import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
-import { NodeSettingsIniFile, LookerNodeSDK } from '@looker/sdk-node';
+import { LookerNodeSDK, NodeSettingsIniFile } from '@looker/sdk-node';
 import type { ISpecItem } from '@looker/sdk-codegen';
 import {
-  fixConversion,
-  openApiStyle,
-  swapXLookerTags,
-  convertParam,
-  upgradeSpec,
+  ApiModel,
+  compareSpecs,
   convertDefs,
+  convertParam,
+  fixConversion,
   getLookerSpecs,
   getSpecLinks,
-  loadSpecs,
   getSpecsFromVersions,
-  compareSpecs,
-  ApiModel,
+  loadSpecs,
+  openApiStyle,
+  swapXLookerTags,
+  upgradeSpec,
 } from '@looker/sdk-codegen';
 import { TestConfig } from './testUtils';
 

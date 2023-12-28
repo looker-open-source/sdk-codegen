@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Select, SpaceVertical, ValidationMessage } from '@looker/components';
 import type { SelectOptionObject } from '@looker/components';
 import { useThemeActions, useThemesStoreState } from './state';

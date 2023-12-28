@@ -25,7 +25,7 @@
  */
 import type { FC, ReactElement } from 'react';
 import React from 'react';
-import { Space, Box, Label } from '@looker/components';
+import { Box, Label, Space } from '@looker/components';
 
 interface FormItemProps {
   /** ID of input item for label */

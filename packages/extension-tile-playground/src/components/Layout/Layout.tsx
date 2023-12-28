@@ -25,7 +25,7 @@
  */
 import React from 'react';
 import type { ReactNode } from 'react';
-import { Flex, Box2 } from '@looker/components';
+import { Box2, Flex } from '@looker/components';
 
 export interface LayoutProps {
   children: ReactNode;

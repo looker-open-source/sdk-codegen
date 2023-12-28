@@ -28,9 +28,9 @@ import type { FC } from 'react';
 import React from 'react';
 import styled from 'styled-components';
 import { Span } from '@looker/components';
-import Highlight, { defaultProps, Prism } from 'prism-react-renderer';
+import Highlight, { Prism, defaultProps } from 'prism-react-renderer';
 
-import { getPrismLanguage, getOverriddenTheme } from '../utils';
+import { getOverriddenTheme, getPrismLanguage } from '../utils';
 import { CodeWrapper } from './CodeWrapper';
 import { LineItem } from './LineItem';
 import type { CodeDisplayProps } from './types';

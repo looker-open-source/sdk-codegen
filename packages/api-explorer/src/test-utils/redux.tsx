@@ -36,11 +36,11 @@ import { initRunItSdk } from '@looker/run-it';
 
 import type { LodesState, RootState, SettingState, SpecState } from '../state';
 import {
-  settingsSlice,
   defaultLodesState,
   defaultSettingsState,
-  lodesSlice,
   defaultSpecsState,
+  lodesSlice,
+  settingsSlice,
   specsSlice,
 } from '../state';
 import { specState } from '../test-data';

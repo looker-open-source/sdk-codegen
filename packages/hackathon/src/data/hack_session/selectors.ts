@@ -26,14 +26,14 @@
 
 import type {
   IHackathonProps,
-  ITechnologyProps,
   IHackerProps,
+  ITechnologyProps,
 } from '../../models';
 import type { RootState } from '../root_reducer';
 import type {
-  ProjectsHeadings,
   HackersHeadings,
   JudgingsHeadings,
+  ProjectsHeadings,
 } from '../types';
 
 export const getCurrentHackathonState = (

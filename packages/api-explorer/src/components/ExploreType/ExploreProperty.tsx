@@ -30,20 +30,20 @@ import type { IconType } from '@looker/components';
 import {
   Box,
   Icon,
+  Paragraph,
+  Space,
+  Tooltip,
   Tree,
   TreeItem,
-  Tooltip,
-  Space,
-  Paragraph,
 } from '@looker/components';
 import { Done } from '@styled-icons/material/Done';
 import { Lock } from '@styled-icons/material/Lock';
 import { Remove } from '@styled-icons/material/Remove';
-import type { IProperty, ApiModel } from '@looker/sdk-codegen';
+import type { ApiModel, IProperty } from '@looker/sdk-codegen';
 import { Markdown } from '@looker/code-editor';
 import {
-  expandable,
   ExploreTypeLink,
+  expandable,
   pickType,
   pickTypeProps,
   typeIcon,

@@ -24,12 +24,12 @@
 
  */
 import {
-  functionalSdk40 as funSdk,
   all_themes,
-  update_theme,
   create_theme,
   delete_theme,
+  functionalSdk40 as funSdk,
   search_themes,
+  update_theme,
 } from '@looker/sdk';
 import type { ITheme } from '@looker/sdk';
 import type { IAPIMethods } from '@looker/sdk-rtl';

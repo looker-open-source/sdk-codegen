@@ -28,35 +28,35 @@ import * as fs from 'fs';
 import type { Readable } from 'readable-stream';
 import type {
   ICreateQueryTask,
+  IDashboard,
   IQuery,
+  IRequestCreateDashboardElement,
   IRequestRunInlineQuery,
   IUser,
   IWriteQuery,
-  IDashboard,
-  IRequestCreateDashboardElement,
 } from '@looker/sdk';
 import {
+  Looker40SDK,
+  Looker40SDKStream,
   Looker40SDK as LookerSDK,
   ResultFormat,
   environmentPrefix,
-  Looker40SDK,
-  Looker40SDKStream,
 } from '@looker/sdk';
 import type { IRawResponse } from '@looker/sdk-rtl';
 import {
+  ApiConfigMap,
   DelimArray,
+  LookerSDKError,
   boolDefault,
   defaultTimeout,
-  ApiConfigMap,
   pageAll,
   pager,
-  LookerSDKError,
 } from '@looker/sdk-rtl';
 import {
+  LookerNodeSDK,
+  NodeSession,
   NodeSettings,
   NodeSettingsIniFile,
-  NodeSession,
-  LookerNodeSDK,
   readIniConfig,
 } from '../src';
 import { TestConfig } from '../../sdk-rtl/src/testUtils';

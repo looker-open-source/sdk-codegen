@@ -24,26 +24,26 @@
 
  */
 
-import type { BaseSyntheticEvent, FC, Dispatch, FormEventHandler } from 'react';
+import type { BaseSyntheticEvent, Dispatch, FC, FormEventHandler } from 'react';
 import React from 'react';
 import {
   Button,
-  Form,
   ButtonTransparent,
-  Tooltip,
   Fieldset,
+  Form,
+  Label,
   MessageBar,
   ToggleSwitch,
-  Label,
+  Tooltip,
 } from '@looker/components';
 import type { RunItHttpMethod, RunItInput, RunItValues } from '../../RunIt';
 import { LoginForm } from '../LoginForm';
 import {
-  createSimpleItem,
+  BODY_HINT,
   createComplexItem,
+  createSimpleItem,
   showDataChangeWarning,
   updateNullableProp,
-  BODY_HINT,
 } from './formUtils';
 import { FormItem } from './FormItem';
 import { DarkSpan } from './../common';

@@ -25,7 +25,7 @@
  */
 import React from 'react';
 import styled from 'styled-components';
-import { Paragraph, Table, Heading } from '@looker/components';
+import { Heading, Paragraph, Table } from '@looker/components';
 import type {
   HeadingProps,
   ParagraphProps,

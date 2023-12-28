@@ -25,7 +25,7 @@
  */
 import type { FC } from 'react';
 import React from 'react';
-import { Grid, Flex, FlexItem, Code, Heading } from '@looker/components';
+import { Code, Flex, FlexItem, Grid, Heading } from '@looker/components';
 import type { DiffRow, IMethod } from '@looker/sdk-codegen';
 import { DiffLegend } from './DiffLegend';
 

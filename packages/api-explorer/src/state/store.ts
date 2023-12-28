@@ -32,8 +32,8 @@ import type { SpecList } from '@looker/sdk-codegen';
 import type { SettingState } from './settings';
 import { defaultSettingsState, settingsSlice } from './settings';
 import type { LodesState } from './lodes';
-import { lodesSlice, defaultLodesState } from './lodes';
-import type { SpecState, InitSpecsSuccessPayload } from './specs';
+import { defaultLodesState, lodesSlice } from './lodes';
+import type { InitSpecsSuccessPayload, SpecState } from './specs';
 import { defaultSpecsState, specsSlice } from './specs';
 
 const isInitSuccessAction = (

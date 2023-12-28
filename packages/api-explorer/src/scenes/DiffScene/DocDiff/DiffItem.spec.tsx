@@ -28,7 +28,7 @@ import { Router } from 'react-router';
 import type { MemoryHistory } from 'history';
 import { createMemoryHistory } from 'history';
 import { renderWithTheme } from '@looker/components-test-utils';
-import { screen, fireEvent } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import { api } from '../../../test-data';
 import { DiffMethodLink } from './DiffItem';
 

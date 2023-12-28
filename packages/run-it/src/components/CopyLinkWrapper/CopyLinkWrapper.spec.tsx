@@ -32,8 +32,8 @@ import {
   BrowserAdaptor,
   registerTestEnvAdaptor,
 } from '@looker/extension-utils';
-import { CopyLinkWrapper } from './index';
 import { initRunItSdk } from '@looker/run-it';
+import { CopyLinkWrapper } from './index';
 
 jest.mock('react-router-dom', () => {
   const ReactRouterDOM = jest.requireActual('react-router-dom');

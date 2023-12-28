@@ -25,7 +25,7 @@
  */
 import type { FC } from 'react';
 import React from 'react';
-import { Code, Tooltip, Badge } from '@looker/components';
+import { Badge, Code, Tooltip } from '@looker/components';
 import type { IMethod } from '@looker/sdk-codegen';
 
 interface DocActivityTypeProps {

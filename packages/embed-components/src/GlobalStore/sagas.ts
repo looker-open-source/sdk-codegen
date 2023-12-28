@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { takeEvery, put } from 'typed-redux-saga';
+import { put, takeEvery } from 'typed-redux-saga';
 import { createFactory } from '@looker/embed-services';
 import type { PayloadAction } from '@reduxjs/toolkit';
 

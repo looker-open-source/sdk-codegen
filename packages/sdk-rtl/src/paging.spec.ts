@@ -26,9 +26,9 @@
 
 import {
   LinkHeader,
+  TotalCountHeader,
   linkHeaderParser,
   pager,
-  TotalCountHeader,
 } from './paging';
 import { APIMethods } from './apiMethods';
 import { AuthSession } from './authSession';

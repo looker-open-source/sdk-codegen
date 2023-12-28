@@ -25,13 +25,13 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { Tabs2, Tab2 } from '@looker/components';
+import { Tab2, Tabs2 } from '@looker/components';
 import type { ApiModel, IMethod } from '@looker/sdk-codegen';
 import { CollapserCard } from '@looker/run-it';
 import { ErrorDoc } from '@looker/sdk-rtl';
 import {
-  apiErrorDisplayFetch,
   ExtMarkdown,
+  apiErrorDisplayFetch,
   getEnvAdaptor,
 } from '@looker/extension-utils';
 

@@ -24,7 +24,7 @@
 
  */
 import type { FC } from 'react';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactDiffViewer, { DiffMethod } from 'react-diff-viewer';
 import styled from 'styled-components';
 import { Accordion2, Box, Card, Grid, Heading, Link } from '@looker/components';

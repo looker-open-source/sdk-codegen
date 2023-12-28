@@ -28,8 +28,8 @@ import {
   Accordion2,
   Card,
   CardContent,
-  SpaceVertical,
   Paragraph,
+  SpaceVertical,
 } from '@looker/components';
 import { ExtensionContext40 } from '@looker/extension-sdk-react';
 import { DashboardRunState } from '@looker/extension-sdk';

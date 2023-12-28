@@ -28,30 +28,30 @@ import type { FC } from 'react';
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import {
-  TabList,
+  Box2,
+  InputSearch,
   Tab,
+  TabList,
   TabPanel,
   TabPanels,
   useTabs,
-  InputSearch,
-  Box2,
 } from '@looker/components';
 import type {
-  SpecItem,
-  ISearchResult,
   ApiModel,
+  ISearchResult,
+  SpecItem,
   TagList,
   TypeTagList,
 } from '@looker/sdk-codegen';
 import { criteriaToSet, tagTypes } from '@looker/sdk-codegen';
 import { useSelector } from 'react-redux';
 import { CopyLinkWrapper } from '@looker/run-it';
-import { useWindowSize, useNavigation } from '../../utils';
+import { useNavigation, useWindowSize } from '../../utils';
 import { HEADER_REM } from '../Header';
 import { selectSearchCriteria, selectSearchPattern } from '../../state';
 import { SideNavMethodTags } from './SideNavMethodTags';
 import { SideNavTypeTags } from './SideNavTypeTags';
-import { useDebounce, countMethods, countTypes } from './searchUtils';
+import { countMethods, countTypes, useDebounce } from './searchUtils';
 import { SearchMessage } from './SearchMessage';
 
 interface SideNavState {

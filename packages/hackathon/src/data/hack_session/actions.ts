@@ -25,13 +25,13 @@
  */
 import type {
   IHackathonProps,
-  ITechnologyProps,
   IHackerProps,
+  ITechnologyProps,
 } from '../../models';
 import type {
-  ProjectsHeadings,
   HackersHeadings,
   JudgingsHeadings,
+  ProjectsHeadings,
 } from '../types';
 
 export enum Actions {

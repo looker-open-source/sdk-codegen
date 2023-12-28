@@ -30,7 +30,7 @@ import { Accordion2, Heading } from '@looker/components';
 import type { MethodList } from '@looker/sdk-codegen';
 import { useSelector } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
-import { useNavigation, highlightHTML, buildMethodPath } from '../../utils';
+import { buildMethodPath, highlightHTML, useNavigation } from '../../utils';
 import { Link } from '../Link';
 import { selectSearchPattern } from '../../state';
 

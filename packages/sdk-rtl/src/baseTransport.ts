@@ -25,16 +25,16 @@
  */
 
 import type { Readable } from 'readable-stream';
-import { addQueryParams, StatusCode } from './transport';
+import { StatusCode, addQueryParams } from './transport';
 import type {
   Authenticator,
   HttpMethod,
   IRawResponse,
   ITransport,
   ITransportSettings,
+  RawObserver,
   SDKResponse,
   Values,
-  RawObserver,
 } from './transport';
 
 export abstract class BaseTransport implements ITransport {

@@ -25,8 +25,8 @@
  */
 
 import type {
-  IApiSettings,
   APIMethods,
+  IApiSettings,
   IAuthSession,
   IHostConnection,
 } from '@looker/sdk-rtl';

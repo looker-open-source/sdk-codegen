@@ -34,24 +34,24 @@ import { PassThrough } from 'readable-stream';
 import { StatusCodeError } from 'request-promise-native/errors';
 import {
   BaseTransport,
+  LookerAppId,
   ResponseMode,
+  agentPrefix,
   defaultTimeout,
   responseMode,
-  trace,
-  LookerAppId,
-  agentPrefix,
   safeBase64,
+  trace,
 } from '@looker/sdk-rtl';
 import type {
   Authenticator,
   HttpMethod,
+  ICryptoHash,
+  IRawResponse,
+  IRequestHeaders,
   ISDKError,
   ITransportSettings,
   SDKResponse,
   Values,
-  IRequestHeaders,
-  IRawResponse,
-  ICryptoHash,
 } from '@looker/sdk-rtl';
 
 const utf8 = 'utf8';

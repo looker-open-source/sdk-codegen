@@ -34,7 +34,7 @@ import {
   wait2Mins,
 } from '../test-data/mocks';
 // import { initActiveSheet } from './SheetData'
-import type { SheetData, ITeamMemberProps } from '.';
+import type { ITeamMemberProps, SheetData } from '.';
 
 // let sheetSDK: SheetSDK
 // let doc: ISheet

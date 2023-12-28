@@ -26,7 +26,7 @@
 import type { FC } from 'react';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Space, Heading, Span, Icon } from '@looker/components';
+import { Heading, Icon, Space, Span } from '@looker/components';
 import { ArrowDownward } from '@styled-icons/material/ArrowDownward';
 import { isLoadingState } from '../../data/common/selectors';
 import { Loading } from '../../components/Loading';

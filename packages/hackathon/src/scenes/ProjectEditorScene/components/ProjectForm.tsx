@@ -38,47 +38,47 @@
 import type { BaseSyntheticEvent, FC, FormEvent } from 'react';
 import React, { useEffect } from 'react';
 import {
-  Form,
-  Fieldset,
+  Button,
+  ButtonOutline,
+  FieldSelect,
+  FieldSelectMulti,
   FieldText,
   FieldTextArea,
   FieldToggleSwitch,
-  FieldSelect,
-  FieldSelectMulti,
-  Button,
-  ButtonOutline,
+  Fieldset,
+  Form,
   Space,
+  SpaceVertical,
   Tab2,
   Tabs2,
-  SpaceVertical,
 } from '@looker/components';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { actionMessage } from '../../../data/common/actions';
 import { isLoadingState } from '../../../data/common/selectors';
 import {
-  updateProject,
-  createProject,
   changeMembership,
+  createProject,
   getProjectRequest,
-  updateProjectData,
   lockProject,
+  updateProject,
+  updateProjectData,
 } from '../../../data/projects/actions';
 import {
+  getIsProjectMemberState,
   getProjectLoadedState,
   getProjectState,
   getValidationMessagesState,
-  getIsProjectMemberState,
 } from '../../../data/projects/selectors';
 import {
-  getHackerState,
   getHackerIdState,
   getHackerRegistrationIdState,
+  getHackerState,
   getTechnologies,
 } from '../../../data/hack_session/selectors';
 import { allHackersRequest } from '../../../data/hackers/actions';
 import { getJudgesState } from '../../../data/hackers/selectors';
-import { canUpdateProject, canLockProject } from '../../../utils';
+import { canLockProject, canUpdateProject } from '../../../utils';
 import { Routes } from '../../../routes';
 import { ProjectView } from '../../ProjectsScene/components/ProjectView';
 

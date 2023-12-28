@@ -28,13 +28,13 @@ import React, { useEffect } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  Tab,
-  TabList,
-  TabPanels,
-  TabPanel,
   Heading,
   Space,
   SpaceVertical,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
 } from '@looker/components';
 import { Routes } from '../../routes/AppRouter';
 import { isLoadingState } from '../../data/common/selectors';
@@ -44,11 +44,11 @@ import {
   updateHackersPageNum,
 } from '../../data/hackers/actions';
 import {
-  getHackersState,
   getAdminsState,
+  getHackersPageNumState,
+  getHackersState,
   getJudgesState,
   getStaffState,
-  getHackersPageNumState,
 } from '../../data/hackers/selectors';
 import { getTabInfo } from '../../utils';
 import { HackerList } from './components/HackerList';

@@ -28,7 +28,7 @@ import ReduxSagaTester from 'redux-saga-tester';
 import { getEnvAdaptor, registerTestEnvAdaptor } from '@looker/extension-utils';
 import { StoreConstants } from '@looker/run-it';
 import * as sagas from './sagas';
-import { settingActions, defaultSettings, settingsSlice } from './slice';
+import { defaultSettings, settingActions, settingsSlice } from './slice';
 
 describe('Settings Sagas', () => {
   let sagaTester: ReduxSagaTester<any>;

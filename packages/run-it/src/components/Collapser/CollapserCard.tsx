@@ -25,7 +25,7 @@
  */
 import type { ReactElement } from 'react';
 import React from 'react';
-import { useToggle, Accordion2, Divider, Box2 } from '@looker/components';
+import { Accordion2, Box2, Divider, useToggle } from '@looker/components';
 import { ArrowRight } from '@styled-icons/material/ArrowRight';
 import { ArrowDropDown } from '@styled-icons/material/ArrowDropDown';
 

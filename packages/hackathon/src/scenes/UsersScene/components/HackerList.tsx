@@ -27,11 +27,11 @@
 import type { FC } from 'react';
 import React from 'react';
 import {
-  DataTableItem,
-  DataTableCell,
-  DataTableAction,
-  Pagination,
   DataTable,
+  DataTableAction,
+  DataTableCell,
+  DataTableItem,
+  Pagination,
 } from '@looker/components';
 import { Create } from '@styled-icons/material/Create';
 import { useSelector } from 'react-redux';

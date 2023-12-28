@@ -28,23 +28,23 @@ import type { FC } from 'react';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  Form,
-  Fieldset,
   Button,
+  Divider,
+  FieldText,
+  Fieldset,
+  Form,
+  MessageBar,
   ProgressCircular,
   Space,
   SpaceVertical,
   Span,
-  FieldText,
-  MessageBar,
-  Divider,
 } from '@looker/components';
 import type { UserToAdd } from '../../../data/add_user/actions';
-import { parseCsv, addUsers } from '../../../data/add_user/actions';
+import { addUsers, parseCsv } from '../../../data/add_user/actions';
 import {
+  getNumUsersToAddState,
   getStage,
   getUsersAddedState,
-  getNumUsersToAddState,
 } from '../../../data/add_user/selectors';
 import { ADD_STAGES } from '../../../data/add_user/reducer';
 

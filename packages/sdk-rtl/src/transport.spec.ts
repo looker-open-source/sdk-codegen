@@ -25,7 +25,7 @@
  */
 
 import { TestConfig } from './testUtils';
-import { encodeParam, ResponseMode, responseMode } from './transport';
+import { ResponseMode, encodeParam, responseMode } from './transport';
 import { DelimArray } from './delimArray';
 
 const config = TestConfig();

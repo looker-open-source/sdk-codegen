@@ -24,7 +24,7 @@
 
  */
 import type { FC } from 'react';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Card,
@@ -32,8 +32,8 @@ import {
   DataTableItem,
   Icon,
   Link,
-  Space,
   Pagination,
+  Space,
 } from '@looker/components';
 import type { IMethod } from '@looker/sdk-codegen';
 import { findExampleLanguages } from '@looker/sdk-codegen';
@@ -41,12 +41,12 @@ import { CollapserCard } from '@looker/run-it';
 import { InsertDriveFile } from '@styled-icons/material-outlined/InsertDriveFile';
 import { useSelector } from 'react-redux';
 
-import { selectSdkLanguage, selectExamplesLode } from '../../state';
+import { selectExamplesLode, selectSdkLanguage } from '../../state';
 import {
-  exampleColumns,
   EMPTY_STRING,
-  prepareExampleDataTable,
   PER_PAGE_COUNT,
+  exampleColumns,
+  prepareExampleDataTable,
   sortLanguagesByPreference,
 } from './utils';
 import { DocSdkExampleCell } from './DocSdkExampleCell';

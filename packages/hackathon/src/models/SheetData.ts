@@ -26,12 +26,12 @@
 import type { IArtifact } from '@looker/sdk';
 import { search_artifacts } from '@looker/sdk';
 import {
+  Hackathons,
+  Judgings,
   Projects,
   Registrations,
-  Technologies,
-  Hackathons,
   TeamMembers,
-  Judgings,
+  Technologies,
   Users,
 } from '.';
 

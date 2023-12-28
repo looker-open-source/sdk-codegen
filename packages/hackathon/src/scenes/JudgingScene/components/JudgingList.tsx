@@ -27,14 +27,14 @@ import type { FC } from 'react';
 import React, { useEffect, useState } from 'react';
 import {
   DataTable,
-  DataTableItem,
   DataTableAction,
   DataTableCell,
+  DataTableItem,
   Pagination,
 } from '@looker/components';
 import { TextSnippet } from '@styled-icons/material-outlined/TextSnippet';
 import { Create } from '@styled-icons/material-outlined/Create';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import type { IJudgingProps } from '../../../models';
 import { sheetCell } from '../../../models';
@@ -47,8 +47,8 @@ import {
   updateJudgingsPageNum,
 } from '../../../data/judgings/actions';
 import {
-  getJudgingsState,
   getJudgingsPageNumState,
+  getJudgingsState,
 } from '../../../data/judgings/selectors';
 import { canDoJudgingAction } from '../../../utils';
 import { PAGE_SIZE } from '../../../constants';

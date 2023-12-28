@@ -31,10 +31,10 @@ import { renderWithLode } from '../../test-utils';
 import { api, examples } from '../../test-data';
 import { DocSdkUsage } from './DocSdkUsage';
 import {
-  prepareExampleDataTable,
   PER_PAGE_COUNT,
-  sortLanguagesByPreference,
   getFileNameFromPath,
+  prepareExampleDataTable,
+  sortLanguagesByPreference,
 } from './utils';
 
 describe('DocSdkUsage', () => {

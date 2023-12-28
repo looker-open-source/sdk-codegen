@@ -27,8 +27,8 @@ import React, { useEffect, useRef } from 'react';
 import { Span } from '@looker/components';
 import {
   createSvg,
-  liquidFillGauge,
   defaultConfig,
+  liquidFillGauge,
 } from './liquid_fill_gauge.js';
 
 export interface LiquidFillGaugeVizProps {

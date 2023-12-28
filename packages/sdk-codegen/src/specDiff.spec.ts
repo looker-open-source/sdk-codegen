@@ -37,9 +37,9 @@ import {
   includeDiffs,
   startCount,
 } from './specDiff';
-import { rootFile, TestConfig } from './testUtils';
-import type { PropertyList, IApiModel, IMethod } from './sdkModels';
-import { Type, Method, Parameter, ApiModel } from './sdkModels';
+import { TestConfig, rootFile } from './testUtils';
+import type { IApiModel, IMethod, PropertyList } from './sdkModels';
+import { ApiModel, Method, Parameter, Type } from './sdkModels';
 
 const config = TestConfig();
 const apiTestModel = config.apiTestModel;

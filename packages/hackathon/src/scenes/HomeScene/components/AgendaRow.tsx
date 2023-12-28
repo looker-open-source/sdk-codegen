@@ -26,7 +26,7 @@
 
 import type { FC } from 'react';
 import React from 'react';
-import { TableRow, TableDataCell, Heading, Span } from '@looker/components';
+import { Heading, Span, TableDataCell, TableRow } from '@looker/components';
 import { ExtMarkdown } from '@looker/extension-utils';
 import { getExtensionSDK } from '@looker/extension-sdk';
 import type { IHackerProps } from '../../../models';

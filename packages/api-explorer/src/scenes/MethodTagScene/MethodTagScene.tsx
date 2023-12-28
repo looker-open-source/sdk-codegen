@@ -26,13 +26,13 @@
 import type { FC } from 'react';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-import { Grid, ButtonToggle, ButtonItem } from '@looker/components';
+import { ButtonItem, ButtonToggle, Grid } from '@looker/components';
 import type { ApiModel } from '@looker/sdk-codegen';
 import { useSelector } from 'react-redux';
 import {
   ApixSection,
-  DocTitle,
   DocMethodSummary,
+  DocTitle,
   Link,
 } from '../../components';
 import { buildMethodPath, isValidFilter, useNavigation } from '../../utils';

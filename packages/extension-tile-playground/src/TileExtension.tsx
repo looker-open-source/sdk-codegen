@@ -25,7 +25,7 @@
  */
 import React, { useContext } from 'react';
 import { ComponentsProvider } from '@looker/components';
-import { Switch, Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { ExtensionContext40 } from '@looker/extension-sdk-react';
 import { MountPoint } from '@looker/extension-sdk';
 import { VisualizationTile } from './components/VisualizationTile/VisualizationTile';
@@ -51,7 +51,11 @@ export const TileExtension: React.FC = () => {
   const { lookerHostData } = useContext(ExtensionContext40);
 
   return (
-    <ComponentsProvider>
+    <ComponentsProvider
+      themeCustomizations={{
+        colors: { key: '#1A73E8' },
+      }}
+    >
       <Switch>
         <Route path="/inspect">
           <Inspector />

@@ -25,9 +25,9 @@
  */
 import type { IApiSettings, IAuthSession, ITransport } from '@looker/sdk-rtl';
 import {
-  DefaultSettings,
   BrowserSession,
   BrowserTransport,
+  DefaultSettings,
 } from '@looker/sdk-rtl';
 
 import { Looker40SDK } from './4.0/methods';

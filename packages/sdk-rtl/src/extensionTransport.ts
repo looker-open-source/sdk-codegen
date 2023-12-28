@@ -27,13 +27,13 @@
 import type { Readable } from 'readable-stream';
 import type {
   Authenticator,
-  Values,
-  SDKResponse,
-  ITransport,
-  ITransportSettings,
   HttpMethod,
   IRawResponse,
+  ITransport,
+  ITransportSettings,
   RawObserver,
+  SDKResponse,
+  Values,
 } from './transport';
 
 export interface IHostConnection {

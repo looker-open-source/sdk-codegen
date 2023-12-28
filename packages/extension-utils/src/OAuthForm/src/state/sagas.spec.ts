@@ -25,7 +25,8 @@
  */
 import ReduxSagaTester from 'redux-saga-tester';
 
-import { validateUrl, getVersions } from '../utils';
+import { registerTestEnvAdaptor } from '@looker/extension-utils';
+import { getVersions, validateUrl } from '../utils';
 import * as sagas from './sagas';
 import type { OAuthFormState, SaveConfigPayload } from './slice';
 import {
@@ -33,7 +34,6 @@ import {
   OAuthFormSlice,
   defaultOAuthFormState,
 } from './slice';
-import { registerTestEnvAdaptor } from '@looker/extension-utils';
 
 jest.mock('../utils', () => ({
   __esModule: true,

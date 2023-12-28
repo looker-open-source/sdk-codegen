@@ -25,7 +25,7 @@
  */
 
 import type { IRowModelProps, ITabTable } from '@looker/wholly-artifact';
-import { noDate, WhollyArtifact } from '@looker/wholly-artifact';
+import { WhollyArtifact, noDate } from '@looker/wholly-artifact';
 import { getCore40SDK } from '@looker/extension-sdk-react';
 
 import type { ISheetRow } from './SheetRow';

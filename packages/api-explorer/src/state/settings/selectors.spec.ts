@@ -24,7 +24,7 @@
 
  */
 import { createTestStore, preloadedState } from '../../test-utils';
-import { selectSdkLanguage, isInitialized, selectTagFilter } from './selectors';
+import { isInitialized, selectSdkLanguage, selectTagFilter } from './selectors';
 
 const testStore = createTestStore();
 

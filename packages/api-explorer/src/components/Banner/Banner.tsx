@@ -27,7 +27,7 @@ import { ButtonOutline, Link, MessageBar } from '@looker/components';
 import type { IEnvironmentAdaptor } from '@looker/extension-utils';
 import type { SpecList } from '@looker/sdk-codegen';
 import type { FC } from 'react';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const LOCAL_STORAGE_KEY = 'api-40-ga-apix-banner';
 const LOCAL_STORAGE_VALUE = 'dismissed';

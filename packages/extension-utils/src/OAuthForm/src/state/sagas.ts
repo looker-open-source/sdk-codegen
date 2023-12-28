@@ -24,16 +24,16 @@
 
  */
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { takeEvery, put, call, select } from 'typed-redux-saga';
+import { call, put, select, takeEvery } from 'typed-redux-saga';
 import type { ConfigValues } from '../utils';
 import { getVersions, validateUrl } from '../utils';
 import type {
   ClearConfigActionPayload,
-  SetUrlActionPayload,
   OAuthFormState,
   SaveConfigPayload,
+  SetUrlActionPayload,
 } from './slice';
-import { OAuthFormSlice, OAuthFormActions } from './slice';
+import { OAuthFormActions, OAuthFormSlice } from './slice';
 
 /**
  * get saved configData from localStorage key

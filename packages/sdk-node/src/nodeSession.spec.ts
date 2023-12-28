@@ -25,7 +25,7 @@
  */
 
 import * as fs from 'fs';
-import { defaultTimeout, boolDefault, ApiConfigMap } from '@looker/sdk-rtl';
+import { ApiConfigMap, boolDefault, defaultTimeout } from '@looker/sdk-rtl';
 import { TestConfig } from './testUtils';
 import { NodeTransport } from './nodeTransport';
 import { NodeSession } from './nodeSession';

@@ -26,7 +26,7 @@
 import React from 'react';
 import { renderWithTheme } from '@looker/components-test-utils';
 import { describeParam } from '@looker/sdk-codegen';
-import { screen, waitFor, fireEvent } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 
 import { api } from '../../test-data';
 import { DocParam } from './DocParam';

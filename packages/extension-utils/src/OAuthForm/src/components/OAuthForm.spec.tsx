@@ -31,28 +31,27 @@ import { renderWithTheme } from '@looker/components-test-utils';
 import userEvent from '@testing-library/user-event';
 import type { IApiSettings } from '@looker/sdk-rtl';
 import {
-  DefaultSettings,
-  BrowserTransport,
   BrowserSession,
+  BrowserTransport,
+  DefaultSettings,
 } from '@looker/sdk-rtl';
 import { functionalSdk40 } from '@looker/sdk';
 import { createStore } from '@looker/redux';
 import { Provider } from 'react-redux';
+import {
+  BrowserAdaptor,
+  OAuthConfigProvider,
+  registerTestEnvAdaptor,
+} from '@looker/extension-utils';
 import type { OAuthFormState } from '../state/slice';
 import {
-  useOAuthFormState,
-  useOAuthFormActions,
   OAuthFormSlice,
   defaultOAuthFormState,
+  useOAuthFormActions,
+  useOAuthFormState,
 } from '../state/slice';
 import { OAuthForm } from '..';
 import { getVersions } from '../utils';
-
-import {
-  BrowserAdaptor,
-  registerTestEnvAdaptor,
-  OAuthConfigProvider,
-} from '@looker/extension-utils';
 
 const validUrl = 'https://validUrl';
 

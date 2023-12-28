@@ -24,8 +24,8 @@
 
  */
 
-import type { ICryptoHash, IApiSection, IApiSettings } from '@looker/sdk-rtl';
-import { OAuthSession, ApiSettings, DefaultSettings } from '@looker/sdk-rtl';
+import type { IApiSection, IApiSettings, ICryptoHash } from '@looker/sdk-rtl';
+import { ApiSettings, DefaultSettings, OAuthSession } from '@looker/sdk-rtl';
 import { NodeServices } from './nodeServices';
 import { NodeCryptoHash } from './nodeTransport';
 

@@ -26,17 +26,17 @@
 import type { FC } from 'react';
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import type { IHackerProps, IHackathonProps } from '../models';
+import type { IHackathonProps, IHackerProps } from '../models';
 import {
-  HomeScene,
-  UsersScene,
-  JudgingScene,
-  JudgingEditorScene,
   AdminScene,
+  HomeScene,
+  JudgingEditorScene,
+  JudgingScene,
   NotFoundScene,
-  ProjectsScene,
   ProjectEditorScene,
+  ProjectsScene,
   ResourceScene,
+  UsersScene,
 } from '../scenes';
 
 export enum Routes {

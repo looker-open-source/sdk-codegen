@@ -27,7 +27,7 @@
 import type { FC } from 'react';
 import React from 'react';
 import type { SpaceHelperProps } from '@looker/components';
-import { Space, IconButton } from '@looker/components';
+import { IconButton, Space } from '@looker/components';
 import { ChangeHistory } from '@styled-icons/material/ChangeHistory';
 import type { SpecItem } from '@looker/sdk-codegen';
 

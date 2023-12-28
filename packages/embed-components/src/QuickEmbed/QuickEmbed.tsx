@@ -26,21 +26,21 @@
 
 import React, { useEffect, useState } from 'react';
 import {
-  InputText,
+  Button,
+  ButtonOutline,
   CopyToClipboard,
+  Heading,
+  InputText,
+  Label,
+  Section,
   Space,
   SpaceVertical,
-  Button,
-  Heading,
-  Label,
   Span,
-  Section,
-  ButtonOutline,
   ToggleSwitch,
 } from '@looker/components';
 import { Link } from '@styled-icons/material-outlined';
 import { EmbedUrl } from '@looker/embed-services';
-import { useThemesStoreState, SelectTheme, useThemeActions } from '../Theme';
+import { SelectTheme, useThemeActions, useThemesStoreState } from '../Theme';
 
 interface QuickEmbedProps {
   /** A function triggered when close button is clicked. */

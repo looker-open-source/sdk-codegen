@@ -26,12 +26,13 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import type {
-  ExtensionHostConfiguration,
   ExtensionHostApi,
-  TileSDK,
+  ExtensionHostConfiguration,
   TileHostDataChangedCallback,
+  TileSDK,
+  TileSDKInternal,
   VisualizationDataReceivedCallback,
-  VisualizationSDK,
+  VisualizationSDKInternal,
 } from '@looker/extension-sdk';
 import { DashboardRunState } from '@looker/extension-sdk';
 import { useLocation } from 'react-router-dom';
@@ -91,11 +92,12 @@ const MockExtension = () => {
 };
 
 describe('ExtensionConnector component', () => {
-  const tileSDK: TileSDK = {} as TileSDK;
-  const visualizationSDK: VisualizationSDK = {} as VisualizationSDK;
+  const tileSDK: TileSDKInternal = {} as TileSDKInternal;
+  const visualizationSDK: VisualizationSDKInternal =
+    {} as VisualizationSDKInternal;
   const getContextData = () => {
     return {
-      tileSDK,
+      tileSDK: tileSDK as TileSDK,
       extensionSDK: mockHost,
     } as BaseExtensionContextData;
   };

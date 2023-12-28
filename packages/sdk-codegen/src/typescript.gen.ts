@@ -32,7 +32,7 @@ import type {
   IProperty,
   IType,
 } from './sdkModels';
-import { describeParam, EnumType, isSpecialName, strBody } from './sdkModels';
+import { EnumType, describeParam, isSpecialName, strBody } from './sdkModels';
 import type { CodeAssignment, IMappedType } from './codeGen';
 import { CodeGen, commentBlock } from './codeGen';
 

@@ -30,20 +30,25 @@ import { logError } from '../util';
 import type {
   VisualizationDataReceivedCallback,
   VisualizationSDK,
+  VisualizationSDKInternal,
 } from './visualization';
 import { VisualizationSDKImpl } from './visualization/visualization_sdk';
-import type { TileHostDataChangedCallback, TileSDK } from './tile';
+import type {
+  TileHostDataChangedCallback,
+  TileSDK,
+  TileSDKInternal,
+} from './tile';
 import { TileSDKImpl } from './tile/tile_sdk';
 import { FetchProxyImpl } from './fetch_proxy';
 import type {
-  ExtensionInitializationResponse,
+  ApiVersion,
   ExtensionHostApi,
   ExtensionHostApiConfiguration,
+  ExtensionInitializationResponse,
   ExtensionNotification,
   FetchCustomParameters,
   FetchResponseBodyType,
   LookerHostData,
-  ApiVersion,
 } from './types';
 import {
   ExtensionEvent,
@@ -62,8 +67,8 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
   private hostChangedRoute?: (route: string, routeState?: any) => void;
   private visualizationDataReceivedCallback?: VisualizationDataReceivedCallback;
   private tileHostDataChangedCallback?: TileHostDataChangedCallback;
-  private _visualizationSDK?: VisualizationSDK;
-  private _tileSDK?: TileSDK;
+  private _visualizationSDK?: VisualizationSDKInternal;
+  private _tileSDK?: TileSDKInternal;
 
   private contextData?: string;
 
@@ -127,7 +132,9 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
       }
       case ExtensionNotificationType.VISUALIZATION_DATA: {
         const { payload } = message;
-        this.visualizationSDK.updateVisData(payload);
+        (this.visualizationSDK as VisualizationSDKInternal).updateVisData(
+          payload
+        );
         if (this.visualizationDataReceivedCallback) {
           this.visualizationDataReceivedCallback(payload);
         }
@@ -135,7 +142,7 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
       }
       case ExtensionNotificationType.TILE_HOST_DATA: {
         const { payload } = message;
-        this.tileSDK.tileHostDataChanged(payload);
+        (this.tileSDK as TileSDKInternal).tileHostDataChanged(payload);
         if (this.tileHostDataChangedCallback) {
           this.tileHostDataChangedCallback(payload);
         }

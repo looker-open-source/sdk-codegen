@@ -28,12 +28,12 @@ import path from 'path';
 import type { DeclarationNuggets, IDeclarationMine } from '@looker/sdk-codegen';
 
 import {
+  ExampleMiner,
   filterCodeFiles,
   getCodeFiles,
-  ExampleMiner,
-  readFile,
   getCommitHash,
   getRemoteOrigin,
+  readFile,
 } from './exampleMiner';
 
 /**

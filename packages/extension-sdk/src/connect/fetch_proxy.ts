@@ -25,10 +25,10 @@
  */
 import deepmerge from 'deepmerge';
 import type {
-  FetchProxy,
   FetchCustomParameters,
-  FetchResponseBodyType,
+  FetchProxy,
   FetchProxyDataResponse,
+  FetchResponseBodyType,
 } from './types';
 import type { ExtensionHostApiImpl } from './extension_host_api';
 

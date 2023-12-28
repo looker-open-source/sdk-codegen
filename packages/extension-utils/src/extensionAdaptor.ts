@@ -27,9 +27,9 @@
 import type { ExtensionSDK } from '@looker/extension-sdk';
 import type { IAPIMethods } from '@looker/sdk-rtl';
 import type {
+  IAuthAdaptor,
   IEnvironmentAdaptor,
   ThemeOverrides,
-  IAuthAdaptor,
 } from './adaptorUtils';
 import { getThemeOverrides } from './adaptorUtils';
 

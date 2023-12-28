@@ -33,7 +33,7 @@ import {
 } from '@looker/sdk';
 import type { IAPIMethods } from '@looker/sdk-rtl';
 import { ItemList } from './ItemList';
-import type { IEntityService, IItemList, GetOptions } from './ItemList';
+import type { GetOptions, IEntityService, IItemList } from './ItemList';
 import type { ServiceCreatorFunc } from './ServiceFactory';
 import { getFactory } from './ServiceFactory';
 

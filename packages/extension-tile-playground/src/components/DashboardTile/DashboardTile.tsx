@@ -23,8 +23,8 @@
  SOFTWARE.
 
  */
-import React, { useContext, useCallback, useEffect, useState } from 'react';
-import { SpaceVertical, Text, MessageBar } from '@looker/components';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { MessageBar, SpaceVertical, Text } from '@looker/components';
 import { More } from '@looker/icons';
 import { ExtensionContext40 } from '@looker/extension-sdk-react';
 import { DashboardRunState } from '@looker/extension-sdk';

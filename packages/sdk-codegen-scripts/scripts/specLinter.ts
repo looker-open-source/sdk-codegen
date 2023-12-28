@@ -29,8 +29,8 @@ import { writeFileSync } from 'fs';
 import type { DiffFilter, DiffRow, IMethod } from '@looker/sdk-codegen';
 import {
   ApiModel,
-  csvHeaderRow,
   csvDiffRow,
+  csvHeaderRow,
   includeDiffs,
   mdDiffRow,
   mdHeaderRow,

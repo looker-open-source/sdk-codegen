@@ -27,9 +27,9 @@
 import path from 'path';
 import type { ILooker40SDK } from '@looker/sdk';
 import {
+  Looker40SDK,
   artifact_namespaces,
   environmentPrefix,
-  Looker40SDK,
   purge_artifacts,
 } from '@looker/sdk';
 import { NodeSession, NodeSettingsIniFile } from '@looker/sdk-node';

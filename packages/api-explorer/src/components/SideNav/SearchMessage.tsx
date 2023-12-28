@@ -26,7 +26,7 @@
 import type { FC } from 'react';
 import React from 'react';
 import type { ISearchResult } from '@looker/sdk-codegen';
-import { Heading, Icon, Flex } from '@looker/components';
+import { Flex, Heading, Icon } from '@looker/components';
 import { Error } from '@styled-icons/material/Error';
 
 interface SearchMessageProps {

@@ -24,7 +24,7 @@
 
  */
 import React from 'react';
-import { screen, waitFor, fireEvent } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { renderWithTheme } from '@looker/components-test-utils';
 import { SelectTheme } from './SelectTheme';

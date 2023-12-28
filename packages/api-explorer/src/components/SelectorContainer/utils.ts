@@ -24,7 +24,7 @@
 
  */
 import type { SelectOptionProps } from '@looker/components';
-import { allSdkLanguages, allAlias } from '../../utils';
+import { allAlias, allSdkLanguages } from '../../utils';
 
 /**
  * @returns sdk language options for render

@@ -27,12 +27,12 @@
 import { getSpecsFromVersions } from '@looker/sdk-codegen';
 import { TestConfig } from './testUtils';
 import {
+  fetchLookerVersion,
   fetchLookerVersions,
   getVersionInfo,
+  logConvertSpec,
   login,
   supportedVersion,
-  logConvertSpec,
-  fetchLookerVersion,
 } from './fetchSpec';
 import type { ISDKConfigProps } from './sdkConfig';
 

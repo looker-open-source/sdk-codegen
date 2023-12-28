@@ -29,19 +29,19 @@ import React from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import {
   Card,
-  Grid,
-  Link,
-  Text,
-  Heading,
   CardContent,
-  Paragraph,
   Field,
+  Grid,
+  Heading,
+  Link,
+  Paragraph,
   SelectMulti,
   Space,
+  Text,
 } from '@looker/components';
 import { getExtensionSDK } from '@looker/extension-sdk';
 import { Routes } from '../../routes/AppRouter';
-import { resources, ResourceTag, ResourceType } from './resource_data';
+import { ResourceTag, ResourceType, resources } from './resource_data';
 
 interface ResourceSceneProps {}
 

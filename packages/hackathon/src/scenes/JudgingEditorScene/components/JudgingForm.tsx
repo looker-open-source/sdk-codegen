@@ -30,13 +30,13 @@ import { useHistory } from 'react-router-dom';
 import {
   Button,
   ButtonOutline,
-  Space,
-  Span,
+  FieldSlider,
   FieldTextArea,
   Form,
-  FieldSlider,
-  Tabs2,
+  Space,
+  Span,
   Tab2,
+  Tabs2,
 } from '@looker/components';
 import {
   saveJudgingRequest,

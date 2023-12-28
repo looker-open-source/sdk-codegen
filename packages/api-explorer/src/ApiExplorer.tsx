@@ -25,7 +25,7 @@
  */
 
 import type { FC } from 'react';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import {
   Aside,
@@ -48,27 +48,27 @@ import { useLocation } from 'react-router-dom';
 
 import type { IApixAdaptor } from './utils';
 import {
-  Header,
-  SideNav,
-  ErrorBoundary,
-  SelectorContainer,
-  HEADER_TOGGLE_LABEL,
-  Loader,
   Banner,
+  ErrorBoundary,
+  HEADER_TOGGLE_LABEL,
+  Header,
+  Loader,
+  SelectorContainer,
+  SideNav,
 } from './components';
 import { AppRouter } from './routes';
 import { apixFilesHost } from './utils/lodeUtils';
 import {
-  useSettingActions,
+  selectCurrentSpec,
+  selectSpecs,
   useLodeActions,
   useLodesStoreState,
+  useSettingActions,
+  useSettingStoreState,
   useSpecActions,
   useSpecStoreState,
-  selectSpecs,
-  selectCurrentSpec,
-  useSettingStoreState,
 } from './state';
-import { getSpecKey, findSdk, useGlobalStoreSync } from './utils';
+import { findSdk, getSpecKey, useGlobalStoreSync } from './utils';
 
 export interface ApiExplorerProps {
   adaptor: IApixAdaptor;

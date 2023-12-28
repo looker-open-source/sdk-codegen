@@ -31,8 +31,8 @@ import { actionMessage } from '../../data/common/actions';
 import { getHackerState } from '../../data/hack_session/selectors';
 import { getJudgingRequest } from '../../data/judgings/actions';
 import {
-  getJudgingState,
   getJudgingLoadedState,
+  getJudgingState,
 } from '../../data/judgings/selectors';
 import { canJudge } from '../../utils';
 import { JudgingForm } from './components';

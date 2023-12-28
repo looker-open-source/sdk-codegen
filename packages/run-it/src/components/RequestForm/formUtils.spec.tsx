@@ -24,7 +24,7 @@
 
  */
 
-import { screen, fireEvent, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { renderWithTheme } from '@looker/components-test-utils';
 import userEvent from '@testing-library/user-event';
 import type { BaseSyntheticEvent } from 'react';

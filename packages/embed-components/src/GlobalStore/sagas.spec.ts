@@ -24,13 +24,13 @@
 
  */
 import ReduxSagaTester from 'redux-saga-tester';
-import { getFactory, createFactory } from '@looker/embed-services';
+import { createFactory, getFactory } from '@looker/embed-services';
 import type { IAPIMethods } from '@looker/sdk-rtl';
 import {
-  factoryActions,
   FACTORY_SLICE_NAME,
-  factorySlice,
   defaultFactoryState,
+  factoryActions,
+  factorySlice,
 } from './slice';
 import * as sagas from './sagas';
 

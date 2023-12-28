@@ -26,13 +26,13 @@
 import {
   testErrorResponse,
   testHtmlResponse,
-  testSqlResponse,
   testImageResponse,
   testJsonResponse,
+  testSqlResponse,
   testTextResponse,
   testUnknownResponse,
 } from '../../test-data';
-import { isColumnar, pickResponseHandler, canTabulate } from './responseUtils';
+import { canTabulate, isColumnar, pickResponseHandler } from './responseUtils';
 
 describe('responseUtils', () => {
   describe('isColumnar', () => {

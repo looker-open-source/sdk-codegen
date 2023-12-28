@@ -205,17 +205,62 @@ export interface Filters {
 }
 
 /**
+ * For internal use only
+ */
+export interface TileSDKInternal extends TileSDK {
+  tileHostDataChanged: (hostData: Partial<TileHostData>) => void;
+}
+
+/**
  * Extension tile SDK
  */
 export interface TileSDK {
+  /**
+   * Tile host data.
+   */
   tileHostData: TileHostData;
-  tileHostDataChanged: (hostData: Partial<TileHostData>) => void;
+  /**
+   * Display an error beneath the tile extension.
+   */
+  addError: (error: TileError) => void;
+  /**
+   * Clear an error beneath the tile extension.
+   */
+  clearError: () => void;
+  /**
+   * Display an error beneath the tile extension.
+   * @deprecated
+   */
   addErrors: (...errors: TileError[]) => void;
+  /**
+   * Clear an error beneath the tile extension.
+   * @deprecated
+   */
   clearErrors: (group?: string) => void;
+  /**
+   * Open a drill menu. The event controls positioning of the drill menu.
+   * Set the pageX and pageY properties on the event to control the
+   * positioning (all other properties are ignored).
+   */
   openDrillMenu: (options: DrillMenuOptions, event?: MouseEvent) => void;
+  /**
+   * Toggle cross filters. This is ignored when running in an explore.
+   */
   toggleCrossFilter: (options: CrossFilterOptions, event?: MouseEvent) => void;
+  /**
+   * Run the current dashboard. This is ignored when running in an explore.
+   */
   runDashboard: () => void;
+  /**
+   * Stop the current dashboard. This is ignored when running in an explore.
+   */
   stopDashboard: () => void;
-  updateFilters: (filters: Filters, runDashboard?: boolean) => void;
+  /**
+   * Update the current filters.
+   */
+  updateFilters: (filters: Filters, run?: boolean) => void;
+  /**
+   * Open the schedule dialog. This is ignored when running in an explore.
+   */
   openScheduleDialog: () => Promise<void>;
 }

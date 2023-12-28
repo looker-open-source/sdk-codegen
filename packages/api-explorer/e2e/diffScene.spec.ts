@@ -25,7 +25,7 @@
  */
 import '@testing-library/jest-dom';
 
-import { goToPage, BASE_URL } from './helpers';
+import { BASE_URL, goToPage } from './helpers';
 
 // https://github.com/smooth-code/jest-puppeteer/tree/master/packages/expect-puppeteer
 // https://github.com/puppeteer/puppeteer/blob/main/docs/api.md

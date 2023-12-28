@@ -27,12 +27,12 @@
 import type { BaseSyntheticEvent, FC } from 'react';
 import React, { useEffect, useState } from 'react';
 import {
-  Heading,
-  FlexItem,
-  IconButton,
-  SpaceVertical,
   FieldToggleSwitch,
   Flex,
+  FlexItem,
+  Heading,
+  IconButton,
+  SpaceVertical,
 } from '@looker/components';
 import { Delete } from '@styled-icons/material/Delete';
 

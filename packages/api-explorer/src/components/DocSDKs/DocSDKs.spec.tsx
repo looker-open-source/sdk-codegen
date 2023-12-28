@@ -29,7 +29,7 @@ import { codeGenerators } from '@looker/sdk-codegen';
 import type { Store } from 'redux';
 
 import { api } from '../../test-data';
-import { renderWithReduxProvider, createTestStore } from '../../test-utils';
+import { createTestStore, renderWithReduxProvider } from '../../test-utils';
 import type { RootState } from '../../state';
 import { DocSDKs } from './DocSDKs';
 

@@ -24,7 +24,7 @@
 
  */
 
-import type { ITransport, IRequestProps } from './transport';
+import type { IRequestProps, ITransport } from './transport';
 import { LookerAppId } from './transport';
 import { BrowserTransport } from './browserTransport';
 import { OAuthSession } from './oauthSession';

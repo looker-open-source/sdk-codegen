@@ -29,6 +29,7 @@ import path from 'path';
 import { execSync } from 'child_process';
 import { warn } from '@looker/sdk-codegen-utils';
 import type {
+  IExampleMine,
   IFileCall,
   INugget,
   ISDKCall,
@@ -36,7 +37,6 @@ import type {
   Nuggets,
   SDKCalls,
   Summaries,
-  IExampleMine,
 } from '@looker/sdk-codegen';
 
 export interface IFileMine {

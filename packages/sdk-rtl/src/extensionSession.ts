@@ -25,7 +25,7 @@
  */
 
 import type { IApiSettings } from './apiSettings';
-import type { ITransport, IRequestProps } from './transport';
+import type { IRequestProps, ITransport } from './transport';
 import type { IAuthSession } from './authSession';
 
 export class ExtensionSession implements IAuthSession {

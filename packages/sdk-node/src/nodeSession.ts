@@ -25,18 +25,18 @@
  */
 
 import type {
+  HttpMethod,
+  IAccessToken,
+  IApiSettings,
+  IError,
   IRequestProps,
   ITransport,
-  HttpMethod,
-  IApiSettings,
-  IAccessToken,
-  IError,
 } from '@looker/sdk-rtl';
 import {
-  sdkError,
-  encodeParams,
-  AuthToken,
   AuthSession,
+  AuthToken,
+  encodeParams,
+  sdkError,
 } from '@looker/sdk-rtl';
 import { NodeTransport } from './nodeTransport';
 

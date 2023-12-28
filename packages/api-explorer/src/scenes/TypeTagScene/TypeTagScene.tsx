@@ -25,7 +25,7 @@
  */
 import type { FC } from 'react';
 import React, { useEffect, useState } from 'react';
-import { Grid, ButtonToggle, ButtonItem } from '@looker/components';
+import { ButtonItem, ButtonToggle, Grid } from '@looker/components';
 import type { ApiModel } from '@looker/sdk-codegen';
 import { useLocation, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';

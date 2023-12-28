@@ -27,17 +27,17 @@ import ReduxSagaTester from 'redux-saga-tester';
 import {
   createFactory,
   destroyFactory,
-  registerThemeService,
   getThemeService,
+  registerThemeService,
 } from '@looker/embed-services';
 import { Looker40SDK as LookerSDK } from '@looker/sdk';
 import type { ITheme } from '@looker/sdk';
 import type { IAPIMethods } from '@looker/sdk-rtl';
 import { session } from '../../test-utils';
 import {
+  THEMES_SLICE_NAME,
   defaultThemesState,
   themeActions,
-  THEMES_SLICE_NAME,
   themesSlice,
 } from './slice';
 import * as sagas from './sagas';

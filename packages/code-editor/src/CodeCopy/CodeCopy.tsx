@@ -24,7 +24,7 @@
 
  */
 import React from 'react';
-import { Space, CopyToClipboard } from '@looker/components';
+import { CopyToClipboard, Space } from '@looker/components';
 import type { CodeDisplayProps } from '..';
 import { CodeDisplay } from '..';
 

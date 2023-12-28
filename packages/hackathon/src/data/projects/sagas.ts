@@ -23,27 +23,27 @@
  SOFTWARE.
 
  */
-import { all, call, put, takeEvery, select } from 'redux-saga/effects';
+import { all, call, put, select, takeEvery } from 'redux-saga/effects';
 import type { SagaIterator } from 'redux-saga';
 import type { IProjectProps } from '../../models';
 import { actionMessage, beginLoading, endLoading } from '../common/actions';
 import { sheetsClient } from '../sheets_client';
 import type {
-  UpdateProjectAction,
-  DeleteProjectAction,
-  LockProjectsAction,
-  LockProjectAction,
-  CreateProjectAction,
   ChangeMembershipAction,
+  CreateProjectAction,
+  DeleteProjectAction,
   GetProjectRequestAction,
+  LockProjectAction,
+  LockProjectsAction,
+  UpdateProjectAction,
 } from './actions';
 import {
   Actions,
-  currentProjectsRequest,
   allProjectsResponse,
+  currentProjectsRequest,
   currentProjectsResponse,
-  saveProjectResponse,
   getProjectResponse,
+  saveProjectResponse,
 } from './actions';
 import { getCurrentProjectsState, getIsProjectMemberState } from './selectors';
 

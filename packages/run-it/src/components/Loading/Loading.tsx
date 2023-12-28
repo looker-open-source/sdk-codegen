@@ -26,7 +26,7 @@
 
 import type { FC } from 'react';
 import React from 'react';
-import { Space, ProgressCircular, Text } from '@looker/components';
+import { ProgressCircular, Space, Text } from '@looker/components';
 
 interface LoadingProps {
   loading: boolean;

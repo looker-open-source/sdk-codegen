@@ -26,11 +26,11 @@
 import React, { useContext } from 'react';
 import {
   Accordion2,
+  Box2,
   Card,
   CardContent,
-  Text,
-  Box2,
   SpaceVertical,
+  Text,
 } from '@looker/components';
 import { ExtensionContext40 } from '@looker/extension-sdk-react';
 

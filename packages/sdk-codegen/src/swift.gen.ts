@@ -33,11 +33,11 @@ import type {
   IType,
 } from './sdkModels';
 import {
-  describeParam,
   EnumType,
+  TypeOfType,
+  describeParam,
   mayQuote,
   strBody,
-  TypeOfType,
   typeOfType,
 } from './sdkModels';
 import type { IMappedType } from './codeGen';

@@ -30,10 +30,10 @@ import styled from 'styled-components';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import gfm from 'remark-gfm';
-import { TableHead, TableBody, TableRow, Link } from '@looker/components';
+import { Link, TableBody, TableHead, TableRow } from '@looker/components';
 
 import { CodeDisplay } from '../CodeDisplay';
-import { qualifyMarkdownText, prepareCodeText } from './utils';
+import { prepareCodeText, qualifyMarkdownText } from './utils';
 import { TableCell } from './TableCell';
 import { MDHeading, MDList, MDListItem, MDParagraph, MDTable } from './common';
 

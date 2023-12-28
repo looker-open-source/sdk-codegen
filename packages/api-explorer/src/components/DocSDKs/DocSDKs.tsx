@@ -25,14 +25,14 @@
  */
 
 import type { FC } from 'react';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import type {
+  ApiModel,
+  CodeGen,
   IMethod,
   IType,
-  ApiModel,
   KeyedCollection,
-  CodeGen,
 } from '@looker/sdk-codegen';
 import { CollapserCard, getGenerators } from '@looker/run-it';
 

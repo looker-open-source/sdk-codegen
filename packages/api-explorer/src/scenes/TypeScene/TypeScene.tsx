@@ -27,18 +27,18 @@
 import type { FC } from 'react';
 import React, { useEffect } from 'react';
 import type { ApiModel } from '@looker/sdk-codegen';
-import { typeRefs, methodRefs } from '@looker/sdk-codegen';
+import { methodRefs, typeRefs } from '@looker/sdk-codegen';
 import { useHistory, useParams } from 'react-router-dom';
-import { Space, Box } from '@looker/components';
+import { Box, Space } from '@looker/components';
 
 import {
   ApixSection,
   DocReferences,
   DocSDKs,
+  DocSchema,
   DocSource,
   DocTitle,
   ExploreType,
-  DocSchema,
 } from '../../components';
 import { useNavigation } from '../../utils';
 

@@ -27,18 +27,18 @@ import type { FC } from 'react';
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import {
-  Page,
-  Layout,
   Aside,
-  Section,
-  MessageBar,
   ComponentsProvider,
+  Layout,
+  MessageBar,
+  Page,
+  Section,
 } from '@looker/components';
 import { hot } from 'react-hot-loader/root';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { getThemeOverrides, hostedInternally } from '@looker/extension-utils';
-import { SideNav, Header } from './components';
+import { Header, SideNav } from './components';
 import { AppRouter, getAuthorizedRoutes } from './routes';
 import { getMessageState } from './data/common/selectors';
 import { actionClearMessage } from './data/common/actions';

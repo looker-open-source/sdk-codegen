@@ -24,7 +24,7 @@
 
  */
 
-import { gridHeaders, gridRows, parseCsv, json2Csv } from './gridUtils';
+import { gridHeaders, gridRows, json2Csv, parseCsv } from './gridUtils';
 
 const dataRowsLength = 2;
 const allRowsLength = dataRowsLength + 1;

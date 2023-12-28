@@ -31,7 +31,7 @@ import type { TypeList } from '@looker/sdk-codegen';
 import { useRouteMatch } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Link } from '../Link';
-import { highlightHTML, useNavigation, buildTypePath } from '../../utils';
+import { buildTypePath, highlightHTML, useNavigation } from '../../utils';
 import { selectSearchPattern } from '../../state';
 
 interface TypesProps {

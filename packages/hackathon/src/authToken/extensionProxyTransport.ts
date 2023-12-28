@@ -28,14 +28,14 @@ import type {
   Authenticator,
   HttpMethod,
   IRawResponse,
-  ITransportSettings,
-  SDKResponse,
-  Values,
   IRequestHeaders,
   IRequestProps,
   ISDKError,
+  ITransportSettings,
+  SDKResponse,
+  Values,
 } from '@looker/sdk-rtl';
-import { BaseTransport, agentPrefix, LookerAppId } from '@looker/sdk-rtl';
+import { BaseTransport, LookerAppId, agentPrefix } from '@looker/sdk-rtl';
 import type {
   ExtensionSDK,
   FetchCustomParameters,

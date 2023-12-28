@@ -24,12 +24,12 @@
 
  */
 
-import * as path from "path";
-import * as fs from "fs";
-import { danger, success, warn } from "@looker/sdk-codegen-utils";
-import type { ICodeGen } from "@looker/sdk-codegen";
-import { isFileSync, readFileSync, run, utf8 } from "./nodeUtils";
-import { prettify } from "./prettify";
+import * as path from 'path';
+import * as fs from 'fs';
+import { danger, success, warn } from '@looker/sdk-codegen-utils';
+import type { ICodeGen } from '@looker/sdk-codegen';
+import { isFileSync, readFileSync, run, utf8 } from './nodeUtils';
+import { prettify } from './prettify';
 
 export interface IReformat {
   fileSep: string;
@@ -50,9 +50,9 @@ const writeFile = (fileName: string, content: string) => {
 };
 
 const noFormatter = (language: string, files: string[]) => {
-  const list = files.join("\n  ");
+  const list = files.join('\n  ');
   return warn(
-    `There is no ${language} formatter. Skipped reformatting of:\n  ${list}`,
+    `There is no ${language} formatter. Skipped reformatting of:\n  ${list}`
   );
 };
 
@@ -61,8 +61,9 @@ const fullPath = (weirdPath: string) => path.resolve(weirdPath);
 abstract class BaseFormatter implements IReformat {
   constructor(
     public language: string,
-    public fileSep = `  \n`,
+    public fileSep = `  \n`
   ) {}
+
   reformat(files: string[]): string {
     return noFormatter(this.language, files);
   }
@@ -71,36 +72,36 @@ abstract class BaseFormatter implements IReformat {
 
   skipping() {
     return warn(
-      `Version information was not retrieved. Skipping ${this.language} SDK version updating.`,
+      `Version information was not retrieved. Skipping ${this.language} SDK version updating.`
     );
   }
 
   reformatted(files: string[]) {
     return success(
-      `Reformatted ${this.language} files:\n  ${files.join(this.fileSep)}`,
+      `Reformatted ${this.language} files:\n  ${files.join(this.fileSep)}`
     );
   }
 }
 
 class PythonFormatter extends BaseFormatter {
   constructor() {
-    super("Python");
+    super('Python');
   }
 
   instructions =
-    "To reformat Python files, please install pipenv: https://docs.pipenv.org/en/latest/install/#installing-pipenv";
+    'To reformat Python files, please install pipenv: https://docs.pipenv.org/en/latest/install/#installing-pipenv';
 
   reformat(files: string[]): string {
     const pipEnvExists = run(
-      "command",
-      ["-v", "pipenv"],
+      'command',
+      ['-v', 'pipenv'],
       this.instructions,
-      true,
+      true
     );
-    if (pipEnvExists.includes("pipenv")) {
-      const list = files.join(" ");
+    if (pipEnvExists.includes('pipenv')) {
+      const list = files.join(' ');
       // pipenv check completed without error
-      run("pipenv", ["run", "black", list], "Python reformat", true);
+      run('pipenv', ['run', 'black', list], 'Python reformat', true);
       return success(files);
     } else {
       return danger(this.instructions);
@@ -109,7 +110,7 @@ class PythonFormatter extends BaseFormatter {
 
   versionStamp(gen: ICodeGen) {
     if (gen.versions && gen.versions.lookerVersion) {
-      const stampFile = fullPath(gen.fileName("sdk/constants"));
+      const stampFile = fullPath(gen.fileName('sdk/constants'));
       if (!isFileSync(stampFile)) {
         warn(`${stampFile} was not found. Skipping version update.`);
       }
@@ -118,11 +119,11 @@ class PythonFormatter extends BaseFormatter {
       const envPattern = /environment_prefix = ['"].*['"]/i;
       content = content.replace(
         sdkVersionPattern,
-        `sdk_version = "${gen.versions.lookerVersion}"`,
+        `sdk_version = "${gen.versions.lookerVersion}"`
       );
       content = content.replace(
         envPattern,
-        `environment_prefix = "${gen.environmentPrefix}"`,
+        `environment_prefix = "${gen.environmentPrefix}"`
       );
       writeFile(stampFile, content);
       return success(`updated ${stampFile} to ${gen.versions.lookerVersion}`);
@@ -134,7 +135,7 @@ class PythonFormatter extends BaseFormatter {
 
 class TypescriptFormatter extends BaseFormatter {
   constructor() {
-    super("TypeScript");
+    super('TypeScript');
   }
 
   reformat(files: string[]) {
@@ -145,7 +146,7 @@ class TypescriptFormatter extends BaseFormatter {
   }
 
   reformatFile(fileName: string) {
-    let source = "";
+    let source = '';
     prettify(readFileSync(fileName)).then((r) => (source = r));
     if (source) {
       fs.writeFileSync(fileName, source, utf8);
@@ -155,7 +156,7 @@ class TypescriptFormatter extends BaseFormatter {
 
   versionStamp(gen: ICodeGen) {
     if (gen.versions && gen.versions.lookerVersion) {
-      const stampFile = fullPath(gen.fileName("../../sdk/src/constants"));
+      const stampFile = fullPath(gen.fileName('../../sdk/src/constants'));
       if (!isFileSync(stampFile)) {
         warn(`${stampFile} was not found. Skipping version update.`);
       }
@@ -164,11 +165,11 @@ class TypescriptFormatter extends BaseFormatter {
       const envPattern = /environmentPrefix = ['"].*['"]/i;
       content = content.replace(
         sdkVersionPattern,
-        `sdkVersion = '${gen.versions.lookerVersion}'`,
+        `sdkVersion = '${gen.versions.lookerVersion}'`
       );
       content = content.replace(
         envPattern,
-        `environmentPrefix = '${gen.environmentPrefix}'`,
+        `environmentPrefix = '${gen.environmentPrefix}'`
       );
       writeFile(stampFile, content);
       return success(`updated ${stampFile} to ${gen.versions.lookerVersion}`);
@@ -181,12 +182,12 @@ class TypescriptFormatter extends BaseFormatter {
 class KotlinFormatter extends BaseFormatter {
   // TODO Kotlin formatter
   constructor() {
-    super("Kotlin");
+    super('Kotlin');
   }
 
   versionStamp(gen: ICodeGen) {
     if (gen.versions && gen.versions.lookerVersion) {
-      const stampFile = fullPath(gen.fileName("sdk/Constants"));
+      const stampFile = fullPath(gen.fileName('sdk/Constants'));
       if (!isFileSync(stampFile)) {
         warn(`${stampFile} was not found. Skipping version update.`);
       }
@@ -196,19 +197,19 @@ class KotlinFormatter extends BaseFormatter {
       const envPattern = /\bENVIRONMENT_PREFIX = ['"].*['"]/i;
       content = content.replace(
         lookerPattern,
-        `LOOKER_VERSION = "${gen.versions.lookerVersion}"`,
+        `LOOKER_VERSION = "${gen.versions.lookerVersion}"`
       );
       content = content.replace(
         apiPattern,
-        `API_VERSION = "${gen.versions.spec.version}"`,
+        `API_VERSION = "${gen.versions.spec.version}"`
       );
       content = content.replace(
         envPattern,
-        `ENVIRONMENT_PREFIX = "${gen.environmentPrefix}"`,
+        `ENVIRONMENT_PREFIX = "${gen.environmentPrefix}"`
       );
       writeFile(stampFile, content);
       return success(
-        `updated ${stampFile} to ${gen.versions.spec.version}.${gen.versions.lookerVersion}`,
+        `updated ${stampFile} to ${gen.versions.spec.version}.${gen.versions.lookerVersion}`
       );
     }
     return this.skipping();
@@ -218,12 +219,12 @@ class KotlinFormatter extends BaseFormatter {
 class SwiftFormatter extends BaseFormatter {
   // TODO Swift formatter
   constructor() {
-    super("Swift");
+    super('Swift');
   }
 
   versionStamp(gen: ICodeGen) {
     if (gen.versions && gen.versions.lookerVersion) {
-      const stampFile = fullPath(gen.fileName("rtl/constants"));
+      const stampFile = fullPath(gen.fileName('rtl/constants'));
       if (!isFileSync(stampFile)) {
         warn(`${stampFile} was not found. Skipping version update.`);
       }
@@ -233,19 +234,19 @@ class SwiftFormatter extends BaseFormatter {
       const envPattern = /environmentPrefix = ['"].*['"]/i;
       content = content.replace(
         lookerPattern,
-        `lookerVersion = "${gen.versions.lookerVersion}"`,
+        `lookerVersion = "${gen.versions.lookerVersion}"`
       );
       content = content.replace(
         apiPattern,
-        `apiVersion = "${gen.versions.spec.version}"`,
+        `apiVersion = "${gen.versions.spec.version}"`
       );
       content = content.replace(
         envPattern,
-        `environmentPrefix = "${gen.environmentPrefix}"`,
+        `environmentPrefix = "${gen.environmentPrefix}"`
       );
       writeFile(stampFile, content);
       return success(
-        `updated ${stampFile} to ${gen.versions.spec.version}.${gen.versions.lookerVersion}`,
+        `updated ${stampFile} to ${gen.versions.spec.version}.${gen.versions.lookerVersion}`
       );
     }
     return this.skipping();
@@ -255,12 +256,12 @@ class SwiftFormatter extends BaseFormatter {
 class CsharpFormatter extends BaseFormatter {
   // TODO C# formatter https://github.com/dotnet/format
   constructor() {
-    super("C#");
+    super('C#');
   }
 
   versionStamp(gen: ICodeGen) {
     if (gen.versions && gen.versions.lookerVersion) {
-      const stampFile = fullPath(gen.fileName("rtl/Constants"));
+      const stampFile = fullPath(gen.fileName('rtl/Constants'));
       if (!isFileSync(stampFile)) {
         warn(`${stampFile} was not found. Skipping version update.`);
       }
@@ -270,19 +271,19 @@ class CsharpFormatter extends BaseFormatter {
       const envPattern = /EnvironmentPrefix = ['"].*['"]/i;
       content = content.replace(
         lookerPattern,
-        `LookerVersion = "${gen.versions.lookerVersion}"`,
+        `LookerVersion = "${gen.versions.lookerVersion}"`
       );
       content = content.replace(
         apiPattern,
-        `ApiVersion = "${gen.versions.spec.version}"`,
+        `ApiVersion = "${gen.versions.spec.version}"`
       );
       content = content.replace(
         envPattern,
-        `EnvironmentPrefix = "${gen.environmentPrefix}"`,
+        `EnvironmentPrefix = "${gen.environmentPrefix}"`
       );
       writeFile(stampFile, content);
       return success(
-        `updated ${stampFile} to ${gen.versions.spec.version}.${gen.versions.lookerVersion}`,
+        `updated ${stampFile} to ${gen.versions.spec.version}.${gen.versions.lookerVersion}`
       );
     }
     return this.skipping();
@@ -292,23 +293,23 @@ class CsharpFormatter extends BaseFormatter {
 class GoFormatter extends BaseFormatter {
   // TODO Go formatter
   constructor() {
-    super("Go");
+    super('Go');
   }
 
   instructions =
-    "To reformat Go files, please install gofmt: https://go.dev/blog/gofmt";
+    'To reformat Go files, please install gofmt: https://go.dev/blog/gofmt';
 
   reformat(files: string[]): string {
     const gofmtExists = run(
-      "command",
-      ["-v", "gofmt"],
+      'command',
+      ['-v', 'gofmt'],
       this.instructions,
-      true,
+      true
     );
-    if (gofmtExists.includes("gofmt")) {
-      const list = files.join(" ");
+    if (gofmtExists.includes('gofmt')) {
+      const list = files.join(' ');
       // gofmt check completed without error
-      run("gofmt", ["-w", list], "Go reformat", true);
+      run('gofmt', ['-w', list], 'Go reformat', true);
       return success(files);
     } else {
       return danger(this.instructions);
@@ -316,7 +317,7 @@ class GoFormatter extends BaseFormatter {
   }
 
   versionStamp() {
-    return warn("Skipping SDK version updating - not implemented for Go.");
+    return warn('Skipping SDK version updating - not implemented for Go.');
   }
 }
 
@@ -325,12 +326,12 @@ type IFormatFiles = { [key: string]: string[] };
 type IFormatters = { [key: string]: IReformat };
 
 const fileFormatters: IFormatters = {
-  ".cs": new CsharpFormatter(),
-  ".kt": new KotlinFormatter(),
-  ".py": new PythonFormatter(),
-  ".swift": new SwiftFormatter(),
-  ".ts": new TypescriptFormatter(),
-  ".go": new GoFormatter(),
+  '.cs': new CsharpFormatter(),
+  '.kt': new KotlinFormatter(),
+  '.py': new PythonFormatter(),
+  '.swift': new SwiftFormatter(),
+  '.ts': new TypescriptFormatter(),
+  '.go': new GoFormatter(),
 };
 
 export class FilesFormatter {

@@ -25,15 +25,15 @@
  */
 
 import type { FC } from 'react';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Aside,
   Button,
   ButtonOutline,
-  Space,
-  useToggle,
   ExtendComponentsThemeProvider,
+  Space,
   Span,
+  useToggle,
 } from '@looker/components';
 import { Beaker } from '@looker/icons';
 import { useHistory, useParams } from 'react-router-dom';
@@ -51,11 +51,11 @@ import {
   DocRateLimited,
   DocReferences,
   DocSDKs,
+  DocSchema,
   DocSdkUsage,
   DocSource,
   DocStatus,
   DocTitle,
-  DocSchema,
 } from '../../components';
 import { selectSdkLanguage } from '../../state';
 import { DocOperation, DocRequestBody, DocResponses } from './components';

@@ -30,7 +30,7 @@ import { RunItProvider } from '@looker/run-it';
 import type { ExtensionContextData } from '@looker/extension-sdk-react';
 import { ExtensionContext } from '@looker/extension-sdk-react';
 import type { IApixAdaptor } from '@looker/api-explorer';
-import { ApiExplorer, store, sdkSpecFetch } from '@looker/api-explorer';
+import { ApiExplorer, sdkSpecFetch, store } from '@looker/api-explorer';
 import { getExtensionSDK } from '@looker/extension-sdk';
 import { Provider } from 'react-redux';
 import { ExtensionAdaptor } from '@looker/extension-utils';

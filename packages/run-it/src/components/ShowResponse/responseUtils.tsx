@@ -28,16 +28,16 @@ import React from 'react';
 import type { IRawResponse } from '@looker/sdk-rtl';
 import { ResponseMode, responseMode } from '@looker/sdk-rtl';
 import {
-  Paragraph,
   MessageBar,
-  TabList,
+  Paragraph,
   Tab,
-  TabPanels,
+  TabList,
   TabPanel,
+  TabPanels,
   useTabs,
 } from '@looker/components';
 import { CodeCopy, Markdown } from '@looker/code-editor';
-import { DataGrid, parseCsv, json2Csv } from '../DataGrid';
+import { DataGrid, json2Csv, parseCsv } from '../DataGrid';
 
 /**
  * Are all items this array "simple"

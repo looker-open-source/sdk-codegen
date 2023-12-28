@@ -25,7 +25,7 @@
  */
 
 import type { FC } from 'react';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { ApiModel, DiffRow, SpecList } from '@looker/sdk-codegen';
 import { useRouteMatch } from 'react-router-dom';
 import {

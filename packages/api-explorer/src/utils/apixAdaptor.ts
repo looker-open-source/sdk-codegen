@@ -31,7 +31,7 @@ import { getSpecsFromVersions } from '@looker/sdk-codegen';
 import { RunItConfigKey, RunItNoConfig } from '@looker/run-it';
 import cloneDeep from 'lodash/cloneDeep';
 
-import { fullify, fallbackFetch, funFetch } from './adaptorUtils';
+import { fallbackFetch, fullify, funFetch } from './adaptorUtils';
 
 export interface IApixAdaptor extends IEnvironmentAdaptor {
   fetchSpecList(versionsUrl?: string): Promise<SpecList>;

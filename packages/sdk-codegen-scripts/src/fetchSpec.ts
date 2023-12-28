@@ -30,11 +30,11 @@ import type { ITransportSettings } from '@looker/sdk-rtl';
 import { defaultTimeout, sdkOk } from '@looker/sdk-rtl';
 import { NodeTransport } from '@looker/sdk-node';
 import {
-  fail,
-  quit,
-  isFileSync,
-  readFileSync,
   createJsonFile,
+  fail,
+  isFileSync,
+  quit,
+  readFileSync,
 } from './nodeUtils';
 import type { ISDKConfigProps } from './sdkConfig';
 import { convertSpec } from './convert';

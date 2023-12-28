@@ -25,13 +25,13 @@
  */
 
 import type { BaseSyntheticEvent, FC, FormEventHandler } from 'react';
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Box,
   Tab,
   TabList,
-  TabPanels,
   TabPanel,
+  TabPanels,
   useTabs,
 } from '@looker/components';
 import type { ApiModel, IMethod } from '@looker/sdk-codegen';
@@ -43,22 +43,22 @@ import { registerEnvAdaptor } from '@looker/extension-utils';
 
 import type { ResponseContent } from './components';
 import {
-  RequestForm,
-  ResponseExplorer,
-  Loading,
-  DocSdkCalls,
   ConfigForm,
-  validateBody,
+  DocSdkCalls,
+  Loading,
   PerfTimings,
   PerfTracker,
+  RequestForm,
+  ResponseExplorer,
+  validateBody,
 } from './components';
 import {
-  initRequestContent,
+  createInputs,
   createRequestParams,
-  runRequest,
+  initRequestContent,
   pathify,
   prepareInputs,
-  createInputs,
+  runRequest,
 } from './utils';
 import { RunItContext } from '.';
 

@@ -26,14 +26,14 @@
 
 import type { ChattyHostConnection } from '@looker/chatty';
 import type {
-  VisualizationDataReceivedCallback,
   RawVisualizationData,
+  VisualizationDataReceivedCallback,
   VisualizationSDK,
 } from './visualization';
 import type {
+  TileHostData,
   TileHostDataChangedCallback,
   TileSDK,
-  TileHostData,
 } from './tile';
 
 /**

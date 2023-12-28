@@ -27,7 +27,7 @@
 import type { FC } from 'react';
 import React from 'react';
 
-import { Heading, SpaceVertical, Paragraph, Span } from '@looker/components';
+import { Heading, Paragraph, SpaceVertical, Span } from '@looker/components';
 import { getExtensionSDK } from '@looker/extension-sdk';
 import { ExtMarkdown } from '@looker/extension-utils';
 import type { IHackerProps } from '../../models';

@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { all, call, put, takeEvery, select } from 'redux-saga/effects';
+import { all, call, put, select, takeEvery } from 'redux-saga/effects';
 import type { SagaIterator } from 'redux-saga';
 import { actionMessage, beginLoading, endLoading } from '../common/actions';
 import type { IJudgingProps } from '../../models';
@@ -34,8 +34,8 @@ import type {
 } from './actions';
 import {
   Actions,
-  getJudgingsResponse,
   getJudgingResponse,
+  getJudgingsResponse,
   saveJudgingResponse,
 } from './actions';
 import { getJudgingsState } from './selectors';

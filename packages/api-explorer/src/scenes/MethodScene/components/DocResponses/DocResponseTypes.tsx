@@ -24,12 +24,12 @@
 
  */
 
-import React, { useState, useEffect } from 'react';
-import { ButtonToggle, ButtonItem } from '@looker/components';
+import React, { useEffect, useState } from 'react';
+import { ButtonItem, ButtonToggle } from '@looker/components';
 import type {
   ApiModel,
-  KeyedCollection,
   IMethodResponse,
+  KeyedCollection,
 } from '@looker/sdk-codegen';
 
 import { ExploreType } from '../../../../components';

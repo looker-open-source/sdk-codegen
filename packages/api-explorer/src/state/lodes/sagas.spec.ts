@@ -24,7 +24,7 @@
 
  */
 import ReduxSagaTester from 'redux-saga-tester';
-import { examples, declarations } from '../../test-data';
+import { declarations, examples } from '../../test-data';
 import * as lodeUtils from '../../utils/lodeUtils';
 import * as sagas from './sagas';
 import { lodeActions, lodesSlice } from './slice';

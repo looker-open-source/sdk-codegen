@@ -25,8 +25,8 @@
  */
 
 import {
-  LookerExtensionSDK as _LookerExtensionSDK,
   Looker40SDK,
+  LookerExtensionSDK as _LookerExtensionSDK,
 } from '@looker/sdk';
 import type { ExtensionHostApi } from '../connect';
 import { ApiVersion } from '../connect';

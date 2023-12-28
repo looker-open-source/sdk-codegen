@@ -27,11 +27,11 @@
 import type { FC } from 'react';
 import React from 'react';
 import {
-  Table,
-  TableBody,
-  Heading,
   Accordion2,
   Box2,
+  Heading,
+  Table,
+  TableBody,
   useToggle,
 } from '@looker/components';
 import type { IHackerProps } from '../../../models';

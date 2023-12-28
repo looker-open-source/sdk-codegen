@@ -24,18 +24,18 @@
 
  */
 
-import * as prettier from "prettier";
+import * as prettier from 'prettier';
 
 const prettierTs: prettier.Options = {
   bracketSpacing: true,
-  endOfLine: "auto",
-  parser: "typescript",
-  proseWrap: "preserve",
-  quoteProps: "as-needed",
+  endOfLine: 'auto',
+  parser: 'typescript',
+  proseWrap: 'preserve',
+  quoteProps: 'as-needed',
   semi: true,
   singleQuote: true,
-  trailingComma: "es5",
-  arrowParens: "always",
+  trailingComma: 'es5',
+  arrowParens: 'always',
 };
 
 /**
@@ -45,7 +45,7 @@ const prettierTs: prettier.Options = {
  */
 export const prettify = async (
   code: string,
-  options: prettier.Options = {},
+  options: prettier.Options = {}
 ) => {
   const merged: prettier.Options = { ...prettierTs, ...{ options } };
   return prettier.format(code, merged);

@@ -26,7 +26,7 @@
 import type { FC } from 'react';
 import React from 'react';
 import styled from 'styled-components';
-import { Box2, MenuList, MenuItem } from '@looker/components';
+import { Box2, MenuItem, MenuList } from '@looker/components';
 import { Beaker } from '@looker/icons';
 import { Map } from '@styled-icons/material/Map';
 import { Settings } from '@styled-icons/material/Settings';

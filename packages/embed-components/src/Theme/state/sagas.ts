@@ -23,13 +23,13 @@
  SOFTWARE.
 
  */
-import { takeEvery, put, call } from 'typed-redux-saga';
+import { call, put, takeEvery } from 'typed-redux-saga';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { ITheme } from '@looker/sdk';
 import {
-  registerThemeService,
-  getThemeService,
   EmbedUrl,
+  getThemeService,
+  registerThemeService,
 } from '@looker/embed-services';
 import { themeActions } from './slice';
 import type { SelectThemeAction } from './slice';

@@ -26,9 +26,9 @@
 import type { ExtensionHostApiImpl } from '../extension_host_api';
 import { VisualizationSDKImpl } from './visualization_sdk';
 import type {
-  RawVisualizationData,
-  RawVisQueryResponse,
   RawVisConfig,
+  RawVisQueryResponse,
+  RawVisualizationData,
 } from './types';
 
 describe('VisualizationSDK', () => {

@@ -27,12 +27,12 @@ import { all, call, put, select, takeLeading } from 'redux-saga/effects';
 import type { SagaIterator } from 'redux-saga';
 import { getCore40SDK } from '@looker/extension-sdk-react';
 import type {
-  IUser,
-  IWriteUser,
-  IRole,
   IGroup,
   IGroupSearch,
+  IRole,
+  IUser,
   IUserAttribute,
+  IWriteUser,
 } from '@looker/sdk';
 import { actionMessage } from '../common/actions';
 import { parseCsv as parseCsvUtil } from '../../utils';

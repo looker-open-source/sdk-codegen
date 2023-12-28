@@ -24,7 +24,7 @@
 
  */
 import React from 'react';
-import { SpaceVertical, Box2 } from '@looker/components';
+import { Box2, SpaceVertical } from '@looker/components';
 import { DashboardGauge } from '@looker/icons';
 import { Layout } from '../Layout';
 import { NavigateButton } from '../NavigateButton';

@@ -28,7 +28,7 @@ import React, { useEffect, useState } from 'react';
 import type { FC } from 'react';
 import type { IHackerProps } from '../../../models';
 import type { AgendaItems, IAgendaEras } from '.';
-import { AgendaEra, agendaEras, Era } from '.';
+import { AgendaEra, Era, agendaEras } from '.';
 
 interface AgendaProps {
   schedule: AgendaItems;

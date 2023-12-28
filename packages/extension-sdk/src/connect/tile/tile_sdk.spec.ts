@@ -131,6 +131,21 @@ describe('TileSDK', () => {
     expect(dashboardFilters).toEqual({});
   });
 
+  it('sends add error message ', () => {
+    const message1 = { title: 'Title1', message: 'Message1', group: 'abc' };
+    const tileSdk = makeTileSdk();
+    tileSdk.addError(message1);
+    expect(api.send).toBeCalledWith('TILE_ADD_ERRORS', {
+      errors: [message1],
+    });
+  });
+
+  it('sends clear error message ', () => {
+    const tileSdk = makeTileSdk();
+    tileSdk.clearError();
+    expect(api.send).toBeCalledWith('TILE_CLEAR_ERRORS', { group: undefined });
+  });
+
   it('sends add errors message ', () => {
     const message1 = { title: 'Title1', message: 'Message1', group: 'abc' };
     const message2 = { title: 'Title2', message: 'Message2', group: 'abc' };

@@ -26,7 +26,7 @@
 
 import type { ChattyHostConnection } from '@looker/chatty';
 import type { Looker40SDK } from '@looker/sdk';
-import { MountPoint, ExtensionNotificationType } from '../connect/types';
+import { ExtensionNotificationType, MountPoint } from '../connect/types';
 import { ExtensionHostApiImpl } from '../connect/extension_host_api';
 import { LookerExtensionSDK } from './extension_sdk';
 import { LookerExtensionSDK40 } from './extension_sdk_40';

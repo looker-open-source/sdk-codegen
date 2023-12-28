@@ -24,7 +24,7 @@
 
  */
 import type { SpecItem, SpecList } from '@looker/sdk-codegen';
-import { call, put, takeEvery, select } from 'typed-redux-saga';
+import { call, put, select, takeEvery } from 'typed-redux-saga';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 import { getApixAdaptor } from '../../utils';

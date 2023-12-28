@@ -27,14 +27,14 @@
 import type { BaseSyntheticEvent } from 'react';
 import React, { Fragment } from 'react';
 import {
-  ToggleSwitch,
-  Label,
   FieldCheckbox,
-  InputText,
-  Tooltip,
   Icon,
   InputDate,
+  InputText,
+  Label,
   Space,
+  ToggleSwitch,
+  Tooltip,
 } from '@looker/components';
 // eslint-disable-next-line no-restricted-imports
 import { Info } from '@styled-icons/material';

@@ -24,10 +24,10 @@
 
  */
 import {
-  qualifyMarkdownText,
-  getCodeLanguageFromTaggedText,
-  removeCodeLanguageTags,
   addCodeLanguageTags,
+  getCodeLanguageFromTaggedText,
+  qualifyMarkdownText,
+  removeCodeLanguageTags,
 } from './utils';
 
 export const toMdString = (textLines: string[]) => textLines.join('\n');

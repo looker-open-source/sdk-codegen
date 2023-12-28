@@ -30,14 +30,14 @@ import { renderWithTheme } from '@looker/components-test-utils';
 import type { IRawResponse } from '@looker/sdk-rtl';
 
 import {
+  testBogusJsonResponse,
   testErrorResponse,
   testHtmlResponse,
   testImageResponse,
   testJsonResponse,
+  testOneRowComplexJson,
   testTextResponse,
   testUnknownResponse,
-  testBogusJsonResponse,
-  testOneRowComplexJson,
 } from '../../test-data';
 import { ShowResponse } from './ShowResponse';
 

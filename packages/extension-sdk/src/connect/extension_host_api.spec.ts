@@ -27,10 +27,10 @@
 import type { ChattyHostConnection } from '@looker/chatty';
 import type { RawVisQueryResponse } from './visualization/types';
 import {
-  ExtensionHostApiImpl,
   EXTENSION_SDK_VERSION,
+  ExtensionHostApiImpl,
 } from './extension_host_api';
-import { ExtensionNotificationType, ApiVersion, MountPoint } from './types';
+import { ApiVersion, ExtensionNotificationType, MountPoint } from './types';
 import type { ExtensionInitializeMessage } from './types';
 
 describe('extension_host_api tests', () => {

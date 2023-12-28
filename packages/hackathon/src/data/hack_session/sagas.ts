@@ -29,8 +29,8 @@ import { actionMessage, beginLoading, endLoading } from '../common/actions';
 import { sheetsClient } from '../sheets_client';
 import {
   Actions,
-  initHackSessionResponse,
   initHackSessionFailure,
+  initHackSessionResponse,
 } from './actions';
 
 function* initializeHackSessionSaga(): SagaIterator {

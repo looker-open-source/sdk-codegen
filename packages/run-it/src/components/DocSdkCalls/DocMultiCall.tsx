@@ -25,7 +25,7 @@
  */
 import type { FC } from 'react';
 import React from 'react';
-import { Tabs2, Tab2 } from '@looker/components';
+import { Tab2, Tabs2 } from '@looker/components';
 import { CodeCopy } from '@looker/code-editor';
 
 interface DocMultiCallProps {

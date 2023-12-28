@@ -26,24 +26,24 @@
 
 import type { Readable } from 'readable-stream';
 import type {
-  ISDKError,
-  SDKResponse,
-  ITransportSettings,
-  HttpMethod,
   Authenticator,
-  IRequestProps,
-  IRequestHeaders,
-  Values,
+  HttpMethod,
   IRawResponse,
+  IRequestHeaders,
+  IRequestProps,
+  ISDKError,
+  ITransportSettings,
+  SDKResponse,
+  Values,
 } from './transport';
 import {
-  trace,
   LookerAppId,
-  agentPrefix,
-  responseMode,
   ResponseMode,
-  safeBase64,
+  agentPrefix,
   isErrorLike,
+  responseMode,
+  safeBase64,
+  trace,
 } from './transport';
 import { BaseTransport } from './baseTransport';
 import type { ICryptoHash } from './cryptoHash';

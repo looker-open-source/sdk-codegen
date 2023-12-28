@@ -29,10 +29,10 @@ import type { IArtifact } from '@looker/sdk';
 import type { IRowModel } from './RowModel';
 import {
   APP_JSON,
-  nilCell,
-  noDate,
   RowAction,
   RowModel,
+  nilCell,
+  noDate,
   stringer,
 } from './RowModel';
 

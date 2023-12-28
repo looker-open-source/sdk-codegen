@@ -25,7 +25,7 @@
  */
 
 import { v4 as uuidv4 } from 'uuid';
-import { boolDefault, LookerSDKError } from '@looker/sdk-rtl';
+import { LookerSDKError, boolDefault } from '@looker/sdk-rtl';
 import omit from 'lodash/omit';
 import type { IArtifact, IUpdateArtifact } from '@looker/sdk';
 export type SheetValues = any[];

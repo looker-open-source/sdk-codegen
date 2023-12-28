@@ -24,7 +24,7 @@
 
  */
 
-import { EmbedUrl, ContentType } from './EmbedUrl';
+import { ContentType, EmbedUrl } from './EmbedUrl';
 
 describe('EmbedUrl', () => {
   const dashboardUrl = 'https://example.com/dashboards/123';

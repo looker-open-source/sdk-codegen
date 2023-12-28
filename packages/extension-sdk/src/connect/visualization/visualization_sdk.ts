@@ -29,17 +29,17 @@ import type { ExtensionHostApiImpl } from '../extension_host_api';
 import { ExtensionRequestType } from '../types';
 import type { Row } from '../tile';
 import type {
-  VisualizationSDK,
-  RawVisualizationData,
-  RawVisConfig,
-  VisualizationConfig,
-  QueryResponse,
-  Measure,
   Dimension,
-  TableCalculation,
+  Measure,
   PivotConfig,
+  QueryResponse,
+  RawVisConfig,
   RawVisQueryResponse,
+  RawVisualizationData,
+  TableCalculation,
   VisOptions,
+  VisualizationConfig,
+  VisualizationSDKInternal,
 } from './types';
 
 class QueryResponseImpl implements QueryResponse {
@@ -114,7 +114,7 @@ class VisualizationConfigImpl implements VisualizationConfig {
   }
 }
 
-export class VisualizationSDKImpl implements VisualizationSDK {
+export class VisualizationSDKImpl implements VisualizationSDKInternal {
   hostApi: ExtensionHostApiImpl;
   visualizationData?: RawVisualizationData;
   _visConfig?: VisualizationConfigImpl;

@@ -27,10 +27,10 @@ import type { FC } from 'react';
 import React from 'react';
 import type { DataTableColumns } from '@looker/components';
 import {
-  DataTableItem,
-  Tooltip,
-  Text,
   DataTableCell,
+  DataTableItem,
+  Text,
+  Tooltip,
 } from '@looker/components';
 import styled from 'styled-components';
 import type { LoadTimes } from './perfUtils';

@@ -28,14 +28,14 @@ import path from 'path';
 import type { SDKCalls } from '@looker/sdk-codegen';
 import {
   CodeMiner,
+  ExampleMiner,
+  MarkdownMiner,
   filterCodeFiles,
   getAllFiles,
   getCodeFiles,
   getCommitHash,
-  getRemoteHttpOrigin,
-  MarkdownMiner,
-  ExampleMiner,
   getPermalinkRoot,
+  getRemoteHttpOrigin,
 } from './exampleMiner';
 
 describe('example mining', () => {
