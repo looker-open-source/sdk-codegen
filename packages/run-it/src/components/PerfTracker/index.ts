@@ -23,5 +23,5 @@
  SOFTWARE.
 
  */
-export { PerfTracker } from './PerfTracker'
-export { PerfTimings } from './perfUtils'
+export { PerfTracker } from './PerfTracker';
+export { PerfTimings } from './perfUtils';

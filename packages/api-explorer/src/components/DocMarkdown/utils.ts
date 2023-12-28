@@ -34,7 +34,7 @@ const cleanURL = (url: string) =>
     .replace(/<mark>/gi, '')
     .replace(/<\/mark>/gi, '')
     .replace(/%3Cmark%3E/gi, '')
-    .replace(/%3C\/mark%3E/gi, '')
+    .replace(/%3C\/mark%3E/gi, '');
 
 /**
  * Remaps tag/method a hashbang url to match the MethodScene route.
@@ -47,7 +47,7 @@ export const remapHashURL = (specKey: string, url: string) =>
     // #!/:navVersion?/:methodTag/:methodName
     .replace(/#!\/(:?\d+\.\d+\/)?(\w+)\/(\w+)/gi, `/${specKey}/methods/$2/$3`)
     // #!/:navVersion/:methodTag
-    .replace(/#!\/(:?\d+\.\d+\/)?(\w+)/gi, `/${specKey}/methods/$2`)
+    .replace(/#!\/(:?\d+\.\d+\/)?(\w+)/gi, `/${specKey}/methods/$2`);
 
 /**
  * Clean urls from mark tags and remap tag/method hashbang urls to match the MethodScene route
@@ -56,5 +56,5 @@ export const remapHashURL = (specKey: string, url: string) =>
  * Returns transformed url
  */
 export const transformURL = (specKey: string, url: string) => {
-  return remapHashURL(specKey, cleanURL(url))
-}
+  return remapHashURL(specKey, cleanURL(url));
+};

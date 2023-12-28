@@ -24,8 +24,8 @@
 
  */
 
-import type { ApiModel, DiffRow, ICodeGen } from '@looker/sdk-codegen'
-import { getCodeGenerator, PseudoGen } from '@looker/sdk-codegen'
+import type { ApiModel, DiffRow, ICodeGen } from '@looker/sdk-codegen';
+import { getCodeGenerator, PseudoGen } from '@looker/sdk-codegen';
 
 export const diffText = (
   row: DiffRow,
@@ -33,38 +33,38 @@ export const diffText = (
   api: ApiModel,
   sdkLanguage: string
 ) => {
-  let gen: ICodeGen
+  let gen: ICodeGen;
   if (sdkLanguage === 'All') {
-    gen = new PseudoGen(api)
+    gen = new PseudoGen(api);
   } else {
-    gen = getCodeGenerator(sdkLanguage, api)!
+    gen = getCodeGenerator(sdkLanguage, api)!;
   }
 
-  const method = api.methods[row.name]
-  if (!method) return `${row.name} is missing`
-  const indent = ''
-  let result = status ? `Status: ${status}\n` : ''
-  result += gen.methodSignature(indent, method)
+  const method = api.methods[row.name];
+  if (!method) return `${row.name} is missing`;
+  const indent = '';
+  let result = status ? `Status: ${status}\n` : '';
+  result += gen.methodSignature(indent, method);
   if (row.bodyDiff) {
     const args = method.bodyParams.map((p) =>
       gen.declareParameter(indent, method, p)
-    )
-    result += `\nBody:\n${args.join('\n')}`
+    );
+    result += `\nBody:\n${args.join('\n')}`;
   }
   if (row.typeDiff) {
-    result += `\nMethod type:\n${gen.declareType(indent, method.type)}`
+    result += `\nMethod type:\n${gen.declareType(indent, method.type)}`;
   }
   if (row.responseDiff) {
-    const bump = gen.bumper(indent)
+    const bump = gen.bumper(indent);
     const items = method.responses.map((r) => {
       return `${bump}Code: ${r.statusCode}
 ${bump}MIME: ${r.mediaType}
-${bump}Type:${r.type.fullName}`
-    })
-    result += `\nResponses:\n${items.join('\n')}`
+${bump}Type:${r.type.fullName}`;
+    });
+    result += `\nResponses:\n${items.join('\n')}`;
   }
-  return result
-}
+  return result;
+};
 
 export const differ = (
   row: DiffRow,
@@ -77,12 +77,12 @@ export const differ = (
     row.lStatus !== row.rStatus ? row.lStatus : '',
     leftSpec,
     sdkLanguage
-  )
+  );
   const rhs = diffText(
     row,
     row.lStatus !== row.rStatus ? row.rStatus : '',
     rightSpec,
     sdkLanguage
-  )
-  return { lhs, rhs }
-}
+  );
+  return { lhs, rhs };
+};

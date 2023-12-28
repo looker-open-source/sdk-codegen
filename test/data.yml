@@ -12,110 +12,110 @@ users:
   - first_name: Amanda
     last_name: Aardvark
 queries:
-  - id: "#user_query"
+  - id: '#user_query'
     model: thelook
     view: users
     fields:
-      - "users.id"
-      - "users.age"
-      - "users.city"
-      - "users.email"
-      - "users.first_name"
-      - "users.last_name"
-      - "users.zip"
-      - "users.state"
-      - "users.country"
+      - 'users.id'
+      - 'users.age'
+      - 'users.city'
+      - 'users.email'
+      - 'users.first_name'
+      - 'users.last_name'
+      - 'users.zip'
+      - 'users.state'
+      - 'users.country'
     vis_config:
       type: looker_column
-    limit: "10"
-  - id: "#brand_query"
+    limit: '10'
+  - id: '#brand_query'
     model: thelook
     view: products
     fields:
-      - "products.brand"
-      - "products.count"
+      - 'products.brand'
+      - 'products.count'
     vis_config:
       type: looker_column
     limit: 100
 queries_system_activity:
-  - id: "#dashboard_query_system_activity"
+  - id: '#dashboard_query_system_activity'
     model: system__activity
     view: dashboard
     fields:
-      - "dashboard.id"
-      - "dashboard.title"
-      - "dashboard.count"
+      - 'dashboard.id'
+      - 'dashboard.title'
+      - 'dashboard.count'
     vis_config:
       type: looker_column
-    limit: "10"
+    limit: '10'
 dashboards:
   - title: An SDK dashboard
     background_color: green
     filters:
-      - name: "Brand Match"
-        title: "Brand Match"
+      - name: 'Brand Match'
+        title: 'Brand Match'
         row: 0
-        type: "field_filter"
-        model: "thelook"
-        explore: "products"
-        dimension: "products.brand"
+        type: 'field_filter'
+        model: 'thelook'
+        explore: 'products'
+        dimension: 'products.brand'
         allow_multiple_values: true
-        default_value: "A%,B%,C%,D%"
+        default_value: 'A%,B%,C%,D%'
     tiles:
       - type: text
         title: "What's all this 1"
-        title_text: "This is the title of a text element"
-        subtitle_text: "Put any subtitle here"
-        body_text: "Something for the body"
+        title_text: 'This is the title of a text element'
+        subtitle_text: 'Put any subtitle here'
+        body_text: 'Something for the body'
       - type: vis
-        title_text: "Brand Count"
-        title: "Brand Count Title"
-        subtitle_text: "Vis Subtitle"
-        body_text: "Vis Body"
+        title_text: 'Brand Count'
+        title: 'Brand Count Title'
+        subtitle_text: 'Vis Subtitle'
+        body_text: 'Vis Body'
         # this is a test data convention to reference the query by some identifying tag
-        query_id: "#brand_query"
+        query_id: '#brand_query'
         result_maker:
           filterables:
             listen:
-              "Brand Match": "products.brand"
+              'Brand Match': 'products.brand'
       - type: data
-        title_text: "Users Data"
-        title: "Users Data Title"
-        subtitle_text: "Data Subtitle"
-        body_text: "Data Body"
+        title_text: 'Users Data'
+        title: 'Users Data Title'
+        subtitle_text: 'Data Subtitle'
+        body_text: 'Data Body'
         # this is a test data convention to reference the query by some identifying tag
-        query_id: "#user_query"
+        query_id: '#user_query'
 themes:
-    - name: "First_SDK_Theme"
-      settings:
-         background_color: "#b83232"
-         base_font_size: "12px"
-         font_color: "rgb(62, 63, 64)"
-         font_family: "Gotham"
-         font_source: ""
-         info_button_color: "#0087e1"
-         primary_button_color: "#e32645"
-         text_tile_text_color: ""
-         tile_background_color: "white"
-         text_tile_background_color: ""
-         tile_text_color: "#20272D"
-         title_color: "#e0060b"
-         warn_button_color: "#f2ad43"
-    - name: "Second_SDK_Theme"
-      settings:
-         background_color: "#f6f8fa"
-         base_font_size: "12px"
-         font_color: "#3e3f40"
-         font_family: "\"Comic Sans MS\""
-         font_source: ""
-         info_button_color: "#0087e1"
-         primary_button_color: "#64518a"
-         tile_background_color: "#ffffff"
-         text_tile_background_color: ""
-         tile_text_color: "#3a4245"
-         title_color: "#3a4245"
-         warn_button_color: "#980c11"
-         tile_title_alignment: "center"
+  - name: 'First_SDK_Theme'
+    settings:
+      background_color: '#b83232'
+      base_font_size: '12px'
+      font_color: 'rgb(62, 63, 64)'
+      font_family: 'Gotham'
+      font_source: ''
+      info_button_color: '#0087e1'
+      primary_button_color: '#e32645'
+      text_tile_text_color: ''
+      tile_background_color: 'white'
+      text_tile_background_color: ''
+      tile_text_color: '#20272D'
+      title_color: '#e0060b'
+      warn_button_color: '#f2ad43'
+  - name: 'Second_SDK_Theme'
+    settings:
+      background_color: '#f6f8fa'
+      base_font_size: '12px'
+      font_color: '#3e3f40'
+      font_family: '"Comic Sans MS"'
+      font_source: ''
+      info_button_color: '#0087e1'
+      primary_button_color: '#64518a'
+      tile_background_color: '#ffffff'
+      text_tile_background_color: ''
+      tile_text_color: '#3a4245'
+      title_color: '#3a4245'
+      warn_button_color: '#980c11'
+      tile_title_alignment: 'center'
 looks:
   - title: An SDK Look
     description: An SDK test look about system activity
@@ -123,12 +123,12 @@ looks:
     is_run_on_load: true
     public: true
     query:
-      - id: "#dashboard_query_system_activity"
+      - id: '#dashboard_query_system_activity'
         model: system__activity
         view: dashboard
         fields:
-          - "dashboard.count"
-          - "dashboard.id"
+          - 'dashboard.count'
+          - 'dashboard.id'
         limit: 100
 content_types:
   string:

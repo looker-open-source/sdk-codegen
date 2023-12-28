@@ -23,19 +23,19 @@
  SOFTWARE.
 
  */
-import React, { useContext } from 'react'
+import React, { useContext } from 'react';
 import {
   Accordion2,
   Card,
   CardContent,
   SpaceVertical,
   Paragraph,
-} from '@looker/components'
-import { ExtensionContext40 } from '@looker/extension-sdk-react'
-import { DashboardRunState } from '@looker/extension-sdk'
+} from '@looker/components';
+import { ExtensionContext40 } from '@looker/extension-sdk-react';
+import { DashboardRunState } from '@looker/extension-sdk';
 
 export const TileHostData: React.FC = () => {
-  const { tileHostData, lookerHostData } = useContext(ExtensionContext40)
+  const { tileHostData, lookerHostData } = useContext(ExtensionContext40);
   const {
     dashboardId,
     elementId,
@@ -51,39 +51,39 @@ export const TileHostData: React.FC = () => {
     lastRunSuccess,
     lastRunSourceElementId,
     filteredQuery,
-  } = tileHostData
+  } = tileHostData;
 
   const dashboardIdMessage = `Dashboard id is "${
     dashboardId || ''
-  }". Element id is "${elementId || ''}".`
+  }". Element id is "${elementId || ''}".`;
 
   const queryIdMessage = `Query id is "${queryId || ''}". Query slug is "${
     querySlug || ''
-  }".`
+  }".`;
 
   const dashboardPrintingMessage =
     lookerHostData?.isRendering && dashboardId
       ? 'Dashboard is printing'
-      : 'Dashboard is NOT printing'
+      : 'Dashboard is NOT printing';
 
   const exploringMessage =
-    isExploring && 'Extension visualization is being configured in an explore'
+    isExploring && 'Extension visualization is being configured in an explore';
 
   const dashboardEditingMessage = isDashboardEditing
     ? 'Dashboard is editing'
-    : 'Dashboard is NOT editing'
+    : 'Dashboard is NOT editing';
 
-  let dashboardRunStateMessage
+  let dashboardRunStateMessage;
   switch (dashboardRunState) {
     case DashboardRunState.RUNNING:
-      dashboardRunStateMessage = 'Dashboard queries are running'
-      break
+      dashboardRunStateMessage = 'Dashboard queries are running';
+      break;
     case DashboardRunState.NOT_RUNNING:
-      dashboardRunStateMessage = 'Dashboard queries are not running'
-      break
+      dashboardRunStateMessage = 'Dashboard queries are not running';
+      break;
     default:
-      dashboardRunStateMessage = 'Query run state is unknown'
-      break
+      dashboardRunStateMessage = 'Query run state is unknown';
+      break;
   }
 
   const lastDashboardRunMessage = lastRunStartTime
@@ -92,19 +92,19 @@ export const TileHostData: React.FC = () => {
       }, last success: ${lastRunSuccess || ''}, initiated by: ${
         lastRunSourceElementId || ''
       }`
-    : 'The dashboard has not run yet'
+    : 'The dashboard has not run yet';
 
   const dashboardCrossFiltersEnabledMessage = isDashboardCrossFilteringEnabled
     ? 'Dashboard cross filters are enabled'
-    : 'DashboardCross filters are NOT enabled'
+    : 'DashboardCross filters are NOT enabled';
 
   const filtersArray = Object.entries(dashboardFilters || {})
     .map(([key, value]) => `${key}=${value}`)
-    .join(', ')
+    .join(', ');
 
   const filteredQueryMessage = filteredQuery
     ? `Filtered query: ${JSON.stringify(filteredQuery, null, 1)}`
-    : 'No filtered query available.'
+    : 'No filtered query available.';
 
   return (
     <Card>
@@ -133,5 +133,5 @@ export const TileHostData: React.FC = () => {
         </Accordion2>
       </CardContent>
     </Card>
-  )
-}
+  );
+};

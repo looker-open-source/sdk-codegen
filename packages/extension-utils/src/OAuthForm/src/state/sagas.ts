@@ -23,17 +23,17 @@
  SOFTWARE.
 
  */
-import type { PayloadAction } from '@reduxjs/toolkit'
-import { takeEvery, put, call, select } from 'typed-redux-saga'
-import type { ConfigValues } from '../utils'
-import { getVersions, validateUrl } from '../utils'
+import type { PayloadAction } from '@reduxjs/toolkit';
+import { takeEvery, put, call, select } from 'typed-redux-saga';
+import type { ConfigValues } from '../utils';
+import { getVersions, validateUrl } from '../utils';
 import type {
   ClearConfigActionPayload,
   SetUrlActionPayload,
   OAuthFormState,
   SaveConfigPayload,
-} from './slice'
-import { OAuthFormSlice, OAuthFormActions } from './slice'
+} from './slice';
+import { OAuthFormSlice, OAuthFormActions } from './slice';
 
 /**
  * get saved configData from localStorage key
@@ -44,23 +44,23 @@ const getLocalStorageConfig = (configKey: string): ConfigValues => {
   const EmptyConfig = {
     base_url: '',
     looker_url: '',
-  }
-  const data = localStorage.getItem(configKey)
-  const result = data ? JSON.parse(data) : EmptyConfig
+  };
+  const data = localStorage.getItem(configKey);
+  const result = data ? JSON.parse(data) : EmptyConfig;
 
-  return result
-}
+  return result;
+};
 
 /**
  * checks for saved configData in localStorage
  */
 function* initSaga(action: PayloadAction<string>) {
-  const { initSuccessAction, setFailureAction } = OAuthFormActions
+  const { initSuccessAction, setFailureAction } = OAuthFormActions;
   try {
-    const result = yield* call(getLocalStorageConfig, action.payload)
-    yield* put(initSuccessAction(result))
+    const result = yield* call(getLocalStorageConfig, action.payload);
+    yield* put(initSuccessAction(result));
   } catch (error: any) {
-    yield* put(setFailureAction(error.message))
+    yield* put(setFailureAction(error.message));
   }
 }
 
@@ -69,10 +69,10 @@ function* initSaga(action: PayloadAction<string>) {
  * @param action containing name and value of form element changed
  */
 function* setUrlSaga(action: PayloadAction<SetUrlActionPayload>) {
-  const { updateValidationMessages, setUrlActionSuccess } = OAuthFormActions
+  const { updateValidationMessages, setUrlActionSuccess } = OAuthFormActions;
   try {
-    const url = validateUrl(action.payload.value)
-    if (!url) throw new Error(`${action.payload.value} is not a valid url`)
+    const url = validateUrl(action.payload.value);
+    if (!url) throw new Error(`${action.payload.value} is not a valid url`);
 
     // clear the error message if one was there
     yield* put(
@@ -80,7 +80,7 @@ function* setUrlSaga(action: PayloadAction<SetUrlActionPayload>) {
         elementName: action.payload.name,
         newMessage: null,
       })
-    )
+    );
   } catch (error: any) {
     yield* put(
       updateValidationMessages({
@@ -90,11 +90,11 @@ function* setUrlSaga(action: PayloadAction<SetUrlActionPayload>) {
           type: 'error',
         },
       })
-    )
+    );
   } finally {
     // update the form element
-    const url = validateUrl(action.payload.value)
-    yield* put(setUrlActionSuccess(url || action.payload.value))
+    const url = validateUrl(action.payload.value);
+    yield* put(setUrlActionSuccess(url || action.payload.value));
   }
 }
 
@@ -104,22 +104,22 @@ function* setUrlSaga(action: PayloadAction<SetUrlActionPayload>) {
  */
 function* clearConfigSaga(action: PayloadAction<ClearConfigActionPayload>) {
   const { clearConfigActionSuccess, setFailureAction, updateMessageBarAction } =
-    OAuthFormActions
+    OAuthFormActions;
   try {
-    const { configKey, setHasConfig, isAuthenticated } = action.payload
-    localStorage.removeItem(configKey)
-    if (setHasConfig) setHasConfig(false)
+    const { configKey, setHasConfig, isAuthenticated } = action.payload;
+    localStorage.removeItem(configKey);
+    if (setHasConfig) setHasConfig(false);
     if (isAuthenticated) {
       yield* put(
         updateMessageBarAction({
           intent: 'warn',
           text: 'Please reload the browser page to log out',
         })
-      )
+      );
     }
-    yield* put(clearConfigActionSuccess())
+    yield* put(clearConfigActionSuccess());
   } catch (error: any) {
-    yield* put(setFailureAction(error.message))
+    yield* put(setFailureAction(error.message));
   }
 }
 
@@ -128,25 +128,25 @@ function* clearConfigSaga(action: PayloadAction<ClearConfigActionPayload>) {
  */
 function* verifyConfigSaga() {
   const apiServerUrl = yield* select((storeState) => {
-    const formState: OAuthFormState = storeState[OAuthFormSlice.name]
-    return formState.apiServerUrl
-  })
+    const formState: OAuthFormState = storeState[OAuthFormSlice.name];
+    return formState.apiServerUrl;
+  });
   const {
     verifyConfigActionFailure,
     verifyConfigActionSuccess,
     clearMessageBarAction,
-  } = OAuthFormActions
+  } = OAuthFormActions;
 
   try {
-    yield* put(clearMessageBarAction())
-    const versionsUrl = `${apiServerUrl}/versions`
+    yield* put(clearMessageBarAction());
+    const versionsUrl = `${apiServerUrl}/versions`;
 
-    const versions = yield* call(getVersions, versionsUrl)
-    if (!versions) throw new Error()
+    const versions = yield* call(getVersions, versionsUrl);
+    if (!versions) throw new Error();
 
-    yield* put(verifyConfigActionSuccess(versions.web_server_url))
+    yield* put(verifyConfigActionSuccess(versions.web_server_url));
   } catch (error: any) {
-    yield* put(verifyConfigActionFailure(error.message))
+    yield* put(verifyConfigActionFailure(error.message));
   }
 }
 
@@ -156,40 +156,40 @@ function* verifyConfigSaga() {
  */
 function* saveConfigSaga(action: PayloadAction<SaveConfigPayload>) {
   const apiServerUrl = yield* select((storeState) => {
-    const formState: OAuthFormState = storeState[OAuthFormSlice.name]
-    return formState.apiServerUrl
-  })
+    const formState: OAuthFormState = storeState[OAuthFormSlice.name];
+    return formState.apiServerUrl;
+  });
   const {
     verifyConfigActionFailure,
     clearMessageBarAction,
     saveConfigActionSuccess,
-  } = OAuthFormActions
-  const { configKey, setHasConfig, client_id, redirect_uri } = action.payload
+  } = OAuthFormActions;
+  const { configKey, setHasConfig, client_id, redirect_uri } = action.payload;
 
   try {
-    yield* put(clearMessageBarAction())
-    const versionsUrl = `${apiServerUrl}/versions`
+    yield* put(clearMessageBarAction());
+    const versionsUrl = `${apiServerUrl}/versions`;
 
-    const versions = yield* call(getVersions, versionsUrl)
-    if (!versions) throw new Error()
+    const versions = yield* call(getVersions, versionsUrl);
+    if (!versions) throw new Error();
 
     const data = {
       base_url: versions.api_server_url,
       looker_url: versions.web_server_url,
       client_id,
       redirect_uri,
-    }
-    localStorage.setItem(configKey, JSON.stringify(data))
-    if (setHasConfig) setHasConfig(true)
+    };
+    localStorage.setItem(configKey, JSON.stringify(data));
+    if (setHasConfig) setHasConfig(true);
 
     yield* put(
       saveConfigActionSuccess({
         base_url: versions.api_server_url,
         looker_url: versions.web_server_url,
       })
-    )
+    );
   } catch (error: any) {
-    yield* put(verifyConfigActionFailure(error.message))
+    yield* put(verifyConfigActionFailure(error.message));
   }
 }
 
@@ -200,10 +200,10 @@ export function* saga() {
     clearConfigAction,
     verifyConfigAction,
     saveConfigAction,
-  } = OAuthFormActions
-  yield* takeEvery(initAction, initSaga)
-  yield* takeEvery(setUrlAction, setUrlSaga)
-  yield* takeEvery(clearConfigAction, clearConfigSaga)
-  yield* takeEvery(verifyConfigAction, verifyConfigSaga)
-  yield* takeEvery(saveConfigAction, saveConfigSaga)
+  } = OAuthFormActions;
+  yield* takeEvery(initAction, initSaga);
+  yield* takeEvery(setUrlAction, setUrlSaga);
+  yield* takeEvery(clearConfigAction, clearConfigSaga);
+  yield* takeEvery(verifyConfigAction, verifyConfigSaga);
+  yield* takeEvery(saveConfigAction, saveConfigSaga);
 }

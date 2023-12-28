@@ -24,16 +24,16 @@
 
  */
 
-import { Chatty } from '@looker/chatty'
-import { ExtensionHostApiImpl } from './extension_host_api'
-import { registerHostApi } from './global_listener'
+import { Chatty } from '@looker/chatty';
+import { ExtensionHostApiImpl } from './extension_host_api';
+import { registerHostApi } from './global_listener';
 import type {
   ExtensionHostApi,
   ExtensionHostConfiguration,
   ExtensionInitializationResponse,
   ExtensionNotification,
-} from './types'
-import { ExtensionEvent } from './types'
+} from './types';
+import { ExtensionEvent } from './types';
 
 /**
  * Connect extension to Looker host. React extensions using the extension-sdk-react
@@ -53,11 +53,11 @@ export const connectExtensionHost = async (
       () =>
         reject(new Error('Failed to establish communication with Looker host')),
       30000
-    )
+    );
     // Legacy callback to indicate that connection is established
-    const { initializedCallback, chattyTimeout } = configuration
-    let extensionHost: ExtensionHostApi
-    let targetOrigin
+    const { initializedCallback, chattyTimeout } = configuration;
+    let extensionHost: ExtensionHostApi;
+    let targetOrigin;
     // The initialized function replaces the need the legacy callback as it
     // resolves/rejects the promise that now wraps the chatty promise that
     // was originally returned.
@@ -69,25 +69,25 @@ export const connectExtensionHost = async (
       if (initializationResponse) {
         // The initialization can fail, for example, Looker host is not
         // at the right version.
-        const { errorMessage } = initializationResponse
+        const { errorMessage } = initializationResponse;
         if (initializedCallback) {
-          initializedCallback(errorMessage)
+          initializedCallback(errorMessage);
         }
         if (errorMessage) {
-          reject(new Error(errorMessage))
+          reject(new Error(errorMessage));
         } else {
-          resolve(extensionHost)
+          resolve(extensionHost);
         }
       } else {
-        reject(new Error('Unexpected response from initialization'))
+        reject(new Error('Unexpected response from initialization'));
       }
-    }
+    };
     try {
       // if extension is not sandboxed the following will succeed
-      targetOrigin = window.parent.location.origin
+      targetOrigin = window.parent.location.origin;
     } catch (err) {
       // failure indicates running in a sandboxed environment
-      targetOrigin = '*'
+      targetOrigin = '*';
     }
     try {
       const chattyHost = await Chatty.createClient()
@@ -99,50 +99,50 @@ export const connectExtensionHost = async (
             // Handle messages from the looker host. The first message should
             // be an initialization message containing information about the host
             // and host extension (looker version, extension id for example).
-            let messageResponse: ExtensionInitializationResponse | undefined
+            let messageResponse: ExtensionInitializationResponse | undefined;
             if (message) {
               if (initializationTimer) {
                 // The initialization timer is present so assume this is an initialization
                 // message. The initialization timer is now cleared.
-                window.clearTimeout(initializationTimer)
-                initializationTimer = undefined
+                window.clearTimeout(initializationTimer);
+                initializationTimer = undefined;
                 if (extensionHost) {
                   try {
-                    messageResponse = extensionHost.handleNotification(message)
-                    initialized(messageResponse)
+                    messageResponse = extensionHost.handleNotification(message);
+                    initialized(messageResponse);
                   } catch (error) {
                     // Handle invalid extension host initialization failure
-                    reject(error)
+                    reject(error);
                   }
                 } else {
                   // The extension host should be initialized if we get here
                   // so this should never happen.
-                  reject(new Error('Extension host not created'))
+                  reject(new Error('Extension host not created'));
                 }
               } else {
                 // All other extension host messages
-                messageResponse = extensionHost.handleNotification(message)
+                messageResponse = extensionHost.handleNotification(message);
               }
             }
-            return messageResponse
+            return messageResponse;
           }
         )
         .withTargetOrigin(targetOrigin)
         .withDefaultTimeout(chattyTimeout || 30000)
         .build()
-        .connect()
+        .connect();
       // Create the extension host (a extension specific wrapper around the
       // chatty host)
       extensionHost = new ExtensionHostApiImpl({
         chattyHost,
         ...configuration,
-      })
+      });
       // Register the extension host so that global event listeners can send
       // messages to the looker host (for example beforeUnload event).
-      registerHostApi(extensionHost)
+      registerHostApi(extensionHost);
     } catch (error) {
-      window.clearTimeout(initializationTimer)
-      initializationTimer = undefined
-      reject(error)
+      window.clearTimeout(initializationTimer);
+      initializationTimer = undefined;
+      reject(error);
     }
-  })
+  });

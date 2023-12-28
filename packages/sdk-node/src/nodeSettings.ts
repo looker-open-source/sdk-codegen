@@ -24,9 +24,9 @@
 
  */
 
-import * as fs from 'fs'
-import * as ini from 'ini'
-import type { IApiSettings, IApiSection } from '@looker/sdk-rtl'
+import * as fs from 'fs';
+import * as ini from 'ini';
+import type { IApiSettings, IApiSection } from '@looker/sdk-rtl';
 import {
   ApiConfigMap,
   ApiSettings,
@@ -34,7 +34,7 @@ import {
   ValueSettings,
   sdkError,
   unquote,
-} from '@looker/sdk-rtl'
+} from '@looker/sdk-rtl';
 
 /**
  * Read an environment key. Use defaultValue if it doesn't exist
@@ -46,15 +46,15 @@ export const getenv = (
   name: string,
   defaultValue: string | undefined = undefined
 ) => {
-  const val = process.env[name]
-  return val === undefined ? defaultValue : val
-}
+  const val = process.env[name];
+  return val === undefined ? defaultValue : val;
+};
 
 /**
  * Complete .INI file parse results
  */
 export interface IApiConfig {
-  [key: string]: any
+  [key: string]: any;
 }
 
 /**
@@ -62,7 +62,7 @@ export interface IApiConfig {
  * @param contents formatted as an `.ini` file
  * @constructor
  */
-export const ApiConfig = (contents: string): IApiConfig => ini.parse(contents)
+export const ApiConfig = (contents: string): IApiConfig => ini.parse(contents);
 
 /**
  * Extract named or (default) first section from INI file
@@ -74,22 +74,22 @@ export const ApiConfigSection = (
   contents: string,
   section?: string
 ): IApiSection => {
-  const config = ApiConfig(contents)
+  const config = ApiConfig(contents);
   if (!section) {
     // default to the first section if not specified
-    section = Object.keys(config)[0]
+    section = Object.keys(config)[0];
   }
-  const settings = config[section]
+  const settings = config[section];
   if (!settings) {
-    throw new Error(`No section named "${section}" was found`)
+    throw new Error(`No section named "${section}" was found`);
   }
   if (settings.api_version) {
     console.warn(
       'api_version is no longer read from a configuration file by the SDK'
-    )
+    );
   }
-  return settings
-}
+  return settings;
+};
 
 /**
  * A utility function that loads environment variables and maps them to the standard configuration values
@@ -97,18 +97,18 @@ export const ApiConfigSection = (
  * @returns the populated `IApiSection`, which may be empty
  */
 export const readEnvConfig = (envPrefix: string) => {
-  const values: IApiSection = {}
-  const configMap = ApiConfigMap(envPrefix)
+  const values: IApiSection = {};
+  const configMap = ApiConfigMap(envPrefix);
   Object.keys(configMap).forEach((key) => {
-    const envKey = configMap[key]
+    const envKey = configMap[key];
     if (process.env[envKey] !== undefined) {
       // Value exists. Map environment variable keys to config variable keys
-      const val = unquote(process.env[envKey])
-      values[key] = val
+      const val = unquote(process.env[envKey]);
+      values[key] = val;
     }
-  })
-  return values
-}
+  });
+  return values;
+};
 
 /**
  * A utility function that loads the configuration values from the specified file name and overrides them
@@ -125,23 +125,23 @@ export const readIniConfig = (
   section?: string
 ) => {
   // get environment variables
-  let config = readEnvConfig(envPrefix)
+  let config = readEnvConfig(envPrefix);
   if (fileName && fs.existsSync(fileName)) {
     // override any config file settings with environment values if the environment value is set
     config = {
       ...ApiConfigSection(fs.readFileSync(fileName, 'utf8'), section),
       ...config,
-    }
+    };
   }
   // Unquote any quoted configuration values
   Object.keys(config).forEach((key) => {
-    const val = config[key]
+    const val = config[key];
     if (typeof val === 'string') {
-      config[key] = unquote(val)
+      config[key] = unquote(val);
     }
-  })
-  return config
-}
+  });
+  return config;
+};
 
 /**
  * Read configuration settings from Node environment variables
@@ -154,8 +154,8 @@ export const readIniConfig = (
  *
  */
 export class NodeSettings extends ApiSettings {
-  protected readonly envPrefix!: string
-  public section: string
+  protected readonly envPrefix!: string;
+  public section: string;
 
   /**
    * Initialize config settings for the node SDK runtime
@@ -168,20 +168,20 @@ export class NodeSettings extends ApiSettings {
     contents?: string | IApiSettings,
     section?: string
   ) {
-    let settings: IApiSettings
+    let settings: IApiSettings;
     if (contents) {
       if (typeof contents === 'string') {
-        settings = ApiConfigSection(contents, section) as IApiSettings
+        settings = ApiConfigSection(contents, section) as IApiSettings;
       } else {
-        settings = contents
+        settings = contents;
       }
-      settings = { ...readEnvConfig(envPrefix), ...settings }
+      settings = { ...readEnvConfig(envPrefix), ...settings };
     } else {
-      settings = readEnvConfig(envPrefix) as IApiSettings
+      settings = readEnvConfig(envPrefix) as IApiSettings;
     }
-    super({ ...DefaultSettings(), ...settings })
-    this.section = section ?? ''
-    this.envPrefix = envPrefix
+    super({ ...DefaultSettings(), ...settings });
+    this.section = section ?? '';
+    this.envPrefix = envPrefix;
   }
 
   /**
@@ -190,7 +190,7 @@ export class NodeSettings extends ApiSettings {
    * @param _section section name is ignored here.
    */
   readConfig(_section?: string): IApiSection {
-    return readEnvConfig(this.envPrefix)
+    return readEnvConfig(this.envPrefix);
   }
 }
 
@@ -210,18 +210,18 @@ export class NodeSettings extends ApiSettings {
  *
  */
 export class NodeSettingsIniFile extends NodeSettings {
-  private readonly fileName!: string
+  private readonly fileName!: string;
 
   constructor(envPrefix: string, fileName = '', section?: string) {
     if (fileName && !fs.existsSync(fileName)) {
-      throw sdkError({ message: `File ${fileName} was not found` })
+      throw sdkError({ message: `File ${fileName} was not found` });
     }
     // default fileName to looker.ini
-    fileName = fileName || './looker.ini'
-    const config = readIniConfig(fileName, envPrefix, section)
-    const settings = ValueSettings(config, envPrefix)
-    super(envPrefix, settings, section)
-    this.fileName = fileName
+    fileName = fileName || './looker.ini';
+    const config = readIniConfig(fileName, envPrefix, section);
+    const settings = ValueSettings(config, envPrefix);
+    super(envPrefix, settings, section);
+    this.fileName = fileName;
   }
 
   /**
@@ -235,7 +235,7 @@ export class NodeSettingsIniFile extends NodeSettings {
    *
    */
   readConfig(section?: string): IApiSection {
-    section = section || this.section
-    return readIniConfig(this.fileName, this.envPrefix, section)
+    section = section || this.section;
+    return readIniConfig(this.fileName, this.envPrefix, section);
   }
 }

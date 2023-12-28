@@ -23,76 +23,76 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { act, screen, waitFor } from '@testing-library/react'
-import { codeGenerators } from '@looker/sdk-codegen'
-import userEvent from '@testing-library/user-event'
+import React from 'react';
+import { act, screen, waitFor } from '@testing-library/react';
+import { codeGenerators } from '@looker/sdk-codegen';
+import userEvent from '@testing-library/user-event';
 
-import { getLoadedSpecs, specs } from '../../test-data'
-import { renderWithRouterAndReduxProvider } from '../../test-utils'
-import { defaultSettingsState } from '../../state'
-import { Header } from './Header'
+import { getLoadedSpecs, specs } from '../../test-data';
+import { renderWithRouterAndReduxProvider } from '../../test-utils';
+import { defaultSettingsState } from '../../state';
+import { Header } from './Header';
 
 describe('Header', () => {
-  const hasNavigation = true
-  const toggleNavigation = () => !hasNavigation
-  const spec = getLoadedSpecs()['4.0']
+  const hasNavigation = true;
+  const toggleNavigation = () => !hasNavigation;
+  const spec = getLoadedSpecs()['4.0'];
   beforeAll(() => {
-    window.HTMLElement.prototype.scrollIntoView = jest.fn()
-  })
+    window.HTMLElement.prototype.scrollIntoView = jest.fn();
+  });
 
   test('it renders a title', () => {
     renderWithRouterAndReduxProvider(
       <Header spec={spec} toggleNavigation={toggleNavigation} />
-    )
+    );
     expect(screen.getByText('API Explorer').closest('a')).toHaveAttribute(
       'href',
       `/${spec.key}`
-    )
-  })
+    );
+  });
 
   test('it renders a spec selector with the correct default value and options', async () => {
     renderWithRouterAndReduxProvider(
       <Header spec={spec} toggleNavigation={toggleNavigation} />
-    )
-    const selector = screen.getByLabelText('spec selector')
-    expect(selector).toHaveValue(`${spec.key}`)
+    );
+    const selector = screen.getByLabelText('spec selector');
+    expect(selector).toHaveValue(`${spec.key}`);
     await act(async () => {
-      await userEvent.click(selector)
+      await userEvent.click(selector);
       await waitFor(() => {
         expect(screen.getAllByRole('option')).toHaveLength(
           Object.keys(specs).length
-        )
-      })
-    })
-  })
+        );
+      });
+    });
+  });
 
   test('it renders an sdk language selector with the correct value and options', async () => {
     renderWithRouterAndReduxProvider(
       <Header spec={spec} toggleNavigation={toggleNavigation} />
-    )
-    const selector = screen.getByLabelText('sdk language selector')
-    expect(selector).toHaveValue(defaultSettingsState.sdkLanguage)
+    );
+    const selector = screen.getByLabelText('sdk language selector');
+    expect(selector).toHaveValue(defaultSettingsState.sdkLanguage);
     await act(async () => {
-      await userEvent.click(selector)
+      await userEvent.click(selector);
       await waitFor(() => {
         expect(screen.getAllByRole('option')).toHaveLength(
           codeGenerators.length + 1
-        )
-      })
-    })
-  })
+        );
+      });
+    });
+  });
 
   test('it renders an icon button for the differ', () => {
     renderWithRouterAndReduxProvider(
       <Header spec={spec} toggleNavigation={toggleNavigation} />
-    )
+    );
     expect(
       screen
         .getByRole('button', {
           name: 'Compare Specifications',
         })
         .closest('a')
-    ).toHaveAttribute('href', `/${spec.key}/diff`)
-  })
-})
+    ).toHaveAttribute('href', `/${spec.key}/diff`);
+  });
+});

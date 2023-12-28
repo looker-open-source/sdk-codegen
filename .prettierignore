@@ -6,3 +6,4 @@
 **/storybook-static
 **/test/output
 **/.eslintrc
+*.lock

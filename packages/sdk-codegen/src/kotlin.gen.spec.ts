@@ -24,66 +24,66 @@
 
  */
 
-import { DelimArray } from '@looker/sdk-rtl'
-import { TestConfig } from './testUtils'
-import type { IEnumType } from './sdkModels'
-import { KotlinGen } from './kotlin.gen'
+import { DelimArray } from '@looker/sdk-rtl';
+import { TestConfig } from './testUtils';
+import type { IEnumType } from './sdkModels';
+import { KotlinGen } from './kotlin.gen';
 
-const config = TestConfig()
-const apiTestModel = config.apiTestModel
-const gen = new KotlinGen(apiTestModel)
-const indent = ''
+const config = TestConfig();
+const apiTestModel = config.apiTestModel;
+const gen = new KotlinGen(apiTestModel);
+const indent = '';
 
 describe('Kotlin generator', () => {
   describe('comment header', () => {
     it('is empty with no comment', () => {
-      expect(gen.commentHeader(indent, '')).toEqual('')
-    })
+      expect(gen.commentHeader(indent, '')).toEqual('');
+    });
 
     it('is four lines with a two line comment', () => {
       const expected = `/**
  * foo
  * bar
  */
-`
-      expect(gen.commentHeader(indent, 'foo\nbar')).toEqual(expected)
-    })
-  })
+`;
+      expect(gen.commentHeader(indent, 'foo\nbar')).toEqual(expected);
+    });
+  });
 
   describe('types', () => {
     it('enum type', () => {
-      const type = apiTestModel.types.PermissionType as IEnumType
-      expect(type).toBeDefined()
-      expect(type.values).toEqual(['view', 'edit'])
+      const type = apiTestModel.types.PermissionType as IEnumType;
+      expect(type).toBeDefined();
+      expect(type.values).toEqual(['view', 'edit']);
       const expected = `/**
  * Type of permission: "view" or "edit" Valid values are: "view", "edit". (Enum defined in ContentMetaGroupUser)
  */
 enum class PermissionType : Serializable {
     view,
     edit
-}`
-      const actual = gen.declareType('', type)
-      expect(actual).toEqual(expected)
-    })
+}`;
+      const actual = gen.declareType('', type);
+      expect(actual).toEqual(expected);
+    });
 
     it('noComment enum type', () => {
-      const type = apiTestModel.types.PermissionType as IEnumType
-      expect(type).toBeDefined()
-      expect(type.values).toEqual(['view', 'edit'])
+      const type = apiTestModel.types.PermissionType as IEnumType;
+      expect(type).toBeDefined();
+      expect(type.values).toEqual(['view', 'edit']);
       const expected = `enum class PermissionType : Serializable {
     view,
     edit
-}`
-      gen.noComment = true
-      const actual = gen.declareType('', type)
-      gen.noComment = false
-      expect(actual).toEqual(expected)
-    })
+}`;
+      gen.noComment = true;
+      const actual = gen.declareType('', type);
+      gen.noComment = false;
+      expect(actual).toEqual(expected);
+    });
 
     // TODO a different PR broke this, need to fix it
     it.skip('special needs', () => {
-      const type = apiTestModel.types.HyphenType
-      const actual = gen.declareType('', type)
+      const type = apiTestModel.types.HyphenType;
+      const actual = gen.declareType('', type);
       const expected = `/**
  * @property project_name A normal variable name (read-only)
  * @property project_digest A hyphenated property name (read-only)
@@ -95,16 +95,16 @@ data class HyphenType (
     var project_digest: String? = null,
     @SerializedName("computation time")
     var computation_time: Float? = null
-) : Serializable`
-      expect(actual).toEqual(expected)
-    })
-  })
+) : Serializable`;
+      expect(actual).toEqual(expected);
+    });
+  });
 
   it('deprecated method with deprecated params', () => {
-    const method = apiTestModel.methods.old_login
-    const arg = method.params[0]
-    expect(arg.deprecated).toEqual(true)
-    const space = ' '
+    const method = apiTestModel.methods.old_login;
+    const arg = method.params[0];
+    expect(arg.deprecated).toEqual(true);
+    const space = ' ';
     const expected = `
 /**
  * Endpoint to test deprecation flags
@@ -119,37 +119,37 @@ data class HyphenType (
 ) : SDKResponse {
     return this.get<AccessToken>("/old_login",${space}
         mapOf("old_cred" to old_cred))
-}`
-    const actual = gen.declareMethod(indent, method)
-    expect(actual).toEqual(expected)
-  })
+}`;
+    const actual = gen.declareMethod(indent, method);
+    expect(actual).toEqual(expected);
+  });
 
   describe('makeTheCall', () => {
-    const fields = 'id,user_id,title,description'
+    const fields = 'id,user_id,title,description';
     it('handles no params', () => {
-      const inputs = {}
-      const method = apiTestModel.methods.look
-      const actual = gen.makeTheCall(method, inputs)
-      const expected = 'val response = await sdk.ok<LookWithQuery>(sdk.look())'
-      expect(actual).toEqual(expected)
-    })
+      const inputs = {};
+      const method = apiTestModel.methods.look;
+      const actual = gen.makeTheCall(method, inputs);
+      const expected = 'val response = await sdk.ok<LookWithQuery>(sdk.look())';
+      expect(actual).toEqual(expected);
+    });
 
     it('assigns single param', () => {
-      const inputs = { look_id: 17 }
-      const method = apiTestModel.methods.look
-      const actual = gen.makeTheCall(method, inputs)
-      const expected = `val response = await sdk.ok<LookWithQuery>(sdk.look(17))`
-      expect(actual).toEqual(expected)
-    })
+      const inputs = { look_id: 17 };
+      const method = apiTestModel.methods.look;
+      const actual = gen.makeTheCall(method, inputs);
+      const expected = `val response = await sdk.ok<LookWithQuery>(sdk.look(17))`;
+      expect(actual).toEqual(expected);
+    });
 
     it('assigns simple params', () => {
-      const inputs = { look_id: 17, fields }
-      const method = apiTestModel.methods.look
-      const actual = gen.makeTheCall(method, inputs)
+      const inputs = { look_id: 17, fields };
+      const method = apiTestModel.methods.look;
+      const actual = gen.makeTheCall(method, inputs);
       const expected = `val response = await sdk.ok<LookWithQuery>(sdk.look(
-    17, fields = "${fields}"))`
-      expect(actual).toEqual(expected)
-    })
+    17, fields = "${fields}"))`;
+      expect(actual).toEqual(expected);
+    });
 
     it('assigns a body param', () => {
       const body = {
@@ -160,10 +160,10 @@ data class HyphenType (
           view: 'users',
           total: true,
         },
-      }
-      const inputs = { look_id: 17, body, fields }
-      const method = apiTestModel.methods.update_look
-      const actual = gen.makeTheCall(method, inputs)
+      };
+      const inputs = { look_id: 17, body, fields };
+      const method = apiTestModel.methods.update_look;
+      const actual = gen.makeTheCall(method, inputs);
       const expected = `val response = await sdk.ok<LookWithQuery>(sdk.update_look(
     17, WriteLookWithQuery(
         title = "test title",
@@ -173,18 +173,18 @@ data class HyphenType (
             view = "users",
             total = true
         )
-    ), fields = "id,user_id,title,description"))`
-      expect(actual).toEqual(expected)
-    })
+    ), fields = "id,user_id,title,description"))`;
+      expect(actual).toEqual(expected);
+    });
 
     it('treats void response type as String', () => {
-      const inputs = { look_id: 17, result_format: 'png', limit: 10 }
-      const method = apiTestModel.methods.run_look
-      const actual = gen.makeTheCall(method, inputs)
+      const inputs = { look_id: 17, result_format: 'png', limit: 10 };
+      const method = apiTestModel.methods.run_look;
+      const actual = gen.makeTheCall(method, inputs);
       const expected = `val response = await sdk.ok<String>(sdk.run_look(
-    17, "png", limit = 10))`
-      expect(actual).toEqual(expected)
-    })
+    17, "png", limit = 10))`;
+      expect(actual).toEqual(expected);
+    });
 
     it('assigns an enum', () => {
       const inputs = {
@@ -192,27 +192,27 @@ data class HyphenType (
           query_id: 1,
           result_format: 'csv',
         },
-      }
-      const method = apiTestModel.methods.create_query_task
-      const actual = gen.makeTheCall(method, inputs)
+      };
+      const method = apiTestModel.methods.create_query_task;
+      const actual = gen.makeTheCall(method, inputs);
       const expected = `val response = await sdk.ok<QueryTask>(sdk.create_query_task(
     WriteCreateQueryTask(
         query_id = 1,
         result_format = ResultFormat.csv
-    )))`
-      expect(actual).toEqual(expected)
-    })
+    )))`;
+      expect(actual).toEqual(expected);
+    });
 
     it('assigns a DelimArray', () => {
       const inputs = {
         ids: new DelimArray<number>([1, 2, 3]),
-      }
-      const method = apiTestModel.methods.all_users
-      const actual = gen.makeTheCall(method, inputs)
+      };
+      const method = apiTestModel.methods.all_users;
+      const actual = gen.makeTheCall(method, inputs);
       const expected = `val response = await sdk.ok<Array<User>>(sdk.all_users(
-    ids = DelimArray<Long>(arrayOf(1,2,3))))`
-      expect(actual).toEqual(expected)
-    })
+    ids = DelimArray<Long>(arrayOf(1,2,3))))`;
+      expect(actual).toEqual(expected);
+    });
 
     it('assigns simple and complex arrays', () => {
       const body = {
@@ -240,10 +240,10 @@ data class HyphenType (
             ],
           },
         ],
-      }
-      const inputs = { body, fields }
-      const method = apiTestModel.methods.create_merge_query
-      const actual = gen.makeTheCall(method, inputs)
+      };
+      const inputs = { body, fields };
+      const method = apiTestModel.methods.create_merge_query;
+      const actual = gen.makeTheCall(method, inputs);
       const expected = `val response = await sdk.ok<MergeQuery>(sdk.create_merge_query(
     body = WriteMergeQuery(
         pivots = arrayOf(
@@ -274,18 +274,18 @@ data class HyphenType (
                 query_id = 2
             )
         )
-    ), fields = "id,user_id,title,description"))`
-      expect(actual).toEqual(expected)
-    })
+    ), fields = "id,user_id,title,description"))`;
+      expect(actual).toEqual(expected);
+    });
 
     it('assigns dictionaries', () => {
       const query = {
         connection_name: 'looker',
         model_name: 'the_look',
         vis_config: { first: 1, second: 'two' },
-      }
-      const inputs = { body: query }
-      const method = apiTestModel.methods.create_sql_query
+      };
+      const inputs = { body: query };
+      const method = apiTestModel.methods.create_sql_query;
       const expected = `val response = await sdk.ok<SqlQuery>(sdk.create_sql_query(
     SqlQueryCreate(
         connection_name = "looker",
@@ -294,10 +294,10 @@ data class HyphenType (
             "first" to 1,
             "second" to "two"
         )
-    )))`
-      const actual = gen.makeTheCall(method, inputs)
-      expect(actual).toEqual(expected)
-    })
+    )))`;
+      const actual = gen.makeTheCall(method, inputs);
+      expect(actual).toEqual(expected);
+    });
 
     it('includes empty objects', () => {
       const inputs = {
@@ -335,8 +335,8 @@ data class HyphenType (
             key_color: '',
           },
         },
-      }
-      const method = apiTestModel.methods.update_dashboard
+      };
+      const method = apiTestModel.methods.update_dashboard;
       const expected = `val response = await sdk.ok<Dashboard>(sdk.update_dashboard(
     "10", WriteDashboard(
         description = "",
@@ -368,10 +368,10 @@ data class HyphenType (
             key_color = ""
         ),
         preferred_viewer = ""
-    )))`
-      const actual = gen.makeTheCall(method, inputs)
-      expect(actual).toEqual(expected)
-    })
+    )))`;
+      const actual = gen.makeTheCall(method, inputs);
+      expect(actual).toEqual(expected);
+    });
 
     describe('hashValue', () => {
       it('assigns a hash with heterogeneous values', () => {
@@ -379,9 +379,9 @@ data class HyphenType (
           access_token: 'backstage',
           token_type: 'test',
           expires_in: 10,
-        }
-        const oneItem = [1]
-        const threeItems = ['Abe', 'Zeb', token]
+        };
+        const oneItem = [1];
+        const threeItems = ['Abe', 'Zeb', token];
         const inputs = {
           item: oneItem,
           items: threeItems,
@@ -389,7 +389,7 @@ data class HyphenType (
           second: 'two',
           third: false,
           token,
-        }
+        };
         const expected = `mapOf(
     "item" to arrayOf(1),
     "items" to arrayOf(
@@ -409,11 +409,11 @@ data class HyphenType (
         "token_type" to "test",
         "expires_in" to 10
     )
-)`
-        const actual = gen.hashValue('', inputs)
-        expect(actual).toEqual(expected)
-      })
-    })
+)`;
+        const actual = gen.hashValue('', inputs);
+        expect(actual).toEqual(expected);
+      });
+    });
     describe('assignType', () => {
       it('assigns a complex type', () => {
         const inputs = {
@@ -425,9 +425,9 @@ data class HyphenType (
               source_field_name: 'source_1',
             },
           ],
-        }
-        const type = apiTestModel.types.MergeQuerySourceQuery
-        expect(type).toBeDefined()
+        };
+        const type = apiTestModel.types.MergeQuerySourceQuery;
+        expect(type).toBeDefined();
         const expected = `MergeQuerySourceQuery(
         merge_fields = arrayOf(
             MergeFields(
@@ -437,11 +437,11 @@ data class HyphenType (
         ),
         name = "first query",
         query_id = 1
-    )`
-        const actual = gen.assignType(gen.indentStr, type, inputs)
-        expect(actual).toEqual(expected)
-      })
-    })
+    )`;
+        const actual = gen.assignType(gen.indentStr, type, inputs);
+        expect(actual).toEqual(expected);
+      });
+    });
     describe('arrayValue', () => {
       it('assigns complex arrays', () => {
         const sourceQueries = [
@@ -465,11 +465,11 @@ data class HyphenType (
               },
             ],
           },
-        ]
-        const props = apiTestModel.types.WriteMergeQuery.properties
-        const type = props.source_queries.type
-        expect(type).toBeDefined()
-        const actual = gen.arrayValue('', type, sourceQueries)
+        ];
+        const props = apiTestModel.types.WriteMergeQuery.properties;
+        const type = props.source_queries.type;
+        expect(type).toBeDefined();
+        const actual = gen.arrayValue('', type, sourceQueries);
         const expected = `arrayOf(
     MergeQuerySourceQuery(
         merge_fields = arrayOf(
@@ -491,9 +491,9 @@ data class HyphenType (
         name = "second query",
         query_id = 2
     )
-)`
-        expect(actual).toEqual(expected)
-      })
-    })
-  })
-})
+)`;
+        expect(actual).toEqual(expected);
+      });
+    });
+  });
+});

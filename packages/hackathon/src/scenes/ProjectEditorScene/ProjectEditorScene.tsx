@@ -24,11 +24,11 @@
 
  */
 
-import type { FC } from 'react'
-import React from 'react'
-import { ProjectForm } from './components'
+import type { FC } from 'react';
+import React from 'react';
+import { ProjectForm } from './components';
 
 export const ProjectEditorScene: FC = () => {
   // TODO: add a not found error in case project is not found
-  return <ProjectForm />
-}
+  return <ProjectForm />;
+};

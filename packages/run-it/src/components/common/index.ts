@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { DarkSpan, RunItHeading } from './common'
+export { DarkSpan, RunItHeading } from './common';

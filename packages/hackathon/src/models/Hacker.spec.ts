@@ -23,60 +23,60 @@
  SOFTWARE.
 
  */
-import path from 'path'
+import path from 'path';
 // eslint-disable-next-line import/no-extraneous-dependencies
-import { NodeSettingsIniFile, LookerNodeSDK } from '@looker/sdk-node'
-import { Hacker } from './Hacker'
+import { NodeSettingsIniFile, LookerNodeSDK } from '@looker/sdk-node';
+import { Hacker } from './Hacker';
 
-const iniFile = path.join(__dirname, '../../../../looker.ini')
-const settings = new NodeSettingsIniFile(iniFile)
-const sdk = LookerNodeSDK.init40(settings)
+const iniFile = path.join(__dirname, '../../../../looker.ini');
+const settings = new NodeSettingsIniFile(iniFile);
+const sdk = LookerNodeSDK.init40(settings);
 
 export const getHacker = async () => {
-  const hacker = new Hacker(sdk)
-  return await hacker.getMe()
-}
+  const hacker = new Hacker(sdk);
+  return await hacker.getMe();
+};
 
 describe('Hacker', () => {
   test('gets me', async () => {
-    const me = await getHacker()
-    expect(me.user).toBeDefined()
-    expect(me.firstName).toBeDefined()
-    expect(me.lastName).toBeDefined()
-    expect(me.id).toBeDefined()
-    expect(me.firstName).toBeDefined()
-    expect(me.roles.has('user')).toBeTruthy()
-  })
+    const me = await getHacker();
+    expect(me.user).toBeDefined();
+    expect(me.firstName).toBeDefined();
+    expect(me.lastName).toBeDefined();
+    expect(me.id).toBeDefined();
+    expect(me.firstName).toBeDefined();
+    expect(me.roles.has('user')).toBeTruthy();
+  });
 
   test('regular user cannot judge, staff, or admin', () => {
-    const actual = new Hacker(sdk)
-    expect(actual.canAdmin).toEqual(false)
-    expect(actual.canJudge).toEqual(false)
-    expect(actual.canStaff).toEqual(false)
-  })
+    const actual = new Hacker(sdk);
+    expect(actual.canAdmin).toEqual(false);
+    expect(actual.canJudge).toEqual(false);
+    expect(actual.canStaff).toEqual(false);
+  });
 
   test('staff role can staff but not judge or admin', () => {
-    const actual = new Hacker(sdk)
-    actual.roles.add('staff')
-    actual.assignRights()
-    expect(actual.canAdmin).toEqual(false)
-    expect(actual.canJudge).toEqual(false)
-    expect(actual.canStaff).toEqual(true)
-  })
+    const actual = new Hacker(sdk);
+    actual.roles.add('staff');
+    actual.assignRights();
+    expect(actual.canAdmin).toEqual(false);
+    expect(actual.canJudge).toEqual(false);
+    expect(actual.canStaff).toEqual(true);
+  });
   test('judge role can judge but not staff or admin', () => {
-    const actual = new Hacker(sdk)
-    actual.roles.add('judge')
-    actual.assignRights()
-    expect(actual.canAdmin).toEqual(false)
-    expect(actual.canJudge).toEqual(true)
-    expect(actual.canStaff).toEqual(false)
-  })
+    const actual = new Hacker(sdk);
+    actual.roles.add('judge');
+    actual.assignRights();
+    expect(actual.canAdmin).toEqual(false);
+    expect(actual.canJudge).toEqual(true);
+    expect(actual.canStaff).toEqual(false);
+  });
   test('admin role can admin or staff', () => {
-    const actual = new Hacker(sdk)
-    actual.roles.add('admin')
-    actual.assignRights()
-    expect(actual.canAdmin).toEqual(true)
-    expect(actual.canJudge).toEqual(false)
-    expect(actual.canStaff).toEqual(true)
-  })
-})
+    const actual = new Hacker(sdk);
+    actual.roles.add('admin');
+    actual.assignRights();
+    expect(actual.canAdmin).toEqual(true);
+    expect(actual.canJudge).toEqual(false);
+    expect(actual.canStaff).toEqual(true);
+  });
+});

@@ -24,17 +24,17 @@
 
  */
 
-import type { ThemeCustomizations } from '@looker/design-tokens'
-import type { IAPIMethods } from '@looker/sdk-rtl'
-import type { Location as HLocation } from 'history'
-import { BrowserAdaptor } from './browserAdaptor'
+import type { ThemeCustomizations } from '@looker/design-tokens';
+import type { IAPIMethods } from '@looker/sdk-rtl';
+import type { Location as HLocation } from 'history';
+import { BrowserAdaptor } from './browserAdaptor';
 
 export interface IAuthAdaptor {
   /** Method for retrieving an instantiated SDK */
-  get sdk(): IAPIMethods
+  get sdk(): IAPIMethods;
   /** Method for authenticating against the API server. Auth mechanism is dependent on the authSession implementation
    * used for the sdk. */
-  login(): Promise<boolean>
+  login(): Promise<boolean>;
 }
 
 /**
@@ -44,23 +44,23 @@ export interface IAuthAdaptor {
 export interface IEnvironmentAdaptor extends IAuthAdaptor {
   /** Copy page URL to clipboard */
   copyToClipboard: (location?: {
-    pathname: string
-    search: string
-  }) => Promise<void>
+    pathname: string;
+    search: string;
+  }) => Promise<void>;
   /** Method for determining whether running in a browser or extension environment */
-  isExtension(): boolean
+  isExtension(): boolean;
   /** Method for retrieving a keyed value from local storage */
-  localStorageGetItem(key: string): Promise<string | null>
+  localStorageGetItem(key: string): Promise<string | null>;
   /** Method for setting a keyed value in local storage */
-  localStorageSetItem(key: string, value: string): void
+  localStorageSetItem(key: string, value: string): void;
   /** Method for removing a keyed value from local storage */
-  localStorageRemoveItem(key: string): void
+  localStorageRemoveItem(key: string): void;
   /** Theme settings for extension */
-  themeOverrides(): ThemeOverrides
+  themeOverrides(): ThemeOverrides;
   /** Open a new browser window with the given url and target  */
-  openBrowserWindow: (url: string, target?: string) => void
+  openBrowserWindow: (url: string, target?: string) => void;
   /** error logger */
-  logError: (error: Error, componentStack: string) => void
+  logError: (error: Error, componentStack: string) => void;
 }
 
 /**
@@ -70,9 +70,9 @@ export interface IEnvironmentAdaptor extends IAuthAdaptor {
  */
 export interface ThemeOverrides {
   /** Should Google-specific fonts be used for the theme? */
-  loadGoogleFonts?: boolean
+  loadGoogleFonts?: boolean;
   /** Property bag overrides for Looker component theming */
-  themeCustomizations?: ThemeCustomizations
+  themeCustomizations?: ThemeCustomizations;
 }
 
 /**
@@ -87,7 +87,7 @@ export const hostedInternally = (hostname: string): boolean =>
   // when dev portal gets its own APIX project. Also includes
   // PRs.
   (hostname.startsWith('looker-developer-portal') &&
-    hostname.endsWith('.web.app'))
+    hostname.endsWith('.web.app'));
 
 /**
  * Return theme overrides that make apply "internal" or external theming
@@ -106,9 +106,9 @@ export const getThemeOverrides = (internalTheming: boolean): ThemeOverrides =>
         themeCustomizations: {
           colors: { key: '#1A73E8' },
         },
-      }
+      };
 
-let extensionAdaptor: IEnvironmentAdaptor | undefined
+let extensionAdaptor: IEnvironmentAdaptor | undefined;
 
 /**
  * Register the environment adaptor. Used when initializing the application
@@ -117,25 +117,25 @@ let extensionAdaptor: IEnvironmentAdaptor | undefined
 export const registerEnvAdaptor = <T extends IEnvironmentAdaptor>(
   adaptor: T
 ) => {
-  extensionAdaptor = adaptor
-}
+  extensionAdaptor = adaptor;
+};
 
 /**
  * Unregister the environment adaptor. Extensions should call this when unmounted
  */
 export const unregisterEnvAdaptor = () => {
-  extensionAdaptor = undefined
-}
+  extensionAdaptor = undefined;
+};
 
 /**
  * Global access to the environment adaptor. An error will be thrown if accessed prematurely.
  */
 export const getEnvAdaptor = () => {
   if (!extensionAdaptor) {
-    throw new Error('Environment adaptor not initialized.')
+    throw new Error('Environment adaptor not initialized.');
   }
-  return extensionAdaptor
-}
+  return extensionAdaptor;
+};
 
 /**
  * Used by some unit tests
@@ -144,9 +144,9 @@ export const getEnvAdaptor = () => {
 export const registerTestEnvAdaptor = <T extends IEnvironmentAdaptor>(
   adaptor?: T
 ) => {
-  const mockSdk = {} as unknown as IAPIMethods
-  registerEnvAdaptor(adaptor || new BrowserAdaptor(mockSdk))
-}
+  const mockSdk = {} as unknown as IAPIMethods;
+  registerEnvAdaptor(adaptor || new BrowserAdaptor(mockSdk));
+};
 
 /**
  * Get new application-level base path for react application
@@ -158,13 +158,13 @@ export const registerTestEnvAdaptor = <T extends IEnvironmentAdaptor>(
  * @param newPath new path to assign, like `/oauth`
  */
 export const appPath = (location: HLocation, newPath: string) => {
-  const reactPath = location.pathname
-  const wloc = (window as any).location
-  const base = wloc.origin
-  const wpath = wloc.pathname
+  const reactPath = location.pathname;
+  const wloc = (window as any).location;
+  const base = wloc.origin;
+  const wpath = wloc.pathname;
   const result = `${base}${wpath.substring(
     0,
     wpath.indexOf(reactPath)
-  )}${newPath}`
-  return result
-}
+  )}${newPath}`;
+  return result;
+};

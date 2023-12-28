@@ -23,71 +23,71 @@
  SOFTWARE.
 
  */
-import type { FC } from 'react'
-import React, { useEffect, useState } from 'react'
+import type { FC } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   DataTable,
   DataTableItem,
   DataTableAction,
   DataTableCell,
   Pagination,
-} from '@looker/components'
-import { TextSnippet } from '@styled-icons/material-outlined/TextSnippet'
-import { Create } from '@styled-icons/material-outlined/Create'
-import { useSelector, useDispatch } from 'react-redux'
-import { useHistory } from 'react-router-dom'
-import type { IJudgingProps } from '../../../models'
-import { sheetCell } from '../../../models'
+} from '@looker/components';
+import { TextSnippet } from '@styled-icons/material-outlined/TextSnippet';
+import { Create } from '@styled-icons/material-outlined/Create';
+import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import type { IJudgingProps } from '../../../models';
+import { sheetCell } from '../../../models';
 import {
   getHackerState,
   getJudgingsHeadings,
-} from '../../../data/hack_session/selectors'
+} from '../../../data/hack_session/selectors';
 import {
   getJudgingsRequest,
   updateJudgingsPageNum,
-} from '../../../data/judgings/actions'
+} from '../../../data/judgings/actions';
 import {
   getJudgingsState,
   getJudgingsPageNumState,
-} from '../../../data/judgings/selectors'
-import { canDoJudgingAction } from '../../../utils'
-import { PAGE_SIZE } from '../../../constants'
-import { JudgingViewDialog } from '../../JudgingEditorScene'
+} from '../../../data/judgings/selectors';
+import { canDoJudgingAction } from '../../../utils';
+import { PAGE_SIZE } from '../../../constants';
+import { JudgingViewDialog } from '../../JudgingEditorScene';
 
 interface JudgingListProps {}
 
 export const JudgingList: FC<JudgingListProps> = () => {
-  const dispatch = useDispatch()
-  const history = useHistory()
-  const columns = useSelector(getJudgingsHeadings)
-  const hacker = useSelector(getHackerState)
-  const judgings = useSelector(getJudgingsState)
-  const currentPage = useSelector(getJudgingsPageNumState)
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const columns = useSelector(getJudgingsHeadings);
+  const hacker = useSelector(getHackerState);
+  const judgings = useSelector(getJudgingsState);
+  const currentPage = useSelector(getJudgingsPageNumState);
   const [currentJudging, setCurrentJudging] = useState<
     IJudgingProps | undefined
-  >(undefined)
+  >(undefined);
 
   useEffect(() => {
-    dispatch(getJudgingsRequest())
-  }, [dispatch])
+    dispatch(getJudgingsRequest());
+  }, [dispatch]);
 
   const updatePage = (pageNum: number) => {
-    dispatch(updateJudgingsPageNum(pageNum))
-  }
+    dispatch(updateJudgingsPageNum(pageNum));
+  };
 
   const handleView = (judging: IJudgingProps) => {
-    setCurrentJudging(judging)
-  }
+    setCurrentJudging(judging);
+  };
 
   const closeView = () => {
-    setCurrentJudging(undefined)
-  }
+    setCurrentJudging(undefined);
+  };
 
   const handleUpdate = (judgingId: string) => {
     setTimeout(() => {
-      history.push(`/judging/${judgingId}`)
-    })
-  }
+      history.push(`/judging/${judgingId}`);
+    });
+  };
 
   const actions = (judging: IJudgingProps) => {
     return (
@@ -108,12 +108,12 @@ export const JudgingList: FC<JudgingListProps> = () => {
           </DataTableAction>
         )}
       </>
-    )
-  }
+    );
+  };
 
-  const totalPages = Math.ceil(judgings.length / PAGE_SIZE)
+  const totalPages = Math.ceil(judgings.length / PAGE_SIZE);
 
-  const startIdx = (currentPage - 1) * PAGE_SIZE
+  const startIdx = (currentPage - 1) * PAGE_SIZE;
   const rows = judgings
     .slice(startIdx, startIdx + PAGE_SIZE)
     .map((judging, idx) => (
@@ -129,7 +129,7 @@ export const JudgingList: FC<JudgingListProps> = () => {
           </DataTableCell>
         ))}
       </DataTableItem>
-    ))
+    ));
 
   return (
     <>
@@ -143,5 +143,5 @@ export const JudgingList: FC<JudgingListProps> = () => {
       />
       <JudgingViewDialog judging={currentJudging} onClose={closeView} />
     </>
-  )
-}
+  );
+};

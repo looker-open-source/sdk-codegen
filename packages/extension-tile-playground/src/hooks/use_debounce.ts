@@ -23,17 +23,17 @@
  SOFTWARE.
 
  */
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 
 export const useDebounce = <T>(value: T, delay: number): T => {
-  const [debouncedValue, setDebouncedValue] = useState(value)
+  const [debouncedValue, setDebouncedValue] = useState(value);
   useEffect(() => {
     const handler = setTimeout(() => {
-      setDebouncedValue(value)
-    }, delay)
+      setDebouncedValue(value);
+    }, delay);
     return () => {
-      clearTimeout(handler)
-    }
-  }, [value, delay])
-  return debouncedValue
-}
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+  return debouncedValue;
+};

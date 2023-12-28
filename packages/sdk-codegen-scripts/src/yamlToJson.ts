@@ -24,23 +24,23 @@
 
  */
 
-import * as fs from 'fs'
-import * as yaml from 'js-yaml'
-import { quit } from './nodeUtils'
+import * as fs from 'fs';
+import * as yaml from 'js-yaml';
+import { quit } from './nodeUtils';
 
 /**
  * Use this script to convert any valid YAML file to pretty-printed JSON
  */
-const utf8 = 'utf-8'
-const args = process.argv.slice(2)
+const utf8 = 'utf-8';
+const args = process.argv.slice(2);
 if (args.length < 1) {
-  quit('Yaml file name is required')
+  quit('Yaml file name is required');
 }
 
-const yamlFile = args[0]
-const jsonFile = args.length > 1 ? args[1] : yamlFile + '.json'
+const yamlFile = args[0];
+const jsonFile = args.length > 1 ? args[1] : yamlFile + '.json';
 
-const data = yaml.safeLoad(fs.readFileSync(yamlFile, utf8))
-const json = JSON.stringify(data, undefined, 2)
-fs.writeFileSync(jsonFile, json, utf8)
-console.log(`Converted ${yamlFile} to ${jsonFile}`)
+const data = yaml.safeLoad(fs.readFileSync(yamlFile, utf8));
+const json = JSON.stringify(data, undefined, 2);
+fs.writeFileSync(jsonFile, json, utf8);
+console.log(`Converted ${yamlFile} to ${jsonFile}`);

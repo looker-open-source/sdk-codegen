@@ -24,13 +24,17 @@
 
  */
 
-import type { ChattyHostConnection } from '@looker/chatty'
+import type { ChattyHostConnection } from '@looker/chatty';
 import type {
   VisualizationDataReceivedCallback,
   RawVisualizationData,
   VisualizationSDK,
-} from './visualization'
-import type { TileHostDataChangedCallback, TileSDK, TileHostData } from './tile'
+} from './visualization';
+import type {
+  TileHostDataChangedCallback,
+  TileSDK,
+  TileHostData,
+} from './tile';
 
 /**
  * Extension event used for chatty communication
@@ -176,11 +180,11 @@ export interface ExtensionRequest {
   /**
    * Extension request type
    */
-  type: ExtensionRequestType
+  type: ExtensionRequestType;
   /**
    * Optional payload associated with extension request type
    */
-  payload?: InvokeCoreSdkRequest | undefined
+  payload?: InvokeCoreSdkRequest | undefined;
 }
 
 export enum ApiVersion {
@@ -188,29 +192,29 @@ export enum ApiVersion {
 }
 
 export interface InvokeCoreSdkRequest {
-  apiMethodName?: string
-  httpMethod?: string
-  path?: string
-  body?: any
-  params?: any
-  options?: any
-  apiVersion?: ApiVersion
+  apiMethodName?: string;
+  httpMethod?: string;
+  path?: string;
+  body?: any;
+  params?: any;
+  options?: any;
+  apiVersion?: ApiVersion;
 }
 
 export interface UpdateTitleRequest {
-  title: string
+  title: string;
 }
 
 export interface UpdateLocationRequest {
-  url: string
-  state?: any
+  url: string;
+  state?: any;
 }
 
 export interface ExtensionHostApi extends ExtensionSDK {
-  isDashboardMountSupported: boolean
+  isDashboardMountSupported: boolean;
   handleNotification(
     message: ExtensionNotification
-  ): ExtensionInitializationResponse | undefined
+  ): ExtensionInitializationResponse | undefined;
   invokeCoreSdk(
     httpMethod: string,
     path: string,
@@ -219,49 +223,49 @@ export interface ExtensionHostApi extends ExtensionSDK {
     authenticator?: any,
     options?: any,
     apiVersion?: ApiVersion
-  ): Promise<any>
+  ): Promise<any>;
   invokeCoreSdkRaw(
     httpMethod: string,
     path: string,
     body?: any,
     params?: any,
     apiVersion?: ApiVersion
-  ): Promise<any>
-  unloaded(): void
+  ): Promise<any>;
+  unloaded(): void;
 }
 
 export interface ExtensionClientApi {
-  handleRequest(message: ExtensionRequest): any | void
+  handleRequest(message: ExtensionRequest): any | void;
 }
 
 export interface ContextDataRequest {
-  type: 'save' | 'refresh'
-  contextData?: string
+  type: 'save' | 'refresh';
+  contextData?: string;
 }
 
 export interface RouteChangeRequest {
-  route: string
+  route: string;
 }
 
 export interface ClipboardRequest {
-  type: 'write'
-  value: string
+  type: 'write';
+  value: string;
 }
 
 export interface LocalStorageRequest {
-  type: 'get' | 'set' | 'remove'
-  name: string
-  value?: string
+  type: 'get' | 'set' | 'remove';
+  name: string;
+  value?: string;
 }
 
 export interface TrackActionRequest {
-  name: string
-  trackAction: string
-  attributes?: Record<string, any>
+  name: string;
+  trackAction: string;
+  attributes?: Record<string, any>;
 }
 
 export interface ErrorEventRequest {
-  errorEvent: ErrorEvent
+  errorEvent: ErrorEvent;
 }
 
 export enum FetchResponseBodyType {
@@ -270,9 +274,9 @@ export enum FetchResponseBodyType {
 }
 
 export interface FetchDataRequest {
-  resource: string
-  init?: Extract<RequestInit, 'method' | 'headers' | 'body' | 'credentials'>
-  responseBodyType?: FetchResponseBodyType
+  resource: string;
+  init?: Extract<RequestInit, 'method' | 'headers' | 'body' | 'credentials'>;
+  responseBodyType?: FetchResponseBodyType;
 }
 
 /**
@@ -304,8 +308,8 @@ export enum ExtensionNotificationType {
  * when the extension is first instantiated
  */
 export interface ExtensionInitializeMessage {
-  type: ExtensionNotificationType.INITIALIZE
-  payload: LookerHostData
+  type: ExtensionNotificationType.INITIALIZE;
+  payload: LookerHostData;
 }
 
 /**
@@ -314,8 +318,8 @@ export interface ExtensionInitializeMessage {
  * forward button.
  */
 export interface ExtensionRouteChangedMessage {
-  type: ExtensionNotificationType.ROUTE_CHANGED
-  payload: RouteChangeData
+  type: ExtensionNotificationType.ROUTE_CHANGED;
+  payload: RouteChangeData;
 }
 
 /**
@@ -323,8 +327,8 @@ export interface ExtensionRouteChangedMessage {
  * <code>Looker >=22.8</code>
  */
 export interface ExtensionVisualizationDataMessage {
-  type: ExtensionNotificationType.VISUALIZATION_DATA
-  payload: RawVisualizationData
+  type: ExtensionNotificationType.VISUALIZATION_DATA;
+  payload: RawVisualizationData;
 }
 
 /**
@@ -332,8 +336,8 @@ export interface ExtensionVisualizationDataMessage {
  * <code>Looker >=22.8</code>
  */
 export interface TileHostDataChangedMessage {
-  type: ExtensionNotificationType.TILE_HOST_DATA
-  payload: Partial<TileHostData>
+  type: ExtensionNotificationType.TILE_HOST_DATA;
+  payload: Partial<TileHostData>;
 }
 
 /**
@@ -343,7 +347,7 @@ export type ExtensionNotification =
   | ExtensionInitializeMessage
   | ExtensionRouteChangedMessage
   | ExtensionVisualizationDataMessage
-  | TileHostDataChangedMessage
+  | TileHostDataChangedMessage;
 
 /**
  * Route change data
@@ -352,11 +356,11 @@ export interface RouteChangeData {
   /**
    * Changed route for the extension
    */
-  route?: string
+  route?: string;
   /**
    * Changed route state
    */
-  routeState?: any
+  routeState?: any;
 }
 
 /**
@@ -365,14 +369,14 @@ export interface RouteChangeData {
  * embed - Embedded Looker host.
  * spartan - Spartan Looker host.
  */
-export type HostType = 'standard' | 'embed' | 'spartan'
+export type HostType = 'standard' | 'embed' | 'spartan';
 
 /**
  * Extension mount type.
  * Fullscreen mount.
  * @deprecated <code>Looker >=22.8</code>. Use MountPoint (fullscreen is equivalent of standalone)
  */
-export type MountType = 'fullscreen' | undefined
+export type MountType = 'fullscreen' | undefined;
 
 /**
  * Extension mount point
@@ -392,58 +396,58 @@ export interface LookerHostData {
   /**
    * Extension id
    */
-  extensionId: string
+  extensionId: string;
   /**
    * Version of looker
    */
-  lookerVersion: string
+  lookerVersion: string;
   /**
    * Initial route for the extension
    */
-  route?: string
+  route?: string;
   /**
    * route state
    */
-  routeState?: any
+  routeState?: any;
   /**
    * Origin of Looker host
    * @deprecated
    */
-  hostUrl?: string
+  hostUrl?: string;
   /**
    * Origin of Looker host
    * <code>Looker >=21.8</code>
    */
-  hostOrigin?: string
+  hostOrigin?: string;
   /**
    * Looker host type (standard, embed, spartan)
    * <code>Looker >=21.8</code>
    */
-  hostType?: HostType
+  hostType?: HostType;
   /**
    * Extension mount type.
    * <code>Looker >=21.8</code>
    */
-  mountType?: MountType
+  mountType?: MountType;
   /**
    * Extension mount point.
    * <code>Looker >=22.8</code>
    */
-  mountPoint: MountPoint
+  mountPoint: MountPoint;
   /**
    * Extension context data
    */
-  contextData?: string
+  contextData?: string;
   /**
    * The extension is rendering to a PDF or image.
    * <code>Looker >=22.8</code>
    */
-  isRendering?: boolean
+  isRendering?: boolean;
   /**
    * When true the dashboard tile has been enabled.
    * <code>Looker >=22.8</code>
    */
-  extensionDashboardTileEnabled: boolean
+  extensionDashboardTileEnabled: boolean;
 }
 
 /**
@@ -453,11 +457,11 @@ export interface ExtensionInitializationResponse {
   /**
    * Version of the SDK
    */
-  extensionSdkVersion: string
+  extensionSdkVersion: string;
   /**
    * initialization error message
    */
-  errorMessage?: string
+  errorMessage?: string;
 }
 
 /**
@@ -469,42 +473,42 @@ export interface ExtensionHostConfiguration {
    * @param errorMessage details of any errors that have
    *  occured during initialization
    */
-  initializedCallback?: (errorMessage?: string) => void
+  initializedCallback?: (errorMessage?: string) => void;
   /**
    * Callback to set the initial route to be restored. Ignored if
    * route tracking off
    */
-  setInitialRoute?: (route: string, routeState?: any) => void
+  setInitialRoute?: (route: string, routeState?: any) => void;
   /**
    * Required looker version. An error will be thrown if the host
    * Looker is not at the version specified.
    */
-  requiredLookerVersion?: string
+  requiredLookerVersion?: string;
   /**
    * Callback to notify extension that host has changed the route.
    * The host changes the route when browser back or forward button
    * pressed.
    */
-  hostChangedRoute?: (route: string, routeState?: any) => void
+  hostChangedRoute?: (route: string, routeState?: any) => void;
   /**
    * Timeout for messages sent via chatty. Defaults to 30000 milliseconds.
    * Set to -1 for no timeout.
    */
-  chattyTimeout?: number
+  chattyTimeout?: number;
   /**
    * Callback called when visualization data received
    */
-  visualizationDataReceivedCallback?: VisualizationDataReceivedCallback
+  visualizationDataReceivedCallback?: VisualizationDataReceivedCallback;
 
   /**
    * Callback called when the host is updated
    */
-  tileHostDataChangedCallback?: TileHostDataChangedCallback
+  tileHostDataChangedCallback?: TileHostDataChangedCallback;
 }
 
 export interface ExtensionHostApiConfiguration
   extends ExtensionHostConfiguration {
-  chattyHost: ChattyHostConnection
+  chattyHost: ChattyHostConnection;
 }
 
 /**
@@ -514,22 +518,22 @@ export interface FetchCustomParameters {
   /**
    * Http method
    */
-  method?: 'POST' | 'GET' | 'DELETE' | 'PATCH' | 'PUT' | 'HEAD'
+  method?: 'POST' | 'GET' | 'DELETE' | 'PATCH' | 'PUT' | 'HEAD';
   /**
    * Request headers
    */
-  headers?: Record<string, string>
+  headers?: Record<string, string>;
   /**
    * Request body
    */
-  body?: string
+  body?: string;
   /**
    * Credentials. Controls how cookies are sent to the external API server.
    * For external APIs this should be set to include if cookies suppor is
    * credentials are or omitted or the init object is omitted, the credentials
    * desired.
    */
-  credentials?: 'omit' | 'same-origin' | 'include'
+  credentials?: 'omit' | 'same-origin' | 'include';
 }
 
 /**
@@ -539,23 +543,23 @@ export interface FetchProxyDataResponse {
   /**
    * true if status in the 200 range
    */
-  ok: boolean
+  ok: boolean;
   /**
    * http response status
    */
-  status: number
+  status: number;
   /**
    * description of the status
    */
-  statusText?: string
+  statusText?: string;
   /**
    * response headers
    */
-  headers: Record<string, string>
+  headers: Record<string, string>;
   /**
    * response body
    */
-  body?: any
+  body?: any;
 }
 
 /**
@@ -578,7 +582,7 @@ export interface FetchProxy {
     resource: string,
     init?: FetchCustomParameters,
     responseBodyType?: FetchResponseBodyType
-  ): Promise<FetchProxyDataResponse>
+  ): Promise<FetchProxyDataResponse>;
 }
 
 /**
@@ -588,7 +592,7 @@ export interface ExtensionSDK {
   /**
    * Looker host data
    */
-  lookerHostData?: Readonly<LookerHostData>
+  lookerHostData?: Readonly<LookerHostData>;
 
   /**
    * Create a tag that the Looker server will recognize as a
@@ -596,18 +600,18 @@ export interface ExtensionSDK {
    * to the extension.
    * @param keyName for which a tag is required
    */
-  createSecretKeyTag(keyName: string): string
+  createSecretKeyTag(keyName: string): string;
 
   /**
    * Verify that looker host is available
    */
-  verifyHostConnection(): Promise<boolean>
+  verifyHostConnection(): Promise<boolean>;
 
   /**
    * Update window title (if allowed)
    * @param title new window title
    */
-  updateTitle(title: string): void
+  updateTitle(title: string): void;
 
   /**
    * Update location of current window (if allowed). Navigating to
@@ -617,19 +621,19 @@ export interface ExtensionSDK {
    * @param target when set opens new browser window. Use
    *        openBrowserWindow instead.
    */
-  updateLocation(url: string, state?: any, target?: string): void
+  updateLocation(url: string, state?: any, target?: string): void;
 
   /**
    * Open new browser window with URL
    * @param url for window
    * @param target name of window. Defaults to _blank
    */
-  openBrowserWindow(url: string, target?: string): void
+  openBrowserWindow(url: string, target?: string): void;
 
   /**
    * Close currently opened popovers (menus for example)
    */
-  closeHostPopovers(): void
+  closeHostPopovers(): void;
 
   /**
    * Store an item in local storage. Note that local storage is name
@@ -638,7 +642,7 @@ export interface ExtensionSDK {
    * @param name of item
    * @param value to store in local storage
    */
-  localStorageSetItem(name: string, value?: string): Promise<boolean>
+  localStorageSetItem(name: string, value?: string): Promise<boolean>;
 
   /**
    * Get an item from local storage. Note that local storage is name
@@ -646,7 +650,7 @@ export interface ExtensionSDK {
    * name in the name of the item.
    * @param name of item
    */
-  localStorageRemoveItem(name: string): Promise<boolean>
+  localStorageRemoveItem(name: string): Promise<boolean>;
 
   /**
    * Remove an item from local storage. Note that local storage is name
@@ -654,30 +658,30 @@ export interface ExtensionSDK {
    * name in the name of the item.
    * @param name of item
    */
-  localStorageGetItem(name: string): Promise<string | null>
+  localStorageGetItem(name: string): Promise<string | null>;
 
   /**
    * Write string to clipboard.
    * @param value to write to clipboard.
    */
-  clipboardWrite(value: string): Promise<void>
+  clipboardWrite(value: string): Promise<void>;
 
   /**
    * Set a user attribute value.
    * @param name of item
    * @param value to store in local storage
    */
-  userAttributeSetItem(name: string, value?: string): Promise<boolean>
+  userAttributeSetItem(name: string, value?: string): Promise<boolean>;
   /**
    * Get a user attribute value.
    * @param name of item
    */
-  userAttributeGetItem(name: string): Promise<string | null>
+  userAttributeGetItem(name: string): Promise<string | null>;
   /**
    * Reset a user attribute value to the default
    * @param name of item
    */
-  userAttributeResetItem(name: string): Promise<void>
+  userAttributeResetItem(name: string): Promise<void>;
   /**
    * Track some kind of action.
    * @param name of action
@@ -688,7 +692,7 @@ export interface ExtensionSDK {
     name: string,
     trackAction: string,
     attributes?: Record<string, any>
-  ): void
+  ): void;
 
   /**
    * Error event details. Report error details to the Looker host
@@ -699,14 +703,14 @@ export interface ExtensionSDK {
    *    be recorded twice. This is because react reports the failure to get
    *    details of the error as an error.
    */
-  error(errorEvent: ErrorEvent): void
+  error(errorEvent: ErrorEvent): void;
 
   /**
    * Notify host that client route has changed
    * @param route
    * @param routeState state of route
    */
-  clientRouteChanged(route: string, routeState?: any): void
+  clientRouteChanged(route: string, routeState?: any): void;
 
   /**
    * Get the context associated with the extension. The context can be of any
@@ -716,7 +720,7 @@ export interface ExtensionSDK {
    * is called so an update to context object will not be reflected in subsequent
    * calls UNLESS saveContext is called.
    */
-  getContextData(): any
+  getContextData(): any;
 
   /**
    * Save the context data in the Looker server and return a copy of the context data.
@@ -731,7 +735,7 @@ export interface ExtensionSDK {
    * @param contextData to save
    * @return current context data
    */
-  saveContextData(contextData: any): Promise<any>
+  saveContextData(contextData: any): Promise<any>;
 
   /**
    * Get the lastest version of context data from the Looker server.
@@ -740,7 +744,7 @@ export interface ExtensionSDK {
    * without reloading the extension. Note that there is not a mechanism to indicate
    * that the context data has been modified.
    */
-  refreshContextData(): Promise<any>
+  refreshContextData(): Promise<any>;
 
   /**
    * Create a fetch proxy instance. Allows set up init parameter to be centalized into one place
@@ -755,7 +759,7 @@ export interface ExtensionSDK {
     baseUrl?: string,
     init?: FetchCustomParameters,
     responseBodyType?: FetchResponseBodyType
-  ): FetchProxy
+  ): FetchProxy;
 
   /**
    * External API proxy to the browser fetch API.
@@ -773,7 +777,7 @@ export interface ExtensionSDK {
     resource: string,
     init?: FetchCustomParameters,
     responseBodyType?: FetchResponseBodyType
-  ): Promise<FetchProxyDataResponse>
+  ): Promise<FetchProxyDataResponse>;
 
   /**
    * External API server proxy. Similar to fetch proxy except that external API calls are made
@@ -796,7 +800,7 @@ export interface ExtensionSDK {
     resource: string,
     init?: FetchCustomParameters,
     responseBodyType?: FetchResponseBodyType
-  ): Promise<FetchProxyDataResponse>
+  ): Promise<FetchProxyDataResponse>;
 
   /**
    * Oauth2 authentication. Authentication relies on a new window being
@@ -819,7 +823,7 @@ export interface ExtensionSDK {
     authEndpoint: string,
     authParameters: Record<string, string>,
     httpMethod?: string
-  ): Promise<any>
+  ): Promise<any>;
 
   /**
    * Oauth2 exchange code for token. This is actually a wrapper around
@@ -846,28 +850,28 @@ export interface ExtensionSDK {
   oauth2ExchangeCodeForToken(
     authEndpoint: string,
     authParameters: Record<string, string>
-  ): Promise<any>
+  ): Promise<any>;
 
   /**
    * Log user out of Looker. Only works when running under /spartan
    */
-  spartanLogout(): void
+  spartanLogout(): void;
 
   /**
    * Indicate that an extension has been rendered.
    * <code>Looker >=22.8</code>
    */
-  rendered(failureMessage?: string): void
+  rendered(failureMessage?: string): void;
 
   /**
    * Visualization API.
    */
-  visualizationSDK: VisualizationSDK
+  visualizationSDK: VisualizationSDK;
 
   /**
    * Tile API.
    */
-  tileSDK: TileSDK
+  tileSDK: TileSDK;
 
   /**
    * Returns true if dashboard mount is supported. There are two
@@ -875,5 +879,5 @@ export interface ExtensionSDK {
    * 1. The extension mount point is configured correctly
    * 2. The Looker host system supports it.
    */
-  isDashboardMountSupported: boolean
+  isDashboardMountSupported: boolean;
 }

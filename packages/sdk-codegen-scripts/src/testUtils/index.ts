@@ -24,5 +24,5 @@
 
  */
 
-export * from './mocks'
-export * from './testUtils'
+export * from './mocks';
+export * from './testUtils';

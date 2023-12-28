@@ -23,21 +23,21 @@
  SOFTWARE.
 
  */
-import React, { useEffect, useRef } from 'react'
-import { Span } from '@looker/components'
+import React, { useEffect, useRef } from 'react';
+import { Span } from '@looker/components';
 import {
   createSvg,
   liquidFillGauge,
   defaultConfig,
-} from './liquid_fill_gauge.js'
+} from './liquid_fill_gauge.js';
 
 export interface LiquidFillGaugeVizProps {
-  renderComplete?: () => void
-  value: any
-  valueFormat?: any
-  config?: any
-  width: number | string
-  height: number | string
+  renderComplete?: () => void;
+  value: any;
+  valueFormat?: any;
+  config?: any;
+  width: number | string;
+  height: number | string;
 }
 
 export const LiquidFillGaugeViz: React.FC<LiquidFillGaugeVizProps> = ({
@@ -50,17 +50,17 @@ export const LiquidFillGaugeViz: React.FC<LiquidFillGaugeVizProps> = ({
   height,
   width,
 }) => {
-  const ctrRef = useRef<HTMLDivElement | null>(null)
+  const ctrRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (ctrRef.current) {
-      const element = ctrRef.current as any
-      const svg = createSvg(element)
-      const cfg = { ...defaultConfig, config }
-      liquidFillGauge(svg, value, cfg, valueFormat)
-      renderComplete()
+      const element = ctrRef.current as any;
+      const svg = createSvg(element);
+      const cfg = { ...defaultConfig, config };
+      liquidFillGauge(svg, value, cfg, valueFormat);
+      renderComplete();
     }
-  }, [renderComplete, value, valueFormat, config])
+  }, [renderComplete, value, valueFormat, config]);
 
-  return <Span style={{ width, height }} ref={ctrRef}></Span>
-}
+  return <Span style={{ width, height }} ref={ctrRef}></Span>;
+};

@@ -23,27 +23,27 @@
  SOFTWARE.
 
  */
-import React, { useCallback } from 'react'
-import { useHistory } from 'react-router-dom'
-import { IconButton } from '@looker/components'
-import type { IconType } from '@looker/components'
+import React, { useCallback } from 'react';
+import { useHistory } from 'react-router-dom';
+import { IconButton } from '@looker/components';
+import type { IconType } from '@looker/components';
 
 export interface NavigateButtonProps {
-  path: string
-  icon: IconType
+  path: string;
+  icon: IconType;
 }
 
 export const NavigateButton: React.FC<NavigateButtonProps> = ({
   path,
   icon,
 }) => {
-  const history = useHistory()
+  const history = useHistory();
 
   const navigateClick = useCallback(() => {
-    history.push(path)
-  }, [history])
+    history.push(path);
+  }, [history]);
 
   return (
     <IconButton onClick={navigateClick} icon={icon} label="" size="large" />
-  )
-}
+  );
+};

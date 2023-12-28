@@ -35,8 +35,8 @@
  * the saga.
  */
 
-import type { BaseSyntheticEvent, FC, FormEvent } from 'react'
-import React, { useEffect } from 'react'
+import type { BaseSyntheticEvent, FC, FormEvent } from 'react';
+import React, { useEffect } from 'react';
 import {
   Form,
   Fieldset,
@@ -51,11 +51,11 @@ import {
   Tab2,
   Tabs2,
   SpaceVertical,
-} from '@looker/components'
-import { useDispatch, useSelector } from 'react-redux'
-import { useHistory, useRouteMatch } from 'react-router-dom'
-import { actionMessage } from '../../../data/common/actions'
-import { isLoadingState } from '../../../data/common/selectors'
+} from '@looker/components';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory, useRouteMatch } from 'react-router-dom';
+import { actionMessage } from '../../../data/common/actions';
+import { isLoadingState } from '../../../data/common/selectors';
 import {
   updateProject,
   createProject,
@@ -63,67 +63,67 @@ import {
   getProjectRequest,
   updateProjectData,
   lockProject,
-} from '../../../data/projects/actions'
+} from '../../../data/projects/actions';
 import {
   getProjectLoadedState,
   getProjectState,
   getValidationMessagesState,
   getIsProjectMemberState,
-} from '../../../data/projects/selectors'
+} from '../../../data/projects/selectors';
 import {
   getHackerState,
   getHackerIdState,
   getHackerRegistrationIdState,
   getTechnologies,
-} from '../../../data/hack_session/selectors'
-import { allHackersRequest } from '../../../data/hackers/actions'
-import { getJudgesState } from '../../../data/hackers/selectors'
-import { canUpdateProject, canLockProject } from '../../../utils'
-import { Routes } from '../../../routes'
-import { ProjectView } from '../../ProjectsScene/components/ProjectView'
+} from '../../../data/hack_session/selectors';
+import { allHackersRequest } from '../../../data/hackers/actions';
+import { getJudgesState } from '../../../data/hackers/selectors';
+import { canUpdateProject, canLockProject } from '../../../utils';
+import { Routes } from '../../../routes';
+import { ProjectView } from '../../ProjectsScene/components/ProjectView';
 
 interface ProjectFormProps {}
 
 export const ProjectForm: FC<ProjectFormProps> = () => {
-  const dispatch = useDispatch()
-  const history = useHistory()
+  const dispatch = useDispatch();
+  const history = useHistory();
   const match = useRouteMatch<{ projectIdOrNew: string }>(
     '/projects/:projectIdOrNew'
-  )
-  const hacker = useSelector(getHackerState)
-  const isLoading = useSelector(isLoadingState)
-  const availableTechnologies = useSelector(getTechnologies)
-  const availableJudges = useSelector(getJudgesState)
-  const projectIdOrNew = match?.params?.projectIdOrNew
-  const isProjectLoaded = useSelector(getProjectLoadedState)
-  const project = useSelector(getProjectState)
-  const isProjectMember = useSelector(getIsProjectMemberState)
-  const validationMessages = useSelector(getValidationMessagesState)
-  const hackerId = useSelector(getHackerIdState)
-  const hackerRegistrationId = useSelector(getHackerRegistrationIdState)
+  );
+  const hacker = useSelector(getHackerState);
+  const isLoading = useSelector(isLoadingState);
+  const availableTechnologies = useSelector(getTechnologies);
+  const availableJudges = useSelector(getJudgesState);
+  const projectIdOrNew = match?.params?.projectIdOrNew;
+  const isProjectLoaded = useSelector(getProjectLoadedState);
+  const project = useSelector(getProjectState);
+  const isProjectMember = useSelector(getIsProjectMemberState);
+  const validationMessages = useSelector(getValidationMessagesState);
+  const hackerId = useSelector(getHackerIdState);
+  const hackerRegistrationId = useSelector(getHackerRegistrationIdState);
 
   useEffect(() => {
     if (projectIdOrNew && !project) {
       dispatch(
         getProjectRequest(projectIdOrNew === 'new' ? undefined : projectIdOrNew)
-      )
-      dispatch(allHackersRequest())
+      );
+      dispatch(allHackersRequest());
     }
-  }, [dispatch, projectIdOrNew, project])
+  }, [dispatch, projectIdOrNew, project]);
 
   useEffect(() => {
     // TODO all of this logic should be in the saga!
     if (project) {
       if (!hackerRegistrationId) {
-        dispatch(actionMessage('Hacker has not been registered', 'critical'))
+        dispatch(actionMessage('Hacker has not been registered', 'critical'));
       } else if (projectIdOrNew === 'new' && project._id) {
-        history.push(`${Routes.PROJECTS}/${project._id}`)
+        history.push(`${Routes.PROJECTS}/${project._id}`);
       } else if (project.locked) {
-        dispatch(actionMessage('This project is locked', 'warn'))
+        dispatch(actionMessage('This project is locked', 'warn'));
       }
     } else {
       if (isProjectLoaded) {
-        dispatch(actionMessage('Invalid project', 'critical'))
+        dispatch(actionMessage('Invalid project', 'critical'));
       }
     }
   }, [
@@ -133,35 +133,35 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
     projectIdOrNew,
     dispatch,
     history,
-  ])
+  ]);
 
   const handleSubmit = (e: FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     // TODO this should be a single action - saveProject
     if (projectIdOrNew === 'new') {
-      dispatch(createProject(hackerRegistrationId!, project!))
+      dispatch(createProject(hackerRegistrationId!, project!));
     } else {
-      dispatch(updateProject(project!))
+      dispatch(updateProject(project!));
     }
-  }
+  };
 
   const handleCancel = () => {
-    history.push(Routes.PROJECTS)
-  }
+    history.push(Routes.PROJECTS);
+  };
 
   const updateMembershipClick = () => {
-    dispatch(changeMembership(project!._id, hackerId!, isProjectMember!))
-  }
+    dispatch(changeMembership(project!._id, hackerId!, isProjectMember!));
+  };
 
   const lockProjectClick = () => {
-    dispatch(lockProject(!project!.locked, project!._id))
-  }
+    dispatch(lockProject(!project!.locked, project!._id));
+  };
 
-  if (!project) return <></>
+  if (!project) return <></>;
 
   // TODO move this to the saga and pull data out of redux
-  const canUpdate = canUpdateProject(hacker, project, projectIdOrNew === 'new')
-  const canLock = canLockProject(hacker) && projectIdOrNew !== 'new'
+  const canUpdate = canUpdateProject(hacker, project, projectIdOrNew === 'new');
+  const canLock = canLockProject(hacker) && projectIdOrNew !== 'new';
 
   return (
     <SpaceVertical gap="u1">
@@ -179,7 +179,7 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
                 onChange={(e: BaseSyntheticEvent) => {
                   dispatch(
                     updateProjectData({ ...project, title: e.target.value })
-                  )
+                  );
                 }}
               />
               <FieldTextArea
@@ -196,7 +196,7 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
                       ...project,
                       description: e.target.value,
                     })
-                  )
+                  );
                 }}
               />
               <FieldSelect
@@ -216,7 +216,7 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
                 onChange={(value: string) => {
                   dispatch(
                     updateProjectData({ ...project, project_type: value })
-                  )
+                  );
                 }}
               />
               <FieldToggleSwitch
@@ -229,7 +229,7 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
                       ...project,
                       contestant: e.target.checked,
                     })
-                  )
+                  );
                 }}
                 on={project.contestant}
               />
@@ -248,7 +248,7 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
                 onChange={(values: string[] = []) => {
                   dispatch(
                     updateProjectData({ ...project, technologies: values })
-                  )
+                  );
                 }}
               />
               {projectIdOrNew !== 'new' && (
@@ -277,7 +277,7 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
                       ...project,
                       $judges: values,
                     })
-                  )
+                  );
                 }}
               />
             )}
@@ -330,5 +330,5 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
         )}
       </Space>
     </SpaceVertical>
-  )
-}
+  );
+};

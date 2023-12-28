@@ -23,10 +23,10 @@
  SOFTWARE.
 
  */
-import type { FC } from 'react'
-import React, { useEffect } from 'react'
-import { useHistory, useRouteMatch } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
+import type { FC } from 'react';
+import React, { useEffect } from 'react';
+import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Tab,
   TabList,
@@ -35,65 +35,65 @@ import {
   Heading,
   Space,
   SpaceVertical,
-} from '@looker/components'
-import { Routes } from '../../routes/AppRouter'
-import { isLoadingState } from '../../data/common/selectors'
-import { Loading } from '../../components/Loading'
+} from '@looker/components';
+import { Routes } from '../../routes/AppRouter';
+import { isLoadingState } from '../../data/common/selectors';
+import { Loading } from '../../components/Loading';
 import {
   allHackersRequest,
   updateHackersPageNum,
-} from '../../data/hackers/actions'
+} from '../../data/hackers/actions';
 import {
   getHackersState,
   getAdminsState,
   getJudgesState,
   getStaffState,
   getHackersPageNumState,
-} from '../../data/hackers/selectors'
-import { getTabInfo } from '../../utils'
-import { HackerList } from './components/HackerList'
+} from '../../data/hackers/selectors';
+import { getTabInfo } from '../../utils';
+import { HackerList } from './components/HackerList';
 
 interface UsersSceneProps {}
 
-const tabnames = ['hackers', 'staff', 'judges', 'admins']
+const tabnames = ['hackers', 'staff', 'judges', 'admins'];
 
 export const UsersScene: FC<UsersSceneProps> = () => {
-  const history = useHistory()
+  const history = useHistory();
   const match = useRouteMatch<{ func: string; tabname: string }>(
     '/:func/:tabname'
-  )
-  const dispatch = useDispatch()
+  );
+  const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(allHackersRequest())
-  }, [dispatch])
-  const pageNum = useSelector(getHackersPageNumState)
-  const hackers = useSelector(getHackersState)
-  const staff = useSelector(getStaffState)
-  const admins = useSelector(getAdminsState)
-  const judges = useSelector(getJudgesState)
-  const isLoading = useSelector(isLoadingState)
-  const { tabIndex } = getTabInfo(tabnames, match?.params?.tabname)
+    dispatch(allHackersRequest());
+  }, [dispatch]);
+  const pageNum = useSelector(getHackersPageNumState);
+  const hackers = useSelector(getHackersState);
+  const staff = useSelector(getStaffState);
+  const admins = useSelector(getAdminsState);
+  const judges = useSelector(getJudgesState);
+  const isLoading = useSelector(isLoadingState);
+  const { tabIndex } = getTabInfo(tabnames, match?.params?.tabname);
 
   useEffect(() => {
-    const currentTabname = match?.params?.tabname
-    const { tabname } = getTabInfo(tabnames, currentTabname)
+    const currentTabname = match?.params?.tabname;
+    const { tabname } = getTabInfo(tabnames, currentTabname);
     if (tabname !== currentTabname) {
-      history.push(`${Routes.USERS}/${tabname}`)
+      history.push(`${Routes.USERS}/${tabname}`);
     }
-  }, [history, match])
+  }, [history, match]);
 
   const updatePageNum = (pageNum: number) => {
-    dispatch(updateHackersPageNum(pageNum))
-  }
+    dispatch(updateHackersPageNum(pageNum));
+  };
 
   const onSelectTab = (index: number) => {
-    const currentTabname = match?.params?.tabname
-    const tabname = tabnames[index]
+    const currentTabname = match?.params?.tabname;
+    const tabname = tabnames[index];
     if (tabname !== currentTabname) {
-      updateHackersPageNum(1)
-      history.push(`${Routes.USERS}/${tabname}`)
+      updateHackersPageNum(1);
+      history.push(`${Routes.USERS}/${tabname}`);
     }
-  }
+  };
 
   return (
     <>
@@ -147,5 +147,5 @@ export const UsersScene: FC<UsersSceneProps> = () => {
         </SpaceVertical>
       )}
     </>
-  )
-}
+  );
+};

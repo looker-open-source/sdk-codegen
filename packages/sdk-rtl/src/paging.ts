@@ -24,40 +24,44 @@
 
  */
 
-import type { IRawResponse, ITransportSettings, SDKResponse } from './transport'
-import { sdkOk } from './transport'
-import type { IAPIMethods } from './apiMethods'
-import type { BaseTransport } from './baseTransport'
+import type {
+  IRawResponse,
+  ITransportSettings,
+  SDKResponse,
+} from './transport';
+import { sdkOk } from './transport';
+import type { IAPIMethods } from './apiMethods';
+import type { BaseTransport } from './baseTransport';
 
-export const LinkHeader = 'Link'
-export const TotalCountHeader = 'X-Total-Count'
+export const LinkHeader = 'Link';
+export const TotalCountHeader = 'X-Total-Count';
 
 /**
  * Types of paging link relative URLs
  * based on https://docs.github.com/en/rest/overview/resources-in-the-rest-api#link-header
  */
-export type PageLinkRel = 'first' | 'last' | 'next' | 'prev'
+export type PageLinkRel = 'first' | 'last' | 'next' | 'prev';
 
 /** Constraints for TSuccess type */
 interface ILength {
-  length: number
+  length: number;
 }
 
 /** Result paging function call */
 export type PagingFunc<TSuccess, TError> = () => Promise<
   SDKResponse<TSuccess, TError>
->
+>;
 
 /** Page link structure */
 export interface IPageLink {
   /** Name of link */
-  name?: string
+  name?: string;
   /** Type of link */
-  rel: PageLinkRel
+  rel: PageLinkRel;
   /** Media type for link */
-  mediaType?: string
+  mediaType?: string;
   /** URL for retrieving the link results */
-  url: string
+  url: string;
 }
 
 /**
@@ -65,31 +69,31 @@ export interface IPageLink {
  *
  * TODO can this be Record<PageLinkRel, IPageLink> instead and still init to {}?
  */
-export type PageLinks = Record<string, IPageLink>
+export type PageLinks = Record<string, IPageLink>;
 
 export interface IPager<TSuccess, TError> {
   /** Total number of available items being paginated */
-  total: number
+  total: number;
   /** Offset extracted from pager request */
-  offset: number
+  offset: number;
   /** Limit extracted from pager request */
-  limit: number
+  limit: number;
   /** Paging links extracted from Link header */
-  links: PageLinks
+  links: PageLinks;
   /** Latest items returned from response */
-  items: TSuccess
+  items: TSuccess;
   /** Captured from the original paging request */
-  options?: Partial<ITransportSettings>
+  options?: Partial<ITransportSettings>;
   /** Total number of pages. -1 if not known. */
-  pages: number
+  pages: number;
   /** Current page. -1 if not known. */
-  page: number
+  page: number;
 
   /**
    * Is the specified link rel defined in the Link header?
    * @param link to check
    */
-  hasRel(link: PageLinkRel): boolean
+  hasRel(link: PageLinkRel): boolean;
 
   /**
    * GET the requested relative link
@@ -105,31 +109,31 @@ export interface IPager<TSuccess, TError> {
     name: PageLinkRel,
     limit?: number,
     offset?: number
-  ): Promise<SDKResponse<TSuccess, TError>>
+  ): Promise<SDKResponse<TSuccess, TError>>;
 
   /** Get the first page of items. This is the same as offset=0 */
-  firstPage(): Promise<SDKResponse<TSuccess, TError>>
+  firstPage(): Promise<SDKResponse<TSuccess, TError>>;
   /**
    * Get the last page of items
    *
    * @remarks This link is only provided if `total` is known.
    */
-  lastPage(): Promise<SDKResponse<TSuccess, TError>>
+  lastPage(): Promise<SDKResponse<TSuccess, TError>>;
   /**
    * Get the next page of items
    *
    * @remarks This link is provided if `total` is known, or if the number of items returned == `limit`. In the latter case, this function may return an empty result set.
    */
-  nextPage(): Promise<SDKResponse<TSuccess, TError>>
+  nextPage(): Promise<SDKResponse<TSuccess, TError>>;
   /**
    * Get the previous page of items
    *
    * @remarks This link is provided if the last page was not the first page.
    */
-  prevPage(): Promise<SDKResponse<TSuccess, TError>>
+  prevPage(): Promise<SDKResponse<TSuccess, TError>>;
 
   /** `true` if the `next` link is defined */
-  more(): boolean
+  more(): boolean;
 }
 
 /**
@@ -142,30 +146,30 @@ export interface IPager<TSuccess, TError> {
  *
  */
 export const linkHeaderParser = (linkHeader: string): PageLinks => {
-  const re = /<\s*(.*)\s*>;\s*rel="\s*(.*)\s*"\s*/gm
-  const links = linkHeader.split(',')
-  const obj: PageLinks = {}
-  let arrRes
+  const re = /<\s*(.*)\s*>;\s*rel="\s*(.*)\s*"\s*/gm;
+  const links = linkHeader.split(',');
+  const obj: PageLinks = {};
+  let arrRes;
 
   links.forEach((link) => {
-    link = link.trim()
+    link = link.trim();
     while ((arrRes = re.exec(link))) {
-      const key = arrRes[2].split(' ')[0].trim().toLocaleLowerCase()
+      const key = arrRes[2].split(' ')[0].trim().toLocaleLowerCase();
       obj[key] = {
         url: arrRes[1].trim(),
         rel: key as PageLinkRel,
         name: arrRes[2].trim(),
-      }
+      };
     }
-  })
-  return obj
-}
+  });
+  return obj;
+};
 
 /** Event to observe the paging call */
 export type PageObserver<TSuccess> = (
   /** Current retrieved page of results */
   page: TSuccess
-) => TSuccess
+) => TSuccess;
 
 /**
  * Create an API response pager for an endpoint that returns a Link header
@@ -180,7 +184,7 @@ export async function pager<TSuccess extends ILength, TError>(
   pageFunc: PagingFunc<TSuccess, TError>,
   options?: Partial<ITransportSettings>
 ): Promise<IPager<TSuccess, TError>> {
-  return await new Paging<TSuccess, TError>(sdk, pageFunc, options).init()
+  return await new Paging<TSuccess, TError>(sdk, pageFunc, options).init();
 }
 
 /**
@@ -198,18 +202,18 @@ export async function pageAll<TSuccess extends ILength, TError>(
   onPage: PageObserver<TSuccess> = (page: TSuccess) => page,
   options?: Partial<ITransportSettings>
 ): Promise<IPager<TSuccess, TError>> {
-  const paged = await pager(sdk, pageFunc, options)
+  const paged = await pager(sdk, pageFunc, options);
   // Process the first page
-  onPage(paged.items)
+  onPage(paged.items);
   try {
     while (paged.more()) {
       // Pass the page items to the event
-      onPage(await sdk.ok(paged.nextPage()))
+      onPage(await sdk.ok(paged.nextPage()));
     }
   } catch (err) {
-    return Promise.reject(err)
+    return Promise.reject(err);
   }
-  return paged
+  return paged;
 }
 
 /**
@@ -218,13 +222,13 @@ export async function pageAll<TSuccess extends ILength, TError>(
 export class Paging<TSuccess extends ILength, TError>
   implements IPager<TSuccess, TError>
 {
-  items: TSuccess = [] as unknown as TSuccess
-  links: PageLinks = {}
-  total = -1
-  offset = -1
-  limit = -1
+  items: TSuccess = [] as unknown as TSuccess;
+  links: PageLinks = {};
+  total = -1;
+  offset = -1;
+  limit = -1;
 
-  private transport: BaseTransport
+  private transport: BaseTransport;
 
   /**
    * Create an API paginator
@@ -237,55 +241,55 @@ export class Paging<TSuccess extends ILength, TError>
     public func: PagingFunc<TSuccess, TError>,
     public options?: Partial<ITransportSettings>
   ) {
-    this.transport = sdk.authSession.transport as BaseTransport
+    this.transport = sdk.authSession.transport as BaseTransport;
   }
 
   private async rawCatch(func: () => any) {
-    let raw: IRawResponse = {} as IRawResponse
-    const saved = this.transport.observer
+    let raw: IRawResponse = {} as IRawResponse;
+    const saved = this.transport.observer;
     try {
       // Capture the raw request for header parsing
       this.transport.observer = (response: IRawResponse) => {
         if (saved) {
           // Chain the observer
-          response = saved(response)
+          response = saved(response);
         }
-        raw = response
-        return response
-      }
-      this.items = await sdkOk(func())
+        raw = response;
+        return response;
+      };
+      this.items = await sdkOk(func());
     } finally {
       // Restore the previous observer (if any)
-      this.transport.observer = saved
+      this.transport.observer = saved;
     }
     if (Object.keys(raw).length === 0 || Object.keys(raw.headers).length === 0)
-      return Promise.reject(new Error('No paging headers were found'))
-    this.parse(raw)
-    return this
+      return Promise.reject(new Error('No paging headers were found'));
+    this.parse(raw);
+    return this;
   }
 
   get page(): number {
-    if (this.limit < 1 || this.offset < 0) return -1
-    const x = this.offset / this.limit + 1
-    return Math.ceil(x)
+    if (this.limit < 1 || this.offset < 0) return -1;
+    const x = this.offset / this.limit + 1;
+    return Math.ceil(x);
   }
 
   get pages(): number {
-    if (this.total < 1 || this.limit < 1) return -1
-    const x = this.total / this.limit
-    return Math.ceil(x)
+    if (this.total < 1 || this.limit < 1) return -1;
+    const x = this.total / this.limit;
+    return Math.ceil(x);
   }
 
   async init() {
-    return await this.rawCatch(this.func)
+    return await this.rawCatch(this.func);
   }
 
   hasRel(link: PageLinkRel): boolean {
-    return !!this.links[link]
+    return !!this.links[link];
   }
 
   more() {
-    return this.hasRel('next')
+    return this.hasRel('next');
   }
 
   /**
@@ -300,14 +304,14 @@ export class Paging<TSuccess extends ILength, TError>
     defaultValue: any,
     convert = (v: string) => parseInt(v, 10)
   ) {
-    if (value === null) return defaultValue
-    return convert(value)
+    if (value === null) return defaultValue;
+    return convert(value);
   }
 
   reset() {
-    this.links = {}
-    this.total = this.offset = this.limit = -1
-    this.items = [] as unknown as TSuccess
+    this.links = {};
+    this.total = this.offset = this.limit = -1;
+    this.items = [] as unknown as TSuccess;
   }
 
   async getRel(
@@ -315,21 +319,21 @@ export class Paging<TSuccess extends ILength, TError>
     limit?: number,
     offset?: number
   ): Promise<SDKResponse<TSuccess, TError>> {
-    const rel = this.links[name]
-    let result: SDKResponse<TSuccess, TError>
-    this.reset()
+    const rel = this.links[name];
+    let result: SDKResponse<TSuccess, TError>;
+    this.reset();
     if (!rel) {
-      result = { ok: true, value: this.items }
-      return result
+      result = { ok: true, value: this.items };
+      return result;
     }
     const authenticator = (init: any) => {
-      return this.sdk.authSession.authenticate(init)
-    }
+      return this.sdk.authSession.authenticate(init);
+    };
 
-    let link = rel.url
+    let link = rel.url;
     if (limit !== undefined) {
       if (offset === undefined) {
-        offset = 0
+        offset = 0;
       }
       if (limit < 1 || offset < 0) {
         result = {
@@ -337,14 +341,14 @@ export class Paging<TSuccess extends ILength, TError>
           error: new Error(
             'limit must be > 0 and offset must be >= 0'
           ) as unknown as TError,
-        }
-        return result
+        };
+        return result;
       }
-      const url = new URL(link)
-      const params = url.searchParams
-      params.set('limit', limit.toString())
-      params.set('offset', offset.toString())
-      link = url.toString()
+      const url = new URL(link);
+      const params = url.searchParams;
+      params.set('limit', limit.toString());
+      params.set('offset', offset.toString());
+      link = url.toString();
     }
     const raw = await this.transport.rawRequest(
       'GET',
@@ -353,15 +357,15 @@ export class Paging<TSuccess extends ILength, TError>
       undefined,
       authenticator,
       this.options
-    )
+    );
     try {
-      this.parse(raw)
-      this.items = await sdkOk(this.transport.parseResponse(raw))
-      result = { ok: true, value: this.items }
+      this.parse(raw);
+      this.items = await sdkOk(this.transport.parseResponse(raw));
+      result = { ok: true, value: this.items };
     } catch (e: any) {
-      result = { ok: false, error: e }
+      result = { ok: false, error: e };
     }
-    return result
+    return result;
   }
 
   static findHeader(raw: IRawResponse, name: string) {
@@ -369,44 +373,44 @@ export class Paging<TSuccess extends ILength, TError>
       raw.headers[name] ||
       raw.headers[name.toLowerCase()] ||
       raw.headers[name.toUpperCase()]
-    )
+    );
   }
 
   parse(raw: IRawResponse): IPager<TSuccess, TError> {
-    const params = new URL(raw.url, 'http://default').searchParams
-    this.limit = Paging.paramDefault(params.get('limit'), -1)
+    const params = new URL(raw.url, 'http://default').searchParams;
+    this.limit = Paging.paramDefault(params.get('limit'), -1);
     this.offset = Paging.paramDefault(
       params.get('offset'),
       this.limit > 0 ? 0 : -1
-    )
-    const linkHeader = Paging.findHeader(raw, LinkHeader)
+    );
+    const linkHeader = Paging.findHeader(raw, LinkHeader);
     if (linkHeader) {
-      this.links = linkHeaderParser(linkHeader)
+      this.links = linkHeaderParser(linkHeader);
     } else {
-      this.links = {}
+      this.links = {};
     }
-    const totalHeader = Paging.findHeader(raw, TotalCountHeader)
+    const totalHeader = Paging.findHeader(raw, TotalCountHeader);
     if (totalHeader) {
-      this.total = parseInt(totalHeader.trim(), 10)
+      this.total = parseInt(totalHeader.trim(), 10);
     } else {
-      this.total = -1
+      this.total = -1;
     }
-    return this as unknown as IPager<TSuccess, TError>
+    return this as unknown as IPager<TSuccess, TError>;
   }
 
   async firstPage(): Promise<SDKResponse<TSuccess, TError>> {
-    return await this.getRel('first')
+    return await this.getRel('first');
   }
 
   async lastPage(): Promise<SDKResponse<TSuccess, TError>> {
-    return await this.getRel('last')
+    return await this.getRel('last');
   }
 
   async nextPage(): Promise<SDKResponse<TSuccess, TError>> {
-    return await this.getRel('next')
+    return await this.getRel('next');
   }
 
   async prevPage(): Promise<SDKResponse<TSuccess, TError>> {
-    return await this.getRel('prev')
+    return await this.getRel('prev');
   }
 }

@@ -23,5 +23,5 @@
  SOFTWARE.
 
  */
-export { CodeDisplay } from './CodeDisplay'
-export type { CodeDisplayProps } from './types'
+export { CodeDisplay } from './CodeDisplay';
+export type { CodeDisplayProps } from './types';

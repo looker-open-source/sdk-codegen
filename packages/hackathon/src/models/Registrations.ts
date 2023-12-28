@@ -24,52 +24,52 @@
 
  */
 
-import type { IRowModelProps, ITabTable } from '@looker/wholly-artifact'
-import { noDate, WhollyArtifact } from '@looker/wholly-artifact'
-import { getCore40SDK } from '@looker/extension-sdk-react'
+import type { IRowModelProps, ITabTable } from '@looker/wholly-artifact';
+import { noDate, WhollyArtifact } from '@looker/wholly-artifact';
+import { getCore40SDK } from '@looker/extension-sdk-react';
 
-import type { ISheetRow } from './SheetRow'
-import { SheetRow } from './SheetRow'
-import type { Hackathon } from './Hackathons'
-import type { SheetData } from './SheetData'
+import type { ISheetRow } from './SheetRow';
+import { SheetRow } from './SheetRow';
+import type { Hackathon } from './Hackathons';
+import type { SheetData } from './SheetData';
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface IRegistrationProps extends IRowModelProps {
-  _user_id: string
-  hackathon_id: string
-  date_registered: Date
-  attended: boolean
+  _user_id: string;
+  hackathon_id: string;
+  date_registered: Date;
+  attended: boolean;
 }
 
 export interface IRegistration extends IRowModelProps, ISheetRow {}
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export class Registration extends SheetRow<IRegistration> {
-  _user_id = ''
-  hackathon_id = ''
-  date_registered: Date = noDate
-  attended = false
+  _user_id = '';
+  hackathon_id = '';
+  date_registered: Date = noDate;
+  attended = false;
   constructor(values?: any) {
-    super()
+    super();
     // IMPORTANT: this must be done after super() constructor is called so keys are established
     // there may be a way to overload the constructor so this isn't necessary but pattern hasn't been found
-    this.assign(values)
+    this.assign(values);
   }
 
   tableName() {
-    return 'Registration'
+    return 'Registration';
   }
 
   prepare(): IRegistration {
-    super.prepare()
-    if (this.date_registered === noDate) this.date_registered = new Date()
+    super.prepare();
+    if (this.date_registered === noDate) this.date_registered = new Date();
     // Current behavior is, if this registration record exists, the user attended because they're using the extension
-    this.attended = true
-    return this
+    this.attended = true;
+    return this;
   }
 
   toObject(): IRegistrationProps {
-    return super.toObject() as IRegistrationProps
+    return super.toObject() as IRegistrationProps;
   }
 }
 
@@ -81,14 +81,14 @@ export class Registrations extends WhollyArtifact<
     public readonly data: SheetData,
     public readonly table: ITabTable
   ) {
-    super(getCore40SDK(), table)
+    super(getCore40SDK(), table);
   }
 
   typeRow<Registration>(values?: any) {
-    return new Registration(values) as unknown as Registration
+    return new Registration(values) as unknown as Registration;
   }
 
   hackRegs(hackathon: Hackathon) {
-    return this.rows.filter((r) => r.hackathon_id === hackathon._id)
+    return this.rows.filter((r) => r.hackathon_id === hackathon._id);
   }
 }

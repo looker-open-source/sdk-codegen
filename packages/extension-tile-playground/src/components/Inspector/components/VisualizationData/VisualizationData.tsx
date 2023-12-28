@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import React, { useContext } from 'react'
+import React, { useContext } from 'react';
 import {
   Accordion2,
   Card,
@@ -31,11 +31,12 @@ import {
   Text,
   Box2,
   SpaceVertical,
-} from '@looker/components'
-import { ExtensionContext40 } from '@looker/extension-sdk-react'
+} from '@looker/components';
+import { ExtensionContext40 } from '@looker/extension-sdk-react';
 
 export const VisualizationData: React.FC = () => {
-  const { visualizationData, visualizationSDK } = useContext(ExtensionContext40)
+  const { visualizationData, visualizationSDK } =
+    useContext(ExtensionContext40);
   return (
     <>
       {!visualizationData ? (
@@ -75,5 +76,5 @@ export const VisualizationData: React.FC = () => {
         </SpaceVertical>
       )}
     </>
-  )
-}
+  );
+};

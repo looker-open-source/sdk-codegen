@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import type { ApiModel, DiffRow } from '@looker/sdk-codegen'
+import type { ApiModel, DiffRow } from '@looker/sdk-codegen';
 import {
   Flex,
   Heading,
@@ -31,24 +31,24 @@ import {
   Space,
   SpaceVertical,
   Text,
-} from '@looker/components'
-import type { FC } from 'react'
-import React, { useState } from 'react'
-import { DiffItem } from './DiffItem'
+} from '@looker/components';
+import type { FC } from 'react';
+import React, { useState } from 'react';
+import { DiffItem } from './DiffItem';
 
 export interface DocDiffProps {
   /** Using delta because IntelliJ has bugs with 'diff' in a react app */
-  delta: DiffRow[]
+  delta: DiffRow[];
   /** Left side specKey */
-  leftKey: string
+  leftKey: string;
   /** Left side spec */
-  leftSpec: ApiModel
+  leftSpec: ApiModel;
   /** Right side specKey */
-  rightKey: string
+  rightKey: string;
   /** Right side spec */
-  rightSpec: ApiModel
+  rightSpec: ApiModel;
   /** Number of rows per page. Defaults to 15 */
-  pageSize?: number
+  pageSize?: number;
 }
 
 export const DocDiff: FC<DocDiffProps> = ({
@@ -59,12 +59,12 @@ export const DocDiff: FC<DocDiffProps> = ({
   rightSpec,
   pageSize = 15,
 }) => {
-  const [page, setPage] = useState(1)
+  const [page, setPage] = useState(1);
 
-  if (delta.length === 0) return <Text>{'No differences found'}</Text>
+  if (delta.length === 0) return <Text>{'No differences found'}</Text>;
 
-  const pageCount = Math.ceil(delta.length / pageSize)
-  const pageItemData = delta.slice((page - 1) * pageSize, page * pageSize)
+  const pageCount = Math.ceil(delta.length / pageSize);
+  const pageItemData = delta.slice((page - 1) * pageSize, page * pageSize);
 
   return (
     <>
@@ -91,11 +91,11 @@ export const DocDiff: FC<DocDiffProps> = ({
             current={page}
             pages={pageCount}
             onChange={(nextPage) => {
-              setPage(nextPage)
+              setPage(nextPage);
             }}
           />
         </Flex>
       )}
     </>
-  )
-}
+  );
+};

@@ -23,21 +23,21 @@
  SOFTWARE.
 
  */
-import type { ValidationMessages } from '@looker/components'
-import type { IProjectProps } from '../../models'
-import type { ProjectAction } from './actions'
-import { Actions } from './actions'
+import type { ValidationMessages } from '@looker/components';
+import type { IProjectProps } from '../../models';
+import type { ProjectAction } from './actions';
+import { Actions } from './actions';
 
 export interface ProjectsState {
-  currentPageNum: number
-  projects: IProjectProps[]
-  currentProjects: IProjectProps[]
-  projectsLoaded: boolean
-  currentProject?: IProjectProps
-  isProjectMember?: boolean
-  validationMessages?: ValidationMessages
-  projectUpdated?: boolean
-  projectLoaded: boolean
+  currentPageNum: number;
+  projects: IProjectProps[];
+  currentProjects: IProjectProps[];
+  projectsLoaded: boolean;
+  currentProject?: IProjectProps;
+  isProjectMember?: boolean;
+  validationMessages?: ValidationMessages;
+  projectUpdated?: boolean;
+  projectLoaded: boolean;
 }
 
 const defaultState: Readonly<ProjectsState> = Object.freeze({
@@ -46,7 +46,7 @@ const defaultState: Readonly<ProjectsState> = Object.freeze({
   currentProjects: [],
   projectsLoaded: false,
   projectLoaded: false,
-})
+});
 
 export const projectsReducer = (
   state: ProjectsState = defaultState,
@@ -59,26 +59,26 @@ export const projectsReducer = (
         currentProject: undefined,
         projectUpdated: undefined,
         projectLoaded: false,
-      }
+      };
     case Actions.ALL_PROJECTS_RESPONSE:
       return {
         ...state,
         projects: action.payload,
         projectsLoaded: true,
-      }
+      };
     case Actions.CURRENT_PROJECTS_REQUEST:
       return {
         ...state,
         currentProject: undefined,
         projectUpdated: undefined,
         projectLoaded: false,
-      }
+      };
     case Actions.CURRENT_PROJECTS_RESPONSE:
       return {
         ...state,
         currentProjects: action.payload,
         projectsLoaded: true,
-      }
+      };
     case Actions.GET_PROJECT_REQUEST:
       return {
         ...state,
@@ -86,31 +86,31 @@ export const projectsReducer = (
         validationMessages: undefined,
         projectUpdated: undefined,
         projectLoaded: false,
-      }
+      };
     case Actions.GET_PROJECT_RESPONSE: {
-      const { project, isProjectMember } = action.payload
+      const { project, isProjectMember } = action.payload;
       return {
         ...state,
         currentProject: project,
         isProjectMember,
         projectLoaded: true,
-      }
+      };
     }
     case Actions.UPDATE_PROJECT_DATA:
       return {
         ...state,
         currentProject: { ...action.payload },
-      }
+      };
     case Actions.UPDATE_PROJECTS_PAGE_NUM:
       return {
         ...state,
         currentPageNum: action.payload,
-      }
+      };
     case Actions.CREATE_PROJECT:
       return {
         ...state,
         validationMessages: undefined,
-      }
+      };
     case Actions.SAVE_PROJECT_RESPONSE:
       return {
         ...state,
@@ -118,8 +118,8 @@ export const projectsReducer = (
         validationMessages: action.payload.validationMessages,
         isProjectMember: action.payload.isProjectMember,
         projectUpdated: true,
-      }
+      };
     default:
-      return state
+      return state;
   }
-}
+};

@@ -23,30 +23,30 @@
  SOFTWARE.
 
  */
-import type { IRowModel } from '@looker/wholly-artifact'
-import { RowModel } from '@looker/wholly-artifact'
-import type { IHacker } from './Hacker'
+import type { IRowModel } from '@looker/wholly-artifact';
+import { RowModel } from '@looker/wholly-artifact';
+import type { IHacker } from './Hacker';
 
 export interface ISheetRow extends IRowModel {
   /** can the user create this row? */
-  canCreate(user: IHacker): boolean
+  canCreate(user: IHacker): boolean;
   /** can the user update this row? */
-  canUpdate(user: IHacker): boolean
+  canUpdate(user: IHacker): boolean;
   /** can the user delete this row? */
-  canDelete(user: IHacker): boolean
+  canDelete(user: IHacker): boolean;
 }
 
 export abstract class SheetRow<T extends ISheetRow> extends RowModel<T> {
   constructor(values?: any) {
-    super(values)
+    super(values);
   }
 
   canCreate(user: IHacker): boolean {
-    return user.canAdmin || user.permissions.has('create')
+    return user.canAdmin || user.permissions.has('create');
   }
 
   canDelete(user: IHacker): boolean {
-    return user.canAdmin || user.permissions.has('delete')
+    return user.canAdmin || user.permissions.has('delete');
   }
 
   canUpdate(user: IHacker): boolean {
@@ -55,10 +55,10 @@ export abstract class SheetRow<T extends ISheetRow> extends RowModel<T> {
       user.canStaff ||
       user.canJudge ||
       user.permissions.has('update')
-    )
+    );
   }
 
   namespace() {
-    return 'hackathon'
+    return 'hackathon';
   }
 }

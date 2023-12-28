@@ -23,8 +23,8 @@
  SOFTWARE.
 
  */
-import type { BaseSyntheticEvent, Dispatch, FormEvent } from 'react'
-import React, { useEffect } from 'react'
+import type { BaseSyntheticEvent, Dispatch, FormEvent } from 'react';
+import React, { useEffect } from 'react';
 import {
   Button,
   ButtonTransparent,
@@ -39,25 +39,25 @@ import {
   SpaceVertical,
   Span,
   Tooltip,
-} from '@looker/components'
-import { CodeCopy } from '@looker/code-editor'
-import { useLocation } from 'react-router-dom'
-import { appPath, getEnvAdaptor } from '../../..'
-import { useOAuthFormActions, useOAuthFormState } from '../state/slice'
-import { CollapserCard } from './CollapserCard'
-import { ConfigHeading } from './ConfigHeading'
+} from '@looker/components';
+import { CodeCopy } from '@looker/code-editor';
+import { useLocation } from 'react-router-dom';
+import { appPath, getEnvAdaptor } from '../../..';
+import { useOAuthFormActions, useOAuthFormState } from '../state/slice';
+import { CollapserCard } from './CollapserCard';
+import { ConfigHeading } from './ConfigHeading';
 export const readyToLogin =
-  'OAuth is configured but your browser session is not authenticated. Click Login.'
+  'OAuth is configured but your browser session is not authenticated. Click Login.';
 
 interface ConfigFormProps {
   /** A set state callback which allows for editing, setting or clearing OAuth configuration parameters if present */
-  setHasConfig?: Dispatch<boolean>
+  setHasConfig?: Dispatch<boolean>;
   /** Local storage key value for storing config parameters  */
-  configKey: string
+  configKey: string;
   /** OAuth client id */
-  clientId: string
+  clientId: string;
   /** OAuth client display label */
-  clientLabel: string
+  clientLabel: string;
 }
 
 export const OAuthForm = ({
@@ -66,8 +66,8 @@ export const OAuthForm = ({
   clientLabel,
   configKey,
 }: ConfigFormProps) => {
-  const location = useLocation()
-  const redirect_uri = appPath(location, '/oauth')
+  const location = useLocation();
+  const redirect_uri = appPath(location, '/oauth');
   const appConfig = `// client_guid=${clientId}
  {
    "redirect_uri": "${redirect_uri}",
@@ -75,9 +75,9 @@ export const OAuthForm = ({
    "description": "Looker ${clientLabel} using CORS",
    "enabled": true
  }
- `
-  const adaptor = getEnvAdaptor()
-  const sdk = adaptor.sdk
+ `;
+  const adaptor = getEnvAdaptor();
+  const sdk = adaptor.sdk;
 
   const {
     initAction,
@@ -86,7 +86,7 @@ export const OAuthForm = ({
     verifyConfigAction,
     clearMessageBarAction,
     saveConfigAction,
-  } = useOAuthFormActions()
+  } = useOAuthFormActions();
   const {
     apiServerUrl,
     fetchedUrl,
@@ -94,7 +94,7 @@ export const OAuthForm = ({
     messageBar,
     validationMessages,
     savedConfig,
-  } = useOAuthFormState()
+  } = useOAuthFormState();
 
   const isConfigured = () => {
     return (
@@ -102,8 +102,8 @@ export const OAuthForm = ({
       webUrl === savedConfig.looker_url &&
       apiServerUrl !== '' &&
       webUrl !== ''
-    )
-  }
+    );
+  };
 
   const handleSave = () => {
     saveConfigAction({
@@ -111,51 +111,51 @@ export const OAuthForm = ({
       setHasConfig,
       client_id: clientId,
       redirect_uri,
-    })
-  }
+    });
+  };
 
   const handleVerify = () => {
-    verifyConfigAction()
-  }
+    verifyConfigAction();
+  };
 
   const handleClear = async () => {
     clearConfigAction({
       configKey,
       setHasConfig: setHasConfig,
       isAuthenticated: isAuthenticated(),
-    })
-  }
+    });
+  };
 
   const handleUrlChange = (event: FormEvent<HTMLInputElement>) => {
     setUrlAction({
       name: event.currentTarget.name,
       value: event.currentTarget.value,
-    })
-  }
+    });
+  };
 
-  const isAuthenticated = () => sdk.authSession.isAuthenticated()
+  const isAuthenticated = () => sdk.authSession.isAuthenticated();
 
   const verifyButtonDisabled =
     apiServerUrl.trim().length === 0 ||
-    Object.keys(validationMessages).length > 0
+    Object.keys(validationMessages).length > 0;
 
   const saveButtonDisabled =
-    verifyButtonDisabled || webUrl.trim().length === 0 || isConfigured()
+    verifyButtonDisabled || webUrl.trim().length === 0 || isConfigured();
 
-  const clearButtonDisabled = apiServerUrl.trim().length === 0
+  const clearButtonDisabled = apiServerUrl.trim().length === 0;
 
   const loginButtonDisabled =
-    verifyButtonDisabled || !isConfigured() || isAuthenticated()
+    verifyButtonDisabled || !isConfigured() || isAuthenticated();
 
   const handleLogin = async (e: BaseSyntheticEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     // This will set storage variables and return to OAuthScene when successful
-    await adaptor.login()
-  }
+    await adaptor.login();
+  };
 
   useEffect(() => {
-    initAction(configKey)
-  }, [configKey, initAction])
+    initAction(configKey);
+  }, [configKey, initAction]);
 
   return (
     <SpaceVertical gap="u2">
@@ -281,5 +281,5 @@ export const OAuthForm = ({
         </SpaceVertical>
       </CollapserCard>
     </SpaceVertical>
-  )
-}
+  );
+};

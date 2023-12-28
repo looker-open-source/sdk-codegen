@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { OAuthForm } from './OAuthForm'
+export { OAuthForm } from './OAuthForm';

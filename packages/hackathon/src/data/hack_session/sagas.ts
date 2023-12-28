@@ -23,49 +23,49 @@
  SOFTWARE.
 
  */
-import { all, call, put, takeEvery } from 'redux-saga/effects'
-import type { SagaIterator } from 'redux-saga'
-import { actionMessage, beginLoading, endLoading } from '../common/actions'
-import { sheetsClient } from '../sheets_client'
+import { all, call, put, takeEvery } from 'redux-saga/effects';
+import type { SagaIterator } from 'redux-saga';
+import { actionMessage, beginLoading, endLoading } from '../common/actions';
+import { sheetsClient } from '../sheets_client';
 import {
   Actions,
   initHackSessionResponse,
   initHackSessionFailure,
-} from './actions'
+} from './actions';
 
 function* initializeHackSessionSaga(): SagaIterator {
-  let hacker
+  let hacker;
   try {
-    yield put(beginLoading())
-    hacker = yield call([sheetsClient, sheetsClient.getHacker])
+    yield put(beginLoading());
+    hacker = yield call([sheetsClient, sheetsClient.getHacker]);
     const hackathon = yield call([
       sheetsClient,
       sheetsClient.getCurrentHackathon,
-    ])
+    ]);
     if (hackathon) {
       if (!hacker.registration) {
         const registration = yield call(
           [sheetsClient, sheetsClient.registerUser],
           hacker
-        )
-        hacker.registration = registration
+        );
+        hacker.registration = registration;
       }
       const technologies = yield call([
         sheetsClient,
         sheetsClient.getTechnologies,
-      ])
+      ]);
       const projectsHeadings = yield call([
         sheetsClient,
         sheetsClient.getProjectsHeadings,
-      ])
+      ]);
       const hackersHeadings = yield call([
         sheetsClient,
         sheetsClient.getHackersHeadings,
-      ])
+      ]);
       const judgingsHeadings = yield call([
         sheetsClient,
         sheetsClient.getJudgingsHeadings,
-      ])
+      ]);
       yield put(
         initHackSessionResponse(
           hackathon,
@@ -75,26 +75,26 @@ function* initializeHackSessionSaga(): SagaIterator {
           hackersHeadings,
           judgingsHeadings
         )
-      )
-      yield put(endLoading())
+      );
+      yield put(endLoading());
     } else {
-      yield put(initHackSessionFailure(hacker))
-      yield put(actionMessage('No active hackathon found', 'warn'))
+      yield put(initHackSessionFailure(hacker));
+      yield put(actionMessage('No active hackathon found', 'warn'));
     }
   } catch (err) {
-    console.error(err)
+    console.error(err);
     if (hacker) {
-      yield put(initHackSessionFailure(hacker))
+      yield put(initHackSessionFailure(hacker));
       yield put(
         actionMessage(
           'A problem occurred loading the data. Has the extension been configured?',
           'critical'
         )
-      )
+      );
     } else {
       yield put(
         actionMessage('A problem occurred loading the data', 'critical')
-      )
+      );
     }
   }
 }
@@ -102,5 +102,5 @@ function* initializeHackSessionSaga(): SagaIterator {
 export function* registerHackSessionSagas() {
   yield all([
     takeEvery(Actions.INIT_HACK_SESSION_REQUEST, initializeHackSessionSaga),
-  ])
+  ]);
 }

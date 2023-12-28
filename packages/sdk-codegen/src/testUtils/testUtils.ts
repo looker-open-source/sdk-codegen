@@ -24,71 +24,71 @@
 
  */
 
-import * as fs from 'fs'
-import path from 'path'
-import { ApiConfig } from '../../../sdk-node/src/nodeSettings'
-import { ApiModel } from '../sdkModels'
+import * as fs from 'fs';
+import path from 'path';
+import { ApiConfig } from '../../../sdk-node/src/nodeSettings';
+import { ApiModel } from '../sdkModels';
 
 interface IKeyAny {
-  [key: string]: any
+  [key: string]: any;
 }
 
-const utf8 = 'utf-8'
+const utf8 = 'utf-8';
 
 /**
  * Convert a spec file into an APIModel
  * @param specFile name of spec file
  */
 export const specFromFile = (specFile: string): ApiModel => {
-  const specContent = fs.readFileSync(specFile, { encoding: utf8 })
-  return ApiModel.fromString(specContent)
-}
+  const specContent = fs.readFileSync(specFile, { encoding: utf8 });
+  return ApiModel.fromString(specContent);
+};
 
 /**
  * Properties used for various typescript-based tests
  */
 export interface ITestConfig {
   /** the openApi.json snapshot in the test/ dir */
-  apiTestModel: ApiModel
+  apiTestModel: ApiModel;
   /** root dir of this repository */
-  rootPath: string
+  rootPath: string;
   /** <rootPath>/test dir */
-  testPath: string
+  testPath: string;
   /** test/data.yml.json file */
-  dataFile: string
+  dataFile: string;
   /** root looker.ini file or LOOKERSDK_INI value */
-  localIni: string
+  localIni: string;
   /** base_url from looker.ini section */
-  baseUrl: string
+  baseUrl: string;
   /** timeout from looker.ini section */
-  timeout: number
+  timeout: number;
   /** contents of test/data.yml.json */
-  testData: any
+  testData: any;
   /** ini file configured in testData */
-  testIni: string
+  testIni: string;
   /** contents of local ini */
-  configContents: string
+  configContents: string;
   /** the APIConfig version of local ini */
-  config: IKeyAny
+  config: IKeyAny;
   /** [Looker] section of local ini */
-  section: IKeyAny
+  section: IKeyAny;
   /** APIConfig of the test ini */
-  testConfig: IKeyAny
+  testConfig: IKeyAny;
   /** [Looker] section of test ini */
-  testSection: IKeyAny
+  testSection: IKeyAny;
 }
 
-const homeToRoost = '../../../../'
+const homeToRoost = '../../../../';
 
 /** fully resolved root dir of the repository */
-export const getRootPath = (): string => path.join(__dirname, homeToRoost)
+export const getRootPath = (): string => path.join(__dirname, homeToRoost);
 
 /**
  * Fully resolved path to a file based from the root path
  * @param fileName to path. It can start with folders
  */
 export const rootFile = (fileName = ''): string =>
-  path.join(getRootPath(), fileName)
+  path.join(getRootPath(), fileName);
 
 /**
  * Reads configuration information, returning various test values
@@ -97,22 +97,22 @@ export const rootFile = (fileName = ''): string =>
  * @constructor
  */
 export const TestConfig = (rootPath = ''): ITestConfig => {
-  const testFile = 'data.yml.json'
-  rootPath = rootPath || getRootPath()
-  const localIni = process.env.LOOKERSDK_INI || `${rootPath}looker.ini`
-  const testPath = `${rootPath}test/`
-  const dataFile = `${testPath}${testFile}`
-  const testData = JSON.parse(fs.readFileSync(dataFile, utf8))
-  const testIni = `${rootPath}${testData.iniFile}`
-  const configContents = fs.readFileSync(localIni, utf8)
-  const config = ApiConfig(configContents)
-  const section = config.Looker
-  const baseUrl = section.base_url
-  const timeout = parseInt(section.timeout, 10)
-  const testContents = fs.readFileSync(testIni, utf8)
-  const testConfig = ApiConfig(testContents)
-  const testSection = testConfig.Looker
-  const apiTestModel = specFromFile(`${testPath}openApiRef.json`)
+  const testFile = 'data.yml.json';
+  rootPath = rootPath || getRootPath();
+  const localIni = process.env.LOOKERSDK_INI || `${rootPath}looker.ini`;
+  const testPath = `${rootPath}test/`;
+  const dataFile = `${testPath}${testFile}`;
+  const testData = JSON.parse(fs.readFileSync(dataFile, utf8));
+  const testIni = `${rootPath}${testData.iniFile}`;
+  const configContents = fs.readFileSync(localIni, utf8);
+  const config = ApiConfig(configContents);
+  const section = config.Looker;
+  const baseUrl = section.base_url;
+  const timeout = parseInt(section.timeout, 10);
+  const testContents = fs.readFileSync(testIni, utf8);
+  const testConfig = ApiConfig(testContents);
+  const testSection = testConfig.Looker;
+  const apiTestModel = specFromFile(`${testPath}openApiRef.json`);
   return {
     apiTestModel,
     baseUrl,
@@ -128,5 +128,5 @@ export const TestConfig = (rootPath = ''): ITestConfig => {
     testPath,
     testSection,
     timeout,
-  }
-}
+  };
+};

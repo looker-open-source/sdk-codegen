@@ -90,7 +90,6 @@
     "@babel/runtime": "^7.14.0",
     "@babel/runtime-corejs3": "^7.14.0",
     "@looker/eslint-config-oss": "1.7.14",
-    "@looker/prettier-config": "1.5.1",
     "@testing-library/jest-dom": "5.16.5",
     "@types/blueimp-md5": "^2.7.0",
     "@types/ini": "^1.3.30",
@@ -98,7 +97,7 @@
     "@types/js-yaml": "^3.12.1",
     "@types/lodash": "4.14.172",
     "@types/node": "14.18.63",
-    "@types/prettier": "2.3.2",
+    "@types/prettier": "3.0.0",
     "@types/readable-stream": "2.3.9",
     "@types/request": "2.48.12",
     "@types/request-promise-native": "1.0.21",
@@ -129,7 +128,7 @@
     "openapi3-ts": "2.0.2",
     "pre-commit": "1.2.2",
     "prettier": "3.1.1",
-    "prettier-quick": "0.0.5",
+    "pretty-quick": "2.0.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "regenerator-runtime": "0.13.11",
@@ -161,9 +160,6 @@
     "lint-staged"
   ],
   "eslintConfig": {
-    "extends": [
-      "@looker/eslint-config-oss"
-    ],
     "rules": {
       "@typescript-eslint/no-explicit-any": "off",
       "camelcase": "off",

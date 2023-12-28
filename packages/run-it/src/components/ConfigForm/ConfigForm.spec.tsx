@@ -24,17 +24,20 @@
 
  */
 
-import React from 'react'
-import { fireEvent, screen } from '@testing-library/react'
-import { renderWithTheme } from '@looker/components-test-utils'
-import userEvent from '@testing-library/user-event'
-import { BrowserAdaptor, registerTestEnvAdaptor } from '@looker/extension-utils'
+import React from 'react';
+import { fireEvent, screen } from '@testing-library/react';
+import { renderWithTheme } from '@looker/components-test-utils';
+import userEvent from '@testing-library/user-event';
+import {
+  BrowserAdaptor,
+  registerTestEnvAdaptor,
+} from '@looker/extension-utils';
 
-import { initRunItSdk } from '../..'
-import { ConfigForm, RunItConfigKey } from '.'
+import { initRunItSdk } from '../..';
+import { ConfigForm, RunItConfigKey } from '.';
 
 jest.mock('react-router-dom', () => {
-  const ReactRouterDOM = jest.requireActual('react-router-dom')
+  const ReactRouterDOM = jest.requireActual('react-router-dom');
   return {
     ...ReactRouterDOM,
     useLocation: () => ({
@@ -43,125 +46,125 @@ jest.mock('react-router-dom', () => {
     useHistory: jest
       .fn()
       .mockReturnValue({ push: jest.fn(), location: globalThis.location }),
-  }
-})
+  };
+});
 
 describe('ConfigForm', () => {
-  const adaptor = new BrowserAdaptor(initRunItSdk())
-  registerTestEnvAdaptor(adaptor)
+  const adaptor = new BrowserAdaptor(initRunItSdk());
+  registerTestEnvAdaptor(adaptor);
 
-  const apiLabel = /API server URL/i
-  const authLabel = /OAuth server URL/i
+  const apiLabel = /API server URL/i;
+  const authLabel = /OAuth server URL/i;
   beforeEach(() => {
-    localStorage.removeItem(RunItConfigKey)
-  })
+    localStorage.removeItem(RunItConfigKey);
+  });
 
   test('it creates an empty config form without stored config', async () => {
-    renderWithTheme(<ConfigForm requestContent={{}} />)
+    renderWithTheme(<ConfigForm requestContent={{}} />);
     expect(
       screen.getByRole('heading', { name: 'RunIt Configuration' })
-    ).toBeInTheDocument()
+    ).toBeInTheDocument();
 
     const apiUrl = screen.getByRole('textbox', {
       name: apiLabel,
-    }) as HTMLInputElement
-    expect(apiUrl).toBeInTheDocument()
-    expect(apiUrl).toHaveValue('')
+    }) as HTMLInputElement;
+    expect(apiUrl).toBeInTheDocument();
+    expect(apiUrl).toHaveValue('');
 
     const authUrl = screen.getByRole('textbox', {
       name: authLabel,
-    }) as HTMLInputElement
-    expect(authUrl).toBeInTheDocument()
-    expect(authUrl).toHaveValue('')
+    }) as HTMLInputElement;
+    expect(authUrl).toBeInTheDocument();
+    expect(authUrl).toHaveValue('');
 
     expect(
       screen.getByRole('button', {
         name: 'Clear',
       })
-    ).toBeInTheDocument()
+    ).toBeInTheDocument();
     expect(
       screen.getByRole('button', {
         name: 'Verify',
       })
-    ).toBeInTheDocument()
+    ).toBeInTheDocument();
     expect(
       screen.getByRole('button', {
         name: 'Save',
       })
-    ).toBeInTheDocument()
-  })
+    ).toBeInTheDocument();
+  });
 
   test('it disables and enables verify for bad and good urls', async () => {
-    renderWithTheme(<ConfigForm requestContent={{}} />)
+    renderWithTheme(<ConfigForm requestContent={{}} />);
     const apiUrl = screen.getByRole('textbox', {
       name: apiLabel,
-    }) as HTMLInputElement
-    expect(apiUrl).toBeInTheDocument()
-    expect(apiUrl).toHaveValue('')
+    }) as HTMLInputElement;
+    expect(apiUrl).toBeInTheDocument();
+    expect(apiUrl).toHaveValue('');
 
-    await userEvent.type(apiUrl, 'bad')
+    await userEvent.type(apiUrl, 'bad');
     let button = screen.getByRole('button', {
       name: 'Verify',
-    }) as HTMLButtonElement
-    expect(button).toBeInTheDocument()
-    expect(button).toBeDisabled()
-    expect(screen.getByText(`'bad' is not a valid url`)).toBeInTheDocument()
+    }) as HTMLButtonElement;
+    expect(button).toBeInTheDocument();
+    expect(button).toBeDisabled();
+    expect(screen.getByText(`'bad' is not a valid url`)).toBeInTheDocument();
 
-    fireEvent.change(apiUrl, { target: { value: '' } })
-    await userEvent.type(apiUrl, 'https:good')
-    expect(apiUrl).toHaveValue('https://good')
+    fireEvent.change(apiUrl, { target: { value: '' } });
+    await userEvent.type(apiUrl, 'https:good');
+    expect(apiUrl).toHaveValue('https://good');
     button = screen.getByRole('button', {
       name: 'Verify',
-    }) as HTMLButtonElement
-    expect(button).toBeInTheDocument()
-    expect(button).toBeEnabled()
-  })
+    }) as HTMLButtonElement;
+    expect(button).toBeInTheDocument();
+    expect(button).toBeEnabled();
+  });
 
   test('it can have a custom title', () => {
-    const title = 'New title'
-    renderWithTheme(<ConfigForm title={title} requestContent={{}} />)
-    expect(screen.getByRole('heading', { name: title })).toBeInTheDocument()
-  })
+    const title = 'New title';
+    renderWithTheme(<ConfigForm title={title} requestContent={{}} />);
+    expect(screen.getByRole('heading', { name: title })).toBeInTheDocument();
+  });
 
   describe('storage', () => {
     test.skip('it saves and clears storage', async () => {
       // TODO need to rewrite this test
-      renderWithTheme(<ConfigForm requestContent={{}} />)
+      renderWithTheme(<ConfigForm requestContent={{}} />);
       const apiUrl = screen.getByRole('textbox', {
         name: apiLabel,
-      }) as HTMLInputElement
-      expect(apiUrl).toBeInTheDocument()
-      expect(apiUrl).toHaveValue('')
+      }) as HTMLInputElement;
+      expect(apiUrl).toBeInTheDocument();
+      expect(apiUrl).toHaveValue('');
 
       const authUrl = screen.getByRole('textbox', {
         name: authLabel,
-      }) as HTMLInputElement
-      expect(authUrl).toBeInTheDocument()
-      expect(authUrl).toHaveValue('')
+      }) as HTMLInputElement;
+      expect(authUrl).toBeInTheDocument();
+      expect(authUrl).toHaveValue('');
 
       const save = screen.getByRole('button', {
         name: 'Save',
-      }) as HTMLButtonElement
-      expect(save).toBeInTheDocument()
+      }) as HTMLButtonElement;
+      expect(save).toBeInTheDocument();
 
       const remove = screen.getByRole('button', {
         name: 'Remove',
-      }) as HTMLButtonElement
-      expect(remove).toBeInTheDocument()
+      }) as HTMLButtonElement;
+      expect(remove).toBeInTheDocument();
 
-      await userEvent.type(apiUrl, 'https://foo:199')
-      await userEvent.click(save)
-      const value = localStorage.getItem(RunItConfigKey)
-      expect(value).toBeDefined()
+      await userEvent.type(apiUrl, 'https://foo:199');
+      await userEvent.click(save);
+      const value = localStorage.getItem(RunItConfigKey);
+      expect(value).toBeDefined();
       expect(JSON.parse(value!)).toEqual({
         base_url: 'https://foo:199',
         looker_url: 'https://foo:99',
-      })
+      });
 
-      await userEvent.click(remove)
-      const val = localStorage.getItem(RunItConfigKey)
-      expect(val).toBeEmpty()
-    })
+      await userEvent.click(remove);
+      const val = localStorage.getItem(RunItConfigKey);
+      expect(val).toBeEmpty();
+    });
 
     test('it shows login section when configured', async () => {
       localStorage.setItem(
@@ -170,18 +173,18 @@ describe('ConfigForm', () => {
           base_url: 'http://locb',
           looker_url: 'http://local',
         })
-      )
+      );
 
-      renderWithTheme(<ConfigForm requestContent={{}} />)
+      renderWithTheme(<ConfigForm requestContent={{}} />);
       expect(
         screen.getByRole('heading', { name: 'RunIt Configuration' })
-      ).toBeInTheDocument()
+      ).toBeInTheDocument();
 
       expect(
         screen.getByRole('button', {
           name: 'Login',
         })
-      ).toBeInTheDocument()
-    })
-  })
-})
+      ).toBeInTheDocument();
+    });
+  });
+});

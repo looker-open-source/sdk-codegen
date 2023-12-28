@@ -24,8 +24,8 @@
 
  */
 
-import type { ReactElement } from 'react'
-import React, { useEffect, useState } from 'react'
+import type { ReactElement } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   DataTable,
   Pagination,
@@ -34,36 +34,36 @@ import {
   TabPanel,
   TabPanels,
   useTabs,
-} from '@looker/components'
-import { gridHeaders, gridRows } from './gridUtils'
+} from '@looker/components';
+import { gridHeaders, gridRows } from './gridUtils';
 
 interface DataGridProps {
   /** grid data. First row is header names. All other rows are data */
-  data: any[]
+  data: any[];
   /** Component to render "raw" output */
-  raw: ReactElement<any> | ReactElement[]
+  raw: ReactElement<any> | ReactElement[];
   /** Number of rows per page. Defaults to 15 */
-  pageSize?: number
+  pageSize?: number;
 }
 
 export const DataGrid = ({ data, raw, pageSize = 15 }: DataGridProps) => {
-  const tabs = useTabs()
-  const headers = gridHeaders(data)
-  const [page, setPage] = useState(1)
-  const pageCount = Math.round((data.length - 1) / pageSize)
+  const tabs = useTabs();
+  const headers = gridHeaders(data);
+  const [page, setPage] = useState(1);
+  const pageCount = Math.round((data.length - 1) / pageSize);
 
   // The +1 is to skip the header row
   const pageItemData = data.slice(
     (page - 1) * pageSize + 1,
     page * pageSize + 1
-  )
-  const pageItems = gridRows(pageItemData)
+  );
+  const pageItems = gridRows(pageItemData);
   useEffect(() => {
     if (data.length === 2) {
       // Show raw tab by default for 1 data row
-      tabs.onSelectTab(1)
+      tabs.onSelectTab(1);
     }
-  }, [data])
+  }, [data]);
   return (
     <>
       <TabList {...tabs}>
@@ -79,12 +79,12 @@ export const DataGrid = ({ data, raw, pageSize = 15 }: DataGridProps) => {
             current={page}
             pages={pageCount}
             onChange={(nextPage) => {
-              setPage(nextPage)
+              setPage(nextPage);
             }}
           />
         </TabPanel>
         <TabPanel key="raw">{raw}</TabPanel>
       </TabPanels>
     </>
-  )
-}
+  );
+};

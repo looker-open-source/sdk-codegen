@@ -24,70 +24,70 @@
 
  */
 
-import React, { useEffect, useState } from 'react'
-import { Tabs2, Tab2 } from '@looker/components'
-import type { ApiModel, IMethod } from '@looker/sdk-codegen'
-import { CollapserCard } from '@looker/run-it'
-import { ErrorDoc } from '@looker/sdk-rtl'
+import React, { useEffect, useState } from 'react';
+import { Tabs2, Tab2 } from '@looker/components';
+import type { ApiModel, IMethod } from '@looker/sdk-codegen';
+import { CollapserCard } from '@looker/run-it';
+import { ErrorDoc } from '@looker/sdk-rtl';
 import {
   apiErrorDisplayFetch,
   ExtMarkdown,
   getEnvAdaptor,
-} from '@looker/extension-utils'
+} from '@looker/extension-utils';
 
-import { DocResponseTypes } from './DocResponseTypes'
-import { buildResponseTree } from './utils'
+import { DocResponseTypes } from './DocResponseTypes';
+import { buildResponseTree } from './utils';
 
 interface DocResponsesProps {
-  api: ApiModel
-  method: IMethod
+  api: ApiModel;
+  method: IMethod;
   /** error code to display */
-  errorCode?: string
+  errorCode?: string;
 }
 
 /**
  * Renders a tab list and tab panels for different method response types
  */
 export const DocResponses = ({ api, method, errorCode }: DocResponsesProps) => {
-  const [errorContent, setErrorContent] = useState('')
-  const responses = method.responses
+  const [errorContent, setErrorContent] = useState('');
+  const responses = method.responses;
 
-  const responseTree = buildResponseTree(responses)
-  const tabNames = Object.keys(responseTree)
+  const responseTree = buildResponseTree(responses);
+  const tabNames = Object.keys(responseTree);
 
-  let defaultTabId = tabNames[0]
+  let defaultTabId = tabNames[0];
 
   if (errorCode) {
-    const pattern = new RegExp(`${errorCode}: \\w+`)
+    const pattern = new RegExp(`${errorCode}: \\w+`);
     tabNames.forEach((el) => {
       if (pattern.test(el)) {
-        defaultTabId = el
+        defaultTabId = el;
       }
-    })
+    });
   }
 
   useEffect(() => {
-    if (!errorCode) return
+    if (!errorCode) return;
 
     const getErrorContent = async () => {
       const docUrl = `/err/4.0/${errorCode}/${method.httpMethod.toLocaleLowerCase()}${
         method.endpoint
-      }`
-      const adaptor = getEnvAdaptor()
-      const errDoc = new ErrorDoc(adaptor.sdk, apiErrorDisplayFetch)
-      const content = await errDoc.content(docUrl)
-      setErrorContent(content)
-    }
-    getErrorContent()
-  }, [errorCode])
+      }`;
+      const adaptor = getEnvAdaptor();
+      const errDoc = new ErrorDoc(adaptor.sdk, apiErrorDisplayFetch);
+      const content = await errDoc.content(docUrl);
+      setErrorContent(content);
+    };
+    getErrorContent();
+  }, [errorCode]);
 
-  if (responses.length === 0) return <></>
+  if (responses.length === 0) return <></>;
 
   return (
     <CollapserCard heading="Response Models" id="response models">
       <Tabs2 defaultTabId={defaultTabId}>
         {Object.entries(responseTree).map(([statusCode, response]) => {
-          const errorTab = errorCode && statusCode === defaultTabId
+          const errorTab = errorCode && statusCode === defaultTabId;
           return (
             <Tab2 key={statusCode} id={statusCode} label={statusCode}>
               <DocResponseTypes api={api} responses={response} />
@@ -95,9 +95,9 @@ export const DocResponses = ({ api, method, errorCode }: DocResponsesProps) => {
                 <ExtMarkdown source={errorContent} />
               )}
             </Tab2>
-          )
+          );
         })}
       </Tabs2>
     </CollapserCard>
-  )
-}
+  );
+};

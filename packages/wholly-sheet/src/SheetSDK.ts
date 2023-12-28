@@ -24,17 +24,17 @@
 
  */
 
-import type { HttpMethod, IAuthSession } from '@looker/sdk-rtl'
-import { APIMethods } from '@looker/sdk-rtl'
-import type { ColumnHeaders, IRowModel } from './RowModel'
-import { rowPosition } from './RowModel'
+import type { HttpMethod, IAuthSession } from '@looker/sdk-rtl';
+import { APIMethods } from '@looker/sdk-rtl';
+import type { ColumnHeaders, IRowModel } from './RowModel';
+import { rowPosition } from './RowModel';
 
 /** Keyed data for a tab, and the tab's header row */
 export interface ITabTable {
   /** Array of header names, in column order */
-  header: ColumnHeaders
+  header: ColumnHeaders;
   /** Parsed data for the tab */
-  rows: IRowModel[]
+  rows: IRowModel[];
 }
 
 export const defaultScopes = [
@@ -43,49 +43,49 @@ export const defaultScopes = [
   // 'https://www.googleapis.com/auth/drive.readonly',
   'https://www.googleapis.com/auth/spreadsheets',
   // 'https://www.googleapis.com/auth/spreadsheets.readonly',
-]
+];
 
 // https://developers.google.com/sheets/api/reference/rest
 
 export class SheetError extends Error {
   constructor(message?: string) {
-    super(message) // 'Error' breaks prototype chain here
-    Object.setPrototypeOf(this, new.target.prototype) // restore prototype chain
+    super(message); // 'Error' breaks prototype chain here
+    Object.setPrototypeOf(this, new.target.prototype); // restore prototype chain
   }
 }
 
 // Manually recreated type/interface declarations that are NOT complete
 export interface ITabGridProperties {
-  rowCount: number
-  columnCount: number
+  rowCount: number;
+  columnCount: number;
 }
 
 export interface ITabProperties {
-  sheetId: number
-  title: string
-  index: number
-  sheetType: string
-  gridProperties: ITabGridProperties
+  sheetId: number;
+  title: string;
+  index: number;
+  sheetType: string;
+  gridProperties: ITabGridProperties;
 }
 
 export interface ICellValue {
-  stringValue: string
+  stringValue: string;
 }
 
 export interface ICellTextFormat {
-  fontFamily: string
+  fontFamily: string;
 }
 
 export interface ICellFormat {
-  verticalAlignment: string
-  textFormat: ICellTextFormat
+  verticalAlignment: string;
+  textFormat: ICellTextFormat;
 }
 
 export interface ICellData {
-  userEnteredValue: ICellValue
-  effectiveValue: ICellValue
-  formattedValue: string
-  userEnteredFormat: ICellFormat
+  userEnteredValue: ICellValue;
+  effectiveValue: ICellValue;
+  formattedValue: string;
+  userEnteredFormat: ICellFormat;
   // effectiveFormat: {
   //   "backgroundColor": {
   //     "red": 1,
@@ -125,38 +125,38 @@ export interface ICellData {
 }
 
 export interface ITabRowData {
-  values: ICellData[]
+  values: ICellData[];
 }
 
 export interface ITabData {
-  rowData: ITabRowData[]
+  rowData: ITabRowData[];
 }
 
 export interface ISheetTab {
-  properties: ITabProperties
-  data: ITabData
+  properties: ITabProperties;
+  data: ITabData;
 }
 
 export interface ISheetProperties {
-  title: string
-  local: string
-  autoRecalc: string
-  timeZone: string
+  title: string;
+  local: string;
+  autoRecalc: string;
+  timeZone: string;
 }
 
-export type TabTables = Record<string, ITabTable>
+export type TabTables = Record<string, ITabTable>;
 
 export interface ISheet {
   /** id of the spreadsheet */
-  spreadsheetId: string
+  spreadsheetId: string;
   /** Sheet metadata */
-  properties: ISheetProperties
+  properties: ISheetProperties;
   /** Individual sheet tabs */
-  sheets: ISheetTab[]
+  sheets: ISheetTab[];
   /** All tabs data loaded into a keyed collection of TabData */
-  tabs: TabTables
+  tabs: TabTables;
   /** Url where sheet can be viewed */
-  spreadsheetUrl: string
+  spreadsheetUrl: string;
 }
 
 /**
@@ -164,9 +164,9 @@ export interface ISheet {
  * @param tab string or ISheetTab interface
  */
 export const tabName = (tab: string | ISheetTab) => {
-  if (typeof tab === 'string') return tab
-  return tab.properties.title
-}
+  if (typeof tab === 'string') return tab;
+  return tab.properties.title;
+};
 
 /**
  * Loads the GSheet data from a sheet (tab) into a header name collection and data rows
@@ -180,73 +180,76 @@ export const loadTabTable = (tab: ISheetTab, keyName = '_id'): ITabTable => {
   const result: ITabTable = {
     header: [],
     rows: [],
-  }
-  const rowData = tab.data[0].rowData
-  if (rowData.length < 1) return result
+  };
+  const rowData = tab.data[0].rowData;
+  if (rowData.length < 1) return result;
 
   // Get column headers
-  const values = rowData[0].values
+  const values = rowData[0].values;
   for (let i = 0; i < values.length; i++) {
-    const cell = values[i]
+    const cell = values[i];
     // Are we at an empty header column?
-    if (!cell.formattedValue) break
-    result.header.push(cell.formattedValue)
+    if (!cell.formattedValue) break;
+    result.header.push(cell.formattedValue);
   }
 
   // Index row data
   for (let rowIndex = 1; rowIndex < rowData.length; rowIndex++) {
-    const r = rowData[rowIndex]
-    const row = {}
-    row[rowPosition] = rowIndex + 1
+    const r = rowData[rowIndex];
+    const row = {};
+    row[rowPosition] = rowIndex + 1;
     result.header.forEach((colName, index) => {
       if (index < r.values.length) {
-        const cell: ICellData = r.values[index]
+        const cell: ICellData = r.values[index];
         // Only assign cells with values
-        if (cell.formattedValue) row[colName] = cell.formattedValue
+        if (cell.formattedValue) row[colName] = cell.formattedValue;
       }
-    })
+    });
 
     // An empty data row means we've hit the last row of data
     // some tabs have thousands of rows of no data
     if (Object.keys(row).length === 1) {
-      break
+      break;
     }
 
     if (!row[keyName]) {
       throw new SheetError(
         `Tab ${tabName(tab)} row ${rowIndex + 1} has no key column '${keyName}'`
-      )
+      );
     }
-    result.rows.push(row as IRowModel)
+    result.rows.push(row as IRowModel);
   }
-  return result
-}
+  return result;
+};
 
 // https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets.values
-export type SheetValues = any[]
+export type SheetValues = any[];
 
-const sheetSDKVersion = '0.5.0-beta'
+const sheetSDKVersion = '0.5.0-beta';
 
 export interface ISheetRowResponse {
-  row: number
-  values: SheetValues
+  row: number;
+  values: SheetValues;
 }
 
 export class SheetSDK extends APIMethods {
-  constructor(authSession: IAuthSession, public sheetId: string) {
-    super(authSession, sheetSDKVersion)
-    authSession.settings.agentTag = `SheetSDK ${this.apiVersion}`
-    this.sheetId = encodeURIComponent(sheetId)
+  constructor(
+    authSession: IAuthSession,
+    public sheetId: string
+  ) {
+    super(authSession, sheetSDKVersion);
+    authSession.settings.agentTag = `SheetSDK ${this.apiVersion}`;
+    this.sheetId = encodeURIComponent(sheetId);
   }
 
   async request<TSuccess>(method: HttpMethod, api = '', body: any = undefined) {
-    const path = `https://sheets.googleapis.com/v4/spreadsheets/${this.sheetId}${api}`
+    const path = `https://sheets.googleapis.com/v4/spreadsheets/${this.sheetId}${api}`;
     const response = await this.ok<TSuccess, SheetError>(
       this.authRequest<TSuccess, SheetError>(method, path, undefined, body)
-    )
+    );
     // const response = await parseResponse(raw)
     // if (!raw.ok) throw new SheetError(response)
-    return response
+    return response;
   }
 
   /**
@@ -254,9 +257,9 @@ export class SheetSDK extends APIMethods {
    * **NOTE**: this response is cast to the ISheet interface so some properties may be hidden
    */
   async read() {
-    const api = '?includeGridData=true'
-    const result = (await this.request('GET', api)) as ISheet
-    return result
+    const api = '?includeGridData=true';
+    const result = (await this.request('GET', api)) as ISheet;
+    return result;
   }
 
   /**
@@ -264,14 +267,14 @@ export class SheetSDK extends APIMethods {
    * @param doc Sheet to index
    */
   async index(doc?: ISheet): Promise<ISheet> {
-    if (!doc) doc = await this.read()
+    if (!doc) doc = await this.read();
     if (doc) {
-      doc.tabs = {}
+      doc.tabs = {};
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      doc.sheets.forEach((tab) => (doc.tabs[tabName(tab)] = loadTabTable(tab)))
+      doc.sheets.forEach((tab) => (doc.tabs[tabName(tab)] = loadTabTable(tab)));
     }
-    return doc
+    return doc;
   }
 
   /**
@@ -279,9 +282,9 @@ export class SheetSDK extends APIMethods {
    * @param range Defaults to all values in the default (first?) tab
    */
   async getValues(range = '!A1:end') {
-    const api = range ? `/values/${range}` : ''
-    const sheet = await this.request<any>('GET', api)
-    return sheet.values as SheetValues
+    const api = range ? `/values/${range}` : '';
+    const sheet = await this.request<any>('GET', api);
+    return sheet.values as SheetValues;
   }
 
   /**
@@ -290,11 +293,11 @@ export class SheetSDK extends APIMethods {
    * @param row to retrieve
    */
   async rowGet(tab: string | ISheetTab, row: number) {
-    if (!row) throw new SheetError('row cannot be zero')
-    const name = tabName(tab)
-    const api = `/values/${name}!A${row}:end`
-    const sheet = await this.request<any>('GET', api)
-    return sheet.values as SheetValues
+    if (!row) throw new SheetError('row cannot be zero');
+    const name = tabName(tab);
+    const api = `/values/${name}!A${row}:end`;
+    const sheet = await this.request<any>('GET', api);
+    return sheet.values as SheetValues;
   }
 
   /**
@@ -307,25 +310,25 @@ export class SheetSDK extends APIMethods {
     if (!values || values.length === 0 || !Array.isArray(values[0]))
       throw new SheetError(
         `Nothing to batch update. Expected an array of row values`
-      )
-    const name = tabName(tab)
+      );
+    const name = tabName(tab);
     const data = {
       range: `${name}!A${row}:end`,
       majorDimension: 'ROWS',
       values: values,
-    }
-    const api = `/values:batchUpdate`
+    };
+    const api = `/values:batchUpdate`;
     const body = {
       valueInputOption: 'RAW',
       data: [data],
       includeValuesInResponse: true,
       responseValueRenderOption: 'UNFORMATTED_VALUE',
       responseDateTimeRenderOption: 'FORMATTED_STRING',
-    }
-    const response = await this.request<any>('POST', api, JSON.stringify(body))
+    };
+    const response = await this.request<any>('POST', api, JSON.stringify(body));
     // remove header row
-    const update = response.responses[0].updatedData.values.slice(1)
-    return update
+    const update = response.responses[0].updatedData.values.slice(1);
+    return update;
   }
 
   /**
@@ -333,13 +336,13 @@ export class SheetSDK extends APIMethods {
    * @param tab to clear
    */
   async tabClear(tab: string | ISheetTab) {
-    const name = tabName(tab)
+    const name = tabName(tab);
     // https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets.values/batchClear
     // TODO is there a way to KNOW what the last column is?
-    const body = { ranges: [name] }
-    const api = `/values:batchClear`
-    const response = await this.request<any>('POST', api, JSON.stringify(body))
-    return response
+    const body = { ranges: [name] };
+    const api = `/values:batchClear`;
+    const response = await this.request<any>('POST', api, JSON.stringify(body));
+    return response;
   }
 
   /**
@@ -355,23 +358,23 @@ export class SheetSDK extends APIMethods {
      * - batch update the sheet with the new collection
      */
 
-    if (!row) throw new SheetError('row cannot be zero')
-    const batch = await this.tabValues(tab)
-    const rowPos = row - 1
+    if (!row) throw new SheetError('row cannot be zero');
+    const batch = await this.tabValues(tab);
+    const rowPos = row - 1;
     if (rowPos > batch.length)
       throw new SheetError(
         `Row ${row} doesn't exist. ${batch.length} rows found.`
-      )
-    await this.tabClear(tab)
+      );
+    await this.tabClear(tab);
     // Remove the target row
-    batch.splice(rowPos, 1)
+    batch.splice(rowPos, 1);
 
-    const values = await this.batchUpdate(tab, batch)
-    return values
+    const values = await this.batchUpdate(tab, batch);
+    return values;
   }
 
   private static bodyValues(values: SheetValues) {
-    return JSON.stringify({ values: [values] })
+    return JSON.stringify({ values: [values] });
   }
 
   /**
@@ -391,20 +394,20 @@ export class SheetSDK extends APIMethods {
     row: number,
     values: SheetValues
   ): Promise<ISheetRowResponse> {
-    const body = SheetSDK.bodyValues(values)
-    const name = tabName(tab)
+    const body = SheetSDK.bodyValues(values);
+    const name = tabName(tab);
     // TODO receive changed values back from request
     // https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets.values/update
     const options =
-      'valueInputOption=RAW&includeValuesInResponse=true&responseValueRenderOption=FORMATTED_VALUE'
-    const api = `/values/${name}!A${row}:end?${options}`
-    const response = await this.request<any>('PUT', api, body)
-    const changeCount = values.length
-    const expected = `1 row(s), ${changeCount} column(s), ${changeCount} cells`
-    const actual = `${response.updatedRows} row(s), ${response.updatedColumns} column(s), ${response.updatedCells} cells`
+      'valueInputOption=RAW&includeValuesInResponse=true&responseValueRenderOption=FORMATTED_VALUE';
+    const api = `/values/${name}!A${row}:end?${options}`;
+    const response = await this.request<any>('PUT', api, body);
+    const changeCount = values.length;
+    const expected = `1 row(s), ${changeCount} column(s), ${changeCount} cells`;
+    const actual = `${response.updatedRows} row(s), ${response.updatedColumns} column(s), ${response.updatedCells} cells`;
     if (expected !== actual)
-      throw new SheetError(`Update expected ${expected} but got ${actual}`)
-    return { row: row, values: response.updatedData.values }
+      throw new SheetError(`Update expected ${expected} but got ${actual}`);
+    return { row: row, values: response.updatedData.values };
   }
 
   /**
@@ -422,21 +425,21 @@ export class SheetSDK extends APIMethods {
     row: number,
     values: SheetValues
   ): Promise<ISheetRowResponse> {
-    const body = SheetSDK.bodyValues(values)
-    const name = tabName(tab)
+    const body = SheetSDK.bodyValues(values);
+    const name = tabName(tab);
     // TODO receive changed values back from request
     // https://developers.google.com/sheets/api/reference/rest/v4/spreadsheets.values/append
     const options =
-      'valueInputOption=RAW&insertDataOption=INSERT_ROWS&includeValuesInResponse=true&responseValueRenderOption=FORMATTED_VALUE'
-    const api = `/values/${name}!A${row}:end:append?${options}`
-    const response = await this.request<any>('POST', api, body)
-    const range = response.updates.updatedRange
-    const match = range.match(/!A(\d+):/)
+      'valueInputOption=RAW&insertDataOption=INSERT_ROWS&includeValuesInResponse=true&responseValueRenderOption=FORMATTED_VALUE';
+    const api = `/values/${name}!A${row}:end:append?${options}`;
+    const response = await this.request<any>('POST', api, body);
+    const range = response.updates.updatedRange;
+    const match = range.match(/!A(\d+):/);
     if (!match) {
-      throw new SheetError(`Update couldn't extract row from range ${range}`)
+      throw new SheetError(`Update couldn't extract row from range ${range}`);
     }
-    const rowId = parseInt(match[1])
-    return { row: rowId, values: response.updates.updatedData.values }
+    const rowId = parseInt(match[1]);
+    return { row: rowId, values: response.updates.updatedData.values };
   }
 
   /**
@@ -445,6 +448,6 @@ export class SheetSDK extends APIMethods {
    * @param range defaults to the entire sheet
    */
   async tabValues(tab: string | ISheetTab, range = '!A1:end') {
-    return await this.getValues(`${tabName(tab)}${range}`)
+    return await this.getValues(`${tabName(tab)}${range}`);
   }
 }

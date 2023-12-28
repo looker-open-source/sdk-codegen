@@ -24,25 +24,25 @@
 
  */
 
-import type { IAPIMethods } from '@looker/sdk-rtl'
+import type { IAPIMethods } from '@looker/sdk-rtl';
 import type {
   IAuthAdaptor,
   IEnvironmentAdaptor,
   ThemeOverrides,
-} from './adaptorUtils'
-import { getThemeOverrides, hostedInternally } from './adaptorUtils'
-import type { OAuthConfigProvider } from './authUtils'
+} from './adaptorUtils';
+import { getThemeOverrides, hostedInternally } from './adaptorUtils';
+import type { OAuthConfigProvider } from './authUtils';
 
 export class BrowserAuthAdaptor implements IAuthAdaptor {
   constructor(public readonly sdk: IAPIMethods) {}
 
   async login() {
-    let token
-    const settings = this.sdk.authSession.settings as OAuthConfigProvider
+    let token;
+    const settings = this.sdk.authSession.settings as OAuthConfigProvider;
     if (settings.authIsConfigured()) {
-      token = await this.sdk.authSession.login()
+      token = await this.sdk.authSession.login();
     }
-    return !!token
+    return !!token;
   }
 }
 
@@ -53,40 +53,40 @@ export class BrowserAdaptor
   extends BrowserAuthAdaptor
   implements IEnvironmentAdaptor
 {
-  private _themeOverrides: ThemeOverrides
+  private _themeOverrides: ThemeOverrides;
 
   constructor(sdk: IAPIMethods) {
-    super(sdk)
-    const { hostname } = location
-    this._themeOverrides = getThemeOverrides(hostedInternally(hostname))
+    super(sdk);
+    const { hostname } = location;
+    this._themeOverrides = getThemeOverrides(hostedInternally(hostname));
   }
 
   async copyToClipboard() {
-    await navigator.clipboard.writeText(location.href)
+    await navigator.clipboard.writeText(location.href);
   }
 
   isExtension() {
-    return false
+    return false;
   }
 
   async localStorageGetItem(key: string) {
-    return localStorage.getItem(key)
+    return localStorage.getItem(key);
   }
 
   async localStorageSetItem(key: string, value: string) {
-    await localStorage.setItem(key, value)
+    await localStorage.setItem(key, value);
   }
 
   async localStorageRemoveItem(key: string) {
-    await localStorage.removeItem(key)
+    await localStorage.removeItem(key);
   }
 
   themeOverrides() {
-    return this._themeOverrides
+    return this._themeOverrides;
   }
 
   openBrowserWindow(url: string, target?: string) {
-    window.open(url, target)
+    window.open(url, target);
   }
 
   logError(_error: Error, _componentStack: string): void {

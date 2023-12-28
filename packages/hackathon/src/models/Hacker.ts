@@ -24,56 +24,56 @@
 
  */
 
-import type { IRole, IUser as ILookerUser, Looker40SDK } from '@looker/sdk'
-import { TypedRows } from '@looker/wholly-artifact'
-import type { SheetData, Registration, Hackathon } from '.'
-import { User } from '.'
+import type { IRole, IUser as ILookerUser, Looker40SDK } from '@looker/sdk';
+import { TypedRows } from '@looker/wholly-artifact';
+import type { SheetData, Registration, Hackathon } from '.';
+import { User } from '.';
 
-export type UserPermission = 'delete' | 'create' | 'update'
+export type UserPermission = 'delete' | 'create' | 'update';
 /** This will probably need to change but it's a start at establishing user permissions for data operations */
 
-export type UserRole = 'user' | 'staff' | 'judge' | 'admin'
+export type UserRole = 'user' | 'staff' | 'judge' | 'admin';
 
 export interface IHackerProps {
   /** Looker user object */
-  user: ILookerUser
+  user: ILookerUser;
   /** User record */
-  userRecord?: User
+  userRecord?: User;
   /** ID of the user */
-  id: string
+  id: string;
   /** First name of user */
-  firstName: string
+  firstName: string;
   /** Last name of user */
-  lastName: string
+  lastName: string;
   /** Full name of user */
-  name: string
+  name: string;
   /** Roles for this user */
-  roles: Set<UserRole>
+  roles: Set<UserRole>;
   /** Permissions for this user */
-  permissions: Set<UserPermission>
+  permissions: Set<UserPermission>;
   /** virtual property for registration date */
-  registered: Date | undefined
+  registered: Date | undefined;
   /** virtual property for attended */
-  attended: boolean
+  attended: boolean;
   /** Does the hacker have API3 credentials */
-  api3: boolean
+  api3: boolean;
   /** user registration record */
-  registration: Registration
+  registration: Registration;
   /** is this user a staff member? */
-  canStaff: boolean
+  canStaff: boolean;
   /** is this user a judge? */
-  canJudge: boolean
+  canJudge: boolean;
   /** is this user an admin? */
-  canAdmin: boolean
+  canAdmin: boolean;
   /** locale user attribute value */
-  locale: string
+  locale: string;
   /** timezone user attribute value */
-  timezone: string
+  timezone: string;
 }
 
 export interface IHacker extends IHackerProps {
   /** assign the current user their roles and permissions from Looker user lookup */
-  getMe(): Promise<IHacker>
+  getMe(): Promise<IHacker>;
 }
 
 /**
@@ -84,17 +84,17 @@ export interface IHacker extends IHackerProps {
  * The User object from the sheet is used to avoid rights issues getting all users as a normal Hacker
  */
 export class Hacker implements IHacker {
-  user: ILookerUser = { id: '0', first_name: 'Unknown', last_name: 'user!' }
-  roles = new Set<UserRole>(['user'])
-  permissions = new Set<UserPermission>()
-  locale = ''
-  timezone = ''
-  api3 = false
-  registration!: Registration
-  canAdmin = false
-  canJudge = false
-  canStaff = false
-  userRecord = undefined
+  user: ILookerUser = { id: '0', first_name: 'Unknown', last_name: 'user!' };
+  roles = new Set<UserRole>(['user']);
+  permissions = new Set<UserPermission>();
+  locale = '';
+  timezone = '';
+  api3 = false;
+  registration!: Registration;
+  canAdmin = false;
+  canJudge = false;
+  canStaff = false;
+  userRecord = undefined;
 
   constructor(
     public readonly sdk?: Looker40SDK,
@@ -102,37 +102,37 @@ export class Hacker implements IHacker {
     userRecord?: User
   ) {
     if (user) {
-      this.user = user
+      this.user = user;
       if (
         user.credentials_api3 &&
         user.credentials_api3.find((c) => !c.is_disabled)
       )
-        this.api3 = true
+        this.api3 = true;
     }
     if (userRecord) {
       // Complains without `as any` even though I have a check
-      this.userRecord = userRecord as any
+      this.userRecord = userRecord as any;
     }
   }
 
   get name() {
-    return `${this.firstName} ${this.lastName}`
+    return `${this.firstName} ${this.lastName}`;
   }
 
-  protected staffRole?: IRole
-  protected judgeRole?: IRole
-  protected adminRole?: IRole
+  protected staffRole?: IRole;
+  protected judgeRole?: IRole;
+  protected adminRole?: IRole;
 
   protected async getRoles(sdk: Looker40SDK, userId: string): Promise<void> {
     try {
-      const roles = await sdk.ok(sdk.user_roles({ user_id: userId }))
-      this.staffRole = roles.find((r: IRole) =>
-        r.name?.match(/hackathon staff/i)
-      )
-      this.judgeRole = roles.find((r: IRole) =>
-        r.name?.match(/hackathon judge/i)
-      )
-      this.adminRole = roles.find((r: IRole) => r.name?.match(/admin/i))
+      const roles = await sdk.ok(sdk.user_roles({ user_id: userId }));
+      this.staffRole = roles.find(
+        (r: IRole) => r.name?.match(/hackathon staff/i)
+      );
+      this.judgeRole = roles.find(
+        (r: IRole) => r.name?.match(/hackathon judge/i)
+      );
+      this.adminRole = roles.find((r: IRole) => r.name?.match(/admin/i));
     } catch (error) {
       // user doesn't have roles, so the user role will default to 'user' only
     }
@@ -148,90 +148,90 @@ export class Hacker implements IHacker {
    */
   async getMe() {
     if (this.sdk) {
-      this.user = await this.sdk.ok(this.sdk.me())
+      this.user = await this.sdk.ok(this.sdk.me());
       // not limiting user_attribute_ids because I'd rather resolve them by name since id could change
       const attribs = await this.sdk.ok(
         this.sdk.user_attribute_user_values({
           user_id: this.user.id!,
           fields: 'name,value',
         })
-      )
-      this.locale = attribs.find((a) => a.name === 'locale')?.value || 'en'
+      );
+      this.locale = attribs.find((a) => a.name === 'locale')?.value || 'en';
       this.timezone =
         attribs.find((a) => a.name === 'timezone')?.value ||
-        'America/Los_Angeles'
-      return await this.assignRoles()
+        'America/Los_Angeles';
+      return await this.assignRoles();
     }
-    return this
+    return this;
   }
 
   async assignRoles() {
     if (this.sdk) {
       try {
-        await this.getRoles(this.sdk, this.user.id!)
-        if (this.staffRole) this.roles.add('staff')
-        if (this.judgeRole) this.roles.add('judge')
-        if (this.adminRole) this.roles.add('admin')
+        await this.getRoles(this.sdk, this.user.id!);
+        if (this.staffRole) this.roles.add('staff');
+        if (this.judgeRole) this.roles.add('judge');
+        if (this.adminRole) this.roles.add('admin');
       } catch (err: any) {
         if (err.message !== 'Not found') {
-          throw err
+          throw err;
         }
       }
     }
-    this.assignRights()
-    return this
+    this.assignRights();
+    return this;
   }
 
   assignRights() {
-    this.canAdmin = this.roles.has('admin')
-    this.canJudge = this.roles.has('judge')
-    this.canStaff = this.roles.has('staff') || this.canAdmin
+    this.canAdmin = this.roles.has('admin');
+    this.canJudge = this.roles.has('judge');
+    this.canStaff = this.roles.has('staff') || this.canAdmin;
   }
 
   findRegistration(hackathon: Hackathon, registrations: Registration[]) {
     const reg = registrations.find(
       (r: Registration) =>
         r._user_id === this.id && r.hackathon_id === hackathon._id
-    )
-    if (reg) this.registration = reg
+    );
+    if (reg) this.registration = reg;
   }
 
   get id(): string {
-    if (this.userRecord) return (this.userRecord as User)._id
-    throw new Error('No User record associated with hacker')
+    if (this.userRecord) return (this.userRecord as User)._id;
+    throw new Error('No User record associated with hacker');
   }
 
   get firstName(): string {
-    return this.user.first_name || 'Unknown'
+    return this.user.first_name || 'Unknown';
   }
 
   get lastName(): string {
-    return this.user.last_name || 'user!'
+    return this.user.last_name || 'user!';
   }
 
   get registered(): Date | undefined {
-    if (this.registration) return this.registration.date_registered
-    return undefined
+    if (this.registration) return this.registration.date_registered;
+    return undefined;
   }
 
   get attended(): boolean {
-    if (this.registration) return this.registration.attended
-    return false
+    if (this.registration) return this.registration.attended;
+    return false;
   }
 
   toObject(): IHackerProps {
-    return { ...this } as IHackerProps
+    return { ...this } as IHackerProps;
   }
 }
 
 export class Hackers extends TypedRows<Hacker> {
-  judges!: Hacker[]
-  users!: Hacker[]
-  staff!: Hacker[]
-  admins!: Hacker[]
+  judges!: Hacker[];
+  users!: Hacker[];
+  staff!: Hacker[];
+  admins!: Hacker[];
 
   constructor(public sdk: Looker40SDK) {
-    super([])
+    super([]);
   }
 
   get displayHeaders() {
@@ -244,12 +244,12 @@ export class Hackers extends TypedRows<Hacker> {
       'registered',
       'api3',
       'attended',
-    ]
+    ];
   }
 
   assign(users: ILookerUser[]) {
-    this.rows = users.map((u) => new Hacker(this.sdk, u))
-    return this
+    this.rows = users.map((u) => new Hacker(this.sdk, u));
+    return this;
   }
 
   /**
@@ -257,28 +257,28 @@ export class Hackers extends TypedRows<Hacker> {
    * @param hackathon
    */
   async findHackUsers(hackathon: Hackathon) {
-    const groupName = `Looker_Hack: ${hackathon._id}`
+    const groupName = `Looker_Hack: ${hackathon._id}`;
     // const groupName = `Hackathon`
     const groups = await this.sdk.ok(
       this.sdk.search_groups({ name: groupName })
-    )
+    );
     if (!groups || groups.length === 0)
-      throw new Error(`Group ${groupName} was not found`)
-    const group = groups[0]
+      throw new Error(`Group ${groupName} was not found`);
+    const group = groups[0];
     return await this.sdk.ok(
       this.sdk.search_users({
         group_id: group.id?.toString(),
       })
-    )
+    );
   }
 
   private loadGroups() {
     this.users = this.rows.filter(
       (h) => !(h.canJudge || h.canStaff || h.canAdmin)
-    )
-    this.staff = this.rows.filter((h) => h.canStaff)
-    this.judges = this.rows.filter((h) => h.canJudge)
-    this.admins = this.rows.filter((h) => h.canAdmin)
+    );
+    this.staff = this.rows.filter((h) => h.canStaff);
+    this.judges = this.rows.filter((h) => h.canJudge);
+    this.admins = this.rows.filter((h) => h.canAdmin);
   }
 
   /**
@@ -287,93 +287,95 @@ export class Hackers extends TypedRows<Hacker> {
    * @param hackers to load. If not specified, the hackers for the currentHackathon will be loaded
    */
   async load(data: SheetData) {
-    const hackathon = data.currentHackathon
-    if (!hackathon) throw new Error(`No current hackathon was found`)
+    const hackathon = data.currentHackathon;
+    if (!hackathon) throw new Error(`No current hackathon was found`);
 
-    this.rows = []
+    this.rows = [];
 
-    const hackathonLookerUsers = await this.findHackUsers(hackathon)
+    const hackathonLookerUsers = await this.findHackUsers(hackathon);
 
     for (const u of hackathonLookerUsers) {
-      let userRecord = data.users.find(u.id, 'looker_id')
+      let userRecord = data.users.find(u.id, 'looker_id');
       if (!userRecord) {
         /** create the user tab row for this hacker */
         const newUserRecord = new User({
           looker_id: u.id,
           first_name: u.first_name,
           last_name: u.last_name,
-        })
-        userRecord = await data.users.save(newUserRecord)
+        });
+        userRecord = await data.users.save(newUserRecord);
       } else {
         if (
           userRecord.first_name !== u.first_name ||
           userRecord.last_name !== u.last_name
         ) {
           // Refresh the user's name
-          userRecord.first_name = u.first_name as string
-          userRecord.last_name = u.last_name as string
-          userRecord = await data.users.update(userRecord)
+          userRecord.first_name = u.first_name as string;
+          userRecord.last_name = u.last_name as string;
+          userRecord = await data.users.update(userRecord);
         }
       }
-      this.rows.push(new Hacker(this.sdk, u, userRecord))
+      this.rows.push(new Hacker(this.sdk, u, userRecord));
     }
 
     const regs = data.registrations.rows.filter(
       (r) => r.hackathon_id === hackathon._id
-    )
-    const { admins, staff, judges } = await this.getSpecialUsers()
+    );
+    const { admins, staff, judges } = await this.getSpecialUsers();
     for (const hacker of this.rows) {
       if (admins.includes(hacker.user.id as string)) {
-        hacker.roles.add('admin')
-        hacker.canAdmin = true
+        hacker.roles.add('admin');
+        hacker.canAdmin = true;
       }
       if (staff.includes(hacker.user.id as string)) {
-        hacker.roles.add('staff')
-        hacker.canStaff = true
+        hacker.roles.add('staff');
+        hacker.canStaff = true;
       }
       if (judges.includes(hacker.user.id as string)) {
-        hacker.roles.add('judge')
-        hacker.canJudge = true
+        hacker.roles.add('judge');
+        hacker.canJudge = true;
       }
-      hacker.findRegistration(hackathon, regs)
+      hacker.findRegistration(hackathon, regs);
     }
-    this.loadGroups()
-    return this
+    this.loadGroups();
+    return this;
   }
 
   private async getSpecialUsers() {
-    let judges: string[] = []
-    let staff: string[] = []
-    let admins: string[] = []
+    let judges: string[] = [];
+    let staff: string[] = [];
+    let admins: string[] = [];
     try {
-      const roles = await this.sdk.ok(this.sdk.all_roles({ fields: 'name,id' }))
-      const adminRole = roles.find((r: IRole) => r.name?.match(/admin/i))
+      const roles = await this.sdk.ok(
+        this.sdk.all_roles({ fields: 'name,id' })
+      );
+      const adminRole = roles.find((r: IRole) => r.name?.match(/admin/i));
       if (adminRole) {
         const users = await this.sdk.ok(
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           this.sdk.role_users({ fields: 'id', role_id: adminRole.id! })
-        )
-        admins = users.map((user) => user.id?.toString() || 'no id')
+        );
+        admins = users.map((user) => user.id?.toString() || 'no id');
       }
-      const judgeRole = roles.find((r: IRole) =>
-        r.name?.match(/hackathon judge/i)
-      )
+      const judgeRole = roles.find(
+        (r: IRole) => r.name?.match(/hackathon judge/i)
+      );
       if (judgeRole) {
         const users = await this.sdk.ok(
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           this.sdk.role_users({ fields: 'id', role_id: judgeRole.id! })
-        )
-        judges = users.map((user) => user.id?.toString() || 'no id')
+        );
+        judges = users.map((user) => user.id?.toString() || 'no id');
       }
-      const staffRole = roles.find((r: IRole) =>
-        r.name?.match(/hackathon staff/i)
-      )
+      const staffRole = roles.find(
+        (r: IRole) => r.name?.match(/hackathon staff/i)
+      );
       if (staffRole) {
         const users = await this.sdk.ok(
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           this.sdk.role_users({ fields: 'id', role_id: staffRole.id! })
-        )
-        staff = users.map((user) => user.id?.toString() || 'no id')
+        );
+        staff = users.map((user) => user.id?.toString() || 'no id');
       }
     } catch (err) {
       // Likely caused by permission access failure for regular user who
@@ -381,6 +383,6 @@ export class Hackers extends TypedRows<Hacker> {
       // It's okay to eat as regular user does not need information about
       // other users.
     }
-    return { admins, judges, staff }
+    return { admins, judges, staff };
   }
 }

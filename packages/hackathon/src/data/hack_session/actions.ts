@@ -27,12 +27,12 @@ import type {
   IHackathonProps,
   ITechnologyProps,
   IHackerProps,
-} from '../../models'
+} from '../../models';
 import type {
   ProjectsHeadings,
   HackersHeadings,
   JudgingsHeadings,
-} from '../types'
+} from '../types';
 
 export enum Actions {
   INIT_HACK_SESSION_REQUEST = 'INIT_HACK_SESSION_REQUEST',
@@ -41,40 +41,40 @@ export enum Actions {
 }
 
 export interface InitHackSessionRequestAction {
-  type: Actions.INIT_HACK_SESSION_REQUEST
+  type: Actions.INIT_HACK_SESSION_REQUEST;
 }
 
 export interface InitHackSessionPayload {
-  currentHackathon: IHackathonProps
-  technologies: ITechnologyProps[]
-  hacker: IHackerProps
-  projectsHeadings: ProjectsHeadings
-  hackersHeadings: HackersHeadings
-  judgingsHeadings: JudgingsHeadings
+  currentHackathon: IHackathonProps;
+  technologies: ITechnologyProps[];
+  hacker: IHackerProps;
+  projectsHeadings: ProjectsHeadings;
+  hackersHeadings: HackersHeadings;
+  judgingsHeadings: JudgingsHeadings;
 }
 
 export interface InitHackFailurePayload {
-  hacker: IHackerProps
+  hacker: IHackerProps;
 }
 
 export interface InitHackSessionResponseAction {
-  type: Actions.INIT_HACK_SESSION_RESPONSE
-  payload: InitHackSessionPayload
+  type: Actions.INIT_HACK_SESSION_RESPONSE;
+  payload: InitHackSessionPayload;
 }
 
 export interface InitHackSessionFailureAction {
-  type: Actions.INIT_HACK_SESSION_FAILURE
-  payload: InitHackFailurePayload
+  type: Actions.INIT_HACK_SESSION_FAILURE;
+  payload: InitHackFailurePayload;
 }
 
 export type HackSessionAction =
   | InitHackSessionRequestAction
   | InitHackSessionResponseAction
-  | InitHackSessionFailureAction
+  | InitHackSessionFailureAction;
 
 export const initHackSessionRequest = (): InitHackSessionRequestAction => ({
   type: Actions.INIT_HACK_SESSION_REQUEST,
-})
+});
 
 export const initHackSessionResponse = (
   currentHackathon: IHackathonProps,
@@ -93,11 +93,11 @@ export const initHackSessionResponse = (
     hackersHeadings,
     judgingsHeadings,
   },
-})
+});
 
 export const initHackSessionFailure = (
   hacker: IHackerProps
 ): InitHackSessionFailureAction => ({
   type: Actions.INIT_HACK_SESSION_FAILURE,
   payload: { hacker },
-})
+});

@@ -24,11 +24,11 @@
 
  */
 
-import React from 'react'
-import { screen } from '@testing-library/react'
-import { renderWithTheme } from '@looker/components-test-utils'
+import React from 'react';
+import { screen } from '@testing-library/react';
+import { renderWithTheme } from '@looker/components-test-utils';
 
-import { Markdown } from './Markdown'
+import { Markdown } from './Markdown';
 
 describe('Markdown', () => {
   test('it renders markdown', () => {
@@ -38,79 +38,79 @@ describe('Markdown', () => {
           '# Markdown Component \n Renders markdown using [ReactMarkdown](https://github.com/rexxars/react-markdown)'
         }
       />
-    )
+    );
 
-    const heading = screen.getByRole('heading')
-    expect(heading).toHaveTextContent('Markdown Component')
-    const link = screen.getByRole('link')
-    expect(link).toHaveTextContent('ReactMarkdown')
+    const heading = screen.getByRole('heading');
+    expect(heading).toHaveTextContent('Markdown Component');
+    const link = screen.getByRole('link');
+    expect(link).toHaveTextContent('ReactMarkdown');
     expect(link).toHaveAttribute(
       'href',
       'https://github.com/rexxars/react-markdown'
-    )
-  })
+    );
+  });
 
   test('it renders path links', () => {
     const input =
-      'A link to the [create_dashboard](/4.0/methods/Dashboard/create_dashboard) endpoint'
-    renderWithTheme(<Markdown source={input} />)
-    expect(screen.getByText(/A link to the/)).toBeInTheDocument()
+      'A link to the [create_dashboard](/4.0/methods/Dashboard/create_dashboard) endpoint';
+    renderWithTheme(<Markdown source={input} />);
+    expect(screen.getByText(/A link to the/)).toBeInTheDocument();
     expect(screen.getByText('create_dashboard')).toHaveAttribute(
       'href',
       '/4.0/methods/Dashboard/create_dashboard'
-    )
-  })
+    );
+  });
 
   test('it renders url links', () => {
     renderWithTheme(
       <Markdown source={'[external_link](https://www.foo.com)'} />
-    )
+    );
     expect(screen.getByText('external_link')).toHaveAttribute(
       'href',
       'https://www.foo.com'
-    )
-  })
+    );
+  });
 
   test('it highlights text matching search pattern', () => {
-    const highlightPattern = 'OpenAPI'
+    const highlightPattern = 'OpenAPI';
     renderWithTheme(
       <Markdown
         source={'An API Explorer to explore your OpenAPI spec'}
         pattern={highlightPattern}
       />
-    )
-    const mark = screen.getByText(highlightPattern)
-    expect(mark.tagName).toEqual('MARK')
-  })
+    );
+    const mark = screen.getByText(highlightPattern);
+    expect(mark.tagName).toEqual('MARK');
+  });
 
   test('it renders code blocks', () => {
     const code =
-      '```\nAuthorization: token 4QDkCyCtZzYgj4C2p2cj3csJH7zqS5RzKs2kTnG4\n```'
-    renderWithTheme(<Markdown source={code} />)
+      '```\nAuthorization: token 4QDkCyCtZzYgj4C2p2cj3csJH7zqS5RzKs2kTnG4\n```';
+    renderWithTheme(<Markdown source={code} />);
     expect(
       screen.getByText(
         'Authorization: token 4QDkCyCtZzYgj4C2p2cj3csJH7zqS5RzKs2kTnG4'
       )
-    ).toBeInTheDocument()
-  })
+    ).toBeInTheDocument();
+  });
 
   test('it renders syntax highlighted code blocks', () => {
-    const code = '```json\n{\n"model":"thelook"}```'
-    renderWithTheme(<Markdown source={code} />)
-    expect(screen.getByText('"model"')).toHaveClass('property')
-  })
+    const code = '```json\n{\n"model":"thelook"}```';
+    renderWithTheme(<Markdown source={code} />);
+    expect(screen.getByText('"model"')).toHaveClass('property');
+  });
 
   test('it renders search matches in syntax highlighted code blocks', () => {
-    const code = '```json\n{\n"model":"thelook"}```'
-    renderWithTheme(<Markdown source={code} pattern={'model'} />)
-    expect(screen.getByText('"model"')).toHaveClass('match')
-  })
+    const code = '```json\n{\n"model":"thelook"}```';
+    renderWithTheme(<Markdown source={code} pattern={'model'} />);
+    expect(screen.getByText('"model"')).toHaveClass('match');
+  });
 
   test('it renders inline code', () => {
-    const markdown = 'Some text with code: `const noop = () => null`'
-    renderWithTheme(<Markdown source={markdown} />)
-    expect(screen.getByText('const noop = () => null')).toBeInTheDocument()
-  })
+    const markdown = 'Some text with code: `const noop = () => null`';
+    renderWithTheme(<Markdown source={markdown} />);
+    expect(screen.getByText('const noop = () => null')).toBeInTheDocument();
+  });
 
   test('it renders table', () => {
     const markdown = `
@@ -123,13 +123,13 @@ Before.
 | both set | Find themes with an active inclusive period between \`begin_at\` and \`end_at\` |
 
 After.
-    `
-    const { container } = renderWithTheme(<Markdown source={markdown} />)
+    `;
+    const { container } = renderWithTheme(<Markdown source={markdown} />);
     // eslint-disable-next-line testing-library/no-container
     expect(container.querySelector('th')?.innerHTML).toContain(
       'Search Parameters'
-    )
+    );
     // eslint-disable-next-line testing-library/no-container
-    expect(container.querySelector('td')?.innerHTML).toContain('begin_at')
-  })
-})
+    expect(container.querySelector('td')?.innerHTML).toContain('begin_at');
+  });
+});

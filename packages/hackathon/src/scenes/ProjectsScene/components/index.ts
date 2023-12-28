@@ -24,5 +24,5 @@
 
  */
 
-export * from './ProjectList'
-export * from './ProjectView'
+export * from './ProjectList';
+export * from './ProjectView';

@@ -23,20 +23,20 @@
  SOFTWARE.
 
  */
-import { createTestStore } from '../../test-utils'
-import { declarations, examples } from '../../test-data'
-import { selectDeclarationsLode, selectExamplesLode } from './selectors'
+import { createTestStore } from '../../test-utils';
+import { declarations, examples } from '../../test-data';
+import { selectDeclarationsLode, selectExamplesLode } from './selectors';
 
-const testStore = createTestStore({ lodes: { examples, declarations } })
+const testStore = createTestStore({ lodes: { examples, declarations } });
 
 describe('Lode selectors', () => {
-  const state = testStore.getState()
+  const state = testStore.getState();
 
   test('selectExamplesLode selects', () => {
-    expect(selectExamplesLode(state)).toEqual(examples)
-  })
+    expect(selectExamplesLode(state)).toEqual(examples);
+  });
 
   test('selectDeclarationsLode selects', () => {
-    expect(selectDeclarationsLode(state)).toEqual(declarations)
-  })
-})
+    expect(selectDeclarationsLode(state)).toEqual(declarations);
+  });
+});

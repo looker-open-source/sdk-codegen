@@ -23,14 +23,14 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import styled from 'styled-components'
-import { Paragraph, Table, Heading } from '@looker/components'
+import React from 'react';
+import styled from 'styled-components';
+import { Paragraph, Table, Heading } from '@looker/components';
 import type {
   HeadingProps,
   ParagraphProps,
   TableProps,
-} from '@looker/components'
+} from '@looker/components';
 
 /**
  * Common styled components used by DocMarkdown
@@ -38,7 +38,7 @@ import type {
 
 export const MDHeading = styled(Heading).attrs(
   ({ mb = 'xsmall', pt = 'xsmall' }: HeadingProps) => ({ mb, pt })
-)<HeadingProps>``
+)<HeadingProps>``;
 
 export const MDParagraph = styled(Paragraph).attrs(
   ({ mb = 'large' }: ParagraphProps) => ({
@@ -47,31 +47,31 @@ export const MDParagraph = styled(Paragraph).attrs(
 )<ParagraphProps>`
   color: ${({ theme }) => theme.colors.text5};
   max-width: 600px;
-`
+`;
 
 const OListInternal = styled.ol`
   color: ${({ theme }) => theme.colors.text5};
   max-width: 600px;
   margin-bottom: 20px;
-`
+`;
 
 const UListInternal = styled.ul`
   color: ${({ theme }) => theme.colors.text5};
   max-width: 600px;
   margin-bottom: 20px;
-`
+`;
 
 export const MDList: React.FC<any> = ({ ordered, ...rest }) => {
-  return ordered ? <OListInternal {...rest} /> : <UListInternal {...rest} />
-}
+  return ordered ? <OListInternal {...rest} /> : <UListInternal {...rest} />;
+};
 
 export const MDListItem = styled.li`
   color: ${({ theme }) => theme.colors.text5};
   max-width: 600px;
   margin-bottom: 4px;
   line-height: 1.5;
-`
+`;
 
 export const MDTable = styled(Table).attrs(({ mb = 'large' }: TableProps) => ({
   mb,
-}))``
+}))``;

@@ -24,11 +24,11 @@
 
  */
 
-import { readFileSync } from 'fs'
-import cloneDeep from 'lodash/cloneDeep'
-import isEmpty from 'lodash/isEmpty'
-import { NodeSettingsIniFile, LookerNodeSDK } from '@looker/sdk-node'
-import type { ISpecItem } from '@looker/sdk-codegen'
+import { readFileSync } from 'fs';
+import cloneDeep from 'lodash/cloneDeep';
+import isEmpty from 'lodash/isEmpty';
+import { NodeSettingsIniFile, LookerNodeSDK } from '@looker/sdk-node';
+import type { ISpecItem } from '@looker/sdk-codegen';
 import {
   fixConversion,
   openApiStyle,
@@ -42,8 +42,8 @@ import {
   getSpecsFromVersions,
   compareSpecs,
   ApiModel,
-} from '@looker/sdk-codegen'
-import { TestConfig } from './testUtils'
+} from '@looker/sdk-codegen';
+import { TestConfig } from './testUtils';
 
 const swaggerFrag = `
 {
@@ -170,7 +170,7 @@ const swaggerFrag = `
     }
   }
 }
-`
+`;
 const openApiFrag = `
 {
   "paths": {
@@ -339,7 +339,7 @@ const openApiFrag = `
     }
   }
 }
-`
+`;
 const specFrag = `
 "can": {
   "type": "object",
@@ -399,143 +399,148 @@ const specFrag = `
   "description": "A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: \\"txt\\", \\"csv\\", \\"inline_json\\", \\"json\\", \\"json_label\\", \\"json_detail\\", \\"json_detail_lite_stream\\", \\"xlsx\\", \\"html\\", \\"wysiwyg_pdf\\", \\"assembled_pdf\\", \\"wysiwyg_png\\", \\"csv_zip\\".",
   "nullable": false
 },
-`
+`;
 
-const swagger = JSON.parse(swaggerFrag)
-const api = JSON.parse(openApiFrag)
+const swagger = JSON.parse(swaggerFrag);
+const api = JSON.parse(openApiFrag);
 
-const config = TestConfig()
-const swaggerFile = `${config.rootPath}spec/Looker.4.0.json`
-const apiFile = `${config.rootPath}spec/Looker.4.0.oas.json`
-const swaggerSource = readFileSync(swaggerFile, 'utf-8')
-const fullSwagger = JSON.parse(swaggerSource)
-const apiSource = readFileSync(apiFile, 'utf-8')
-const settings = new NodeSettingsIniFile('LOOKERSDK', config.localIni, 'Looker')
-const sdk = LookerNodeSDK.init40(settings)
+const config = TestConfig();
+const swaggerFile = `${config.rootPath}spec/Looker.4.0.json`;
+const apiFile = `${config.rootPath}spec/Looker.4.0.oas.json`;
+const swaggerSource = readFileSync(swaggerFile, 'utf-8');
+const fullSwagger = JSON.parse(swaggerSource);
+const apiSource = readFileSync(apiFile, 'utf-8');
+const settings = new NodeSettingsIniFile(
+  'LOOKERSDK',
+  config.localIni,
+  'Looker'
+);
+const sdk = LookerNodeSDK.init40(settings);
 
 describe('spec conversion', () => {
   it('swaps out x-looker-tags', () => {
-    const actual = swapXLookerTags(specFrag)
-    expect(actual).toContain('"nullable": true')
-    expect(actual).not.toContain('"x-looker-nullable": true')
-    expect(actual).toContain('"enum": [')
-    expect(actual).not.toContain('"x-looker-values": [')
-    expect(actual).toContain('"deprecated": true')
-    expect(actual).not.toContain('"x-looker-deprecated"')
-  })
+    const actual = swapXLookerTags(specFrag);
+    expect(actual).toContain('"nullable": true');
+    expect(actual).not.toContain('"x-looker-nullable": true');
+    expect(actual).toContain('"enum": [');
+    expect(actual).not.toContain('"x-looker-values": [');
+    expect(actual).toContain('"deprecated": true');
+    expect(actual).not.toContain('"x-looker-deprecated"');
+  });
 
   it('collectionFormat to style', () => {
-    expect(openApiStyle('csv')).toEqual('simple')
-    expect(openApiStyle('ssv')).toEqual('spaceDelimited')
-    expect(openApiStyle('pipes')).toEqual('pipeDelimited')
-    expect(openApiStyle('tabs')).toBeUndefined()
-  })
+    expect(openApiStyle('csv')).toEqual('simple');
+    expect(openApiStyle('ssv')).toEqual('spaceDelimited');
+    expect(openApiStyle('pipes')).toEqual('pipeDelimited');
+    expect(openApiStyle('tabs')).toBeUndefined();
+  });
 
   it('fixes missing conversion items', () => {
-    const actual = fixConversion(openApiFrag, swaggerFrag)
-    expect(actual.spec).toContain(`"style":"simple"`)
-    expect(actual.fixes).not.toHaveLength(0)
-  })
+    const actual = fixConversion(openApiFrag, swaggerFrag);
+    expect(actual.spec).toContain(`"style":"simple"`);
+    expect(actual.fixes).not.toHaveLength(0);
+  });
 
   describe('spec retrieval', () => {
     const onlyPublic = (specs: ISpecItem[]) => {
-      return specs.filter((v) => v.status !== 'undocumented')
-    }
+      return specs.filter((v) => v.status !== 'undocumented');
+    };
 
     it.skip('gets looker specs', async () => {
-      const actual = await getLookerSpecs(sdk, config.baseUrl)
-      expect(actual).toBeDefined()
-      expect(actual.looker_release_version).not.toEqual('')
-      expect(actual.current_version.version).not.toEqual('')
-      const supported = onlyPublic(actual.supported_versions)
-      expect(supported).toHaveLength(3)
-    })
+      const actual = await getLookerSpecs(sdk, config.baseUrl);
+      expect(actual).toBeDefined();
+      expect(actual.looker_release_version).not.toEqual('');
+      expect(actual.current_version.version).not.toEqual('');
+      const supported = onlyPublic(actual.supported_versions);
+      expect(supported).toHaveLength(3);
+    });
 
     it('gets spec links', async () => {
-      const versions = await getLookerSpecs(sdk, config.baseUrl)
-      expect(versions).toBeDefined()
-      versions.supported_versions = onlyPublic(versions.supported_versions)
-      const actual = getSpecLinks(versions)
-      expect(actual).toBeDefined()
+      const versions = await getLookerSpecs(sdk, config.baseUrl);
+      expect(versions).toBeDefined();
+      versions.supported_versions = onlyPublic(versions.supported_versions);
+      const actual = getSpecLinks(versions);
+      expect(actual).toBeDefined();
       /*
        * 23.18 and later only has one API defined
        * expect(actual).toHaveLength(3)
        */
       actual.forEach((spec) => {
-        expect(spec.name).not.toEqual('')
-        expect(spec.version).not.toEqual('')
-        expect(spec.status).not.toEqual('')
-        expect(spec.url).not.toEqual('')
-        expect(isEmpty(spec.api)).toEqual(true)
-      })
-      const current = actual.find((s) => s.status === 'current')
-      expect(current).toBeDefined()
-      actual.forEach((spec) => expect(isEmpty(spec.api)).toEqual(true))
-    })
+        expect(spec.name).not.toEqual('');
+        expect(spec.version).not.toEqual('');
+        expect(spec.status).not.toEqual('');
+        expect(spec.url).not.toEqual('');
+        expect(isEmpty(spec.api)).toEqual(true);
+      });
+      const current = actual.find((s) => s.status === 'current');
+      expect(current).toBeDefined();
+      actual.forEach((spec) => expect(isEmpty(spec.api)).toEqual(true));
+    });
 
     it('fetches and parses all specs', async () => {
-      const versions = await getLookerSpecs(sdk, config.baseUrl)
-      expect(versions).toBeDefined()
-      versions.supported_versions = onlyPublic(versions.supported_versions)
-      const links = getSpecLinks(versions)
+      const versions = await getLookerSpecs(sdk, config.baseUrl);
+      expect(versions).toBeDefined();
+      versions.supported_versions = onlyPublic(versions.supported_versions);
+      const links = getSpecLinks(versions);
       links.forEach(
         (link) =>
           (link.url = link.url.replace(
             link.url.substring(0, link.url.indexOf('/api/')),
             config.baseUrl
           ))
-      )
-      const actual = await loadSpecs(sdk, links)
-      expect(actual).toBeDefined()
+      );
+      const actual = await loadSpecs(sdk, links);
+      expect(actual).toBeDefined();
       /*
        * 23.18 and later only has one API defined
        * expect(actual).toHaveLength(3)
        */
       actual.forEach((spec) => {
-        expect(isEmpty(spec.api)).toEqual(false)
-        expect(spec.api.version).not.toEqual('')
-        expect(spec.api.description).not.toEqual('')
-      })
-    })
-  })
+        expect(isEmpty(spec.api)).toEqual(false);
+        expect(spec.api.version).not.toEqual('');
+        expect(spec.api.description).not.toEqual('');
+      });
+    });
+  });
 
   describe('spec upgrade', () => {
     it('converts a swagger array param', () => {
-      const op = swagger.paths['/query_tasks/multi_results'].get
-      const param = op.parameters[0]
-      const actual = convertParam(param)
-      expect(actual).toBeDefined()
-      const expected = api.paths['/query_tasks/multi_results'].get.parameters[0]
-      expect(actual).toEqual(expected)
-    })
+      const op = swagger.paths['/query_tasks/multi_results'].get;
+      const param = op.parameters[0];
+      const actual = convertParam(param);
+      expect(actual).toBeDefined();
+      const expected =
+        api.paths['/query_tasks/multi_results'].get.parameters[0];
+      expect(actual).toEqual(expected);
+    });
 
     it('converts all definitions', () => {
-      const defs = fullSwagger.definitions
-      const actual = convertDefs(defs)
-      expect(actual).toBeDefined()
-      const keys = Object.keys(actual)
-      expect(keys).toHaveLength(Object.keys(defs).length)
-    })
+      const defs = fullSwagger.definitions;
+      const actual = convertDefs(defs);
+      expect(actual).toBeDefined();
+      const keys = Object.keys(actual);
+      expect(keys).toHaveLength(Object.keys(defs).length);
+    });
 
     it.skip('matches a reference OpenAPI conversion', () => {
       // TODO There is a different branch to address this
-      const spec = upgradeSpec(swaggerSource)
-      expect(spec).toBeDefined()
-      const left = ApiModel.fromString(apiSource)
-      const right = ApiModel.fromString(spec)
-      const diff = compareSpecs(left, right)
-      expect(diff).toHaveLength(0)
-    })
+      const spec = upgradeSpec(swaggerSource);
+      expect(spec).toBeDefined();
+      const left = ApiModel.fromString(apiSource);
+      const right = ApiModel.fromString(spec);
+      const diff = compareSpecs(left, right);
+      expect(diff).toHaveLength(0);
+    });
 
     it('passes through an existing OpenAPI spec', () => {
-      const spec = upgradeSpec(apiSource)
-      expect(spec).toBeDefined()
-      const left = ApiModel.fromString(apiSource)
-      const right = ApiModel.fromString(spec)
-      const diff = compareSpecs(left, right)
-      expect(diff).toHaveLength(0)
-    })
-  })
+      const spec = upgradeSpec(apiSource);
+      expect(spec).toBeDefined();
+      const left = ApiModel.fromString(apiSource);
+      const right = ApiModel.fromString(spec);
+      const diff = compareSpecs(left, right);
+      expect(diff).toHaveLength(0);
+    });
+  });
 
   describe('getSpecsFromVersions', () => {
     const versions = {
@@ -573,29 +578,29 @@ describe('spec conversion', () => {
         },
       ],
       api_server_url: 'http://localhost:19999',
-    }
+    };
 
     test('only gets supported specifications', async () => {
-      const actual = await getSpecsFromVersions(versions)
-      expect(Object.keys(actual)).toEqual(['3.1', '4.0'])
-    })
+      const actual = await getSpecsFromVersions(versions);
+      expect(Object.keys(actual)).toEqual(['3.1', '4.0']);
+    });
 
     test('current is the default spec', async () => {
-      const specs = await getSpecsFromVersions(versions)
+      const specs = await getSpecsFromVersions(versions);
       const actual = Object.entries(specs).find(
         ([_, a]) => a.status === 'current'
-      )
-      expect(actual).toBeDefined()
+      );
+      expect(actual).toBeDefined();
       if (actual) {
-        const [, current] = actual
-        expect(current).toBeDefined()
-        expect(current.status).toEqual('current')
-        expect(current.isDefault).toEqual(true)
+        const [, current] = actual;
+        expect(current).toBeDefined();
+        expect(current.status).toEqual('current');
+        expect(current.isDefault).toEqual(true);
       }
-    })
+    });
 
     test('specs have unique keys', async () => {
-      const moar = cloneDeep(versions)
+      const moar = cloneDeep(versions);
       moar.supported_versions.push(
         {
           version: '4.0',
@@ -621,8 +626,8 @@ describe('spec conversion', () => {
           status: 'un',
           swagger_url: 'http://localhost:19999/api/4.0/un4.json',
         }
-      )
-      const actual = await getSpecsFromVersions(moar)
+      );
+      const actual = await getSpecsFromVersions(moar);
       expect(Object.keys(actual)).toEqual([
         '3.1',
         '4.0',
@@ -630,7 +635,7 @@ describe('spec conversion', () => {
         '4.0un',
         '4.0un3',
         '4.0un4',
-      ])
-    })
-  })
-})
+      ]);
+    });
+  });
+});

@@ -23,25 +23,25 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { screen, waitFor, fireEvent } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import { renderWithTheme } from '@looker/components-test-utils'
-import { SelectTheme } from './SelectTheme'
-import { useThemeActions, useThemesStoreState } from './state'
+import React from 'react';
+import { screen, waitFor, fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { renderWithTheme } from '@looker/components-test-utils';
+import { SelectTheme } from './SelectTheme';
+import { useThemeActions, useThemesStoreState } from './state';
 
 jest.mock('./state', () => ({
   ...jest.requireActual('./state'),
   useThemeActions: jest.fn(),
   useThemesStoreState: jest.fn(),
-}))
+}));
 
 describe('SelectTheme', () => {
-  const lookerTheme = { id: '1', name: 'Looker' }
-  const customTheme1 = { id: '2', name: 'custom_theme_1' }
-  const customTheme2 = { id: '3', name: 'custom_theme_2' }
-  const selectedTheme = lookerTheme
-  const themes = [lookerTheme, customTheme1, customTheme2]
+  const lookerTheme = { id: '1', name: 'Looker' };
+  const customTheme1 = { id: '2', name: 'custom_theme_1' };
+  const customTheme2 = { id: '3', name: 'custom_theme_2' };
+  const selectedTheme = lookerTheme;
+  const themes = [lookerTheme, customTheme1, customTheme2];
 
   const getMockStoreState = (overrides: Record<string, any> = {}) => ({
     initialized: true,
@@ -49,104 +49,104 @@ describe('SelectTheme', () => {
     themes,
     defaultTheme: lookerTheme,
     ...overrides,
-  })
+  });
 
-  const initActionSpy = jest.fn()
-  const loadThemeDataActionSpy = jest.fn()
-  const selectThemeActionSpy = jest.fn()
+  const initActionSpy = jest.fn();
+  const loadThemeDataActionSpy = jest.fn();
+  const selectThemeActionSpy = jest.fn();
 
   beforeEach(() => {
-    ;(useThemeActions as jest.Mock).mockReturnValue({
+    (useThemeActions as jest.Mock).mockReturnValue({
       initAction: initActionSpy,
       loadThemeDataAction: loadThemeDataActionSpy,
       selectThemeAction: selectThemeActionSpy,
-    })
-    ;(useThemesStoreState as jest.Mock).mockReturnValue(getMockStoreState())
-  })
+    });
+    (useThemesStoreState as jest.Mock).mockReturnValue(getMockStoreState());
+  });
 
   afterEach(() => {
-    jest.clearAllMocks()
-  })
+    jest.clearAllMocks();
+  });
 
   it('renders with the default theme selected', async () => {
-    renderWithTheme(<SelectTheme />)
+    renderWithTheme(<SelectTheme />);
 
-    expect(initActionSpy).toHaveBeenCalled()
-    expect(loadThemeDataActionSpy).toHaveBeenCalled()
-    expect(selectThemeActionSpy).not.toHaveBeenCalled()
+    expect(initActionSpy).toHaveBeenCalled();
+    expect(loadThemeDataActionSpy).toHaveBeenCalled();
+    expect(selectThemeActionSpy).not.toHaveBeenCalled();
 
-    const selector = screen.getByRole('textbox')
-    expect(selector).toHaveValue(lookerTheme.name)
+    const selector = screen.getByRole('textbox');
+    expect(selector).toHaveValue(lookerTheme.name);
 
-    userEvent.click(selector)
+    userEvent.click(selector);
 
     await waitFor(() => {
-      expect(screen.getAllByRole('option')).toHaveLength(themes.length)
+      expect(screen.getAllByRole('option')).toHaveLength(themes.length);
       expect(
         screen.getByRole('option', { name: customTheme1.name })
-      ).toBeInTheDocument()
+      ).toBeInTheDocument();
       expect(
         screen.getByRole('option', { name: customTheme2.name })
-      ).toBeInTheDocument()
-    })
-  })
+      ).toBeInTheDocument();
+    });
+  });
 
   it('selects on select', async () => {
-    renderWithTheme(<SelectTheme />)
+    renderWithTheme(<SelectTheme />);
 
-    const selector = screen.getByRole('textbox')
-    expect(selector).toHaveValue(lookerTheme.name)
+    const selector = screen.getByRole('textbox');
+    expect(selector).toHaveValue(lookerTheme.name);
 
-    expect(screen.queryByRole('option')).not.toBeInTheDocument()
+    expect(screen.queryByRole('option')).not.toBeInTheDocument();
 
-    fireEvent.click(selector)
+    fireEvent.click(selector);
 
     await waitFor(() => {
-      expect(screen.getAllByRole('option')).toHaveLength(themes.length)
-    })
+      expect(screen.getAllByRole('option')).toHaveLength(themes.length);
+    });
 
     const anotherTheme = screen.getByRole('option', {
       name: customTheme1.name,
-    })
+    });
 
     // Using fireEvent here because userEvent was causing overlapping act warnings
-    fireEvent.click(anotherTheme)
+    fireEvent.click(anotherTheme);
 
     await waitFor(() => {
       expect(selectThemeActionSpy).toHaveBeenCalledWith({
         key: customTheme1.id,
-      })
-    })
-  })
+      });
+    });
+  });
 
   it('is disabled when only one theme is available', () => {
-    ;(useThemesStoreState as jest.Mock).mockReturnValue(
+    (useThemesStoreState as jest.Mock).mockReturnValue(
       getMockStoreState({
         selectedTheme: lookerTheme,
         themes: [lookerTheme],
         defaultTheme: lookerTheme,
       })
-    )
+    );
 
-    renderWithTheme(<SelectTheme />)
+    renderWithTheme(<SelectTheme />);
 
-    const selector = screen.getByRole('textbox')
-    expect(selector).toHaveValue(lookerTheme.name)
-    expect(selector).toBeDisabled()
-  })
+    const selector = screen.getByRole('textbox');
+    expect(selector).toHaveValue(lookerTheme.name);
+    expect(selector).toBeDisabled();
+  });
 
   it('renders an error if present', () => {
-    ;(useThemesStoreState as jest.Mock).mockReturnValue(
+    (useThemesStoreState as jest.Mock).mockReturnValue(
       getMockStoreState({
         selectedTheme: {},
         themes: [],
         defaultTheme: {},
         error: 'Failed to fetch themes',
       })
-    )
+    );
 
-    renderWithTheme(<SelectTheme />)
+    renderWithTheme(<SelectTheme />);
 
-    expect(screen.getByText('Failed to fetch themes')).toBeInTheDocument()
-  })
-})
+    expect(screen.getByText('Failed to fetch themes')).toBeInTheDocument();
+  });
+});

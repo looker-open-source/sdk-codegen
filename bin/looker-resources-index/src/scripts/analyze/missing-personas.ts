@@ -23,12 +23,12 @@
  SOFTWARE.
 
  */
-import type { Resource } from '../../types'
+import type { Resource } from '../../types';
 
 export function missingPersonas(resources: Resource[]) {
   const resourcesMissingPersonas = resources.filter(
     (r) => !r.personas || r.personas.length === 0
-  )
+  );
 
   return {
     summary:
@@ -38,5 +38,5 @@ export function missingPersonas(resources: Resource[]) {
     actionItems: resourcesMissingPersonas.map(
       (r) => `No personas defined. \tResource ID: ${r.id}`
     ),
-  }
+  };
 }

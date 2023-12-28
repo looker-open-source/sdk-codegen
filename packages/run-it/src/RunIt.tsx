@@ -24,8 +24,8 @@
 
  */
 
-import type { BaseSyntheticEvent, FC, FormEventHandler } from 'react'
-import React, { useContext, useState, useEffect } from 'react'
+import type { BaseSyntheticEvent, FC, FormEventHandler } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
   Box,
   Tab,
@@ -33,15 +33,15 @@ import {
   TabPanels,
   TabPanel,
   useTabs,
-} from '@looker/components'
-import type { ApiModel, IMethod } from '@looker/sdk-codegen'
+} from '@looker/components';
+import type { ApiModel, IMethod } from '@looker/sdk-codegen';
 import type {
   IEnvironmentAdaptor,
   OAuthConfigProvider,
-} from '@looker/extension-utils'
-import { registerEnvAdaptor } from '@looker/extension-utils'
+} from '@looker/extension-utils';
+import { registerEnvAdaptor } from '@looker/extension-utils';
 
-import type { ResponseContent } from './components'
+import type { ResponseContent } from './components';
 import {
   RequestForm,
   ResponseExplorer,
@@ -51,7 +51,7 @@ import {
   validateBody,
   PerfTimings,
   PerfTracker,
-} from './components'
+} from './components';
 import {
   initRequestContent,
   createRequestParams,
@@ -59,15 +59,15 @@ import {
   pathify,
   prepareInputs,
   createInputs,
-} from './utils'
-import { RunItContext } from '.'
+} from './utils';
+import { RunItContext } from '.';
 
-export type RunItHttpMethod = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE'
+export type RunItHttpMethod = 'GET' | 'PUT' | 'POST' | 'PATCH' | 'DELETE';
 
 /**
  * Generic collection
  */
-export type RunItValues = Record<string, any>
+export type RunItValues = Record<string, any>;
 
 type RunItInputType =
   | 'boolean'
@@ -83,30 +83,30 @@ type RunItInputType =
   | 'ipv6'
   | 'email'
   | 'password'
-  | 'datetime'
+  | 'datetime';
 
-type RunItInputLocation = 'body' | 'path' | 'query' | 'header' | 'cookie'
+type RunItInputLocation = 'body' | 'path' | 'query' | 'header' | 'cookie';
 
 /**
  * A RunIt input type describing a single REST request's parameter or a structure
  */
 export interface RunItInput {
-  name: string
-  location: RunItInputLocation
+  name: string;
+  location: RunItInputLocation;
   /** A RunItInputType or a structure */
-  type: RunItInputType | any
-  required: boolean
-  description: string
+  type: RunItInputType | any;
+  required: boolean;
+  description: string;
 }
 
 interface RunItProps {
-  adaptor: IEnvironmentAdaptor
+  adaptor: IEnvironmentAdaptor;
   /** spec model to use for sdk call generation */
-  api: ApiModel
+  api: ApiModel;
   /** Method to test */
-  method: IMethod
+  method: IMethod;
   /** Sdk language to use for generating call syntax */
-  sdkLanguage?: string
+  sdkLanguage?: string;
 }
 
 /**
@@ -119,76 +119,76 @@ export const RunIt: FC<RunItProps> = ({
   method,
   sdkLanguage = 'All',
 }) => {
-  const httpMethod = method.httpMethod as RunItHttpMethod
-  const endpoint = method.endpoint
-  const sdk = adaptor.sdk
-  const [initialized, setInitialized] = useState(false)
-  const { basePath } = useContext(RunItContext)
-  const [inputs] = useState(() => createInputs(api, method))
+  const httpMethod = method.httpMethod as RunItHttpMethod;
+  const endpoint = method.endpoint;
+  const sdk = adaptor.sdk;
+  const [initialized, setInitialized] = useState(false);
+  const { basePath } = useContext(RunItContext);
+  const [inputs] = useState(() => createInputs(api, method));
 
   /** Request related state */
   const [requestContent, setRequestContent] = useState(
     initRequestContent(inputs)
-  )
-  const [activePathParams, setActivePathParams] = useState({})
-  const [loading, setLoading] = useState<boolean>(false)
-  const [keepBody, setKeepBody] = useState<boolean>(false)
+  );
+  const [activePathParams, setActivePathParams] = useState({});
+  const [loading, setLoading] = useState<boolean>(false);
+  const [keepBody, setKeepBody] = useState<boolean>(false);
   const [responseContent, setResponseContent] =
-    useState<ResponseContent>(undefined)
+    useState<ResponseContent>(undefined);
 
   /** Auth config related state */
-  const isExtension = adaptor.isExtension()
+  const isExtension = adaptor.isExtension();
   const [hasConfig, setHasConfig] = useState<boolean>(
     isExtension ||
       (sdk.authSession.settings as OAuthConfigProvider).authIsConfigured()
-  )
+  );
   const [needsAuth] = useState<boolean>(
     () => !isExtension && !sdk.authSession.isAuthenticated()
-  )
+  );
 
-  const [validationMessage, setValidationMessage] = useState<string>('')
-  const tabs = useTabs()
+  const [validationMessage, setValidationMessage] = useState<string>('');
+  const tabs = useTabs();
 
-  const perf = new PerfTimings()
+  const perf = new PerfTimings();
 
   useEffect(() => {
-    registerEnvAdaptor(adaptor)
-    setInitialized(true)
-  }, [adaptor])
+    registerEnvAdaptor(adaptor);
+    setInitialized(true);
+  }, [adaptor]);
 
   const toggleKeepBody: (_event: FormEventHandler<HTMLInputElement>) => void = (
     _event: FormEventHandler<HTMLInputElement>
   ) => {
-    setKeepBody((prev) => !prev)
-  }
+    setKeepBody((prev) => !prev);
+  };
 
   const handleConfig = (_e: BaseSyntheticEvent) => {
-    tabs.onSelectTab(4)
-  }
+    tabs.onSelectTab(4);
+  };
 
   const handleSubmit = async (e: BaseSyntheticEvent) => {
-    e.preventDefault()
+    e.preventDefault();
 
     const [pathParams, queryParams, body] = createRequestParams(
       inputs,
       requestContent,
       keepBody
-    )
+    );
     if (body) {
-      const [bodyParam] = method.bodyParams
-      const requiredKeys = Object.keys(bodyParam.type.requiredProperties)
-      const message = validateBody(body, requiredKeys)
-      setValidationMessage(message)
+      const [bodyParam] = method.bodyParams;
+      const requiredKeys = Object.keys(bodyParam.type.requiredProperties);
+      const message = validateBody(body, requiredKeys);
+      setValidationMessage(message);
       if (message) {
         // body has an error, don't run
-        return
+        return;
       }
     }
-    setActivePathParams(pathParams)
-    tabs.onSelectTab(1)
+    setActivePathParams(pathParams);
+    tabs.onSelectTab(1);
     if (sdk) {
-      setLoading(true)
-      let response: ResponseContent
+      setLoading(true);
+      let response: ResponseContent;
       try {
         response = await runRequest(
           sdk,
@@ -198,7 +198,7 @@ export const RunIt: FC<RunItProps> = ({
           pathParams,
           queryParams,
           body
-        )
+        );
       } catch (err: any) {
         // This should not happen but it could. runRequest uses
         // sdk.ok to login once. sdk.ok throws an error so fake
@@ -210,12 +210,12 @@ export const RunIt: FC<RunItProps> = ({
           contentType: 'application/json',
           body: JSON.stringify(err),
           headers: {},
-        } as ResponseContent
+        } as ResponseContent;
       }
-      setResponseContent(response)
-      setLoading(false)
+      setResponseContent(response);
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <Box bg="background" py="large" height="100%">
@@ -290,5 +290,5 @@ export const RunIt: FC<RunItProps> = ({
         </>
       )}
     </Box>
-  )
-}
+  );
+};

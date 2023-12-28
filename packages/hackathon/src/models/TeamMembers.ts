@@ -24,55 +24,55 @@
 
  */
 
-import type { IRowModelProps, ITabTable } from '@looker/wholly-artifact'
-import { WhollyArtifact } from '@looker/wholly-artifact'
-import { getCore40SDK } from '@looker/extension-sdk-react'
+import type { IRowModelProps, ITabTable } from '@looker/wholly-artifact';
+import { WhollyArtifact } from '@looker/wholly-artifact';
+import { getCore40SDK } from '@looker/extension-sdk-react';
 
-import type { ISheetRow } from './SheetRow'
-import { SheetRow } from './SheetRow'
-import type { SheetData } from './SheetData'
-import type { User } from './Users'
+import type { ISheetRow } from './SheetRow';
+import { SheetRow } from './SheetRow';
+import type { SheetData } from './SheetData';
+import type { User } from './Users';
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface ITeamMemberProps extends IRowModelProps {
-  user_id: string
-  project_id: string
-  responsibilities: string
+  user_id: string;
+  project_id: string;
+  responsibilities: string;
   /** Associated user record */
-  $user: User
+  $user: User;
   /** Calculated property for user */
-  $name: string
+  $name: string;
 }
 
 export interface ITeamMember extends ITeamMemberProps, ISheetRow {}
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export class TeamMember extends SheetRow<ITeamMember> {
-  user_id = ''
-  project_id = ''
-  responsibilities = ''
-  $user!: User
+  user_id = '';
+  project_id = '';
+  responsibilities = '';
+  $user!: User;
 
   constructor(values?: any) {
-    super()
+    super();
     // IMPORTANT: this must be done after super() constructor is called so keys are established
     // there may be a way to overload the constructor so this isn't necessary but pattern hasn't been found
-    this.assign(values)
+    this.assign(values);
   }
 
   tableName() {
-    return 'TeamMember'
+    return 'TeamMember';
   }
 
   get $name() {
     if (!this.$user) {
-      throw new Error(`$user is not assigned for user_id ${this.user_id}`)
+      throw new Error(`$user is not assigned for user_id ${this.user_id}`);
     }
-    return `${this.$user.first_name} ${this.$user.last_name}`
+    return `${this.$user.first_name} ${this.$user.last_name}`;
   }
 
   toObject(): ITeamMemberProps {
-    return super.toObject() as ITeamMemberProps
+    return super.toObject() as ITeamMemberProps;
   }
 }
 
@@ -81,13 +81,13 @@ export class TeamMembers extends WhollyArtifact<TeamMember, ITeamMemberProps> {
     public readonly data: SheetData,
     public readonly table: ITabTable
   ) {
-    super(getCore40SDK(), table)
+    super(getCore40SDK(), table);
   }
 
   typeRow<TeamMember>(values?: any) {
-    const member = new TeamMember(values)
-    const user = this.data?.users.find(member.user_id)
-    if (user) member.$user = user
-    return member as unknown as TeamMember
+    const member = new TeamMember(values);
+    const user = this.data?.users.find(member.user_id);
+    if (user) member.$user = user;
+    return member as unknown as TeamMember;
   }
 }

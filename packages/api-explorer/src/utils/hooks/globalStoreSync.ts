@@ -23,55 +23,55 @@
  SOFTWARE.
 
  */
-import { useLocation } from 'react-router-dom'
-import { useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import { allAlias, findSdk, useNavigation } from '../index'
+import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { allAlias, findSdk, useNavigation } from '../index';
 import {
   selectSdkLanguage,
   useSettingActions,
   useSettingStoreState,
-} from '../../state'
+} from '../../state';
 
 /**
  * Hook for syncing global URL params with the Redux store
  * Global search parameters: 's', 'sdk'
  */
 export const useGlobalStoreSync = () => {
-  const location = useLocation()
-  const { navigate } = useNavigation()
-  const { setSdkLanguageAction, setSearchPatternAction } = useSettingActions()
-  const { initialized } = useSettingStoreState()
-  const selectedSdkLanguage = useSelector(selectSdkLanguage)
+  const location = useLocation();
+  const { navigate } = useNavigation();
+  const { setSdkLanguageAction, setSearchPatternAction } = useSettingActions();
+  const { initialized } = useSettingStoreState();
+  const selectedSdkLanguage = useSelector(selectSdkLanguage);
 
   useEffect(() => {
     if (initialized) {
-      const params = new URLSearchParams(location.search)
+      const params = new URLSearchParams(location.search);
 
       // syncing search query
-      const searchParam = params.get('s')
+      const searchParam = params.get('s');
       if (searchParam) {
         setSearchPatternAction({
           searchPattern: searchParam,
-        })
+        });
       }
 
       // syncing SDK language selection
-      const sdkParam = params.get('sdk') || ''
-      const sdk = findSdk(sdkParam)
+      const sdkParam = params.get('sdk') || '';
+      const sdk = findSdk(sdkParam);
       const validSdkParam =
         !sdkParam.localeCompare(sdk.alias, 'en', { sensitivity: 'base' }) ||
-        !sdkParam.localeCompare(sdk.language, 'en', { sensitivity: 'base' })
+        !sdkParam.localeCompare(sdk.language, 'en', { sensitivity: 'base' });
       if (validSdkParam) {
         setSdkLanguageAction({
           sdkLanguage: sdk.language,
-        })
+        });
       } else {
-        const { alias } = findSdk(selectedSdkLanguage)
+        const { alias } = findSdk(selectedSdkLanguage);
         navigate(location.pathname, {
           sdk: alias === allAlias ? null : alias,
-        })
+        });
       }
     }
-  }, [initialized])
-}
+  }, [initialized]);
+};

@@ -24,25 +24,25 @@
 
  */
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 // from: https://usehooks.com/useWindowSize/
 export function useWindowSize() {
   const [windowSize, setWindowSize] = useState({
     width: 0,
     height: 0,
-  })
+  });
 
   useEffect(() => {
     function handleResize() {
       setWindowSize({
         width: window.innerWidth,
         height: window.innerHeight,
-      })
+      });
     }
-    window.addEventListener('resize', handleResize)
-    handleResize()
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
-  return windowSize
+  return windowSize;
 }

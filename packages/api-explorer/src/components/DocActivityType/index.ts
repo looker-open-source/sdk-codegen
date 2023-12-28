@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { DocActivityType } from './DocActivityType'
+export { DocActivityType } from './DocActivityType';

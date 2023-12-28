@@ -23,36 +23,36 @@
  SOFTWARE.
 
  */
-import { mockHackathons } from '../test-data'
-import type { Hackathon } from './Hackathons'
+import { mockHackathons } from '../test-data';
+import type { Hackathon } from './Hackathons';
 
-const hackathons = mockHackathons()
+const hackathons = mockHackathons();
 
 describe('Hackathons', () => {
   test('gets current hackathon by default', () => {
-    const actual = hackathons.currentHackathon
-    expect(actual).toBeDefined()
-    expect(actual?._id).toEqual('current')
-    expect(actual?.isActive()).toEqual(true)
-  })
+    const actual = hackathons.currentHackathon;
+    expect(actual).toBeDefined();
+    expect(actual?._id).toEqual('current');
+    expect(actual?.isActive()).toEqual(true);
+  });
   test('past hackathon is not active', () => {
-    const actual = hackathons.find('past') as Hackathon
-    expect(actual).toBeDefined()
-    expect(actual._id).toEqual('past')
-    expect(actual.isActive()).toEqual(false)
-  })
+    const actual = hackathons.find('past') as Hackathon;
+    expect(actual).toBeDefined();
+    expect(actual._id).toEqual('past');
+    expect(actual.isActive()).toEqual(false);
+  });
   test('future hackathon is not active', () => {
-    const actual = hackathons.find('future') as Hackathon
-    expect(actual).toBeDefined()
-    expect(actual._id).toEqual('future')
-    expect(actual.isActive()).toEqual(false)
-  })
+    const actual = hackathons.find('future') as Hackathon;
+    expect(actual).toBeDefined();
+    expect(actual._id).toEqual('future');
+    expect(actual.isActive()).toEqual(false);
+  });
   test('setting default to true finds the earliest "current" hackathon', () => {
-    const past = hackathons.find('past') as Hackathon
-    past.default = true
-    const actual = hackathons.getCurrentHackathon() as Hackathon
-    past.default = false
-    expect(actual).toBeDefined()
-    expect(actual._id).toEqual('past')
-  })
-})
+    const past = hackathons.find('past') as Hackathon;
+    past.default = true;
+    const actual = hackathons.getCurrentHackathon() as Hackathon;
+    past.default = false;
+    expect(actual).toBeDefined();
+    expect(actual._id).toEqual('past');
+  });
+});

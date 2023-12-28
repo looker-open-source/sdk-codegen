@@ -24,9 +24,9 @@
 
  */
 
-import { LookerSDKError } from '@looker/sdk-rtl'
-import type { IArtifact } from '@looker/sdk'
-import type { IRowModel } from './RowModel'
+import { LookerSDKError } from '@looker/sdk-rtl';
+import type { IArtifact } from '@looker/sdk';
+import type { IRowModel } from './RowModel';
 import {
   APP_JSON,
   nilCell,
@@ -34,40 +34,40 @@ import {
   RowAction,
   RowModel,
   stringer,
-} from './RowModel'
+} from './RowModel';
 
 export interface ITestRowProps {
-  name: string
-  toggle: boolean
-  score: number
-  average: number
-  strArray: string[]
-  $notheader: string
+  name: string;
+  toggle: boolean;
+  score: number;
+  average: number;
+  strArray: string[];
+  $notheader: string;
 }
 
 export interface ITestRow extends IRowModel, ITestRowProps {}
 
 export class TestRow extends RowModel<ITestRow> {
-  name = ''
-  toggle = false
-  score = 0
-  average = 0.0
-  strArray = []
-  $notheader = ''
+  name = '';
+  toggle = false;
+  score = 0;
+  average = 0.0;
+  strArray = [];
+  $notheader = '';
   constructor(values?: any) {
-    super(values)
+    super(values);
     // sadly, this second call is required for all descendants because otherwise
     // the properties of the object are not yet all defined in the parent
     // constructor for the values array iteration can be incomplete
-    if (values) this.assign(values)
+    if (values) this.assign(values);
   }
 
   namespace(): string {
-    return 'test'
+    return 'test';
   }
 }
 
-export const testRowNow = new Date()
+export const testRowNow = new Date();
 export const testRowValues = [
   '3',
   testRowNow,
@@ -76,7 +76,7 @@ export const testRowValues = [
   5,
   3.2,
   ['a', 'b'],
-]
+];
 
 export const testRowObject = {
   _row: 2,
@@ -87,7 +87,7 @@ export const testRowObject = {
   score: testRowValues[4],
   average: testRowValues[5],
   strArray: testRowValues[6],
-}
+};
 
 const testArtifactObject = {
   created_at: Date.now(),
@@ -100,44 +100,44 @@ const testArtifactObject = {
   version: 1,
   content_type: APP_JSON,
   value: JSON.stringify(testRowObject),
-}
+};
 
 describe('RowModel', () => {
   describe('stringer', () => {
     test('formats dates', () => {
       expect(stringer(new Date('2019-11-05T15:00:00.000000+00:00'))).toEqual(
         '2019-11-05T15:00:00.000Z'
-      )
-    })
+      );
+    });
     test('NILs empty dates', () => {
-      expect(stringer(noDate)).toEqual(nilCell)
-    })
+      expect(stringer(noDate)).toEqual(nilCell);
+    });
     test('NILs undefined', () => {
-      expect(stringer(undefined)).toEqual(nilCell)
-    })
+      expect(stringer(undefined)).toEqual(nilCell);
+    });
     test('NILs null', () => {
-      expect(stringer(null)).toEqual(nilCell)
-    })
+      expect(stringer(null)).toEqual(nilCell);
+    });
     test('Returns empty string', () => {
-      expect(stringer('')).toEqual('')
-    })
+      expect(stringer('')).toEqual('');
+    });
     test('Returns bool string', () => {
-      expect(stringer(true)).toEqual('true')
-      expect(stringer(false)).toEqual('false')
-    })
+      expect(stringer(true)).toEqual('true');
+      expect(stringer(false)).toEqual('false');
+    });
     test('Returns float string', () => {
-      expect(stringer(1.2)).toEqual('1.2')
-    })
+      expect(stringer(1.2)).toEqual('1.2');
+    });
     test('Returns int string', () => {
-      expect(stringer(12)).toEqual('12')
-    })
+      expect(stringer(12)).toEqual('12');
+    });
     test('Returns comma-delimited array', () => {
-      expect(stringer(['a', 'b'])).toEqual('a,b')
-    })
-  })
+      expect(stringer(['a', 'b'])).toEqual('a,b');
+    });
+  });
 
   test('header omits _row and $ vars', () => {
-    const row = new TestRow()
+    const row = new TestRow();
     const expected = [
       '_id',
       '_updated',
@@ -146,246 +146,246 @@ describe('RowModel', () => {
       'score',
       'average',
       'strArray',
-    ]
-    const actual = row.header()
-    expect(actual).toEqual(expected)
-  })
+    ];
+    const actual = row.header();
+    expect(actual).toEqual(expected);
+  });
 
   test('displayHeaders omits _ and $ vars', () => {
-    const row = new TestRow()
-    const expected = ['name', 'toggle', 'score', 'average', 'strArray']
-    const actual = row.displayHeader()
-    expect(actual).toEqual(expected)
-  })
+    const row = new TestRow();
+    const expected = ['name', 'toggle', 'score', 'average', 'strArray'];
+    const actual = row.displayHeader();
+    expect(actual).toEqual(expected);
+  });
 
   test('namespace', () => {
-    const row = new TestRow()
-    expect(row.namespace()).toEqual('test')
-  })
+    const row = new TestRow();
+    expect(row.namespace()).toEqual('test');
+  });
 
   describe('initialization', () => {
     test('inits with an artifact object', () => {
-      const actual = new TestRow(testArtifactObject)
-      expect(actual._row).toEqual(2)
+      const actual = new TestRow(testArtifactObject);
+      expect(actual._row).toEqual(2);
       // artifact key overrides an _id value
-      expect(actual._id).toEqual('TestRow:1')
-      expect(actual.key).toEqual(actual._id)
-      expect(actual._updated).toEqual(testRowNow)
-      expect(actual.name).toEqual(testRowObject.name)
-      expect(actual.toggle).toEqual(true)
-      expect(actual.score).toEqual(5)
-      expect(actual.average).toEqual(3.2)
-      expect(actual.strArray).toEqual(['a', 'b'])
-      expect(actual.$action).toEqual(RowAction.None)
-      expect(actual.$artifact).toBeDefined()
-    })
+      expect(actual._id).toEqual('TestRow:1');
+      expect(actual.key).toEqual(actual._id);
+      expect(actual._updated).toEqual(testRowNow);
+      expect(actual.name).toEqual(testRowObject.name);
+      expect(actual.toggle).toEqual(true);
+      expect(actual.score).toEqual(5);
+      expect(actual.average).toEqual(3.2);
+      expect(actual.strArray).toEqual(['a', 'b']);
+      expect(actual.$action).toEqual(RowAction.None);
+      expect(actual.$artifact).toBeDefined();
+    });
 
     test('assigns with fromArtifact and toArtifact', () => {
-      const actual = new TestRow()
-      actual.fromArtifact(testArtifactObject as unknown as Partial<IArtifact>)
-      expect(actual._row).toEqual(2)
-      expect(actual._id).toEqual('TestRow:1')
-      expect(actual.key).toEqual(actual._id)
-      expect(actual._updated).toEqual(testRowNow)
-      expect(actual.name).toEqual(testRowObject.name)
-      expect(actual.toggle).toEqual(true)
-      expect(actual.score).toEqual(5)
-      expect(actual.average).toEqual(3.2)
-      expect(actual.strArray).toEqual(['a', 'b'])
-      expect(actual.$action).toEqual(RowAction.Create)
-      expect(actual.$artifact).toBeDefined()
-      const expected = actual.toArtifact()
-      const second = new TestRow()
-      second.fromArtifact(expected)
+      const actual = new TestRow();
+      actual.fromArtifact(testArtifactObject as unknown as Partial<IArtifact>);
+      expect(actual._row).toEqual(2);
+      expect(actual._id).toEqual('TestRow:1');
+      expect(actual.key).toEqual(actual._id);
+      expect(actual._updated).toEqual(testRowNow);
+      expect(actual.name).toEqual(testRowObject.name);
+      expect(actual.toggle).toEqual(true);
+      expect(actual.score).toEqual(5);
+      expect(actual.average).toEqual(3.2);
+      expect(actual.strArray).toEqual(['a', 'b']);
+      expect(actual.$action).toEqual(RowAction.Create);
+      expect(actual.$artifact).toBeDefined();
+      const expected = actual.toArtifact();
+      const second = new TestRow();
+      second.fromArtifact(expected);
       // ensure marshalled values are identical
-      expect(actual.toArtifact()).toEqual(second.toArtifact())
-    })
+      expect(actual.toArtifact()).toEqual(second.toArtifact());
+    });
 
     test('throws JSON error with bad artifact value', () => {
-      const bad = { ...testArtifactObject, ...{ value: '{ this is bad }' } }
+      const bad = { ...testArtifactObject, ...{ value: '{ this is bad }' } };
       try {
-        const actual = new TestRow(bad)
-        expect(actual).toBeUndefined()
+        const actual = new TestRow(bad);
+        expect(actual).toBeUndefined();
       } catch (e: any) {
-        expect(e).toBeInstanceOf(LookerSDKError)
+        expect(e).toBeInstanceOf(LookerSDKError);
         expect(e.message).toEqual(
           'SyntaxError: Unexpected token t in JSON at position 2'
-        )
+        );
       }
-    })
+    });
 
     test('inits with default values', () => {
-      const actual = new TestRow()
-      expect(actual._row).toEqual(0)
-      expect(actual._id).toMatch(/^TestRow:.*/)
-      expect(actual._updated).toEqual(noDate)
-      expect(actual.name).toEqual('')
-      expect(actual.toggle).toEqual(false)
-      expect(actual.score).toEqual(0)
-      expect(actual.average).toEqual(0.0)
-      expect(actual.strArray).toEqual([])
-      expect(actual.$action).toEqual(RowAction.Create)
-    })
+      const actual = new TestRow();
+      expect(actual._row).toEqual(0);
+      expect(actual._id).toMatch(/^TestRow:.*/);
+      expect(actual._updated).toEqual(noDate);
+      expect(actual.name).toEqual('');
+      expect(actual.toggle).toEqual(false);
+      expect(actual.score).toEqual(0);
+      expect(actual.average).toEqual(0.0);
+      expect(actual.strArray).toEqual([]);
+      expect(actual.$action).toEqual(RowAction.Create);
+    });
     test('inits with object values', () => {
-      const actual = new TestRow(testRowObject)
-      expect(actual._row).toEqual(2)
-      expect(actual._id).toEqual('3')
-      expect(actual._updated).toEqual(testRowNow)
-      expect(actual.name).toEqual(testRowObject.name)
-      expect(actual.toggle).toEqual(true)
-      expect(actual.score).toEqual(5)
-      expect(actual.average).toEqual(3.2)
-      expect(actual.strArray).toEqual(['a', 'b'])
-      expect(actual.$action).toEqual(RowAction.Create)
-    })
+      const actual = new TestRow(testRowObject);
+      expect(actual._row).toEqual(2);
+      expect(actual._id).toEqual('3');
+      expect(actual._updated).toEqual(testRowNow);
+      expect(actual.name).toEqual(testRowObject.name);
+      expect(actual.toggle).toEqual(true);
+      expect(actual.score).toEqual(5);
+      expect(actual.average).toEqual(3.2);
+      expect(actual.strArray).toEqual(['a', 'b']);
+      expect(actual.$action).toEqual(RowAction.Create);
+    });
     test('inits with value array', () => {
-      const actual = new TestRow(testRowValues)
-      expect(actual._row).toEqual(0)
-      expect(actual._id).toEqual('3')
-      expect(actual._updated).toEqual(testRowNow)
-      expect(actual.name).toEqual(testRowObject.name)
-      expect(actual.toggle).toEqual(true)
-      expect(actual.score).toEqual(5)
-      expect(actual.average).toEqual(3.2)
-      expect(actual.strArray).toEqual(['a', 'b'])
-      expect(actual.$action).toEqual(RowAction.Create)
-    })
+      const actual = new TestRow(testRowValues);
+      expect(actual._row).toEqual(0);
+      expect(actual._id).toEqual('3');
+      expect(actual._updated).toEqual(testRowNow);
+      expect(actual.name).toEqual(testRowObject.name);
+      expect(actual.toggle).toEqual(true);
+      expect(actual.score).toEqual(5);
+      expect(actual.average).toEqual(3.2);
+      expect(actual.strArray).toEqual(['a', 'b']);
+      expect(actual.$action).toEqual(RowAction.Create);
+    });
     test('inits with array of empty strings', () => {
-      const actual = new TestRow(['', '', '', '', '', '', ''])
-      expect(actual._row).toEqual(0)
-      expect(actual._id).toMatch('')
-      expect(actual._updated).toEqual(noDate)
-      expect(actual.name).toEqual('')
-      expect(actual.toggle).toEqual(false)
-      expect(actual.score).toEqual(0)
-      expect(actual.average).toEqual(0.0)
-      expect(actual.strArray).toEqual([])
-    })
-  })
+      const actual = new TestRow(['', '', '', '', '', '', '']);
+      expect(actual._row).toEqual(0);
+      expect(actual._id).toMatch('');
+      expect(actual._updated).toEqual(noDate);
+      expect(actual.name).toEqual('');
+      expect(actual.toggle).toEqual(false);
+      expect(actual.score).toEqual(0);
+      expect(actual.average).toEqual(0.0);
+      expect(actual.strArray).toEqual([]);
+    });
+  });
 
   describe('assign', () => {
     test('with value array', () => {
-      const actual = new TestRow()
-      actual.assign(testRowValues)
-      expect(actual._row).toEqual(0)
-      expect(actual._id).toEqual('3')
-      expect(actual._updated).toEqual(testRowNow)
-      expect(actual.name).toEqual(testRowObject.name)
-      expect(actual.toggle).toEqual(true)
-      expect(actual.score).toEqual(5)
-      expect(actual.average).toEqual(3.2)
-      expect(actual.strArray).toEqual(['a', 'b'])
-    })
+      const actual = new TestRow();
+      actual.assign(testRowValues);
+      expect(actual._row).toEqual(0);
+      expect(actual._id).toEqual('3');
+      expect(actual._updated).toEqual(testRowNow);
+      expect(actual.name).toEqual(testRowObject.name);
+      expect(actual.toggle).toEqual(true);
+      expect(actual.score).toEqual(5);
+      expect(actual.average).toEqual(3.2);
+      expect(actual.strArray).toEqual(['a', 'b']);
+    });
     test('with object', () => {
-      const actual = new TestRow()
-      actual.assign(testRowObject)
-      expect(actual._row).toEqual(2)
-      expect(actual._id).toEqual('3')
-      expect(actual._updated).toEqual(testRowNow)
-      expect(actual.name).toEqual(testRowObject.name)
-      expect(actual.toggle).toEqual(true)
-      expect(actual.score).toEqual(5)
-      expect(actual.average).toEqual(3.2)
-      expect(actual.strArray).toEqual(['a', 'b'])
-    })
+      const actual = new TestRow();
+      actual.assign(testRowObject);
+      expect(actual._row).toEqual(2);
+      expect(actual._id).toEqual('3');
+      expect(actual._updated).toEqual(testRowNow);
+      expect(actual.name).toEqual(testRowObject.name);
+      expect(actual.toggle).toEqual(true);
+      expect(actual.score).toEqual(5);
+      expect(actual.average).toEqual(3.2);
+      expect(actual.strArray).toEqual(['a', 'b']);
+    });
     test('with toObject and fromObject', () => {
-      const actual = new TestRow()
-      actual.fromObject(testRowObject)
-      expect(actual._row).toEqual(2)
-      expect(actual._id).toEqual('3')
-      expect(actual._updated).toEqual(testRowNow)
-      expect(actual.name).toEqual(testRowObject.name)
-      expect(actual.toggle).toEqual(true)
-      expect(actual.score).toEqual(5)
-      expect(actual.average).toEqual(3.2)
-      expect(actual.strArray).toEqual(['a', 'b'])
-      const obj = actual.toObject()
-      actual.fromObject(obj)
-      expect(actual._row).toEqual(2)
-      expect(actual._id).toEqual('3')
-      expect(actual._updated).toEqual(testRowNow)
-      expect(actual.name).toEqual(testRowObject.name)
-      expect(actual.toggle).toEqual(true)
-      expect(actual.score).toEqual(5)
-      expect(actual.average).toEqual(3.2)
-      expect(actual.strArray).toEqual(['a', 'b'])
-    })
-  })
+      const actual = new TestRow();
+      actual.fromObject(testRowObject);
+      expect(actual._row).toEqual(2);
+      expect(actual._id).toEqual('3');
+      expect(actual._updated).toEqual(testRowNow);
+      expect(actual.name).toEqual(testRowObject.name);
+      expect(actual.toggle).toEqual(true);
+      expect(actual.score).toEqual(5);
+      expect(actual.average).toEqual(3.2);
+      expect(actual.strArray).toEqual(['a', 'b']);
+      const obj = actual.toObject();
+      actual.fromObject(obj);
+      expect(actual._row).toEqual(2);
+      expect(actual._id).toEqual('3');
+      expect(actual._updated).toEqual(testRowNow);
+      expect(actual.name).toEqual(testRowObject.name);
+      expect(actual.toggle).toEqual(true);
+      expect(actual.score).toEqual(5);
+      expect(actual.average).toEqual(3.2);
+      expect(actual.strArray).toEqual(['a', 'b']);
+    });
+  });
 
   describe('prepare', () => {
     test('assigns new id and updated', () => {
-      const actual = new TestRow()
-      expect(actual._row).toEqual(0)
-      expect(actual._id).toMatch(/^TestRow:.*/)
-      expect(actual._updated).toEqual(noDate)
-      actual.prepare()
-      expect(actual._row).toEqual(0)
-      expect(actual._id).not.toEqual('')
-      expect(actual._updated).not.toEqual(noDate)
-    })
+      const actual = new TestRow();
+      expect(actual._row).toEqual(0);
+      expect(actual._id).toMatch(/^TestRow:.*/);
+      expect(actual._updated).toEqual(noDate);
+      actual.prepare();
+      expect(actual._row).toEqual(0);
+      expect(actual._id).not.toEqual('');
+      expect(actual._updated).not.toEqual(noDate);
+    });
     test('updates updated without updating id', async () => {
-      const id = 'baad-f00d'
-      const actual = new TestRow({ _row: 1, _id: id })
-      actual.prepare()
-      expect(actual._row).toEqual(1)
-      expect(actual._id).toEqual(id)
-      expect(actual._updated).not.toEqual(noDate)
-      const updated = actual._updated
-      jest.useFakeTimers()
-      await null // match delay from await func1()
-      jest.advanceTimersByTime(1000)
-      actual.prepare()
-      expect(actual._row).toEqual(1)
-      expect(actual._id).toEqual(id)
-      expect(actual._updated.getTime()).not.toEqual(updated.getTime())
-    })
-  })
+      const id = 'baad-f00d';
+      const actual = new TestRow({ _row: 1, _id: id });
+      actual.prepare();
+      expect(actual._row).toEqual(1);
+      expect(actual._id).toEqual(id);
+      expect(actual._updated).not.toEqual(noDate);
+      const updated = actual._updated;
+      jest.useFakeTimers();
+      await null; // match delay from await func1()
+      jest.advanceTimersByTime(1000);
+      actual.prepare();
+      expect(actual._row).toEqual(1);
+      expect(actual._id).toEqual(id);
+      expect(actual._updated.getTime()).not.toEqual(updated.getTime());
+    });
+  });
 
   describe('actions', () => {
     test('setCreate marks create action', () => {
-      const actual = new TestRow()
-      actual.setCreate()
-      expect(actual.$action).toEqual(RowAction.Create)
-    })
+      const actual = new TestRow();
+      actual.setCreate();
+      expect(actual.$action).toEqual(RowAction.Create);
+    });
     test('setDelete marks delete action', () => {
-      const actual = new TestRow(testArtifactObject)
-      actual.setDelete()
-      expect(actual.$action).toEqual(RowAction.Delete)
-    })
+      const actual = new TestRow(testArtifactObject);
+      actual.setDelete();
+      expect(actual.$action).toEqual(RowAction.Delete);
+    });
     test('setUpdate marks update action', () => {
-      const actual = new TestRow(testArtifactObject)
-      actual.setUpdate()
-      expect(actual.$action).toEqual(RowAction.Update)
-    })
+      const actual = new TestRow(testArtifactObject);
+      actual.setUpdate();
+      expect(actual.$action).toEqual(RowAction.Update);
+    });
     test('Create action is rejected for existing row', () => {
-      const actual = new TestRow(testArtifactObject)
-      const expected = actual.$action
+      const actual = new TestRow(testArtifactObject);
+      const expected = actual.$action;
       try {
-        expect(actual.setCreate()).toEqual(false)
+        expect(actual.setCreate()).toEqual(false);
       } catch (e: any) {
-        expect(e.message).toMatch(/can't create/)
+        expect(e.message).toMatch(/can't create/);
       }
-      expect(actual.$action).toEqual(expected)
-    })
+      expect(actual.$action).toEqual(expected);
+    });
     test('Delete action is rejected for new row', () => {
-      const actual = new TestRow({ _row: 0 })
-      const expected = actual.$action
+      const actual = new TestRow({ _row: 0 });
+      const expected = actual.$action;
       try {
-        expect(actual.setDelete()).toEqual(false)
+        expect(actual.setDelete()).toEqual(false);
       } catch (e: any) {
-        expect(e.message).toMatch(/can't delete/)
+        expect(e.message).toMatch(/can't delete/);
       }
-      expect(actual.$action).toEqual(expected)
-    })
+      expect(actual.$action).toEqual(expected);
+    });
     test('Update action is rejected for new row', () => {
-      const actual = new TestRow({ _row: 0 })
-      const expected = actual.$action
+      const actual = new TestRow({ _row: 0 });
+      const expected = actual.$action;
       try {
-        expect(actual.setUpdate()).toEqual(false)
+        expect(actual.setUpdate()).toEqual(false);
       } catch (e: any) {
-        expect(e.message).toMatch(/can't update/)
+        expect(e.message).toMatch(/can't update/);
       }
-      expect(actual.$action).toEqual(expected)
-    })
-  })
-})
+      expect(actual.$action).toEqual(expected);
+    });
+  });
+});

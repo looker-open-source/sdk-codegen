@@ -24,16 +24,16 @@
 
  */
 
-import type { FC } from 'react'
-import React from 'react'
-import Editor from 'react-simple-code-editor'
+import type { FC } from 'react';
+import React from 'react';
+import Editor from 'react-simple-code-editor';
 
-import type { CodeDisplayProps } from '../CodeDisplay/types'
-import { CodeDisplay } from '../index'
+import type { CodeDisplayProps } from '../CodeDisplay/types';
+import { CodeDisplay } from '../index';
 
 interface CodeEditorProps extends CodeDisplayProps {
   /** onChange event handler, for Editor functionality */
-  onChange: (text: string) => void
+  onChange: (text: string) => void;
 }
 
 /**
@@ -71,5 +71,5 @@ export const CodeEditor: FC<CodeEditorProps> = ({
         fontFamily: 'monospace',
       }}
     />
-  )
-}
+  );
+};

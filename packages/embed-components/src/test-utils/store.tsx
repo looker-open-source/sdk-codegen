@@ -23,15 +23,15 @@
  SOFTWARE.
 
  */
-import { createStore } from '@looker/redux'
-import { factorySlice, defaultFactoryState } from '../GlobalStore'
-import type { RootState, FactoryState } from '../GlobalStore'
-import { themesSlice, defaultThemesState } from '../Theme'
-import type { ThemesState } from '../Theme'
+import { createStore } from '@looker/redux';
+import { factorySlice, defaultFactoryState } from '../GlobalStore';
+import type { RootState, FactoryState } from '../GlobalStore';
+import { themesSlice, defaultThemesState } from '../Theme';
+import type { ThemesState } from '../Theme';
 
 type DeepPartial<T> = {
-  [P in keyof T]?: DeepPartial<T[P]>
-}
+  [P in keyof T]?: DeepPartial<T[P]>;
+};
 
 export const createTestStore = (overrides?: DeepPartial<RootState>) =>
   createStore({
@@ -46,4 +46,4 @@ export const createTestStore = (overrides?: DeepPartial<RootState>) =>
       factory: factorySlice.reducer,
       themes: themesSlice.reducer,
     },
-  })
+  });

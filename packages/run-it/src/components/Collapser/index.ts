@@ -24,4 +24,4 @@
 
  */
 
-export { CollapserCard } from './CollapserCard'
+export { CollapserCard } from './CollapserCard';

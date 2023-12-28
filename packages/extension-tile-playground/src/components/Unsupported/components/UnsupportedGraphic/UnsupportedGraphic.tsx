@@ -23,10 +23,10 @@
  SOFTWARE.
 
  */
-import React from 'react'
+import React from 'react';
 
 interface UnsupportedGraphicProps {
-  altText?: string
+  altText?: string;
 }
 
 const UnsupportedGraphicImage: React.FC<UnsupportedGraphicProps> = ({
@@ -197,6 +197,6 @@ const UnsupportedGraphicImage: React.FC<UnsupportedGraphicProps> = ({
       fill="#202124"
     />
   </svg>
-)
+);
 
-export const UnsupportedGraphic = React.memo(UnsupportedGraphicImage)
+export const UnsupportedGraphic = React.memo(UnsupportedGraphicImage);

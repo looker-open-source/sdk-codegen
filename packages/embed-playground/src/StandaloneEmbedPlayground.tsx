@@ -23,70 +23,70 @@
  SOFTWARE.
 
  */
-import React, { useState, useEffect } from 'react'
-import { ComponentsProvider } from '@looker/components'
+import React, { useState, useEffect } from 'react';
+import { ComponentsProvider } from '@looker/components';
 import {
   BrowserAdaptor,
   registerEnvAdaptor,
   OAuthScene,
   OAuthConfigProvider,
   OAuthForm,
-} from '@looker/extension-utils'
-import { Provider } from 'react-redux'
-import { useLocation } from 'react-router'
-import type { IApiSettings } from '@looker/sdk-rtl'
+} from '@looker/extension-utils';
+import { Provider } from 'react-redux';
+import { useLocation } from 'react-router';
+import type { IApiSettings } from '@looker/sdk-rtl';
 import {
   BrowserSession,
   BrowserTransport,
   DefaultSettings,
-} from '@looker/sdk-rtl'
-import { functionalSdk40 } from '@looker/sdk'
-import { store } from '@looker/embed-components'
-import { Loader } from './components'
-import { EmbedPlayground } from './EmbedPlayground'
+} from '@looker/sdk-rtl';
+import { functionalSdk40 } from '@looker/sdk';
+import { store } from '@looker/embed-components';
+import { Loader } from './components';
+import { EmbedPlayground } from './EmbedPlayground';
 
-const ConfigKey = 'EPConfig'
+const ConfigKey = 'EPConfig';
 
-const OAuthClientId = 'looker.embed-playground'
+const OAuthClientId = 'looker.embed-playground';
 
 export const initSdk = () => {
   const settings = {
     ...DefaultSettings(),
     base_url: 'https://self-signed.looker.com:19999',
     agentTag: 'EmbedPlayground 0.1',
-  } as IApiSettings
+  } as IApiSettings;
 
-  const options = new OAuthConfigProvider(settings, OAuthClientId, ConfigKey)
-  const transport = new BrowserTransport(options)
-  const session = new BrowserSession(options, transport)
-  const sdk = functionalSdk40(session)
-  return sdk
-}
+  const options = new OAuthConfigProvider(settings, OAuthClientId, ConfigKey);
+  const transport = new BrowserTransport(options);
+  const session = new BrowserSession(options, transport);
+  const sdk = functionalSdk40(session);
+  return sdk;
+};
 
 export const StandaloneEmbedPlayground = () => {
-  const location = useLocation()
-  const oauthReturn = location.pathname === '/oauth'
-  const [adaptor] = useState(new BrowserAdaptor(initSdk()))
-  const sdk = adaptor.sdk
+  const location = useLocation();
+  const oauthReturn = location.pathname === '/oauth';
+  const [adaptor] = useState(new BrowserAdaptor(initSdk()));
+  const sdk = adaptor.sdk;
   const authIsConfigured = (
     sdk.authSession.settings as OAuthConfigProvider
-  ).authIsConfigured()
+  ).authIsConfigured();
   const canLogin =
-    authIsConfigured && !sdk.authSession.isAuthenticated() && !oauthReturn
+    authIsConfigured && !sdk.authSession.isAuthenticated() && !oauthReturn;
 
   useEffect(() => {
-    const login = async () => await adaptor.login()
+    const login = async () => await adaptor.login();
     if (canLogin) {
-      login()
+      login();
     }
-  }, [])
+  }, []);
 
   const { looker_url } = (
     sdk.authSession.settings as OAuthConfigProvider
-  ).getStoredConfig()
-  registerEnvAdaptor(adaptor)
+  ).getStoredConfig();
+  registerEnvAdaptor(adaptor);
 
-  const themeOverrides = adaptor.themeOverrides()
+  const themeOverrides = adaptor.themeOverrides();
 
   if (!authIsConfigured) {
     return (
@@ -102,7 +102,7 @@ export const StandaloneEmbedPlayground = () => {
           />
         </ComponentsProvider>
       </Provider>
-    )
+    );
   }
 
   if (canLogin) {
@@ -113,7 +113,7 @@ export const StandaloneEmbedPlayground = () => {
           message={`Configuration found. Logging into ${looker_url}`}
         />
       </Provider>
-    )
+    );
   }
 
   return (
@@ -124,5 +124,5 @@ export const StandaloneEmbedPlayground = () => {
         <EmbedPlayground adaptor={adaptor} />
       )}
     </Provider>
-  )
-}
+  );
+};

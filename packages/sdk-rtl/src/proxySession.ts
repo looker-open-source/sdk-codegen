@@ -24,11 +24,11 @@
 
  */
 
-import { AuthSession } from './authSession'
-import { BrowserTransport } from './browserTransport'
-import type { ITransport, IRequestProps } from './transport'
-import { LookerAppId, agentPrefix } from './transport'
-import type { IApiSettings } from './apiSettings'
+import { AuthSession } from './authSession';
+import { BrowserTransport } from './browserTransport';
+import type { ITransport, IRequestProps } from './transport';
+import { LookerAppId, agentPrefix } from './transport';
+import type { IApiSettings } from './apiSettings';
 
 /**
  * An AuthSession class intended for use with proxied requests
@@ -44,7 +44,7 @@ export abstract class ProxySession extends AuthSession {
     public proxyUrl: string,
     transport?: ITransport
   ) {
-    super(settings, transport || new BrowserTransport(settings))
+    super(settings, transport || new BrowserTransport(settings));
   }
 
   /**
@@ -53,7 +53,7 @@ export abstract class ProxySession extends AuthSession {
    * @returns `true` since the proxy handles all authentication
    */
   isAuthenticated() {
-    return true
+    return true;
   }
 
   /**
@@ -67,11 +67,11 @@ export abstract class ProxySession extends AuthSession {
    */
   async authenticate(props: IRequestProps) {
     if (!props.headers) {
-      props.headers = {}
+      props.headers = {};
     }
-    props.headers['X-Forwarded-For'] = props.url
-    props.headers[LookerAppId] = agentPrefix
-    props.url = this.proxyUrl
-    return props
+    props.headers['X-Forwarded-For'] = props.url;
+    props.headers[LookerAppId] = agentPrefix;
+    props.url = this.proxyUrl;
+    return props;
   }
 }

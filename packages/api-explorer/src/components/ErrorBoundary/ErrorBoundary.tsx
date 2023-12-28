@@ -24,18 +24,18 @@
 
  */
 
-import React, { Component } from 'react'
-import type { ReactNode, ErrorInfo } from 'react'
-import { SomethingWentWrong } from './components/SomethingWentWrong'
+import React, { Component } from 'react';
+import type { ReactNode, ErrorInfo } from 'react';
+import { SomethingWentWrong } from './components/SomethingWentWrong';
 
 interface ErrorBoundaryProps {
-  children: ReactNode
-  logError: (error: Error, componentStack: string) => void
+  children: ReactNode;
+  logError: (error: Error, componentStack: string) => void;
 }
 
 interface ErrorBoundaryState {
-  hasError: boolean
-  errorMessage: Error
+  hasError: boolean;
+  errorMessage: Error;
 }
 
 export class ErrorBoundary extends Component<
@@ -43,30 +43,30 @@ export class ErrorBoundary extends Component<
   ErrorBoundaryState
 > {
   constructor(props: ErrorBoundaryProps) {
-    super(props)
-    this.state = { hasError: false, errorMessage: new Error('') }
+    super(props);
+    this.state = { hasError: false, errorMessage: new Error('') };
   }
 
   static getDerivedStateFromError(error: Error) {
-    return { hasError: true, errorMessage: error }
+    return { hasError: true, errorMessage: error };
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    const { logError } = this.props
-    logError(error, errorInfo.componentStack)
+    const { logError } = this.props;
+    logError(error, errorInfo.componentStack);
   }
 
   render() {
-    const { hasError } = this.state
-    const { children } = this.props
+    const { hasError } = this.state;
+    const { children } = this.props;
     if (hasError) {
       return (
         <SomethingWentWrong
           header="Uh oh! Something went wrong!"
           actionMessage="Try refreshing the page to correct the problem."
         />
-      )
+      );
     }
-    return children || <></>
+    return children || <></>;
   }
 }

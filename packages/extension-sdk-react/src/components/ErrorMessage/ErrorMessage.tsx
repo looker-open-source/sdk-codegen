@@ -24,8 +24,8 @@
 
  */
 
-import React from 'react'
-import type { ErrorMessageProps } from './types'
+import React from 'react';
+import type { ErrorMessageProps } from './types';
 
 export const ErrorMessage: React.FC<ErrorMessageProps> = ({ errorMessage }) => (
   <div
@@ -43,4 +43,4 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({ errorMessage }) => (
   >
     {errorMessage}
   </div>
-)
+);

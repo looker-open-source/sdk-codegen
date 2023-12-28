@@ -23,22 +23,22 @@
  SOFTWARE.
 
  */
-import type { FC } from 'react'
-import React, { useState, useEffect } from 'react'
-import ReactDiffViewer, { DiffMethod } from 'react-diff-viewer'
-import styled from 'styled-components'
-import { Accordion2, Box, Card, Grid, Heading, Link } from '@looker/components'
-import type { DiffRow } from '@looker/sdk-codegen/src'
-import type { ApiModel, IMethod } from '@looker/sdk-codegen'
-import { useSelector } from 'react-redux'
-import { selectSdkLanguage } from '../../../state'
-import { buildMethodPath, useNavigation } from '../../../utils'
-import { DiffBanner } from './DiffBanner'
-import { differ } from './docDiffUtils'
+import type { FC } from 'react';
+import React, { useState, useEffect } from 'react';
+import ReactDiffViewer, { DiffMethod } from 'react-diff-viewer';
+import styled from 'styled-components';
+import { Accordion2, Box, Card, Grid, Heading, Link } from '@looker/components';
+import type { DiffRow } from '@looker/sdk-codegen/src';
+import type { ApiModel, IMethod } from '@looker/sdk-codegen';
+import { useSelector } from 'react-redux';
+import { selectSdkLanguage } from '../../../state';
+import { buildMethodPath, useNavigation } from '../../../utils';
+import { DiffBanner } from './DiffBanner';
+import { differ } from './docDiffUtils';
 
 interface DiffMethodLinkProps {
-  method: IMethod | undefined
-  specKey: string
+  method: IMethod | undefined;
+  specKey: string;
 }
 
 const DiffLink = styled(Link)`
@@ -53,35 +53,35 @@ const DiffLink = styled(Link)`
     color: ${({ theme }) => theme.colors.key};
     cursor: pointer;
   }
-`
+`;
 
 export const DiffMethodLink: FC<DiffMethodLinkProps> = ({
   method,
   specKey,
 }) => {
-  const { navigate } = useNavigation()
+  const { navigate } = useNavigation();
 
-  if (!method) return <Heading as="h4">{`Missing in ${specKey}`}</Heading>
+  if (!method) return <Heading as="h4">{`Missing in ${specKey}`}</Heading>;
 
-  const tag = method.schema.tags[0]
-  const path = `${buildMethodPath(specKey, tag, method.name)}`
+  const tag = method.schema.tags[0];
+  const path = `${buildMethodPath(specKey, tag, method.name)}`;
 
   return (
     <DiffLink
       role="link"
       onClick={() => {
-        navigate(path)
+        navigate(path);
       }}
     >{`${method.name} for ${specKey}`}</DiffLink>
-  )
-}
+  );
+};
 
 interface DiffItemProps {
-  item: DiffRow
-  leftKey: string
-  rightKey: string
-  leftSpec: ApiModel
-  rightSpec: ApiModel
+  item: DiffRow;
+  leftKey: string;
+  rightKey: string;
+  leftSpec: ApiModel;
+  rightSpec: ApiModel;
 }
 
 export const DiffItem: FC<DiffItemProps> = ({
@@ -91,32 +91,32 @@ export const DiffItem: FC<DiffItemProps> = ({
   rightKey,
   rightSpec,
 }) => {
-  const selectedSdkLanguage = useSelector(selectSdkLanguage)
+  const selectedSdkLanguage = useSelector(selectSdkLanguage);
   const [leftMethod, setLeftMethod] = useState<IMethod | undefined>(
     leftSpec.methods[item.name]
-  )
+  );
   const [rightMethod, setRightMethod] = useState<IMethod | undefined>(
     rightSpec.methods[item.name]
-  )
-  const [method, setMethod] = useState<IMethod>((leftMethod || rightMethod)!)
-  const [isOpen, setIsOpen] = useState(false)
-  const [leftSide, setLeftSide] = useState<string>('')
-  const [rightSide, setRightSide] = useState<string>('')
+  );
+  const [method, setMethod] = useState<IMethod>((leftMethod || rightMethod)!);
+  const [isOpen, setIsOpen] = useState(false);
+  const [leftSide, setLeftSide] = useState<string>('');
+  const [rightSide, setRightSide] = useState<string>('');
 
   useEffect(() => {
-    const { lhs, rhs } = differ(item, leftSpec, rightSpec, selectedSdkLanguage)
-    const lMethod = leftSpec.methods[item.name]
-    const rMethod = rightSpec.methods[item.name]
-    setLeftMethod(lMethod)
-    setRightMethod(rMethod)
-    setMethod((lMethod || rMethod)!)
-    setLeftSide(lhs)
-    setRightSide(rhs)
-  }, [leftSpec, rightSpec, isOpen, selectedSdkLanguage])
+    const { lhs, rhs } = differ(item, leftSpec, rightSpec, selectedSdkLanguage);
+    const lMethod = leftSpec.methods[item.name];
+    const rMethod = rightSpec.methods[item.name];
+    setLeftMethod(lMethod);
+    setRightMethod(rMethod);
+    setMethod((lMethod || rMethod)!);
+    setLeftSide(lhs);
+    setRightSide(rhs);
+  }, [leftSpec, rightSpec, isOpen, selectedSdkLanguage]);
 
   const handleOpen = () => {
-    setIsOpen(!isOpen)
-  }
+    setIsOpen(!isOpen);
+  };
 
   return (
     <Card border width="100%">
@@ -143,5 +143,5 @@ export const DiffItem: FC<DiffItemProps> = ({
         />
       </Accordion2>
     </Card>
-  )
-}
+  );
+};

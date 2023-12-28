@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { DocCode } from './DocCode'
+export { DocCode } from './DocCode';

@@ -23,27 +23,27 @@
  SOFTWARE.
 
  */
-import { takeEvery, put, call } from 'typed-redux-saga'
-import type { PayloadAction } from '@reduxjs/toolkit'
-import type { ITheme } from '@looker/sdk'
+import { takeEvery, put, call } from 'typed-redux-saga';
+import type { PayloadAction } from '@reduxjs/toolkit';
+import type { ITheme } from '@looker/sdk';
 import {
   registerThemeService,
   getThemeService,
   EmbedUrl,
-} from '@looker/embed-services'
-import { themeActions } from './slice'
-import type { SelectThemeAction } from './slice'
+} from '@looker/embed-services';
+import { themeActions } from './slice';
+import type { SelectThemeAction } from './slice';
 
 /**
  * Registers theme service with factory
  */
 function* initSaga() {
-  const { initSuccessAction, setFailureAction } = themeActions
+  const { initSuccessAction, setFailureAction } = themeActions;
   try {
-    registerThemeService()
-    yield* put(initSuccessAction())
+    registerThemeService();
+    yield* put(initSuccessAction());
   } catch (error: any) {
-    yield* put(setFailureAction({ error: error.message }))
+    yield* put(setFailureAction({ error: error.message }));
   }
 }
 
@@ -51,15 +51,15 @@ function* initSaga() {
  * Gets all themes, default and url themes, and sets the selected theme
  */
 function* loadThemeDataSaga() {
-  const { loadThemeDataSuccessAction, setFailureAction } = themeActions
+  const { loadThemeDataSuccessAction, setFailureAction } = themeActions;
   try {
-    const service = getThemeService()
-    yield* call([service, 'load'])
-    const searchParams = new EmbedUrl().searchParams
-    const urlThemeName = searchParams.theme
-    let urlTheme: ITheme | undefined
+    const service = getThemeService();
+    yield* call([service, 'load']);
+    const searchParams = new EmbedUrl().searchParams;
+    const urlThemeName = searchParams.theme;
+    let urlTheme: ITheme | undefined;
     if (urlThemeName) {
-      urlTheme = service.find('name', urlThemeName)
+      urlTheme = service.find('name', urlThemeName);
     }
     yield* put(
       loadThemeDataSuccessAction({
@@ -67,9 +67,9 @@ function* loadThemeDataSaga() {
         defaultTheme: service.defaultTheme!,
         selectedTheme: (urlTheme ?? service.defaultTheme!)!,
       })
-    )
+    );
   } catch (error: any) {
-    yield* put(setFailureAction({ error: error.message }))
+    yield* put(setFailureAction({ error: error.message }));
   }
 }
 
@@ -78,30 +78,30 @@ function* loadThemeDataSaga() {
  * @param action containing id or name of theme to select
  */
 function* selectThemeSaga(action: PayloadAction<SelectThemeAction>) {
-  const { selectThemeSuccessAction, setFailureAction } = themeActions
+  const { selectThemeSuccessAction, setFailureAction } = themeActions;
   try {
-    const service = getThemeService()
-    yield* call([service, 'getAll'])
-    const key = action.payload.key
-    let item: ITheme | undefined = service.indexedItems[key]
+    const service = getThemeService();
+    yield* call([service, 'getAll']);
+    const key = action.payload.key;
+    let item: ITheme | undefined = service.indexedItems[key];
     if (!item) {
-      item = service.find(['id', 'name'], `^${key}$`)
+      item = service.find(['id', 'name'], `^${key}$`);
     }
     yield* put(
       selectThemeSuccessAction({ selectedTheme: item ?? service.defaultTheme! })
-    )
+    );
   } catch (error: any) {
     yield* put(
       setFailureAction({
         error: error.message,
       })
-    )
+    );
   }
 }
 
 export function* saga() {
-  const { initAction, loadThemeDataAction, selectThemeAction } = themeActions
-  yield* takeEvery(initAction, initSaga)
-  yield* takeEvery(loadThemeDataAction, loadThemeDataSaga)
-  yield* takeEvery(selectThemeAction, selectThemeSaga)
+  const { initAction, loadThemeDataAction, selectThemeAction } = themeActions;
+  yield* takeEvery(initAction, initSaga);
+  yield* takeEvery(loadThemeDataAction, loadThemeDataSaga);
+  yield* takeEvery(selectThemeAction, selectThemeSaga);
 }

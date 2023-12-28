@@ -24,27 +24,27 @@
 
  */
 
-import type { FC } from 'react'
-import React from 'react'
+import type { FC } from 'react';
+import React from 'react';
 import {
   DataTableItem,
   DataTableCell,
   DataTableAction,
   Pagination,
   DataTable,
-} from '@looker/components'
-import { Create } from '@styled-icons/material/Create'
-import { useSelector } from 'react-redux'
-import { getExtensionSDK } from '@looker/extension-sdk'
-import type { IHackerProps } from '../../../models'
-import { sheetCell } from '../../../models'
-import { getHackersHeadings } from '../../../data/hack_session/selectors'
-import { PAGE_SIZE } from '../../../constants'
+} from '@looker/components';
+import { Create } from '@styled-icons/material/Create';
+import { useSelector } from 'react-redux';
+import { getExtensionSDK } from '@looker/extension-sdk';
+import type { IHackerProps } from '../../../models';
+import { sheetCell } from '../../../models';
+import { getHackersHeadings } from '../../../data/hack_session/selectors';
+import { PAGE_SIZE } from '../../../constants';
 
 interface HackerListProps {
-  hackers: IHackerProps[]
-  pageNum: number
-  updatePageNum: (pageNum: number) => void
+  hackers: IHackerProps[];
+  pageNum: number;
+  updatePageNum: (pageNum: number) => void;
 }
 
 export const HackerList: FC<HackerListProps> = ({
@@ -52,11 +52,11 @@ export const HackerList: FC<HackerListProps> = ({
   pageNum,
   updatePageNum,
 }) => {
-  const columns = useSelector(getHackersHeadings)
+  const columns = useSelector(getHackersHeadings);
 
   const hackHacker = (hacker: IHackerProps) => {
-    getExtensionSDK().openBrowserWindow(`/admin/users/${hacker.user.id}/edit`)
-  }
+    getExtensionSDK().openBrowserWindow(`/admin/users/${hacker.user.id}/edit`);
+  };
 
   // Super hacky. Override the 'id' value, which is the User class id,
   // with the Looker user id
@@ -64,25 +64,25 @@ export const HackerList: FC<HackerListProps> = ({
   // but actually show a different value.
   const userCell = (hacker: IHackerProps, columnName: string) => {
     if (columnName !== 'id') {
-      return sheetCell(hacker[columnName])
+      return sheetCell(hacker[columnName]);
     } else {
-      return sheetCell(hacker.user.id)
+      return sheetCell(hacker.user.id);
     }
-  }
+  };
 
   const takeAction = (
     idx: number,
     columnName: string,
     hacker: IHackerProps
   ) => {
-    const key = `${idx}.${columnName}`
+    const key = `${idx}.${columnName}`;
     return (
       <DataTableCell key={key}>{userCell(hacker, columnName)}</DataTableCell>
-    )
-  }
+    );
+  };
 
-  const totalPages = Math.ceil(hackers.length / PAGE_SIZE)
-  const startIdx = (pageNum - 1) * PAGE_SIZE
+  const totalPages = Math.ceil(hackers.length / PAGE_SIZE);
+  const startIdx = (pageNum - 1) * PAGE_SIZE;
   const rows = hackers
     .slice(startIdx, startIdx + PAGE_SIZE)
     .map((hacker, idx) => (
@@ -101,7 +101,7 @@ export const HackerList: FC<HackerListProps> = ({
       >
         {columns.map((column) => takeAction(idx, column.id, hacker))}
       </DataTableItem>
-    ))
+    ));
 
   return (
     <>
@@ -114,5 +114,5 @@ export const HackerList: FC<HackerListProps> = ({
         onChange={updatePageNum}
       />
     </>
-  )
-}
+  );
+};

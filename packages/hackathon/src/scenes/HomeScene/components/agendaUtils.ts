@@ -25,26 +25,26 @@
  */
 
 // eslint-disable-next-line import/no-duplicates
-import { format, formatDistance } from 'date-fns'
+import { format, formatDistance } from 'date-fns';
 // eslint-disable-next-line import/no-duplicates
-import { enUS, ja } from 'date-fns/locale'
-import { utcToZonedTime } from 'date-fns-tz'
-import cloneDeep from 'lodash/cloneDeep'
+import { enUS, ja } from 'date-fns/locale';
+import { utcToZonedTime } from 'date-fns-tz';
+import cloneDeep from 'lodash/cloneDeep';
 
 /** Alias for Date in case AgendaTime needs to be someting else in the future */
-export type AgendaTime = Date
+export type AgendaTime = Date;
 
 /** an agenda entry */
 export interface IAgendaItem {
   /** Markdown description of agenda item */
-  description: string
+  description: string;
   /** Start datetime of agenda item */
-  start: AgendaTime
+  start: AgendaTime;
   /** End of agenda item. If not specified, the next chronological event will be its end time */
-  stop?: AgendaTime
+  stop?: AgendaTime;
 }
 
-export type AgendaItems = Array<IAgendaItem>
+export type AgendaItems = Array<IAgendaItem>;
 
 /**
  * Apply timezone to a date
@@ -52,14 +52,14 @@ export type AgendaItems = Array<IAgendaItem>
  * @param zone zone to apply
  */
 export const zoneDate = (date: AgendaTime, zone: string) => {
-  return utcToZonedTime(date, zone)
-}
+  return utcToZonedTime(date, zone);
+};
 
 /**
  * Localization of date/time is not exhaustive. Currently, only Japanese and English are imported
  * @param locale anything but `ja_JP` defaults to `en`
  */
-export const dateLocale = (locale: string) => (locale === 'ja_JP' ? ja : enUS)
+export const dateLocale = (locale: string) => (locale === 'ja_JP' ? ja : enUS);
 
 /**
  * Format a date using locale and string template
@@ -75,8 +75,8 @@ export const dateString = (
   locale: string,
   template = 'PPpp'
 ) => {
-  return format(value, template, { locale: dateLocale(locale) })
-}
+  return format(value, template, { locale: dateLocale(locale) });
+};
 
 /**
  * Localized, zoned time
@@ -91,8 +91,8 @@ export const zonedLocaleDate = (
   locale: string,
   template = 'PPpp'
 ) => {
-  return dateString(zoneDate(value, zone), locale, template)
-}
+  return dateString(zoneDate(value, zone), locale, template);
+};
 
 /**
  * Display the Month abbreviation and nth day
@@ -100,8 +100,8 @@ export const zonedLocaleDate = (
  * @param locale for display
  */
 export const monthDay = (date: AgendaTime, locale: string) => {
-  return dateString(date, locale, 'MMM do')
-}
+  return dateString(date, locale, 'MMM do');
+};
 
 /**
  * String showing localized start and stop date
@@ -117,12 +117,12 @@ export const gapDate = (
   stop: AgendaTime,
   locale: string
 ) => {
-  let result = monthDay(start, locale)
+  let result = monthDay(start, locale);
   if (start.getDate() !== stop.getDate()) {
-    result += ` - ${dateString(stop, locale, 'do')}`
+    result += ` - ${dateString(stop, locale, 'do')}`;
   }
-  return result
-}
+  return result;
+};
 
 /**
  * String showing localized start and stop time
@@ -135,13 +135,13 @@ export const gapTime = (
   stop: AgendaTime,
   locale: string
 ) => {
-  const template = 'K:mm b'
+  const template = 'K:mm b';
   return `${dateString(start, locale, template)} - ${dateString(
     stop,
     locale,
     template
-  )}`
-}
+  )}`;
+};
 
 /**
  * the textual difference between two times
@@ -153,8 +153,8 @@ export const diff = (first: AgendaTime, second: AgendaTime, locale: string) => {
   return formatDistance(second, first, {
     addSuffix: true,
     locale: dateLocale(locale),
-  })
-}
+  });
+};
 
 /**
  * text describing the time difference for a start/stop time period compared to "now"
@@ -171,12 +171,12 @@ export const gapDiff = (
 ) => {
   if (now < start) {
     // Prefixes not localized. TODO: fix
-    return 'starts ' + diff(now, start, locale)
+    return 'starts ' + diff(now, start, locale);
   } else if (now < stop) {
-    return 'ends ' + diff(now, stop, locale)
+    return 'ends ' + diff(now, stop, locale);
   }
-  return 'ended ' + diff(now, stop, locale)
-}
+  return 'ended ' + diff(now, stop, locale);
+};
 
 /**
  * Sort chronologically, assign default stops
@@ -185,17 +185,17 @@ export const gapDiff = (
 export const calcAgenda = (schedule: AgendaItems) => {
   const agenda = cloneDeep(schedule).sort(
     (a, b) => a.start.getTime() - b.start.getTime()
-  )
+  );
   agenda.forEach((item, index) => {
     // Fill in any missing stop values with the next item's start value
     if (!item.stop) {
       if (index < agenda.length - 1) {
-        item.stop = agenda[index + 1].start
+        item.stop = agenda[index + 1].start;
       }
     }
-  })
-  return agenda
-}
+  });
+  return agenda;
+};
 
 /** Era buckets */
 export enum Era {
@@ -206,9 +206,9 @@ export enum Era {
 
 /** Era buckets for a schedule */
 export interface IAgendaEras {
-  past: AgendaItems
-  present: AgendaItems
-  future: AgendaItems
+  past: AgendaItems;
+  present: AgendaItems;
+  future: AgendaItems;
 }
 
 /**
@@ -218,13 +218,13 @@ export interface IAgendaEras {
 export const eraColor = (era: string) => {
   switch (era) {
     case Era.present:
-      return 'calculation'
+      return 'calculation';
     case Era.future:
-      return 'dimension'
+      return 'dimension';
     default:
-      return 'neutral'
+      return 'neutral';
   }
-}
+};
 
 /**
  * Default stops, set timezone, and put agenda items into era buckets
@@ -235,23 +235,23 @@ export const agendaEras = (
   schedule: AgendaItems,
   current: Date = new Date()
 ): IAgendaEras => {
-  const time = current.getTime()
-  const agenda = calcAgenda(schedule)
+  const time = current.getTime();
+  const agenda = calcAgenda(schedule);
   const result: IAgendaEras = {
     past: [],
     present: [],
     future: [],
-  }
+  };
   agenda.forEach((item) => {
-    const start = item.start.getTime()
-    const stop = item.stop!.getTime()
+    const start = item.start.getTime();
+    const stop = item.stop!.getTime();
     if (time < start) {
-      result.future.push(item)
+      result.future.push(item);
     } else if (time < stop) {
-      result.present.push(item)
+      result.present.push(item);
     } else {
-      result.past.push(item)
+      result.past.push(item);
     }
-  })
-  return result
-}
+  });
+  return result;
+};

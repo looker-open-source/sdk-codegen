@@ -23,21 +23,21 @@
  SOFTWARE.
 
  */
-import type { FC } from 'react'
-import React from 'react'
-import styled from 'styled-components'
-import { Box2, MenuList, MenuItem } from '@looker/components'
-import { Beaker } from '@looker/icons'
-import { Map } from '@styled-icons/material/Map'
-import { Settings } from '@styled-icons/material/Settings'
-import { Home } from '@styled-icons/material-outlined/Home'
-import { Group } from '@styled-icons/material-outlined/Group'
-import { FactCheck } from '@styled-icons/material-outlined/FactCheck'
-import { NavLink } from 'react-router-dom'
-import { Routes } from '../../routes/AppRouter'
+import type { FC } from 'react';
+import React from 'react';
+import styled from 'styled-components';
+import { Box2, MenuList, MenuItem } from '@looker/components';
+import { Beaker } from '@looker/icons';
+import { Map } from '@styled-icons/material/Map';
+import { Settings } from '@styled-icons/material/Settings';
+import { Home } from '@styled-icons/material-outlined/Home';
+import { Group } from '@styled-icons/material-outlined/Group';
+import { FactCheck } from '@styled-icons/material-outlined/FactCheck';
+import { NavLink } from 'react-router-dom';
+import { Routes } from '../../routes/AppRouter';
 
 export interface SideNavProps {
-  authorizedRoutes: Routes[]
+  authorizedRoutes: Routes[];
 }
 
 export const SideNav: FC<SideNavProps> = ({ authorizedRoutes }) => (
@@ -75,7 +75,7 @@ export const SideNav: FC<SideNavProps> = ({ authorizedRoutes }) => (
       )}
     </MenuList>
   </Box2>
-)
+);
 
 const Link = styled(NavLink)`
   text-decoration: none;
@@ -91,4 +91,4 @@ const Link = styled(NavLink)`
   cursor: pointer;
   display: block;
   padding: ${({ theme: { space } }) => `${space.xsmall} ${space.large}`};
-`
+`;

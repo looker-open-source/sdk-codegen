@@ -24,13 +24,13 @@
 
  */
 
-import React from 'react'
-import { render, screen } from '@testing-library/react'
-import { ErrorMessage } from './ErrorMessage'
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import { ErrorMessage } from './ErrorMessage';
 
 describe(ErrorMessage.name, () => {
   it('should show error message', () => {
-    render(<ErrorMessage errorMessage="I'm a teapot" />)
-    expect(screen.queryByText("I'm a teapot")).toBeInTheDocument()
-  })
-})
+    render(<ErrorMessage errorMessage="I'm a teapot" />);
+    expect(screen.queryByText("I'm a teapot")).toBeInTheDocument();
+  });
+});

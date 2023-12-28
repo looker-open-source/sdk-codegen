@@ -24,9 +24,9 @@
 
  */
 
-import type { FC } from 'react'
-import React from 'react'
-import { useHistory, useLocation } from 'react-router-dom'
+import type { FC } from 'react';
+import React from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 import {
   Card,
   Grid,
@@ -38,61 +38,61 @@ import {
   Field,
   SelectMulti,
   Space,
-} from '@looker/components'
-import { getExtensionSDK } from '@looker/extension-sdk'
-import { Routes } from '../../routes/AppRouter'
-import { resources, ResourceTag, ResourceType } from './resource_data'
+} from '@looker/components';
+import { getExtensionSDK } from '@looker/extension-sdk';
+import { Routes } from '../../routes/AppRouter';
+import { resources, ResourceTag, ResourceType } from './resource_data';
 
 interface ResourceSceneProps {}
 
-const DOMAIN_PARAM = 'domain'
-const TYPE_PARAM = 'type'
+const DOMAIN_PARAM = 'domain';
+const TYPE_PARAM = 'type';
 
 export const ResourceScene: FC<ResourceSceneProps> = () => {
-  const history = useHistory()
-  const location = useLocation()
-  const urlParams = new URLSearchParams(location.search)
+  const history = useHistory();
+  const location = useLocation();
+  const urlParams = new URLSearchParams(location.search);
 
   const domainFilterValues: string[] = urlParams.get(DOMAIN_PARAM)
     ? urlParams
         .get(DOMAIN_PARAM)!
         .split(',')
         .filter((v) => v !== '')
-    : []
+    : [];
   const typeFilterValues: string[] = urlParams.get(TYPE_PARAM)
     ? urlParams
         .get(TYPE_PARAM)!
         .split(',')
         .filter((v) => v !== '')
-    : []
+    : [];
 
-  let selectedResources = resources
+  let selectedResources = resources;
 
   if (domainFilterValues.length !== 0) {
     selectedResources = selectedResources.filter(({ tag }) => {
-      return domainFilterValues.includes(tag)
-    })
+      return domainFilterValues.includes(tag);
+    });
   }
 
   if (typeFilterValues.length !== 0) {
     selectedResources = selectedResources.filter(({ type }) => {
-      return typeFilterValues.includes(type)
-    })
+      return typeFilterValues.includes(type);
+    });
   }
 
   const updateFilterValues = (
     parameter: string,
     values: string[] | undefined
   ) => {
-    const urlParams = new URLSearchParams(location.search)
-    urlParams.set(parameter, values ? values.join(',') : '')
-    history.push(`${Routes.RESOURCES}?${urlParams.toString()}`)
-  }
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set(parameter, values ? values.join(',') : '');
+    history.push(`${Routes.RESOURCES}?${urlParams.toString()}`);
+  };
 
   const onClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault()
-    getExtensionSDK().openBrowserWindow(e.currentTarget.href)
-  }
+    e.preventDefault();
+    getExtensionSDK().openBrowserWindow(e.currentTarget.href);
+  };
 
   return (
     <>
@@ -167,5 +167,5 @@ export const ResourceScene: FC<ResourceSceneProps> = () => {
         ))}
       </Grid>
     </>
-  )
-}
+  );
+};

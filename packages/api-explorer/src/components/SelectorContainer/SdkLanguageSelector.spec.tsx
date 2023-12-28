@@ -23,59 +23,59 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { screen, waitFor } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import { codeGenerators } from '@looker/sdk-codegen'
+import React from 'react';
+import { screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { codeGenerators } from '@looker/sdk-codegen';
 import {
   createTestStore,
   renderWithRouterAndReduxProvider,
-} from '../../test-utils'
-import { findSdk } from '../../utils'
-import { languages } from '../../test-data'
-import { defaultSettingsState } from '../../state'
-import { SdkLanguageSelector } from './SdkLanguageSelector'
+} from '../../test-utils';
+import { findSdk } from '../../utils';
+import { languages } from '../../test-data';
+import { defaultSettingsState } from '../../state';
+import { SdkLanguageSelector } from './SdkLanguageSelector';
 
-const mockHistoryPush = jest.fn()
+const mockHistoryPush = jest.fn();
 jest.mock('react-router-dom', () => {
-  const ReactRouterDOM = jest.requireActual('react-router-dom')
+  const ReactRouterDOM = jest.requireActual('react-router-dom');
   return {
     ...ReactRouterDOM,
     useHistory: () => ({
       push: mockHistoryPush,
       location: globalThis.location,
     }),
-  }
-})
+  };
+});
 describe('SdkLanguageSelector', () => {
-  window.HTMLElement.prototype.scrollIntoView = jest.fn()
-  const store = createTestStore({ settings: { initialized: true } })
+  window.HTMLElement.prototype.scrollIntoView = jest.fn();
+  const store = createTestStore({ settings: { initialized: true } });
 
   beforeEach(() => {
-    localStorage.clear()
-  })
+    localStorage.clear();
+  });
 
   test('it has the correct default language selected', async () => {
-    renderWithRouterAndReduxProvider(<SdkLanguageSelector />, undefined, store)
+    renderWithRouterAndReduxProvider(<SdkLanguageSelector />, undefined, store);
     expect(screen.getByRole('textbox')).toHaveValue(
       defaultSettingsState.sdkLanguage
-    )
-  })
+    );
+  });
 
   test('it lists all available languages and "All" as options', async () => {
-    renderWithRouterAndReduxProvider(<SdkLanguageSelector />, undefined, store)
-    await userEvent.click(screen.getByRole('textbox'))
+    renderWithRouterAndReduxProvider(<SdkLanguageSelector />, undefined, store);
+    await userEvent.click(screen.getByRole('textbox'));
     await waitFor(() => {
       expect(screen.getAllByRole('option')).toHaveLength(
         codeGenerators.length + 1
-      )
+      );
       languages.forEach((language) => {
         expect(
           screen.getByRole('option', { name: language })
-        ).toBeInTheDocument()
-      })
-    })
-  })
+        ).toBeInTheDocument();
+      });
+    });
+  });
 
   test.each(languages.filter((l) => l !== 'All'))(
     'choosing `%s` pushes its alias to url',
@@ -84,29 +84,29 @@ describe('SdkLanguageSelector', () => {
         <SdkLanguageSelector />,
         undefined,
         store
-      )
-      const selector = screen.getByRole('textbox')
-      await userEvent.click(selector)
+      );
+      const selector = screen.getByRole('textbox');
+      await userEvent.click(selector);
       await waitFor(async () => {
-        await userEvent.click(screen.getByRole('option', { name: language }))
-        const sdk = findSdk(language)
+        await userEvent.click(screen.getByRole('option', { name: language }));
+        const sdk = findSdk(language);
         expect(mockHistoryPush).toHaveBeenLastCalledWith({
           pathname: location.pathname,
           search: `sdk=${sdk.alias}`,
-        })
-      })
+        });
+      });
     }
-  )
+  );
 
   test("choosing 'All' removes sdk parameter from the url", async () => {
-    renderWithRouterAndReduxProvider(<SdkLanguageSelector />, undefined, store)
-    await userEvent.click(screen.getByRole('textbox'))
+    renderWithRouterAndReduxProvider(<SdkLanguageSelector />, undefined, store);
+    await userEvent.click(screen.getByRole('textbox'));
     await waitFor(async () => {
-      await userEvent.click(screen.getByRole('option', { name: 'All' }))
+      await userEvent.click(screen.getByRole('option', { name: 'All' }));
       expect(mockHistoryPush).toHaveBeenLastCalledWith({
         pathname: location.pathname,
         search: '',
-      })
-    })
-  })
-})
+      });
+    });
+  });
+});

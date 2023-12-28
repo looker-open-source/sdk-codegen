@@ -23,14 +23,14 @@
  SOFTWARE.
 
  */
-import type { FC } from 'react'
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { Heading } from '@looker/components'
+import type { FC } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Heading } from '@looker/components';
 
 export const NotFoundScene: FC = () => (
   <Heading as="h2">
     The page you requested could not be found. Click{' '}
     <Link to="/home">here</Link> to go back to the homepage
   </Heading>
-)
+);

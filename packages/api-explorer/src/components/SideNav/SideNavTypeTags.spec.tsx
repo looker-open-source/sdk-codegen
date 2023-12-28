@@ -24,56 +24,56 @@
 
  */
 
-import React from 'react'
-import pick from 'lodash/pick'
-import { screen } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import React from 'react';
+import pick from 'lodash/pick';
+import { screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
-import { api } from '../../test-data'
-import { renderWithRouterAndReduxProvider } from '../../test-utils'
-import { SideNavTypeTags } from './SideNavTypeTags'
+import { api } from '../../test-data';
+import { renderWithRouterAndReduxProvider } from '../../test-utils';
+import { SideNavTypeTags } from './SideNavTypeTags';
 
 describe('SideNavTypeTags', () => {
-  const tags = pick(api.typeTags, ['ApiAuth', 'Dashboard'])
+  const tags = pick(api.typeTags, ['ApiAuth', 'Dashboard']);
   test('it renders a provided tag and its methods', async () => {
     renderWithRouterAndReduxProvider(
       <SideNavTypeTags tags={tags} specKey={'4.0'} />
-    )
-    const tag = screen.getByText('Dashboard')
-    const tagContent = 'CreateDashboardFilter'
-    expect(screen.queryByText(tagContent)).not.toBeInTheDocument()
-    await userEvent.click(tag)
-    expect(screen.getByText(tagContent)).toBeInTheDocument()
-    const methods = screen.getAllByRole('link')
-    expect(methods).toHaveLength(Object.keys(tags.Dashboard).length)
-  })
+    );
+    const tag = screen.getByText('Dashboard');
+    const tagContent = 'CreateDashboardFilter';
+    expect(screen.queryByText(tagContent)).not.toBeInTheDocument();
+    await userEvent.click(tag);
+    expect(screen.getByText(tagContent)).toBeInTheDocument();
+    const methods = screen.getAllByRole('link');
+    expect(methods).toHaveLength(Object.keys(tags.Dashboard).length);
+  });
 
   test('tags are rendered initially collapsed and expand when clicked', async () => {
     renderWithRouterAndReduxProvider(
       <SideNavTypeTags tags={tags} specKey={'4.0'} />
-    )
+    );
 
-    const allTags = screen.getAllByText(/ApiAuth|Dashboard/)
-    expect(allTags).toHaveLength(2)
-    expect(screen.queryByText('AccessToken')).not.toBeInTheDocument()
-    expect(screen.queryByText('CreateDashboardFilter')).not.toBeInTheDocument()
-    await userEvent.click(allTags[0])
-    expect(screen.getByText('AccessToken')).toBeInTheDocument()
-    expect(screen.queryByText('CreateDashboardFilter')).not.toBeInTheDocument()
-  })
+    const allTags = screen.getAllByText(/ApiAuth|Dashboard/);
+    expect(allTags).toHaveLength(2);
+    expect(screen.queryByText('AccessToken')).not.toBeInTheDocument();
+    expect(screen.queryByText('CreateDashboardFilter')).not.toBeInTheDocument();
+    await userEvent.click(allTags[0]);
+    expect(screen.getByText('AccessToken')).toBeInTheDocument();
+    expect(screen.queryByText('CreateDashboardFilter')).not.toBeInTheDocument();
+  });
 
   test('tag is expanded if specified in route', () => {
-    const tags = pick(api.typeTags, ['ApiAuth', 'DataAction'])
+    const tags = pick(api.typeTags, ['ApiAuth', 'DataAction']);
     renderWithRouterAndReduxProvider(
       <SideNavTypeTags tags={tags} specKey={'4.0'} />,
       ['/4.0/types/DataAction']
-    )
+    );
 
-    const allTags = screen.getAllByText(/^(ApiAuth|DataAction)$/)
-    expect(allTags).toHaveLength(2)
-    expect(screen.queryByText('AccessToken')).not.toBeInTheDocument()
+    const allTags = screen.getAllByText(/^(ApiAuth|DataAction)$/);
+    expect(allTags).toHaveLength(2);
+    expect(screen.queryByText('AccessToken')).not.toBeInTheDocument();
     expect(screen.getAllByRole('link')).toHaveLength(
       Object.keys(tags.DataAction).length
-    )
-  })
-})
+    );
+  });
+});

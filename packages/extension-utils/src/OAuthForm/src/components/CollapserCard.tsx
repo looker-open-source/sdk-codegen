@@ -23,18 +23,18 @@
  SOFTWARE.
 
  */
-import type { FC, ReactElement } from 'react'
-import React from 'react'
-import { useToggle, Accordion2, Divider, Box2 } from '@looker/components'
-import { ArrowRight, ArrowDropDown } from '@styled-icons/material'
-import { ConfigHeading } from './ConfigHeading'
+import type { FC, ReactElement } from 'react';
+import React from 'react';
+import { useToggle, Accordion2, Divider, Box2 } from '@looker/components';
+import { ArrowRight, ArrowDropDown } from '@styled-icons/material';
+import { ConfigHeading } from './ConfigHeading';
 
 interface CollapserCardProps {
-  id?: string
-  heading: string
-  children: ReactElement
-  defaultOpen?: boolean
-  divider?: boolean
+  id?: string;
+  heading: string;
+  children: ReactElement;
+  defaultOpen?: boolean;
+  divider?: boolean;
 }
 
 /**
@@ -47,8 +47,8 @@ export const CollapserCard: FC<CollapserCardProps> = ({
   defaultOpen = true,
   divider = true,
 }) => {
-  const level = divider ? 'h3' : 'h4'
-  const { value, toggle } = useToggle(defaultOpen)
+  const level = divider ? 'h3' : 'h4';
+  const { value, toggle } = useToggle(defaultOpen);
 
   return (
     <Box2 display="flex" flexDirection="column">
@@ -64,5 +64,5 @@ export const CollapserCard: FC<CollapserCardProps> = ({
         <Box2 pb="xlarge">{children}</Box2>
       </Accordion2>
     </Box2>
-  )
-}
+  );
+};

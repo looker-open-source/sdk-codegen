@@ -23,14 +23,14 @@
  SOFTWARE.
 
  */
-import deepmerge from 'deepmerge'
+import deepmerge from 'deepmerge';
 import type {
   FetchProxy,
   FetchCustomParameters,
   FetchResponseBodyType,
   FetchProxyDataResponse,
-} from './types'
-import type { ExtensionHostApiImpl } from './extension_host_api'
+} from './types';
+import type { ExtensionHostApiImpl } from './extension_host_api';
 
 export class FetchProxyImpl implements FetchProxy {
   constructor(
@@ -49,21 +49,21 @@ export class FetchProxyImpl implements FetchProxy {
       this.getResource(resource),
       this.getInit(init),
       this.getResponseBodyType(responseBodyType)
-    )
+    );
   }
 
   private getResource(resource: string) {
-    return this.baseUrl ? this.baseUrl + resource : resource
+    return this.baseUrl ? this.baseUrl + resource : resource;
   }
 
   private getInit(init?: FetchCustomParameters) {
     if (init || this.init) {
-      return deepmerge(this.init || {}, init || {})
+      return deepmerge(this.init || {}, init || {});
     }
-    return undefined
+    return undefined;
   }
 
   private getResponseBodyType(responseBodyType?: FetchResponseBodyType) {
-    return responseBodyType || this.responseBodyType
+    return responseBodyType || this.responseBodyType;
   }
 }

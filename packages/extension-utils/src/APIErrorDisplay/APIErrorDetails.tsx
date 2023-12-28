@@ -24,8 +24,8 @@
 
  */
 
-import type { LookerSDKError } from '@looker/sdk-rtl'
-import React from 'react'
+import type { LookerSDKError } from '@looker/sdk-rtl';
+import React from 'react';
 import {
   Span,
   Table,
@@ -34,10 +34,10 @@ import {
   TableHead,
   TableHeaderCell,
   TableRow,
-} from '@looker/components'
+} from '@looker/components';
 
 interface APIErrorDetailsProps {
-  error: LookerSDKError
+  error: LookerSDKError;
 }
 
 /**
@@ -49,7 +49,7 @@ interface APIErrorDetailsProps {
  * @param error to display
  */
 export const APIErrorDetails = ({ error }: APIErrorDetailsProps) => {
-  if (!error?.errors) return <></>
+  if (!error?.errors) return <></>;
 
   return (
     <Table>
@@ -72,5 +72,5 @@ export const APIErrorDetails = ({ error }: APIErrorDetailsProps) => {
         ))}
       </TableBody>
     </Table>
-  )
-}
+  );
+};

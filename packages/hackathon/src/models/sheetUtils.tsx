@@ -23,25 +23,25 @@
  SOFTWARE.
 
  */
-import type { SheetValues } from '@looker/wholly-sheet'
-import type { DataTableColumn, DataTableColumns } from '@looker/components'
-import { Span, Icon } from '@looker/components'
-import { Done } from '@styled-icons/material/Done'
-import React from 'react'
+import type { SheetValues } from '@looker/wholly-sheet';
+import type { DataTableColumn, DataTableColumns } from '@looker/components';
+import { Span, Icon } from '@looker/components';
+import { Done } from '@styled-icons/material/Done';
+import React from 'react';
 
 /**
  * Convert a word possibly like snake_case to Snake Case
  * @param value to convert
  */
 export const asTitle = (value: string) => {
-  if (!value) return ''
-  value = value.replace('$', '')
+  if (!value) return '';
+  value = value.replace('$', '');
   value = value.replace(/(([-_ ]+)[a-z])|([-_ ]+)/gi, ($1) => {
-    return $1.toLocaleUpperCase().replace(/([-_ ]+)/gi, ' ')
-  })
+    return $1.toLocaleUpperCase().replace(/([-_ ]+)/gi, ' ');
+  });
 
-  return value[0].toLocaleUpperCase() + value.substr(1)
-}
+  return value[0].toLocaleUpperCase() + value.substr(1);
+};
 
 export const sheetHeaderColumn = (
   key: string,
@@ -49,22 +49,22 @@ export const sheetHeaderColumn = (
   // colCount: number,
   // boolCount: number
 ): DataTableColumn => {
-  if (!key) throw new Error('Each header column needs a key')
-  let colType = typeof value
+  if (!key) throw new Error('Each header column needs a key');
+  let colType = typeof value;
   // const all = 100 + 100 * (boolCount / colCount / 2)
   // const width = colType === 'boolean' ? 50 / colCount : all / colCount
   // const size = colType === 'boolean' ? 'small' : 'auto'
-  if (['string', 'boolean'].includes(colType)) colType = 'string'
-  else if (['bigint'].includes(colType)) colType = 'number'
-  else colType = 'string'
+  if (['string', 'boolean'].includes(colType)) colType = 'string';
+  else if (['bigint'].includes(colType)) colType = 'number';
+  else colType = 'string';
   return {
     canSort: true,
     id: key,
     title: asTitle(key),
     type: colType,
     size: 'auto',
-  }
-}
+  };
+};
 
 /**
  * Create the ActionListColumns for this sheet
@@ -72,36 +72,36 @@ export const sheetHeaderColumn = (
  * @param row data template to use for column typing
  */
 export const sheetHeader = (header: string[], row: any) => {
-  const result: SheetValues = []
+  const result: SheetValues = [];
   // const colCount = header.length
   // const boolCount = header.filter((h) => typeof row[h] === 'boolean').length
   header.forEach((key) => {
-    result.push(sheetHeaderColumn(key, row[key])) // , colCount, boolCount))
-  })
-  return result as DataTableColumns
-}
+    result.push(sheetHeaderColumn(key, row[key])); // , colCount, boolCount))
+  });
+  return result as DataTableColumns;
+};
 
 /**
  * Create a react element representing the data of this cell
  * @param value to convert to displayable actionitem
  */
 export const sheetCell = (value: any) => {
-  if (typeof value === 'undefined') return <Span></Span>
+  if (typeof value === 'undefined') return <Span></Span>;
 
   if (typeof value === 'boolean') {
-    return value ? <Icon size="small" icon={<Done />} /> : <Span></Span>
+    return value ? <Icon size="small" icon={<Done />} /> : <Span></Span>;
   }
 
   if (value instanceof Set) {
-    const values: string[] = []
+    const values: string[] = [];
     // Value iteration is a bit clumsy. Probably could create a helper method
     for (const v of value.values()) {
-      values.push(v.toString())
+      values.push(v.toString());
     }
-    return <Span>{values.join(', ')}</Span>
+    return <Span>{values.join(', ')}</Span>;
   }
   if (value instanceof Date) {
-    return <Span>{value.toDateString()}</Span>
+    return <Span>{value.toDateString()}</Span>;
   }
-  return <Span>{value.toString()}</Span>
-}
+  return <Span>{value.toString()}</Span>;
+};

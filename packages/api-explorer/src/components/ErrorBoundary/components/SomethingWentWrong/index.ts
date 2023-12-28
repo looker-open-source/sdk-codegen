@@ -23,5 +23,5 @@
  SOFTWARE.
 
  */
-export { SomethingWentWrong } from './SomethingWentWrong'
-export type { SomethingWentWrongProps } from './SomethingWentWrong'
+export { SomethingWentWrong } from './SomethingWentWrong';
+export type { SomethingWentWrongProps } from './SomethingWentWrong';

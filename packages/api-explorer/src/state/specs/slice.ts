@@ -23,19 +23,19 @@
  SOFTWARE.
 
  */
-import type { PayloadAction } from '@reduxjs/toolkit'
-import { createSlice } from '@reduxjs/toolkit'
-import type { ApiModel, SpecList } from '@looker/sdk-codegen'
-import { createSliceHooks } from '@looker/redux'
+import type { PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
+import type { ApiModel, SpecList } from '@looker/sdk-codegen';
+import { createSliceHooks } from '@looker/redux';
 
-import { saga } from './sagas'
+import { saga } from './sagas';
 
 export interface SpecState {
-  specs: SpecList
-  currentSpecKey: string
-  error?: Error
-  working: boolean
-  description?: string
+  specs: SpecList;
+  currentSpecKey: string;
+  error?: Error;
+  working: boolean;
+  description?: string;
 }
 
 export const defaultSpecsState: SpecState = {
@@ -43,24 +43,24 @@ export const defaultSpecsState: SpecState = {
   currentSpecKey: '',
   working: true,
   description: undefined,
-}
+};
 
 export interface InitSpecsAction {
-  specKey: string | null
+  specKey: string | null;
 }
 
 export interface InitSpecsSuccessPayload {
-  specs: SpecList
-  currentSpecKey: string
+  specs: SpecList;
+  currentSpecKey: string;
 }
 
 export interface SetCurrentSpecAction {
-  currentSpecKey: string
+  currentSpecKey: string;
 }
 
 interface SetCurrentSpecSuccessAction {
-  api: ApiModel
-  currentSpecKey: string
+  api: ApiModel;
+  currentSpecKey: string;
 }
 
 export const specsSlice = createSlice({
@@ -68,42 +68,42 @@ export const specsSlice = createSlice({
   initialState: defaultSpecsState,
   reducers: {
     initSpecsAction(state, _action: PayloadAction<InitSpecsAction>) {
-      state.working = true
-      state.description = 'Fetching specifications...'
+      state.working = true;
+      state.description = 'Fetching specifications...';
     },
     initSpecsSuccessAction(
       state,
       action: PayloadAction<InitSpecsSuccessPayload>
     ) {
-      state.specs = action.payload.specs
-      state.currentSpecKey = action.payload.currentSpecKey
-      state.working = false
-      state.description = undefined
+      state.specs = action.payload.specs;
+      state.currentSpecKey = action.payload.currentSpecKey;
+      state.working = false;
+      state.description = undefined;
     },
     initSpecsFailureAction(state, action: PayloadAction<Error>) {
-      state.working = false
-      state.error = action.payload
+      state.working = false;
+      state.error = action.payload;
     },
     setCurrentSpecAction(state, action: PayloadAction<SetCurrentSpecAction>) {
-      state.working = true
-      state.description = `Fetching API ${action.payload.currentSpecKey} spec`
+      state.working = true;
+      state.description = `Fetching API ${action.payload.currentSpecKey} spec`;
     },
     setCurrentSpecSuccessAction(
       state,
       action: PayloadAction<SetCurrentSpecSuccessAction>
     ) {
-      state.currentSpecKey = action.payload.currentSpecKey
-      state.specs[state.currentSpecKey].api = action.payload.api
-      state.description = undefined
-      state.working = false
+      state.currentSpecKey = action.payload.currentSpecKey;
+      state.specs[state.currentSpecKey].api = action.payload.api;
+      state.description = undefined;
+      state.working = false;
     },
     setCurrentSpecFailureAction(state, action: PayloadAction<Error>) {
-      state.working = false
-      state.error = action.payload
+      state.working = false;
+      state.error = action.payload;
     },
   },
-})
+});
 
-export const specActions = specsSlice.actions
+export const specActions = specsSlice.actions;
 export const { useActions: useSpecActions, useStoreState: useSpecStoreState } =
-  createSliceHooks(specsSlice, saga)
+  createSliceHooks(specsSlice, saga);

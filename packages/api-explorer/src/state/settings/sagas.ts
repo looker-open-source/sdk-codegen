@@ -23,38 +23,38 @@
  SOFTWARE.
 
  */
-import { takeEvery, call, put, select } from 'typed-redux-saga'
+import { takeEvery, call, put, select } from 'typed-redux-saga';
 
-import { getEnvAdaptor } from '@looker/extension-utils'
-import { StoreConstants } from '@looker/run-it'
-import type { RootState } from '../store'
-import { settingActions, defaultSettings } from './slice'
+import { getEnvAdaptor } from '@looker/extension-utils';
+import { StoreConstants } from '@looker/run-it';
+import type { RootState } from '../store';
+import { settingActions, defaultSettings } from './slice';
 
 /**
  * Serializes state to local storage
  */
 function* serializeToLocalStorageSaga() {
-  const adaptor = getEnvAdaptor()
+  const adaptor = getEnvAdaptor();
   const settings = yield* select((state: RootState) => ({
     sdkLanguage: state.settings.sdkLanguage,
-  }))
+  }));
   adaptor.localStorageSetItem(
     StoreConstants.LOCALSTORAGE_SETTINGS_KEY,
     JSON.stringify(settings)
-  )
+  );
 }
 
 /**
  * Returns default settings overridden with any persisted state in local storage
  */
 async function deserializeLocalStorage() {
-  const adaptor = getEnvAdaptor()
+  const adaptor = getEnvAdaptor();
   const settings = await adaptor.localStorageGetItem(
     StoreConstants.LOCALSTORAGE_SETTINGS_KEY
-  )
+  );
   return settings
     ? { ...defaultSettings, ...JSON.parse(settings) }
-    : defaultSettings
+    : defaultSettings;
 }
 
 /**
@@ -62,18 +62,18 @@ async function deserializeLocalStorage() {
  */
 function* initSaga() {
   const { initSettingsSuccessAction, initSettingsFailureAction } =
-    settingActions
+    settingActions;
   try {
-    const settings = yield* call(deserializeLocalStorage)
-    yield* put(initSettingsSuccessAction(settings))
+    const settings = yield* call(deserializeLocalStorage);
+    yield* put(initSettingsSuccessAction(settings));
   } catch (error: any) {
-    yield* put(initSettingsFailureAction(error))
+    yield* put(initSettingsFailureAction(error));
   }
 }
 
 export function* saga() {
-  const { initSettingsAction, setSdkLanguageAction } = settingActions
+  const { initSettingsAction, setSdkLanguageAction } = settingActions;
 
-  yield* takeEvery(initSettingsAction, initSaga)
-  yield* takeEvery(setSdkLanguageAction, serializeToLocalStorageSaga)
+  yield* takeEvery(initSettingsAction, initSaga);
+  yield* takeEvery(setSdkLanguageAction, serializeToLocalStorageSaga);
 }

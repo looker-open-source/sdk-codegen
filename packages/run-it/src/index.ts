@@ -24,7 +24,7 @@
 
  */
 
-export * from './RunIt'
-export * from './RunItProvider'
-export * from './utils'
-export * from './components'
+export * from './RunIt';
+export * from './RunItProvider';
+export * from './utils';
+export * from './components';

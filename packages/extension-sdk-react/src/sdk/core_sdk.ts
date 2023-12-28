@@ -28,7 +28,7 @@ import {
   registerCore40SDK,
   unregisterCore40SDK,
   getCore40SDK,
-} from './core_sdk_40'
+} from './core_sdk_40';
 
 /**
  * Register the core SDK. The ExtensionProvider will automatically
@@ -37,7 +37,7 @@ import {
  * @param coreSDK core sdk
  * @deprecated use registerCore40SDK instead
  */
-export const registerCoreSDK = registerCore40SDK
+export const registerCoreSDK = registerCore40SDK;
 
 /**
  * Unregister the core SDK. The ExtensionProvider will automatically
@@ -45,10 +45,10 @@ export const registerCoreSDK = registerCore40SDK
  * the ExtensionProvider should never call this.
  * @deprecated use unregisterCore40SDK instead
  */
-export const unregisterCoreSDK = unregisterCore40SDK
+export const unregisterCoreSDK = unregisterCore40SDK;
 
 /**
  * Global access to the coreSDK. An error will be thrown if accessed prematurely.
  * @deprecated use getCore40SDK instead
  */
-export const getCoreSDK = getCore40SDK
+export const getCoreSDK = getCore40SDK;

@@ -1,6 +1,8 @@
-// module.exports = require('@looker/prettier-config');
+// module.exports = require("@looker/prettier-config");
 const config = {
-  Schema: "https://json.schemastore.org/prettierrc",
+  // SSchema: "https://json.schemastore.org/prettierrc",
   semi: true,
   singleQuote: true,
+  trailingComma: 'es5',
 };
+module.exports = config;

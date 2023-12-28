@@ -24,16 +24,16 @@
 
  */
 
-import { gridHeaders, gridRows, parseCsv, json2Csv } from './gridUtils'
+import { gridHeaders, gridRows, parseCsv, json2Csv } from './gridUtils';
 
-const dataRowsLength = 2
-const allRowsLength = dataRowsLength + 1
-const dataColsLength = 3
+const dataRowsLength = 2;
+const allRowsLength = dataRowsLength + 1;
+const dataColsLength = 3;
 
 const testCsvData = `First,Last,Age
 Aaron,Aardvark,20
 Zzed,Zzebra,21
-`
+`;
 
 const testJsonData = JSON.stringify([
   {
@@ -46,42 +46,42 @@ const testJsonData = JSON.stringify([
     Last: 'Zzebra',
     Age: 21,
   },
-])
+]);
 
 describe('gridUtils', () => {
   // TODO: Test actual data values
   test('parses csv', () => {
-    const actual = parseCsv(testCsvData)
-    expect(actual).toBeDefined()
-    expect(actual.data).toBeDefined()
-    expect(actual.data).toHaveLength(allRowsLength)
-    expect(gridRows(actual.data)).toHaveLength(allRowsLength)
-  })
+    const actual = parseCsv(testCsvData);
+    expect(actual).toBeDefined();
+    expect(actual.data).toBeDefined();
+    expect(actual.data).toHaveLength(allRowsLength);
+    expect(gridRows(actual.data)).toHaveLength(allRowsLength);
+  });
 
   test('parses json data', () => {
-    const actual = json2Csv(testJsonData)
-    expect(actual).toBeDefined()
-    expect(actual.data).toBeDefined()
-    expect(actual.data).toHaveLength(allRowsLength)
-    const csvData = parseCsv(testCsvData)
-    expect(actual.data).toEqual(csvData.data)
-  })
+    const actual = json2Csv(testJsonData);
+    expect(actual).toBeDefined();
+    expect(actual.data).toBeDefined();
+    expect(actual.data).toHaveLength(allRowsLength);
+    const csvData = parseCsv(testCsvData);
+    expect(actual.data).toEqual(csvData.data);
+  });
 
   test('creates grid columns', () => {
-    const data = parseCsv(testCsvData)
-    const actual = gridHeaders(data.data)
-    expect(actual).toHaveLength(dataColsLength)
-  })
+    const data = parseCsv(testCsvData);
+    const actual = gridHeaders(data.data);
+    expect(actual).toHaveLength(dataColsLength);
+  });
 
   test('creates grid rows', () => {
-    const data = parseCsv(testCsvData)
-    const actual = gridRows(data.data)
-    expect(actual).toHaveLength(allRowsLength)
-  })
+    const data = parseCsv(testCsvData);
+    const actual = gridRows(data.data);
+    expect(actual).toHaveLength(allRowsLength);
+  });
 
   test('creates grid rows from json', () => {
-    const data = json2Csv(testJsonData)
-    const actual = gridRows(data.data)
-    expect(actual).toHaveLength(allRowsLength)
-  })
-})
+    const data = json2Csv(testJsonData);
+    const actual = gridRows(data.data);
+    expect(actual).toHaveLength(allRowsLength);
+  });
+});

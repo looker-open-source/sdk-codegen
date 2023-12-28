@@ -23,31 +23,31 @@
  SOFTWARE.
 
  */
-import type { IUser as ILookerUser } from '@looker/sdk'
+import type { IUser as ILookerUser } from '@looker/sdk';
 import type {
   IHackathonProps,
   ITechnologyProps,
   IHackerProps,
-} from '../../models'
+} from '../../models';
 import type {
   ProjectsHeadings,
   HackersHeadings,
   JudgingsHeadings,
-} from '../types'
-import type { HackSessionAction } from './actions'
-import { Actions } from './actions'
+} from '../types';
+import type { HackSessionAction } from './actions';
+import { Actions } from './actions';
 
 export interface Metadata {
-  projectsHeadings: ProjectsHeadings
-  hackersHeadings: HackersHeadings
-  judgingsHeadings: JudgingsHeadings
+  projectsHeadings: ProjectsHeadings;
+  hackersHeadings: HackersHeadings;
+  judgingsHeadings: JudgingsHeadings;
 }
 
 export interface HackSessionState {
-  currentHackathon?: IHackathonProps
-  technologies?: ITechnologyProps[]
-  hacker: IHackerProps
-  metadata: Metadata
+  currentHackathon?: IHackathonProps;
+  technologies?: ITechnologyProps[];
+  hacker: IHackerProps;
+  metadata: Metadata;
 }
 
 const EmptyHacker: IHackerProps = {
@@ -56,7 +56,7 @@ const EmptyHacker: IHackerProps = {
   firstName: '',
   name: '',
   lastName: '',
-} as IHackerProps
+} as IHackerProps;
 const defaultState: Readonly<HackSessionState> = Object.freeze({
   hacker: EmptyHacker,
   metadata: {
@@ -64,7 +64,7 @@ const defaultState: Readonly<HackSessionState> = Object.freeze({
     hackersHeadings: [],
     judgingsHeadings: [],
   },
-})
+});
 
 export const hackSessionReducer = (
   state: HackSessionState = defaultState,
@@ -74,7 +74,7 @@ export const hackSessionReducer = (
     case Actions.INIT_HACK_SESSION_REQUEST:
       return {
         ...state,
-      }
+      };
     case Actions.INIT_HACK_SESSION_RESPONSE: {
       const {
         currentHackathon,
@@ -83,7 +83,7 @@ export const hackSessionReducer = (
         projectsHeadings,
         hackersHeadings,
         judgingsHeadings,
-      } = action.payload
+      } = action.payload;
       return {
         ...state,
         currentHackathon: currentHackathon,
@@ -94,14 +94,14 @@ export const hackSessionReducer = (
           hackersHeadings,
           judgingsHeadings,
         },
-      }
+      };
     }
     case Actions.INIT_HACK_SESSION_FAILURE:
       return {
         ...state,
         hacker: action.payload.hacker,
-      }
+      };
     default:
-      return state
+      return state;
   }
-}
+};

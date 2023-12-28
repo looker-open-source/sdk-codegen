@@ -24,34 +24,34 @@
 
  */
 
-import React from 'react'
-import { renderWithTheme } from '@looker/components-test-utils'
-import { act, screen, waitFor } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import React from 'react';
+import { renderWithTheme } from '@looker/components-test-utils';
+import { act, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 
-import type { RunItInput } from '../..'
-import { runItNoSet } from '../..'
-import { RequestForm } from './RequestForm'
+import type { RunItInput } from '../..';
+import { runItNoSet } from '../..';
+import { RequestForm } from './RequestForm';
 
 describe('RequestForm', () => {
-  const run = 'Run'
-  let requestContent = {}
+  const run = 'Run';
+  let requestContent = {};
   const setRequestContent = jest.fn((content) => {
-    requestContent = content
-  })
-  const handleSubmit = jest.fn((e) => e.preventDefault())
+    requestContent = content;
+  });
+  const handleSubmit = jest.fn((e) => e.preventDefault());
 
   beforeEach(() => {
-    jest.resetAllMocks()
-  })
+    jest.resetAllMocks();
+  });
 
   afterEach(() => {
-    requestContent = {}
-  })
+    requestContent = {};
+  });
 
   describe('validation messages', () => {
     test('validation errors are displayed', () => {
-      const message = 'Invalid message'
+      const message = 'Invalid message';
       renderWithTheme(
         <RequestForm
           inputs={[
@@ -74,15 +74,15 @@ describe('RequestForm', () => {
           validationMessage={message}
           handleConfig={runItNoSet}
         />
-      )
+      );
 
-      expect(screen.getByRole('img', { name: 'Error' })).toBeInTheDocument()
-      expect(screen.getByText(message)).toBeInTheDocument()
-    })
+      expect(screen.getByRole('img', { name: 'Error' })).toBeInTheDocument();
+      expect(screen.getByText(message)).toBeInTheDocument();
+    });
 
-    test.todo('clear removes validation messages')
-    test.todo('clicking run with an invalid body shows a messagebar')
-  })
+    test.todo('clear removes validation messages');
+    test.todo('clicking run with an invalid body shows a messagebar');
+  });
 
   test('it creates a form with a simple item, submit button, and config button if not an extension', () => {
     renderWithTheme(
@@ -106,15 +106,15 @@ describe('RequestForm', () => {
         isExtension={false}
         handleConfig={runItNoSet}
       />
-    )
+    );
 
     expect(
       screen.getByLabelText('user_id', { exact: false })
-    ).toBeInTheDocument()
+    ).toBeInTheDocument();
     /** Warning checkbox should only be rendered for operations that modify data */
-    expect(screen.queryByRole('checkbox')).not.toBeInTheDocument()
-    expect(screen.getByRole('button', { name: run })).toBeInTheDocument()
-  })
+    expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: run })).toBeInTheDocument();
+  });
 
   test('it creates a form with a simple item, submit button, and config button if running as an extension', () => {
     renderWithTheme(
@@ -137,21 +137,21 @@ describe('RequestForm', () => {
         hasConfig={true}
         handleConfig={runItNoSet}
       />
-    )
+    );
 
     expect(
       screen.getByLabelText('user_id', { exact: false })
-    ).toBeInTheDocument()
+    ).toBeInTheDocument();
     /** Warning checkbox should only be rendered for operations that modify data */
-    expect(screen.queryByRole('checkbox')).not.toBeInTheDocument()
-    expect(screen.getByRole('button', { name: run })).toBeInTheDocument()
+    expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: run })).toBeInTheDocument();
     expect(
       screen.queryByRole('button', { name: 'Settings' })
-    ).not.toBeInTheDocument()
-  })
+    ).not.toBeInTheDocument();
+  });
 
   test('interacting with a boolean simple item changes the request content', async () => {
-    const name = 'boolean_item'
+    const name = 'boolean_item';
     renderWithTheme(
       <RequestForm
         inputs={[
@@ -171,18 +171,18 @@ describe('RequestForm', () => {
         hasConfig={true}
         handleConfig={runItNoSet}
       />
-    )
+    );
 
-    const item = screen.getByRole('switch', { name })
-    await userEvent.click(item)
+    const item = screen.getByRole('switch', { name });
+    await userEvent.click(item);
     await waitFor(() => {
-      expect(setRequestContent).toHaveBeenLastCalledWith({ [name]: true })
-    })
-  })
+      expect(setRequestContent).toHaveBeenLastCalledWith({ [name]: true });
+    });
+  });
 
   test('interacting with a date picker changes the request content', async () => {
-    const name = 'date_item'
-    requestContent = { [name]: new Date('Aug 30, 2022') }
+    const name = 'date_item';
+    requestContent = { [name]: new Date('Aug 30, 2022') };
     renderWithTheme(
       <RequestForm
         inputs={[
@@ -202,20 +202,20 @@ describe('RequestForm', () => {
         hasConfig={true}
         handleConfig={runItNoSet}
       />
-    )
+    );
 
-    const calendar = screen.getByText('Open calendar')
-    await userEvent.click(calendar)
+    const calendar = screen.getByText('Open calendar');
+    await userEvent.click(calendar);
 
-    const date = screen.getAllByText('15')[1]
-    await userEvent.click(date)
+    const date = screen.getAllByText('15')[1];
+    await userEvent.click(date);
     expect(setRequestContent).toHaveBeenLastCalledWith({
       [name]: new Date('Aug 15, 2022 00:00:00 AM'),
-    })
-  })
+    });
+  });
 
   test('interacting with a number simple item changes the request content', async () => {
-    const name = 'number_item'
+    const name = 'number_item';
     renderWithTheme(
       <RequestForm
         inputs={[
@@ -235,14 +235,14 @@ describe('RequestForm', () => {
         hasConfig={true}
         handleConfig={runItNoSet}
       />
-    )
+    );
 
-    const item = screen.getByRole('spinbutton', { name })
-    await userEvent.type(item, '3')
+    const item = screen.getByRole('spinbutton', { name });
+    await userEvent.type(item, '3');
     await waitFor(() => {
-      expect(setRequestContent).toHaveBeenCalledWith({ [name]: 3 })
-    })
-  })
+      expect(setRequestContent).toHaveBeenCalledWith({ [name]: 3 });
+    });
+  });
 
   test('interacting with a text simple item changes the request content', async () => {
     renderWithTheme(
@@ -264,20 +264,20 @@ describe('RequestForm', () => {
         hasConfig={true}
         handleConfig={runItNoSet}
       />
-    )
+    );
 
-    const item = screen.getByRole('textbox', { name: 'text_item' })
-    await userEvent.click(item)
-    await userEvent.paste(item, 'some text')
+    const item = screen.getByRole('textbox', { name: 'text_item' });
+    await userEvent.click(item);
+    await userEvent.paste(item, 'some text');
     await waitFor(() => {
       expect(setRequestContent).toHaveBeenCalledWith({
         text_item: 'some text',
-      })
-    })
-  })
+      });
+    });
+  });
 
   test('interacting with a complex item changes the request content', async () => {
-    const handleSubmit = jest.fn((e) => e.preventDefault())
+    const handleSubmit = jest.fn((e) => e.preventDefault());
     const inputs: RunItInput[] = [
       {
         name: 'body',
@@ -290,7 +290,7 @@ describe('RequestForm', () => {
         required: true,
         description: 'Request body',
       },
-    ]
+    ];
     renderWithTheme(
       <RequestForm
         inputs={inputs}
@@ -302,22 +302,22 @@ describe('RequestForm', () => {
         hasConfig={true}
         handleConfig={runItNoSet}
       />
-    )
-    expect(screen.getByRole('checkbox')).toBeInTheDocument()
-    const input = screen.getByRole('textbox')
+    );
+    expect(screen.getByRole('checkbox')).toBeInTheDocument();
+    const input = screen.getByRole('textbox');
     await act(async () => {
       // TODO: make complex items requirable. i.e. expect(input).toBeRequired() should pass
-      await userEvent.click(input)
-      await userEvent.paste(input, 'content')
-      expect(setRequestContent).toHaveBeenCalled()
-      await userEvent.click(screen.getByRole('button', { name: run }))
+      await userEvent.click(input);
+      await userEvent.paste(input, 'content');
+      expect(setRequestContent).toHaveBeenCalled();
+      await userEvent.click(screen.getByRole('button', { name: run }));
       // TODO get this working again
       // expect(handleSubmit).toHaveBeenCalledTimes(1)
-    })
-  })
+    });
+  });
 
   test('pressing enter submits the request form', async () => {
-    const handleSubmit = jest.fn((e) => e.preventDefault())
+    const handleSubmit = jest.fn((e) => e.preventDefault());
     renderWithTheme(
       <RequestForm
         inputs={[
@@ -337,18 +337,18 @@ describe('RequestForm', () => {
         hasConfig={true}
         handleConfig={runItNoSet}
       />
-    )
+    );
 
-    expect(screen.getByRole('textbox')).toBeInTheDocument()
-    const input = screen.getByRole('textbox')
-    await userEvent.click(input)
-    await userEvent.paste(input, 'foo')
-    await userEvent.type(input, '{enter}')
+    expect(screen.getByRole('textbox')).toBeInTheDocument();
+    const input = screen.getByRole('textbox');
+    await userEvent.click(input);
+    await userEvent.paste(input, 'foo');
+    await userEvent.type(input, '{enter}');
     await waitFor(() => {
       expect(setRequestContent).toHaveBeenLastCalledWith({
         id: 'foo',
-      })
-      expect(handleSubmit).toHaveBeenCalledTimes(1)
-    })
-  })
-})
+      });
+      expect(handleSubmit).toHaveBeenCalledTimes(1);
+    });
+  });
+});

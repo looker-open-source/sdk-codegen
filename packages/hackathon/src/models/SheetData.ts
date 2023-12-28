@@ -23,8 +23,8 @@
  SOFTWARE.
 
  */
-import type { IArtifact } from '@looker/sdk'
-import { search_artifacts } from '@looker/sdk'
+import type { IArtifact } from '@looker/sdk';
+import { search_artifacts } from '@looker/sdk';
 import {
   Projects,
   Registrations,
@@ -33,23 +33,23 @@ import {
   TeamMembers,
   Judgings,
   Users,
-} from '.'
+} from '.';
 
 export class SheetData {
-  users!: Users
-  projects!: Projects
-  technologies!: Technologies
-  registrations!: Registrations
-  hackathons!: Hackathons
-  teamMembers!: TeamMembers
-  judgings!: Judgings
+  users!: Users;
+  projects!: Projects;
+  technologies!: Technologies;
+  registrations!: Registrations;
+  hackathons!: Hackathons;
+  teamMembers!: TeamMembers;
+  judgings!: Judgings;
 
   get currentHackathon() {
-    return this.hackathons.currentHackathon
+    return this.hackathons.currentHackathon;
   }
 
   private extract(artifacts: IArtifact[], name: string) {
-    return artifacts.filter((a) => a.key.startsWith(`${name}:`))
+    return artifacts.filter((a) => a.key.startsWith(`${name}:`));
   }
 
   async init() {
@@ -57,12 +57,12 @@ export class SheetData {
     this.users = new Users(this, {
       header: ['_id', '_updated', 'first_name', 'last_name'],
       rows: [],
-    })
-    const sdk = this.users.sdk
+    });
+    const sdk = this.users.sdk;
     const artifacts = await sdk.ok(
       search_artifacts(sdk, { namespace: this.users.namespace, key: '%' })
-    )
-    await this.users.refresh(this.extract(artifacts, this.users.tableName))
+    );
+    await this.users.refresh(this.extract(artifacts, this.users.tableName));
     this.registrations = new Registrations(this, {
       header: [
         '_id',
@@ -73,17 +73,17 @@ export class SheetData {
         'attended',
       ],
       rows: [],
-    })
+    });
     await this.registrations.refresh(
       this.extract(artifacts, this.registrations.tableName)
-    )
+    );
     this.technologies = new Technologies(this, {
       header: ['_id', '_updated', 'description'],
       rows: [],
-    })
+    });
     await this.technologies.refresh(
       this.extract(artifacts, this.technologies.tableName)
-    )
+    );
     this.hackathons = new Hackathons(this, {
       header: [
         '_id',
@@ -99,17 +99,17 @@ export class SheetData {
         'default',
       ],
       rows: [],
-    })
+    });
     await this.hackathons.refresh(
       this.extract(artifacts, this.hackathons.tableName)
-    )
+    );
     this.teamMembers = new TeamMembers(this, {
       header: ['_id', '_updated', 'user_id', 'project_id', 'responsibilities'],
       rows: [],
-    })
+    });
     await this.teamMembers.refresh(
       this.extract(artifacts, this.teamMembers.tableName)
-    )
+    );
     this.judgings = new Judgings(this, {
       header: [
         '_id',
@@ -124,10 +124,10 @@ export class SheetData {
         'notes',
       ],
       rows: [],
-    })
+    });
     await this.judgings.refresh(
       this.extract(artifacts, this.judgings.tableName)
-    )
+    );
     this.projects = new Projects(this, {
       header: [
         '_id',
@@ -144,23 +144,23 @@ export class SheetData {
         'technologies',
       ],
       rows: [],
-    })
+    });
     await this.projects.refresh(
       this.extract(artifacts, this.projects.tableName)
-    )
-    this.projects.rows.forEach((p) => p.load(this))
-    this.judgings.rows.forEach((j) => j.load(this))
-    return this
+    );
+    this.projects.rows.forEach((p) => p.load(this));
+    this.judgings.rows.forEach((j) => j.load(this));
+    return this;
   }
 }
 
-let _activeSheet: SheetData
+let _activeSheet: SheetData;
 
 /** Initialize the globally available sheet */
 export const initActiveSheet = (sheetData: SheetData): SheetData => {
-  _activeSheet = sheetData
-  return _activeSheet
-}
+  _activeSheet = sheetData;
+  return _activeSheet;
+};
 
 /** Get the globally available sheet */
-export const getActiveSheet = (): SheetData => _activeSheet
+export const getActiveSheet = (): SheetData => _activeSheet;

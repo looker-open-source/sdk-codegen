@@ -1,42 +1,41 @@
 <!doctype html>
 <title>{% block title %}{% endblock %} - Looker SDK Flask Example</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 
 <nav>
   <div>
-  <h1>
-    <a href="/">Looker SDK Flask Example</a>
-  </h1>
+    <h1>
+      <a href="/">Looker SDK Flask Example</a>
+    </h1>
   </div>
   <ul>
     {% if session['user_id'] %}
-      <li>
-        <b><span>Logged in! </span></b>
-      </li>
-      <li>
-        <b><a href="{{ url_for('auth.logout') }}">Log Out</a></b>
-      </li>
+    <li>
+      <b><span>Logged in! </span></b>
+    </li>
+    <li>
+      <b><a href="{{ url_for('auth.logout') }}">Log Out</a></b>
+    </li>
     {% else %}
-      <li>
-        <b><a href="{{ url_for('auth.register') }}">Register</a></b>
-      </li>
-      <li>
-        <b><a href="{{ url_for('auth.login') }}">Log In</a></b>
-      </li>
+    <li>
+      <b><a href="{{ url_for('auth.register') }}">Register</a></b>
+    </li>
+    <li>
+      <b><a href="{{ url_for('auth.login') }}">Log In</a></b>
+    </li>
 
-      <li>
-          <a href="https://github.com/looker-open-source/sdk-codegen/tree/main/examples/python/looker_flask_example">See Code</a>
-      </li>
+    <li>
+      <a
+        href="https://github.com/looker-open-source/sdk-codegen/tree/main/examples/python/looker_flask_example"
+        >See Code</a
+      >
+    </li>
     {% endif %}
   </ul>
 </nav>
 <section class="content">
-  <header>
-    {% block header %}{% endblock %}
-  </header>
+  <header>{% block header %}{% endblock %}</header>
   {% for message in get_flashed_messages() %}
-    <div class="flash">{{ message }}</div>
-  {% endfor %}
-
-  {% block content %}{% endblock %}
+  <div class="flash">{{ message }}</div>
+  {% endfor %} {% block content %}{% endblock %}
 </section>

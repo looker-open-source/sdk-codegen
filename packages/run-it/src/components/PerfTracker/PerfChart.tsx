@@ -24,16 +24,16 @@
 
  */
 
-import type { FC } from 'react'
-import React from 'react'
-import { Chart } from 'react-google-charts'
-import { Heading, Space, Tooltip } from '@looker/components'
-import { Loading } from '../Loading'
-import type { IResourceLoadTimes } from './perfUtils'
+import type { FC } from 'react';
+import React from 'react';
+import { Chart } from 'react-google-charts';
+import { Heading, Space, Tooltip } from '@looker/components';
+import { Loading } from '../Loading';
+import type { IResourceLoadTimes } from './perfUtils';
 
 interface PerfChartProps {
   /** Performance Resource timing data */
-  loadTimes: IResourceLoadTimes
+  loadTimes: IResourceLoadTimes;
 }
 
 // https://react-google-charts.com/timeline-chart#putting-bars-on-one-row
@@ -44,13 +44,13 @@ const chartItem = (
   start: number,
   end: number
 ) => {
-  if (start > 0) list.push([desc, desc, start - offset, end - offset])
-  return list
-}
+  if (start > 0) list.push([desc, desc, start - offset, end - offset]);
+  return list;
+};
 
 const chartData = (timings: IResourceLoadTimes) => {
-  const item = timings.entry as PerformanceResourceTiming
-  const offset = item.startTime
+  const item = timings.entry as PerformanceResourceTiming;
+  const offset = item.startTime;
   const result = [
     [
       { type: 'string', id: 'Metric' },
@@ -58,64 +58,64 @@ const chartData = (timings: IResourceLoadTimes) => {
       { type: 'number', id: 'Start' },
       { type: 'number', id: 'End' },
     ],
-  ]
-  chartItem(result, 'redirect', offset, item.redirectStart, item.redirectEnd)
+  ];
+  chartItem(result, 'redirect', offset, item.redirectStart, item.redirectEnd);
   chartItem(
     result,
     'domainLookup',
     offset,
     item.domainLookupStart,
     item.domainLookupEnd
-  )
-  chartItem(result, 'connect', offset, item.connectStart, item.connectEnd)
+  );
+  chartItem(result, 'connect', offset, item.connectStart, item.connectEnd);
   chartItem(
     result,
     'secureConnection',
     offset,
     item.secureConnectionStart,
     item.connectEnd
-  )
+  );
   chartItem(
     result,
     'responseTime',
     offset,
     item.responseStart,
     item.responseEnd
-  )
+  );
   chartItem(
     result,
     'fetchUntilResponseEnd',
     offset,
     item.fetchStart,
     item.responseEnd
-  )
+  );
   chartItem(
     result,
     'requestUntilResponseEnd',
     offset,
     item.requestStart,
     item.responseEnd
-  )
+  );
   chartItem(
     result,
     'startUntilResponseEnd',
     offset,
     item.startTime,
     item.responseEnd
-  )
+  );
   chartItem(
     result,
     'processDuration',
     offset,
     timings.processStart,
     timings.processEnd
-  )
-  return result
-}
+  );
+  return result;
+};
 
 export const PerfChart: FC<PerfChartProps> = ({ loadTimes }) => {
-  const entry = loadTimes.entry as PerformanceResourceTiming
-  const data = chartData(loadTimes)
+  const entry = loadTimes.entry as PerformanceResourceTiming;
+  const data = chartData(loadTimes);
   return (
     <>
       <Heading as="h4">{loadTimes.name}</Heading>
@@ -154,14 +154,14 @@ export const PerfChart: FC<PerfChartProps> = ({ loadTimes }) => {
             callback: ({ chartWrapper }) => {
               const container = document.getElementById(
                 chartWrapper.getContainerId()
-              )
+              );
               if (container) {
-                const labels = container.getElementsByTagName('text')
+                const labels = container.getElementsByTagName('text');
                 for (let n = 0; n < labels.length; n++) {
-                  const textEl = labels.item(n)
+                  const textEl = labels.item(n);
                   // clear any numeric ticks at the bottom of the chart
                   if (textEl && parseInt(textEl.innerHTML, 10) > -1) {
-                    textEl.innerHTML = ''
+                    textEl.innerHTML = '';
                   }
                 }
               }
@@ -170,5 +170,5 @@ export const PerfChart: FC<PerfChartProps> = ({ loadTimes }) => {
         ]}
       />
     </>
-  )
-}
+  );
+};

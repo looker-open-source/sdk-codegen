@@ -24,22 +24,22 @@
 
  */
 
-import type { FC } from 'react'
-import React, { useEffect, useState } from 'react'
-import { initRunItSdk, RunItProvider } from '@looker/run-it'
-import type { OAuthConfigProvider } from '@looker/extension-utils'
-import { OAuthScene } from '@looker/extension-utils'
-import { Provider } from 'react-redux'
-import { useLocation } from 'react-router'
+import type { FC } from 'react';
+import React, { useEffect, useState } from 'react';
+import { initRunItSdk, RunItProvider } from '@looker/run-it';
+import type { OAuthConfigProvider } from '@looker/extension-utils';
+import { OAuthScene } from '@looker/extension-utils';
+import { Provider } from 'react-redux';
+import { useLocation } from 'react-router';
 
-import { ApiExplorer } from './ApiExplorer'
-import { store } from './state'
-import { oAuthPath, ApixAdaptor } from './utils'
-import { Loader } from './components'
+import { ApiExplorer } from './ApiExplorer';
+import { store } from './state';
+import { oAuthPath, ApixAdaptor } from './utils';
+import { Loader } from './components';
 
 export interface StandaloneApiExplorerProps {
-  headless?: boolean
-  versionsUrl: string
+  headless?: boolean;
+  versionsUrl: string;
 }
 
 export const StandaloneApiExplorer: FC<StandaloneApiExplorerProps> = ({
@@ -47,25 +47,25 @@ export const StandaloneApiExplorer: FC<StandaloneApiExplorerProps> = ({
 }) => {
   const [browserAdaptor] = useState(
     new ApixAdaptor(initRunItSdk(), window.origin)
-  )
-  const location = useLocation()
-  const oauthReturn = location.pathname === `/${oAuthPath}`
-  const sdk = browserAdaptor.sdk
+  );
+  const location = useLocation();
+  const oauthReturn = location.pathname === `/${oAuthPath}`;
+  const sdk = browserAdaptor.sdk;
   const canLogin =
     (sdk.authSession.settings as OAuthConfigProvider).authIsConfigured() &&
     !sdk.authSession.isAuthenticated() &&
-    !oauthReturn
+    !oauthReturn;
 
   useEffect(() => {
-    const login = async () => await browserAdaptor.login()
+    const login = async () => await browserAdaptor.login();
     if (canLogin) {
-      login()
+      login();
     }
-  }, [])
+  }, []);
 
   const { looker_url } = (
     sdk.authSession.settings as OAuthConfigProvider
-  ).getStoredConfig()
+  ).getStoredConfig();
 
   return (
     <Provider store={store}>
@@ -86,5 +86,5 @@ export const StandaloneApiExplorer: FC<StandaloneApiExplorerProps> = ({
         )}
       </RunItProvider>
     </Provider>
-  )
-}
+  );
+};

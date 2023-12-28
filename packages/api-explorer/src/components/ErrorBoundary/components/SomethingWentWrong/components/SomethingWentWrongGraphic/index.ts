@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { SomethingWentWrongGraphic } from './SomethingWentWrongGraphic'
+export { SomethingWentWrongGraphic } from './SomethingWentWrongGraphic';

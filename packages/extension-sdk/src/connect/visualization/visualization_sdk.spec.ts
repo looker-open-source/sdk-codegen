@@ -23,45 +23,45 @@
  SOFTWARE.
 
  */
-import type { ExtensionHostApiImpl } from '../extension_host_api'
-import { VisualizationSDKImpl } from './visualization_sdk'
+import type { ExtensionHostApiImpl } from '../extension_host_api';
+import { VisualizationSDKImpl } from './visualization_sdk';
 import type {
   RawVisualizationData,
   RawVisQueryResponse,
   RawVisConfig,
-} from './types'
+} from './types';
 
 describe('VisualizationSDK', () => {
-  let api: ExtensionHostApiImpl
+  let api: ExtensionHostApiImpl;
   beforeEach(() => {
     api = {
       isDashboardMountSupported: true,
       send: jest.fn(),
       sendAndReceive: jest.fn(),
-    } as unknown as ExtensionHostApiImpl
-  })
+    } as unknown as ExtensionHostApiImpl;
+  });
 
   it('constructs', () => {
-    const sdk = new VisualizationSDKImpl(api)
-    expect(sdk.visualizationData).toBeUndefined()
-    expect(sdk.visConfig).toBeDefined()
-    expect(sdk.visConfig.queryFieldMeasures).toEqual([])
-    expect(sdk.visConfig.queryFieldDimensions).toEqual([])
-    expect(sdk.visConfig.queryFieldTableCalculations).toEqual([])
-    expect(sdk.visConfig.queryFieldPivots).toEqual([])
-    expect(sdk.queryResponse).toBeDefined()
-    expect(sdk.queryResponse.fieldMeasures).toEqual([])
-    expect(sdk.queryResponse.fieldDimensions).toEqual([])
-    expect(sdk.queryResponse.fieldTableCalculations).toEqual([])
-    expect(sdk.queryResponse.fieldPivots).toEqual([])
-    expect(sdk.queryResponse.fieldMeasureLike).toEqual([])
-    expect(sdk.queryResponse.fieldDimensionLike).toEqual([])
-    expect(sdk.queryResponse.data).toEqual([])
-  })
+    const sdk = new VisualizationSDKImpl(api);
+    expect(sdk.visualizationData).toBeUndefined();
+    expect(sdk.visConfig).toBeDefined();
+    expect(sdk.visConfig.queryFieldMeasures).toEqual([]);
+    expect(sdk.visConfig.queryFieldDimensions).toEqual([]);
+    expect(sdk.visConfig.queryFieldTableCalculations).toEqual([]);
+    expect(sdk.visConfig.queryFieldPivots).toEqual([]);
+    expect(sdk.queryResponse).toBeDefined();
+    expect(sdk.queryResponse.fieldMeasures).toEqual([]);
+    expect(sdk.queryResponse.fieldDimensions).toEqual([]);
+    expect(sdk.queryResponse.fieldTableCalculations).toEqual([]);
+    expect(sdk.queryResponse.fieldPivots).toEqual([]);
+    expect(sdk.queryResponse.fieldMeasureLike).toEqual([]);
+    expect(sdk.queryResponse.fieldDimensionLike).toEqual([]);
+    expect(sdk.queryResponse.data).toEqual([]);
+  });
 
   it('updates host data and convenience functions work correcly', () => {
-    const sdk = new VisualizationSDKImpl(api)
-    expect(sdk.visualizationData).toBeUndefined()
+    const sdk = new VisualizationSDKImpl(api);
+    expect(sdk.visualizationData).toBeUndefined();
     const visConfig: RawVisConfig = {
       query_fields: {
         measures: [{ a: 'a' }],
@@ -69,7 +69,7 @@ describe('VisualizationSDK', () => {
         table_calculations: [{ a: 'c' }],
         pivots: [{ a: 'd' }],
       },
-    }
+    };
     const queryResponse: RawVisQueryResponse = {
       data: [{ abc: { value: 'xyz' } }],
       fields: {
@@ -81,50 +81,50 @@ describe('VisualizationSDK', () => {
         dimension_like: [{ a: 'f' }],
       },
       pivots: [],
-    }
+    };
     const visualizationData: RawVisualizationData = {
       visConfig,
       queryResponse,
-    }
-    sdk.updateVisData(visualizationData)
-    expect(sdk.visualizationData).toEqual(visualizationData)
+    };
+    sdk.updateVisData(visualizationData);
+    expect(sdk.visualizationData).toEqual(visualizationData);
     expect(sdk.visConfig.queryFieldMeasures).toEqual(
       visConfig.query_fields.measures
-    )
+    );
     expect(sdk.visConfig.queryFieldDimensions).toEqual(
       visConfig.query_fields.dimensions
-    )
+    );
     expect(sdk.visConfig.queryFieldTableCalculations).toEqual(
       visConfig.query_fields.table_calculations
-    )
+    );
     expect(sdk.visConfig.queryFieldPivots).toEqual(
       visConfig.query_fields.pivots
-    )
+    );
     expect(sdk.queryResponse.fieldMeasures).toEqual(
       queryResponse.fields.measures
-    )
+    );
     expect(sdk.queryResponse.fieldDimensions).toEqual(
       queryResponse.fields.dimensions
-    )
+    );
     expect(sdk.queryResponse.fieldTableCalculations).toEqual(
       queryResponse.fields.table_calculations
-    )
-    expect(sdk.queryResponse.fieldPivots).toEqual(queryResponse.fields.pivots)
+    );
+    expect(sdk.queryResponse.fieldPivots).toEqual(queryResponse.fields.pivots);
     expect(sdk.queryResponse.fieldMeasureLike).toEqual(
       queryResponse.fields.measure_like
-    )
+    );
     expect(sdk.queryResponse.fieldDimensionLike).toEqual(
       queryResponse.fields.dimension_like
-    )
-  })
+    );
+  });
 
   it('does not update host data when dashboard tile mount not supported', () => {
     api = {
       ...api,
       isDashboardMountSupported: false,
-    } as unknown as ExtensionHostApiImpl
-    const sdk = new VisualizationSDKImpl(api)
-    expect(sdk.visualizationData).toBeUndefined()
+    } as unknown as ExtensionHostApiImpl;
+    const sdk = new VisualizationSDKImpl(api);
+    expect(sdk.visualizationData).toBeUndefined();
     const visConfig: RawVisConfig = {
       query_fields: {
         measures: [{ a: 'a' }],
@@ -132,7 +132,7 @@ describe('VisualizationSDK', () => {
         table_calculations: [{ a: 'c' }],
         pivots: [{ a: 'd' }],
       },
-    }
+    };
     const queryResponse: RawVisQueryResponse = {
       data: [{ abc: { value: 'xyz' } }],
       fields: {
@@ -144,18 +144,18 @@ describe('VisualizationSDK', () => {
         dimension_like: [{ a: 'f' }],
       },
       pivots: [],
-    }
+    };
     const visualizationData: RawVisualizationData = {
       visConfig,
       queryResponse,
-    }
-    sdk.updateVisData(visualizationData)
-    expect(sdk.visualizationData).toBeUndefined()
-  })
+    };
+    sdk.updateVisData(visualizationData);
+    expect(sdk.visualizationData).toBeUndefined();
+  });
 
   it('updates visConfig and queryResponse locally when provided', () => {
-    const sdk = new VisualizationSDKImpl(api)
-    expect(sdk.visualizationData).toBeUndefined()
+    const sdk = new VisualizationSDKImpl(api);
+    expect(sdk.visualizationData).toBeUndefined();
     const visConfig: RawVisConfig = {
       query_fields: {
         measures: [{ a: 'a' }],
@@ -163,7 +163,7 @@ describe('VisualizationSDK', () => {
         table_calculations: [{ a: 'c' }],
         pivots: [{ a: 'd' }],
       },
-    }
+    };
     const queryResponse: RawVisQueryResponse = {
       data: [{ abc: { value: 'xyz' } }],
       fields: {
@@ -175,26 +175,26 @@ describe('VisualizationSDK', () => {
         dimension_like: [{ a: 'f' }],
       },
       pivots: [],
-    }
+    };
     const visualizationData: RawVisualizationData = {
       visConfig,
       queryResponse,
-    }
-    sdk.updateVisData(visualizationData)
-    expect(sdk.visualizationData).toEqual(visualizationData)
-    expect(sdk.visConfig.visConfig).toEqual(visConfig)
+    };
+    sdk.updateVisData(visualizationData);
+    expect(sdk.visualizationData).toEqual(visualizationData);
+    expect(sdk.visConfig.visConfig).toEqual(visConfig);
 
     const updatedVisConfig = {
       ...visConfig,
       background_color: 'blue',
-    } as RawVisConfig
+    } as RawVisConfig;
     const updatedVisualizationData: RawVisualizationData = {
       visConfig: updatedVisConfig,
       queryResponse,
-    }
+    };
 
-    sdk.updateVisData(updatedVisualizationData)
-    expect(sdk.visualizationData).toEqual(updatedVisualizationData)
-    expect(sdk.visConfig.visConfig).toEqual(updatedVisConfig)
-  })
-})
+    sdk.updateVisData(updatedVisualizationData);
+    expect(sdk.visualizationData).toEqual(updatedVisualizationData);
+    expect(sdk.visConfig.visConfig).toEqual(updatedVisConfig);
+  });
+});

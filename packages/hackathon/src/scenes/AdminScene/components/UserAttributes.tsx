@@ -24,38 +24,38 @@
 
  */
 
-import type { FC } from 'react'
-import React, { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { Form, Fieldset, FieldText, Button, Space } from '@looker/components'
+import type { FC } from 'react';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Form, Fieldset, FieldText, Button, Space } from '@looker/components';
 import {
   loadUserAttributesRequest,
   updateAttributeValues,
   saveUserAttributesRequest,
-} from '../../../data/admin/actions'
-import { getUserAttributesState } from '../../../data/admin/selectors'
-import { isLoadingState } from '../../../data/common/selectors'
+} from '../../../data/admin/actions';
+import { getUserAttributesState } from '../../../data/admin/selectors';
+import { isLoadingState } from '../../../data/common/selectors';
 
 export interface UserAttributesProps {}
 
 export const UserAttributes: FC<UserAttributesProps> = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(loadUserAttributesRequest())
-  }, [dispatch])
-  const userAttributes = useSelector(getUserAttributesState)
-  const isLoading = useSelector(isLoadingState)
+    dispatch(loadUserAttributesRequest());
+  }, [dispatch]);
+  const userAttributes = useSelector(getUserAttributesState);
+  const isLoading = useSelector(isLoadingState);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    dispatch(saveUserAttributesRequest(userAttributes!))
-  }
+    e.preventDefault();
+    dispatch(saveUserAttributesRequest(userAttributes!));
+  };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const updatedUserAttributes = { ...userAttributes! }
-    updatedUserAttributes[e.target.name] = e.target.value
-    dispatch(updateAttributeValues(updatedUserAttributes))
-  }
+    const updatedUserAttributes = { ...userAttributes! };
+    updatedUserAttributes[e.target.name] = e.target.value;
+    dispatch(updateAttributeValues(updatedUserAttributes));
+  };
 
   return (
     <Form onSubmit={onSubmit} width="40vw" mt="large">
@@ -101,5 +101,5 @@ export const UserAttributes: FC<UserAttributesProps> = () => {
         </Button>
       </Space>
     </Form>
-  )
-}
+  );
+};

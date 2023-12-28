@@ -24,8 +24,8 @@
 
  */
 
-import type { BaseSyntheticEvent } from 'react'
-import React, { Fragment } from 'react'
+import type { BaseSyntheticEvent } from 'react';
+import React, { Fragment } from 'react';
 import {
   ToggleSwitch,
   Label,
@@ -35,15 +35,15 @@ import {
   Icon,
   InputDate,
   Space,
-} from '@looker/components'
+} from '@looker/components';
 // eslint-disable-next-line no-restricted-imports
-import { Info } from '@styled-icons/material'
-import { CodeEditor } from '@looker/code-editor'
-import type { RunItInput, RunItValues } from '../../RunIt'
-import { FormItem } from './FormItem'
+import { Info } from '@styled-icons/material';
+import { CodeEditor } from '@looker/code-editor';
+import type { RunItInput, RunItValues } from '../../RunIt';
+import { FormItem } from './FormItem';
 
 export const BODY_HINT =
-  'By default, empty values are automatically removed from the request inputs, except for properties with `false` boolean values, which must be completely removed from the JSON body if they should not be passed.'
+  'By default, empty values are automatically removed from the request inputs, except for properties with `false` boolean values, which must be completely removed from the JSON body if they should not be passed.';
 /**
  * Creates a datetime form item
  * @param name Form item's name
@@ -65,7 +65,7 @@ const createDateItem = (
       onChange={handleChange.bind(null, name)}
     />
   </FormItem>
-)
+);
 
 /**
  * Creates a boolean form item
@@ -93,20 +93,20 @@ const createBoolItem = (
       {description && <Label>{description}</Label>}
     </>
   </FormItem>
-)
+);
 
 const inputTextType = (type: string) => {
   switch (type) {
     case 'number':
-      return 'number'
+      return 'number';
     case 'email':
-      return 'email'
+      return 'email';
     case 'password':
-      return 'password'
+      return 'password';
     default:
-      return 'text'
+      return 'text';
   }
-}
+};
 
 /**
  * Create a field text input item based on definitions
@@ -140,7 +140,7 @@ const createItem = (
       onChange={handleChange}
     />
   </FormItem>
-)
+);
 
 /**
  * Creates a simple form item
@@ -171,7 +171,7 @@ export const createSimpleItem = (
         input.description,
         handleBoolChange,
         requestContent
-      )
+      );
     case 'int64':
     case 'integer':
     case 'float':
@@ -184,7 +184,7 @@ export const createSimpleItem = (
         '(number)',
         handleNumberChange,
         requestContent
-      )
+      );
     case 'string':
     case 'hostname':
     case 'uuid':
@@ -199,7 +199,7 @@ export const createSimpleItem = (
         '(string)',
         handleChange,
         requestContent
-      )
+      );
     case 'email':
     case 'password':
       return createItem(
@@ -210,13 +210,13 @@ export const createSimpleItem = (
         '(string)',
         handleChange,
         requestContent
-      )
+      );
     case 'datetime':
-      return createDateItem(input.name, handleDateChange, requestContent)
+      return createDateItem(input.name, handleDateChange, requestContent);
     default:
-      return <Fragment key={input.name}></Fragment>
+      return <Fragment key={input.name}></Fragment>;
   }
-}
+};
 
 /**
  * Creates a complex item
@@ -231,9 +231,9 @@ export const createComplexItem = (
   handleComplexChange: (value: string, name: string) => void,
   requestContent: RunItValues
 ) => {
-  const content = requestContent[input.name]
+  const content = requestContent[input.name];
   const code =
-    typeof content === 'string' ? content : JSON.stringify(content, null, 2)
+    typeof content === 'string' ? content : JSON.stringify(content, null, 2);
 
   return (
     <FormItem
@@ -262,8 +262,8 @@ export const createComplexItem = (
         transparent={true}
       />
     </FormItem>
-  )
-}
+  );
+};
 
 /**
  * Creates a required checkbox form item
@@ -277,7 +277,7 @@ export const showDataChangeWarning = () => (
       label="I understand that this API endpoint will change data."
     />
   </FormItem>
-)
+);
 
 /**
  * Updates a given state with a key/value pair, taking into consideration
@@ -291,14 +291,14 @@ export const updateNullableProp = (
   key: string,
   newValue?: any
 ) => {
-  const updatedState = { ...state }
+  const updatedState = { ...state };
   if (key in state && !newValue) {
-    delete updatedState[key]
+    delete updatedState[key];
   } else {
-    updatedState[key] = newValue
+    updatedState[key] = newValue;
   }
-  return updatedState
-}
+  return updatedState;
+};
 
 /**
  * If the body isn't empty, it must be valid form encoded syntax
@@ -308,17 +308,17 @@ export const updateNullableProp = (
  * @param body to validate
  */
 export const validateEncodedValues = (body: string) => {
-  let result = ''
-  if (!body) return result
-  const args = body.split('&')
+  let result = '';
+  if (!body) return result;
+  const args = body.split('&');
   args.forEach((arg) => {
-    const formArg = /[\w-_.]+(\[])?=.*/i
+    const formArg = /[\w-_.]+(\[])?=.*/i;
     if (!formArg.test(arg)) {
-      result += ` ${arg}`
+      result += ` ${arg}`;
     }
-  })
-  return result.trim()
-}
+  });
+  return result.trim();
+};
 
 /**
  * Returns an error message if the body is not JSON or valid form url encoding
@@ -330,38 +330,38 @@ export const validateBody = (
   body: string | Record<string, any>,
   requiredKeys: string[]
 ) => {
-  let parsed
+  let parsed;
 
-  let result = ''
+  let result = '';
   if (body) {
     if (typeof body === 'string') {
       if (/^[[{}"]/.test(body)) {
         // most likely JSON
         try {
-          parsed = JSON.parse(body)
+          parsed = JSON.parse(body);
         } catch (e: any) {
-          result = e.message
+          result = e.message;
         }
       } else {
-        result = validateEncodedValues(body)
+        result = validateEncodedValues(body);
       }
       if (result) {
-        result = `Syntax error in the body: ${result}`
+        result = `Syntax error in the body: ${result}`;
       }
     } else {
-      parsed = body
+      parsed = body;
     }
   }
 
   if (parsed && requiredKeys && requiredKeys.length > 0) {
-    const required = new Set<string>(requiredKeys)
-    const keys = new Set<string>(Object.keys(parsed))
-    const missing = new Set<string>([...required].filter((k) => !keys.has(k)))
+    const required = new Set<string>(requiredKeys);
+    const keys = new Set<string>(Object.keys(parsed));
+    const missing = new Set<string>([...required].filter((k) => !keys.has(k)));
     if (missing.size > 0) {
       result = `Error: Required properties "${Array.from(missing).join(
         ', '
-      )}" must be provided in the body`
+      )}" must be provided in the body`;
     }
   }
-  return result
-}
+  return result;
+};

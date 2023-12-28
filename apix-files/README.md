@@ -16,6 +16,7 @@ This will start the API Explorer file server at `http://localhost:30000`
 ## Mining the source code
 
 `yarn mine` runs two specific miners:
+
 - `yarn mine:examples`
 - `yarn mine:declarations`
 
@@ -28,6 +29,7 @@ The source code in this repository is mined to find examples of using the Looker
 ```sh
 yarn mine:examples
 ```
+
 produces [examplesIndex.json](/examplesIndex.json), which is checked in.
 
 ### Declaration mining

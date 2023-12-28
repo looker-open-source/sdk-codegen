@@ -24,23 +24,23 @@
 
  */
 
-import { codeGenerators } from '@looker/sdk-codegen'
+import { codeGenerators } from '@looker/sdk-codegen';
 
-export const allAlias = 'all'
+export const allAlias = 'all';
 
 /**
  * Gets all supported sdk languages
  * @returns mapping of sdk language aliases to name
  */
 export const allSdkLanguages = (): Record<string, string> => {
-  const languages = {}
+  const languages = {};
   codeGenerators.forEach((gen) => {
-    const alias = gen.extension.toString().match(/\.(\w+)\b/)![1]
-    languages[alias] = gen.language
-  })
+    const alias = gen.extension.toString().match(/\.(\w+)\b/)![1];
+    languages[alias] = gen.language;
+  });
 
-  return { ...languages, [allAlias]: 'All' }
-}
+  return { ...languages, [allAlias]: 'All' };
+};
 
 /**
  * Searches for sdk language details given label
@@ -48,16 +48,16 @@ export const allSdkLanguages = (): Record<string, string> => {
  * @returns language name and alias
  */
 export const findSdk = (label: string) => {
-  const languages = allSdkLanguages()
-  let match = { alias: allAlias, language: languages[allAlias] }
+  const languages = allSdkLanguages();
+  let match = { alias: allAlias, language: languages[allAlias] };
   for (const [alias, language] of Object.entries(languages)) {
     if (
       !label.localeCompare(alias, 'en', { sensitivity: 'base' }) ||
       !label.localeCompare(language, 'en', { sensitivity: 'base' })
     ) {
-      match = { alias, language }
-      break
+      match = { alias, language };
+      break;
     }
   }
-  return match
-}
+  return match;
+};

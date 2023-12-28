@@ -24,52 +24,52 @@
 
  */
 
-import { DelimArray } from './delimArray'
+import { DelimArray } from './delimArray';
 
 describe('DelimArray', () => {
   it('empty values work', () => {
-    const values = new DelimArray<number>()
-    const actual = values.toString()
-    const expected = ''
-    expect(actual).toEqual(expected)
-  })
+    const values = new DelimArray<number>();
+    const actual = values.toString();
+    const expected = '';
+    expect(actual).toEqual(expected);
+  });
 
   it('integers', () => {
-    const numbers = [1, 2, 3, 4]
-    let values = new DelimArray<number>(numbers)
-    const expected = '1,2,3,4'
-    let actual = values.toString()
-    const normal = `${numbers}`
-    expect(normal).toEqual(expected)
-    expect(actual).toEqual(expected)
-    values = new DelimArray<number>(numbers, ' ', '{', '}')
-    actual = values.toString()
-    expect(actual).toEqual('{1 2 3 4}')
-  })
+    const numbers = [1, 2, 3, 4];
+    let values = new DelimArray<number>(numbers);
+    const expected = '1,2,3,4';
+    let actual = values.toString();
+    const normal = `${numbers}`;
+    expect(normal).toEqual(expected);
+    expect(actual).toEqual(expected);
+    values = new DelimArray<number>(numbers, ' ', '{', '}');
+    actual = values.toString();
+    expect(actual).toEqual('{1 2 3 4}');
+  });
 
   it('integer', () => {
-    const numbers = [2]
-    let values = new DelimArray<number>(numbers)
-    const expected = '2'
-    let actual = values.toString()
-    const normal = `${numbers}`
-    expect(normal).toEqual(expected)
-    expect(actual).toEqual(expected)
-    values = new DelimArray<number>(numbers, ' ', '{', '}')
-    actual = values.toString()
-    expect(actual).toEqual('{2}')
-  })
+    const numbers = [2];
+    let values = new DelimArray<number>(numbers);
+    const expected = '2';
+    let actual = values.toString();
+    const normal = `${numbers}`;
+    expect(normal).toEqual(expected);
+    expect(actual).toEqual(expected);
+    values = new DelimArray<number>(numbers, ' ', '{', '}');
+    actual = values.toString();
+    expect(actual).toEqual('{2}');
+  });
 
   it('strings', () => {
-    const strings = ['a', 'b', 'c', 'd']
-    let values = new DelimArray<string>(strings)
-    const expected = 'a,b,c,d'
-    let actual = values.toString()
-    const normal = `${strings}`
-    expect(normal).toEqual(expected)
-    expect(actual).toEqual(expected)
-    values = new DelimArray<string>(strings, '|', '{', '}')
-    actual = values.toString()
-    expect(actual).toEqual('{a|b|c|d}')
-  })
-})
+    const strings = ['a', 'b', 'c', 'd'];
+    let values = new DelimArray<string>(strings);
+    const expected = 'a,b,c,d';
+    let actual = values.toString();
+    const normal = `${strings}`;
+    expect(normal).toEqual(expected);
+    expect(actual).toEqual(expected);
+    values = new DelimArray<string>(strings, '|', '{', '}');
+    actual = values.toString();
+    expect(actual).toEqual('{a|b|c|d}');
+  });
+});

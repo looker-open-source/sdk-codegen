@@ -24,8 +24,8 @@
 
  */
 
-import type { RawVisConfig, VisualizationSDK } from '@looker/extension-sdk'
-import { defaultConfig } from '../../LiquidFillGaugeViz/liquid_fill_gauge'
+import type { RawVisConfig, VisualizationSDK } from '@looker/extension-sdk';
+import { defaultConfig } from '../../LiquidFillGaugeViz/liquid_fill_gauge';
 
 export const getValueAndFormat = (
   visualizationSDK: VisualizationSDK
@@ -34,32 +34,32 @@ export const getValueAndFormat = (
   const visConfig = {
     ...defaultConfig,
     ...visualizationSDK.visConfig,
-  } as RawVisConfig
+  } as RawVisConfig;
 
-  const queryResponse = visualizationSDK.queryResponse
-  const { data } = queryResponse
+  const queryResponse = visualizationSDK.queryResponse;
+  const { data } = queryResponse;
 
-  const datumField = queryResponse.fieldMeasureLike[0]
+  const datumField = queryResponse.fieldMeasureLike[0];
   if (!datumField) {
-    return { value: undefined, valueFormat: undefined }
+    return { value: undefined, valueFormat: undefined };
   }
-  const valueFormat = visConfig.displayPercent ? null : datumField.value_format
-  const datum = data[0][datumField.name]
-  let value = datum.value
+  const valueFormat = visConfig.displayPercent ? null : datumField.value_format;
+  const datum = data[0][datumField.name];
+  let value = datum.value;
 
-  const compareField = queryResponse.fieldMeasureLike[1]
+  const compareField = queryResponse.fieldMeasureLike[1];
   if (compareField && visConfig.showComparison) {
-    const compareDatum = data[0][compareField.name]
-    visConfig.maxValue = compareDatum.value
+    const compareDatum = data[0][compareField.name];
+    visConfig.maxValue = compareDatum.value;
   }
 
   if (visConfig.displayPercent) {
-    value = (datum.value / visConfig.maxValue) * 100
-    visConfig.maxValue = 100
+    value = (datum.value / visConfig.maxValue) * 100;
+    visConfig.maxValue = 100;
   }
 
-  return { value, valueFormat }
-}
+  return { value, valueFormat };
+};
 
 export const liquidFillVisOptions = {
   showComparison: {
@@ -231,4 +231,4 @@ export const liquidFillVisOptions = {
     type: 'string',
     display: 'color',
   },
-}
+};

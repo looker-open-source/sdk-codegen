@@ -23,11 +23,11 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import type { ApiModel, IMethod, IType } from '@looker/sdk-codegen'
-import { Link } from 'react-router-dom'
-import { RunItHeading } from '@looker/run-it'
-import { buildPath, highlightHTML } from '../../utils'
+import React from 'react';
+import type { ApiModel, IMethod, IType } from '@looker/sdk-codegen';
+import { Link } from 'react-router-dom';
+import { RunItHeading } from '@looker/run-it';
+import { buildPath, highlightHTML } from '../../utils';
 
 /**
  * Renders a heading and links to all item types
@@ -39,7 +39,7 @@ export const DocReferenceItems = (
   specKey: string,
   pattern: string
 ) => {
-  if (items.length === 0) return <></>
+  if (items.length === 0) return <></>;
 
   return (
     <>
@@ -53,5 +53,5 @@ export const DocReferenceItems = (
         </span>
       ))}
     </>
-  )
-}
+  );
+};

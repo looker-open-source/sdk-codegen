@@ -23,46 +23,46 @@
  SOFTWARE.
 
  */
-import type { FC } from 'react'
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { useRouteMatch } from 'react-router-dom'
-import { actionMessage } from '../../data/common/actions'
-import { getHackerState } from '../../data/hack_session/selectors'
-import { getJudgingRequest } from '../../data/judgings/actions'
+import type { FC } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useRouteMatch } from 'react-router-dom';
+import { actionMessage } from '../../data/common/actions';
+import { getHackerState } from '../../data/hack_session/selectors';
+import { getJudgingRequest } from '../../data/judgings/actions';
 import {
   getJudgingState,
   getJudgingLoadedState,
-} from '../../data/judgings/selectors'
-import { canJudge } from '../../utils'
-import { JudgingForm } from './components'
+} from '../../data/judgings/selectors';
+import { canJudge } from '../../utils';
+import { JudgingForm } from './components';
 
 export const JudgingEditorScene: FC = () => {
-  const dispatch = useDispatch()
-  const match = useRouteMatch<{ id: string }>('/judging/:id')
-  const id = match?.params?.id
-  const hacker = useSelector(getHackerState)
-  const judging = useSelector(getJudgingState)
-  const judgingLoaded = useSelector(getJudgingLoadedState)
+  const dispatch = useDispatch();
+  const match = useRouteMatch<{ id: string }>('/judging/:id');
+  const id = match?.params?.id;
+  const hacker = useSelector(getHackerState);
+  const judging = useSelector(getJudgingState);
+  const judgingLoaded = useSelector(getJudgingLoadedState);
 
   useEffect(() => {
     if (id) {
-      dispatch(getJudgingRequest(id))
+      dispatch(getJudgingRequest(id));
     }
-  }, [dispatch, id])
+  }, [dispatch, id]);
 
-  const readonly = !canJudge(hacker, judging)
+  const readonly = !canJudge(hacker, judging);
 
   useEffect(() => {
     if (judgingLoaded && readonly) {
-      dispatch(actionMessage('Viewing judgment', 'inform'))
+      dispatch(actionMessage('Viewing judgment', 'inform'));
     }
-  }, [judgingLoaded, readonly])
+  }, [judgingLoaded, readonly]);
 
   return (
     <>
       {!judging && judgingLoaded && <>No judging information</>}
       {judging && <JudgingForm judging={judging} readonly={readonly} />}
     </>
-  )
-}
+  );
+};

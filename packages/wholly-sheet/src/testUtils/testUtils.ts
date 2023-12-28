@@ -23,34 +23,34 @@
  SOFTWARE.
 
  */
-import * as fs from 'fs'
-import path from 'path'
-import { JWT } from 'google-auth-library'
-import type { IRequestProps, IApiSettings, ITransport } from '@looker/sdk-rtl'
-import { DefaultSettings, AuthSession } from '@looker/sdk-rtl'
-import { NodeTransport } from '@looker/sdk-node'
-import { defaultScopes, SheetSDK } from '../SheetSDK'
+import * as fs from 'fs';
+import path from 'path';
+import { JWT } from 'google-auth-library';
+import type { IRequestProps, IApiSettings, ITransport } from '@looker/sdk-rtl';
+import { DefaultSettings, AuthSession } from '@looker/sdk-rtl';
+import { NodeTransport } from '@looker/sdk-node';
+import { defaultScopes, SheetSDK } from '../SheetSDK';
 
 const credFile = path.join(
   __dirname,
   '../../../../examples/access-token-server/service_account.json'
-)
-const creds = fs.readFileSync(credFile, { encoding: 'utf-8' })
-export const cred = JSON.parse(creds)
-export const transport = new NodeTransport(DefaultSettings())
-export const sheetTimeout = 10000
+);
+const creds = fs.readFileSync(credFile, { encoding: 'utf-8' });
+export const cred = JSON.parse(creds);
+export const transport = new NodeTransport(DefaultSettings());
+export const sheetTimeout = 10000;
 
 export const getAuthToken = async (cred: any): Promise<string> => {
   const client = new JWT({
     email: cred.client_email,
     key: cred.private_key,
     scopes: defaultScopes,
-  })
+  });
 
-  const result = await client.getAccessToken()
+  const result = await client.getAccessToken();
   // console.log({ result })
-  return result.token || ''
-}
+  return result.token || '';
+};
 
 class TestAuthSession extends AuthSession {
   constructor(
@@ -58,28 +58,28 @@ class TestAuthSession extends AuthSession {
     settings: IApiSettings,
     transport: ITransport
   ) {
-    super(settings, transport)
+    super(settings, transport);
   }
 
   async authenticate(props: IRequestProps) {
-    props.headers.Authorization = `Bearer ${this.activeToken}`
-    return props
+    props.headers.Authorization = `Bearer ${this.activeToken}`;
+    return props;
   }
 
   getToken() {
-    return Promise.resolve(this.activeToken)
+    return Promise.resolve(this.activeToken);
   }
 
   isAuthenticated(): boolean {
-    return !!this.activeToken
+    return !!this.activeToken;
   }
 }
 
 export const initSheetSDK = async (keys = cred): Promise<SheetSDK> => {
-  const token = await getAuthToken(keys)
-  const settings = DefaultSettings()
-  const transport = new NodeTransport(settings)
-  const session = new TestAuthSession(token, settings, transport)
-  const sheetSDK = new SheetSDK(session, cred.sheet_id)
-  return sheetSDK
-}
+  const token = await getAuthToken(keys);
+  const settings = DefaultSettings();
+  const transport = new NodeTransport(settings);
+  const session = new TestAuthSession(token, settings, transport);
+  const sheetSDK = new SheetSDK(session, cred.sheet_id);
+  return sheetSDK;
+};

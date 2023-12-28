@@ -23,24 +23,24 @@
  SOFTWARE.
 
  */
-import { useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom';
 
-const GLOBAL_PARAMS = ['s', 'sdk']
+const GLOBAL_PARAMS = ['s', 'sdk'];
 
 interface QueryParamProps {
   /** Search Query **/
-  s?: string | null
+  s?: string | null;
   /** Chosen SDK Language **/
-  sdk?: string | null
+  sdk?: string | null;
   /** Tag Scene Filter **/
-  t?: string | null
+  t?: string | null;
 }
 
 /**
  * Hook for navigating to given route with query params
  */
 export const useNavigation = () => {
-  const history = useHistory()
+  const history = useHistory();
 
   /**
    * Navigates to path including provided search parameters
@@ -49,26 +49,26 @@ export const useNavigation = () => {
    * @param queryParams Hash of query param name/value pairs to include in the destination url
    */
   const navigate = (path: string, queryParams?: QueryParamProps | null) => {
-    const urlParams = new URLSearchParams(history.location.search)
+    const urlParams = new URLSearchParams(history.location.search);
 
     if (queryParams === undefined) {
       // if params passed in is undefined, maintain existing parameters in the URL
-      history.push({ pathname: path, search: urlParams.toString() })
+      history.push({ pathname: path, search: urlParams.toString() });
     } else if (queryParams === null) {
       // if params passed in is null, remove all parameters from the URL
-      history.push({ pathname: path })
+      history.push({ pathname: path });
     } else {
       // push each key as new param to URL, excluding entries with value null
       Object.keys(queryParams).forEach((key) => {
         if (queryParams[key] === null || queryParams[key] === '') {
-          urlParams.delete(key)
+          urlParams.delete(key);
         } else {
-          urlParams.set(key, queryParams[key])
+          urlParams.set(key, queryParams[key]);
         }
-      })
-      history.push({ pathname: path, search: urlParams.toString() })
+      });
+      history.push({ pathname: path, search: urlParams.toString() });
     }
-  }
+  };
 
   /**
    * Builds path to a scene and removes any scene-specific URL parameters
@@ -78,31 +78,31 @@ export const useNavigation = () => {
    * @returns a path excluding scene-specific search parameters
    */
   const buildPathWithGlobalParams = (path: string, otherParams = {}) => {
-    const params = new URLSearchParams(history.location.search)
+    const params = new URLSearchParams(history.location.search);
 
     for (const key of params.keys()) {
       if (!GLOBAL_PARAMS.includes(key)) {
-        params.delete(key)
+        params.delete(key);
       }
     }
-    const globalParams = params.toString()
+    const globalParams = params.toString();
 
-    let additionalParams = ''
+    let additionalParams = '';
     Object.entries(otherParams).forEach(([key, value]) => {
-      additionalParams += `${key}=${value}`
-    })
+      additionalParams += `${key}=${value}`;
+    });
 
-    let queryString = ''
+    let queryString = '';
     if (globalParams) {
-      queryString = globalParams
+      queryString = globalParams;
     }
 
     if (additionalParams) {
-      queryString += globalParams ? `&${additionalParams}` : additionalParams
+      queryString += globalParams ? `&${additionalParams}` : additionalParams;
     }
 
-    return `${path}${queryString ? `?${queryString}` : ''}`
-  }
+    return `${path}${queryString ? `?${queryString}` : ''}`;
+  };
 
   /**
    * Navigates to a scene removing any scene-specific URL parameters
@@ -110,12 +110,12 @@ export const useNavigation = () => {
    * @param path Pathname to navigate to
    */
   const navigateWithGlobalParams = (path: string) => {
-    history.push(buildPathWithGlobalParams(path))
-  }
+    history.push(buildPathWithGlobalParams(path));
+  };
 
   return {
     navigate,
     navigateWithGlobalParams,
     buildPathWithGlobalParams,
-  }
-}
+  };
+};

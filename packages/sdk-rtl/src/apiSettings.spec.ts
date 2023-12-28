@@ -29,23 +29,23 @@ import {
   ApiSettings,
   strBadConfiguration,
   ValueSettings,
-} from './apiSettings'
-import { defaultTimeout } from './transport'
+} from './apiSettings';
+import { defaultTimeout } from './transport';
 
-const envPrefix = 'LOOKERSDK'
-const envKey = ApiConfigMap(envPrefix)
-const strLookerBaseUrl = envKey.base_url
-const strLookerTimeout = envKey.timeout
-const strLookerVerifySsl = envKey.verify_ssl
+const envPrefix = 'LOOKERSDK';
+const envKey = ApiConfigMap(envPrefix);
+const strLookerBaseUrl = envKey.base_url;
+const strLookerTimeout = envKey.timeout;
+const strLookerVerifySsl = envKey.verify_ssl;
 
 describe('SDK configuration', () => {
   describe('ValueSettings', () => {
     it('initializes to defaults', () => {
-      const settings = ValueSettings({}, envPrefix)
-      expect(settings.base_url).toEqual('')
-      expect(settings.verify_ssl).toEqual(true)
-      expect(settings.timeout).toEqual(defaultTimeout)
-    })
+      const settings = ValueSettings({}, envPrefix);
+      expect(settings.base_url).toEqual('');
+      expect(settings.verify_ssl).toEqual(true);
+      expect(settings.timeout).toEqual(defaultTimeout);
+    });
 
     it('retrieves the first section by name', () => {
       const settings = ValueSettings(
@@ -55,11 +55,11 @@ describe('SDK configuration', () => {
           [strLookerVerifySsl]: 'false',
         },
         envPrefix
-      )
-      expect(settings.base_url).toEqual('base')
-      expect(settings.verify_ssl).toEqual(false)
-      expect(settings.timeout).toEqual(30)
-    })
+      );
+      expect(settings.base_url).toEqual('base');
+      expect(settings.verify_ssl).toEqual(false);
+      expect(settings.timeout).toEqual(30);
+    });
 
     it('unquotes ValueSettings', () => {
       const settings = ValueSettings(
@@ -69,12 +69,12 @@ describe('SDK configuration', () => {
           [strLookerVerifySsl]: "'false'",
         },
         envPrefix
-      )
-      expect(settings.base_url).toEqual('base')
-      expect(settings.verify_ssl).toEqual(false)
-      expect(settings.timeout).toEqual(30)
-    })
-  })
+      );
+      expect(settings.base_url).toEqual('base');
+      expect(settings.verify_ssl).toEqual(false);
+      expect(settings.timeout).toEqual(30);
+    });
+  });
 
   describe('ApiSettings', () => {
     it('initialization', () => {
@@ -82,29 +82,29 @@ describe('SDK configuration', () => {
         base_url: 'base',
         timeout: 30,
         verify_ssl: false,
-      })
-      expect(settings.base_url).toEqual('base')
-      expect(settings.verify_ssl).toEqual(false)
-      expect(settings.timeout).toEqual(30)
-    })
+      });
+      expect(settings.base_url).toEqual('base');
+      expect(settings.verify_ssl).toEqual(false);
+      expect(settings.timeout).toEqual(30);
+    });
 
     it('unquotes initialization', () => {
       const settings = new ApiSettings({
         base_url: '"base"',
         timeout: 30,
         verify_ssl: false,
-      })
-      expect(settings.base_url).toEqual('base')
-      expect(settings.verify_ssl).toEqual(false)
-      expect(settings.timeout).toEqual(30)
-    })
+      });
+      expect(settings.base_url).toEqual('base');
+      expect(settings.verify_ssl).toEqual(false);
+      expect(settings.timeout).toEqual(30);
+    });
 
     it('fails with missing required values', () => {
       const values = {
         base_url: '',
-      }
+      };
 
-      expect(() => new ApiSettings(values)).toThrow(strBadConfiguration)
-    })
-  })
-})
+      expect(() => new ApiSettings(values)).toThrow(strBadConfiguration);
+    });
+  });
+});

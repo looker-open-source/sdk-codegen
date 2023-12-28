@@ -24,47 +24,47 @@
 
  */
 
-import { v4 as uuidv4 } from 'uuid'
-import { boolDefault, LookerSDKError } from '@looker/sdk-rtl'
-import omit from 'lodash/omit'
-import type { IArtifact, IUpdateArtifact } from '@looker/sdk'
-export type SheetValues = any[]
+import { v4 as uuidv4 } from 'uuid';
+import { boolDefault, LookerSDKError } from '@looker/sdk-rtl';
+import omit from 'lodash/omit';
+import type { IArtifact, IUpdateArtifact } from '@looker/sdk';
+export type SheetValues = any[];
 
-export const noDate = new Date(-8640000000000000)
-export const APP_JSON = 'application/json'
+export const noDate = new Date(-8640000000000000);
+export const APP_JSON = 'application/json';
 
 /** Signifies an empty cell */
-export const nilCell = '\0'
+export const nilCell = '\0';
 
 export const addMinutes = (date: Date, minutes: number) => {
-  return new Date(date.getTime() + minutes * 60000)
-}
+  return new Date(date.getTime() + minutes * 60000);
+};
 
 /** Convert a value to the string representation for a cell value */
 export const stringer = (value: any) => {
-  if (value === undefined || value === null) return nilCell
+  if (value === undefined || value === null) return nilCell;
   if (value instanceof Date) {
-    if (value === noDate) return nilCell
-    return value.toISOString()
+    if (value === noDate) return nilCell;
+    return value.toISOString();
   }
-  return value.toString()
-}
+  return value.toString();
+};
 
 /** Key/value pairs for tab data */
-export type RowValues = Record<string, any>
+export type RowValues = Record<string, any>;
 
 /** Sheet (tab) column header definition */
-export type ColumnHeaders = string[]
+export type ColumnHeaders = string[];
 
 /** name of the property that tracks the row's position in the tab sheet */
-export const rowPosition = '_row'
+export const rowPosition = '_row';
 
 export interface IRowValidationError {
-  message: string
-  type: 'error'
+  message: string;
+  type: 'error';
 }
 
-export type RowValidationErrors = Record<string, IRowValidationError>
+export type RowValidationErrors = Record<string, IRowValidationError>;
 
 export enum RowAction {
   None,
@@ -80,24 +80,24 @@ export enum RowAction {
  */
 export interface IRowModelProps extends RowValues {
   /** Row position in sheet for this item. Usually assigned in WhollySheet processing */
-  _row: number
+  _row: number;
   /**
    * Unique ID for this row. This is an alias for the artifact's key.
    * It's assigned to a combination type name:UUID in prepare()
    *
    * TODO remove this property entirely after changing the `_id` refs in the Hackathon app to use `key`
    */
-  _id: string
+  _id: string;
   /**
    * Updated date/time stamp for this row. Always set in prepare().
    * TODO remove this property entirely because the artifact `version` property performs the version locking
    */
-  _updated: Date
+  _updated: Date;
 
   /** Batch update action. Defaults to RowAction.None, so the row is not part of the delta */
-  $action: RowAction
+  $action: RowAction;
   /** Looker API key/value store artifact object for managing this row */
-  $artifact: Partial<IArtifact>
+  $artifact: Partial<IArtifact>;
 }
 
 /** Keyed data for a sheet row */
@@ -107,45 +107,45 @@ export interface IRowModel extends IRowModelProps {
    *
    * @param values an array of values, or an object with matching keys
    */
-  assign(values: any): IRowModel
+  assign(values: any): IRowModel;
 
   /** All keys for this object, but overrideable */
-  keys(): ColumnHeaders
+  keys(): ColumnHeaders;
 
   /** The sheet Column Headers keys for this model */
-  header(): ColumnHeaders
+  header(): ColumnHeaders;
 
   /** The display column headers for this model */
-  displayHeader(): ColumnHeaders
+  displayHeader(): ColumnHeaders;
 
   /** Column values in the correct order to write the entire row to the GSheet */
-  values(): SheetValues
+  values(): SheetValues;
 
   /**
    * Prepare the row for saving. This includes auto-generation of _id and updating _update
    * Override this for error handling, calculations, and other default initializations
    * to avoid persisting bad data values to the sheet
    */
-  prepare(): IRowModel
+  prepare(): IRowModel;
 
   /** Returns undefined if no errors, or the error messages with keys corresponding to property names */
-  validate(): RowValidationErrors | undefined
+  validate(): RowValidationErrors | undefined;
 
   /**
    * Convert a cell to the declared type of the keyed property
    * @param key name of property to receive the value
    * @param value any value representation
    */
-  typeCast(key: string, value: any): any
+  typeCast(key: string, value: any): any;
 
   /** Converts instance to plain javascript object */
-  toObject(): Record<string, unknown>
+  toObject(): Record<string, unknown>;
 
   /**
    * Converts from plain javascript object to class instance
    * @param obj to assign to row. Uses properties of the same name
    */
-  fromObject(obj: Record<string, unknown>): IRowModel
+  fromObject(obj: Record<string, unknown>): IRowModel;
 
   /** Converts instance to IArtifact javascript object for storing in a Looker instance
    * the required columns are:
@@ -154,31 +154,31 @@ export interface IRowModel extends IRowModelProps {
    * - version: version number of the artifact
    * - content_type: for WhollyArtifacts, always "application/json"
    */
-  toArtifact(): Partial<IUpdateArtifact>
+  toArtifact(): Partial<IUpdateArtifact>;
 
   /** Converts from IArtifact interface to class instance
    *
    * @param obj to assign to row
    */
-  fromArtifact(obj: Partial<IArtifact>): IRowModel
+  fromArtifact(obj: Partial<IArtifact>): IRowModel;
 
   /** Mark a row for update. Sets the $action and returns true if the row can be marked for updating. Throws error otherwise */
-  setUpdate(): boolean
+  setUpdate(): boolean;
 
   /** Mark a row for deletion. Sets the $action and returns true if the row can be marked for deleting. Throws error otherwise */
-  setDelete(): boolean
+  setDelete(): boolean;
 
   /** Mark a row for creation. Sets the $action and returns true if the row can be marked for creating. Throws error otherwise */
-  setCreate(): boolean
+  setCreate(): boolean;
 
   /** True if this item has NOT been saved to the artifact store. False otherwise */
-  isNew(): boolean
+  isNew(): boolean;
 
   /** True if this item HAS been saved to the artifact store. False otherwise */
-  isStored(): boolean
+  isStored(): boolean;
 
   /** Namespace of artifact storage bucket to use for this collection  */
-  namespace(): string
+  namespace(): string;
 
   /**
    * RowModel prefix to use for generating new key values. For example, a prefix() that returns `Hackathon` would
@@ -188,44 +188,44 @@ export interface IRowModel extends IRowModelProps {
    * This prefix is purely used for making it feasible to query an artifact collection by its prefix key value
    * Must be implemented.
    */
-  tableName(): string
+  tableName(): string;
 
   /**
    * Combines prefix() with a UUID to create a filterable key pattern
    * makey makey!
    */
-  makey(): string
+  makey(): string;
 }
 
 export abstract class RowModel<T extends IRowModel> implements IRowModel {
-  _row = 0
-  _id = ''
-  _updated: Date = noDate
+  _row = 0;
+  _id = '';
+  _updated: Date = noDate;
 
   $artifact: Partial<IArtifact> = {
     version: 0,
-  }
+  };
 
   constructor(values?: any) {
-    this.initValues(values)
+    this.initValues(values);
     if (!this.key) {
-      this.key = this.makey()
-      this.$_action = RowAction.Create
+      this.key = this.makey();
+      this.$_action = RowAction.Create;
     }
   }
 
   isNew() {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    return this.$artifact.version! < 1
+    return this.$artifact.version! < 1;
   }
 
   isStored() {
-    return !this.isNew()
+    return !this.isNew();
   }
 
-  private $_action: RowAction = RowAction.None
+  private $_action: RowAction = RowAction.None;
 
-  private static hide = new Set(['_row'])
+  private static hide = new Set(['_row']);
 
   /**
    * initializes values by position, iterating the header keys
@@ -234,19 +234,19 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
    */
   private initFromArray(values?: any) {
     if (Array.isArray(values)) {
-      const keys = this.header()
+      const keys = this.header();
       if (Array.isArray(values)) {
         // Assign by position
         values.forEach((val, index) => {
           if (val !== undefined && val !== null && index < keys.length) {
-            const key = keys[index]
-            this[key] = this.typeCast(key, val)
+            const key = keys[index];
+            this[key] = this.typeCast(key, val);
           }
-        })
+        });
       }
-      return true
+      return true;
     }
-    return false
+    return false;
   }
 
   /**
@@ -258,38 +258,38 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
    * @private
    */
   private initValues(values?: any) {
-    if (this.initFromArray(values)) return
+    if (this.initFromArray(values)) return;
     if (typeof values === 'object' && values !== null && values !== undefined) {
-      const nested = 'value' in values
-      let value = nested ? values.value : values
+      const nested = 'value' in values;
+      let value = nested ? values.value : values;
       if (nested) {
-        this.$artifact = values
+        this.$artifact = values;
       }
       if (typeof value === 'string') {
         try {
-          value = JSON.parse(value)
+          value = JSON.parse(value);
         } catch (e: any) {
           if (
             values.$artifact?.content_type?.localeCompare(APP_JSON, 'en', {
               sensitivity: 'base',
             }) === 0
           ) {
-            throw new LookerSDKError(`Expected ${APP_JSON} but got ${e}`)
+            throw new LookerSDKError(`Expected ${APP_JSON} but got ${e}`);
           } else {
-            throw new LookerSDKError(e)
+            throw new LookerSDKError(e);
           }
         }
       }
       Object.keys(value).forEach((k) => {
-        this[k] = this.typeCast(k, value[k])
+        this[k] = this.typeCast(k, value[k]);
         if (typeof this[k] === 'string') {
-          this[k] = decodeURI(this[k])
+          this[k] = decodeURI(this[k]);
         }
-      })
-      if (values.key) this.key = values.key
-      return true
+      });
+      if (values.key) this.key = values.key;
+      return true;
     }
-    return false
+    return false;
   }
 
   /**
@@ -300,168 +300,168 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
    * This prefix is purely used for making it feasible to query an artifact collection by its prefix key value
    */
   tableName() {
-    return this.constructor.name
+    return this.constructor.name;
   }
 
   makey() {
-    return `${this.tableName()}:${uuidv4()}`
+    return `${this.tableName()}:${uuidv4()}`;
   }
 
   get key() {
-    return this._id
+    return this._id;
   }
 
   set key(value) {
-    this._id = value
-    this.$artifact.key = value
+    this._id = value;
+    this.$artifact.key = value;
   }
 
   private oops(message: string) {
-    throw new LookerSDKError(`${this.key}: ${message}`)
+    throw new LookerSDKError(`${this.key}: ${message}`);
   }
 
   get $action(): RowAction {
     if (this.$_action === RowAction.None && this.isNew())
-      return RowAction.Create
-    return this.$_action
+      return RowAction.Create;
+    return this.$_action;
   }
 
   set $action(value: RowAction) {
     switch (value) {
       case RowAction.Create: {
-        if (this.isStored()) this.oops(`can't create an existing item`)
-        break
+        if (this.isStored()) this.oops(`can't create an existing item`);
+        break;
       }
       case RowAction.Delete: {
         if (this.isNew()) {
-          this.oops(`can't delete a new item`)
+          this.oops(`can't delete a new item`);
         }
-        break
+        break;
       }
       case RowAction.Update: {
         if (this.isNew()) {
-          this.oops(`can't update a new item`)
+          this.oops(`can't update a new item`);
         }
-        break
+        break;
       }
       case RowAction.None: {
         if (this.isNew()) {
-          this.oops(`Action must be assigned for a new item`)
+          this.oops(`Action must be assigned for a new item`);
         }
-        break
+        break;
       }
     }
-    this.$_action = value
+    this.$_action = value;
   }
 
   setCreate(): boolean {
-    this.$action = RowAction.Create
-    return true
+    this.$action = RowAction.Create;
+    return true;
   }
 
   setUpdate(): boolean {
-    this.$action = RowAction.Update
-    return true
+    this.$action = RowAction.Update;
+    return true;
   }
 
   setDelete(): boolean {
-    this.$action = RowAction.Delete
-    return true
+    this.$action = RowAction.Delete;
+    return true;
   }
 
   keys(): ColumnHeaders {
-    return Object.keys(this)
+    return Object.keys(this);
   }
 
   header(): ColumnHeaders {
-    const keys = this.keys()
+    const keys = this.keys();
     const result = keys.filter(
       (v) => !(v.startsWith('$') || RowModel.hide.has(v))
-    )
-    return result
+    );
+    return result;
   }
 
   displayHeader(): ColumnHeaders {
     return this.header().filter(
       (v) => !(v.startsWith('_') || RowModel.hide.has(v))
-    )
+    );
   }
 
   prepare(): T {
     if (!this.key) {
       // Generate id if not assigned
-      this.key = this.makey()
-      this.$action = RowAction.Create
+      this.key = this.makey();
+      this.$action = RowAction.Create;
     }
     /** Always update the "updated" value before saving */
-    this._updated = new Date()
-    return this as unknown as T
+    this._updated = new Date();
+    return this as unknown as T;
   }
 
   values() {
-    const result: SheetValues = []
-    const keys = this.header()
+    const result: SheetValues = [];
+    const keys = this.header();
     keys.forEach((key) => {
-      result.push(stringer(this[key]))
-    })
-    return result
+      result.push(stringer(this[key]));
+    });
+    return result;
   }
 
   typeCast(key: string, value: any) {
-    if (value === undefined || value === null) value = ''
-    const type = typeof this[key]
-    const fromType = typeof value
+    if (value === undefined || value === null) value = '';
+    const type = typeof this[key];
+    const fromType = typeof value;
     if (type === fromType) {
       // No conversion required
-      return value
+      return value;
     }
     if (type === 'string') {
-      return value.toString()
+      return value.toString();
     }
     if (type === 'number') {
-      if (value === '') return 0
-      const isInt = /^([+-]?[1-9]\d*|0)$/
+      if (value === '') return 0;
+      const isInt = /^([+-]?[1-9]\d*|0)$/;
       if (value.toString().match(isInt)) {
-        return parseInt(value, 10)
+        return parseInt(value, 10);
       }
-      return parseFloat(value)
+      return parseFloat(value);
     }
     if (type === 'boolean') {
-      return boolDefault(value, false)
+      return boolDefault(value, false);
     }
     if (this[key] instanceof Date) {
-      if (value) return new Date(value)
-      return noDate
+      if (value) return new Date(value);
+      return noDate;
     }
     if (Array.isArray(this[key])) {
-      if (!value) return []
-      return value.toString().split(',')
+      if (!value) return [];
+      return value.toString().split(',');
     }
-    return value
+    return value;
   }
 
   assign(values: any): T {
     if (values) {
-      this.initValues(values)
+      this.initValues(values);
     }
-    return this as unknown as T
+    return this as unknown as T;
   }
 
   /** default to no errors */
   validate(): RowValidationErrors | undefined {
-    return undefined
+    return undefined;
   }
 
   toObject(): Record<string, unknown> {
-    return omit({ ...this }, ['$_action'])
+    return omit({ ...this }, ['$_action']);
   }
 
   fromObject(obj: Record<string, unknown>): IRowModel {
-    return this.assign(obj)
+    return this.assign(obj);
   }
 
   fromArtifact(obj: Partial<IArtifact>): IRowModel {
-    return this.assign(obj)
+    return this.assign(obj);
   }
 
   /**
@@ -471,16 +471,16 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
    * @private
    */
   private storageValues() {
-    const result = {}
+    const result = {};
     // TODO after migrating from sheets, use `key` as this.keyColumn rather than `_id` and use displayHeader()
     // const keys = this.displayHeader()
-    const keys = this.header()
+    const keys = this.header();
     for (const key of keys) {
       const val =
-        typeof this[key] === 'string' ? encodeURI(this[key]) : this[key]
-      result[key] = val
+        typeof this[key] === 'string' ? encodeURI(this[key]) : this[key];
+      result[key] = val;
     }
-    return result
+    return result;
   }
 
   toArtifact(): Partial<IUpdateArtifact> {
@@ -489,14 +489,14 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
       value: JSON.stringify(this.storageValues()),
       version: this.$artifact.version ?? 0,
       content_type: APP_JSON,
-    } as Partial<IArtifact>
+    } as Partial<IArtifact>;
   }
 
-  abstract namespace(): string
+  abstract namespace(): string;
 }
 
 // TODO figure out the TypeScript magic for this to work
-export type RowModelFactory<T extends IRowModel> = { new (values?: any): T }
+export type RowModelFactory<T extends IRowModel> = { new (values?: any): T };
 
 // export const RowModelCreator: RowModelFactory<IRowModel> = (values?: any) =>
 //   new RowModel(values)

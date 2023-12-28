@@ -24,9 +24,9 @@
 
  */
 
-import type { FC } from 'react'
-import React from 'react'
-import type { IconType } from '@looker/components'
+import type { FC } from 'react';
+import React from 'react';
+import type { IconType } from '@looker/components';
 import {
   Box,
   Icon,
@@ -35,25 +35,25 @@ import {
   Tooltip,
   Space,
   Paragraph,
-} from '@looker/components'
-import { Done } from '@styled-icons/material/Done'
-import { Lock } from '@styled-icons/material/Lock'
-import { Remove } from '@styled-icons/material/Remove'
-import type { IProperty, ApiModel } from '@looker/sdk-codegen'
-import { Markdown } from '@looker/code-editor'
+} from '@looker/components';
+import { Done } from '@styled-icons/material/Done';
+import { Lock } from '@styled-icons/material/Lock';
+import { Remove } from '@styled-icons/material/Remove';
+import type { IProperty, ApiModel } from '@looker/sdk-codegen';
+import { Markdown } from '@looker/code-editor';
 import {
   expandable,
   ExploreTypeLink,
   pickType,
   pickTypeProps,
   typeIcon,
-} from '.'
+} from '.';
 
 interface TipIconProps {
-  show: boolean
-  tip: string
-  icon: IconType
-  title: string
+  show: boolean;
+  tip: string;
+  icon: IconType;
+  title: string;
 }
 
 /**
@@ -65,26 +65,26 @@ interface TipIconProps {
  * @constructor
  */
 export const TipIcon: FC<TipIconProps> = ({ show, tip, icon, title }) => {
-  if (!show) return <></>
+  if (!show) return <></>;
   return (
     <Tooltip content={tip}>
       <Icon icon={icon} size="xsmall" content={tip} title={title} />
     </Tooltip>
-  )
-}
+  );
+};
 
 /**
  * Interface shared by several ExploreProperty components
  */
 interface ExplorePropertyProps {
   /** property to explore */
-  property: IProperty
+  property: IProperty;
   /** the current level of the hierarchy */
-  level?: number
+  level?: number;
   /** the maximum depth to expanded nested types. -1 = all (default), 0 = no expansion */
-  maxDepth?: number
+  maxDepth?: number;
   /** open all nodes immediately? */
-  openAll?: boolean
+  openAll?: boolean;
 }
 
 /**
@@ -95,7 +95,7 @@ interface ExplorePropertyProps {
 export const ExplorePropertyRequired: FC<ExplorePropertyProps> = ({
   property,
 }) => {
-  const tip = `${property.fullName} is required`
+  const tip = `${property.fullName} is required`;
   return (
     <TipIcon
       show={property.required}
@@ -103,8 +103,8 @@ export const ExplorePropertyRequired: FC<ExplorePropertyProps> = ({
       tip={tip}
       title="required property"
     />
-  )
-}
+  );
+};
 
 /**
  * Show deprecated status if a property is deprecated
@@ -114,7 +114,7 @@ export const ExplorePropertyRequired: FC<ExplorePropertyProps> = ({
 export const ExplorePropertyDeprecated: FC<ExplorePropertyProps> = ({
   property,
 }) => {
-  const tip = `${property.fullName} is deprecated`
+  const tip = `${property.fullName} is deprecated`;
   return (
     <TipIcon
       show={property.deprecated}
@@ -122,8 +122,8 @@ export const ExplorePropertyDeprecated: FC<ExplorePropertyProps> = ({
       tip={tip}
       title="deprecated property"
     />
-  )
-}
+  );
+};
 
 /**
  * Show read-only status if a property is read-only
@@ -133,7 +133,7 @@ export const ExplorePropertyDeprecated: FC<ExplorePropertyProps> = ({
 export const ExplorePropertyReadOnly: FC<ExplorePropertyProps> = ({
   property,
 }) => {
-  const tip = `${property.fullName} is read-only`
+  const tip = `${property.fullName} is read-only`;
   return (
     <TipIcon
       show={property.readOnly}
@@ -141,8 +141,8 @@ export const ExplorePropertyReadOnly: FC<ExplorePropertyProps> = ({
       tip={tip}
       title="read-only property"
     />
-  )
-}
+  );
+};
 
 /**
  * Display the property description if it's assigned
@@ -151,7 +151,7 @@ export const ExplorePropertyReadOnly: FC<ExplorePropertyProps> = ({
  */
 const DescriptionParagraph: FC = (props) => (
   <Paragraph fontSize="small" m="none" {...props} />
-)
+);
 
 const ExplorePropertyDescription: FC<ExplorePropertyProps> = ({ property }) =>
   property.description ? (
@@ -159,11 +159,11 @@ const ExplorePropertyDescription: FC<ExplorePropertyProps> = ({ property }) =>
       source={property.description}
       paragraphOverride={DescriptionParagraph}
     />
-  ) : null
+  ) : null;
 
 interface ExploreApiPropertyProps extends ExplorePropertyProps {
   /** parsed api */
-  api: ApiModel
+  api: ApiModel;
 }
 
 /**
@@ -188,7 +188,7 @@ export const ExplorePropertyDetail: FC<ExploreApiPropertyProps> = ({
       <ExplorePropertyDescription property={property} />
     </Box>
   </Space>
-)
+);
 
 /**
  * Render a potentially complex property as a non-expanding node
@@ -199,7 +199,7 @@ export const ExplorePropertyNode: FC<ExploreApiPropertyProps> = ({
   property,
   api,
 }) => {
-  const legend = typeIcon(property.type)
+  const legend = typeIcon(property.type);
   return (
     <TreeItem
       {...legend}
@@ -207,8 +207,8 @@ export const ExplorePropertyNode: FC<ExploreApiPropertyProps> = ({
     >
       {property.jsonName}
     </TreeItem>
-  )
-}
+  );
+};
 
 /**
  * Render the Tree or TreeItem for this property
@@ -225,7 +225,7 @@ export const ExploreProperty: FC<ExploreApiPropertyProps> = ({
   maxDepth = -1,
   openAll = false,
 }) => {
-  const picked = pickType(property.type)
+  const picked = pickType(property.type);
   if (!picked.intrinsic) {
     return (
       <ExplorePropertyType
@@ -236,14 +236,14 @@ export const ExploreProperty: FC<ExploreApiPropertyProps> = ({
         maxDepth={maxDepth}
         openAll={openAll}
       />
-    )
+    );
   }
-  return <ExplorePropertyNode api={api} property={property} />
-}
+  return <ExplorePropertyNode api={api} property={property} />;
+};
 
 interface ExplorePropertyTypeProps extends ExploreApiPropertyProps {
   /** Open the node display immediately? */
-  open?: boolean
+  open?: boolean;
 }
 
 export const ExplorePropertyType: FC<ExplorePropertyTypeProps> = ({
@@ -254,12 +254,12 @@ export const ExplorePropertyType: FC<ExplorePropertyTypeProps> = ({
   maxDepth = -1,
   openAll = false,
 }) => {
-  const type = property.type
-  const props = pickTypeProps(type)
-  const nest = expandable(level, maxDepth)
-  const legend = typeIcon(type)
+  const type = property.type;
+  const props = pickTypeProps(type);
+  const nest = expandable(level, maxDepth);
+  const legend = typeIcon(type);
   if (!nest) {
-    return <ExplorePropertyNode api={api} property={property} />
+    return <ExplorePropertyNode api={api} property={property} />;
   }
   return (
     <Tree
@@ -281,5 +281,5 @@ export const ExplorePropertyType: FC<ExplorePropertyTypeProps> = ({
         />
       ))}
     </Tree>
-  )
-}
+  );
+};

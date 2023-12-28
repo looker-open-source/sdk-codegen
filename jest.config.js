@@ -24,9 +24,9 @@
 
  */
 
-const { excludeNodeModulesExcept } = require('./babel.common')
+const { excludeNodeModulesExcept } = require('./babel.common');
 
-process.env.TZ = 'UTC'
+process.env.TZ = 'UTC';
 
 module.exports = {
   automock: false,
@@ -66,4 +66,4 @@ module.exports = {
       diagnostics: false,
     },
   },
-}
+};

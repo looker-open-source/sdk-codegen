@@ -23,16 +23,16 @@
  SOFTWARE.
 
  */
-import type { FC } from 'react'
-import React from 'react'
-import { Card, CardContent, Flex, Space, Text } from '@looker/components'
-import type { IMethod } from '@looker/sdk-codegen'
-import { MethodBadge, RunItHeading } from '@looker/run-it'
-import { DocActivityType, DocRateLimited } from '../../components'
-import { DocSummaryStatus } from './DocSummaryStatus'
+import type { FC } from 'react';
+import React from 'react';
+import { Card, CardContent, Flex, Space, Text } from '@looker/components';
+import type { IMethod } from '@looker/sdk-codegen';
+import { MethodBadge, RunItHeading } from '@looker/run-it';
+import { DocActivityType, DocRateLimited } from '../../components';
+import { DocSummaryStatus } from './DocSummaryStatus';
 
 interface DocMethodSummaryProps {
-  method: IMethod
+  method: IMethod;
 }
 
 export const DocMethodSummary: FC<DocMethodSummaryProps> = ({ method }) => (
@@ -60,4 +60,4 @@ export const DocMethodSummary: FC<DocMethodSummaryProps> = ({ method }) => (
       </Space>
     </CardContent>
   </Card>
-)
+);

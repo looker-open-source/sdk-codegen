@@ -23,22 +23,22 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { renderWithTheme } from '@looker/components-test-utils'
-import { screen, fireEvent, waitFor } from '@testing-library/react'
+import React from 'react';
+import { renderWithTheme } from '@looker/components-test-utils';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
 
-import { api40 } from '../../test-data'
-import { DocStatus } from './DocStatus'
+import { api40 } from '../../test-data';
+import { DocStatus } from './DocStatus';
 
 describe('DocStatus', () => {
   test('it renders a badge with the status and a tooltip on hover', async () => {
-    renderWithTheme(<DocStatus method={api40.methods.invalidate_tokens} />)
-    const badge = screen.getByText('BETA')
-    fireEvent.mouseOver(badge)
+    renderWithTheme(<DocStatus method={api40.methods.invalidate_tokens} />);
+    const badge = screen.getByText('BETA');
+    fireEvent.mouseOver(badge);
     await waitFor(() => {
       expect(screen.getByRole('tooltip')).toHaveTextContent(
         'This beta item is under development and subject to change.'
-      )
-    })
-  })
-})
+      );
+    });
+  });
+});

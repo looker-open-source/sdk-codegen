@@ -29,23 +29,23 @@ import type {
   IApiSettings,
   ITransport,
   IPlatformServices,
-} from '@looker/sdk-rtl'
-import { sdkError } from '@looker/sdk-rtl'
-import { NodeCryptoHash, NodeTransport } from './nodeTransport'
+} from '@looker/sdk-rtl';
+import { sdkError } from '@looker/sdk-rtl';
+import { NodeCryptoHash, NodeTransport } from './nodeTransport';
 
 export class NodeServices implements IPlatformServices {
   /** Cryptography service interface */
-  crypto: ICryptoHash
+  crypto: ICryptoHash;
   /** SDK configuration interface */
-  settings: IApiSettings
-  transport: ITransport
+  settings: IApiSettings;
+  transport: ITransport;
 
   constructor(services: Partial<IPlatformServices>) {
     if (!services.settings) {
-      throw sdkError({ message: 'Missing required IApiSettings' })
+      throw sdkError({ message: 'Missing required IApiSettings' });
     }
-    this.settings = services.settings
-    this.transport = services.transport || new NodeTransport(this.settings)
-    this.crypto = services.crypto || new NodeCryptoHash()
+    this.settings = services.settings;
+    this.transport = services.transport || new NodeTransport(this.settings);
+    this.crypto = services.crypto || new NodeCryptoHash();
   }
 }

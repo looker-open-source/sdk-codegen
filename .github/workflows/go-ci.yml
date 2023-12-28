@@ -70,7 +70,7 @@ jobs:
     uses: looker-open-source/reusable-actions/.github/workflows/supported-versions.yml@main
 
   integration:
-    needs: [setup,unit]
+    needs: [setup, unit]
     name: Integration - ${{ matrix.os }} / Looker.${{ matrix.looker }}
     env:
       LOOKERSDK_CLIENT_ID: ${{ secrets.LOOKERSDK_CLIENT_ID }}
@@ -85,7 +85,8 @@ jobs:
       matrix:
         os:
           - ubuntu
-        looker: ${{ fromJson(needs.setup.outputs.matrix_json) }}
+        looker:
+          ${{ fromJson(needs.setup.outputs.matrix_json) }}
 
           # TODO uncomment `include:` when either macos or windows works to satisfaction.
           #include:

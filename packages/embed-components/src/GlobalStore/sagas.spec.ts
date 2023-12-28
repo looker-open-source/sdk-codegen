@@ -23,27 +23,27 @@
  SOFTWARE.
 
  */
-import ReduxSagaTester from 'redux-saga-tester'
-import { getFactory, createFactory } from '@looker/embed-services'
-import type { IAPIMethods } from '@looker/sdk-rtl'
+import ReduxSagaTester from 'redux-saga-tester';
+import { getFactory, createFactory } from '@looker/embed-services';
+import type { IAPIMethods } from '@looker/sdk-rtl';
 import {
   factoryActions,
   FACTORY_SLICE_NAME,
   factorySlice,
   defaultFactoryState,
-} from './slice'
-import * as sagas from './sagas'
+} from './slice';
+import * as sagas from './sagas';
 
 jest.mock('@looker/embed-services', () => ({
   ...jest.requireActual('@looker/embed-services'),
   createFactory: jest.fn(),
-}))
+}));
 
 describe('Factory sagas', () => {
-  let sagaTester: ReduxSagaTester<any>
-  const mockSdk = {} as IAPIMethods
+  let sagaTester: ReduxSagaTester<any>;
+  const mockSdk = {} as IAPIMethods;
   const { initFactoryAction, initFactorySuccessAction, setFailureAction } =
-    factoryActions
+    factoryActions;
 
   beforeEach(() => {
     sagaTester = new ReduxSagaTester({
@@ -51,42 +51,42 @@ describe('Factory sagas', () => {
       reducers: {
         [FACTORY_SLICE_NAME]: factorySlice.reducer,
       },
-    })
-    sagaTester.start(sagas.saga)
-  })
+    });
+    sagaTester.start(sagas.saga);
+  });
 
   afterEach(() => {
-    jest.clearAllMocks()
-  })
+    jest.clearAllMocks();
+  });
 
   describe('initSaga', () => {
     it('sends initFactorySuccessAction on success', async () => {
-      expect(getFactory).toThrow('Factory must be created with an SDK.')
+      expect(getFactory).toThrow('Factory must be created with an SDK.');
 
-      sagaTester.dispatch(initFactoryAction({ sdk: mockSdk }))
+      sagaTester.dispatch(initFactoryAction({ sdk: mockSdk }));
 
-      await sagaTester.waitFor('factory/initFactorySuccessAction')
+      await sagaTester.waitFor('factory/initFactorySuccessAction');
 
-      const calledActions = sagaTester.getCalledActions()
-      expect(calledActions).toHaveLength(2)
-      expect(calledActions[0]).toEqual(initFactoryAction({ sdk: mockSdk }))
-      expect(calledActions[1]).toEqual(initFactorySuccessAction())
-    })
+      const calledActions = sagaTester.getCalledActions();
+      expect(calledActions).toHaveLength(2);
+      expect(calledActions[0]).toEqual(initFactoryAction({ sdk: mockSdk }));
+      expect(calledActions[1]).toEqual(initFactorySuccessAction());
+    });
 
     it('sends setFailureAction on error', async () => {
-      const expectedError = 'Failed to create factory'
-      ;(createFactory as jest.Mock).mockImplementationOnce(() => {
-        throw new Error(expectedError)
-      })
-      sagaTester.dispatch(initFactoryAction({ sdk: mockSdk }))
+      const expectedError = 'Failed to create factory';
+      (createFactory as jest.Mock).mockImplementationOnce(() => {
+        throw new Error(expectedError);
+      });
+      sagaTester.dispatch(initFactoryAction({ sdk: mockSdk }));
 
-      await sagaTester.waitFor('factory/setFailureAction')
-      const calledActions = sagaTester.getCalledActions()
-      expect(calledActions).toHaveLength(2)
-      expect(calledActions[0]).toEqual(initFactoryAction({ sdk: mockSdk }))
+      await sagaTester.waitFor('factory/setFailureAction');
+      const calledActions = sagaTester.getCalledActions();
+      expect(calledActions).toHaveLength(2);
+      expect(calledActions[0]).toEqual(initFactoryAction({ sdk: mockSdk }));
       expect(calledActions[1]).toEqual(
         setFailureAction({ error: expectedError })
-      )
-    })
-  })
-})
+      );
+    });
+  });
+});

@@ -23,21 +23,21 @@
  SOFTWARE.
 
  */
-import type { RootState } from '../store'
+import type { RootState } from '../store';
 
-const selectSettingsState = (state: RootState) => state.settings
+const selectSettingsState = (state: RootState) => state.settings;
 
 export const selectSdkLanguage = (state: RootState) =>
-  selectSettingsState(state).sdkLanguage
+  selectSettingsState(state).sdkLanguage;
 
 export const selectSearchPattern = (state: RootState) =>
-  selectSettingsState(state).searchPattern
+  selectSettingsState(state).searchPattern;
 
 export const selectSearchCriteria = (state: RootState) =>
-  selectSettingsState(state).searchCriteria
+  selectSettingsState(state).searchCriteria;
 
 export const selectTagFilter = (state: RootState) =>
-  selectSettingsState(state).tagFilter
+  selectSettingsState(state).tagFilter;
 
 export const isInitialized = (state: RootState) =>
-  selectSettingsState(state).initialized
+  selectSettingsState(state).initialized;

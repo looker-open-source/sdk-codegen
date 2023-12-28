@@ -23,16 +23,16 @@
  SOFTWARE.
 
  */
-import type { FC } from 'react'
-import React from 'react'
-import { Tooltip } from '@looker/components'
-import { MethodBadge } from '@looker/run-it'
-import type { IMethod } from '@looker/sdk-codegen'
+import type { FC } from 'react';
+import React from 'react';
+import { Tooltip } from '@looker/components';
+import { MethodBadge } from '@looker/run-it';
+import type { IMethod } from '@looker/sdk-codegen';
 
-import { pickTooltipContent } from '../DocMethodSummary'
+import { pickTooltipContent } from '../DocMethodSummary';
 
 interface DocStatusProps {
-  method: IMethod
+  method: IMethod;
 }
 
 /**
@@ -44,4 +44,4 @@ export const DocStatus: FC<DocStatusProps> = ({ method }) => (
       {method.status.toLocaleUpperCase()}
     </MethodBadge>
   </Tooltip>
-)
+);

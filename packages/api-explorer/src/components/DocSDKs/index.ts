@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { DocSDKs } from './DocSDKs'
+export { DocSDKs } from './DocSDKs';

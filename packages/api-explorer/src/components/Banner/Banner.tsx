@@ -23,23 +23,23 @@
  SOFTWARE.
 
  */
-import { ButtonOutline, Link, MessageBar } from '@looker/components'
-import type { IEnvironmentAdaptor } from '@looker/extension-utils'
-import type { SpecList } from '@looker/sdk-codegen'
-import type { FC } from 'react'
-import React, { useState, useEffect } from 'react'
+import { ButtonOutline, Link, MessageBar } from '@looker/components';
+import type { IEnvironmentAdaptor } from '@looker/extension-utils';
+import type { SpecList } from '@looker/sdk-codegen';
+import type { FC } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const LOCAL_STORAGE_KEY = 'api-40-ga-apix-banner'
-const LOCAL_STORAGE_VALUE = 'dismissed'
+const LOCAL_STORAGE_KEY = 'api-40-ga-apix-banner';
+const LOCAL_STORAGE_VALUE = 'dismissed';
 
 export interface BannerProps {
-  adaptor: IEnvironmentAdaptor
-  specs: SpecList
+  adaptor: IEnvironmentAdaptor;
+  specs: SpecList;
 }
 
 export const Banner: FC<BannerProps> = ({ adaptor, specs }) => {
-  const [isOpen, setOpen] = useState(false)
-  useEffect(onLoad, [])
+  const [isOpen, setOpen] = useState(false);
+  useEffect(onLoad, []);
 
   if (isOpen) {
     return (
@@ -59,9 +59,9 @@ export const Banner: FC<BannerProps> = ({ adaptor, specs }) => {
         additions and possible breaking changes. Read the announcement to see
         how this affects you.
       </MessageBar>
-    )
+    );
   } else {
-    return null
+    return null;
   }
 
   function onLoad() {
@@ -71,17 +71,17 @@ export const Banner: FC<BannerProps> = ({ adaptor, specs }) => {
       // 4.0 is stable in Looker 22.4+. 4.0 is default or `current` in 22.4+.
       // Still check for `stable` just in case new version comes along.
       const is40Stable =
-        specs['4.0'].status === 'stable' || specs['4.0'].status === 'current'
+        specs['4.0'].status === 'stable' || specs['4.0'].status === 'current';
       const wasDismissed =
         (await adaptor.localStorageGetItem(LOCAL_STORAGE_KEY)) ===
-        LOCAL_STORAGE_VALUE
-      setOpen(!is40Stable && !wasDismissed && adaptor.isExtension())
+        LOCAL_STORAGE_VALUE;
+      setOpen(!is40Stable && !wasDismissed && adaptor.isExtension());
     }
-    innerOnLoad()
+    innerOnLoad();
   }
 
   function onClose() {
-    adaptor.localStorageSetItem(LOCAL_STORAGE_KEY, LOCAL_STORAGE_VALUE)
-    setOpen(false)
+    adaptor.localStorageSetItem(LOCAL_STORAGE_KEY, LOCAL_STORAGE_VALUE);
+    setOpen(false);
   }
-}
+};

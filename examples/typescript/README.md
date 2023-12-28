@@ -53,37 +53,36 @@ A very brief descriptions of the examples, and the link to the main example/proj
 
 | &nbsp;&nbsp;Example&nbsp;Topic&nbsp;&nbsp;   | Discussion                                                                                                                                                                                                                                                                                        |
 | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-||
+|                                              |
 | [custom configReader](customConfigReader.ts) | Shows how to implement a custom method of reading your configuration settings, including API credentials                                                                                                                                                                                          |
 | [SDK utilities](utils.ts)                    | This file has some SDK utility methods tasks like:<ul><li>finding a dashboard by name</li> <li>listing dashboards and ids</li> <li>finding a tile on a dashboard</li> <li>listing queryable tiles for a dashboard</li><li>a general-purpose `waitForRender` routine with progress ticks</li></ul> |
 
 ### User management
 
-| &nbsp;&nbsp;Example&nbsp;Topic&nbsp;&nbsp; | Discussion                                                                                                                                                                                                                                        |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [sudo as user](sudoAsUser.ts)                              | Uses several User management SDK methods and shows how to `sudo` as a different user than the default API credentials user. Once the auth session is set to that user, subsequent SDK requests will be "as user `<x>`" when submitted to the API.|
-| [bulk generate api credentials](generateApiCredentials.ts) | Allows an admin to generate api credentials in bulk given a Looker role ID as input (Ex: generate api credentials for all users with the "Developer" role).
+| &nbsp;&nbsp;Example&nbsp;Topic&nbsp;&nbsp;                 | Discussion                                                                                                                                                                                                                                        |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [sudo as user](sudoAsUser.ts)                              | Uses several User management SDK methods and shows how to `sudo` as a different user than the default API credentials user. Once the auth session is set to that user, subsequent SDK requests will be "as user `<x>`" when submitted to the API. |
+| [bulk generate api credentials](generateApiCredentials.ts) | Allows an admin to generate api credentials in bulk given a Looker role ID as input (Ex: generate api credentials for all users with the "Developer" role).                                                                                       |
 
 ### Schedules
 
-| &nbsp;&nbsp;Example&nbsp;Topic&nbsp;&nbsp;           | Discussion                                                                                                                                                                                                                                                                                                                                              |
-| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [bulk disable schedules](bulkDisableSchedules.ts)       | This script allows an admin user to disable all user schedules OR just the schedules of a specific user. |
-| [bulk reassign schedules](bulkReassignSchedules.ts)     | This script allows allows an admin user to either reassign all user schedules OR a single user's schedules to a specified user. 
+| &nbsp;&nbsp;Example&nbsp;Topic&nbsp;&nbsp;          | Discussion                                                                                                                      |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| [bulk disable schedules](bulkDisableSchedules.ts)   | This script allows an admin user to disable all user schedules OR just the schedules of a specific user.                        |
+| [bulk reassign schedules](bulkReassignSchedules.ts) | This script allows allows an admin user to either reassign all user schedules OR a single user's schedules to a specified user. |
 
 ### Git / LookML Project Validation
 
-| &nbsp;&nbsp;Example&nbsp;Topic&nbsp;&nbsp;           | Discussion                                                                                                                                                                                                                                                                                                                                              |
-| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [validate branch](validateBranch.ts)                 | Allows you to validate a given branch of a specific project in development mode, returning any validation errors that are surfaced. |
+| &nbsp;&nbsp;Example&nbsp;Topic&nbsp;&nbsp; | Discussion                                                                                                                          |
+| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
+| [validate branch](validateBranch.ts)       | Allows you to validate a given branch of a specific project in development mode, returning any validation errors that are surfaced. |
 
 ### Connection / PDT
 
-| &nbsp;&nbsp;Example&nbsp;Topic&nbsp;&nbsp;           | Discussion                                                                                                                                                                                                                                                                                                                                              |
-| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [test connections](testDBConnections.ts)             | Allows an admin user to run connection tests in bulk outputting a results object with the results of the test for each db connection in Looker. |
-| [pdt mapping](dependencyGraph.ts)                    | This file allows you to map out your pdt dependencies for a given model in an output svg file.
-
+| &nbsp;&nbsp;Example&nbsp;Topic&nbsp;&nbsp; | Discussion                                                                                                                                      |
+| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| [test connections](testDBConnections.ts)   | Allows an admin user to run connection tests in bulk outputting a results object with the results of the test for each db connection in Looker. |
+| [pdt mapping](dependencyGraph.ts)          | This file allows you to map out your pdt dependencies for a given model in an output svg file.                                                  |
 
 ### Downloading
 

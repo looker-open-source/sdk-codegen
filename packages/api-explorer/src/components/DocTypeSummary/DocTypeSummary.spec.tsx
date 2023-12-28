@@ -23,20 +23,20 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { renderWithTheme } from '@looker/components-test-utils'
-import { screen } from '@testing-library/react'
+import React from 'react';
+import { renderWithTheme } from '@looker/components-test-utils';
+import { screen } from '@testing-library/react';
 
-import { api } from '../../test-data'
-import { DocTypeSummary } from './DocTypeSummary'
+import { api } from '../../test-data';
+import { DocTypeSummary } from './DocTypeSummary';
 
 describe('DocTypeSummary', () => {
   test('it renders a type summary', async () => {
-    const type = api.types.Dashboard
-    renderWithTheme(<DocTypeSummary type={type} />)
+    const type = api.types.Dashboard;
+    renderWithTheme(<DocTypeSummary type={type} />);
     expect(
       screen.getByText(type.metaType.toString().toLocaleUpperCase())
-    ).toBeInTheDocument()
-    expect(screen.getByText(type.jsonName)).toBeInTheDocument()
-  })
-})
+    ).toBeInTheDocument();
+    expect(screen.getByText(type.jsonName)).toBeInTheDocument();
+  });
+});

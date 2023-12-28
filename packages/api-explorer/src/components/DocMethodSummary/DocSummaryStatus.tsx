@@ -23,16 +23,16 @@
  SOFTWARE.
 
  */
-import type { FC } from 'react'
-import React from 'react'
-import { Tooltip } from '@looker/components'
+import type { FC } from 'react';
+import React from 'react';
+import { Tooltip } from '@looker/components';
 
-import { pickStatus, pickTooltipContent } from './utils'
+import { pickStatus, pickTooltipContent } from './utils';
 
 interface DocSummaryStatusProps {
-  status: string
+  status: string;
 }
 
 export const DocSummaryStatus: FC<DocSummaryStatusProps> = ({ status }) => (
   <Tooltip content={pickTooltipContent(status)}>{pickStatus(status)}</Tooltip>
-)
+);

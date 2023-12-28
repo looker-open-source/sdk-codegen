@@ -11,6 +11,7 @@ Until the Hackathon extension is available via the Looker Marketplace, a Hackath
 Remember to add a model to the project that has a valid connection.
 
 ## Specific steps to `yarn`
+
 1. run `yarn install` in sdk-codegen
 2. run `yarn build` in sdk-codegen
 3. run `yarn start` in examples/access_token_server
@@ -49,8 +50,8 @@ You need to be a Looker Admin to set up the Hackathon extension and add users.
 - See the banner listing the desired hackathon in the Welcome message
 - Create `Hackathon` role with permissions you deem necessary for hackathon users.
 - Add users through app, which will create the hackathon group and assign the `Hackathon` role and accomplish other administrative tasks.
-  -   Admin | Add users
-    -  Add Users with CSV or individually
-    -  Submit
-  -  Reload the page
+  - Admin | Add users
+  - Add Users with CSV or individually
+  - Submit
+  - Reload the page
 - Create `Hackathon Staff` and `Hackathon Judge` roles, set up their permissions, and and assign them to users.

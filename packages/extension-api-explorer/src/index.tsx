@@ -24,18 +24,18 @@
 
  */
 
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { ExtensionProvider } from '@looker/extension-sdk-react'
-import { ExtensionApiExplorer } from './ExtensionApiExplorer'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { ExtensionProvider } from '@looker/extension-sdk-react';
+import { ExtensionApiExplorer } from './ExtensionApiExplorer';
 
 window.addEventListener('DOMContentLoaded', () => {
-  const root = document.createElement('div')
-  document.body.appendChild(root)
+  const root = document.createElement('div');
+  document.body.appendChild(root);
   ReactDOM.render(
     <ExtensionProvider requiredLookerVersion=">=21.3.0">
       <ExtensionApiExplorer />
     </ExtensionProvider>,
     root
-  )
-})
+  );
+});

@@ -23,11 +23,11 @@
  SOFTWARE.
 
  */
-import { createStore } from '@looker/redux'
-import { defaultThemesState, themesSlice } from '../Theme'
-import type { ThemesState } from '../Theme'
-import { defaultFactoryState, factorySlice } from './slice'
-import type { FactoryState } from './slice'
+import { createStore } from '@looker/redux';
+import { defaultThemesState, themesSlice } from '../Theme';
+import type { ThemesState } from '../Theme';
+import { defaultFactoryState, factorySlice } from './slice';
+import type { FactoryState } from './slice';
 
 export const store = createStore({
   preloadedState: {
@@ -38,9 +38,9 @@ export const store = createStore({
     factory: factorySlice.reducer,
     themes: themesSlice.reducer,
   },
-})
+});
 
 export interface RootState {
-  factory: FactoryState
-  themes?: ThemesState
+  factory: FactoryState;
+  themes?: ThemesState;
 }

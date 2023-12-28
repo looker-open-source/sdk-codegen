@@ -24,20 +24,20 @@
 
  */
 
-import React, { useState, useEffect } from 'react'
-import { ButtonToggle, ButtonItem } from '@looker/components'
+import React, { useState, useEffect } from 'react';
+import { ButtonToggle, ButtonItem } from '@looker/components';
 import type {
   ApiModel,
   KeyedCollection,
   IMethodResponse,
-} from '@looker/sdk-codegen'
+} from '@looker/sdk-codegen';
 
-import { ExploreType } from '../../../../components'
+import { ExploreType } from '../../../../components';
 
 interface DocResponseTypesProps {
-  api: ApiModel
+  api: ApiModel;
   /** responses to render */
-  responses: KeyedCollection<IMethodResponse>
+  responses: KeyedCollection<IMethodResponse>;
 }
 
 /**
@@ -46,15 +46,15 @@ interface DocResponseTypesProps {
  * @param response
  */
 export const DocResponseTypes = ({ api, responses }: DocResponseTypesProps) => {
-  const mediaTypes = Object.keys(responses)
-  const [selectedMediaType, setSelectedMediaType] = useState(mediaTypes[0])
-  const [resps, setResps] = useState(responses)
+  const mediaTypes = Object.keys(responses);
+  const [selectedMediaType, setSelectedMediaType] = useState(mediaTypes[0]);
+  const [resps, setResps] = useState(responses);
 
   useEffect(() => {
     /** When new responses are passed, update the default selected media type */
-    setSelectedMediaType(mediaTypes[0])
-    setResps(responses)
-  }, [responses, mediaTypes])
+    setSelectedMediaType(mediaTypes[0]);
+    setResps(responses);
+  }, [responses, mediaTypes]);
 
   // TODO: Account for endpoints with no responses (e.g. delete a custom cmd)
   return (
@@ -79,5 +79,5 @@ export const DocResponseTypes = ({ api, responses }: DocResponseTypesProps) => {
         />
       </div>
     </>
-  )
-}
+  );
+};

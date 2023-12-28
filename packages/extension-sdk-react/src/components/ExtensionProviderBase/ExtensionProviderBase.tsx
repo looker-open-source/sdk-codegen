@@ -24,13 +24,13 @@
 
  */
 
-import React, { useState } from 'react'
-import type { ExtensionHostApi } from '@looker/extension-sdk'
+import React, { useState } from 'react';
+import type { ExtensionHostApi } from '@looker/extension-sdk';
 import type {
   BaseExtensionContextData,
   ExtensionProviderProps,
-} from '../ExtensionConnector'
-import { ExtensionConnector } from '../ExtensionConnector'
+} from '../ExtensionConnector';
+import { ExtensionConnector } from '../ExtensionConnector';
 
 /**
  * React context provider for extension API and SDK
@@ -38,7 +38,7 @@ import { ExtensionConnector } from '../ExtensionConnector'
 export const ExtensionContextBase =
   React.createContext<BaseExtensionContextData>(
     undefined as any // no one will ever see this undefined!
-  )
+  );
 
 /**
  * ExtensionProviderBase component. Provides access to the extension API but no SDK is
@@ -50,12 +50,12 @@ export const ExtensionProviderBase: React.FC<ExtensionProviderProps> = ({
 }) => {
   const [extensionData, setExtensionData] = useState<BaseExtensionContextData>(
     {} as BaseExtensionContextData
-  )
+  );
 
   const connectedCallback = (extensionHost: ExtensionHostApi) => {
-    const { visualizationSDK, tileSDK, lookerHostData } = extensionHost
-    const { visualizationData } = visualizationSDK
-    const { tileHostData } = tileSDK
+    const { visualizationSDK, tileSDK, lookerHostData } = extensionHost;
+    const { visualizationData } = visualizationSDK;
+    const { tileHostData } = tileSDK;
     setExtensionData((previousState: BaseExtensionContextData) => {
       return {
         ...previousState,
@@ -65,13 +65,13 @@ export const ExtensionProviderBase: React.FC<ExtensionProviderProps> = ({
         visualizationData,
         tileHostData,
         lookerHostData,
-      }
-    })
-  }
+      };
+    });
+  };
 
   const unloadedCallback = () => {
     // noop
-  }
+  };
 
   const updateContextData = (
     contextData: Partial<BaseExtensionContextData>
@@ -79,8 +79,8 @@ export const ExtensionProviderBase: React.FC<ExtensionProviderProps> = ({
     setExtensionData((previousContextData) => ({
       ...previousContextData,
       ...contextData,
-    }))
-  }
+    }));
+  };
 
   return (
     <ExtensionContextBase.Provider value={extensionData}>
@@ -94,5 +94,5 @@ export const ExtensionProviderBase: React.FC<ExtensionProviderProps> = ({
         {children}
       </ExtensionConnector>
     </ExtensionContextBase.Provider>
-  )
-}
+  );
+};

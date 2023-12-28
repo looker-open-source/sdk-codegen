@@ -24,46 +24,46 @@
 
  */
 
-import type { FC } from 'react'
-import React, { useContext } from 'react'
-import { RunItProvider } from '@looker/run-it'
-import type { ExtensionContextData } from '@looker/extension-sdk-react'
-import { ExtensionContext } from '@looker/extension-sdk-react'
-import type { IApixAdaptor } from '@looker/api-explorer'
-import { ApiExplorer, store, sdkSpecFetch } from '@looker/api-explorer'
-import { getExtensionSDK } from '@looker/extension-sdk'
-import { Provider } from 'react-redux'
-import { ExtensionAdaptor } from '@looker/extension-utils'
-import type { SpecItem } from '@looker/sdk-codegen'
-import { getSpecsFromVersions } from '@looker/sdk-codegen'
-import cloneDeep from 'lodash/cloneDeep'
-import type { ILooker40SDK } from '@looker/sdk'
+import type { FC } from 'react';
+import React, { useContext } from 'react';
+import { RunItProvider } from '@looker/run-it';
+import type { ExtensionContextData } from '@looker/extension-sdk-react';
+import { ExtensionContext } from '@looker/extension-sdk-react';
+import type { IApixAdaptor } from '@looker/api-explorer';
+import { ApiExplorer, store, sdkSpecFetch } from '@looker/api-explorer';
+import { getExtensionSDK } from '@looker/extension-sdk';
+import { Provider } from 'react-redux';
+import { ExtensionAdaptor } from '@looker/extension-utils';
+import type { SpecItem } from '@looker/sdk-codegen';
+import { getSpecsFromVersions } from '@looker/sdk-codegen';
+import cloneDeep from 'lodash/cloneDeep';
+import type { ILooker40SDK } from '@looker/sdk';
 
 class ApixExtensionAdaptor extends ExtensionAdaptor implements IApixAdaptor {
   async fetchSpecList() {
-    const sdk = this.sdk as ILooker40SDK
-    const versions = await sdk.ok(sdk.versions())
-    const result = await getSpecsFromVersions(versions)
-    return result
+    const sdk = this.sdk as ILooker40SDK;
+    const versions = await sdk.ok(sdk.versions());
+    const result = await getSpecsFromVersions(versions);
+    return result;
   }
 
   async fetchSpec(spec: SpecItem): Promise<SpecItem> {
-    const sdk = this.sdk as ILooker40SDK
-    const _spec = cloneDeep(spec)
+    const sdk = this.sdk as ILooker40SDK;
+    const _spec = cloneDeep(spec);
     _spec.api = await sdkSpecFetch(spec, (version, name) =>
       sdk.ok(sdk.api_spec(version, name))
-    )
-    return _spec
+    );
+    return _spec;
   }
 }
 
 export const ExtensionApiExplorer: FC = () => {
-  const extensionContext = useContext<ExtensionContextData>(ExtensionContext)
+  const extensionContext = useContext<ExtensionContextData>(ExtensionContext);
 
   const extensionAdaptor = new ApixExtensionAdaptor(
     getExtensionSDK(),
     extensionContext.core40SDK
-  )
+  );
 
   return (
     <Provider store={store}>
@@ -71,5 +71,5 @@ export const ExtensionApiExplorer: FC = () => {
         <ApiExplorer adaptor={extensionAdaptor} headless={true} />
       </RunItProvider>
     </Provider>
-  )
-}
+  );
+};

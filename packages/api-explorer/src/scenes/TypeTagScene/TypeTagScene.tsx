@@ -23,71 +23,73 @@
  SOFTWARE.
 
  */
-import type { FC } from 'react'
-import React, { useEffect, useState } from 'react'
-import { Grid, ButtonToggle, ButtonItem } from '@looker/components'
-import type { ApiModel } from '@looker/sdk-codegen'
-import { useLocation, useParams } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import { ApixSection, DocTitle, DocTypeSummary, Link } from '../../components'
-import { buildTypePath, isValidFilter, useNavigation } from '../../utils'
-import { selectTagFilter, useSettingActions } from '../../state'
-import { useTagStoreSync } from '../utils'
-import { getMetaTypes } from './utils'
+import type { FC } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Grid, ButtonToggle, ButtonItem } from '@looker/components';
+import type { ApiModel } from '@looker/sdk-codegen';
+import { useLocation, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { ApixSection, DocTitle, DocTypeSummary, Link } from '../../components';
+import { buildTypePath, isValidFilter, useNavigation } from '../../utils';
+import { selectTagFilter, useSettingActions } from '../../state';
+import { useTagStoreSync } from '../utils';
+import { getMetaTypes } from './utils';
 
 interface TypeTagSceneProps {
-  api: ApiModel
+  api: ApiModel;
 }
 
 interface TypeTagSceneParams {
-  specKey: string
-  typeTag: string
+  specKey: string;
+  typeTag: string;
 }
 
 export const TypeTagScene: FC<TypeTagSceneProps> = ({ api }) => {
-  const { specKey, typeTag } = useParams<TypeTagSceneParams>()
-  const location = useLocation()
+  const { specKey, typeTag } = useParams<TypeTagSceneParams>();
+  const location = useLocation();
   const { navigate, buildPathWithGlobalParams, navigateWithGlobalParams } =
-    useNavigation()
-  const selectedTagFilter = useSelector(selectTagFilter)
-  const { setTagFilterAction } = useSettingActions()
-  const [tagFilter, setTagFilter] = useState(selectedTagFilter)
-  useTagStoreSync()
+    useNavigation();
+  const selectedTagFilter = useSelector(selectTagFilter);
+  const { setTagFilterAction } = useSettingActions();
+  const [tagFilter, setTagFilter] = useState(selectedTagFilter);
+  useTagStoreSync();
 
   const handleChange = (filter: string) => {
     navigate(location.pathname, {
       t: filter === 'ALL' ? null : filter.toLowerCase(),
-    })
-  }
+    });
+  };
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(location.search)
-    let verbParam = searchParams.get('t') || 'ALL'
+    const searchParams = new URLSearchParams(location.search);
+    let verbParam = searchParams.get('t') || 'ALL';
     verbParam = isValidFilter(location.pathname, verbParam)
       ? verbParam.toUpperCase()
-      : 'ALL'
+      : 'ALL';
     setTagFilterAction({
       tagFilter: verbParam,
-    })
-  }, [location.search])
+    });
+  }, [location.search]);
 
-  const types = api.typeTags[typeTag]
+  const types = api.typeTags[typeTag];
   useEffect(() => {
     if (!types) {
-      navigateWithGlobalParams(`/${specKey}/types`)
+      navigateWithGlobalParams(`/${specKey}/types`);
     }
-  }, [types])
+  }, [types]);
 
   useEffect(() => {
-    setTagFilter(selectedTagFilter)
-  }, [selectedTagFilter])
+    setTagFilter(selectedTagFilter);
+  }, [selectedTagFilter]);
 
   if (!types) {
-    return <></>
+    return <></>;
   }
 
-  const tag = Object.values(api.spec.tags!).find((tag) => tag.name === typeTag)!
-  const metaTypes = getMetaTypes(types)
+  const tag = Object.values(api.spec.tags!).find(
+    (tag) => tag.name === typeTag
+  )!;
+  const metaTypes = getMetaTypes(types);
   return (
     <ApixSection>
       <DocTitle>{`${tag.name}: ${tag.description}`}</DocTitle>
@@ -123,5 +125,5 @@ export const TypeTagScene: FC<TypeTagSceneProps> = ({ api }) => {
           )
       )}
     </ApixSection>
-  )
-}
+  );
+};

@@ -20,8 +20,10 @@ if [[ "${ARG_QUICK}" == "true" ]]; then
     args+=("--staged")
   fi
 
-  npx pretty-quick "${args[@]}"
+  echo "Sorry, quick isn't supported yet because pretty-quick is bloated and borked"
+  # yarn pretty-quick "${args[@]}"
 else
   echo "👀 Running on your local dev machine? Consider using -q|--quick to check only changed files."
-  npx --workspaces prettier . "${args[@]}"
+  yarn prettier . "${args[@]}" --ignore ../.prettierignore
+  #  When we switch to NPM, use npx --workspaces prettier . "${args[@]}" --single-quote --semi --trailing-comma es5
 fi

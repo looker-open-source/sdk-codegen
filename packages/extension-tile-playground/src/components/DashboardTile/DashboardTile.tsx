@@ -23,15 +23,15 @@
  SOFTWARE.
 
  */
-import React, { useContext, useCallback, useEffect, useState } from 'react'
-import { SpaceVertical, Text, MessageBar } from '@looker/components'
-import { More } from '@looker/icons'
-import { ExtensionContext40 } from '@looker/extension-sdk-react'
-import { DashboardRunState } from '@looker/extension-sdk'
-import { useWindowSize } from '../../hooks/use_window_size'
-import { LiquidFillGaugeViz } from '../LiquidFillGaugeViz'
-import { Layout } from '../Layout'
-import { NavigateButton } from '../NavigateButton'
+import React, { useContext, useCallback, useEffect, useState } from 'react';
+import { SpaceVertical, Text, MessageBar } from '@looker/components';
+import { More } from '@looker/icons';
+import { ExtensionContext40 } from '@looker/extension-sdk-react';
+import { DashboardRunState } from '@looker/extension-sdk';
+import { useWindowSize } from '../../hooks/use_window_size';
+import { LiquidFillGaugeViz } from '../LiquidFillGaugeViz';
+import { Layout } from '../Layout';
+import { NavigateButton } from '../NavigateButton';
 
 /**
  * This component demonstrates a dashboard tile that is reponsible for
@@ -47,19 +47,20 @@ import { NavigateButton } from '../NavigateButton'
  * has been setup to auto refresh).
  */
 export const DashboardTile: React.FC = () => {
-  const { height, width } = useWindowSize()
-  const vizSize = Math.min(height, width) - 250
-  const { extensionSDK, coreSDK, tileHostData } = useContext(ExtensionContext40)
-  const { lastRunStartTime, dashboardRunState } = tileHostData || -1
+  const { height, width } = useWindowSize();
+  const vizSize = Math.min(height, width) - 250;
+  const { extensionSDK, coreSDK, tileHostData } =
+    useContext(ExtensionContext40);
+  const { lastRunStartTime, dashboardRunState } = tileHostData || -1;
   const [saveLastRunStartTime, setSaveLastRunStartTime] = useState<
     number | undefined
-  >()
-  const [value, setValue] = useState<number | undefined>()
-  const [message, setMessage] = useState<string | undefined>()
+  >();
+  const [value, setValue] = useState<number | undefined>();
+  const [message, setMessage] = useState<string | undefined>();
 
   useEffect(() => {
     const readData = async () => {
-      setSaveLastRunStartTime(lastRunStartTime)
+      setSaveLastRunStartTime(lastRunStartTime);
       try {
         const response = await coreSDK.ok(
           coreSDK.run_inline_query({
@@ -71,33 +72,33 @@ export const DashboardTile: React.FC = () => {
               total: false,
             },
           })
-        )
-        setValue(response[0]['users.average_age'])
-        setMessage(undefined)
+        );
+        setValue(response[0]['users.average_age']);
+        setMessage(undefined);
       } catch (error) {
-        console.error(error)
-        setValue(undefined)
-        setMessage('Failed to read data')
+        console.error(error);
+        setValue(undefined);
+        setMessage('Failed to read data');
       }
-    }
+    };
     if (
       !saveLastRunStartTime ||
       lastRunStartTime !== saveLastRunStartTime ||
       // Not required but shown here as an alternative
       dashboardRunState === DashboardRunState.RUNNING
     ) {
-      readData()
+      readData();
     }
   }, [
     lastRunStartTime,
     saveLastRunStartTime,
     setSaveLastRunStartTime,
     dashboardRunState,
-  ])
+  ]);
 
   const renderComplete = useCallback(() => {
-    extensionSDK.rendered()
-  }, [extensionSDK])
+    extensionSDK.rendered();
+  }, [extensionSDK]);
 
   return (
     <Layout right={<NavigateButton path="/inspect" icon={<More />} />}>
@@ -117,5 +118,5 @@ export const DashboardTile: React.FC = () => {
         )}
       </SpaceVertical>
     </Layout>
-  )
-}
+  );
+};

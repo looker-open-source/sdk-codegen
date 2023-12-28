@@ -24,9 +24,9 @@
 
  */
 
-import type { ITransport, IApiSettings, IAuthSession } from '@looker/sdk-rtl'
-import { Looker40SDK, environmentPrefix } from '@looker/sdk'
-import { NodeSettingsIniFile, NodeSession, NodeTransport } from '.'
+import type { ITransport, IApiSettings, IAuthSession } from '@looker/sdk-rtl';
+import { Looker40SDK, environmentPrefix } from '@looker/sdk';
+import { NodeSettingsIniFile, NodeSession, NodeTransport } from '.';
 
 /**
  * @class LookerNodeSDK
@@ -49,9 +49,9 @@ export class LookerNodeSDK {
     transport?: ITransport,
     session?: IAuthSession
   ) {
-    settings = settings || new NodeSettingsIniFile(environmentPrefix)
-    transport = transport || new NodeTransport(settings)
-    session = session ?? new NodeSession(settings, transport)
-    return new Looker40SDK(session)
+    settings = settings || new NodeSettingsIniFile(environmentPrefix);
+    transport = transport || new NodeTransport(settings);
+    session = session ?? new NodeSession(settings, transport);
+    return new Looker40SDK(session);
   }
 }

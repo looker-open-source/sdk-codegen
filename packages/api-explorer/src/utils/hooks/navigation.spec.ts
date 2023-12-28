@@ -23,12 +23,12 @@
  SOFTWARE.
 
  */
-import { useHistory } from 'react-router-dom'
-import { useNavigation } from './navigation'
+import { useHistory } from 'react-router-dom';
+import { useNavigation } from './navigation';
 
-const mockHistoryPush = jest.fn()
+const mockHistoryPush = jest.fn();
 jest.mock('react-router-dom', () => {
-  const ReactRouterDOM = jest.requireActual('react-router-dom')
+  const ReactRouterDOM = jest.requireActual('react-router-dom');
   return {
     ...ReactRouterDOM,
     useHistory: () => ({
@@ -38,81 +38,83 @@ jest.mock('react-router-dom', () => {
         search: 's=test&sdk=py&t=get',
       },
     }),
-  }
-})
+  };
+});
 
 describe('useNavigation', () => {
-  const history = useHistory()
+  const history = useHistory();
   const { navigate, navigateWithGlobalParams, buildPathWithGlobalParams } =
-    useNavigation()
-  const curParams = new URLSearchParams(history.location.search)
-  const route = `/3.1`
+    useNavigation();
+  const curParams = new URLSearchParams(history.location.search);
+  const route = `/3.1`;
 
   describe('navigate', () => {
     test('preserves existing query params when given params are undefined', () => {
-      navigate(route)
-      expect(curParams.get('s')).toBe('test')
-      expect(curParams.get('sdk')).toBe('py')
-      expect(curParams.get('t')).toBe('get')
+      navigate(route);
+      expect(curParams.get('s')).toBe('test');
+      expect(curParams.get('sdk')).toBe('py');
+      expect(curParams.get('t')).toBe('get');
       expect(mockHistoryPush).lastCalledWith({
         pathname: route,
         search: curParams.toString(),
-      })
-    })
+      });
+    });
 
     test('clears existing params when given params are null', () => {
-      navigate(route, null)
+      navigate(route, null);
       expect(mockHistoryPush).lastCalledWith({
         pathname: route,
-      })
-    })
+      });
+    });
 
     test('removes null query params while persisting undefined params if in URL', () => {
-      navigate(route, { s: null, sdk: 'test' })
+      navigate(route, { s: null, sdk: 'test' });
       expect(mockHistoryPush).lastCalledWith({
         pathname: route,
         search: 'sdk=test&t=get',
-      })
-    })
+      });
+    });
 
     test('sets query parameters when given a populated query params object', () => {
-      const newParams = new URLSearchParams()
-      newParams.set('s', 'newTest')
-      newParams.set('sdk', 'kt')
-      newParams.set('t', 'post')
+      const newParams = new URLSearchParams();
+      newParams.set('s', 'newTest');
+      newParams.set('sdk', 'kt');
+      newParams.set('t', 'post');
       navigate(route, {
         s: newParams.get('s'),
         sdk: newParams.get('sdk'),
         t: newParams.get('t'),
-      })
+      });
       expect(mockHistoryPush).lastCalledWith({
         pathname: route,
         search: newParams.toString(),
-      })
-    })
-  })
+      });
+    });
+  });
 
   describe('buildPathWithGlobalParams', () => {
     test('creates path with global parameters excluding scene specific parameters', () => {
-      curParams.delete('t')
+      curParams.delete('t');
       expect(buildPathWithGlobalParams(route)).toEqual(
         `${route}?${curParams.toString()}`
-      )
-    })
+      );
+    });
 
     test('adds other parameters if present', () => {
-      curParams.delete('t')
-      const actual = buildPathWithGlobalParams(route, { e: 400 })
-      expect(actual).toEqual(`${route}?${curParams.toString()}&e=400`)
-    })
-  })
+      curParams.delete('t');
+      const actual = buildPathWithGlobalParams(route, { e: 400 });
+      expect(actual).toEqual(`${route}?${curParams.toString()}&e=400`);
+    });
+  });
 
   describe('navigateWithGlobalParams', () => {
     test('preserves global query params and removes scene specific parameters', () => {
-      curParams.delete('t')
-      navigateWithGlobalParams(route)
-      expect(curParams.get('s')).toEqual('test')
-      expect(mockHistoryPush).lastCalledWith(`${route}?${curParams.toString()}`)
-    })
-  })
-})
+      curParams.delete('t');
+      navigateWithGlobalParams(route);
+      expect(curParams.get('s')).toEqual('test');
+      expect(mockHistoryPush).lastCalledWith(
+        `${route}?${curParams.toString()}`
+      );
+    });
+  });
+});

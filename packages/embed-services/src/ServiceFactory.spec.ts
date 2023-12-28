@@ -23,34 +23,34 @@
  SOFTWARE.
 
  */
-import { functionalSdk40 as funSdk } from '@looker/sdk'
-import type { IAPIMethods } from '@looker/sdk-rtl'
-import { session } from './test-utils'
-import { createFactory, destroyFactory, getFactory } from './ServiceFactory'
-import { getThemeService, registerThemeService } from './ThemeService'
+import { functionalSdk40 as funSdk } from '@looker/sdk';
+import type { IAPIMethods } from '@looker/sdk-rtl';
+import { session } from './test-utils';
+import { createFactory, destroyFactory, getFactory } from './ServiceFactory';
+import { getThemeService, registerThemeService } from './ThemeService';
 
 describe('ServiceFactory', () => {
-  const sdk: IAPIMethods = funSdk(session)
+  const sdk: IAPIMethods = funSdk(session);
 
   afterEach(() => {
-    destroyFactory()
-  })
+    destroyFactory();
+  });
 
   it('createFactory creates', () => {
-    createFactory(sdk)
-    expect(getFactory()).toBeDefined()
-  })
+    createFactory(sdk);
+    expect(getFactory()).toBeDefined();
+  });
 
   it('getFactory throws when no factory exists', () => {
-    expect(getFactory).toThrow('Factory must be created with an SDK')
-  })
+    expect(getFactory).toThrow('Factory must be created with an SDK');
+  });
 
   it('registers and gets a service', async () => {
-    createFactory(sdk)
-    registerThemeService()
-    const service = getThemeService()
-    expect(service).toBeDefined()
-    await service.getDefaultTheme()
-    expect(service.defaultTheme?.name).toEqual('Looker')
-  })
-})
+    createFactory(sdk);
+    registerThemeService();
+    const service = getThemeService();
+    expect(service).toBeDefined();
+    await service.getDefaultTheme();
+    expect(service.defaultTheme?.name).toEqual('Looker');
+  });
+});

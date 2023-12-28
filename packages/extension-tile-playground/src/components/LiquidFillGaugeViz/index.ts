@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export * from './LiquidFillGaugeViz'
+export * from './LiquidFillGaugeViz';

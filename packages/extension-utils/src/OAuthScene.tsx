@@ -24,22 +24,22 @@
 
  */
 
-import type { FC } from 'react'
-import React, { useEffect } from 'react'
-import type { BrowserSession } from '@looker/sdk-rtl'
+import type { FC } from 'react';
+import React, { useEffect } from 'react';
+import type { BrowserSession } from '@looker/sdk-rtl';
 import {
   ComponentsProvider,
   Flex,
   FlexItem,
   Heading,
   ProgressCircular,
-} from '@looker/components'
-import { useHistory } from 'react-router'
-import { useLocation } from 'react-router-dom'
-import type { IEnvironmentAdaptor } from './adaptorUtils'
+} from '@looker/components';
+import { useHistory } from 'react-router';
+import { useLocation } from 'react-router-dom';
+import type { IEnvironmentAdaptor } from './adaptorUtils';
 
 interface OAuthSceneProps {
-  adaptor: IEnvironmentAdaptor
+  adaptor: IEnvironmentAdaptor;
 }
 
 /**
@@ -47,28 +47,28 @@ interface OAuthSceneProps {
  * route
  */
 export const OAuthScene: FC<OAuthSceneProps> = ({ adaptor }) => {
-  const history = useHistory()
-  const location = useLocation()
-  const reactPath = location.pathname
-  const fullPath = (window as any).location.pathname
-  const extraPath = fullPath.substr(0, fullPath.indexOf(reactPath))
-  const authSession = adaptor.sdk.authSession as BrowserSession
-  const retPath = authSession.returnUrl ?? '/'
+  const history = useHistory();
+  const location = useLocation();
+  const reactPath = location.pathname;
+  const fullPath = (window as any).location.pathname;
+  const extraPath = fullPath.substr(0, fullPath.indexOf(reactPath));
+  const authSession = adaptor.sdk.authSession as BrowserSession;
+  const retPath = authSession.returnUrl ?? '/';
   /** If this is a nested React app, remove extraPath to prevent recursive return pathing */
-  const oldUrl = retPath.replace(extraPath, '')
+  const oldUrl = retPath.replace(extraPath, '');
 
   useEffect(() => {
     const maybeLogin = async () => {
-      const token = await adaptor.login()
+      const token = await adaptor.login();
       if (token) {
-        console.error({ push: oldUrl, retPath, extraPath, location })
-        history.push(oldUrl)
+        console.error({ push: oldUrl, retPath, extraPath, location });
+        history.push(oldUrl);
       }
-    }
-    maybeLogin()
-  }, [])
+    };
+    maybeLogin();
+  }, []);
 
-  const themeOverrides = adaptor.themeOverrides()
+  const themeOverrides = adaptor.themeOverrides();
   return (
     <ComponentsProvider
       loadGoogleFonts={themeOverrides.loadGoogleFonts}
@@ -85,5 +85,5 @@ export const OAuthScene: FC<OAuthSceneProps> = ({ adaptor }) => {
         </FlexItem>
       </Flex>
     </ComponentsProvider>
-  )
-}
+  );
+};
