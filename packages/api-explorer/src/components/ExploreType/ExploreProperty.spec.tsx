@@ -30,7 +30,6 @@ import { IdeFileManifest } from '@looker/icons';
 import { Toc } from '@styled-icons/material/Toc';
 import { Tag } from '@styled-icons/material-rounded/Tag';
 
-import userEvent from '@testing-library/user-event';
 import { api } from '../../test-data';
 import { renderWithRouter } from '../../test-utils';
 import { ExploreProperty, ExplorePropertyDetail, typeIcon } from '.';

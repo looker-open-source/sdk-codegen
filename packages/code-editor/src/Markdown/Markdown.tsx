@@ -136,7 +136,7 @@ export const Markdown = ({
         transformLinkUri={transformLinkUri}
         components={components}
       >
-        {qualifyMarkdownText(source, pattern)}
+        {qualifyMarkdownText(source, pattern ?? '')}
       </ReactMarkdown>
     </MarkdownWrapper>
   );

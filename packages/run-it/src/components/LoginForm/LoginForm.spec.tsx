@@ -29,8 +29,8 @@ import { fireEvent, screen } from '@testing-library/react';
 import { renderWithTheme } from '@looker/components-test-utils';
 import {
   BrowserAdaptor,
-  registerTestEnvAdaptor,
   OAuthConfigProvider,
+  registerTestEnvAdaptor,
 } from '@looker/extension-utils';
 
 import { initRunItSdk, readyToLogin } from '../..';

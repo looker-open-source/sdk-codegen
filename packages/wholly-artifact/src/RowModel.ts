@@ -197,6 +197,7 @@ export interface IRowModel extends IRowModelProps {
   makey(): string;
 }
 
+// noinspection TypeScriptValidateTypes
 export abstract class RowModel<T extends IRowModel> implements IRowModel {
   _row = 0;
   _id = '';
@@ -240,7 +241,7 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
         values.forEach((val, index) => {
           if (val !== undefined && val !== null && index < keys.length) {
             const key = keys[index];
-            this[key] = this.typeCast(key, val);
+            this[key as keyof RowModel<any>] = this.typeCast(key, val);
           }
         });
       }

@@ -25,7 +25,7 @@
  */
 import React from 'react';
 import { renderWithTheme } from '@looker/components-test-utils';
-import { screen, fireEvent, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import type { IEnvironmentAdaptor } from '@looker/extension-utils';
 import type { SpecList } from '@looker/sdk-codegen';
 import { Banner } from './Banner';

@@ -24,6 +24,7 @@
 
  */
 
+import type { ArgValues } from '@looker/sdk-codegen';
 import type { ICryptoHash } from './cryptoHash';
 import { OAuthSession } from './oauthSession';
 import type { IApiSection, IApiSettings } from './apiSettings';
@@ -67,7 +68,7 @@ export class MockCrypto implements ICryptoHash {
 }
 
 const mockStorage = (() => {
-  let store = {};
+  let store: ArgValues = {};
 
   return {
     getItem(key: string) {

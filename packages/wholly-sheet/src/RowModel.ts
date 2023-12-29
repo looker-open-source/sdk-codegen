@@ -139,6 +139,7 @@ export interface IRowModel extends IRowModelProps {
   setCreate(): boolean;
 }
 
+// noinspection TypeScriptValidateTypes
 export class RowModel<T extends IRowModel> implements IRowModel {
   _row = 0;
   _id = '';
@@ -215,7 +216,7 @@ export class RowModel<T extends IRowModel> implements IRowModel {
     const result: SheetValues = [];
     const keys = this.header();
     keys.forEach((key) => {
-      result.push(stringer(this[key]));
+      result.push(stringer(this[key as keyof RowModel<any>]));
     });
     return result;
   }

@@ -24,7 +24,7 @@
 
  */
 import React from 'react';
-import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import type { IDeclarationMine } from '@looker/sdk-codegen';
 import { codeSearchLink } from '@looker/sdk-codegen';
 import { api } from '../../test-data';

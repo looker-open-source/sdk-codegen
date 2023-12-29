@@ -24,7 +24,7 @@
 
  */
 import React from 'react';
-import { act, screen, waitFor } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { codeGenerators } from '@looker/sdk-codegen';
 import userEvent from '@testing-library/user-event';
 

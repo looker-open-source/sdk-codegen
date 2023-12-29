@@ -24,7 +24,13 @@
 
  */
 
-import type { IApiModel, IMethod, IType, KeyedCollection } from './sdkModels';
+import type {
+  ArgValues,
+  IApiModel,
+  IMethod,
+  IType,
+  KeyedCollection,
+} from './sdkModels';
 import { ArrayType, EnumType } from './sdkModels';
 
 interface ITypeDelta {
@@ -187,8 +193,8 @@ export const compareParams = (
   rMethod: IMethod,
   count: DiffCount
 ) => {
-  const lParams = {};
-  const rParams = {};
+  const lParams: ArgValues = {};
+  const rParams: ArgValues = {};
   lMethod.allParams.forEach((p) => (lParams[p.name] = p));
   rMethod.allParams.forEach((p) => (rParams[p.name] = p));
   // TODO typediff the matching body types?
@@ -230,8 +236,8 @@ export const compareBodies = (
   rMethod: IMethod,
   count: DiffCount
 ) => {
-  const lParams = {};
-  const rParams = {};
+  const lParams: ArgValues = {};
+  const rParams: ArgValues = {};
   lMethod.bodyParams.forEach((p) => (lParams[p.name] = p));
   rMethod.bodyParams.forEach((p) => (rParams[p.name] = p));
   // TODO typediff the matching body types?

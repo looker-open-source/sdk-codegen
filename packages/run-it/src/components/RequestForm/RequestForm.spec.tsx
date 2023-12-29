@@ -26,7 +26,7 @@
 
 import React from 'react';
 import { renderWithTheme } from '@looker/components-test-utils';
-import { act, screen, waitFor } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import type { RunItInput } from '../..';
