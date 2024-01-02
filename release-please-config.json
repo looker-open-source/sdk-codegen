@@ -1,20 +1,23 @@
 {
-  "plugins": [{
-    "type": "node-workspace",
-    "merge": false
-  },{
-    "type":"linked-versions",
-    "group-name": "calendar versioned sdks",
-    "components": [
-      "embed-components",
-      "embed-services",
-      "extension-sdk",
-      "extension-sdk-react",
-      "sdk",
-      "sdk-node",
-      "looker_sdk"
-    ]
-  }],
+  "plugins": [
+    {
+      "type": "node-workspace",
+      "merge": false
+    },
+    {
+      "type": "linked-versions",
+      "group-name": "calendar versioned sdks",
+      "components": [
+        "embed-components",
+        "embed-services",
+        "extension-sdk",
+        "extension-sdk-react",
+        "sdk",
+        "sdk-node",
+        "looker_sdk"
+      ]
+    }
+  ],
   "bump-minor-pre-major": true,
   "bump-patch-for-minor-pre-major": true,
   "packages": {

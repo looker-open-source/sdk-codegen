@@ -24,18 +24,18 @@
 
  */
 
-import { getInitialRouteEntries } from './get_initial_route_entries'
+import { getInitialRouteEntries } from './get_initial_route_entries';
 
 describe('getInitialRouteEntries', () => {
   it('returns undefined when no initial route', () => {
-    expect(getInitialRouteEntries()).toBeUndefined()
-  })
+    expect(getInitialRouteEntries()).toBeUndefined();
+  });
 
   it('returns pathname', () => {
     expect(getInitialRouteEntries({ route: '/abcd/wxyz' })).toEqual([
       { pathname: '/abcd/wxyz', search: '', hash: '', state: undefined },
-    ])
-  })
+    ]);
+  });
 
   it('returns pathname and query string', () => {
     expect(getInitialRouteEntries({ route: '/abcd/wxyz?test=1234' })).toEqual([
@@ -45,8 +45,8 @@ describe('getInitialRouteEntries', () => {
         hash: '',
         state: undefined,
       },
-    ])
-  })
+    ]);
+  });
 
   it('returns pathname, query string and state', () => {
     expect(
@@ -61,6 +61,6 @@ describe('getInitialRouteEntries', () => {
         hash: '',
         state: { hello: 'world' },
       },
-    ])
-  })
-})
+    ]);
+  });
+});

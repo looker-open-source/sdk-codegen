@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { ErrorBoundary } from './ErrorBoundary'
+export { ErrorBoundary } from './ErrorBoundary';

@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { MethodScene } from './MethodScene'
+export { MethodScene } from './MethodScene';

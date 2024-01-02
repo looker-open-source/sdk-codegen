@@ -25,10 +25,10 @@
  */
 
 export const connectExtensionHost = (configuration: any) => {
-  const { initializedCallback } = configuration
-  initializedCallback(true)
-  return Promise.resolve({})
-}
+  const { initializedCallback } = configuration;
+  initializedCallback(true);
+  return Promise.resolve({});
+};
 
 export class LookerExtensionSDK {
   static createClient() {

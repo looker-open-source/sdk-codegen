@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { DocStatus } from './DocStatus'
+export { DocStatus } from './DocStatus';

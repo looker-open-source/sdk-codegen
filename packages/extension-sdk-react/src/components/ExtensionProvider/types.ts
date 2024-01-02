@@ -24,8 +24,8 @@
 
  */
 
-import type { Looker40SDK } from '@looker/sdk'
-import type { BaseExtensionContextData } from '../ExtensionConnector'
+import type { Looker40SDK } from '@looker/sdk';
+import type { BaseExtensionContextData } from '../ExtensionConnector';
 
 /**
  * Extension context
@@ -34,5 +34,5 @@ export interface ExtensionContextData extends BaseExtensionContextData {
   /**
    * Looker 4.0 SDK. Note that SDK calls are made by the extension host.
    */
-  core40SDK: Looker40SDK
+  core40SDK: Looker40SDK;
 }

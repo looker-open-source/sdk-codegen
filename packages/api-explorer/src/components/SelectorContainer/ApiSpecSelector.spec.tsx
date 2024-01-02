@@ -23,19 +23,19 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { screen, waitFor } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
-import { useHistory } from 'react-router-dom'
-import { getLoadedSpecs, specs } from '../../test-data'
+import React from 'react';
+import { screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { useHistory } from 'react-router-dom';
+import { getLoadedSpecs, specs } from '../../test-data';
 import {
   renderWithReduxProvider,
   renderWithRouterAndReduxProvider,
-} from '../../test-utils'
-import { ApiSpecSelector } from './ApiSpecSelector'
+} from '../../test-utils';
+import { ApiSpecSelector } from './ApiSpecSelector';
 
 jest.mock('react-router-dom', () => {
-  const ReactRouterDOM = jest.requireActual('react-router-dom')
+  const ReactRouterDOM = jest.requireActual('react-router-dom');
   return {
     ...ReactRouterDOM,
     useLocation: () => ({
@@ -44,8 +44,8 @@ jest.mock('react-router-dom', () => {
     useHistory: jest
       .fn()
       .mockReturnValue({ push: jest.fn(), location: globalThis.location }),
-  }
-})
+  };
+});
 
 // jest.mock('../../state/specs', () => ({
 //   ...(jest.requireActual('../../state/specs') as Record<string, unknown>),
@@ -55,39 +55,39 @@ jest.mock('react-router-dom', () => {
 // }))
 
 describe('ApiSpecSelector', () => {
-  Element.prototype.scrollIntoView = jest.fn()
-  const spec = getLoadedSpecs()['4.0']
+  Element.prototype.scrollIntoView = jest.fn();
+  const spec = getLoadedSpecs()['4.0'];
 
   test('the base spec is selected by default', () => {
-    renderWithReduxProvider(<ApiSpecSelector spec={spec} />)
-    const selector = screen.getByRole('textbox')
-    expect(selector).toHaveValue(`${spec.key}`)
-  })
+    renderWithReduxProvider(<ApiSpecSelector spec={spec} />);
+    const selector = screen.getByRole('textbox');
+    expect(selector).toHaveValue(`${spec.key}`);
+  });
 
   test('it lists all available specs', async () => {
-    renderWithReduxProvider(<ApiSpecSelector spec={spec} />)
-    userEvent.click(screen.getByRole('textbox'))
+    renderWithReduxProvider(<ApiSpecSelector spec={spec} />);
+    userEvent.click(screen.getByRole('textbox'));
     await waitFor(() => {
       expect(screen.getAllByRole('option')).toHaveLength(
         Object.keys(specs).length
-      )
-    })
-  })
+      );
+    });
+  });
 
   test.skip('requests selected spec', async () => {
-    const { push } = useHistory()
-    renderWithRouterAndReduxProvider(<ApiSpecSelector spec={spec} />)
-    userEvent.click(screen.getByRole('textbox'))
+    const { push } = useHistory();
+    renderWithRouterAndReduxProvider(<ApiSpecSelector spec={spec} />);
+    userEvent.click(screen.getByRole('textbox'));
     await waitFor(() => {
       expect(screen.getAllByRole('option')).toHaveLength(
         Object.keys(specs).length
-      )
-    })
-    const button = screen.getByText('4.0')
-    userEvent.click(button)
+      );
+    });
+    const button = screen.getByText('4.0');
+    userEvent.click(button);
     expect(push).toHaveBeenCalledWith({
       pathname: '/4.0/methods/Dashboard/dashboard',
       search: '',
-    })
-  })
-})
+    });
+  });
+});

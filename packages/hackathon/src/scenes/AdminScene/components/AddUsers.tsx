@@ -24,79 +24,79 @@
 
  */
 
-import type { FC } from 'react'
-import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import type { FC } from 'react';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
-  Form,
-  Fieldset,
   Button,
+  Divider,
+  FieldText,
+  Fieldset,
+  Form,
+  MessageBar,
   ProgressCircular,
   Space,
   SpaceVertical,
   Span,
-  FieldText,
-  MessageBar,
-  Divider,
-} from '@looker/components'
-import type { UserToAdd } from '../../../data/add_user/actions'
-import { parseCsv, addUsers } from '../../../data/add_user/actions'
+} from '@looker/components';
+import type { UserToAdd } from '../../../data/add_user/actions';
+import { addUsers, parseCsv } from '../../../data/add_user/actions';
 import {
+  getNumUsersToAddState,
   getStage,
   getUsersAddedState,
-  getNumUsersToAddState,
-} from '../../../data/add_user/selectors'
-import { ADD_STAGES } from '../../../data/add_user/reducer'
+} from '../../../data/add_user/selectors';
+import { ADD_STAGES } from '../../../data/add_user/reducer';
 
 export interface AddUsersProps {}
 
 export const AddUsers: FC<AddUsersProps> = () => {
-  const [file, setFile] = useState<File | null>(null)
+  const [file, setFile] = useState<File | null>(null);
   const [user, setUser] = useState<UserToAdd>({
     first: '',
     last: '',
     email: '',
-  })
-  const dispatch = useDispatch()
-  const currentAddStage = useSelector(getStage)
-  const numUsersToAdd = useSelector(getNumUsersToAddState)
-  const numUsersAdded = useSelector(getUsersAddedState)
+  });
+  const dispatch = useDispatch();
+  const currentAddStage = useSelector(getStage);
+  const numUsersToAdd = useSelector(getNumUsersToAddState);
+  const numUsersAdded = useSelector(getUsersAddedState);
 
   const onMultiSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
+    e.preventDefault();
     if (file !== null) {
-      dispatch(parseCsv(file))
+      dispatch(parseCsv(file));
     }
-  }
+  };
 
   const onSingleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    dispatch(addUsers([user]))
-  }
+    e.preventDefault();
+    dispatch(addUsers([user]));
+  };
 
   const onMultiChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      setFile(e.target.files[0])
+      setFile(e.target.files[0]);
     } else {
-      setFile(null)
+      setFile(null);
     }
-  }
+  };
 
   const onSingleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newUser = Object.assign({}, user)
+    const newUser = Object.assign({}, user);
     switch (e.target.name) {
       case 'userFirstName':
-        newUser.first = e.target.value
-        break
+        newUser.first = e.target.value;
+        break;
       case 'userLastName':
-        newUser.last = e.target.value
-        break
+        newUser.last = e.target.value;
+        break;
       case 'userEmail':
-        newUser.email = e.target.value
-        break
+        newUser.email = e.target.value;
+        break;
     }
-    setUser(newUser)
-  }
+    setUser(newUser);
+  };
 
   return (
     <SpaceVertical width="40vw">
@@ -159,5 +159,5 @@ export const AddUsers: FC<AddUsersProps> = () => {
         </Fieldset>
       </Form>
     </SpaceVertical>
-  )
-}
+  );
+};

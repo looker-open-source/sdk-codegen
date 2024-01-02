@@ -74,23 +74,23 @@ export type HttpMethod =
   | 'DELETE'
   | 'PATCH'
   | 'TRACE'
-  | 'HEAD'
+  | 'HEAD';
 
 /** Interface for API transport values */
 export interface ITransportSettings {
-  [key: string]: any
+  [key: string]: any;
   /** base URL of API REST web service */
-  base_url: string
+  base_url: string;
   /** standard headers to provide in all transport requests */
-  headers?: Headers
+  headers?: Headers;
   /** whether to verify ssl certs or not. Defaults to true */
-  verify_ssl: boolean
+  verify_ssl: boolean;
   /** request timeout in seconds. Default to 30 */
-  timeout: number
+  timeout: number;
   /** encoding override */
-  encoding?: string | null
+  encoding?: string | null;
   /** agent tag to use for the SDK requests */
-  agentTag: string
+  agentTag: string;
 }
 
 /**
@@ -98,15 +98,15 @@ export interface ITransportSettings {
  */
 export interface IRawResponse {
   /** ok is `true` if the response is successful, `false` otherwise */
-  ok: boolean
+  ok: boolean;
   /** HTTP response code */
-  statusCode: number
+  statusCode: number;
   /** HTTP response status message text */
-  statusMessage: string
+  statusMessage: string;
   /** MIME type of the response from the HTTP response header */
-  contentType: string
+  contentType: string;
   /** The body of the HTTP response, without any additional processing */
-  body: any
+  body: any;
 }
 
 /**
@@ -133,7 +133,7 @@ export interface ITransport {
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
-  ): Promise<IRawResponse>
+  ): Promise<IRawResponse>;
 
   /**
    * HTTP request function for atomic, fully downloaded responses
@@ -152,7 +152,7 @@ export interface ITransport {
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<TSuccess, TError>>
+  ): Promise<SDKResponse<TSuccess, TError>>;
 
   /**
    * HTTP request function for a streamable response
@@ -174,7 +174,7 @@ export interface ITransport {
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
-  ): Promise<T>
+  ): Promise<T>;
 }
 ```
 
@@ -213,6 +213,7 @@ In the `ITransport` function parameters shown above:
   argument and returns a modified set of request properties that includes authorization information for the request.
   If an `authenticator` is not provided for a request, no special treatment of the HTTP url is performed. If an
   `authenticator` **is** specified for a request, the HTTP url for that particular request will be:
+
   - `base_url` (from `ITransportSettings`) `+`
   - `api_version` (from the SDK method class) `+`
   - `path` from the request parameter
@@ -241,7 +242,7 @@ Additional attributes can be added to the agent tag by separating them with semi
 The `rawRequest()` implementation:
 
 - constructs an HTTP request based on the properties passed into it, and returns the result of the response
-without any type conversion or error handling
+  without any type conversion or error handling
 - sets the `ok` property to `true` if successful or `false` if the request fails.
 
 The `request()` implementation:
@@ -259,40 +260,37 @@ The `stream()` implementation:
 Here's a TypeScript code sample for streaming the download of a query's CSV result:
 
 ```ts
-  const request: IRequestRunInlineQuery = {
-    body: {
-      client_id: q.client_id || undefined,
-      column_limit: q.column_limit || undefined,
-      dynamic_fields: q.dynamic_fields || undefined,
-      fields: q.fields || undefined,
-      fill_fields: q.fill_fields || [],
-      filter_config: q.filter_config || undefined,
-      filter_expression: q.filter_expression || undefined,
-      filters: q.filters,
-      limit: limit.toString(10),
-      model: q.model!,
-      pivots: q.pivots || undefined,
-      query_timezone: q.query_timezone || undefined,
-      row_total: q.row_total || undefined,
-      sorts: q.sorts || [],
-      subtotals: q.subtotals || undefined,
-      total: typeof q.total !== 'undefined' ? q.total : false,
-      view: q.view!,
-      vis_config: q.vis_config || undefined,
-      visible_ui_sections: q.visible_ui_sections || undefined,
-    },
-    result_format: 'csv',
-  }
-  const csvFile = './query.csv'
-  const writer = fs.createWriteStream(csvFile)
-  await sdk.stream.run_inline_query(async (readable: Readable) => {
-    return new Promise<any>((resolve, reject) => {
-      readable
-        .pipe(writer)
-        .on('error', reject)
-        .on('finish', resolve)
-    })
-  }, request)
+const request: IRequestRunInlineQuery = {
+  body: {
+    client_id: q.client_id || undefined,
+    column_limit: q.column_limit || undefined,
+    dynamic_fields: q.dynamic_fields || undefined,
+    fields: q.fields || undefined,
+    fill_fields: q.fill_fields || [],
+    filter_config: q.filter_config || undefined,
+    filter_expression: q.filter_expression || undefined,
+    filters: q.filters,
+    limit: limit.toString(10),
+    model: q.model!,
+    pivots: q.pivots || undefined,
+    query_timezone: q.query_timezone || undefined,
+    row_total: q.row_total || undefined,
+    sorts: q.sorts || [],
+    subtotals: q.subtotals || undefined,
+    total: typeof q.total !== 'undefined' ? q.total : false,
+    view: q.view!,
+    vis_config: q.vis_config || undefined,
+    visible_ui_sections: q.visible_ui_sections || undefined,
+  },
+  result_format: 'csv',
+};
+const csvFile = './query.csv';
+const writer = fs.createWriteStream(csvFile);
+await sdk.stream.run_inline_query(async (readable: Readable) => {
+  return new Promise<any>((resolve, reject) => {
+    readable.pipe(writer).on('error', reject).on('finish', resolve);
+  });
+}, request);
 ```
 
 #### Request parameter encoding
@@ -417,7 +415,7 @@ be set to `true` in this circumstance. In the [TypeScript generator](../packages
 the `methodHeaderDeclaration` function has this line:
 
 ```ts
-const requestType = this.requestTypeName(method)
+const requestType = this.requestTypeName(method);
 ```
 
 If the method requires a request type and `needRequestTypes` is `true`, the [`codeGen.ts`](../packages/sdk-codegen/src/codeGen.ts)

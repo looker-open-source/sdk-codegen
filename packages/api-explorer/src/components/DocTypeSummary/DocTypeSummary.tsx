@@ -24,21 +24,21 @@
 
  */
 
-import type { FC } from 'react'
-import React from 'react'
-import { Card, CardContent, Flex, Space } from '@looker/components'
-import type { IType } from '@looker/sdk-codegen'
-import { MethodBadge, RunItHeading } from '@looker/run-it'
-import { DocSummaryStatus } from '../../components'
+import type { FC } from 'react';
+import React from 'react';
+import { Card, CardContent, Flex, Space } from '@looker/components';
+import type { IType } from '@looker/sdk-codegen';
+import { MethodBadge, RunItHeading } from '@looker/run-it';
+import { DocSummaryStatus } from '../../components';
 
 interface DocTypeSummaryProps {
-  type: IType
+  type: IType;
 }
 
 const typeDescription = (type: IType) => {
-  if (type.description) return type.description
-  return `${Object.entries(type.properties).length} properties`
-}
+  if (type.description) return type.description;
+  return `${Object.entries(type.properties).length} properties`;
+};
 
 export const DocTypeSummary: FC<DocTypeSummaryProps> = ({ type }) => (
   <Card maxWidth="50rem" border>
@@ -61,4 +61,4 @@ export const DocTypeSummary: FC<DocTypeSummaryProps> = ({ type }) => (
       </Space>
     </CardContent>
   </Card>
-)
+);

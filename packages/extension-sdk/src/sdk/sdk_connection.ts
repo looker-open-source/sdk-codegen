@@ -24,16 +24,16 @@
 
  */
 
-import type { Readable } from 'readable-stream'
+import type { Readable } from 'readable-stream';
 import type {
-  HttpMethod,
-  Values,
   Authenticator,
-  ITransportSettings,
+  HttpMethod,
   IHostConnection,
-} from '@looker/sdk-rtl'
+  ITransportSettings,
+  Values,
+} from '@looker/sdk-rtl';
 
-import type { ExtensionHostApi, ApiVersion } from '../connect'
+import type { ApiVersion, ExtensionHostApi } from '../connect';
 
 export class SdkConnection implements IHostConnection {
   constructor(
@@ -57,7 +57,7 @@ export class SdkConnection implements IHostConnection {
       undefined,
       options,
       this.apiVersion
-    )
+    );
   }
 
   async rawRequest(
@@ -74,7 +74,7 @@ export class SdkConnection implements IHostConnection {
       params,
       body,
       this.apiVersion
-    )
+    );
   }
 
   async stream<T>(
@@ -86,6 +86,6 @@ export class SdkConnection implements IHostConnection {
     _authenticator?: Authenticator,
     _options?: Partial<ITransportSettings>
   ): Promise<any> {
-    return Promise.reject(new Error('Not implemented'))
+    return Promise.reject(new Error('Not implemented'));
   }
 }

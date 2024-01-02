@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { DocResponses } from './DocResponses'
+export { DocResponses } from './DocResponses';

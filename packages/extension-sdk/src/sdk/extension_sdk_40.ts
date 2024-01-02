@@ -25,13 +25,13 @@
  */
 
 import {
-  LookerExtensionSDK as _LookerExtensionSDK,
   Looker40SDK,
-} from '@looker/sdk'
-import type { ExtensionHostApi } from '../connect'
-import { ApiVersion } from '../connect'
+  LookerExtensionSDK as _LookerExtensionSDK,
+} from '@looker/sdk';
+import type { ExtensionHostApi } from '../connect';
+import { ApiVersion } from '../connect';
 
-import { SdkConnection } from './sdk_connection'
+import { SdkConnection } from './sdk_connection';
 
 export class LookerExtensionSDK40 {
   /**
@@ -42,6 +42,6 @@ export class LookerExtensionSDK40 {
     return _LookerExtensionSDK.createClient(
       new SdkConnection(hostConnection, ApiVersion.sdk40),
       Looker40SDK
-    )
+    );
   }
 }

@@ -24,5 +24,5 @@
 
  */
 
-export * from './types'
-export * from './visualization_sdk'
+export * from './types';
+export * from './visualization_sdk';

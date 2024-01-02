@@ -23,25 +23,25 @@
  SOFTWARE.
 
  */
-import type { FC } from 'react'
-import React, { useEffect } from 'react'
-import type { SectionProps } from '@looker/components'
-import { Section } from '@looker/components'
-import { useWindowSize } from '../../utils'
-import { HEADER_REM } from '../Header'
+import type { FC } from 'react';
+import React, { useEffect } from 'react';
+import type { SectionProps } from '@looker/components';
+import { Section } from '@looker/components';
+import { useWindowSize } from '../../utils';
+import { HEADER_REM } from '../Header';
 
-export const REM_TO_PX = 16
+export const REM_TO_PX = 16;
 
 /**
  * Extends the looker Section to proper height and scrolls to top on use
  * @param props - anything you want, but probably SectionProps
  */
 export const ApixSection: FC<SectionProps> = (props: any) => {
-  const size = useWindowSize()
-  const sectionH = size.height - REM_TO_PX * HEADER_REM
+  const size = useWindowSize();
+  const sectionH = size.height - REM_TO_PX * HEADER_REM;
   useEffect(() => {
-    document.getElementById('top')?.scrollTo(REM_TO_PX * HEADER_REM, 0)
-  }, [props])
+    document.getElementById('top')?.scrollTo(REM_TO_PX * HEADER_REM, 0);
+  }, [props]);
 
   return (
     <Section
@@ -50,5 +50,5 @@ export const ApixSection: FC<SectionProps> = (props: any) => {
       p="xxlarge"
       style={{ height: `${sectionH}px`, overflow: 'auto', borderTop: '0px' }}
     />
-  )
-}
+  );
+};

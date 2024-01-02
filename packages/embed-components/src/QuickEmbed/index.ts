@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export * from './QuickEmbed'
+export * from './QuickEmbed';

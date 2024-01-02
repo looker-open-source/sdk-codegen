@@ -24,4 +24,4 @@
 
  */
 
-export { useTagStoreSync } from './hooks'
+export { useTagStoreSync } from './hooks';

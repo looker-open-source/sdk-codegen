@@ -23,15 +23,15 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { Box, Flex } from '@looker/components'
-import styled from 'styled-components'
-import { SomethingWentWrongGraphic } from './components'
+import React from 'react';
+import { Box, Flex } from '@looker/components';
+import styled from 'styled-components';
+import { SomethingWentWrongGraphic } from './components';
 
 export interface SomethingWentWrongProps {
-  header: string
-  actionMessage: string
-  altText?: string
+  header: string;
+  actionMessage: string;
+  altText?: string;
 }
 
 export const SomethingWentWrong: React.FC<SomethingWentWrongProps> = ({
@@ -46,7 +46,7 @@ export const SomethingWentWrong: React.FC<SomethingWentWrongProps> = ({
       <ActionMessage>{actionMessage}</ActionMessage>
     </Box>
   </OuterFlex>
-)
+);
 
 const OuterFlex = styled(Flex)`
   width: 100%;
@@ -54,7 +54,7 @@ const OuterFlex = styled(Flex)`
   justify-content: center;
   flex-direction: column;
   align-items: center;
-`
+`;
 
 const HeaderText = styled.h1`
   margin-top: ${(props) => props.theme.space.large};
@@ -63,7 +63,7 @@ const HeaderText = styled.h1`
   font-weight: ${(props) => props.theme.fontWeights.normal};
   font-size: ${(props) => props.theme.fontSizes.xxxxlarge};
   color: ${(props) => props.theme.colors.text5};
-`
+`;
 
 const ActionMessage = styled.h3`
   margin-top: ${(props) => props.theme.space.small};
@@ -72,4 +72,4 @@ const ActionMessage = styled.h3`
   font-weight: ${(props) => props.theme.fontWeights.normal};
   font-size: ${(props) => props.theme.fontSizes.large};
   color: ${(props) => props.theme.colors.text3};
-`
+`;

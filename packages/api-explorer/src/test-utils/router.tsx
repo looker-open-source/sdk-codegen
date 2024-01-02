@@ -24,19 +24,19 @@
 
  */
 
-import type { ReactElement } from 'react'
-import React from 'react'
-import { MemoryRouter } from 'react-router-dom'
-import type { RenderOptions } from '@testing-library/react'
-import { renderWithTheme } from '@looker/components-test-utils'
+import type { ReactElement } from 'react';
+import React from 'react';
+import { MemoryRouter } from 'react-router-dom';
+import type { RenderOptions } from '@testing-library/react';
+import { renderWithTheme } from '@looker/components-test-utils';
 
 export const withRouter = (
   children: ReactElement<any> | ReactElement[],
   initialEntries: string[] = ['/']
-) => <MemoryRouter initialEntries={initialEntries}>{children}</MemoryRouter>
+) => <MemoryRouter initialEntries={initialEntries}>{children}</MemoryRouter>;
 
 export const renderWithRouter = (
   children: ReactElement<any> | ReactElement[],
   initialEntries?: string[],
   options?: Omit<RenderOptions<any>, 'queries'>
-) => renderWithTheme(withRouter(children, initialEntries), options)
+) => renderWithTheme(withRouter(children, initialEntries), options);

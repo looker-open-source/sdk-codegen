@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { DocPseudo } from './DocPseudo'
+export { DocPseudo } from './DocPseudo';

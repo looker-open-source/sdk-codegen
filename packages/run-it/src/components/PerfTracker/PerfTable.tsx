@@ -24,20 +24,20 @@
 
  */
 
-import type { FC } from 'react'
-import React, { useEffect, useState } from 'react'
-import { DataTable, doDataTableSort } from '@looker/components'
+import type { FC } from 'react';
+import React, { useEffect, useState } from 'react';
+import { DataTable, doDataTableSort } from '@looker/components';
 
-import type { LoadTimes } from './perfUtils'
-import { createTableRows, perfTableColumns } from './perfTableUtils'
+import type { LoadTimes } from './perfUtils';
+import { createTableRows, perfTableColumns } from './perfTableUtils';
 
 interface PerfTableProps {
   /** An array of performance load times */
-  data: LoadTimes[]
+  data: LoadTimes[];
   /** A row select action handler */
-  onSelect: (item: LoadTimes) => void
+  onSelect: (item: LoadTimes) => void;
   /** Show all columns, or just "important" ones */
-  showAllColumns?: boolean
+  showAllColumns?: boolean;
 }
 
 /**
@@ -49,29 +49,29 @@ export const PerfTable: FC<PerfTableProps> = ({
   onSelect,
   showAllColumns = false,
 }) => {
-  const [columns, setColumns] = useState(perfTableColumns(showAllColumns))
+  const [columns, setColumns] = useState(perfTableColumns(showAllColumns));
   const [rows, setRows] = useState(
     createTableRows(data, onSelect, showAllColumns)
-  )
+  );
   const handleSort = (id: string, sortDirection: 'asc' | 'desc') => {
     const { columns: sortedColumns, data: sortedData } = doDataTableSort(
       data,
       columns,
       id,
       sortDirection
-    )
+    );
     setRows(
       createTableRows(sortedData as LoadTimes[], onSelect, showAllColumns)
-    )
-    setColumns(sortedColumns)
-  }
+    );
+    setColumns(sortedColumns);
+  };
 
   useEffect(() => {
-    setColumns(perfTableColumns(showAllColumns))
-  }, [showAllColumns])
+    setColumns(perfTableColumns(showAllColumns));
+  }, [showAllColumns]);
   useEffect(() => {
-    setRows(createTableRows(data, onSelect, showAllColumns))
-  }, [data, onSelect, showAllColumns])
+    setRows(createTableRows(data, onSelect, showAllColumns));
+  }, [data, onSelect, showAllColumns]);
   return (
     <DataTable
       onSort={handleSort}
@@ -80,5 +80,5 @@ export const PerfTable: FC<PerfTableProps> = ({
     >
       {rows}
     </DataTable>
-  )
-}
+  );
+};

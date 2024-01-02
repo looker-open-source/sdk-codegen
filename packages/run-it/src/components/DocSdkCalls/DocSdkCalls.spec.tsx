@@ -23,17 +23,17 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { renderWithTheme } from '@looker/components-test-utils'
-import { screen } from '@testing-library/react'
-import { codeGenerators } from '@looker/sdk-codegen'
+import React from 'react';
+import { renderWithTheme } from '@looker/components-test-utils';
+import { screen } from '@testing-library/react';
+import { codeGenerators } from '@looker/sdk-codegen';
 
-import { api } from '../../test-data'
-import { DocSdkCalls } from './DocSdkCalls'
+import { api } from '../../test-data';
+import { DocSdkCalls } from './DocSdkCalls';
 
 describe('DocSdkCalls', () => {
-  const supportedLanguages = codeGenerators.map((g) => g.language)
-  const pattern = new RegExp(`${supportedLanguages.join('|')}`)
+  const supportedLanguages = codeGenerators.map((g) => g.language);
+  const pattern = new RegExp(`${supportedLanguages.join('|')}`);
 
   test('it can render SDK call syntax for all supported languages', () => {
     renderWithTheme(
@@ -43,16 +43,16 @@ describe('DocSdkCalls', () => {
         inputs={{ user_id: 1 }}
         sdkLanguage="All"
       />
-    )
+    );
     expect(
       screen.getByRole('heading', { name: 'SDKs call syntax' })
-    ).toBeInTheDocument()
+    ).toBeInTheDocument();
     expect(
       screen.getAllByRole('tab', {
         name: pattern,
       })
-    ).toHaveLength(supportedLanguages.length)
-  })
+    ).toHaveLength(supportedLanguages.length);
+  });
 
   test.each(supportedLanguages)(
     'it can render a %s method declaration',
@@ -64,13 +64,13 @@ describe('DocSdkCalls', () => {
           inputs={{ user_id: 1 }}
           sdkLanguage={sdkLanguage}
         />
-      )
-      expect(screen.queryByRole('tab')).not.toBeInTheDocument()
+      );
+      expect(screen.queryByRole('tab')).not.toBeInTheDocument();
       expect(
         screen.getByRole('heading', { name: `${sdkLanguage} SDK call syntax` })
-      ).toBeInTheDocument()
+      ).toBeInTheDocument();
     }
-  )
+  );
 
   test('shows useful message when it errors while parsing complex structures', () => {
     renderWithTheme(
@@ -82,11 +82,11 @@ describe('DocSdkCalls', () => {
         }}
         sdkLanguage="All"
       />
-    )
+    );
     expect(
       screen.getByText(
         'Cannot generate SDK call syntax. Ensure all complex structures in the request form are valid.'
       )
-    ).toBeInTheDocument()
-  })
-})
+    ).toBeInTheDocument();
+  });
+});

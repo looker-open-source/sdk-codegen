@@ -23,15 +23,15 @@
  SOFTWARE.
 
  */
-import type { FC } from 'react'
-import React from 'react'
-import type { ApiModel, IMethod } from '@looker/sdk-codegen'
-import { CollapserCard } from '@looker/run-it'
-import { ExploreType } from '../../../components'
+import type { FC } from 'react';
+import React from 'react';
+import type { ApiModel, IMethod } from '@looker/sdk-codegen';
+import { CollapserCard } from '@looker/run-it';
+import { ExploreType } from '../../../components';
 
 interface DocRequestBodyProps {
-  method: IMethod
-  api: ApiModel
+  method: IMethod;
+  api: ApiModel;
 }
 
 /**
@@ -39,9 +39,9 @@ interface DocRequestBodyProps {
  * @param method to document
  */
 export const DocRequestBody: FC<DocRequestBodyProps> = ({ method, api }) => {
-  const bodies = method.bodyParams
-  if (bodies.length === 0) return <></>
-  const header = bodies.length > 1 ? 'Request bodies' : 'Request body'
+  const bodies = method.bodyParams;
+  if (bodies.length === 0) return <></>;
+  const header = bodies.length > 1 ? 'Request bodies' : 'Request body';
 
   return (
     <CollapserCard id="bodies" heading={header}>
@@ -56,5 +56,5 @@ export const DocRequestBody: FC<DocRequestBodyProps> = ({ method, api }) => {
         ))}
       </>
     </CollapserCard>
-  )
-}
+  );
+};

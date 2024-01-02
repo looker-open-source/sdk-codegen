@@ -24,7 +24,7 @@
 
  */
 
-import type { MessageDetail } from './reducer'
+import type { MessageDetail } from './reducer';
 
 export enum Actions {
   ERROR = 'ERROR',
@@ -35,25 +35,25 @@ export enum Actions {
 }
 
 export interface ErrorAction {
-  type: Actions.ERROR
-  payload: Error
+  type: Actions.ERROR;
+  payload: Error;
 }
 
 export interface ClearMessageAction {
-  type: Actions.MESSAGE_CLEAR
+  type: Actions.MESSAGE_CLEAR;
 }
 
 export interface MessageAction {
-  type: Actions.MESSAGE
-  payload: MessageDetail
+  type: Actions.MESSAGE;
+  payload: MessageDetail;
 }
 
 export interface BeginLoadingAction {
-  type: Actions.BEGIN_LOADING
+  type: Actions.BEGIN_LOADING;
 }
 
 export interface EndLoadingAction {
-  type: Actions.END_LOADING
+  type: Actions.END_LOADING;
 }
 
 export type CommonAction =
@@ -61,12 +61,12 @@ export type CommonAction =
   | ClearMessageAction
   | MessageAction
   | BeginLoadingAction
-  | EndLoadingAction
+  | EndLoadingAction;
 
 export const actionError = (error: Error): ErrorAction => ({
   type: Actions.ERROR,
   payload: error,
-})
+});
 
 export const actionMessage = (
   messageText: string,
@@ -77,16 +77,16 @@ export const actionMessage = (
     messageText,
     intent,
   },
-})
+});
 
 export const actionClearMessage = (): ClearMessageAction => ({
   type: Actions.MESSAGE_CLEAR,
-})
+});
 
 export const beginLoading = (): BeginLoadingAction => ({
   type: Actions.BEGIN_LOADING,
-})
+});
 
 export const endLoading = (): EndLoadingAction => ({
   type: Actions.END_LOADING,
-})
+});

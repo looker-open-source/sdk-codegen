@@ -24,17 +24,17 @@
 
  */
 
-import { shallow } from 'enzyme'
-import * as React from 'react'
-import { unregisterCore40SDK } from '../../sdk/core_sdk_40'
-import { ExtensionProvider40 } from './ExtensionProvider40'
+import { shallow } from 'enzyme';
+import * as React from 'react';
+import { unregisterCore40SDK } from '../../sdk/core_sdk_40';
+import { ExtensionProvider40 } from './ExtensionProvider40';
 
-let mockFailConnection = false
+let mockFailConnection = false;
 const mockHost = {
   clientRouteChanged: () => {
     // noop
   },
-}
+};
 
 jest.mock('@looker/extension-sdk', () => ({
   connectExtensionHost: () =>
@@ -44,30 +44,30 @@ jest.mock('@looker/extension-sdk', () => ({
   LookerExtensionSDK40: {
     createClient: () => ({}),
   },
-}))
+}));
 
 describe('ExtensionProvider40 component', () => {
-  let originalConsoleError: any
+  let originalConsoleError: any;
 
   beforeEach(() => {
-    originalConsoleError = console.error
-    console.error = jest.fn()
-    mockFailConnection = false
-    unregisterCore40SDK()
-  })
+    originalConsoleError = console.error;
+    console.error = jest.fn();
+    mockFailConnection = false;
+    unregisterCore40SDK();
+  });
 
   afterEach(() => {
-    console.error = originalConsoleError
-  })
+    console.error = originalConsoleError;
+  });
 
   it('renders', () => {
     const comp = shallow(
       <ExtensionProvider40 loadingComponent={<span id="loading">Loading</span>}>
         <div id="extension"></div>
       </ExtensionProvider40>
-    )
-    expect(comp.find('ContextProvider')).toHaveLength(1)
-    expect(comp.find('[loadingComponent]')).toHaveLength(1)
-    expect(comp.find('#extension')).toHaveLength(1)
-  })
-})
+    );
+    expect(comp.find('ContextProvider')).toHaveLength(1);
+    expect(comp.find('[loadingComponent]')).toHaveLength(1);
+    expect(comp.find('#extension')).toHaveLength(1);
+  });
+});

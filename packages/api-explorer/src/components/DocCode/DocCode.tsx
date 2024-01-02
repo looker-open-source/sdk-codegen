@@ -24,23 +24,25 @@
 
  */
 
-import type { FC } from 'react'
-import React from 'react'
-import { findGenerator } from '@looker/sdk-codegen'
-import { CodeDisplay } from '@looker/code-editor'
-import { useSelector } from 'react-redux'
+import type { FC } from 'react';
+import React from 'react';
+import { findGenerator } from '@looker/sdk-codegen';
+import { CodeDisplay } from '@looker/code-editor';
+import { useSelector } from 'react-redux';
 
-import { selectSearchPattern } from '../../state'
+import { selectSearchPattern } from '../../state';
 
 interface DocCodeProps {
-  code: string
-  language?: string
+  code: string;
+  language?: string;
 }
 
 export const DocCode: FC<DocCodeProps> = ({ code, language = 'json' }) => {
-  const searchPattern = useSelector(selectSearchPattern)
-  const gen = findGenerator(language)
-  if (gen) language = gen.language.toLocaleLowerCase()
+  const searchPattern = useSelector(selectSearchPattern);
+  const gen = findGenerator(language);
+  if (gen) language = gen.language.toLocaleLowerCase();
 
-  return <CodeDisplay language={language} code={code} pattern={searchPattern} />
-}
+  return (
+    <CodeDisplay language={language} code={code} pattern={searchPattern} />
+  );
+};

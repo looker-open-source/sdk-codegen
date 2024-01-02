@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { DocSdkUsage } from './DocSdkUsage'
+export { DocSdkUsage } from './DocSdkUsage';

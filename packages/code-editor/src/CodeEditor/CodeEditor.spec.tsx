@@ -23,47 +23,47 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { renderWithTheme } from '@looker/components-test-utils'
-import userEvent from '@testing-library/user-event'
-import { screen } from '@testing-library/react'
+import React from 'react';
+import { renderWithTheme } from '@looker/components-test-utils';
+import userEvent from '@testing-library/user-event';
+import { screen } from '@testing-library/react';
 
-import { pythonTestCode } from '../test-data'
-import { CodeEditor } from './CodeEditor'
+import { pythonTestCode } from '../test-data';
+import { CodeEditor } from './CodeEditor';
 
 describe('CodeEditor', () => {
-  const setState = jest.fn()
-  const useStateSpy = jest.spyOn(React, 'useState')
-  useStateSpy.mockImplementation(() => [pythonTestCode, setState])
+  const setState = jest.fn();
+  const useStateSpy = jest.spyOn(React, 'useState');
+  useStateSpy.mockImplementation(() => [pythonTestCode, setState]);
 
   test('it syntax highlights', () => {
     renderWithTheme(
       <CodeEditor onChange={setState} code={pythonTestCode} language="python" />
-    )
+    );
     expect(screen.getByText('all_lookml_models').closest('span')).toHaveClass(
       'function'
-    )
-    expect(screen.getByText('def').closest('span')).toHaveClass('keyword')
+    );
+    expect(screen.getByText('def').closest('span')).toHaveClass('keyword');
     expect(
       screen
         .getByText('# GET /lookml_models -> Sequence[models.LookmlModel]')
         .closest('span')
-    ).toHaveClass('comment')
-  })
+    ).toHaveClass('comment');
+  });
   test('it is edittable', async () => {
     renderWithTheme(
       <CodeEditor onChange={setState} code={pythonTestCode} language="python" />
-    )
-    const editPattern = '\n# This is the new code'
+    );
+    const editPattern = '\n# This is the new code';
     const input = screen
       .getByRole('code-editor')
       .getElementsByClassName(
         'npm__react-simple-code-editor__textarea'
-      )[0] as HTMLElement
-    await userEvent.click(input)
+      )[0] as HTMLElement;
+    await userEvent.click(input);
     await userEvent.paste(input, editPattern, undefined, {
       initialSelectionEnd: pythonTestCode.length,
-    })
-    expect(setState).toHaveBeenCalledWith(pythonTestCode + editPattern)
-  })
-})
+    });
+    expect(setState).toHaveBeenCalledWith(pythonTestCode + editPattern);
+  });
+});

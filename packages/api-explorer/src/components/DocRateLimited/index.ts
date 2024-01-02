@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { DocRateLimited } from './DocRateLimited'
+export { DocRateLimited } from './DocRateLimited';

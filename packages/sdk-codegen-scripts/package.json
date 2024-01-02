@@ -44,9 +44,9 @@
     "ini": "^1.3.8",
     "js-yaml": "3.14.1",
     "openapi3-ts": "2.0.2",
-    "prettier": "^2.4.1",
-    "swagger2openapi": "^7.0.3",
-    "lodash": "^4.17.21"
+    "prettier": "3.1.1",
+    "swagger2openapi": "7.0.8",
+    "lodash": "4.17.21"
   },
   "gitHead": "d16d6fd98594572f130dd0b7959d49a737de8722"
 }

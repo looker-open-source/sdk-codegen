@@ -23,5 +23,5 @@
  SOFTWARE.
 
  */
-export { DataGrid } from './DataGrid'
-export { parseCsv, json2Csv } from './gridUtils'
+export { DataGrid } from './DataGrid';
+export { parseCsv, json2Csv } from './gridUtils';

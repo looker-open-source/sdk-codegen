@@ -24,10 +24,10 @@
 
  */
 
-import config from 'config'
-import type { ApiModel, ICodeGen, IVersionInfo } from '@looker/sdk-codegen'
-import { codeGenerators, getCodeGenerator } from '@looker/sdk-codegen'
-import { quit } from './nodeUtils'
+import config from 'config';
+import type { ApiModel, ICodeGen, IVersionInfo } from '@looker/sdk-codegen';
+import { codeGenerators, getCodeGenerator } from '@looker/sdk-codegen';
+import { quit } from './nodeUtils';
 
 /**
  * constructs a language generator by name
@@ -46,27 +46,27 @@ export const getGenerator = (
   api: ApiModel,
   versions?: IVersionInfo
 ): ICodeGen | undefined => {
-  const gen = getCodeGenerator(language, api, versions)
+  const gen: any = getCodeGenerator(language, api, versions);
   if (!gen) {
-    const langs = codeGenerators.map((item) => item.language)
+    const langs = codeGenerators.map((item) => item.language);
     quit(
       `"${language}" is not a recognized language. Supported languages are: all, ${langs.join(
         ', '
       )}`
-    )
+    );
     // TS doesn't know quit() exits the program
-    return undefined
+    return undefined;
   }
 
   if (config.has(language)) {
-    const overrides = config.get<ICodeGen>(language)
+    const overrides: any = config.get<ICodeGen>(language);
     // Spread operator loses class functions
     // gen = { ...gen, ...overrides }
     Object.keys(overrides).forEach((key) => {
       if (key in gen) {
-        gen[key] = overrides[key]
+        gen[key] = overrides[key];
       }
-    })
+    });
   }
-  return gen
-}
+  return gen;
+};

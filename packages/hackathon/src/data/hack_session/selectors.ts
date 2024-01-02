@@ -26,39 +26,39 @@
 
 import type {
   IHackathonProps,
-  ITechnologyProps,
   IHackerProps,
-} from '../../models'
-import type { RootState } from '../root_reducer'
+  ITechnologyProps,
+} from '../../models';
+import type { RootState } from '../root_reducer';
 import type {
-  ProjectsHeadings,
   HackersHeadings,
   JudgingsHeadings,
-} from '../types'
+  ProjectsHeadings,
+} from '../types';
 
 export const getCurrentHackathonState = (
   state: RootState
-): IHackathonProps | undefined => state.hackSessionState.currentHackathon
+): IHackathonProps | undefined => state.hackSessionState.currentHackathon;
 
 export const getHackerState = (state: RootState): IHackerProps =>
-  state.hackSessionState.hacker
+  state.hackSessionState.hacker;
 
 export const getHackerIdState = (state: RootState): string | undefined =>
-  state.hackSessionState.hacker?.id
+  state.hackSessionState.hacker?.id;
 
 export const getHackerRegistrationIdState = (
   state: RootState
-): string | undefined => state.hackSessionState.hacker?.registration?._id
+): string | undefined => state.hackSessionState.hacker?.registration?._id;
 
 export const getTechnologies = (
   state: RootState
-): ITechnologyProps[] | undefined => state.hackSessionState.technologies
+): ITechnologyProps[] | undefined => state.hackSessionState.technologies;
 
 export const getProjectsHeadings = (state: RootState): ProjectsHeadings =>
-  state.hackSessionState.metadata.projectsHeadings
+  state.hackSessionState.metadata.projectsHeadings;
 
 export const getHackersHeadings = (state: RootState): HackersHeadings =>
-  state.hackSessionState.metadata.hackersHeadings
+  state.hackSessionState.metadata.hackersHeadings;
 
 export const getJudgingsHeadings = (state: RootState): JudgingsHeadings =>
-  state.hackSessionState.metadata.judgingsHeadings
+  state.hackSessionState.metadata.judgingsHeadings;

@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { ErrorDetailScene } from './ErrorDetailScene'
+export { ErrorDetailScene } from './ErrorDetailScene';

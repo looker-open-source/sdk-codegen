@@ -50,12 +50,12 @@ export enum ResourceTag {
 }
 
 export interface Resource {
-  content: string
-  type: ResourceType
-  tag: ResourceTag
-  link: string
-  shortenedLink: string
-  title: string
+  content: string;
+  type: ResourceType;
+  tag: ResourceTag;
+  link: string;
+  shortenedLink: string;
+  title: string;
 }
 
 export const resources: Array<Resource> = [
@@ -601,4 +601,4 @@ export const resources: Array<Resource> = [
     shortenedLink: 'https://goo.gle/3Y4yW52',
     title: 'Studio Community Visualization Codelab',
   },
-]
+];

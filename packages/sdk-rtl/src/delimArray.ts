@@ -31,12 +31,12 @@ export class DelimArray<T> extends Array<T> {
     public prefix: string = '',
     public suffix: string = ''
   ) {
-    super()
-    this.push(...(items || []))
+    super();
+    this.push(...(items || []));
   }
 
   static create<T>(): DelimArray<T> {
-    return Object.create(DelimArray.prototype)
+    return Object.create(DelimArray.prototype);
   }
 
   /**
@@ -44,6 +44,6 @@ export class DelimArray<T> extends Array<T> {
    * @returns {string} Delimited version of array
    */
   public toString = (): string => {
-    return `${this.prefix}${this.join(this.separator)}${this.suffix}`
-  }
+    return `${this.prefix}${this.join(this.separator)}${this.suffix}`;
+  };
 }

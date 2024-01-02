@@ -6,7 +6,7 @@ Any endpoint that accepts `limit` and `offset` parameters can support generic pa
 
 | Parameter | Description                                                                                                                                                                            |
 | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `limit`   | If provided, this value sets the number of results to return per _page_ and triggers paging headers to be provided.                                                                |
+| `limit`   | If provided, this value sets the number of results to return per _page_ and triggers paging headers to be provided.                                                                    |
 | `offset`  | This value sets the starting position of the results to return. A value of `0` (zero) is used for the first result. `offset` defaults to 0 if `limit` is provided and `offset` is not. |
 
 Some endpoints have `page` and `per_page` parameters instead of, or in addition to, `limit` and `offset`. The `limit` and `offset` parameters take precedence over the `page` and `per_page` parameters for endpoints that support both.
@@ -64,20 +64,23 @@ Results can be retrieved a page at a time with code like this sample:
 
 ```ts
 // "Monolithic" SDK search function
-async function dashboardSearchResultsByPage(inTitle: string, limit: number = 100) {
-  const sdk = new Looker40SDK(session)
+async function dashboardSearchResultsByPage(
+  inTitle: string,
+  limit: number = 100
+) {
+  const sdk = new Looker40SDK(session);
   return await pager(sdk, () =>
-    sdk.search_dashboards({title: inTitle, limit})
-  )
+    sdk.search_dashboards({ title: inTitle, limit })
+  );
 }
 
-const pagedDashboards = await dashboardSearchResultsByPage('JOEL')
+const pagedDashboards = await dashboardSearchResultsByPage('JOEL');
 for (const dash of pagedDashboards.items) {
-  console.log(dash.title)
+  console.log(dash.title);
 }
 while (pagedDashboards.more()) {
   for (const dash of await pagedDashboards.nextPage()) {
-    console.log(dash.title)
+    console.log(dash.title);
   }
 }
 ```
@@ -86,13 +89,15 @@ For the functional SDK, the syntax is almost identical (the imports will vary). 
 
 ```ts
 // Functional SDK search function
-async function dashboardSearchResultsByPage(inTitle: string, limit: number = 100) {
-  const sdk = new Looker40SDK(session)
+async function dashboardSearchResultsByPage(
+  inTitle: string,
+  limit: number = 100
+) {
+  const sdk = new Looker40SDK(session);
   return await pager(sdk, () =>
-    search_dashboards(sdk, {title: inTitle, limit})
-  )
+    search_dashboards(sdk, { title: inTitle, limit })
+  );
 }
-
 ```
 
 **Note** The above examples will only work correctly when a Looker release with paging headers for the API 4.0 implementation of `search_dashboards` is available.

@@ -24,25 +24,25 @@
 
  */
 
-import { MockCrypto } from './oauthSession.spec'
-import { BrowserServices } from './browserServices'
-import { DefaultSettings } from './apiSettings'
-import { BrowserCryptoHash, BrowserTransport } from './browserTransport'
-import type { IHostConnection } from './extensionTransport'
-import { ExtensionTransport } from './extensionTransport'
+import { MockCrypto } from './oauthSession.spec';
+import { BrowserServices } from './browserServices';
+import { DefaultSettings } from './apiSettings';
+import { BrowserCryptoHash, BrowserTransport } from './browserTransport';
+import type { IHostConnection } from './extensionTransport';
+import { ExtensionTransport } from './extensionTransport';
 
 describe('BrowserServices', () => {
   it('fails if settings are not provided', () => {
-    expect(() => new BrowserServices({})).toThrow()
-  })
+    expect(() => new BrowserServices({})).toThrow();
+  });
 
   it('succeeds with default settings', () => {
-    const defaultSettings = DefaultSettings()
-    const svcs = new BrowserServices({ settings: defaultSettings })
-    expect(svcs.settings).toEqual(defaultSettings)
-    expect(svcs.transport).toBeInstanceOf(BrowserTransport)
-    expect(svcs.crypto).toBeInstanceOf(BrowserCryptoHash)
-  })
+    const defaultSettings = DefaultSettings();
+    const svcs = new BrowserServices({ settings: defaultSettings });
+    expect(svcs.settings).toEqual(defaultSettings);
+    expect(svcs.transport).toBeInstanceOf(BrowserTransport);
+    expect(svcs.crypto).toBeInstanceOf(BrowserCryptoHash);
+  });
 
   it('accepts transport override', () => {
     const svcs = new BrowserServices({
@@ -51,19 +51,19 @@ describe('BrowserServices', () => {
         DefaultSettings(),
         {} as IHostConnection
       ),
-    })
+    });
     // nonsensical combination, but it doesn't matter for testing BrowserService ctor
-    expect(svcs.transport).toBeInstanceOf(ExtensionTransport)
-    expect(svcs.crypto).toBeInstanceOf(BrowserCryptoHash)
-  })
+    expect(svcs.transport).toBeInstanceOf(ExtensionTransport);
+    expect(svcs.crypto).toBeInstanceOf(BrowserCryptoHash);
+  });
 
   it('accepts crypto override', () => {
     const svcs = new BrowserServices({
       crypto: new MockCrypto(),
       settings: DefaultSettings(),
-    })
+    });
     // nonsensical combination, but it doesn't matter for testing BrowserService ctor
-    expect(svcs.transport).toBeInstanceOf(BrowserTransport)
-    expect(svcs.crypto).toBeInstanceOf(MockCrypto)
-  })
-})
+    expect(svcs.transport).toBeInstanceOf(BrowserTransport);
+    expect(svcs.crypto).toBeInstanceOf(MockCrypto);
+  });
+});

@@ -23,10 +23,10 @@
  SOFTWARE.
 
  */
-import type { SpecList } from '@looker/sdk-codegen'
-import { ApiModel } from '@looker/sdk-codegen'
-import type { SpecState } from '../state'
-import { defaultSpecsState } from '../state'
+import type { SpecList } from '@looker/sdk-codegen';
+import { ApiModel } from '@looker/sdk-codegen';
+import type { SpecState } from '../state';
+import { defaultSpecsState } from '../state';
 
 export const specs: SpecList = {
   '3.1': {
@@ -45,19 +45,19 @@ export const specs: SpecList = {
     specContent: require('../../../../spec/Looker.4.0.oas.json'),
     version: '4.0',
   },
-}
+};
 
-export const api = ApiModel.fromJson(specs['3.1'].specContent)
-export const api40 = ApiModel.fromJson(specs['4.0'].specContent)
+export const api = ApiModel.fromJson(specs['3.1'].specContent);
+export const api40 = ApiModel.fromJson(specs['4.0'].specContent);
 
 export const getLoadedSpecs = () => {
-  const loadedSpecs = { ...specs }
-  loadedSpecs['3.1'].api = api
-  loadedSpecs['4.0'].api = api40
-  return loadedSpecs
-}
+  const loadedSpecs = { ...specs };
+  loadedSpecs['3.1'].api = api;
+  loadedSpecs['4.0'].api = api40;
+  return loadedSpecs;
+};
 
 export const specState: SpecState = {
   ...defaultSpecsState,
   specs: getLoadedSpecs(),
-}
+};

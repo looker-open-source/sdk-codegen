@@ -24,34 +24,34 @@
 
  */
 
-import type { Readable } from 'readable-stream'
-import { addQueryParams, StatusCode } from './transport'
+import type { Readable } from 'readable-stream';
+import { StatusCode, addQueryParams } from './transport';
 import type {
   Authenticator,
   HttpMethod,
   IRawResponse,
   ITransport,
   ITransportSettings,
+  RawObserver,
   SDKResponse,
   Values,
-  RawObserver,
-} from './transport'
+} from './transport';
 
 export abstract class BaseTransport implements ITransport {
   protected constructor(protected readonly options: ITransportSettings) {
-    this.options = options
+    this.options = options;
   }
 
-  observer: RawObserver | undefined = undefined
+  observer: RawObserver | undefined = undefined;
 
   abstract parseResponse<TSuccess, TError>(
     raw: IRawResponse
-  ): Promise<SDKResponse<TSuccess, TError>>
+  ): Promise<SDKResponse<TSuccess, TError>>;
 
   ok(res: IRawResponse): boolean {
     return (
       res.statusCode >= StatusCode.OK && res.statusCode <= StatusCode.IMUsed
-    )
+    );
   }
 
   /**
@@ -74,7 +74,7 @@ export abstract class BaseTransport implements ITransport {
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
-  ): Promise<IRawResponse>
+  ): Promise<IRawResponse>;
 
   /**
    * Request a streaming response
@@ -93,7 +93,7 @@ export abstract class BaseTransport implements ITransport {
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<TSuccess, TError>>
+  ): Promise<SDKResponse<TSuccess, TError>>;
 
   /**
    * Request a streaming response
@@ -115,7 +115,7 @@ export abstract class BaseTransport implements ITransport {
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
-  ): Promise<TSuccess>
+  ): Promise<TSuccess>;
 
   /**
    * Determine whether the url should be an API path, relative from base_url, or is already fully specified override
@@ -130,11 +130,11 @@ export abstract class BaseTransport implements ITransport {
     queryParams?: Values
   ) {
     // is this an API-versioned call?
-    const base = options.base_url
+    const base = options.base_url;
     if (!path.match(/^(http:\/\/|https:\/\/)/gi)) {
-      path = `${base}${path}` // path was relative
+      path = `${base}${path}`; // path was relative
     }
-    path = addQueryParams(path, queryParams)
-    return path
+    path = addQueryParams(path, queryParams);
+    return path;
   }
 }

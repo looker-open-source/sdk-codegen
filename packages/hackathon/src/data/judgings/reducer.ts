@@ -23,17 +23,17 @@
  SOFTWARE.
 
  */
-import type { IJudgingProps } from '../../models'
-import type { JudgingAction } from './actions'
-import { Actions } from './actions'
+import type { IJudgingProps } from '../../models';
+import type { JudgingAction } from './actions';
+import { Actions } from './actions';
 
 export interface JudgingsState {
-  currentPageNum: number
-  judgings: IJudgingProps[]
-  judgingsLoaded: boolean
-  currentJudging?: IJudgingProps
-  judgingUpdated?: boolean
-  judgingLoaded: boolean
+  currentPageNum: number;
+  judgings: IJudgingProps[];
+  judgingsLoaded: boolean;
+  currentJudging?: IJudgingProps;
+  judgingUpdated?: boolean;
+  judgingLoaded: boolean;
 }
 
 const defaultState: Readonly<JudgingsState> = Object.freeze({
@@ -41,28 +41,28 @@ const defaultState: Readonly<JudgingsState> = Object.freeze({
   judgingsLoaded: false,
   judgings: [],
   judgingLoaded: false,
-})
+});
 
 const calculateScore = (judging: IJudgingProps): number =>
-  2 * judging.execution + judging.scope + judging.novelty + judging.impact
+  2 * judging.execution + judging.scope + judging.novelty + judging.impact;
 
 const normalizeValue = (value: number) => {
-  return value > 0 ? value : 1
-}
+  return value > 0 ? value : 1;
+};
 
 const normalizeJudgingData = (
   judging?: IJudgingProps
 ): IJudgingProps | undefined => {
-  const newJudging = judging
+  const newJudging = judging;
   if (newJudging) {
-    newJudging.scope = normalizeValue(newJudging.scope)
-    newJudging.novelty = normalizeValue(newJudging.novelty)
-    newJudging.execution = normalizeValue(newJudging.execution)
-    newJudging.impact = normalizeValue(newJudging.impact)
-    newJudging.score = calculateScore(newJudging)
+    newJudging.scope = normalizeValue(newJudging.scope);
+    newJudging.novelty = normalizeValue(newJudging.novelty);
+    newJudging.execution = normalizeValue(newJudging.execution);
+    newJudging.impact = normalizeValue(newJudging.impact);
+    newJudging.score = calculateScore(newJudging);
   }
-  return newJudging
-}
+  return newJudging;
+};
 
 export const judgingsReducer = (
   state: JudgingsState = defaultState,
@@ -76,48 +76,48 @@ export const judgingsReducer = (
         currentJudging: undefined,
         judgingUpdated: undefined,
         judgingLoaded: false,
-      }
+      };
     case Actions.GET_JUDGINGS_RESPONSE:
       return {
         ...state,
         judgings: action.payload,
         judgingsLoaded: true,
-      }
+      };
     case Actions.GET_JUDGING_REQUEST:
       return {
         ...state,
         currentJudging: undefined,
         judgingUpdated: undefined,
         judgingLoaded: false,
-      }
+      };
     case Actions.GET_JUDGING_RESPONSE:
       return {
         ...state,
         currentJudging: normalizeJudgingData(action.payload),
         judgingLoaded: true,
-      }
+      };
     case Actions.UPDATE_JUDGING_DATA:
       return {
         ...state,
         currentJudging: normalizeJudgingData(action.payload),
-      }
+      };
     case Actions.UPDATE_JUDGINGS_PAGE_NUM:
       return {
         ...state,
         currentPageNum: action.payload,
-      }
+      };
     case Actions.SAVE_JUDGING_REQUEST:
       return {
         ...state,
         judgingUpdated: undefined,
-      }
+      };
     case Actions.SAVE_JUDGING_RESPONSE:
       return {
         ...state,
         currentJudging: action.payload.judging,
         judgingUpdated: action.payload.judgingUpdated,
-      }
+      };
     default:
-      return state
+      return state;
   }
-}
+};

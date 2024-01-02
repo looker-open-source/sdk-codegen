@@ -24,8 +24,8 @@
 
  */
 
-import { NavLink } from 'react-router-dom'
-import styled from 'styled-components'
+import { NavLink } from 'react-router-dom';
+import styled from 'styled-components';
 
 export const Link = styled(NavLink)`
   text-decoration: none;
@@ -37,4 +37,4 @@ export const Link = styled(NavLink)`
   &.active {
     color: inherit;
   }
-`
+`;

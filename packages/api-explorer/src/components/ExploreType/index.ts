@@ -24,13 +24,13 @@
 
  */
 
-export { ExploreType, ExploreTypeLink } from './ExploreType'
+export { ExploreType, ExploreTypeLink } from './ExploreType';
 export {
   ExploreProperty,
   ExplorePropertyNode,
   ExplorePropertyDetail,
   ExplorePropertyType,
-} from './ExploreProperty'
+} from './ExploreProperty';
 export {
   typeIcon,
   pickTypeProps,
@@ -38,4 +38,4 @@ export {
   typeLinkSuffix,
   pickType,
   expandable,
-} from './exploreUtils'
+} from './exploreUtils';

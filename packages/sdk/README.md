@@ -86,35 +86,38 @@ By writing your own `getProxyToken()` visible to this class, any proxied authent
 
 ```typescript
 export class EmbedSession extends ProxySession {
-  constructor(public settings: IApiSettings, transport?: ITransport) {
-    super(settings, transport)
+  constructor(
+    public settings: IApiSettings,
+    transport?: ITransport
+  ) {
+    super(settings, transport);
   }
 
   async authenticate(props: any) {
     // get the auth token from the proxy server
-    const token = await getProxyToken()
+    const token = await getProxyToken();
     if (token) {
       // Assign the token, which will track its expiration time automatically
-      this.activeToken.setToken(token)
+      this.activeToken.setToken(token);
     }
 
     if (this.isAuthenticated()) {
       // Session is authenticated
       // set CORS mode (in this scenario)
-      props.mode = 'cors'
+      props.mode = 'cors';
 
       // remove any credentials attribute that may have been set
       // because the BrowserTransport defaults to having `same-origin` for credentials
-      delete props['credentials']
+      delete props['credentials'];
 
       // replace the headers argument with required values
       // Note: using new Headers() to construct the headers breaks CORS for the Looker API. Don't know why yet
       props.headers = {
         Authorization: `Bearer ${token.access_token}`,
         'x-looker-appid': agentTag,
-      }
+      };
     }
-    return props
+    return props;
   }
 }
 ```

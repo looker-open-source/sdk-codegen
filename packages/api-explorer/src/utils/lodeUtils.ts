@@ -24,22 +24,22 @@
 
  */
 
-import type { IDeclarationMine, IExampleMine } from '@looker/sdk-codegen'
+import type { IDeclarationMine, IExampleMine } from '@looker/sdk-codegen';
 
-export const apixFilesHost = 'http://localhost:30000'
+export const apixFilesHost = 'http://localhost:30000';
 
 const fetchLode = async (lodeUrl: string) => {
   try {
-    const result = await fetch(lodeUrl, { mode: 'cors' })
-    return result.text()
+    const result = await fetch(lodeUrl, { mode: 'cors' });
+    return result.text();
   } catch (error) {
-    return ''
+    return '';
   }
-}
+};
 
 interface FullLode {
-  examples?: IExampleMine
-  declarations?: IDeclarationMine
+  examples?: IExampleMine;
+  declarations?: IDeclarationMine;
 }
 
 export const getLoded = async (
@@ -47,22 +47,22 @@ export const getLoded = async (
   declarationsLodeUrl?: string
 ): Promise<FullLode> => {
   // First try to load from the apix-files server
-  let examples = await fetchLode(`${apixFilesHost}/examplesIndex.json`)
+  let examples = await fetchLode(`${apixFilesHost}/examplesIndex.json`);
   if (!examples && examplesLodeUrl) {
-    examples = await fetchLode(examplesLodeUrl)
+    examples = await fetchLode(examplesLodeUrl);
   }
 
-  let declarations
+  let declarations;
   if (declarationsLodeUrl) {
-    declarations = await fetchLode(declarationsLodeUrl)
+    declarations = await fetchLode(declarationsLodeUrl);
   }
 
-  const lode: FullLode = { examples: undefined, declarations: undefined }
+  const lode: FullLode = { examples: undefined, declarations: undefined };
   if (examples) {
-    lode.examples = JSON.parse(examples)
+    lode.examples = JSON.parse(examples);
   }
   if (declarations) {
-    lode.declarations = JSON.parse(declarations)
+    lode.declarations = JSON.parse(declarations);
   }
-  return lode
-}
+  return lode;
+};

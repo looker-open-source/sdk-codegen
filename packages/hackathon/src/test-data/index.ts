@@ -45,4 +45,4 @@ export {
   mockSheetSDK,
   mockSheet,
   mockJudging,
-} from './mocks'
+} from './mocks';

@@ -23,42 +23,42 @@
  SOFTWARE.
 
  */
-import type { RunItInput } from '../RunIt'
-import { testJsonResponse, api } from '../test-data'
+import type { RunItInput } from '../RunIt';
+import { api, testJsonResponse } from '../test-data';
 import {
+  createInputs,
   createRequestParams,
+  initRequestContent,
   pathify,
   runRequest,
-  createInputs,
-  initRequestContent,
-} from './requestUtils'
-import { initRunItSdk } from './RunItSDK'
+} from './requestUtils';
+import { initRunItSdk } from './RunItSDK';
 
-const sdk = initRunItSdk()
+const sdk = initRunItSdk();
 
 describe('requestUtils', () => {
   afterEach(() => {
-    jest.clearAllMocks()
-  })
+    jest.clearAllMocks();
+  });
 
   describe('pathify', () => {
     test('it returns unchanged path if no path params are specified', () => {
-      const actual = pathify('/logout')
-      expect(actual).toEqual('/logout')
-    })
+      const actual = pathify('/logout');
+      expect(actual).toEqual('/logout');
+    });
 
     test('it works path params', () => {
       const pathParams = {
         query_id: 1,
         result_format: 'json',
-      }
+      };
       const actual = pathify(
         '/queries/{query_id}/run/{result_format}',
         pathParams
-      )
-      expect(actual).toEqual('/queries/1/run/json')
-    })
-  })
+      );
+      expect(actual).toEqual('/queries/1/run/json');
+    });
+  });
 
   describe('createRequestParams', () => {
     const inputs: RunItInput[] = [
@@ -88,7 +88,7 @@ describe('requestUtils', () => {
         description: 'body',
         required: true,
       },
-    ]
+    ];
     const requestContent = {
       result_format: 'json',
       cache: true,
@@ -98,44 +98,44 @@ describe('requestUtils', () => {
         fields: ['orders.created_date', 'orders.count'],
         limit: '500',
       }),
-    }
+    };
 
     const noBody = {
       result_format: 'json',
       cache: true,
       body: '{}',
-    }
+    };
 
     test('empty json body is not removed', () => {
       const [pathParams, queryParams, body] = createRequestParams(
         inputs,
         noBody
-      )
+      );
       expect(pathParams).toEqual({
         result_format: noBody.result_format,
-      })
+      });
       expect(queryParams).toEqual({
         cache: noBody.cache,
-      })
-      expect(body).toEqual({})
-    })
+      });
+      expect(body).toEqual({});
+    });
 
     test('it correctly identifies requestContent params location', () => {
       const [pathParams, queryParams, body] = createRequestParams(
         inputs,
         requestContent
-      )
+      );
       expect(pathParams).toEqual({
         result_format: requestContent.result_format,
-      })
+      });
       expect(queryParams).toEqual({
         cache: requestContent.cache,
-      })
-      expect(body).toEqual(JSON.parse(requestContent.body))
-    })
+      });
+      expect(body).toEqual(JSON.parse(requestContent.body));
+    });
 
     test('non JSON parsable strings are treated as x-www-form-urlencoded strings', () => {
-      const urlParams = 'key1=value1&key2=value2'
+      const urlParams = 'key1=value1&key2=value2';
       const [, , body] = createRequestParams(
         [
           {
@@ -149,17 +149,17 @@ describe('requestUtils', () => {
         {
           body: urlParams,
         }
-      )
-      expect(body).toEqual(urlParams)
-    })
-  })
+      );
+      expect(body).toEqual(urlParams);
+    });
+  });
 
   describe('defaultRunItCallback', () => {
     test('it makes a request', async () => {
       const spy = jest
         .spyOn(sdk.authSession.transport, 'rawRequest')
-        .mockResolvedValueOnce(testJsonResponse)
-      jest.spyOn(sdk.authSession, 'isAuthenticated').mockReturnValue(true)
+        .mockResolvedValueOnce(testJsonResponse);
+      jest.spyOn(sdk.authSession, 'isAuthenticated').mockReturnValue(true);
 
       const resp = await runRequest(
         sdk,
@@ -169,7 +169,7 @@ describe('requestUtils', () => {
         { result_format: 'json' },
         { fields: 'first_name, last_name' },
         { model: 'thelook', view: 'orders', fields: ['orders.count'] }
-      )
+      );
 
       expect(spy).toHaveBeenCalledWith(
         'POST',
@@ -183,29 +183,29 @@ describe('requestUtils', () => {
           view: 'orders',
         },
         expect.any(Function)
-      )
-      expect(resp).toEqual(testJsonResponse)
-    })
-  })
+      );
+      expect(resp).toEqual(testJsonResponse);
+    });
+  });
 
   describe('createInputs', () => {
     test('converts delimarray to string', () => {
-      const method = api.methods.all_roles
-      const actual = createInputs(api, method)
-      expect(actual).toHaveLength(method.allParams.length)
+      const method = api.methods.all_roles;
+      const actual = createInputs(api, method);
+      expect(actual).toHaveLength(method.allParams.length);
       expect(actual[1]).toEqual({
         name: 'ids',
         location: 'query',
         type: 'string',
         required: false,
         description: 'Optional list of ids to get specific roles.',
-      })
-    })
+      });
+    });
 
     test('converts enums in body to string', () => {
-      const method = api.methods.create_query_task
-      const actual = createInputs(api, method)
-      expect(actual).toHaveLength(method.allParams.length)
+      const method = api.methods.create_query_task;
+      const actual = createInputs(api, method);
+      expect(actual).toHaveLength(method.allParams.length);
       expect(actual[0]).toEqual({
         name: 'body',
         location: 'body',
@@ -219,13 +219,13 @@ describe('requestUtils', () => {
         },
         required: true,
         description: '',
-      })
-    })
+      });
+    });
 
     test('works with various param types', () => {
-      const method = api.methods.run_inline_query
-      const actual = createInputs(api, method)
-      expect(actual).toHaveLength(method.allParams.length)
+      const method = api.methods.run_inline_query;
+      const actual = createInputs(api, method);
+      expect(actual).toHaveLength(method.allParams.length);
 
       expect(actual).toEqual(
         expect.arrayContaining([
@@ -282,14 +282,14 @@ describe('requestUtils', () => {
             description: '',
           },
         ])
-      )
-    })
-  })
+      );
+    });
+  });
 
   describe('request content initialization', () => {
     test('it initializes body params with default values', () => {
-      const inputs = createInputs(api, api.methods.run_inline_query)
-      const actual = initRequestContent(inputs)
+      const inputs = createInputs(api, api.methods.run_inline_query);
+      const actual = initRequestContent(inputs);
       expect(actual).toEqual({
         body: {
           client_id: '',
@@ -312,46 +312,46 @@ describe('requestUtils', () => {
           vis_config: {},
           visible_ui_sections: '',
         },
-      })
-    })
+      });
+    });
 
     test('it contains default-empty body params', () => {
-      const inputs = createInputs(api, api.methods.fetch_integration_form)
-      const bodyInput = inputs.find((i) => i.location === 'body')!
-      expect(bodyInput.name).toEqual('body')
-      expect(bodyInput.type).toEqual({})
-      const actual = initRequestContent(inputs)
+      const inputs = createInputs(api, api.methods.fetch_integration_form);
+      const bodyInput = inputs.find((i) => i.location === 'body')!;
+      expect(bodyInput.name).toEqual('body');
+      expect(bodyInput.type).toEqual({});
+      const actual = initRequestContent(inputs);
       expect(actual).toEqual({
         body: {},
-      })
-    })
-  })
+      });
+    });
+  });
 
   describe('createRequestParams', () => {
-    const inputs = createInputs(api, api.methods.run_inline_query)
+    const inputs = createInputs(api, api.methods.run_inline_query);
 
     test('removes empties for path, query and body params', () => {
-      const requestContent = initRequestContent(inputs)
+      const requestContent = initRequestContent(inputs);
       const [pathParams, queryParams, body] = createRequestParams(
         inputs,
         requestContent
-      )
-      expect(pathParams).toEqual({})
-      expect(queryParams).toEqual({})
+      );
+      expect(pathParams).toEqual({});
+      expect(queryParams).toEqual({});
       expect(body).toEqual({
         total: false,
-      })
-    })
+      });
+    });
 
     test('does not remove empty bodies', () => {
-      const requestContent = { body: {} }
+      const requestContent = { body: {} };
       const [pathParams, queryParams, body] = createRequestParams(
         inputs,
         requestContent
-      )
-      expect(pathParams).toEqual({})
-      expect(queryParams).toEqual({})
-      expect(body).toEqual({})
-    })
-  })
-})
+      );
+      expect(pathParams).toEqual({});
+      expect(queryParams).toEqual({});
+      expect(body).toEqual({});
+    });
+  });
+});

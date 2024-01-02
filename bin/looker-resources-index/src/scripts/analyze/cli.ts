@@ -26,34 +26,34 @@
 
 /* eslint no-console: "off" */
 
-import { resources } from '../../resource-data/resources'
+import { resources } from '../../resource-data/resources';
 
-import * as analyze from './index'
+import * as analyze from './index';
 
-report()
+report();
 
 function report() {
-  const results: Record<string, any> = {}
+  const results: Record<string, any> = {};
 
-  results.missingLanguages = analyze.missingLanguages(resources)
+  results.missingLanguages = analyze.missingLanguages(resources);
   if (results.missingLanguages.actionItems.length > 0) {
-    console.log('\n### Missing Languages ###\n')
-    console.log(results.missingLanguages.actionItems.join('\n'))
+    console.log('\n### Missing Languages ###\n');
+    console.log(results.missingLanguages.actionItems.join('\n'));
   }
 
-  results.missingPersonas = analyze.missingPersonas(resources)
+  results.missingPersonas = analyze.missingPersonas(resources);
   if (results.missingPersonas.actionItems.length > 0) {
-    console.log('\n### Missing Personas ###\n')
-    console.log(results.missingPersonas.actionItems.join('\n'))
+    console.log('\n### Missing Personas ###\n');
+    console.log(results.missingPersonas.actionItems.join('\n'));
   }
 
-  console.log('\n### Platform Feature x Content Type Coverage Matrix ###\n')
+  console.log('\n### Platform Feature x Content Type Coverage Matrix ###\n');
   results.platformFeatureXContentType =
-    analyze.platformFeatureXContentType(resources)
-  console.table(results.platformFeatureXContentType.table)
+    analyze.platformFeatureXContentType(resources);
+  console.table(results.platformFeatureXContentType.table);
 
-  console.log('\n### Summary ###\n')
+  console.log('\n### Summary ###\n');
   Object.values(results)
     .filter((r) => r.summary)
-    .forEach((r) => console.log(r.summary))
+    .forEach((r) => console.log(r.summary));
 }

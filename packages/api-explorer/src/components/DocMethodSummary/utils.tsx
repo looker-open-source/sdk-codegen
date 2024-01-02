@@ -23,34 +23,34 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import styled from 'styled-components'
-import { Icon, Status } from '@looker/components'
-import { Beaker } from '@looker/icons'
-import { VisibilityOff } from '@styled-icons/material/VisibilityOff'
+import React from 'react';
+import styled from 'styled-components';
+import { Icon, Status } from '@looker/components';
+import { Beaker } from '@looker/icons';
+import { VisibilityOff } from '@styled-icons/material/VisibilityOff';
 
 /**
  * Return a Status react element based on an endpoint's status
  * @param status Endpoint status
  */
 export const pickStatus = (status: string) => {
-  const title = `${status.toLowerCase()} item`
+  const title = `${status.toLowerCase()} item`;
   switch (status.toLowerCase()) {
     case 'beta':
-      return <StatusBeta aria-label={title}>&beta;</StatusBeta>
+      return <StatusBeta aria-label={title}>&beta;</StatusBeta>;
     case 'experimental': {
-      return <Icon title={title} aria-label={title} icon={<Beaker />} />
+      return <Icon title={title} aria-label={title} icon={<Beaker />} />;
     }
     case 'alpha': {
-      return <Icon title={title} aria-label={title} icon={<Beaker />} />
+      return <Icon title={title} aria-label={title} icon={<Beaker />} />;
     }
     case 'undocumented': {
-      return <Icon title={title} aria-label={title} icon={<VisibilityOff />} />
+      return <Icon title={title} aria-label={title} icon={<VisibilityOff />} />;
     }
     case 'deprecated':
-      return <Status aria-label={title} intent="critical" size="small" />
+      return <Status aria-label={title} intent="critical" size="small" />;
     case 'stable':
-      return <Status aria-label={title} intent="positive" size="small" />
+      return <Status aria-label={title} intent="positive" size="small" />;
     default:
       return (
         <Status
@@ -58,9 +58,9 @@ export const pickStatus = (status: string) => {
           intent="neutral"
           size="small"
         />
-      )
+      );
   }
-}
+};
 
 /**
  * Returns tooltip content based on status
@@ -69,21 +69,21 @@ export const pickStatus = (status: string) => {
 export const pickTooltipContent = (status: string) => {
   switch (status.toLowerCase()) {
     case 'alpha':
-      return 'This alpha item is either for internal use, or not fully developed and may be significantly changed or completely removed in future releases.'
+      return 'This alpha item is either for internal use, or not fully developed and may be significantly changed or completely removed in future releases.';
     case 'beta':
-      return 'This beta item is under development and subject to change.'
+      return 'This beta item is under development and subject to change.';
     case 'experimental':
-      return 'This experimental item is not fully developed and may be significantly changed or completely removed in future releases.'
+      return 'This experimental item is not fully developed and may be significantly changed or completely removed in future releases.';
     case 'deprecated':
-      return 'This item has been deprecated and will be removed in the future.'
+      return 'This item has been deprecated and will be removed in the future.';
     case 'stable':
-      return 'This item is considered stable for this API version.'
+      return 'This item is considered stable for this API version.';
     case 'undocumented':
-      return 'This is an internal-only item.'
+      return 'This is an internal-only item.';
     default:
-      return 'This item has no status associated with it.'
+      return 'This item has no status associated with it.';
   }
-}
+};
 
 const StatusBeta = styled.div`
   display: flex;
@@ -93,4 +93,4 @@ const StatusBeta = styled.div`
   color: ${({ theme }) => theme.colors.neutral};
   width: 1.125rem;
   height: 1.125rem;
-`
+`;

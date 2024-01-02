@@ -24,11 +24,11 @@
 
  */
 
-import type { LookerSDKError } from '@looker/sdk-rtl'
-import { renderWithTheme } from '@looker/components-test-utils'
-import { fireEvent, screen } from '@testing-library/react'
-import React from 'react'
-import { APIErrorDialog } from './APIErrorDialog'
+import type { LookerSDKError } from '@looker/sdk-rtl';
+import { renderWithTheme } from '@looker/components-test-utils';
+import { fireEvent, screen } from '@testing-library/react';
+import React from 'react';
+import { APIErrorDialog } from './APIErrorDialog';
 
 describe('APIErrorDialog', () => {
   it('is hidden if open is false', () => {
@@ -36,83 +36,84 @@ describe('APIErrorDialog', () => {
       name: 'Error',
       message: 'simple error',
       documentation_url: 'https://docs.looker.com/r/err/4.0/404/post/login',
-    }
+    };
     renderWithTheme(
       <APIErrorDialog error={simple} isOpen={false} setOpen={jest.fn()} />
-    )
-    const heading = screen.queryByRole('heading', { name: 'simple error' })
-    expect(heading).not.toBeInTheDocument()
-    const link = screen.queryByRole('link')
-    expect(link).not.toBeInTheDocument()
-  })
+    );
+    const heading = screen.queryByRole('heading', { name: 'simple error' });
+    expect(heading).not.toBeInTheDocument();
+    const link = screen.queryByRole('link');
+    expect(link).not.toBeInTheDocument();
+  });
 
   it('ok button click fires', async () => {
     const simple: LookerSDKError = {
       name: 'Error',
       message: 'simple error',
       documentation_url: 'https://docs.looker.com/r/err/4.0/404/post/login',
-    }
-    const toggle = jest.fn()
+    };
+    const toggle = jest.fn();
     renderWithTheme(
       <APIErrorDialog error={simple} isOpen={true} setOpen={toggle} />
-    )
-    const heading = screen.getByRole('heading', { name: 'simple error' })
-    expect(heading).toBeInTheDocument()
-    const link = screen.getByRole('link')
-    expect(link).toBeInTheDocument()
-    const okButton = screen.getByRole('button', { name: 'OK' })
-    fireEvent.click(okButton)
-    expect(toggle).toHaveBeenCalled()
-  })
+    );
+    const heading = screen.getByRole('heading', { name: 'simple error' });
+    expect(heading).toBeInTheDocument();
+    const link = screen.getByRole('link');
+    expect(link).toBeInTheDocument();
+    const okButton = screen.getByRole('button', { name: 'OK' });
+    fireEvent.click(okButton);
+    expect(toggle).toHaveBeenCalled();
+  });
 
   it('shows simple errors', () => {
     const simple: LookerSDKError = {
       name: 'Error',
       message: 'simple error',
       documentation_url: 'https://docs.looker.com/r/err/4.0/404/post/login',
-    }
+    };
     renderWithTheme(
       <APIErrorDialog error={simple} isOpen={true} setOpen={jest.fn()} />
-    )
-    const heading = screen.getByRole('heading', { name: 'simple error' })
-    expect(heading).toBeInTheDocument()
-    const link = screen.getByRole('link')
+    );
+    const heading = screen.getByRole('heading', { name: 'simple error' });
+    expect(heading).toBeInTheDocument();
+    const link = screen.getByRole('link');
     // expect(link).toHaveTextContent(simple.documentation_url ?? '')
-    expect(link).toHaveAttribute('href', simple.documentation_url)
-    const table = screen.queryByRole('table')
-    expect(table).not.toBeInTheDocument()
-  })
+    expect(link).toHaveAttribute('href', simple.documentation_url);
+    const table = screen.queryByRole('table');
+    expect(table).not.toBeInTheDocument();
+  });
 
   it('skips empty documentation url', () => {
     const simpler: LookerSDKError = {
       name: 'Error',
       message: 'simple error',
-    }
+    };
     renderWithTheme(
       <APIErrorDialog error={simpler} isOpen={true} setOpen={jest.fn()} />
-    )
-    const heading = screen.getByRole('heading', { name: 'simple error' })
-    expect(heading).toBeInTheDocument()
-    const link = screen.queryByRole('link')
-    expect(link).not.toBeInTheDocument()
-  })
+    );
+    const heading = screen.getByRole('heading', { name: 'simple error' });
+    expect(heading).toBeInTheDocument();
+    const link = screen.queryByRole('link');
+    expect(link).not.toBeInTheDocument();
+  });
 
   it('defaults an empty error message', () => {
     const simpler: LookerSDKError = {
       name: '',
       message: '',
-    }
+    };
     renderWithTheme(
       <APIErrorDialog error={simpler} isOpen={true} setOpen={jest.fn()} />
-    )
-    const heading = screen.getByRole('heading', { name: 'Unknown error' })
-    expect(heading).toBeInTheDocument()
-    const link = screen.queryByRole('link')
-    expect(link).not.toBeInTheDocument()
-  })
+    );
+    const heading = screen.getByRole('heading', { name: 'Unknown error' });
+    expect(heading).toBeInTheDocument();
+    const link = screen.queryByRole('link');
+    expect(link).not.toBeInTheDocument();
+  });
 
   it('shows detailed errors', () => {
-    const documentation_url = 'https://docs.looker.com/r/err/4.0/404/post/login'
+    const documentation_url =
+      'https://docs.looker.com/r/err/4.0/404/post/login';
     const detailed: LookerSDKError = {
       name: 'Error',
       message: 'detailed error',
@@ -131,20 +132,20 @@ describe('APIErrorDialog', () => {
           documentation_url,
         },
       ],
-    }
+    };
     renderWithTheme(
       <APIErrorDialog error={detailed} isOpen={true} setOpen={jest.fn()} />
-    )
-    const heading = screen.getByRole('heading', { name: 'detailed error' })
-    expect(heading).toBeInTheDocument()
-    const links = screen.getByRole('link')
-    expect(links).toBeInTheDocument()
-    const table = screen.getByRole('table')
-    expect(table).toBeInTheDocument()
+    );
+    const heading = screen.getByRole('heading', { name: 'detailed error' });
+    expect(heading).toBeInTheDocument();
+    const links = screen.getByRole('link');
+    expect(links).toBeInTheDocument();
+    const table = screen.getByRole('table');
+    expect(table).toBeInTheDocument();
     detailed.errors?.forEach((e) => {
-      expect(table).toHaveTextContent(e.field ?? '')
-      expect(table).toHaveTextContent(e.message ?? '')
-      expect(table).toHaveTextContent(e.code ?? '')
-    })
-  })
-})
+      expect(table).toHaveTextContent(e.field ?? '');
+      expect(table).toHaveTextContent(e.message ?? '');
+      expect(table).toHaveTextContent(e.code ?? '');
+    });
+  });
+});

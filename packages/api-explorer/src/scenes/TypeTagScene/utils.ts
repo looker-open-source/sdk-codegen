@@ -24,16 +24,16 @@
 
  */
 
-import type { TypeList } from '@looker/sdk-codegen'
+import type { TypeList } from '@looker/sdk-codegen';
 
 /**
  * Given a list of types it returns a list of distinct types
  * @param types A list of types
  */
 export const getMetaTypes = (types: TypeList) => {
-  const typeSet = new Set<string>()
+  const typeSet = new Set<string>();
   Object.values(types).forEach((type) => {
-    typeSet.add(type.metaType.toString().toUpperCase())
-  })
-  return Array.from(typeSet.values())
-}
+    typeSet.add(type.metaType.toString().toUpperCase());
+  });
+  return Array.from(typeSet.values());
+};

@@ -23,6 +23,6 @@
  SOFTWARE.
 
  */
-export * from './lodes'
-export * from './router'
-export * from './redux'
+export * from './lodes';
+export * from './router';
+export * from './redux';

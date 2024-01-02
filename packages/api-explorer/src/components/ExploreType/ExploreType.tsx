@@ -24,15 +24,15 @@
 
  */
 
-import type { FC } from 'react'
-import React from 'react'
-import { Code, Tree, TreeItem } from '@looker/components'
-import type { IType, ApiModel } from '@looker/sdk-codegen'
-import { TypeOfType, typeOfType } from '@looker/sdk-codegen'
-import { useRouteMatch } from 'react-router-dom'
+import type { FC } from 'react';
+import React from 'react';
+import { Code, Tree, TreeItem } from '@looker/components';
+import type { ApiModel, IType } from '@looker/sdk-codegen';
+import { TypeOfType, typeOfType } from '@looker/sdk-codegen';
+import { useRouteMatch } from 'react-router-dom';
 
-import { Link } from '../Link'
-import { buildPath } from '../../utils'
+import { Link } from '../Link';
+import { buildPath } from '../../utils';
 import {
   ExploreProperty,
   pickType,
@@ -40,23 +40,23 @@ import {
   typeIcon,
   typeLinkPrefix,
   typeLinkSuffix,
-} from '.'
+} from '.';
 
 interface ExploreTypeLinkProps {
-  type: IType
-  api: ApiModel
+  type: IType;
+  api: ApiModel;
 }
 
 export const ExploreTypeLink: FC<ExploreTypeLinkProps> = ({ type, api }) => {
-  const match = useRouteMatch<{ specKey: string }>('/:specKey')
-  const specKey = match?.params.specKey
-  const picked = pickType(type)
-  const name = picked.name
-  const prefix = typeLinkPrefix(type)
-  const suffix = typeLinkSuffix(type)
-  const typed = typeOfType(picked)
+  const match = useRouteMatch<{ specKey: string }>('/:specKey');
+  const specKey = match?.params.specKey;
+  const picked = pickType(type);
+  const name = picked.name;
+  const prefix = typeLinkPrefix(type);
+  const suffix = typeLinkSuffix(type);
+  const typed = typeOfType(picked);
   if (typed === TypeOfType.Intrinsic)
-    return <Code fontSize="small">{type.jsonName}</Code>
+    return <Code fontSize="small">{type.jsonName}</Code>;
   return (
     <>
       {prefix}
@@ -65,24 +65,24 @@ export const ExploreTypeLink: FC<ExploreTypeLinkProps> = ({ type, api }) => {
       </Link>
       {suffix}
     </>
-  )
-}
+  );
+};
 
 interface ExploreTypeProps {
   /** Type to explore */
-  type: IType
+  type: IType;
   /** parsed specification */
-  api: ApiModel
+  api: ApiModel;
   /** Open the node display immediately */
-  open?: boolean
+  open?: boolean;
   /** Create a link to the type? */
-  link?: boolean
+  link?: boolean;
   /** the nesting level of the type */
-  level?: number
+  level?: number;
   /** the maximum depth to expanded nested types. -1 = all (default), 0 = no expansion */
-  maxDepth?: number
+  maxDepth?: number;
   /** open all nodes immediately? */
-  openAll?: boolean
+  openAll?: boolean;
 }
 
 export const ExploreType: FC<ExploreTypeProps> = ({
@@ -94,9 +94,9 @@ export const ExploreType: FC<ExploreTypeProps> = ({
   maxDepth = -1,
   openAll = false,
 }) => {
-  const props = pickTypeProps(type)
-  const nest = maxDepth === -1 || level < maxDepth
-  const legend = typeIcon(type)
+  const props = pickTypeProps(type);
+  const nest = maxDepth === -1 || level < maxDepth;
+  const legend = typeIcon(type);
   return (
     <Tree
       border
@@ -125,5 +125,5 @@ export const ExploreType: FC<ExploreTypeProps> = ({
           />
         ))}
     </Tree>
-  )
-}
+  );
+};

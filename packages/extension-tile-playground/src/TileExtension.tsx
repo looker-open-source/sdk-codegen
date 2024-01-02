@@ -23,32 +23,32 @@
  SOFTWARE.
 
  */
-import React, { useContext } from 'react'
-import { ComponentsProvider } from '@looker/components'
-import { Switch, Route } from 'react-router-dom'
-import { ExtensionContext40 } from '@looker/extension-sdk-react'
-import { MountPoint } from '@looker/extension-sdk'
-import { VisualizationTile } from './components/VisualizationTile/VisualizationTile'
-import { DashboardTile } from './components/DashboardTile/DashboardTile'
-import { Inspector } from './components/Inspector/Inspector'
-import { Unsupported } from './components/Unsupported/Unsupported'
+import React, { useContext } from 'react';
+import { ComponentsProvider } from '@looker/components';
+import { Route, Switch } from 'react-router-dom';
+import { ExtensionContext40 } from '@looker/extension-sdk-react';
+import { MountPoint } from '@looker/extension-sdk';
+import { VisualizationTile } from './components/VisualizationTile/VisualizationTile';
+import { DashboardTile } from './components/DashboardTile/DashboardTile';
+import { Inspector } from './components/Inspector/Inspector';
+import { Unsupported } from './components/Unsupported/Unsupported';
 
 const getDefaultRouteComponent = (mountPoint?: MountPoint) => {
   if (mountPoint === MountPoint.dashboardVisualization) {
-    return <VisualizationTile />
+    return <VisualizationTile />;
   }
   if (mountPoint === MountPoint.dashboardTilePopup) {
     // TODO create component specifically for dashboard tile popup
-    return <VisualizationTile />
+    return <VisualizationTile />;
   }
   if (mountPoint === MountPoint.dashboardTile) {
-    return <DashboardTile />
+    return <DashboardTile />;
   }
-  return <Unsupported mountPoint={mountPoint} />
-}
+  return <Unsupported mountPoint={mountPoint} />;
+};
 
 export const TileExtension: React.FC = () => {
-  const { lookerHostData } = useContext(ExtensionContext40)
+  const { lookerHostData } = useContext(ExtensionContext40);
 
   return (
     <ComponentsProvider
@@ -63,5 +63,5 @@ export const TileExtension: React.FC = () => {
         <Route>{getDefaultRouteComponent(lookerHostData?.mountPoint)}</Route>
       </Switch>
     </ComponentsProvider>
-  )
-}
+  );
+};

@@ -23,17 +23,17 @@
  SOFTWARE.
 
  */
-import type { FC } from 'react'
-import React from 'react'
-import { Dialog, DialogHeader, DialogContent } from '@looker/components'
-import type { IJudgingProps } from '../../../models'
-import { JudgingView } from './JudgingView'
+import type { FC } from 'react';
+import React from 'react';
+import { Dialog, DialogContent, DialogHeader } from '@looker/components';
+import type { IJudgingProps } from '../../../models';
+import { JudgingView } from './JudgingView';
 
 interface JudgingViewDialogProps {
   /** If assigned, Dialog appears. If undefined, dialog closes */
-  judging?: IJudgingProps
+  judging?: IJudgingProps;
   /** Dialog closing event handler */
-  onClose: () => void
+  onClose: () => void;
 }
 
 export const JudgingViewDialog: FC<JudgingViewDialogProps> = ({
@@ -41,8 +41,8 @@ export const JudgingViewDialog: FC<JudgingViewDialogProps> = ({
   onClose,
 }) => {
   const closeDialog = () => {
-    onClose()
-  }
+    onClose();
+  };
 
   return (
     <Dialog isOpen={!!judging} onClose={closeDialog}>
@@ -53,5 +53,5 @@ export const JudgingViewDialog: FC<JudgingViewDialogProps> = ({
         {!!judging && <JudgingView judging={judging} />}
       </DialogContent>
     </Dialog>
-  )
-}
+  );
+};

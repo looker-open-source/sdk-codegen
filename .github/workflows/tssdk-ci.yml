@@ -112,7 +112,7 @@ jobs:
   setup:
     uses: looker-open-source/reusable-actions/.github/workflows/supported-versions.yml@main
   integration:
-    needs: [unit,setup]
+    needs: [unit, setup]
     name: Integration - ${{ matrix.os }} / Node.${{ matrix.node-version }} / Looker.${{ matrix.looker }}
     env:
       JEST_JUNIT_OUTPUT_DIR: results/tssdk

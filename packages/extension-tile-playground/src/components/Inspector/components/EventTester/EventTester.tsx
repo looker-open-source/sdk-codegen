@@ -23,18 +23,18 @@
  SOFTWARE.
 
  */
-import React, { useCallback, useContext, useState } from 'react'
-import type { MouseEvent } from 'react'
+import React, { useCallback, useContext, useState } from 'react';
+import type { MouseEvent } from 'react';
 import {
-  Space,
   Accordion2,
+  ButtonOutline,
   Card,
   CardContent,
-  Grid,
-  ButtonOutline,
   FieldToggleSwitch,
-} from '@looker/components'
-import { ExtensionContext40 } from '@looker/extension-sdk-react'
+  Grid,
+  Space,
+} from '@looker/components';
+import { ExtensionContext40 } from '@looker/extension-sdk-react';
 
 export const EventTester: React.FC = () => {
   const {
@@ -42,70 +42,70 @@ export const EventTester: React.FC = () => {
     tileSDK,
     visualizationSDK,
     tileHostData: { dashboardFilters },
-  } = useContext(ExtensionContext40)
-  const [runDashboard, setRunDashboard] = useState(false)
+  } = useContext(ExtensionContext40);
+  const [runDashboard, setRunDashboard] = useState(false);
 
   const addErrorClick = useCallback(() => {
     tileSDK.addError({
       title: 'Oh no',
       message: "I've fallen and I can't get up!",
       group: 'error_group_1',
-    })
-  }, [tileSDK])
+    });
+  }, [tileSDK]);
 
   const clearErrorClick = useCallback(() => {
-    tileSDK.clearError()
-  }, [tileSDK])
+    tileSDK.clearError();
+  }, [tileSDK]);
 
   const toggleCrossFilterClick = useCallback(
     (event: MouseEvent) => {
       // TODO pivot and row data needs to be populated
-      tileSDK.toggleCrossFilter({ pivot: {} as any, row: {} as any }, event)
+      tileSDK.toggleCrossFilter({ pivot: {} as any, row: {} as any }, event);
     },
     [tileSDK]
-  )
+  );
 
   const openDrillMenuClick = useCallback(
     (event: MouseEvent) => {
       // TODO links data needs to be populated
-      tileSDK.openDrillMenu({ links: [] }, event)
+      tileSDK.openDrillMenu({ links: [] }, event);
     },
     [tileSDK]
-  )
+  );
 
   const runDashboardClick = useCallback(() => {
-    tileSDK.runDashboard()
-  }, [tileSDK])
+    tileSDK.runDashboard();
+  }, [tileSDK]);
 
   const stopDashboardClick = useCallback(() => {
-    tileSDK.stopDashboard()
-  }, [tileSDK])
+    tileSDK.stopDashboard();
+  }, [tileSDK]);
 
   const updateFiltersClick = useCallback(() => {
-    const updatedFilter = {}
+    const updatedFilter: any = {};
     Object.entries(dashboardFilters || {}).forEach(([key, value]) => {
-      updatedFilter[key] = value
+      updatedFilter[key] = value;
       if (key === 'State') {
         updatedFilter[key] =
-          value === 'California' ? 'Washington' : 'California'
+          value === 'California' ? 'Washington' : 'California';
       } else if (typeof value === 'string') {
-        updatedFilter[key] = value.split('').reverse().join('')
+        updatedFilter[key] = value.split('').reverse().join('');
       }
-    })
-    tileSDK.updateFilters(updatedFilter, runDashboard)
-  }, [tileSDK, dashboardFilters, runDashboard])
+    });
+    tileSDK.updateFilters(updatedFilter, runDashboard);
+  }, [tileSDK, dashboardFilters, runDashboard]);
 
   const openScheduleDialogClick = useCallback(() => {
-    tileSDK.openScheduleDialog()
-  }, [tileSDK])
+    tileSDK.openScheduleDialog();
+  }, [tileSDK]);
 
   const updateTileClick = useCallback(() => {
-    extensionSDK.updateTitle(`Update tile title ${new Date().getSeconds()}`)
-  }, [extensionSDK])
+    extensionSDK.updateTitle(`Update tile title ${new Date().getSeconds()}`);
+  }, [extensionSDK]);
 
   const updateRowLimit = useCallback(() => {
-    visualizationSDK.updateRowLimit(100)
-  }, [visualizationSDK])
+    visualizationSDK.updateRowLimit(100);
+  }, [visualizationSDK]);
 
   return (
     <Card>
@@ -155,5 +155,5 @@ export const EventTester: React.FC = () => {
         </Accordion2>
       </CardContent>
     </Card>
-  )
-}
+  );
+};

@@ -24,42 +24,41 @@
 
  */
 
-import React from 'react'
-import { screen } from '@testing-library/react'
-import { renderWithTheme } from '@looker/components-test-utils'
-import userEvent from '@testing-library/user-event'
+import React from 'react';
+import { fireEvent, screen } from '@testing-library/react';
+import { renderWithTheme } from '@looker/components-test-utils';
 import {
   BrowserAdaptor,
-  registerTestEnvAdaptor,
   OAuthConfigProvider,
-} from '@looker/extension-utils'
+  registerTestEnvAdaptor,
+} from '@looker/extension-utils';
 
-import { initRunItSdk, readyToLogin } from '../..'
-import { LoginForm, notReadyToLogin } from './LoginForm'
+import { initRunItSdk, readyToLogin } from '../..';
+import { LoginForm, notReadyToLogin } from './LoginForm';
 
 describe('LoginForm', () => {
-  const sdk = initRunItSdk()
-  registerTestEnvAdaptor(new BrowserAdaptor(sdk))
+  const sdk = initRunItSdk();
+  registerTestEnvAdaptor(new BrowserAdaptor(sdk));
 
   test('it renders a login form with instructions if auth is not configured', async () => {
-    renderWithTheme(<LoginForm requestContent={{}} />)
+    renderWithTheme(<LoginForm requestContent={{}} />);
     const login = screen.getByRole('button', {
       name: 'Login',
-    })
-    await userEvent.hover(login)
-    expect(screen.getByRole('tooltip')).toHaveTextContent(notReadyToLogin)
-  })
+    });
+    fireEvent.mouseOver(login);
+    expect(screen.getByRole('tooltip')).toHaveTextContent(notReadyToLogin);
+  });
 
   test('it displays a ready to login message if auth is configured', async () => {
     jest
       .spyOn(OAuthConfigProvider.prototype, 'authIsConfigured')
-      .mockReturnValue(true)
+      .mockReturnValue(true);
 
-    renderWithTheme(<LoginForm requestContent={{}} />)
+    renderWithTheme(<LoginForm requestContent={{}} />);
     const login = screen.getByRole('button', {
       name: 'Login',
-    })
-    await userEvent.hover(login)
-    expect(screen.getByRole('tooltip')).toHaveTextContent(readyToLogin)
-  })
-})
+    });
+    fireEvent.mouseOver(login);
+    expect(screen.getByRole('tooltip')).toHaveTextContent(readyToLogin);
+  });
+});

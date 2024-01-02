@@ -23,14 +23,14 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { render } from 'react-dom'
-import { BrowserRouter } from 'react-router-dom'
-import { StandaloneEmbedPlayground } from './StandaloneEmbedPlayground'
+import React from 'react';
+import { render } from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
+import { StandaloneEmbedPlayground } from './StandaloneEmbedPlayground';
 
 render(
   <BrowserRouter>
     <StandaloneEmbedPlayground />
   </BrowserRouter>,
   document.getElementById('container')
-)
+);

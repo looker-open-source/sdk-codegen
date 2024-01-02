@@ -24,16 +24,16 @@
 
  */
 
-import { DefaultSettings } from './apiSettings'
-import type { IHostConnection } from './extensionTransport'
-import { ExtensionTransport } from './extensionTransport'
+import { DefaultSettings } from './apiSettings';
+import type { IHostConnection } from './extensionTransport';
+import { ExtensionTransport } from './extensionTransport';
 
 describe('ExtensionTransport', () => {
-  const queryParams = { a: 'b c', d: false, nil: null, skip: undefined }
-  const body = { song: 'how much is that doggy' }
-  let transport: ExtensionTransport
-  let connection: IHostConnection
-  let mockRequest: any
+  const queryParams = { a: 'b c', d: false, nil: null, skip: undefined };
+  const body = { song: 'how much is that doggy' };
+  let transport: ExtensionTransport;
+  let connection: IHostConnection;
+  let mockRequest: any;
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const streamCallback = (readable: any) => {
@@ -41,23 +41,23 @@ describe('ExtensionTransport', () => {
     // @ts-ignore
     return new Promise((resolve, reject) =>
       reject(Error('Streaming is disabled'))
-    )
-  }
+    );
+  };
 
   beforeEach(() => {
-    mockRequest = jest.fn()
+    mockRequest = jest.fn();
     connection = {
       rawRequest: mockRequest,
       request: mockRequest,
       stream: streamCallback,
-    } as IHostConnection
-    const settings = DefaultSettings()
-    transport = new ExtensionTransport(settings, connection)
-  })
+    } as IHostConnection;
+    const settings = DefaultSettings();
+    transport = new ExtensionTransport(settings, connection);
+  });
 
   it('makes a host request', async () => {
     try {
-      await transport.request('POST', '/path', queryParams, body)
+      await transport.request('POST', '/path', queryParams, body);
       expect(mockRequest).toHaveBeenCalledWith(
         'POST',
         '/path',
@@ -65,15 +65,15 @@ describe('ExtensionTransport', () => {
         { a: 'b c', d: false, nil: null, skip: undefined },
         undefined,
         undefined
-      )
+      );
     } catch (error) {
-      fail(error)
+      fail(error);
     }
-  })
+  });
 
   it('makes a host rawRequest', async () => {
     try {
-      await transport.rawRequest('POST', '/path', queryParams, body)
+      await transport.rawRequest('POST', '/path', queryParams, body);
       expect(mockRequest).toHaveBeenCalledWith(
         'POST',
         '/path',
@@ -81,18 +81,18 @@ describe('ExtensionTransport', () => {
         { a: 'b c', d: false, nil: null, skip: undefined },
         undefined,
         undefined
-      )
+      );
     } catch (error) {
-      fail(error)
+      fail(error);
     }
-  })
+  });
 
   it('stream not supported', async () => {
     try {
-      await transport.stream(streamCallback, 'GET', '/path')
-      fail('stream should fail')
+      await transport.stream(streamCallback, 'GET', '/path');
+      fail('stream should fail');
     } catch (error) {
-      expect(error).toEqual(Error('Streaming is disabled'))
+      expect(error).toEqual(Error('Streaming is disabled'));
     }
-  })
-})
+  });
+});

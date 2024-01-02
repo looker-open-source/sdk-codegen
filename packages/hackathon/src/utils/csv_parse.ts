@@ -28,8 +28,8 @@
 // Assumes header row in csv
 export async function parseCsv<T>(_csvFile: File): Promise<Array<T>> {
   // import Papa from 'papaparse'
-  const stub: Array<T> = []
-  return new Promise<Array<T>>((resolve, _reject) => resolve(stub))
+  const stub: Array<T> = [];
+  return new Promise<Array<T>>((resolve, _reject) => resolve(stub));
   // TODO fix this lint error
   // return new Promise((resolve, reject) => {
   //   Papa.parse(csvFile, {

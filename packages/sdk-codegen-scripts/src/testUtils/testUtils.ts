@@ -24,45 +24,45 @@
 
  */
 
-import * as fs from 'fs'
-import path from 'path'
-import type { IApiConfig } from '@looker/sdk-node'
-import { ApiConfig } from '@looker/sdk-node'
-import type { IApiSection } from '@looker/sdk-rtl'
-import type { ApiModel } from '@looker/sdk-codegen'
-import * as Models from '@looker/sdk-codegen'
+import * as fs from 'fs';
+import path from 'path';
+import type { IApiConfig } from '@looker/sdk-node';
+import { ApiConfig } from '@looker/sdk-node';
+import type { IApiSection } from '@looker/sdk-rtl';
+import type { ApiModel } from '@looker/sdk-codegen';
+import * as Models from '@looker/sdk-codegen';
 
-const utf8 = 'utf-8'
+const utf8 = 'utf-8';
 
 export const specFromFile = (specFile: string): Models.ApiModel => {
-  const specContent = fs.readFileSync(specFile, { encoding: 'utf8' })
-  return Models.ApiModel.fromString(specContent)
-}
+  const specContent = fs.readFileSync(specFile, { encoding: 'utf8' });
+  return Models.ApiModel.fromString(specContent);
+};
 
 /**
  * Properties used for various typescript-based tests
  */
 export interface ITestConfig {
-  apiTestModel: ApiModel
-  rootPath: string
-  testPath: string
-  dataFile: string
-  localIni: string
-  baseUrl: string
-  timeout: number
-  testData: any
-  testIni: string
-  configContents: string
-  config: IApiConfig
-  section: IApiSection
-  testConfig: IApiConfig
-  testSection: IApiSection
+  apiTestModel: ApiModel;
+  rootPath: string;
+  testPath: string;
+  dataFile: string;
+  localIni: string;
+  baseUrl: string;
+  timeout: number;
+  testData: any;
+  testIni: string;
+  configContents: string;
+  config: IApiConfig;
+  section: IApiSection;
+  testConfig: IApiConfig;
+  testSection: IApiSection;
 }
 
-const homeToRoost = '../../../../'
+const homeToRoost = '../../../../';
 
-export const getRootPath = () => path.join(__dirname, homeToRoost)
-export const rootFile = (fileName = '') => path.join(getRootPath(), fileName)
+export const getRootPath = () => path.join(__dirname, homeToRoost);
+export const rootFile = (fileName = '') => path.join(getRootPath(), fileName);
 
 /**
  * Reads configuration information, returning various test values
@@ -71,22 +71,22 @@ export const rootFile = (fileName = '') => path.join(getRootPath(), fileName)
  * @constructor
  */
 export const TestConfig = (rootPath = ''): ITestConfig => {
-  const testFile = 'data.yml.json'
-  rootPath = rootPath || getRootPath()
-  const localIni = process.env.LOOKERSDK_INI || `${rootPath}looker.ini`
-  const testPath = `${rootPath}test/`
-  const dataFile = `${testPath}${testFile}`
-  const testData = JSON.parse(fs.readFileSync(dataFile, utf8))
-  const testIni = `${rootPath}${testData.iniFile}`
-  const configContents = fs.readFileSync(localIni, utf8)
-  const config = ApiConfig(configContents)
-  const section = config.Looker
-  const baseUrl = section.base_url
-  const timeout = parseInt(section.timeout, 10)
-  const testContents = fs.readFileSync(testIni, utf8)
-  const testConfig = ApiConfig(testContents)
-  const testSection = testConfig.Looker
-  const apiTestModel = specFromFile(`${testPath}openApiRef.json`)
+  const testFile = 'data.yml.json';
+  rootPath = rootPath || getRootPath();
+  const localIni = process.env.LOOKERSDK_INI || `${rootPath}looker.ini`;
+  const testPath = `${rootPath}test/`;
+  const dataFile = `${testPath}${testFile}`;
+  const testData = JSON.parse(fs.readFileSync(dataFile, utf8));
+  const testIni = `${rootPath}${testData.iniFile}`;
+  const configContents = fs.readFileSync(localIni, utf8);
+  const config = ApiConfig(configContents);
+  const section = config.Looker;
+  const baseUrl = section.base_url;
+  const timeout = parseInt(section.timeout, 10);
+  const testContents = fs.readFileSync(testIni, utf8);
+  const testConfig = ApiConfig(testContents);
+  const testSection = testConfig.Looker;
+  const apiTestModel = specFromFile(`${testPath}openApiRef.json`);
   return {
     apiTestModel,
     baseUrl,
@@ -102,5 +102,5 @@ export const TestConfig = (rootPath = ''): ITestConfig => {
     testPath,
     testSection,
     timeout,
-  }
-}
+  };
+};

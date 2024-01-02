@@ -24,39 +24,39 @@
 
  */
 
-import type { MouseEvent } from 'react'
-import { NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR } from '../../util/errors'
-import { ExtensionRequestType } from '../types'
-import type { ExtensionHostApiImpl } from '../extension_host_api'
+import type { MouseEvent } from 'react';
+import { NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR } from '../../util/errors';
+import { ExtensionRequestType } from '../types';
+import type { ExtensionHostApiImpl } from '../extension_host_api';
 import type {
-  TileError,
-  DrillMenuOptions,
   CrossFilterOptions,
+  DrillMenuOptions,
   Filters,
+  TileError,
   TileHostData,
   TileSDKInternal,
-} from './types'
-import { DashboardRunState } from './types'
+} from './types';
+import { DashboardRunState } from './types';
 
 const defaultHostData: TileHostData = {
   isDashboardEditing: false,
   dashboardRunState: DashboardRunState.UNKNOWN,
   dashboardFilters: {},
-}
+};
 export class TileSDKImpl implements TileSDKInternal {
-  hostApi: ExtensionHostApiImpl
-  tileHostData: TileHostData
+  hostApi: ExtensionHostApiImpl;
+  tileHostData: TileHostData;
 
   constructor(hostApi: ExtensionHostApiImpl) {
-    this.hostApi = hostApi
-    this.tileHostData = { ...defaultHostData }
+    this.hostApi = hostApi;
+    this.tileHostData = { ...defaultHostData };
   }
 
   tileHostDataChanged(partialHostData: Partial<TileHostData>) {
     // Ignore update messages if dashboard mounts not supported.
     // Should never happen.
     if (this.hostApi.isDashboardMountSupported) {
-      this.tileHostData = { ...this.tileHostData, ...partialHostData }
+      this.tileHostData = { ...this.tileHostData, ...partialHostData };
     }
   }
 
@@ -64,9 +64,9 @@ export class TileSDKImpl implements TileSDKInternal {
     if (this.hostApi.isDashboardMountSupported) {
       this.hostApi.send(ExtensionRequestType.TILE_ADD_ERRORS, {
         errors: [error],
-      })
+      });
     } else {
-      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR
+      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR;
     }
   }
 
@@ -74,25 +74,25 @@ export class TileSDKImpl implements TileSDKInternal {
     if (this.hostApi.isDashboardMountSupported) {
       this.hostApi.send(ExtensionRequestType.TILE_CLEAR_ERRORS, {
         group: undefined,
-      })
+      });
     } else {
-      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR
+      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR;
     }
   }
 
   addErrors(...errors: TileError[]) {
     if (this.hostApi.isDashboardMountSupported) {
-      this.hostApi.send(ExtensionRequestType.TILE_ADD_ERRORS, { errors })
+      this.hostApi.send(ExtensionRequestType.TILE_ADD_ERRORS, { errors });
     } else {
-      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR
+      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR;
     }
   }
 
   clearErrors(group?: string) {
     if (this.hostApi.isDashboardMountSupported) {
-      this.hostApi.send(ExtensionRequestType.TILE_CLEAR_ERRORS, { group })
+      this.hostApi.send(ExtensionRequestType.TILE_CLEAR_ERRORS, { group });
     } else {
-      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR
+      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR;
     }
   }
 
@@ -101,9 +101,9 @@ export class TileSDKImpl implements TileSDKInternal {
       this.hostApi.send(ExtensionRequestType.TILE_OPEN_DRILL_MENU, {
         options,
         event: this.sanitizeEvent(event),
-      })
+      });
     } else {
-      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR
+      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR;
     }
   }
 
@@ -112,25 +112,25 @@ export class TileSDKImpl implements TileSDKInternal {
       this.hostApi.send(ExtensionRequestType.TILE_TOGGLE_CROSS_FILTER, {
         options,
         event: this.sanitizeEvent(event),
-      })
+      });
     } else {
-      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR
+      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR;
     }
   }
 
   runDashboard() {
     if (this.hostApi.isDashboardMountSupported) {
-      this.hostApi.send(ExtensionRequestType.TILE_RUN_DASHBOARD, {})
+      this.hostApi.send(ExtensionRequestType.TILE_RUN_DASHBOARD, {});
     } else {
-      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR
+      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR;
     }
   }
 
   stopDashboard() {
     if (this.hostApi.isDashboardMountSupported) {
-      this.hostApi.send(ExtensionRequestType.TILE_STOP_DASHBOARD, {})
+      this.hostApi.send(ExtensionRequestType.TILE_STOP_DASHBOARD, {});
     } else {
-      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR
+      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR;
     }
   }
 
@@ -139,9 +139,9 @@ export class TileSDKImpl implements TileSDKInternal {
       this.hostApi.send(ExtensionRequestType.TILE_UPDATE_FILTERS, {
         filters,
         run,
-      })
+      });
     } else {
-      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR
+      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR;
     }
   }
 
@@ -150,9 +150,9 @@ export class TileSDKImpl implements TileSDKInternal {
       return this.hostApi.sendAndReceive(
         ExtensionRequestType.TILE_OPEN_SCHEDULE_DIALOG,
         {}
-      )
+      );
     } else {
-      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR
+      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR;
     }
   }
 
@@ -163,8 +163,8 @@ export class TileSDKImpl implements TileSDKInternal {
         pageX: event.pageX,
         pageY: event.pageY,
         type: event.type,
-      }
+      };
     }
-    return undefined
+    return undefined;
   }
 }

@@ -23,11 +23,11 @@
  SOFTWARE.
 
  */
-import type { RootState } from '../root_reducer'
-import type { MessageDetail } from './reducer'
+import type { RootState } from '../root_reducer';
+import type { MessageDetail } from './reducer';
 
 export const isLoadingState = (state: RootState): boolean =>
-  state.commonState.loading
+  state.commonState.loading;
 
 export const getMessageState = (state: RootState): MessageDetail | undefined =>
-  state.commonState.message
+  state.commonState.message;

@@ -24,125 +24,125 @@
 
  */
 
-import { NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR } from '../../util/errors'
-import type { ExtensionHostApiImpl } from '../extension_host_api'
-import { ExtensionRequestType } from '../types'
-import type { Row } from '../tile'
+import { NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR } from '../../util/errors';
+import type { ExtensionHostApiImpl } from '../extension_host_api';
+import { ExtensionRequestType } from '../types';
+import type { Row } from '../tile';
 import type {
-  VisualizationSDKInternal,
-  RawVisualizationData,
-  RawVisConfig,
-  VisualizationConfig,
-  QueryResponse,
-  Measure,
   Dimension,
-  TableCalculation,
+  Measure,
   PivotConfig,
+  QueryResponse,
+  RawVisConfig,
   RawVisQueryResponse,
+  RawVisualizationData,
+  TableCalculation,
   VisOptions,
-} from './types'
+  VisualizationConfig,
+  VisualizationSDKInternal,
+} from './types';
 
 class QueryResponseImpl implements QueryResponse {
-  _queryResponse?: RawVisQueryResponse
+  _queryResponse?: RawVisQueryResponse;
 
   constructor(queryResponse?: RawVisQueryResponse) {
-    this._queryResponse = queryResponse
+    this._queryResponse = queryResponse;
   }
 
   update(queryResponse: RawVisQueryResponse) {
-    this._queryResponse = queryResponse
+    this._queryResponse = queryResponse;
   }
 
   get fieldMeasures(): Measure[] {
-    return this._queryResponse?.fields?.measures || []
+    return this._queryResponse?.fields?.measures || [];
   }
 
   get fieldDimensions(): Dimension[] {
-    return this._queryResponse?.fields?.dimensions || []
+    return this._queryResponse?.fields?.dimensions || [];
   }
 
   get fieldTableCalculations(): TableCalculation[] {
-    return this._queryResponse?.fields?.table_calculations || []
+    return this._queryResponse?.fields?.table_calculations || [];
   }
 
   get fieldPivots(): PivotConfig[] {
-    return this._queryResponse?.fields?.pivots || []
+    return this._queryResponse?.fields?.pivots || [];
   }
 
   get fieldMeasureLike(): Measure[] {
-    return this._queryResponse?.fields?.measure_like || []
+    return this._queryResponse?.fields?.measure_like || [];
   }
 
   get fieldDimensionLike(): Dimension[] {
-    return this._queryResponse?.fields?.dimension_like || []
+    return this._queryResponse?.fields?.dimension_like || [];
   }
 
   get data(): Row[] {
-    return this._queryResponse?.data || []
+    return this._queryResponse?.data || [];
   }
 }
 
 class VisualizationConfigImpl implements VisualizationConfig {
-  _visConfig?: RawVisConfig
+  _visConfig?: RawVisConfig;
 
   constructor(visConfig?: RawVisConfig) {
-    this._visConfig = visConfig
+    this._visConfig = visConfig;
   }
 
   update(visConfig: RawVisConfig) {
-    this._visConfig = visConfig
+    this._visConfig = visConfig;
   }
 
   get visConfig(): RawVisConfig {
-    return this._visConfig || {}
+    return this._visConfig || {};
   }
 
   get queryFieldMeasures(): Measure[] {
-    return this._visConfig?.query_fields?.measures || []
+    return this._visConfig?.query_fields?.measures || [];
   }
 
   get queryFieldDimensions(): Dimension[] {
-    return this._visConfig?.query_fields?.dimensions || []
+    return this._visConfig?.query_fields?.dimensions || [];
   }
 
   get queryFieldTableCalculations(): TableCalculation[] {
-    return this._visConfig?.query_fields?.table_calculations || []
+    return this._visConfig?.query_fields?.table_calculations || [];
   }
 
   get queryFieldPivots(): PivotConfig[] {
-    return this._visConfig?.query_fields?.pivots || []
+    return this._visConfig?.query_fields?.pivots || [];
   }
 }
 
 export class VisualizationSDKImpl implements VisualizationSDKInternal {
-  hostApi: ExtensionHostApiImpl
-  visualizationData?: RawVisualizationData
-  _visConfig?: VisualizationConfigImpl
-  _queryResponse?: QueryResponseImpl
+  hostApi: ExtensionHostApiImpl;
+  visualizationData?: RawVisualizationData;
+  _visConfig?: VisualizationConfigImpl;
+  _queryResponse?: QueryResponseImpl;
 
   constructor(hostApi: ExtensionHostApiImpl) {
-    this.hostApi = hostApi
+    this.hostApi = hostApi;
   }
 
   updateVisData(visualizationData: RawVisualizationData) {
     // Ignore update messages if dashboard mounts not supported.
     // Should never happen.
     if (this.hostApi.isDashboardMountSupported) {
-      this.visualizationData = visualizationData
+      this.visualizationData = visualizationData;
       if (this.visConfig && this._visConfig) {
-        this._visConfig.update(this.visualizationData.visConfig)
+        this._visConfig.update(this.visualizationData.visConfig);
       }
       if (this.queryResponse && this._queryResponse) {
-        this._queryResponse.update(this.visualizationData.queryResponse)
+        this._queryResponse.update(this.visualizationData.queryResponse);
       }
     }
   }
 
   configureVisualization(options: VisOptions): void {
     if (this.hostApi.isDashboardMountSupported) {
-      this.hostApi.send(ExtensionRequestType.VIS_DEFAULT_CONFIG, { options })
+      this.hostApi.send(ExtensionRequestType.VIS_DEFAULT_CONFIG, { options });
     } else {
-      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR
+      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR;
     }
   }
 
@@ -150,9 +150,9 @@ export class VisualizationSDKImpl implements VisualizationSDKInternal {
     if (this.hostApi.isDashboardMountSupported) {
       this.hostApi.send(ExtensionRequestType.VIS_CONFIG_UPDATE, {
         updatedConfig: config,
-      })
+      });
     } else {
-      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR
+      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR;
     }
   }
 
@@ -160,18 +160,18 @@ export class VisualizationSDKImpl implements VisualizationSDKInternal {
     if (!this._visConfig) {
       this._visConfig = new VisualizationConfigImpl(
         this.visualizationData?.visConfig
-      )
+      );
     }
-    return this._visConfig
+    return this._visConfig;
   }
 
   updateRowLimit(rowLimit: number) {
     if (this.hostApi.isDashboardMountSupported) {
       this.hostApi.send(ExtensionRequestType.TILE_ROW_LIMIT_UPDATE, {
         rowLimit,
-      })
+      });
     } else {
-      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR
+      throw NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR;
     }
   }
 
@@ -179,8 +179,8 @@ export class VisualizationSDKImpl implements VisualizationSDKInternal {
     if (!this._queryResponse) {
       this._queryResponse = new QueryResponseImpl(
         this.visualizationData?.queryResponse
-      )
+      );
     }
-    return this._queryResponse
+    return this._queryResponse;
   }
 }

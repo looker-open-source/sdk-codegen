@@ -23,8 +23,8 @@
  SOFTWARE.
 
  */
-import { NodeSettings, LookerNodeSDK } from '@looker/sdk-node'
-import { IApiSettings, IApiSection } from '@looker/sdk-rtl'
+import { NodeSettings, LookerNodeSDK } from '@looker/sdk-node';
+import { IApiSettings, IApiSection } from '@looker/sdk-rtl';
 
 /**
  * @class CustomConfigReader
@@ -35,7 +35,7 @@ import { IApiSettings, IApiSection } from '@looker/sdk-rtl'
  */
 class CustomConfigReader extends NodeSettings {
   constructor(settings: IApiSettings) {
-    super('', settings)
+    super('', settings);
   }
 
   /**
@@ -45,21 +45,21 @@ class CustomConfigReader extends NodeSettings {
     return {
       client_id: 'clientId',
       client_secret: 'clientSecret',
-    }
+    };
   }
 }
 
-;(async () => {
+(async () => {
   const sdk = LookerNodeSDK.init40(
     new CustomConfigReader({
       base_url: 'https://<your-looker-server>:19999',
     } as IApiSettings)
-  )
+  );
 
   const me = await sdk.ok(
     sdk.me(
       'id, first_name, last_name, display_name, email, personal_space_id, home_space_id, group_ids, role_ids'
     )
-  )
-  console.log({ me })
-})()
+  );
+  console.log({ me });
+})();

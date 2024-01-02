@@ -98,7 +98,7 @@ jobs:
           path: python/results/
 
   integration:
-    needs: [unit,setup]
+    needs: [unit, setup]
     name: Integration - ${{ matrix.os }} / Looker.${{ matrix.looker }}
     env:
       TOX_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.Looker-${{ matrix.looker }}.py3.x
@@ -117,10 +117,11 @@ jobs:
       matrix:
         os:
           - large-ubuntu
-        looker: ${{ fromJson(needs.setup.outputs.matrix_json) }}
+        looker:
+          ${{ fromJson(needs.setup.outputs.matrix_json) }}
 
           # TODO uncomment `include:` when either macos or windows works to satisfaction.
-         #include:
+          #include:
           # TODO: macos matrix leg is functional but it takes ~20 minutes (compared
           # to ~4 minutes for ubuntu) because docker install takes ~5 minutes
           # and docker pull takes ~10 minutes. We can probably figure out how to

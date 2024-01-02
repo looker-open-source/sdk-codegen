@@ -23,61 +23,61 @@
  SOFTWARE.
 
  */
-import type { BaseSyntheticEvent, FC } from 'react'
-import React from 'react'
-import { useDispatch } from 'react-redux'
-import { useHistory } from 'react-router-dom'
+import type { BaseSyntheticEvent, FC } from 'react';
+import React from 'react';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import {
   Button,
   ButtonOutline,
-  Space,
-  Span,
+  FieldSlider,
   FieldTextArea,
   Form,
-  FieldSlider,
-  Tabs2,
+  Space,
+  Span,
   Tab2,
-} from '@looker/components'
+  Tabs2,
+} from '@looker/components';
 import {
   saveJudgingRequest,
   updateJudgingData,
-} from '../../../data/judgings/actions'
-import type { IJudgingProps } from '../../../models'
-import { Routes } from '../../../routes'
-import { ProjectView } from '../../ProjectsScene/components'
+} from '../../../data/judgings/actions';
+import type { IJudgingProps } from '../../../models';
+import { Routes } from '../../../routes';
+import { ProjectView } from '../../ProjectsScene/components';
 
 interface JudgingFormProps {
-  judging: IJudgingProps
-  readonly: boolean
+  judging: IJudgingProps;
+  readonly: boolean;
 }
 
 export const JudgingForm: FC<JudgingFormProps> = ({ judging, readonly }) => {
-  const dispatch = useDispatch()
-  const history = useHistory()
+  const dispatch = useDispatch();
+  const history = useHistory();
 
   const onValueChange = (event: BaseSyntheticEvent) => {
-    const newJudging = { ...judging }
+    const newJudging = { ...judging };
     newJudging[event.target.name] =
       event.target.type === 'range'
         ? parseInt(event.target.value, 10)
-        : event.target.value
-    dispatch(updateJudgingData(newJudging))
-  }
+        : event.target.value;
+    dispatch(updateJudgingData(newJudging));
+  };
 
   const handleCancel = () => {
-    history.push(Routes.JUDGING)
-  }
+    history.push(Routes.JUDGING);
+  };
 
   const handleSave = (event: BaseSyntheticEvent) => {
     // Prevent form POST request
-    event.preventDefault()
-    dispatch(saveJudgingRequest(judging))
-  }
+    event.preventDefault();
+    dispatch(saveJudgingRequest(judging));
+  };
 
-  const execution = judging.execution
-  const scope = judging.scope
-  const novelty = judging.novelty
-  const impact = judging.impact
+  const execution = judging.execution;
+  const scope = judging.scope;
+  const novelty = judging.novelty;
+  const impact = judging.impact;
 
   return (
     <Tabs2 defaultTabId="form">
@@ -165,5 +165,5 @@ export const JudgingForm: FC<JudgingFormProps> = ({ judging, readonly }) => {
         />
       </Tab2>
     </Tabs2>
-  )
-}
+  );
+};

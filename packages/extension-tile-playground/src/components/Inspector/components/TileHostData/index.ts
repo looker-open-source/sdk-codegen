@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export * from './TileHostData'
+export * from './TileHostData';

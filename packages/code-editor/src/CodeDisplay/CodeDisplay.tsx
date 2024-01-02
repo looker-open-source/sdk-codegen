@@ -24,27 +24,27 @@
 
  */
 
-import type { FC } from 'react'
-import React from 'react'
-import styled from 'styled-components'
-import { Span } from '@looker/components'
-import Highlight, { defaultProps, Prism } from 'prism-react-renderer'
+import type { FC } from 'react';
+import React from 'react';
+import styled from 'styled-components';
+import { Span } from '@looker/components';
+import Highlight, { Prism, defaultProps } from 'prism-react-renderer';
 
-import { getPrismLanguage, getOverriddenTheme } from '../utils'
-import { CodeWrapper } from './CodeWrapper'
-import { LineItem } from './LineItem'
-import type { CodeDisplayProps } from './types'
-;(typeof global !== 'undefined' ? (global as any) : (window as any)).Prism =
-  Prism
-require('prismjs/components/prism-kotlin')
-require('prismjs/components/prism-csharp')
-require('prismjs/components/prism-swift')
-require('prismjs/components/prism-ruby')
-require('prismjs/components/prism-markdown')
+import { getOverriddenTheme, getPrismLanguage } from '../utils';
+import { CodeWrapper } from './CodeWrapper';
+import { LineItem } from './LineItem';
+import type { CodeDisplayProps } from './types';
+(typeof global !== 'undefined' ? (global as any) : (window as any)).Prism =
+  Prism;
+require('prismjs/components/prism-kotlin');
+require('prismjs/components/prism-csharp');
+require('prismjs/components/prism-swift');
+require('prismjs/components/prism-ruby');
+require('prismjs/components/prism-markdown');
 
 const Line = styled(Span)`
   display: table-row;
-`
+`;
 
 const LineNo = styled(Span)`
   display: table-cell;
@@ -52,12 +52,12 @@ const LineNo = styled(Span)`
   padding-right: 1em;
   user-select: none;
   opacity: 0.5;
-`
+`;
 
 const LineContent = styled(Span)`
   display: table-cell;
   font-family: monospace;
-`
+`;
 
 /**
  * Provides a view-only syntax highlighter for all supported SDK languages.
@@ -90,7 +90,7 @@ export const CodeDisplay: FC<CodeDisplayProps> = ({
               {lineNumbers && <LineNo>{i + 1}</LineNo>}
               <LineContent>
                 {line.map((token, key) => {
-                  const tokenProps = getTokenProps({ token, key })
+                  const tokenProps = getTokenProps({ token, key });
                   return (
                     <LineItem
                       key={key}
@@ -98,7 +98,7 @@ export const CodeDisplay: FC<CodeDisplayProps> = ({
                       tokenProps={tokenProps}
                       pattern={pattern}
                     />
-                  )
+                  );
                 })}
               </LineContent>
             </Line>
@@ -106,5 +106,5 @@ export const CodeDisplay: FC<CodeDisplayProps> = ({
         </CodeWrapper>
       )}
     </Highlight>
-  )
-}
+  );
+};

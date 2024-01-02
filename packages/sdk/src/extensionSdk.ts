@@ -25,16 +25,16 @@
  */
 
 import type {
-  IApiSettings,
   APIMethods,
+  IApiSettings,
   IAuthSession,
   IHostConnection,
-} from '@looker/sdk-rtl'
+} from '@looker/sdk-rtl';
 import {
   DefaultSettings,
   ExtensionSession,
   ExtensionTransport,
-} from '@looker/sdk-rtl'
+} from '@looker/sdk-rtl';
 
 export class LookerExtensionSDK {
   /**
@@ -48,10 +48,10 @@ export class LookerExtensionSDK {
     type: new (authSession: IAuthSession) => T,
     settings?: IApiSettings
   ): T {
-    settings = settings || DefaultSettings()
-    const transport = new ExtensionTransport(settings, hostConnection)
-    const session = new ExtensionSession(settings, transport)
+    settings = settings || DefaultSettings();
+    const transport = new ExtensionTransport(settings, hostConnection);
+    const session = new ExtensionSession(settings, transport);
     // eslint-disable-next-line new-cap
-    return new type(session)
+    return new type(session);
   }
 }

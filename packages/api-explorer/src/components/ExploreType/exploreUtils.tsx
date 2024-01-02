@@ -24,34 +24,34 @@
 
  */
 
-import React from 'react'
-import type { IconType } from '@looker/components'
-import { FieldString, IdeFileManifest, IdeParameter } from '@looker/icons'
-import { CalendarToday } from '@styled-icons/material/CalendarToday'
-import { Check } from '@styled-icons/material/Check'
-import { Code } from '@styled-icons/material/Code'
-import { Link } from '@styled-icons/material/Link'
-import { Toc } from '@styled-icons/material/Toc'
-import { VpnKey } from '@styled-icons/material/VpnKey'
-import { Tag } from '@styled-icons/material-rounded'
-import { Email } from '@styled-icons/material-outlined'
-import type { IType } from '@looker/sdk-codegen'
-import { TypeOfType, typeOfType } from '@looker/sdk-codegen'
+import React from 'react';
+import type { IconType } from '@looker/components';
+import { FieldString, IdeFileManifest, IdeParameter } from '@looker/icons';
+import { CalendarToday } from '@styled-icons/material/CalendarToday';
+import { Check } from '@styled-icons/material/Check';
+import { Code } from '@styled-icons/material/Code';
+import { Link } from '@styled-icons/material/Link';
+import { Toc } from '@styled-icons/material/Toc';
+import { VpnKey } from '@styled-icons/material/VpnKey';
+import { Tag } from '@styled-icons/material-rounded';
+import { Email } from '@styled-icons/material-outlined';
+import type { IType } from '@looker/sdk-codegen';
+import { TypeOfType, typeOfType } from '@looker/sdk-codegen';
 
 /**
  * Get the type or element type if this type is a collection
  * @param value type to pick
  */
 export const pickType = (value: IType) => {
-  const typed = typeOfType(value)
+  const typed = typeOfType(value);
   switch (typed) {
     case TypeOfType.Intrinsic:
     case TypeOfType.Complex:
-      return value
+      return value;
     default:
-      return value.elementType!
+      return value.elementType!;
   }
-}
+};
 
 /**
  * Is this an expandable node?
@@ -59,48 +59,48 @@ export const pickType = (value: IType) => {
  * @param maxDepth is the maximum depth to expanded nested types. -1 = all (default), 0 = no expansion
  */
 export const expandable = (level: number, maxDepth = -1) =>
-  maxDepth === -1 || level <= maxDepth
+  maxDepth === -1 || level <= maxDepth;
 
 /**
  * Gets the properties for the "exploring" type
  * @param value type to pick
  */
-export const pickTypeProps = (value: IType) => pickType(value).properties
+export const pickTypeProps = (value: IType) => pickType(value).properties;
 
 /**
  * Get the link prefix for the type
  * @param value type to link to
  */
 export const typeLinkPrefix = (value: IType) => {
-  const typed = typeOfType(value)
+  const typed = typeOfType(value);
   switch (typed) {
     case TypeOfType.Hash:
-      return 'Hash['
+      return 'Hash[';
     default:
-      return ''
+      return '';
   }
-}
+};
 
 /**
  * Get the link suffix for the type
  * @param value type to link to
  */
 export const typeLinkSuffix = (value: IType) => {
-  const typed = typeOfType(value)
+  const typed = typeOfType(value);
   switch (typed) {
     case TypeOfType.Array:
     case TypeOfType.DelimArray:
-      return '[]'
+      return '[]';
     case TypeOfType.Hash:
-      return ']'
+      return ']';
     default:
-      return ''
+      return '';
   }
-}
+};
 
 interface TypedIcon {
-  icon: IconType
-  title: string
+  icon: IconType;
+  title: string;
 }
 
 /**
@@ -110,39 +110,39 @@ interface TypedIcon {
 export const typeIcon = (value: IType): TypedIcon => {
   switch (value.className) {
     case 'ArrayType':
-      return { icon: <Toc />, title: value.jsonName }
+      return { icon: <Toc />, title: value.jsonName };
     case 'DelimArrayType':
-      return { icon: <Toc />, title: value.jsonName }
+      return { icon: <Toc />, title: value.jsonName };
     case 'HashType':
-      return { icon: <IdeFileManifest />, title: value.jsonName }
+      return { icon: <IdeFileManifest />, title: value.jsonName };
     case 'EnumType':
-      return { icon: <IdeParameter />, title: value.jsonName }
+      return { icon: <IdeParameter />, title: value.jsonName };
   }
 
-  const type = pickType(value)
+  const type = pickType(value);
   switch (type.jsonName) {
     case 'boolean':
-      return { icon: <Check />, title: type.jsonName }
+      return { icon: <Check />, title: type.jsonName };
     case 'int64':
     case 'integer':
     case 'float':
     case 'double':
-      return { icon: <Tag />, title: type.jsonName }
+      return { icon: <Tag />, title: type.jsonName };
     case 'string':
     case 'hostname':
     case 'uuid':
     case 'ipv4':
     case 'ipv6':
-      return { icon: <FieldString />, title: type.jsonName }
+      return { icon: <FieldString />, title: type.jsonName };
     case 'email':
-      return { icon: <Email />, title: type.jsonName }
+      return { icon: <Email />, title: type.jsonName };
     case 'password':
-      return { icon: <VpnKey />, title: type.jsonName }
+      return { icon: <VpnKey />, title: type.jsonName };
     case 'uri':
-      return { icon: <Link />, title: type.jsonName }
+      return { icon: <Link />, title: type.jsonName };
     case 'datetime':
-      return { icon: <CalendarToday />, title: type.jsonName }
+      return { icon: <CalendarToday />, title: type.jsonName };
     default:
-      return { icon: <Code />, title: type.jsonName }
+      return { icon: <Code />, title: type.jsonName };
   }
-}
+};

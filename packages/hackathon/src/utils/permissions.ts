@@ -29,7 +29,7 @@ import type {
   IJudgingProps,
   IProjectProps,
   UserPermission,
-} from '../models'
+} from '../models';
 
 export const canDoProjectAction = (
   hacker: IHackerProps,
@@ -42,8 +42,8 @@ export const canDoProjectAction = (
     hacker.canStaff ||
     hacker.permissions.has(action) ||
     hacker.registration._id === project._user_id
-  )
-}
+  );
+};
 
 export const canUpdateProject = (
   hacker: IHackerProps,
@@ -51,7 +51,7 @@ export const canUpdateProject = (
   newProject?: boolean
 ): boolean => {
   if (hacker.canAdmin || hacker.canJudge || hacker.canStaff) {
-    return true
+    return true;
   }
   if (hacker.registration && hacker.registration._id) {
     if (
@@ -60,11 +60,11 @@ export const canUpdateProject = (
         project?._user_id === hacker.registration._id &&
         !project.locked)
     ) {
-      return true
+      return true;
     }
   }
-  return false
-}
+  return false;
+};
 
 export const canJoinProject = (
   hacker: IHackerProps,
@@ -72,27 +72,27 @@ export const canJoinProject = (
 ): boolean => {
   if (hacker.registration && hacker.registration._id) {
     if (project && project.project_type === 'Open' && !project.locked) {
-      return true
+      return true;
     }
   }
-  return false
-}
+  return false;
+};
 
 export const canLockProject = (hacker: IHackerProps): boolean =>
-  hacker.canAdmin || hacker.canJudge || hacker.canStaff
+  hacker.canAdmin || hacker.canJudge || hacker.canStaff;
 
 export const canJudge = (
   hacker: IHackerProps,
   judging?: IJudgingProps
 ): boolean => {
-  let canJudge = false
+  let canJudge = false;
   if (judging) {
     if (hacker.canAdmin || (hacker.canJudge && judging.user_id === hacker.id)) {
-      canJudge = true
+      canJudge = true;
     }
   }
-  return canJudge
-}
+  return canJudge;
+};
 
 export const canDoJudgingAction = (
   hacker: IHackerProps,
@@ -101,5 +101,5 @@ export const canDoJudgingAction = (
   return (
     hacker.canAdmin ||
     (hacker.canJudge && String(hacker.id) === judging.user_id)
-  )
-}
+  );
+};

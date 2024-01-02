@@ -24,27 +24,27 @@
 
  */
 
-import type { BaseSyntheticEvent, ReactNode } from 'react'
-import React from 'react'
-import styled from 'styled-components'
-import ReactMarkdown from 'react-markdown'
-import rehypeRaw from 'rehype-raw'
-import gfm from 'remark-gfm'
-import { TableHead, TableBody, TableRow, Link } from '@looker/components'
+import type { BaseSyntheticEvent, ReactNode } from 'react';
+import React from 'react';
+import styled from 'styled-components';
+import ReactMarkdown from 'react-markdown';
+import rehypeRaw from 'rehype-raw';
+import gfm from 'remark-gfm';
+import { Link, TableBody, TableHead, TableRow } from '@looker/components';
 
-import { CodeDisplay } from '../CodeDisplay'
-import { qualifyMarkdownText, prepareCodeText } from './utils'
-import { TableCell } from './TableCell'
-import { MDHeading, MDList, MDListItem, MDParagraph, MDTable } from './common'
+import { CodeDisplay } from '../CodeDisplay';
+import { prepareCodeText, qualifyMarkdownText } from './utils';
+import { TableCell } from './TableCell';
+import { MDHeading, MDList, MDListItem, MDParagraph, MDTable } from './common';
 
-type HeadingLevels = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6'
+type HeadingLevels = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
 interface MarkdownProps {
-  source: string
-  pattern?: string
-  transformLinkUri?: (url: string) => string
-  linkClickHandler?: (pathname: string, href: string) => void
-  paragraphOverride?: ({ children }: { children: ReactNode }) => ReactNode
+  source: string;
+  pattern?: string;
+  transformLinkUri?: (url: string) => string;
+  linkClickHandler?: (pathname: string, href: string) => void;
+  paragraphOverride?: ({ children }: { children: ReactNode }) => ReactNode;
 }
 
 export const Markdown = ({
@@ -55,56 +55,56 @@ export const Markdown = ({
   paragraphOverride,
 }: MarkdownProps) => {
   const findAnchor = (ele: HTMLElement): HTMLAnchorElement | undefined => {
-    if (ele.tagName === 'A') return ele as HTMLAnchorElement
+    if (ele.tagName === 'A') return ele as HTMLAnchorElement;
     if (ele.parentElement) {
-      return findAnchor(ele.parentElement)
+      return findAnchor(ele.parentElement);
     }
-    return undefined
-  }
+    return undefined;
+  };
 
   const handleClick = (e: BaseSyntheticEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (linkClickHandler) {
       // Could be a <mark> tag wrapped by an anchor
-      const a = findAnchor(e.target)
+      const a = findAnchor(e.target);
       if (a) {
         linkClickHandler(
           a.getAttribute('pathname') || '',
           a.getAttribute('href') || ''
-        )
+        );
       }
     }
-  }
+  };
 
   const heading = ({
     level,
     children,
   }: {
-    level: number
-    children: ReactNode
-  }) => <MDHeading as={`h${level}` as HeadingLevels}>{children}</MDHeading>
+    level: number;
+    children: ReactNode;
+  }) => <MDHeading as={`h${level}` as HeadingLevels}>{children}</MDHeading>;
 
   const paragraph = ({ children }: { children: ReactNode }) => (
     <MDParagraph>{children}</MDParagraph>
-  )
+  );
 
   const code = ({
     inline,
     children,
   }: {
-    inline?: boolean
-    children: ReactNode
+    inline?: boolean;
+    children: ReactNode;
   }) => {
-    const { text, language } = prepareCodeText(children?.toString() || '')
+    const { text, language } = prepareCodeText(children?.toString() || '');
     const codeProps = {
       language: language,
       code: text,
       pattern: pattern,
       lineNumbers: false,
       inline: inline,
-    }
-    return <CodeDisplay {...codeProps} />
-  }
+    };
+    return <CodeDisplay {...codeProps} />;
+  };
 
   const components = {
     h1: heading,
@@ -126,21 +126,21 @@ export const Markdown = ({
     tr: TableRow,
     td: TableCell,
     th: TableCell,
-  }
+  };
 
   return (
     <MarkdownWrapper onClick={handleClick}>
       <ReactMarkdown
-        remarkPlugins={[gfm]}
-        rehypePlugins={[rehypeRaw]}
+        remarkPlugins={[gfm] as any}
+        rehypePlugins={[rehypeRaw] as any}
         transformLinkUri={transformLinkUri}
         components={components}
       >
-        {qualifyMarkdownText(source, pattern)}
+        {qualifyMarkdownText(source, pattern ?? '')}
       </ReactMarkdown>
     </MarkdownWrapper>
-  )
-}
+  );
+};
 
 const MarkdownWrapper = styled.div`
   & > ul {
@@ -155,4 +155,4 @@ const MarkdownWrapper = styled.div`
     background-color: #fff2c2;
     font-weight: 500;
   }
-`
+`;

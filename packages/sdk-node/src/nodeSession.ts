@@ -25,26 +25,34 @@
  */
 
 import type {
+  HttpMethod,
+  IAccessToken,
+  IApiSettings,
+  IError,
   IRequestProps,
   ITransport,
-  HttpMethod,
-  IApiSettings,
-  IAccessToken,
-  IError,
-} from '@looker/sdk-rtl'
-import { sdkError, encodeParams, AuthToken, AuthSession } from '@looker/sdk-rtl'
-import { NodeTransport } from './nodeTransport'
+} from '@looker/sdk-rtl';
+import {
+  AuthSession,
+  AuthToken,
+  encodeParams,
+  sdkError,
+} from '@looker/sdk-rtl';
+import { NodeTransport } from './nodeTransport';
 
-const strPost: HttpMethod = 'POST'
-const strDelete: HttpMethod = 'DELETE'
+const strPost: HttpMethod = 'POST';
+const strDelete: HttpMethod = 'DELETE';
 
 export class NodeSession extends AuthSession {
-  private readonly apiPath: string = '/api/4.0'
-  _authToken: AuthToken = new AuthToken()
-  _sudoToken: AuthToken = new AuthToken()
+  private readonly apiPath: string = '/api/4.0';
+  _authToken: AuthToken = new AuthToken();
+  _sudoToken: AuthToken = new AuthToken();
 
-  constructor(public settings: IApiSettings, transport?: ITransport) {
-    super(settings, transport || new NodeTransport(settings))
+  constructor(
+    public settings: IApiSettings,
+    transport?: ITransport
+  ) {
+    super(settings, transport || new NodeTransport(settings));
   }
 
   /**
@@ -52,9 +60,9 @@ export class NodeSession extends AuthSession {
    */
   get activeToken() {
     if (this._sudoToken.access_token) {
-      return this._sudoToken
+      return this._sudoToken;
     }
-    return this._authToken
+    return this._authToken;
   }
 
   /**
@@ -62,9 +70,9 @@ export class NodeSession extends AuthSession {
    */
   isAuthenticated() {
     // TODO I think this can be simplified
-    const token = this.activeToken
-    if (!(token && token.access_token)) return false
-    return token.isActive()
+    const token = this.activeToken;
+    if (!(token && token.access_token)) return false;
+    return token.isActive();
   }
 
   /**
@@ -74,15 +82,15 @@ export class NodeSession extends AuthSession {
    * @returns the updated request properties
    */
   async authenticate(props: IRequestProps) {
-    const token = await this.getToken()
+    const token = await this.getToken();
     if (token && token.access_token) {
-      props.headers.Authorization = `Bearer ${token.access_token}`
+      props.headers.Authorization = `Bearer ${token.access_token}`;
     }
-    return props
+    return props;
   }
 
   isSudo() {
-    return !!this.sudoId && this._sudoToken.isActive()
+    return !!this.sudoId && this._sudoToken.isActive();
   }
 
   /**
@@ -91,18 +99,18 @@ export class NodeSession extends AuthSession {
    */
   async getToken() {
     if (!this.isAuthenticated()) {
-      await this.login()
+      await this.login();
     }
-    return this.activeToken
+    return this.activeToken;
   }
 
   /**
    * Reset the authentication session
    */
   reset() {
-    this.sudoId = ''
-    this._authToken.reset()
-    this._sudoToken.reset()
+    this.sudoId = '';
+    this._authToken.reset();
+    this._sudoToken.reset();
   }
 
   /**
@@ -113,59 +121,59 @@ export class NodeSession extends AuthSession {
   async login(sudoId?: string | number) {
     if (sudoId || sudoId !== this.sudoId || !this.isAuthenticated()) {
       if (sudoId) {
-        await this._login(sudoId.toString())
+        await this._login(sudoId.toString());
       } else {
-        await this._login()
+        await this._login();
       }
     }
-    return this.activeToken
+    return this.activeToken;
   }
 
   /**
    * Logout the active user. If the active user is sudo, the session reverts to the API3 user
    */
   async logout() {
-    let result = false
+    let result = false;
     if (this.isAuthenticated()) {
-      result = await this._logout()
+      result = await this._logout();
     }
-    return result
+    return result;
   }
 
   private async sudoLogout() {
-    let result = false
+    let result = false;
     if (this.isSudo()) {
-      result = await this.logout() // Logout the current sudo
-      this._sudoToken.reset()
+      result = await this.logout(); // Logout the current sudo
+      this._sudoToken.reset();
     }
-    return result
+    return result;
   }
 
   // internal login method that manages default auth token and sudo workflow
   private async _login(newId?: string) {
     // for linty freshness, always logout sudo if set
-    await this.sudoLogout()
+    await this.sudoLogout();
 
     if (newId !== this.sudoId) {
       // Assign new requested sudo id
-      this.sudoId = newId || ''
+      this.sudoId = newId || '';
     }
 
     if (!this._authToken.isActive()) {
-      this.reset()
+      this.reset();
       // only retain client API3 credentials for the lifetime of the login request
-      const section = this.settings.readConfig()
-      const clientId = section.client_id
-      const clientSecret = section.client_secret
+      const section = this.settings.readConfig();
+      const clientId = section.client_id;
+      const clientSecret = section.client_secret;
       if (!clientId || !clientSecret) {
         throw sdkError({
           message: 'API credentials client_id and/or client_secret are not set',
-        })
+        });
       }
       const body = encodeParams({
         client_id: clientId,
         client_secret: clientSecret,
-      })
+      });
       // authenticate client
       const token = await this.ok(
         this.transport.request<IAccessToken, IError>(
@@ -174,13 +182,13 @@ export class NodeSession extends AuthSession {
           undefined,
           body
         )
-      )
-      this._authToken.setToken(token)
+      );
+      this._authToken.setToken(token);
     }
 
     if (this.sudoId) {
       // Use the API user auth to sudo
-      const token = this.activeToken
+      const token = this.activeToken;
       const promise = this.transport.request<IAccessToken, IError>(
         strPost,
         encodeURI(`${this.apiPath}/login/${newId}`),
@@ -189,23 +197,23 @@ export class NodeSession extends AuthSession {
         // ensure the auth token is included in the sudo request
         (init: IRequestProps) => {
           if (token.access_token) {
-            init.headers.Authorization = `Bearer ${token.access_token}`
+            init.headers.Authorization = `Bearer ${token.access_token}`;
           }
-          return init
+          return init;
         },
         this.settings // TODO this may not be needed here
-      )
+      );
 
-      const accessToken = await this.ok(promise)
+      const accessToken = await this.ok(promise);
 
-      this._sudoToken.setToken(accessToken)
+      this._sudoToken.setToken(accessToken);
     }
 
-    return this.activeToken
+    return this.activeToken;
   }
 
   private async _logout() {
-    const token = this.activeToken
+    const token = this.activeToken;
     const promise = this.transport.request<string, IError>(
       strDelete,
       `${this.apiPath}/logout`,
@@ -214,27 +222,27 @@ export class NodeSession extends AuthSession {
       // ensure the auth token is included in the logout promise
       (init: IRequestProps) => {
         if (token.access_token) {
-          init.headers.Authorization = `Bearer ${token.access_token}`
+          init.headers.Authorization = `Bearer ${token.access_token}`;
         }
-        return init
+        return init;
       },
       this.settings
-    )
+    );
 
-    await this.ok(promise)
+    await this.ok(promise);
 
     // If no error was thrown, logout was successful
     if (this.sudoId) {
       // User was logged out, so set auth back to default
-      this.sudoId = ''
-      this._sudoToken.reset()
+      this.sudoId = '';
+      this._sudoToken.reset();
       if (!this._authToken.isActive()) {
-        await this.login()
+        await this.login();
       }
     } else {
       // completely logged out
-      this.reset()
+      this.reset();
     }
-    return true
+    return true;
   }
 }

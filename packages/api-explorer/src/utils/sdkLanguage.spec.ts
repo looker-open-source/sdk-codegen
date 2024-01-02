@@ -24,46 +24,46 @@
 
  */
 
-import { codeGenerators } from '@looker/sdk-codegen'
-import { allSdkLanguages, findSdk } from '../utils'
-import { sdkLanguageMapping } from '../test-data'
+import { codeGenerators } from '@looker/sdk-codegen';
+import { allSdkLanguages, findSdk } from '../utils';
+import { sdkLanguageMapping } from '../test-data';
 
 describe('SDK Language Utils', () => {
   test('allSdkLanguages gets all sdk languages', () => {
-    const actual = allSdkLanguages()
-    const aliases = Object.keys(actual)
-    expect(Object.keys(actual)).toHaveLength(codeGenerators.length + 1)
+    const actual = allSdkLanguages();
+    const aliases = Object.keys(actual);
+    expect(Object.keys(actual)).toHaveLength(codeGenerators.length + 1);
     aliases.forEach((alias) =>
-      expect(actual[alias]).toEqual(sdkLanguageMapping[alias])
-    )
-  })
+      expect(actual[alias]).toEqual((sdkLanguageMapping as any)[alias])
+    );
+  });
 
   describe('findSdk', () => {
     test('it is not case sensitive', () => {
-      const actual = findSdk('pY')
-      expect(actual.language).toEqual('Python')
-    })
+      const actual = findSdk('pY');
+      expect(actual.language).toEqual('Python');
+    });
 
     test("it returns 'All' option if provided bogus input", () => {
-      const actual = findSdk('random')
-      expect(actual.language).toEqual('All')
-      expect(actual.alias).toEqual('all')
-    })
+      const actual = findSdk('random');
+      expect(actual.language).toEqual('All');
+      expect(actual.alias).toEqual('all');
+    });
 
     test.each(Object.entries(sdkLanguageMapping))(
       `it finds language for alias %s`,
       (alias, language) => {
-        const actual = findSdk(alias)
-        expect(actual.language).toEqual(language)
+        const actual = findSdk(alias);
+        expect(actual.language).toEqual(language);
       }
-    )
+    );
 
     test.each(Object.entries(sdkLanguageMapping))(
       `it finds alias for language %s`,
       (alias, language) => {
-        const actual = findSdk(language)
-        expect(actual.alias).toEqual(alias)
+        const actual = findSdk(language);
+        expect(actual.alias).toEqual(alias);
       }
-    )
-  })
-})
+    );
+  });
+});

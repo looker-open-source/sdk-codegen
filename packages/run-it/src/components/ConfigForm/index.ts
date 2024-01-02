@@ -24,5 +24,5 @@
 
  */
 
-export * from './ConfigForm'
-export * from './utils'
+export * from './ConfigForm';
+export * from './utils';

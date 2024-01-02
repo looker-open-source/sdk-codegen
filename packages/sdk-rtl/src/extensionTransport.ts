@@ -24,17 +24,17 @@
 
  */
 
-import type { Readable } from 'readable-stream'
+import type { Readable } from 'readable-stream';
 import type {
   Authenticator,
-  Values,
-  SDKResponse,
-  ITransport,
-  ITransportSettings,
   HttpMethod,
   IRawResponse,
+  ITransport,
+  ITransportSettings,
   RawObserver,
-} from './transport'
+  SDKResponse,
+  Values,
+} from './transport';
 
 export interface IHostConnection {
   rawRequest(
@@ -44,7 +44,7 @@ export interface IHostConnection {
     params?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
-  ): Promise<IRawResponse>
+  ): Promise<IRawResponse>;
 
   request(
     httpMethod: string,
@@ -53,7 +53,7 @@ export interface IHostConnection {
     params?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
-  ): Promise<any>
+  ): Promise<any>;
 
   stream<T>(
     callback: (readable: Readable) => Promise<T>,
@@ -63,7 +63,7 @@ export interface IHostConnection {
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
-  ): Promise<T>
+  ): Promise<T>;
 }
 
 export class ExtensionTransport implements ITransport {
@@ -71,11 +71,11 @@ export class ExtensionTransport implements ITransport {
     private readonly options: ITransportSettings,
     private hostConnection: IHostConnection
   ) {
-    this.options = options
-    this.hostConnection = hostConnection
+    this.options = options;
+    this.hostConnection = hostConnection;
   }
 
-  observer: RawObserver | undefined
+  observer: RawObserver | undefined;
 
   async rawRequest(
     method: HttpMethod,
@@ -92,8 +92,8 @@ export class ExtensionTransport implements ITransport {
       queryParams,
       authenticator,
       options
-    )
-    return this.observer ? this.observer(response) : response
+    );
+    return this.observer ? this.observer(response) : response;
   }
 
   async request<TSuccess, TError>(
@@ -111,7 +111,7 @@ export class ExtensionTransport implements ITransport {
       queryParams,
       authenticator,
       options
-    )
+    );
   }
 
   async stream<TSuccess>(
@@ -123,7 +123,7 @@ export class ExtensionTransport implements ITransport {
     authenticator?: any,
     options?: Partial<ITransportSettings>
   ): Promise<TSuccess> {
-    options = options ? { ...this.options, ...options } : this.options
+    options = options ? { ...this.options, ...options } : this.options;
     return this.hostConnection.stream(
       callback,
       method,
@@ -132,7 +132,7 @@ export class ExtensionTransport implements ITransport {
       queryParams,
       authenticator,
       options
-    )
+    );
   }
 
   parseResponse<TSuccess, TError>(
@@ -141,7 +141,7 @@ export class ExtensionTransport implements ITransport {
     const result: SDKResponse<TSuccess, TError> = {
       ok: false,
       error: new Error('Should not be called!') as unknown as TError,
-    }
-    return Promise.resolve(result)
+    };
+    return Promise.resolve(result);
   }
 }

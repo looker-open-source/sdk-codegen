@@ -23,64 +23,64 @@
  SOFTWARE.
 
  */
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react';
 import {
   ComponentsProvider,
   Dialog,
-  IconButton,
   Flex,
   FlexItem,
   Heading,
-} from '@looker/components'
-import type { IEnvironmentAdaptor } from '@looker/extension-utils'
-import { me } from '@looker/sdk'
+  IconButton,
+} from '@looker/components';
+import type { IEnvironmentAdaptor } from '@looker/extension-utils';
+import { me } from '@looker/sdk';
 import {
+  QuickEmbed,
   useFactoryActions,
   useFactoryStoreState,
   useThemesStoreState,
-  QuickEmbed,
-} from '@looker/embed-components'
-import { FlashOn } from '@styled-icons/material'
+} from '@looker/embed-components';
+import { FlashOn } from '@styled-icons/material';
 
 interface EmbedPlaygroundProps {
-  adaptor: IEnvironmentAdaptor
-  headless?: boolean
+  adaptor: IEnvironmentAdaptor;
+  headless?: boolean;
 }
 
 export const EmbedPlayground = ({ adaptor }: EmbedPlaygroundProps) => {
-  const { initFactoryAction } = useFactoryActions()
-  const { initialized } = useFactoryStoreState()
-  useThemesStoreState()
-  const [greeting, setGreeting] = useState('')
-  const [isOpen, setIsOpen] = useState(false)
-  const sdk = adaptor.sdk
+  const { initFactoryAction } = useFactoryActions();
+  const { initialized } = useFactoryStoreState();
+  useThemesStoreState();
+  const [greeting, setGreeting] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
+  const sdk = adaptor.sdk;
 
   useEffect(() => {
     const getCurrentUser = async () => {
-      const currentUser = await sdk.ok(me(sdk))
+      const currentUser = await sdk.ok(me(sdk));
       if (currentUser) {
-        const { first_name } = currentUser
+        const { first_name } = currentUser;
 
-        setGreeting(`Hi ${first_name}, are you ready to embed?`)
+        setGreeting(`Hi ${first_name}, are you ready to embed?`);
       }
-      return currentUser
-    }
-    getCurrentUser()
-  }, [initialized])
+      return currentUser;
+    };
+    getCurrentUser();
+  }, [initialized]);
 
   useEffect(() => {
-    initFactoryAction({ sdk })
-  }, [])
+    initFactoryAction({ sdk });
+  }, []);
 
-  const themeOverrides = adaptor.themeOverrides()
+  const themeOverrides = adaptor.themeOverrides();
 
   const handleClose = () => {
-    setIsOpen(false)
-  }
+    setIsOpen(false);
+  };
 
   const handleOpen = () => {
-    setIsOpen(true)
-  }
+    setIsOpen(true);
+  };
 
   return (
     <ComponentsProvider
@@ -111,5 +111,5 @@ export const EmbedPlayground = ({ adaptor }: EmbedPlaygroundProps) => {
         </Flex>
       )}
     </ComponentsProvider>
-  )
-}
+  );
+};

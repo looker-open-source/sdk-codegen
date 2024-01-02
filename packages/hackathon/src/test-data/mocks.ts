@@ -24,48 +24,48 @@
 
  */
 
-import type { Looker40SDK } from '@looker/sdk'
-import type { ISheet, ITabTable, SheetSDK } from '@looker/wholly-sheet'
-import { addMinutes } from '@looker/wholly-sheet'
+import type { Looker40SDK } from '@looker/sdk';
+import type { ISheet, ITabTable, SheetSDK } from '@looker/wholly-sheet';
+import { addMinutes } from '@looker/wholly-sheet';
 import {
-  SheetData,
   Hackathon,
   Hackathons,
   Hacker,
   Judging,
   Project,
   Projects,
+  SheetData,
   User,
   Users,
-} from '../models'
-import { initActiveSheet } from '../models/SheetData'
+} from '../models';
+import { initActiveSheet } from '../models/SheetData';
 
-export const wait2Mins = 2 * 60 * 1000
+export const wait2Mins = 2 * 60 * 1000;
 
-export const mockLookerSDK = {} as Looker40SDK
-export const mockSheet = {} as ISheet
-export const mockSheetSDK = {} as SheetSDK
-export const noSheetData = {} as SheetData
-export const mockTabTable = {} as ITabTable
+export const mockLookerSDK = {} as Looker40SDK;
+export const mockSheet = {} as ISheet;
+export const mockSheetSDK = {} as SheetSDK;
+export const noSheetData = {} as SheetData;
+export const mockTabTable = {} as ITabTable;
 
-export const mockUser = new Hacker(mockLookerSDK)
-mockUser.user = { id: '1', first_name: 'Ordinary', last_name: 'Joe' }
-mockUser.assignRights()
+export const mockUser = new Hacker(mockLookerSDK);
+mockUser.user = { id: '1', first_name: 'Ordinary', last_name: 'Joe' };
+mockUser.assignRights();
 
-export const mockStaff = new Hacker(mockLookerSDK)
-mockStaff.user = { id: '2', first_name: 'Looker', last_name: 'Staff' }
-mockStaff.roles.add('staff')
-mockStaff.assignRights()
+export const mockStaff = new Hacker(mockLookerSDK);
+mockStaff.user = { id: '2', first_name: 'Looker', last_name: 'Staff' };
+mockStaff.roles.add('staff');
+mockStaff.assignRights();
 
-export const mockJudge = new Hacker(mockLookerSDK)
-mockJudge.user = { id: '3', first_name: 'Looker', last_name: 'Judge' }
-mockJudge.roles.add('judge')
-mockJudge.assignRights()
+export const mockJudge = new Hacker(mockLookerSDK);
+mockJudge.user = { id: '3', first_name: 'Looker', last_name: 'Judge' };
+mockJudge.roles.add('judge');
+mockJudge.assignRights();
 
-export const mockAdmin = new Hacker(mockLookerSDK)
-mockJudge.user = { id: '4', first_name: 'Looker', last_name: 'Admin' }
-mockAdmin.roles.add('admin')
-mockAdmin.assignRights()
+export const mockAdmin = new Hacker(mockLookerSDK);
+mockJudge.user = { id: '4', first_name: 'Looker', last_name: 'Admin' };
+mockAdmin.roles.add('admin');
+mockAdmin.assignRights();
 
 // const filePath = path.join(__dirname, './')
 // const localFile = (name: string) => path.join(filePath, name)
@@ -77,18 +77,18 @@ mockAdmin.assignRights()
 // export const mockProjectData = mockTabs.projects
 
 export const mockAHacker = (id: string): Hacker => {
-  const result = new Hacker(mockLookerSDK)
-  result.user = { id: id, first_name: 'Ordinary', last_name: 'Joe' }
-  result.assignRights()
-  return result
-}
+  const result = new Hacker(mockLookerSDK);
+  result.user = { id: id, first_name: 'Ordinary', last_name: 'Joe' };
+  result.assignRights();
+  return result;
+};
 
 export const mockAJudge = (id: string): Hacker => {
-  const result = mockAHacker(id)
-  result.roles.add('judge')
-  result.assignRights()
-  return result
-}
+  const result = mockAHacker(id);
+  result.roles.add('judge');
+  result.assignRights();
+  return result;
+};
 
 export const mockFullProject = (
   userId: string | number,
@@ -103,17 +103,18 @@ export const mockFullProject = (
     title,
     description,
     technologies,
-  })
-}
+  });
+};
 
 export const mockAProject = (
   userId: string | number,
   hackathon: Hackathon | string
 ) => {
-  const hackathonId = hackathon instanceof Hackathon ? hackathon._id : hackathon
-  const desc = `Hackathon ${hackathonId} project for user ${userId}`
-  return mockFullProject(userId, hackathonId, desc, desc, ['other'])
-}
+  const hackathonId =
+    hackathon instanceof Hackathon ? hackathon._id : hackathon;
+  const desc = `Hackathon ${hackathonId} project for user ${userId}`;
+  return mockFullProject(userId, hackathonId, desc, desc, ['other']);
+};
 
 /**
  * Mock up a hackathon instance
@@ -130,8 +131,8 @@ export const mockAHackathon = (
   judgingStarts = 8 * 60,
   judgingPeriod = 2 * 60
 ) => {
-  const judging_starts = addMinutes(startDate, judgingStarts)
-  const judging_stops = addMinutes(judging_starts, judgingPeriod)
+  const judging_starts = addMinutes(startDate, judgingStarts);
+  const judging_stops = addMinutes(judging_starts, judgingPeriod);
   const result = new Hackathon({
     _id: id,
     name: id,
@@ -140,38 +141,38 @@ export const mockAHackathon = (
     max_team_size: maxTeam,
     judging_starts,
     judging_stops,
-  })
-  return result
-}
+  });
+  return result;
+};
 
 export const mockHackathons = () => {
-  const gap = 90 * 24 * 60
-  const current = new Date()
-  const past = addMinutes(current, -gap)
-  const future = addMinutes(current, gap)
+  const gap = 90 * 24 * 60;
+  const current = new Date();
+  const past = addMinutes(current, -gap);
+  const future = addMinutes(current, gap);
   const rows = [
     mockAHackathon('past', past),
     mockAHackathon('current', current),
     mockAHackathon('future', future),
-  ]
-  const header = rows[0].header()
-  const result = new Hackathons(noSheetData, { header, rows })
-  return result
-}
+  ];
+  const header = rows[0].header();
+  const result = new Hackathons(noSheetData, { header, rows });
+  return result;
+};
 
 export const mockProjects = (hackathons: Hackathon[], users: User[]) => {
-  const rows: Project[] = []
+  const rows: Project[] = [];
   hackathons.forEach((h) => {
     users.forEach((u) => {
       rows.push(
         mockFullProject(u._id, h._id, `${h._id} project for user ${u._id}`)
-      )
-    })
-  })
-  const header = rows[0].header()
-  const result = new Projects(noSheetData, { header, rows })
-  return result
-}
+      );
+    });
+  });
+  const header = rows[0].header();
+  const result = new Projects(noSheetData, { header, rows });
+  return result;
+};
 
 export const mockJudging = (userId: string): Judging =>
   new Judging({
@@ -183,7 +184,7 @@ export const mockJudging = (userId: string): Judging =>
     impact: 1,
     score: 1,
     notes: 'adjudicatory',
-  })
+  });
 
 export const mockUsers = () => {
   const rows = [
@@ -191,16 +192,16 @@ export const mockUsers = () => {
     new User({ ...mockStaff, ...{ _id: mockStaff.id } }),
     new User({ ...mockJudge, ...{ _id: mockJudge.id } }),
     new User({ ...mockAdmin, ...{ _id: mockAdmin.id } }),
-  ]
-  const header = rows[0].header()
-  const result = new Users(noSheetData, { header, rows })
-  return result
-}
+  ];
+  const header = rows[0].header();
+  const result = new Users(noSheetData, { header, rows });
+  return result;
+};
 
 export const mockSheetData = () => {
-  const result = initActiveSheet(new SheetData())
-  result.users = mockUsers()
-  result.hackathons = mockHackathons()
-  result.projects = mockProjects(result.hackathons.rows, result.users.rows)
-  return result
-}
+  const result = initActiveSheet(new SheetData());
+  result.users = mockUsers();
+  result.hackathons = mockHackathons();
+  result.projects = mockProjects(result.hackathons.rows, result.users.rows);
+  return result;
+};
