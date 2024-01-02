@@ -73,7 +73,7 @@ export const DashboardTile: React.FC = () => {
             },
           })
         );
-        setValue(response[0]['users.average_age']);
+        setValue((response[0] as any)['users.average_age']);
         setMessage(undefined);
       } catch (error) {
         console.error(error);

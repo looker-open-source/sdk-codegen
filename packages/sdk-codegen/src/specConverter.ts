@@ -158,7 +158,7 @@ export const getSpecsFromVersions = async (
   fetcher: SpecFetcher | undefined = undefined,
   include: IncludeVersion = include31
 ): Promise<SpecList> => {
-  const items = {};
+  const items: any = {};
 
   /**
    * Create a unique spec key for this version
@@ -486,7 +486,7 @@ export const convertResponses = (
       description: response.description,
     };
     if (response.schema) {
-      const content = {};
+      const content: any = {};
       formats.produces.forEach(
         (format) => (content[format] = { schema: response.schema })
       );
@@ -577,7 +577,7 @@ export const convertPathsAndBodies = (
   paths: ArgValues,
   formats = defaultMimeFormats
 ) => {
-  const result = { paths: {}, requestBodies: {} };
+  const result: any = { paths: {}, requestBodies: {} };
   Object.entries(paths).forEach(([path, entry]) => {
     result.paths[path] = {};
     // Hack to accommodate linting limitations

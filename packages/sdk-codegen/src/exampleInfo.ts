@@ -259,7 +259,7 @@ export const findExampleLanguages = (
   const result = new Set<string>();
   const keys = Object.keys(extensionToLanguage);
   keys.forEach((key) => {
-    if (all.calls[key]) result.add(extensionToLanguage[key]);
+    if (all.calls[key]) result.add((extensionToLanguage as any)[key]);
   });
   return Array.from(result);
 };

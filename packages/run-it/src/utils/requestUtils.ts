@@ -151,8 +151,8 @@ export const createRequestParams = (
   requestContent: RunItValues,
   keepBody = false
 ) => {
-  const pathParams = {};
-  const queryParams = {};
+  const pathParams: any = {};
+  const queryParams: any = {};
   const prepped = prepareInputs(inputs, requestContent);
   const trimmed = trimInputs(prepped, keepBody);
   let body;

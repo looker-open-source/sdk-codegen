@@ -610,7 +610,7 @@ export interface IMethodResponse {
  * @param types to categorize
  */
 export const tagTypes = (api: ApiModel, types: TypeList) => {
-  const typeTags = {};
+  const typeTags: any = {};
   Object.entries(types)
     .filter(([_, type]) => !type.intrinsic)
     .forEach(([name, type]) => {
@@ -811,7 +811,7 @@ export class Property extends SchemadSymbol implements IProperty {
   }
 
   private tag(key: string) {
-    return this[key] ? ` ${key}` : '';
+    return this[key as keyof Property] ? ` ${key}` : '';
   }
 
   summary() {
@@ -894,7 +894,7 @@ export class Parameter extends SchemadSymbol implements IParameter {
   }
 
   private tag(key: string) {
-    return this[key] ? ` ${key}` : '';
+    return this[key as keyof Parameter] ? ` ${key}` : '';
   }
 
   signature() {
@@ -2425,7 +2425,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return this.enumTypes;
   }
 
-  makeWriteableType(type: IType) {
+  makeWriteableType(type: IType): WriteType {
     const writer = new WriteType(this, type);
     this.types[writer.name] = writer;
     return writer;

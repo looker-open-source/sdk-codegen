@@ -181,7 +181,7 @@ export const loadTabTable = (tab: ISheetTab, keyName = '_id'): ITabTable => {
     header: [],
     rows: [],
   };
-  const rowData = tab.data[0].rowData;
+  const rowData = (tab.data as any)[0].rowData;
   if (rowData.length < 1) return result;
 
   // Get column headers
@@ -196,7 +196,7 @@ export const loadTabTable = (tab: ISheetTab, keyName = '_id'): ITabTable => {
   // Index row data
   for (let rowIndex = 1; rowIndex < rowData.length; rowIndex++) {
     const r = rowData[rowIndex];
-    const row = {};
+    const row: any = {};
     row[rowPosition] = rowIndex + 1;
     result.header.forEach((colName, index) => {
       if (index < r.values.length) {

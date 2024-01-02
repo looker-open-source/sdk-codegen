@@ -43,7 +43,6 @@
     "@looker/sdk": "23.20.1",
     "@looker/sdk-rtl": "21.6.1",
     "@looker/wholly-artifact": "0.1.13",
-    "@looker/wholly-sheet": "0.5.51",
     "@styled-icons/material": "^10.47.0",
     "@styled-icons/material-outlined": "^10.47.0",
     "@styled-icons/material-rounded": "^10.28.0",

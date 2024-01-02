@@ -45,7 +45,7 @@ export const ErrorDetailScene = ({ api }: ErrorDetailSceneProps) => {
     statusCode: string;
     verb: string;
   }>(`/:specKey/err/:statusCode/:verb/*`);
-  const methodPath = match?.params[0];
+  const methodPath = match?.path ?? '';
   const adaptor = getEnvAdaptor();
   const errorDoc = new ErrorDoc(adaptor.sdk);
   const restPath = errorDoc.specPath(methodPath);

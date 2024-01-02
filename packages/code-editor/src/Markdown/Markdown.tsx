@@ -131,8 +131,8 @@ export const Markdown = ({
   return (
     <MarkdownWrapper onClick={handleClick}>
       <ReactMarkdown
-        remarkPlugins={[gfm]}
-        rehypePlugins={[rehypeRaw]}
+        remarkPlugins={[gfm] as any}
+        rehypePlugins={[rehypeRaw] as any}
         transformLinkUri={transformLinkUri}
         components={components}
       >

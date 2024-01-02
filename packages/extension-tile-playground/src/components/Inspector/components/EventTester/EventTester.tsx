@@ -82,7 +82,7 @@ export const EventTester: React.FC = () => {
   }, [tileSDK]);
 
   const updateFiltersClick = useCallback(() => {
-    const updatedFilter = {};
+    const updatedFilter: any = {};
     Object.entries(dashboardFilters || {}).forEach(([key, value]) => {
       updatedFilter[key] = value;
       if (key === 'State') {

@@ -196,9 +196,10 @@ Grab a drink and virtually chill out with your fellow Cloud BI Developers!<br>[*
 
 export const localAgenda = (loc: string): AgendaItems =>
   agenda.map((i) => {
+    const desc: any = i.description;
     return {
       start: i.start,
       stop: i.stop,
-      description: i.description[loc] ? i.description[loc] : i.description.en,
+      description: desc[loc] ? desc[loc] : desc.en,
     };
   });

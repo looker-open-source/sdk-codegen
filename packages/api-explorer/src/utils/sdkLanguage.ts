@@ -24,6 +24,7 @@
 
  */
 
+import type { ArgValues } from '@looker/sdk-codegen';
 import { codeGenerators } from '@looker/sdk-codegen';
 
 export const allAlias = 'all';
@@ -33,7 +34,7 @@ export const allAlias = 'all';
  * @returns mapping of sdk language aliases to name
  */
 export const allSdkLanguages = (): Record<string, string> => {
-  const languages = {};
+  const languages: ArgValues = {};
   codeGenerators.forEach((gen) => {
     const alias = gen.extension.toString().match(/\.(\w+)\b/)![1];
     languages[alias] = gen.language;

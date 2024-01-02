@@ -115,8 +115,8 @@ export const ResourceScene: FC<ResourceSceneProps> = () => {
         >
           <SelectMulti
             options={Object.keys(ResourceType).map((k) => ({
-              value: ResourceType[k],
-              label: ResourceType[k],
+              value: (ResourceType as any)[k],
+              label: (ResourceType as any)[k],
             }))}
             values={typeFilterValues}
             onChange={updateFilterValues.bind(null, TYPE_PARAM)}
@@ -129,8 +129,8 @@ export const ResourceScene: FC<ResourceSceneProps> = () => {
         >
           <SelectMulti
             options={Object.keys(ResourceTag).map((k) => ({
-              value: ResourceTag[k],
-              label: ResourceTag[k],
+              value: (ResourceTag as any)[k],
+              label: (ResourceTag as any)[k],
             }))}
             values={domainFilterValues}
             onChange={updateFilterValues.bind(null, DOMAIN_PARAM)}

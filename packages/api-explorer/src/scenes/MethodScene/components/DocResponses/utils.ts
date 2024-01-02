@@ -34,7 +34,7 @@ import type { IMethodResponse, KeyedCollection } from '@looker/sdk-codegen';
 export const buildResponseTree = (
   responses: IMethodResponse[]
 ): KeyedCollection<KeyedCollection<IMethodResponse>> => {
-  const tree = {};
+  const tree: KeyedCollection<KeyedCollection<IMethodResponse>> = {};
   Object.values(responses).forEach((response) => {
     const node = `${response.statusCode}: ${response.description}`;
     if (!(node in tree)) tree[node] = {};

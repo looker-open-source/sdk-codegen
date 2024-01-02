@@ -31,7 +31,7 @@ import { codeGenerators } from '@looker/sdk-codegen';
  * @param api Api spec
  */
 export const getGenerators = (api: ApiModel): KeyedCollection<CodeGen> => {
-  const codeGens = {};
+  const codeGens: any = {};
   codeGenerators
     .filter((x) => x.factory !== undefined)
     .forEach((gen) => {

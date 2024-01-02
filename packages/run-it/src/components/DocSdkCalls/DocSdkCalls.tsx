@@ -70,7 +70,7 @@ export const DocSdkCalls: FC<DocSdkCallsProps> = ({
     setHeading(text);
   }, [sdkLanguage]);
 
-  const calls = {};
+  const calls: any = {};
   try {
     if (sdkLanguage === 'All') {
       const generators = getGenerators(api);

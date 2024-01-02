@@ -241,7 +241,7 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
         values.forEach((val, index) => {
           if (val !== undefined && val !== null && index < keys.length) {
             const key = keys[index];
-            this[key as keyof RowModel<any>] = this.typeCast(key, val);
+            (this as any)[key] = this.typeCast(key, val);
           }
         });
       }
@@ -282,12 +282,10 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
         }
       }
       Object.keys(value).forEach((k) => {
-        this[k] = this.typeCast(k, value[k]);
-        if (typeof this[k] === 'string') {
-          this[k] = decodeURI(this[k]);
-        }
+        const v = this.typeCast(k, value[k]);
+        (this as any)[k] = typeof v === 'string' ? decodeURI(v) : v;
       });
-      if (values.key) this.key = values.key;
+      if (values.key) (this as any).key = values.key;
       return true;
     }
     return false;
@@ -403,14 +401,14 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
     const result: SheetValues = [];
     const keys = this.header();
     keys.forEach((key) => {
-      result.push(stringer(this[key]));
+      result.push(stringer((this as any)[key]));
     });
     return result;
   }
 
   typeCast(key: string, value: any) {
     if (value === undefined || value === null) value = '';
-    const type = typeof this[key];
+    const type = typeof (this as any)[key];
     const fromType = typeof value;
     if (type === fromType) {
       // No conversion required
@@ -430,11 +428,11 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
     if (type === 'boolean') {
       return boolDefault(value, false);
     }
-    if (this[key] instanceof Date) {
+    if ((this as any)[key] instanceof Date) {
       if (value) return new Date(value);
       return noDate;
     }
-    if (Array.isArray(this[key])) {
+    if (Array.isArray((this as any)[key])) {
       if (!value) return [];
       return value.toString().split(',');
     }
@@ -472,13 +470,13 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
    * @private
    */
   private storageValues() {
-    const result = {};
+    const result: any = {};
     // TODO after migrating from sheets, use `key` as this.keyColumn rather than `_id` and use displayHeader()
     // const keys = this.displayHeader()
     const keys = this.header();
     for (const key of keys) {
-      const val =
-        typeof this[key] === 'string' ? encodeURI(this[key]) : this[key];
+      const v: any = (this as any)[key];
+      const val = typeof v === 'string' ? encodeURI(v) : v;
       result[key] = val;
     }
     return result;

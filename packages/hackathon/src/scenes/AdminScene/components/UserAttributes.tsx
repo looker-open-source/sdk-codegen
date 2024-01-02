@@ -52,7 +52,7 @@ export const UserAttributes: FC<UserAttributesProps> = () => {
   };
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const updatedUserAttributes = { ...userAttributes! };
+    const updatedUserAttributes: any = { ...userAttributes! };
     updatedUserAttributes[e.target.name] = e.target.value;
     dispatch(updateAttributeValues(updatedUserAttributes));
   };

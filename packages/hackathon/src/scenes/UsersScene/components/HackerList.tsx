@@ -64,7 +64,7 @@ export const HackerList: FC<HackerListProps> = ({
   // but actually show a different value.
   const userCell = (hacker: IHackerProps, columnName: string) => {
     if (columnName !== 'id') {
-      return sheetCell(hacker[columnName]);
+      return sheetCell(hacker[columnName as keyof IHackerProps]);
     } else {
       return sheetCell(hacker.user.id);
     }

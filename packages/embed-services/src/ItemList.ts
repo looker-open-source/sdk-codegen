@@ -34,7 +34,7 @@ export interface GetOptions {
   [key: string]: any;
 }
 
-export interface IItemList<T> {
+export interface IItemList<T extends Record<string, any>> {
   /** Cache time to live in seconds, defaults to 15 minutes */
   readonly timeToLive: number;
   /** Cached items */
@@ -64,7 +64,8 @@ export interface IItemList<T> {
   getCacheDefault(options?: GetOptions): boolean;
 }
 
-export interface IEntityService<T> extends IItemList<T> {
+export interface IEntityService<T extends Record<string, any>>
+  extends IItemList<T> {
   get(id: string, options?: GetOptions): Promise<T>;
   set(id: string, item: T): Promise<T>;
   getAll(...options: any[]): Promise<IItemList<T>>;

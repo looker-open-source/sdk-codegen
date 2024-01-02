@@ -71,7 +71,7 @@ export const Agenda: FC<AgendaProps> = ({ schedule, hacker }) => {
         <AgendaEra
           era={era}
           key={era}
-          agenda={eras[era]}
+          agenda={(eras as any)[era]}
           hacker={hacker}
           defaultOpen={era === defaultEra}
         />

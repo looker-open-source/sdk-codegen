@@ -46,7 +46,7 @@ export const getGenerator = (
   api: ApiModel,
   versions?: IVersionInfo
 ): ICodeGen | undefined => {
-  const gen = getCodeGenerator(language, api, versions);
+  const gen: any = getCodeGenerator(language, api, versions);
   if (!gen) {
     const langs = codeGenerators.map((item) => item.language);
     quit(
@@ -59,7 +59,7 @@ export const getGenerator = (
   }
 
   if (config.has(language)) {
-    const overrides = config.get<ICodeGen>(language);
+    const overrides: any = config.get<ICodeGen>(language);
     // Spread operator loses class functions
     // gen = { ...gen, ...overrides }
     Object.keys(overrides).forEach((key) => {

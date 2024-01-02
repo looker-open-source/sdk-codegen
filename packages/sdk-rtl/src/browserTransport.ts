@@ -204,7 +204,7 @@ export class BrowserTransport extends BaseTransport {
       // Request will markEnd, so don't mark the end here
       BrowserTransport.markEnd(requestPath, started);
     }
-    const headers = {};
+    const headers: { [key: string]: any } = {};
     res.headers.forEach((value, key) => (headers[key] = value));
     const response: IRawResponse = {
       method,

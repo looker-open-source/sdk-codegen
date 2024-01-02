@@ -115,7 +115,7 @@ describe('spec differ', () => {
       const [key, lProp] = firstProperty(lType.properties);
       const rType = changeType(lType as Type);
       const count = startCount();
-      const actual = compareTypes(lType, rType, count);
+      const actual: any = compareTypes(lType, rType, count);
       expect(actual).toBeDefined();
       if (actual) {
         expect(actual[key]).toBeDefined();

@@ -60,10 +60,13 @@ export const useNavigation = () => {
     } else {
       // push each key as new param to URL, excluding entries with value null
       Object.keys(queryParams).forEach((key) => {
-        if (queryParams[key] === null || queryParams[key] === '') {
+        if (
+          queryParams[key as keyof QueryParamProps] === null ||
+          queryParams[key as keyof QueryParamProps] === ''
+        ) {
           urlParams.delete(key);
         } else {
-          urlParams.set(key, queryParams[key]);
+          urlParams.set(key, queryParams[key as keyof QueryParamProps] ?? '');
         }
       });
       history.push({ pathname: path, search: urlParams.toString() });

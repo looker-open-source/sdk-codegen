@@ -222,11 +222,12 @@ export class RowModel<T extends IRowModel> implements IRowModel {
   }
 
   typeCast(key: string, value: any) {
+    const v: any = (this as any)[key];
     if (value === undefined || value === null) value = '';
-    if (typeof this[key] === 'string') {
+    if (typeof v === 'string') {
       return value.toString();
     }
-    if (typeof this[key] === 'number') {
+    if (typeof v === 'number') {
       if (value === '') return 0;
       const isInt = /^([+-]?[1-9]\d*|0)$/;
       if (value.toString().match(isInt)) {
@@ -234,14 +235,14 @@ export class RowModel<T extends IRowModel> implements IRowModel {
       }
       return parseFloat(value);
     }
-    if (typeof this[key] === 'boolean') {
+    if (typeof v === 'boolean') {
       return boolDefault(value, false);
     }
-    if (this[key] instanceof Date) {
+    if (v instanceof Date) {
       if (value) return new Date(value);
       return noDate;
     }
-    if (Array.isArray(this[key])) {
+    if (Array.isArray(v)) {
       if (!value) return [];
       return value.toString().split(',');
     }
@@ -256,14 +257,14 @@ export class RowModel<T extends IRowModel> implements IRowModel {
         values.forEach((val, index) => {
           if (val !== undefined && val !== null) {
             const key = keys[index];
-            this[key] = this.typeCast(key, val);
+            (this as any)[key] = this.typeCast(key, val);
           }
         });
       } else {
         // Assign by name
         Object.entries(values).forEach(([key, val]) => {
           if (key in this) {
-            this[key] = this.typeCast(key, val);
+            (this as any)[key] = this.typeCast(key, val);
           }
         });
       }
