@@ -23,96 +23,96 @@
  SOFTWARE.
 
  */
-import type { IApiSection, IApiSettings } from '@looker/sdk-rtl'
-import { ApiSettings } from '@looker/sdk-rtl'
+import type { IApiSection, IApiSettings } from '@looker/sdk-rtl';
+import { ApiSettings } from '@looker/sdk-rtl';
 
-export type StorageLocation = 'session' | 'local'
+export type StorageLocation = 'session' | 'local';
 
 /** Object returned from storage service */
 export interface IStorageValue {
   /** Location of the stored object */
-  location: StorageLocation
+  location: StorageLocation;
   /** Stored string representation of the value (usually JSON) */
-  value: string
+  value: string;
 }
 
 /**
  * An OAuth Session configuration provider
  */
 export class OAuthConfigProvider extends ApiSettings {
-  oauthClientId: string
+  oauthClientId: string;
   constructor(
     settings: Partial<IApiSettings>,
     oauthClientId: string,
     private readonly configKey: string
   ) {
-    super(settings)
-    this.oauthClientId = oauthClientId
+    super(settings);
+    this.oauthClientId = oauthClientId;
   }
 
   private getStorage(key: string, defaultValue = ''): IStorageValue {
-    let value = sessionStorage.getItem(key)
+    let value = sessionStorage.getItem(key);
     if (value) {
       return {
         location: 'session',
         value,
-      }
+      };
     }
-    value = localStorage.getItem(key)
+    value = localStorage.getItem(key);
     if (value) {
       return {
         location: 'local',
         value,
-      }
+      };
     }
     return {
       location: 'session',
       value: defaultValue,
-    }
+    };
   }
 
   isConfigured(): boolean {
     // Required to be true otherwise SDK initialization fails
-    return true
+    return true;
   }
 
   getStoredConfig() {
-    const storage = this.getStorage(this.configKey)
+    const storage = this.getStorage(this.configKey);
     let config = {
       base_url: '',
       looker_url: '',
       client_id: '',
       redirect_uri: '',
-    }
+    };
     if (storage.value) {
-      config = JSON.parse(storage.value)
+      config = JSON.parse(storage.value);
     }
-    return config
+    return config;
   }
 
   authIsConfigured(): boolean {
-    const config = this.getStoredConfig()
-    return config.base_url !== '' && config.looker_url !== ''
+    const config = this.getStoredConfig();
+    return config.base_url !== '' && config.looker_url !== '';
   }
 
   readConfig(_section?: string): IApiSection {
     // Read server url values from storage
-    let config = this.getStoredConfig()
+    let config = this.getStoredConfig();
     if (!this.authIsConfigured()) {
       // derive Looker server URL from base_url
-      const url = new URL(this.base_url)
-      const authServer = `${url.protocol}//${url.hostname}`
+      const url = new URL(this.base_url);
+      const authServer = `${url.protocol}//${url.hostname}`;
       config = {
         base_url: this.base_url,
         looker_url: `${authServer}:9999`,
         client_id: this.oauthClientId,
         redirect_uri: `${window.location.origin}/oauth`,
-      }
+      };
     }
 
-    const { base_url, looker_url, client_id, redirect_uri } = config
+    const { base_url, looker_url, client_id, redirect_uri } = config;
     /* update base_url to the dynamically determined value for standard transport requests */
-    this.base_url = base_url
+    this.base_url = base_url;
     return {
       ...super.readConfig(_section),
       ...{
@@ -121,6 +121,6 @@ export class OAuthConfigProvider extends ApiSettings {
         client_id,
         redirect_uri,
       },
-    }
+    };
   }
 }

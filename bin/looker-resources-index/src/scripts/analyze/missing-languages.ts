@@ -23,8 +23,8 @@
  SOFTWARE.
 
  */
-import type { Resource } from '../../types'
-import { ContentType } from '../../types'
+import type { Resource } from '../../types';
+import { ContentType } from '../../types';
 
 export function missingLanguages(resources: Resource[]) {
   const isTargetContentType = (c: ContentType) =>
@@ -33,15 +33,15 @@ export function missingLanguages(resources: Resource[]) {
       ContentType.sourceCode,
       ContentType.template,
       ContentType.library,
-    ].includes(c)
+    ].includes(c);
 
-  const resourcesRequiringLanguages = resources.filter((r) =>
-    r.contentTypes?.some(isTargetContentType)
-  )
+  const resourcesRequiringLanguages = resources.filter(
+    (r) => r.contentTypes?.some(isTargetContentType)
+  );
 
   const resourcesMissingLanguages = resourcesRequiringLanguages.filter(
     (r) => !r.languages || r.languages.length === 0
-  )
+  );
 
   return {
     summary:
@@ -54,5 +54,5 @@ export function missingLanguages(resources: Resource[]) {
           isTargetContentType
         )}'\tResource ID: ${r.id}`
     ),
-  }
+  };
 }

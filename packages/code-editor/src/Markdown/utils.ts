@@ -23,16 +23,16 @@
  SOFTWARE.
 
  */
-import { instanceOfPrismLanguage } from '../utils'
+import { instanceOfPrismLanguage } from '../utils';
 
 export const regReplaceAll = (
   content: string,
   pattern: string,
   replacementFunc: any
 ) => {
-  const target = new RegExp(pattern, 'gi')
-  return content.replace(target, replacementFunc)
-}
+  const target = new RegExp(pattern, 'gi');
+  return content.replace(target, replacementFunc);
+};
 /**
  * Adds <mark> tags around text if search pattern is detected
  * @param content - the main content to render
@@ -40,15 +40,15 @@ export const regReplaceAll = (
  * @returns - a 'marked' string to be rendered by markdown component
  */
 export const addMarkTags = (content: string, searchPattern: string) => {
-  let markedContent
+  let markedContent;
   try {
-    const replacement = (match: string) => `<mark>${match}</mark>`
-    markedContent = regReplaceAll(content, searchPattern, replacement)
+    const replacement = (match: string) => `<mark>${match}</mark>`;
+    markedContent = regReplaceAll(content, searchPattern, replacement);
   } catch (e) {
-    markedContent = content
+    markedContent = content;
   }
-  return markedContent
-}
+  return markedContent;
+};
 
 /**
  * Removes <mark><mark/> tags from markdown text. The mark tag is removed from code styled
@@ -56,8 +56,8 @@ export const addMarkTags = (content: string, searchPattern: string) => {
  * @param markedText - the markdown text input that contains <mark /> tags
  */
 export const removeMarkTags = (markedText: string) => {
-  return markedText.replace(/<\/?mark>/g, '')
-}
+  return markedText.replace(/<\/?mark>/g, '');
+};
 
 /**
  * Checks the input for code block decorators, the programming language used (```json), and returns a language tag
@@ -66,18 +66,18 @@ export const removeMarkTags = (markedText: string) => {
  * @returns - code blob string with code language tag
  */
 export const addCodeLanguageTags = (content: string) => {
-  let languageTaggedContent: string
+  let languageTaggedContent: string;
   try {
-    const searchPattern = /```([A-Za-z]+)$/gm
-    const match = searchPattern.exec(content)
-    const language = match && match[1]
-    const replacement = () => `\`\`\`\n<${language}/>`
-    languageTaggedContent = content.replace(searchPattern, replacement)
+    const searchPattern = /```([A-Za-z]+)$/gm;
+    const match = searchPattern.exec(content);
+    const language = match && match[1];
+    const replacement = () => `\`\`\`\n<${language}/>`;
+    languageTaggedContent = content.replace(searchPattern, replacement);
   } catch (e) {
-    languageTaggedContent = content
+    languageTaggedContent = content;
   }
-  return languageTaggedContent
-}
+  return languageTaggedContent;
+};
 
 /**
  * Removes the code language tag from the code blob text before text presentation to screen
@@ -85,26 +85,26 @@ export const addCodeLanguageTags = (content: string) => {
  * @returns - code blob text without language tag
  */
 export const removeCodeLanguageTags = (content: string) => {
-  let untaggedContent
+  let untaggedContent;
   try {
-    const replacement = () => ''
-    const searchPattern = /<(.*)\/>$/gm
-    const match = searchPattern.exec(content)
-    const language = match && match[1]
+    const replacement = () => '';
+    const searchPattern = /<(.*)\/>$/gm;
+    const match = searchPattern.exec(content);
+    const language = match && match[1];
     if (language && instanceOfPrismLanguage(language)) {
       untaggedContent = regReplaceAll(
         content,
         '<' + language + '/>\n',
         replacement
-      )
+      );
     } else {
-      untaggedContent = content
+      untaggedContent = content;
     }
   } catch (e) {
-    untaggedContent = content
+    untaggedContent = content;
   }
-  return untaggedContent
-}
+  return untaggedContent;
+};
 
 /**
  * Extracts the syntax highlighting language, if specified
@@ -112,10 +112,10 @@ export const removeCodeLanguageTags = (content: string) => {
  * @returns - syntax highlighting language
  */
 export const getCodeLanguageFromTaggedText = (content: string): string => {
-  const searchPattern = /<(.*)\/>$/gm
-  const match = searchPattern.exec(content)
-  return match ? match[1] : 'markup'
-}
+  const searchPattern = /<(.*)\/>$/gm;
+  const match = searchPattern.exec(content);
+  return match ? match[1] : 'markup';
+};
 
 /**
  * Removes tags that were applied for syntax highlighting or search pattern matching and returns just the code blob text
@@ -123,13 +123,13 @@ export const getCodeLanguageFromTaggedText = (content: string): string => {
  * @returns - rendered code text
  */
 export const prepareCodeText = (content: string) => {
-  let text = content
-  const language = getCodeLanguageFromTaggedText(text)
-  text = removeCodeLanguageTags(text)
-  text = removeMarkTags(text)
-  text = text.trim()
-  return { text, language }
-}
+  let text = content;
+  const language = getCodeLanguageFromTaggedText(text);
+  text = removeCodeLanguageTags(text);
+  text = removeMarkTags(text);
+  text = text.trim();
+  return { text, language };
+};
 
 /**
  * Returns a 'qualified markdown' text, a string which contains search pattern match and syntax highlighting qualifiers used by this package
@@ -141,10 +141,10 @@ export const qualifyMarkdownText = (
   content: string,
   pattern: string
 ): string => {
-  let qualifiedContent
+  let qualifiedContent;
   if (pattern !== '') {
-    qualifiedContent = addMarkTags(content, pattern)
+    qualifiedContent = addMarkTags(content, pattern);
   }
-  qualifiedContent = addCodeLanguageTags(qualifiedContent || content)
-  return qualifiedContent
-}
+  qualifiedContent = addCodeLanguageTags(qualifiedContent || content);
+  return qualifiedContent;
+};

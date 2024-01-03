@@ -23,59 +23,59 @@
  SOFTWARE.
 
  */
-import * as path from 'path'
-import { log } from '@looker/sdk-codegen-utils'
-import type { IApiVersion } from '@looker/sdk-codegen'
-import { getSpecsFromVersions } from '@looker/sdk-codegen'
-import type { ISDKConfigProps } from './sdkConfig'
-import { SDKConfig } from './sdkConfig'
-import { convertSpec } from './convert'
-import { quit } from './nodeUtils'
-import { fetchLookerVersions, logConvertSpec } from './fetchSpec'
+import * as path from 'path';
+import { log } from '@looker/sdk-codegen-utils';
+import type { IApiVersion } from '@looker/sdk-codegen';
+import { getSpecsFromVersions } from '@looker/sdk-codegen';
+import type { ISDKConfigProps } from './sdkConfig';
+import { SDKConfig } from './sdkConfig';
+import { convertSpec } from './convert';
+import { quit } from './nodeUtils';
+import { fetchLookerVersions, logConvertSpec } from './fetchSpec';
 
 const apiVersions = (props: any) => {
-  const versions = props.api_versions ?? '3.1,4.0'
-  return versions.split(',')
-}
+  const versions = props.api_versions ?? '3.1,4.0';
+  return versions.split(',');
+};
 
 const fetchAndConvert = async () => {
-  const config = SDKConfig()
-  const [name, props] = Object.entries(config)[0]
+  const config = SDKConfig();
+  const [name, props] = Object.entries(config)[0];
   // Iterate through all specified API versions
-  const apis = apiVersions(props)
-  const lookerVersions = fetchLookerVersions(props)
-  const specs = await getSpecsFromVersions(lookerVersions as IApiVersion)
+  const apis = apiVersions(props);
+  const lookerVersions = fetchLookerVersions(props);
+  const specs = await getSpecsFromVersions(lookerVersions as IApiVersion);
   for (const api of apis) {
-    const p = JSON.parse(JSON.stringify(props)) as ISDKConfigProps
-    p.api_version = api
-    await logConvertSpec(name, specs[api], p, true)
+    const p = JSON.parse(JSON.stringify(props)) as ISDKConfigProps;
+    p.api_version = api;
+    await logConvertSpec(name, specs[api], p, true);
   }
-}
-;(async () => {
+};
+(async () => {
   if (process.argv.length < 3)
     log(
       `yarn ts-node ${process.argv[1]} [Swagger file name] [OpenApi file name]`
-    )
-  const args = process.argv.slice(2)
+    );
+  const args = process.argv.slice(2);
   try {
     if (args.length > 0) {
-      const swagger = args[0]
-      let oas
+      const swagger = args[0];
+      let oas;
       if (args.length > 1) {
-        oas = args[1]
+        oas = args[1];
       } else {
-        const file = path.parse(swagger)
-        oas = `${file.dir}${file.dir ? '/' : ''}${file.name}.oas.json`
+        const file = path.parse(swagger);
+        oas = `${file.dir}${file.dir ? '/' : ''}${file.name}.oas.json`;
       }
-      log(`Converting ${swagger} to ${oas} ...`)
-      convertSpec(swagger, oas)
+      log(`Converting ${swagger} to ${oas} ...`);
+      convertSpec(swagger, oas);
     } else {
       log(
         'using looker.ini as the source for fetching and converting specifications ...'
-      )
-      await fetchAndConvert()
+      );
+      await fetchAndConvert();
     }
   } catch (e: any) {
-    quit(e)
+    quit(e);
   }
-})()
+})();

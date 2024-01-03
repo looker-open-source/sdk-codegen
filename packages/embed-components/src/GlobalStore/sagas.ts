@@ -23,24 +23,24 @@
  SOFTWARE.
 
  */
-import { takeEvery, put } from 'typed-redux-saga'
-import { createFactory } from '@looker/embed-services'
-import type { PayloadAction } from '@reduxjs/toolkit'
+import { put, takeEvery } from 'typed-redux-saga';
+import { createFactory } from '@looker/embed-services';
+import type { PayloadAction } from '@reduxjs/toolkit';
 
-import { factoryActions } from './slice'
-import type { InitFactoryAction } from './slice'
+import { factoryActions } from './slice';
+import type { InitFactoryAction } from './slice';
 
 function* initSaga(action: PayloadAction<InitFactoryAction>) {
-  const { initFactorySuccessAction, setFailureAction } = factoryActions
+  const { initFactorySuccessAction, setFailureAction } = factoryActions;
   try {
-    createFactory(action.payload.sdk)
-    yield* put(initFactorySuccessAction())
+    createFactory(action.payload.sdk);
+    yield* put(initFactorySuccessAction());
   } catch (error: any) {
-    yield* put(setFailureAction({ error: error.message }))
+    yield* put(setFailureAction({ error: error.message }));
   }
 }
 
 export function* saga() {
-  const { initFactoryAction } = factoryActions
-  yield* takeEvery(initFactoryAction, initSaga)
+  const { initFactoryAction } = factoryActions;
+  yield* takeEvery(initFactoryAction, initSaga);
 }

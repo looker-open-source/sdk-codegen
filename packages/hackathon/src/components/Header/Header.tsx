@@ -23,12 +23,12 @@
  SOFTWARE.
 
  */
-import type { FC } from 'react'
-import React from 'react'
-import { Heading } from '@looker/components'
+import type { FC } from 'react';
+import React from 'react';
+import { Heading } from '@looker/components';
 
 export interface HeaderProps {
-  text: string
+  text: string;
 }
 
 export const Header: FC<HeaderProps> = ({ text }) => (
@@ -40,4 +40,4 @@ export const Header: FC<HeaderProps> = ({ text }) => (
   >
     {text}
   </Heading>
-)
+);

@@ -24,29 +24,29 @@
 
  */
 
-import type { FC } from 'react'
-import React, { useEffect, useState } from 'react'
-import type { ApiModel, IMethod } from '@looker/sdk-codegen'
-import { getCodeGenerator, trimInputs } from '@looker/sdk-codegen'
-import { Heading } from '@looker/components'
-import { CodeCopy } from '@looker/code-editor'
+import type { FC } from 'react';
+import React, { useEffect, useState } from 'react';
+import type { ApiModel, IMethod } from '@looker/sdk-codegen';
+import { getCodeGenerator, trimInputs } from '@looker/sdk-codegen';
+import { Heading } from '@looker/components';
+import { CodeCopy } from '@looker/code-editor';
 
-import type { RunItValues } from '../../RunIt'
-import { DarkSpan } from '../common'
-import { DocMultiCall } from './DocMultiCall'
-import { getGenerators } from './callUtils'
+import type { RunItValues } from '../../RunIt';
+import { DarkSpan } from '../common';
+import { DocMultiCall } from './DocMultiCall';
+import { getGenerators } from './callUtils';
 
 export interface DocSdkCallsProps {
   /** API spec */
-  api: ApiModel
+  api: ApiModel;
   /** current method */
-  method: IMethod
+  method: IMethod;
   /** Entered RunIt form values */
-  inputs: RunItValues
+  inputs: RunItValues;
   /** Language to generate Sdk calls in*/
-  sdkLanguage: string
+  sdkLanguage: string;
   /** true to not trim the body params */
-  keepBody?: boolean
+  keepBody?: boolean;
 }
 
 /**
@@ -59,27 +59,27 @@ export const DocSdkCalls: FC<DocSdkCallsProps> = ({
   sdkLanguage = 'All',
   keepBody = false,
 }) => {
-  const [heading, setHeading] = useState('')
-  const trimmed = trimInputs(inputs, keepBody)
+  const [heading, setHeading] = useState('');
+  const trimmed = trimInputs(inputs, keepBody);
 
   useEffect(() => {
     const text =
       sdkLanguage === 'All'
         ? 'SDKs call syntax'
-        : `${sdkLanguage} SDK call syntax`
-    setHeading(text)
-  }, [sdkLanguage])
+        : `${sdkLanguage} SDK call syntax`;
+    setHeading(text);
+  }, [sdkLanguage]);
 
-  const calls = {}
+  const calls: any = {};
   try {
     if (sdkLanguage === 'All') {
-      const generators = getGenerators(api)
+      const generators = getGenerators(api);
       Object.entries(generators).forEach(([language, gen]) => {
-        calls[language] = gen.makeTheCall(method, trimmed)
-      })
+        calls[language] = gen.makeTheCall(method, trimmed);
+      });
     } else {
-      const gen = getCodeGenerator(sdkLanguage, api)
-      calls[sdkLanguage] = gen!.makeTheCall(method, trimmed)
+      const gen = getCodeGenerator(sdkLanguage, api);
+      calls[sdkLanguage] = gen!.makeTheCall(method, trimmed);
     }
   } catch {
     return (
@@ -87,7 +87,7 @@ export const DocSdkCalls: FC<DocSdkCallsProps> = ({
         Cannot generate SDK call syntax. Ensure all complex structures in the
         request form are valid.
       </DarkSpan>
-    )
+    );
   }
 
   return (
@@ -101,5 +101,5 @@ export const DocSdkCalls: FC<DocSdkCallsProps> = ({
         <CodeCopy code={calls[sdkLanguage]} language={sdkLanguage} />
       )}
     </>
-  )
-}
+  );
+};

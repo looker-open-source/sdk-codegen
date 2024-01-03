@@ -23,70 +23,73 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { methodRefs, typeRefs } from '@looker/sdk-codegen'
-import { screen } from '@testing-library/react'
+import React from 'react';
+import { methodRefs, typeRefs } from '@looker/sdk-codegen';
+import { screen } from '@testing-library/react';
 
 import {
   createTestStore,
   renderWithRouterAndReduxProvider,
-} from '../../test-utils'
-import { api } from '../../test-data'
-import { buildPath } from '../../utils'
-import { DocReferences } from './DocReferences'
+} from '../../test-utils';
+import { api } from '../../test-data';
+import { buildPath } from '../../utils';
+import { DocReferences } from './DocReferences';
 
 describe('DocReferences', () => {
   test('it renders method and type references', () => {
-    const typesUsed = typeRefs(api, api.types.DashboardElement.customTypes)
-    const typesUsedBy = typeRefs(api, api.types.DashboardElement.parentTypes)
-    const methodsUsedBy = methodRefs(api, api.types.DashboardElement.methodRefs)
+    const typesUsed = typeRefs(api, api.types.DashboardElement.customTypes);
+    const typesUsedBy = typeRefs(api, api.types.DashboardElement.parentTypes);
+    const methodsUsedBy = methodRefs(
+      api,
+      api.types.DashboardElement.methodRefs
+    );
     renderWithRouterAndReduxProvider(
       <DocReferences
         typesUsed={typesUsed}
         typesUsedBy={typesUsedBy}
         methodsUsedBy={methodsUsedBy}
-        specKey={'3.1'}
+        specKey={'4.0'}
         api={api}
       />
-    )
+    );
     expect(screen.getAllByRole('link')).toHaveLength(
       typesUsed.length + typesUsedBy.length + methodsUsedBy.length
-    )
+    );
     expect(screen.getByText(typesUsed[0].name).closest('a')).toHaveAttribute(
       'href',
-      buildPath(api, typesUsed[0], '3.1')
-    )
+      buildPath(api, typesUsed[0], '4.0')
+    );
 
-    expect(typesUsedBy).toHaveLength(1)
-    expect(typesUsedBy[0].name).toEqual('Dashboard')
+    expect(typesUsedBy).toHaveLength(1);
+    expect(typesUsedBy[0].name).toEqual('Dashboard');
     expect(screen.getByText(typesUsedBy[0].name).closest('a')).toHaveAttribute(
       'href',
-      buildPath(api, typesUsedBy[0], '3.1')
-    )
+      buildPath(api, typesUsedBy[0], '4.0')
+    );
     expect(
       screen.getByText(methodsUsedBy[0].name).closest('a')
-    ).toHaveAttribute('href', buildPath(api, methodsUsedBy[0], '3.1'))
-  })
+    ).toHaveAttribute('href', buildPath(api, methodsUsedBy[0], '4.0'));
+  });
 
   test('it highlights text matching search pattern', () => {
-    const highlightPattern = 'dash'
+    const highlightPattern = 'dash';
     const store = createTestStore({
       settings: { searchPattern: highlightPattern },
-    })
+    });
     renderWithRouterAndReduxProvider(
       <DocReferences
         typesUsed={[api.types.Dashboard]}
-        specKey={'3.1'}
+        specKey={'4.0'}
         api={api}
       />,
       undefined,
       store
-    )
-    const foundRef = screen.getByRole('link')
-    expect(foundRef).toContainHTML('<span class="hi">Dash</span>board')
+    );
+    const foundRef = screen.getByRole('link');
+    expect(foundRef).toContainHTML('<span class="hi">Dash</span>board');
     expect(foundRef).toHaveAttribute(
       'href',
-      buildPath(api, api.types.Dashboard, '3.1')
-    )
-  })
-})
+      buildPath(api, api.types.Dashboard, '4.0')
+    );
+  });
+});

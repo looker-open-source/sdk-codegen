@@ -24,56 +24,56 @@
 
  */
 
-import type { ILookerVersions, SpecItem, SpecList } from '@looker/sdk-codegen'
-import { ApiModel, upgradeSpecObject } from '@looker/sdk-codegen'
-import { api_spec } from '@looker/sdk'
-import { getEnvAdaptor } from '@looker/extension-utils'
-import type { RunItValues } from '@looker/run-it'
-import { getUrl } from '@looker/run-it'
+import type { ILookerVersions, SpecItem, SpecList } from '@looker/sdk-codegen';
+import { ApiModel, upgradeSpecObject } from '@looker/sdk-codegen';
+import { api_spec } from '@looker/sdk';
+import { getEnvAdaptor } from '@looker/extension-utils';
+import type { RunItValues } from '@looker/run-it';
+import { getUrl } from '@looker/run-it';
 
-export type StorageLocation = 'session' | 'local'
+export type StorageLocation = 'session' | 'local';
 
 /** Object returned from storage service */
 export interface IStorageValue {
   /** Location of the stored object */
-  location: StorageLocation
+  location: StorageLocation;
   /** Stored string representation of the value (usually JSON) */
-  value: string
+  value: string;
 }
 
 /** function to retrieve a spec based on version and name */
 export type ApiSpecFetcher = (
   version: string,
   name: string
-) => Promise<string | RunItValues>
+) => Promise<string | RunItValues>;
 
 /** Either the spec is parsed or it's undefined */
-export type ParsedSpec = ApiModel | undefined
+export type ParsedSpec = ApiModel | undefined;
 
 /** service abstraction for extension and browser based usage */
 export interface RunItConfigurator {
-  getStorage: (key: string, defaultValue?: string) => IStorageValue
-  setStorage(key: string, value: string, location: 'local' | 'session'): string
-  removeStorage(key: string): void
+  getStorage: (key: string, defaultValue?: string) => IStorageValue;
+  setStorage(key: string, value: string, location: 'local' | 'session'): string;
+  removeStorage(key: string): void;
 }
 
 /** Processed specifications */
 export interface ILoadedSpecs {
   /** API server url */
-  baseUrl: string
+  baseUrl: string;
   /** Web server url */
-  webUrl: string
+  webUrl: string;
   /** should APIX run headless? */
-  headless: boolean
+  headless: boolean;
   /** loaded specifications */
-  specs: SpecList
+  specs: SpecList;
   /** communication errors */
-  fetchResult: string
+  fetchResult: string;
 }
 
 /** Extends versions payload with headless toggle for API Explorer */
 export interface IAPIXConfig extends ILookerVersions {
-  headless?: boolean
+  headless?: boolean;
 }
 
 /**
@@ -81,15 +81,15 @@ export interface IAPIXConfig extends ILookerVersions {
  * @param content to convert
  */
 const makeApi = (content: string | RunItValues) => {
-  let json
+  let json;
   if (typeof content === 'string') {
-    json = JSON.parse(content)
+    json = JSON.parse(content);
   } else {
-    json = content
+    json = content;
   }
-  json = upgradeSpecObject(json)
-  return ApiModel.fromJson(json)
-}
+  json = upgradeSpecObject(json);
+  return ApiModel.fromJson(json);
+};
 
 /**
  * Ensure the URI is a full URL
@@ -98,17 +98,17 @@ const makeApi = (content: string | RunItValues) => {
  */
 export const fullify = (uri: string, baseUrl: string): string => {
   if (uri.match(/^https?:/)) {
-    return uri
+    return uri;
   }
-  const url = new URL(uri, baseUrl)
-  return url.toString()
-}
+  const url = new URL(uri, baseUrl);
+  return url.toString();
+};
 /**
  * parse spec url into version and name for api_spec call
  * @param spec to parse
  */
 const apiSpecBits = (spec: SpecItem): string[] =>
-  spec.specURL?.split('/').slice(-2) || []
+  spec.specURL?.split('/').slice(-2) || [];
 
 /**
  * Use the functional api_spec fetch
@@ -116,9 +116,9 @@ const apiSpecBits = (spec: SpecItem): string[] =>
  * @param name to retrieve
  */
 export const funFetch = (version: string, name: string): Promise<string> => {
-  const sdk = getEnvAdaptor().sdk
-  return sdk.ok(api_spec(sdk, version, name))
-}
+  const sdk = getEnvAdaptor().sdk;
+  return sdk.ok(api_spec(sdk, version, name));
+};
 
 /**
  * try to fetch a spec by URL, trap any errors and return undefined
@@ -126,12 +126,12 @@ export const funFetch = (version: string, name: string): Promise<string> => {
  */
 export const specUrlFetch = async (url: string): Promise<ParsedSpec> => {
   try {
-    const content = await getUrl(url)
-    return makeApi(content)
+    const content = await getUrl(url);
+    return makeApi(content);
   } catch (error) {
-    return undefined
+    return undefined;
   }
-}
+};
 
 /**
  * fetch and compile an API specification to an ApiModel if it's not already available
@@ -145,12 +145,12 @@ export const sdkSpecFetch = async (
   spec: SpecItem,
   fetcher: ApiSpecFetcher
 ): Promise<ParsedSpec> => {
-  if (spec.api) return spec.api
-  if (!spec.specURL) return undefined
-  const [version, name] = apiSpecBits(spec)
-  const content = await fetcher(version, name)
-  return makeApi(content)
-}
+  if (spec.api) return spec.api;
+  if (!spec.specURL) return undefined;
+  const [version, name] = apiSpecBits(spec);
+  const content = await fetcher(version, name);
+  return makeApi(content);
+};
 
 /** Attempt to retrieve spec by URL, then api_spec SDK call
  *
@@ -161,21 +161,21 @@ export const fallbackFetch = async (
   spec: SpecItem,
   fetcher: ApiSpecFetcher
 ): Promise<ParsedSpec> => {
-  if (spec.api) return spec.api
-  if (!spec.specURL) return undefined
-  let api: ParsedSpec
+  if (spec.api) return spec.api;
+  if (!spec.specURL) return undefined;
+  let api: ParsedSpec;
   try {
-    api = await specUrlFetch(spec.specURL)
+    api = await specUrlFetch(spec.specURL);
   } catch (error) {
-    console.error({ error })
+    console.error({ error });
   }
   if (!api) {
-    const sdk = getEnvAdaptor().sdk
-    const authed = sdk.authSession.isAuthenticated()
+    const sdk = getEnvAdaptor().sdk;
+    const authed = sdk.authSession.isAuthenticated();
     if (!authed) {
-      await sdk.authSession.login()
+      await sdk.authSession.login();
     }
-    api = await sdkSpecFetch(spec, fetcher)
+    api = await sdkSpecFetch(spec, fetcher);
   }
-  return api
-}
+  return api;
+};

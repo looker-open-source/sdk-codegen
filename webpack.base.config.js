@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-const path = require('path')
+const path = require('path');
 
 module.exports = function (packagePath = __dirname) {
   return {
@@ -61,5 +61,5 @@ module.exports = function (packagePath = __dirname) {
     resolve: {
       extensions: ['.tsx', '.ts', '.js'],
     },
-  }
-}
+  };
+};

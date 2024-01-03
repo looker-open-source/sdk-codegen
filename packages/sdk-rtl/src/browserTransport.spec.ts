@@ -24,38 +24,38 @@
 
  */
 
-import { BrowserTransport } from './browserTransport'
-import type { IRawResponse, ISDKError, ITransportSettings } from './transport'
-import { sdkOk } from './transport'
+import { BrowserTransport } from './browserTransport';
+import type { IRawResponse, ISDKError, ITransportSettings } from './transport';
+import { sdkOk } from './transport';
 
 describe('BrowserTransport', () => {
   afterEach(() => {
-    jest.clearAllMocks()
-  })
+    jest.clearAllMocks();
+  });
 
   it('cannot track performance if performance is not supported', () => {
-    jest.spyOn(BrowserTransport, 'supportsPerformance').mockReturnValue(false)
-    BrowserTransport.trackPerformance = true
-    expect(BrowserTransport.trackPerformance).toEqual(false)
-  })
+    jest.spyOn(BrowserTransport, 'supportsPerformance').mockReturnValue(false);
+    BrowserTransport.trackPerformance = true;
+    expect(BrowserTransport.trackPerformance).toEqual(false);
+  });
 
   it('can track performance if performance is supported', () => {
-    jest.spyOn(BrowserTransport, 'supportsPerformance').mockReturnValue(true)
-    BrowserTransport.trackPerformance = true
-    expect(BrowserTransport.trackPerformance).toEqual(true)
-    BrowserTransport.trackPerformance = false
-    expect(BrowserTransport.trackPerformance).toEqual(false)
-  })
+    jest.spyOn(BrowserTransport, 'supportsPerformance').mockReturnValue(true);
+    BrowserTransport.trackPerformance = true;
+    expect(BrowserTransport.trackPerformance).toEqual(true);
+    BrowserTransport.trackPerformance = false;
+    expect(BrowserTransport.trackPerformance).toEqual(false);
+  });
 
   it('just deserializes JSON into an object', async () => {
-    const xp = new BrowserTransport({} as ITransportSettings)
+    const xp = new BrowserTransport({} as ITransportSettings);
     interface ITestModel {
-      string1: string
-      num1: number
-      string2: string
-      num2: number
-      string3: string
-      num3: number
+      string1: string;
+      num1: number;
+      string2: string;
+      num2: number;
+      string3: string;
+      num3: number;
     }
     const resp: IRawResponse = {
       headers: {},
@@ -79,24 +79,24 @@ describe('BrowserTransport', () => {
 `,
       requestStarted: 1000,
       responseCompleted: 2000,
-    }
-    const untyped: any = await sdkOk(xp.parseResponse(resp))
-    expect(untyped.string1).toBe(1)
-    expect(untyped.num1).toBe(1)
-    expect(untyped.string2).toBe('2')
-    expect(untyped.num2).toBe('2')
-    expect(untyped.string3).toBe('3')
-    expect(untyped.num3).toBe(3)
-    expect(untyped.string4).toBe('4')
-    expect(untyped.num4).toBe(4)
-    const typed = await sdkOk(xp.parseResponse<ITestModel, ISDKError>(resp))
-    expect(typed.string1).toBe(1)
-    expect(typed.num1).toBe(1)
-    expect(typed.string2).toBe('2')
-    expect(typed.num2).toBe('2')
-    expect(typed.string3).toBe('3')
-    expect(typed.num3).toBe(3)
-    expect((typed as any).string4).toBe('4')
-    expect((typed as any).num4).toBe(4)
-  })
-})
+    };
+    const untyped: any = await sdkOk(xp.parseResponse(resp));
+    expect(untyped.string1).toBe(1);
+    expect(untyped.num1).toBe(1);
+    expect(untyped.string2).toBe('2');
+    expect(untyped.num2).toBe('2');
+    expect(untyped.string3).toBe('3');
+    expect(untyped.num3).toBe(3);
+    expect(untyped.string4).toBe('4');
+    expect(untyped.num4).toBe(4);
+    const typed = await sdkOk(xp.parseResponse<ITestModel, ISDKError>(resp));
+    expect(typed.string1).toBe(1);
+    expect(typed.num1).toBe(1);
+    expect(typed.string2).toBe('2');
+    expect(typed.num2).toBe('2');
+    expect(typed.string3).toBe('3');
+    expect(typed.num3).toBe(3);
+    expect((typed as any).string4).toBe('4');
+    expect((typed as any).num4).toBe(4);
+  });
+});

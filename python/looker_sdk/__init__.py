@@ -29,9 +29,7 @@ from looker_sdk.rtl import auth_session
 from looker_sdk.sdk import constants
 
 # F401 - providing convenience shortcut for methods/models at top level
-from looker_sdk.sdk.api31 import methods, methods as methods31  # noqa:F401
 from looker_sdk.sdk.api40 import methods as methods40
-from looker_sdk.sdk.api31 import models, models as models31  # noqa:F401
 from looker_sdk.sdk.api40 import models as models40  # noqa: F401
 
 API_SETTINGS_API_VERSION_DEPRECATED = "API_VERSION config value is no longer needed."
@@ -46,27 +44,6 @@ def _settings(
         sdk_version=constants.sdk_version,
         env_prefix=constants.environment_prefix,
     )
-
-
-def init31(
-    config_file: str = "looker.ini",
-    section: Optional[str] = None,
-    config_settings: Optional[api_settings.ApiSettings] = None,
-) -> methods31.Looker31SDK:
-    """Default dependency configuration"""
-    settings = (
-        _settings(config_file, section) if config_settings is None else config_settings
-    )
-    settings.is_configured()
-    transport = requests_transport.RequestsTransport.configure(settings)
-    return methods31.Looker31SDK(
-        auth_session.AuthSession(settings, transport, serialize.deserialize31, "3.1"),
-        serialize.deserialize31,
-        serialize.serialize31,
-        transport,
-        "3.1",
-    )
-
 
 def init40(
     config_file: str = "looker.ini",

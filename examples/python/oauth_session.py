@@ -5,7 +5,7 @@ import urllib.parse
 import requests
 
 from looker_sdk.rtl import api_settings, auth_session, requests_transport
-from looker_sdk.sdk.api31 import methods
+from looker_sdk.sdk.api40 import methods
 from looker_sdk.rtl import serialize
 
 
@@ -20,7 +20,7 @@ def oauth_interactive_roundtrip():
         deserialize=serialize.deserialize31,
         serialize=serialize.serialize,
         crypto=auth_session.CryptoHash(),
-        version="3.1",
+        version="4.0",
     )
     auth_code_request_url = session.create_auth_code_request_url("api", "mystate")
     with requests.Session() as s:
@@ -60,8 +60,8 @@ def oauth_interactive_roundtrip():
     params = urllib.parse.parse_qs(qs)
     assert "code" in params
     session.redeem_auth_code(params["code"][0])
-    sdk = methods.Looker31SDK(
-        session, serialize.deserialize31, serialize.serialize, transport, "3.1"
+    sdk = methods.Looker40SDK(
+        session, serialize.deserialize31, serialize.serialize, transport, "4.0"
     )
     me = sdk.me()
     print(f"Hi {me.first_name}, your user_id is {me.id}")

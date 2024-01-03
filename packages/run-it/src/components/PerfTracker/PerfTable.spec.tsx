@@ -24,13 +24,13 @@
 
  */
 
-import { renderWithTheme } from '@looker/components-test-utils'
-import { screen } from '@testing-library/react'
-import React from 'react'
-import { mockPerfEntries } from './PerfTracker.spec'
-import { PerfTable } from './PerfTable'
+import { renderWithTheme } from '@looker/components-test-utils';
+import { screen } from '@testing-library/react';
+import React from 'react';
+import { mockPerfEntries } from './PerfTracker.spec';
+import { PerfTable } from './PerfTable';
 
-const mockSelect = jest.fn()
+const mockSelect = jest.fn();
 
 describe('PerfTable', () => {
   test('it displays all items if requested', () => {
@@ -40,25 +40,25 @@ describe('PerfTable', () => {
         onSelect={mockSelect}
         data={mockPerfEntries}
       />
-    )
-    expect(screen.getByText(/Domain/i)).toBeInTheDocument()
-    expect(screen.getByText(/Connect/i)).toBeInTheDocument()
-    expect(screen.getByText(/Secure/i)).toBeInTheDocument()
+    );
+    expect(screen.getByText(/Domain/i)).toBeInTheDocument();
+    expect(screen.getByText(/Connect/i)).toBeInTheDocument();
+    expect(screen.getByText(/Secure/i)).toBeInTheDocument();
 
     // Check the partial url is in PerfTable
-    const url = new URL(mockPerfEntries[1].name)
-    const path = `${url.pathname}${url.search}`
-    expect(screen.getByText(path)).toBeInTheDocument()
-  })
+    const url = new URL(mockPerfEntries[1].name);
+    const path = `${url.pathname}${url.search}`;
+    expect(screen.getByText(path)).toBeInTheDocument();
+  });
   test('it skips some columns by default', () => {
-    renderWithTheme(<PerfTable onSelect={mockSelect} data={mockPerfEntries} />)
-    expect(screen.queryByText(/Domain/i)).not.toBeInTheDocument()
-    expect(screen.queryByText(/Connect/i)).not.toBeInTheDocument()
-    expect(screen.queryByText(/Secure/i)).not.toBeInTheDocument()
+    renderWithTheme(<PerfTable onSelect={mockSelect} data={mockPerfEntries} />);
+    expect(screen.queryByText(/Domain/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Connect/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Secure/i)).not.toBeInTheDocument();
 
     // Check the partial url is in PerfTable
-    const url = new URL(mockPerfEntries[1].name)
-    const path = `${url.pathname}${url.search}`
-    expect(screen.getByText(path)).toBeInTheDocument()
-  })
-})
+    const url = new URL(mockPerfEntries[1].name);
+    const path = `${url.pathname}${url.search}`;
+    expect(screen.getByText(path)).toBeInTheDocument();
+  });
+});

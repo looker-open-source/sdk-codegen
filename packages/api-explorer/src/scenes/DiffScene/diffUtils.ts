@@ -24,7 +24,7 @@
 
  */
 
-import cloneDeep from 'lodash/cloneDeep'
+import cloneDeep from 'lodash/cloneDeep';
 import type {
   DiffFilter,
   DiffRow,
@@ -32,8 +32,8 @@ import type {
   IMethod,
   MethodList,
   TagList,
-} from '@looker/sdk-codegen'
-import { compareSpecs } from '@looker/sdk-codegen'
+} from '@looker/sdk-codegen';
+import { compareSpecs } from '@looker/sdk-codegen';
 
 export const allDiffToggles = [
   'missing',
@@ -42,7 +42,7 @@ export const allDiffToggles = [
   'type',
   'body',
   'response',
-]
+];
 
 export const standardDiffToggles = [
   'missing',
@@ -50,7 +50,7 @@ export const standardDiffToggles = [
   'type',
   'body',
   'response',
-]
+];
 
 /**
  * Abstraction of compareAPIs in case we need to transform compareSpecs diff rows
@@ -69,10 +69,10 @@ export const diffSpecs = (
     (options.includes('params') && !!delta.paramsDiff) ||
     (options.includes('type') && !!delta.typeDiff) ||
     (options.includes('body') && !!delta.bodyDiff) ||
-    (options.includes('response') && !!delta.responseDiff)
+    (options.includes('response') && !!delta.responseDiff);
 
-  return compareSpecs(lhs, rhs, includeOptions)
-}
+  return compareSpecs(lhs, rhs, includeOptions);
+};
 
 /**
  * Local copy of private function from ApiModel
@@ -81,15 +81,15 @@ export const diffSpecs = (
  */
 const addMethodToTags = (tags: TagList, method: IMethod): TagList => {
   for (const tag of method.schema.tags) {
-    let list: MethodList = tags[tag]
+    let list: MethodList = tags[tag];
     if (!list) {
-      list = {}
-      tags[tag] = list
+      list = {};
+      tags[tag] = list;
     }
-    list[method.name] = method
+    list[method.name] = method;
   }
-  return tags
-}
+  return tags;
+};
 
 /**
  * Combine diff into a psuedo api spec that contains an established method for each diff result
@@ -102,19 +102,19 @@ export const diffToSpec = (
   lSpec: IApiModel,
   rSpec: IApiModel
 ) => {
-  const result = cloneDeep(lSpec)
-  result.tags = {}
-  result.methods = {}
+  const result = cloneDeep(lSpec);
+  result.tags = {};
+  result.methods = {};
 
   delta.forEach((row) => {
-    const name = row.name
-    let method = lSpec.methods[name]
-    if (!method) method = rSpec.methods[name]
-    result.methods[name] = method
-    addMethodToTags(result.tags, method)
-  })
+    const name = row.name;
+    let method = lSpec.methods[name];
+    if (!method) method = rSpec.methods[name];
+    result.methods[name] = method;
+    addMethodToTags(result.tags, method);
+  });
 
   // TODO diff types then we can populate this also
-  result.types = {}
-  return result
-}
+  result.types = {};
+  return result;
+};

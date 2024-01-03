@@ -24,7 +24,7 @@
 
  */
 
-import type { IHackerProps } from '../../models'
+import type { IHackerProps } from '../../models';
 
 export enum Actions {
   ALL_HACKERS_REQUEST = 'ALL_HACKERS_REQUEST',
@@ -33,32 +33,32 @@ export enum Actions {
 }
 
 export interface AllHackersRequestAction {
-  type: Actions.ALL_HACKERS_REQUEST
+  type: Actions.ALL_HACKERS_REQUEST;
 }
 
 export interface AllHackersResponseAction {
-  type: Actions.ALL_HACKERS_RESPONSE
+  type: Actions.ALL_HACKERS_RESPONSE;
   payload: {
-    hackers: IHackerProps[]
-    judges: IHackerProps[]
-    staff: IHackerProps[]
-    admins: IHackerProps[]
-  }
+    hackers: IHackerProps[];
+    judges: IHackerProps[];
+    staff: IHackerProps[];
+    admins: IHackerProps[];
+  };
 }
 
 export interface UpdateHackersPageNumAction {
-  type: Actions.UPDATE_HACKERS_PAGE_NUM
-  payload: number
+  type: Actions.UPDATE_HACKERS_PAGE_NUM;
+  payload: number;
 }
 
 export type HackerAction =
   | AllHackersRequestAction
   | AllHackersResponseAction
-  | UpdateHackersPageNumAction
+  | UpdateHackersPageNumAction;
 
 export const allHackersRequest = (): AllHackersRequestAction => ({
   type: Actions.ALL_HACKERS_REQUEST,
-})
+});
 
 export const allHackersResponse = (
   hackers: IHackerProps[],
@@ -68,11 +68,11 @@ export const allHackersResponse = (
 ): AllHackersResponseAction => ({
   type: Actions.ALL_HACKERS_RESPONSE,
   payload: { hackers, judges, staff, admins },
-})
+});
 
 export const updateHackersPageNum = (
   pageNum: number
 ): UpdateHackersPageNumAction => ({
   type: Actions.UPDATE_HACKERS_PAGE_NUM,
   payload: pageNum,
-})
+});

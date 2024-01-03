@@ -24,19 +24,19 @@
 
  */
 
-import { createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
-import { createSliceHooks } from '@looker/redux'
-import type { ITheme } from '@looker/sdk'
-import { saga } from './sagas'
+import { createSlice } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
+import { createSliceHooks } from '@looker/redux';
+import type { ITheme } from '@looker/sdk';
+import { saga } from './sagas';
 
 export interface ThemesState {
-  defaultTheme: ITheme
-  themes: ITheme[]
-  selectedTheme: ITheme
-  initialized: boolean
-  error?: string
-  working: boolean
+  defaultTheme: ITheme;
+  themes: ITheme[];
+  selectedTheme: ITheme;
+  initialized: boolean;
+  error?: string;
+  working: boolean;
 }
 
 export const defaultThemesState: ThemesState = {
@@ -45,20 +45,20 @@ export const defaultThemesState: ThemesState = {
   selectedTheme: {} as ITheme,
   themes: [],
   working: false,
-}
+};
 
-export type SelectThemeAction = Record<'key', string>
+export type SelectThemeAction = Record<'key', string>;
 
-type SelectThemeSuccessAction = Pick<ThemesState, 'selectedTheme'>
+type SelectThemeSuccessAction = Pick<ThemesState, 'selectedTheme'>;
 
-type SetFailureAction = Record<'error', string>
+type SetFailureAction = Record<'error', string>;
 
 type LoadThemeDataSuccessAction = Pick<
   ThemesState,
   'defaultTheme' | 'themes' | 'selectedTheme'
->
+>;
 
-export const THEMES_SLICE_NAME = 'themes'
+export const THEMES_SLICE_NAME = 'themes';
 
 export const themesSlice = createSlice({
   name: THEMES_SLICE_NAME,
@@ -68,39 +68,39 @@ export const themesSlice = createSlice({
       // noop
     },
     initSuccessAction(state) {
-      state.initialized = true
+      state.initialized = true;
     },
     loadThemeDataAction(state) {
-      state.working = true
+      state.working = true;
     },
     loadThemeDataSuccessAction(
       state,
       action: PayloadAction<LoadThemeDataSuccessAction>
     ) {
-      state.themes = action.payload.themes
-      state.defaultTheme = action.payload.defaultTheme
-      state.selectedTheme = action.payload.selectedTheme
-      state.working = false
+      state.themes = action.payload.themes;
+      state.defaultTheme = action.payload.defaultTheme;
+      state.selectedTheme = action.payload.selectedTheme;
+      state.working = false;
     },
     selectThemeAction(state, _action: PayloadAction<SelectThemeAction>) {
-      state.working = true
+      state.working = true;
     },
     selectThemeSuccessAction(
       state,
       action: PayloadAction<SelectThemeSuccessAction>
     ) {
-      state.selectedTheme = action.payload.selectedTheme
-      state.working = false
+      state.selectedTheme = action.payload.selectedTheme;
+      state.working = false;
     },
     setFailureAction(state, action: PayloadAction<SetFailureAction>) {
-      state.error = action.payload.error
-      state.working = false
+      state.error = action.payload.error;
+      state.working = false;
     },
   },
-})
+});
 
-export const themeActions = themesSlice.actions
+export const themeActions = themesSlice.actions;
 export const {
   useActions: useThemeActions,
   useStoreState: useThemesStoreState,
-} = createSliceHooks(themesSlice, saga)
+} = createSliceHooks(themesSlice, saga);

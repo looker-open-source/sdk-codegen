@@ -41,17 +41,17 @@ def config_file(monkeypatch, tmpdir_factory):
 [Looker]
 # Base URL for API. Do not include /api/* in the url
 base_url=https://host1.looker.com:19999
-# API 3 client id
-client_id=your_API3_client_id
-# API 3 client secret
-client_secret=your_API3_client_secret
+# API client id
+client_id=your_API_client_id
+# API client secret
+client_secret=your_API_client_secret
 # Set to false if testing locally against self-signed certs. Otherwise leave True
 verify_ssl=True
 
 [OLD_API]
 base_url=https://host2.looker.com:19999
-client_id=your_API3_client_id
-client_secret=your_API3_client_secret
+client_id=your_API_client_id
+client_secret=your_API_client_secret
 verify_ssl=
 
 [BARE_MINIMUM]

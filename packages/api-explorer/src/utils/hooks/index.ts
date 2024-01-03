@@ -23,6 +23,6 @@
  SOFTWARE.
 
  */
-export { useNavigation } from './navigation'
-export { useGlobalStoreSync } from './globalStoreSync'
-export { useQuery } from './useQuery'
+export { useNavigation } from './navigation';
+export { useGlobalStoreSync } from './globalStoreSync';
+export { useQuery } from './useQuery';

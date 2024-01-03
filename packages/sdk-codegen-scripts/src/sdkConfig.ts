@@ -24,22 +24,22 @@
 
  */
 
-import * as fs from 'fs'
-import dotenv from 'dotenv'
-import { boolDefault } from '@looker/sdk-rtl'
-import { readIniConfig } from '@looker/sdk-node'
+import * as fs from 'fs';
+import dotenv from 'dotenv';
+import { boolDefault } from '@looker/sdk-rtl';
+import { readIniConfig } from '@looker/sdk-node';
 
 export interface ISDKConfigProps {
-  api_version: string
-  api_versions: string
-  base_url: string
-  client_id: string
-  client_secret: string
-  verify_ssl: boolean
+  api_version: string;
+  api_versions: string;
+  base_url: string;
+  client_id: string;
+  client_secret: string;
+  verify_ssl: boolean;
 }
 
 export interface ISDKConfigSection {
-  [key: string]: ISDKConfigProps
+  [key: string]: ISDKConfigProps;
 }
 
 export const SDKConfig = (
@@ -47,17 +47,17 @@ export const SDKConfig = (
   envPrefix = 'LOOKERSDK',
   sectionName = 'Looker'
 ): ISDKConfigSection => {
-  dotenv.config()
+  dotenv.config();
   if (process.env.DOT_ENV_FILE) {
     // Load custom env file
-    const name = process.env.DOT_ENV_FILE
-    const vals = dotenv.parse(fs.readFileSync(name, 'utf-8'))
+    const name = process.env.DOT_ENV_FILE;
+    const vals = dotenv.parse(fs.readFileSync(name, 'utf-8'));
     Object.entries(vals).forEach(([key, val]) => {
-      if (val) process.env[key] = val
-    })
+      if (val) process.env[key] = val;
+    });
   }
 
-  const section = readIniConfig(fileName, envPrefix, sectionName)
+  const section = readIniConfig(fileName, envPrefix, sectionName);
   const config: ISDKConfigProps = {
     api_version: section.api_version,
     api_versions: section.api_versions,
@@ -65,10 +65,10 @@ export const SDKConfig = (
     client_id: section.client_id,
     client_secret: section.client_secret,
     verify_ssl: boolDefault(section.verify_ssl, true),
-  }
+  };
 
   if (!config.base_url) {
-    throw Error('Fatal error: base_url is not configured. Exiting.')
+    throw Error('Fatal error: base_url is not configured. Exiting.');
   }
-  return { [sectionName]: config }
-}
+  return { [sectionName]: config };
+};

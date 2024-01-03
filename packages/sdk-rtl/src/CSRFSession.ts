@@ -24,10 +24,10 @@
 
  */
 
-import type { IApiSettings } from './apiSettings'
-import type { IRequestProps, ITransport } from './transport'
-import { BrowserTransport } from './browserTransport'
-import { AuthSession } from './authSession'
+import type { IApiSettings } from './apiSettings';
+import type { IRequestProps, ITransport } from './transport';
+import { BrowserTransport } from './browserTransport';
+import { AuthSession } from './authSession';
 
 /**
  * CSRFSession is only for use within the Looker UI or a script that
@@ -38,23 +38,26 @@ import { AuthSession } from './authSession'
  * all web requests to looker UI web service.
  */
 export class CSRFSession extends AuthSession {
-  _activeToken = ''
-  constructor(public settings: IApiSettings, transport?: ITransport) {
-    super(settings, transport || new BrowserTransport(settings))
+  _activeToken = '';
+  constructor(
+    public settings: IApiSettings,
+    transport?: ITransport
+  ) {
+    super(settings, transport || new BrowserTransport(settings));
   }
 
   get activeToken() {
     if (!this._activeToken) {
       const meta = document.head.querySelector(
         '[name=csrf-token]'
-      ) as HTMLMetaElement
-      this._activeToken = meta ? meta.content : ''
+      ) as HTMLMetaElement;
+      this._activeToken = meta ? meta.content : '';
     }
-    return this._activeToken
+    return this._activeToken;
   }
 
   async getToken() {
-    return this.activeToken
+    return this.activeToken;
   }
 
   /**
@@ -62,9 +65,9 @@ export class CSRFSession extends AuthSession {
    * that can be used for API authentication
    */
   isAuthenticated() {
-    const token = this.activeToken
-    if (!token) return false
-    return true
+    const token = this.activeToken;
+    if (!token) return false;
+    return true;
   }
 
   /**
@@ -73,8 +76,8 @@ export class CSRFSession extends AuthSession {
    * @param props Request properties to decorate
    */
   async authenticate(props: IRequestProps) {
-    const token = this.activeToken
-    if (token) props.headers['X-CSRF-TOKEN'] = token
-    return props
+    const token = this.activeToken;
+    if (token) props.headers['X-CSRF-TOKEN'] = token;
+    return props;
   }
 }

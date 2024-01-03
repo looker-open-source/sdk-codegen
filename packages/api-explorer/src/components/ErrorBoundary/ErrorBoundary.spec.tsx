@@ -23,52 +23,52 @@
  SOFTWARE.
 
  */
-import { renderWithTheme } from '@looker/components-test-utils'
-import React from 'react'
-import { screen } from '@testing-library/react'
+import { renderWithTheme } from '@looker/components-test-utils';
+import React from 'react';
+import { screen } from '@testing-library/react';
 
-import { ErrorBoundary } from './ErrorBoundary'
+import { ErrorBoundary } from './ErrorBoundary';
 
 const ErrorComp = ({ text }: { text: string }) => {
   const terminateWithPrejudice = () => {
-    const badObj: any = {}
-    return badObj.a.b
-  }
-  return <div>{text + terminateWithPrejudice()}</div>
-}
+    const badObj: any = {};
+    return badObj.a.b;
+  };
+  return <div>{text + terminateWithPrejudice()}</div>;
+};
 
 describe('ErrorBoundary', () => {
-  const header = 'Uh oh! Something went wrong!'
-  const actionMessage = 'Try refreshing the page to correct the problem.'
-  const childText = 'Sweet Child'
+  const header = 'Uh oh! Something went wrong!';
+  const actionMessage = 'Try refreshing the page to correct the problem.';
+  const childText = 'Sweet Child';
 
   beforeEach(() => {
-    jest.spyOn(console, 'error').mockImplementation()
-  })
+    jest.spyOn(console, 'error').mockImplementation();
+  });
 
   it('should render child component', () => {
-    const logError = jest.fn()
+    const logError = jest.fn();
     renderWithTheme(
       <ErrorBoundary logError={logError}>
         <div>{childText}</div>
       </ErrorBoundary>
-    )
-    expect(screen.queryByText(header)).not.toBeInTheDocument()
-    expect(screen.queryByText(actionMessage)).not.toBeInTheDocument()
-    expect(screen.getByText(childText)).toBeVisible()
-    expect(logError).not.toHaveBeenCalled()
-  })
+    );
+    expect(screen.queryByText(header)).not.toBeInTheDocument();
+    expect(screen.queryByText(actionMessage)).not.toBeInTheDocument();
+    expect(screen.getByText(childText)).toBeVisible();
+    expect(logError).not.toHaveBeenCalled();
+  });
 
   it('should render error detail on error', () => {
-    const logError = jest.fn()
+    const logError = jest.fn();
     renderWithTheme(
       <ErrorBoundary logError={logError}>
         <ErrorComp text={childText} />
       </ErrorBoundary>
-    )
-    expect(screen.queryByText(childText)).not.toBeInTheDocument()
-    expect(screen.getByText(header)).toBeVisible()
-    expect(screen.getByText(actionMessage)).toBeVisible()
-    expect(logError).toHaveBeenCalled()
-  })
-})
+    );
+    expect(screen.queryByText(childText)).not.toBeInTheDocument();
+    expect(screen.getByText(header)).toBeVisible();
+    expect(screen.getByText(actionMessage)).toBeVisible();
+    expect(logError).toHaveBeenCalled();
+  });
+});

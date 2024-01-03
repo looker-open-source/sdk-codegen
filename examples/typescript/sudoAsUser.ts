@@ -24,27 +24,27 @@
 
  */
 
-import { Looker40SDK as LookerSDK } from '@looker/sdk'
-import { IAuthSession } from '@looker/sdk-rtl'
-import { NodeSettingsIniFile, NodeSession } from '@looker/sdk-node'
-import { rootIni } from './utils'
+import { Looker40SDK as LookerSDK } from '@looker/sdk';
+import type { IAuthSession } from '@looker/sdk-rtl';
+import { NodeSession, NodeSettingsIniFile } from '@looker/sdk-node';
+import { rootIni } from './utils';
 
-const localConfig = rootIni()
+const localConfig = rootIni();
 
 /** Settings retrieved from the configuration file */
-const settings = new NodeSettingsIniFile('', localConfig, 'Looker')
+const settings = new NodeSettingsIniFile('', localConfig, 'Looker');
 
 /**
  * Automatic authentication support for the Node SDK
  * Initialized node-based session manager
  */
-const session = new NodeSession(settings)
+const session = new NodeSession(settings);
 
 /** Initialized SDK object for the Node runtime */
-const sdk = new LookerSDK(session)
+const sdk = new LookerSDK(session);
 
 /** email matching pattern for searching users */
-const emailPattern = 'test%'
+const emailPattern = 'test%';
 
 /**
  * Find a different user than the specified user
@@ -55,38 +55,38 @@ const emailPattern = 'test%'
 const anyoneButMe = async (userId: number, emailPattern: string) => {
   const all = await sdk.ok(
     sdk.search_users({ email: emailPattern, page: 1, per_page: 2 })
-  )
+  );
   if (!all || all.length === 0) {
-    console.warn(`No matches for ${emailPattern}`)
-    return undefined
+    console.warn(`No matches for ${emailPattern}`);
+    return undefined;
   }
   // find a user who is not the specified user
   const [other] = all
     .filter((u) => u.id !== userId && !u.is_disabled)
-    .slice(0, 1)
-  return other
-}
-;(async () => {
+    .slice(0, 1);
+  return other;
+};
+(async () => {
   const userFields =
-    'id, first_name, last_name, display_name, email, personal_space_id, home_space_id, group_ids, role_ids'
+    'id, first_name, last_name, display_name, email, personal_space_id, home_space_id, group_ids, role_ids';
   // retrieve your user account to verify correct credentials
-  const me = await sdk.ok(sdk.me(userFields))
+  const me = await sdk.ok(sdk.me(userFields));
   if (!me) {
-    console.warn('API authentication failed')
-    return
+    console.warn('API authentication failed');
+    return;
   }
-  console.log({ me })
-  const sudoUser = await anyoneButMe(me.id!, emailPattern)
+  console.log({ me });
+  const sudoUser = await anyoneButMe(me.id!, emailPattern);
   if (sudoUser) {
-    const auth = sdk.authSession as IAuthSession
-    await auth.login(sudoUser.id)
-    const sudo = await sdk.ok(sdk.me(userFields))
-    console.log({ sudo })
-    await sdk.authSession.logout() // logout of sudo
+    const auth = sdk.authSession as IAuthSession;
+    await auth.login(sudoUser.id);
+    const sudo = await sdk.ok(sdk.me(userFields));
+    console.log({ sudo });
+    await sdk.authSession.logout(); // logout of sudo
   }
 
-  await sdk.authSession.logout() // logout of API session
+  await sdk.authSession.logout(); // logout of API session
   if (!sdk.authSession.isAuthenticated()) {
-    console.log('Logout successful')
+    console.log('Logout successful');
   }
-})()
+})();

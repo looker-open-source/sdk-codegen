@@ -23,126 +23,126 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { criteriaToSet } from '@looker/sdk-codegen'
-import userEvent from '@testing-library/user-event'
-import { screen, waitFor } from '@testing-library/react'
+import React from 'react';
+import { criteriaToSet } from '@looker/sdk-codegen';
+import userEvent from '@testing-library/user-event';
+import { screen, waitFor } from '@testing-library/react';
 
-import { getLoadedSpecs } from '../../test-data'
+import { getLoadedSpecs } from '../../test-data';
 import {
   createTestStore,
   renderWithRouterAndReduxProvider,
-} from '../../test-utils'
-import { defaultSettingsState } from '../../state'
-import { SideNav } from './SideNav'
-import { countMethods, countTypes } from './searchUtils'
+} from '../../test-utils';
+import { defaultSettingsState } from '../../state';
+import { SideNav } from './SideNav';
+import { countMethods, countTypes } from './searchUtils';
 
-const spec = getLoadedSpecs()['4.0']
+const spec = getLoadedSpecs()['4.0'];
 
 describe('SideNav', () => {
-  const allTagsPattern = /^(Auth|ApiAuth)$/
-  const allTypesPattern = /^(WriteDashboard|WriteQuery)$/
+  const allTagsPattern = /^(Auth|ApiAuth)$/;
+  const allTypesPattern = /^(WriteDashboard|WriteQuery)$/;
 
-  let saveLocation: Location
+  let saveLocation: Location;
 
   beforeEach(() => {
-    saveLocation = globalThis.window.location
+    saveLocation = globalThis.window.location;
+    delete (window as any).location;
     window.location = {
       ...saveLocation,
-      pathname: '/3.1',
-    }
-  })
+      pathname: '/4.0',
+    };
+  });
 
   afterEach(() => {
-    window.location = saveLocation
-  })
+    window.location = saveLocation;
+  });
 
   test('it renders search, methods tab and types tab', () => {
-    renderWithRouterAndReduxProvider(<SideNav spec={spec} />)
-    const search = screen.getByLabelText('Search')
-    expect(search).toHaveProperty('placeholder', 'Search')
+    renderWithRouterAndReduxProvider(<SideNav spec={spec} />);
+    const search = screen.getByLabelText('Search');
+    expect(search).toHaveProperty('placeholder', 'Search');
     const tabs = screen.getAllByRole('tab', {
       name: /^Methods \(\d+\)|Types \(\d+\)$/,
-    })
-    expect(tabs).toHaveLength(2)
+    });
+    expect(tabs).toHaveLength(2);
     expect(tabs[0]).toHaveTextContent(
       `Methods (${countMethods(spec.api!.tags)})`
-    )
+    );
 
-    expect(tabs[1]).toHaveTextContent(`Types (${countTypes(spec.api!.types)})`)
-  })
+    expect(tabs[1]).toHaveTextContent(`Types (${countTypes(spec.api!.types)})`);
+  });
 
-  test('Methods tab is the default active tab', () => {
-    renderWithRouterAndReduxProvider(<SideNav spec={spec} />, ['/3.1/methods'])
-    expect(screen.getAllByText(allTagsPattern)).toHaveLength(2)
+  test('Methods tab is the default active tab', async () => {
+    renderWithRouterAndReduxProvider(<SideNav spec={spec} />, ['/4.0/methods']);
+    expect(screen.getAllByText(allTagsPattern)).toHaveLength(2);
     expect(
       screen.queryAllByRole('link', { name: allTypesPattern })
-    ).toHaveLength(0) // eslint-disable-line jest-dom/prefer-in-document
+    ).toHaveLength(0); // eslint-disable-line jest-dom/prefer-in-document
 
-    userEvent.click(screen.getByRole('tab', { name: /^Types \(\d+\)$/ }))
+    await userEvent.click(screen.getByRole('tab', { name: /^Types \(\d+\)$/ }));
 
-    expect(screen.queryAllByText(allTagsPattern)).toHaveLength(2)
-  })
+    expect(screen.queryAllByText(allTagsPattern)).toHaveLength(2);
+  });
 
   test('url determines active tab', () => {
-    renderWithRouterAndReduxProvider(<SideNav spec={spec} />, ['/3.1/types'])
+    renderWithRouterAndReduxProvider(<SideNav spec={spec} />, ['/4.0/types']);
     // eslint-disable-next-line jest-dom/prefer-in-document
-    expect(screen.queryAllByText(allTagsPattern)).toHaveLength(2)
-  })
-})
+    expect(screen.queryAllByText(allTagsPattern)).toHaveLength(2);
+  });
+});
 
-const mockHistoryPush = jest.fn()
+const mockHistoryPush = jest.fn();
 jest.mock('react-router-dom', () => {
-  const ReactRouterDOM = jest.requireActual('react-router-dom')
+  const ReactRouterDOM = jest.requireActual('react-router-dom');
   return {
     ...ReactRouterDOM,
     useHistory: () => ({
       push: mockHistoryPush,
       location: globalThis.location,
     }),
-  }
-})
+  };
+});
 
 describe('Search', () => {
   test('inputting text in search box updates URL', async () => {
-    renderWithRouterAndReduxProvider(<SideNav spec={spec} />, ['/3.1/methods'])
-    const searchPattern = 'embedsso'
-    const input = screen.getByLabelText('Search')
-    await userEvent.paste(input, searchPattern)
+    renderWithRouterAndReduxProvider(<SideNav spec={spec} />, ['/4.0/methods']);
+    const searchPattern = 'embedsso';
+    const input = screen.getByLabelText('Search');
+    await userEvent.click(input);
+    await userEvent.paste(input, searchPattern);
     await waitFor(() => {
       expect(mockHistoryPush).toHaveBeenCalledWith({
-        pathname: '/3.1/methods',
+        pathname: '/4.0/methods',
         search: `s=${searchPattern}`,
-      })
-    })
-  })
+      });
+    });
+  });
 
   test('sets search default value from store on load', async () => {
-    const searchPattern = 'embedsso'
+    const searchPattern = 'embedsso';
     const store = createTestStore({
       settings: { searchPattern: searchPattern },
-    })
-    jest.spyOn(spec.api!, 'search')
+    });
+    jest.spyOn(spec.api!, 'search');
     renderWithRouterAndReduxProvider(
       <SideNav spec={spec} />,
-      ['/3.1/methods?s=embedsso'],
+      ['/4.0/methods?s=embedsso'],
       store
-    )
-    const input = screen.getByLabelText('Search')
-    expect(input).toHaveValue(searchPattern)
-    await waitFor(() => {
-      expect(spec.api!.search).toHaveBeenCalledWith(
-        searchPattern,
-        criteriaToSet(defaultSettingsState.searchCriteria)
-      )
-      const methods = screen.getByRole('tab', { name: 'Methods (1)' })
-      userEvent.click(methods)
-      expect(
-        screen.getByText(spec.api!.tags.Auth.create_sso_embed_url.summary)
-      ).toBeInTheDocument()
-      const types = screen.getByRole('tab', { name: 'Types (1)' })
-      userEvent.click(types)
-      expect(screen.getByText('EmbedSso')).toBeInTheDocument()
-    })
-  })
-})
+    );
+    const input = screen.getByLabelText('Search');
+    expect(input).toHaveValue(searchPattern);
+    expect(spec.api!.search).toHaveBeenCalledWith(
+      searchPattern,
+      criteriaToSet(defaultSettingsState.searchCriteria)
+    );
+    const methods = screen.getByRole('tab', { name: 'Methods (1)' });
+    await userEvent.click(methods);
+    expect(
+      screen.getByText(spec.api!.tags.Auth.create_sso_embed_url.summary)
+    ).toBeInTheDocument();
+    const types = screen.getByRole('tab', { name: 'Types (1)' });
+    await userEvent.click(types);
+    expect(screen.getByText('EmbedSso')).toBeInTheDocument();
+  });
+});

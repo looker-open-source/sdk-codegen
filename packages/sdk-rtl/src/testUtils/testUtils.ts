@@ -24,29 +24,29 @@
 
  */
 
-import * as fs from 'fs'
-import path from 'path'
-import { config } from 'dotenv'
+import * as fs from 'fs';
+import path from 'path';
+import { config } from 'dotenv';
 
-const utf8 = 'utf-8'
+const utf8 = 'utf-8';
 
 /**
  * Properties used for various typescript-based tests
  */
 export interface ITestConfig {
-  rootPath: string
-  testPath: string
-  dataFile: string
-  localIni: string
-  testData: any
-  testIni: string
+  rootPath: string;
+  testPath: string;
+  dataFile: string;
+  localIni: string;
+  testData: any;
+  testIni: string;
 }
 
-const homeToRoost = '../../../../'
+const homeToRoost = '../../../../';
 
-export const getRootPath = () => path.join(__dirname, homeToRoost)
-export const rootFile = (fileName = '') => path.join(getRootPath(), fileName)
-export const readFile = (fileName: string) => fs.readFileSync(fileName, utf8)
+export const getRootPath = () => path.join(__dirname, homeToRoost);
+export const rootFile = (fileName = '') => path.join(getRootPath(), fileName);
+export const readFile = (fileName: string) => fs.readFileSync(fileName, utf8);
 
 /**
  * Reads configuration information, returning various test values
@@ -55,18 +55,18 @@ export const readFile = (fileName: string) => fs.readFileSync(fileName, utf8)
  * @constructor
  */
 export const TestConfig = (rootPath = ''): ITestConfig => {
-  config()
-  const testFile = 'data.yml.json'
-  rootPath = rootPath || getRootPath()
-  let localIni = process.env.LOOKERSDK_INI || rootFile('looker.ini')
-  const testPath = rootFile('test/')
-  const dataFile = `${testPath}${testFile}`
-  const testData = JSON.parse(fs.readFileSync(dataFile, utf8))
-  let testIni = `${rootPath}${testData.iniFile}`
+  config();
+  const testFile = 'data.yml.json';
+  rootPath = rootPath || getRootPath();
+  let localIni = process.env.LOOKERSDK_INI || rootFile('looker.ini');
+  const testPath = rootFile('test/');
+  const dataFile = `${testPath}${testFile}`;
+  const testData = JSON.parse(fs.readFileSync(dataFile, utf8));
+  let testIni = `${rootPath}${testData.iniFile}`;
 
   // If .ini files don't exist, don't try to read them downstream and expect environment variables to be set
-  if (!fs.existsSync(localIni)) localIni = ''
-  if (!fs.existsSync(testIni)) testIni = ''
+  if (!fs.existsSync(localIni)) localIni = '';
+  if (!fs.existsSync(testIni)) testIni = '';
 
   return {
     dataFile,
@@ -75,5 +75,5 @@ export const TestConfig = (rootPath = ''): ITestConfig => {
     testData,
     testIni,
     testPath,
-  }
-}
+  };
+};

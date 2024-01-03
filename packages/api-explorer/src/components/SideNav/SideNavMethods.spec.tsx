@@ -23,67 +23,67 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import pick from 'lodash/pick'
-import userEvent from '@testing-library/user-event'
-import { screen } from '@testing-library/react'
+import React from 'react';
+import pick from 'lodash/pick';
+import userEvent from '@testing-library/user-event';
+import { screen } from '@testing-library/react';
 
-import { api } from '../../test-data'
+import { api } from '../../test-data';
 import {
   createTestStore,
   renderWithRouterAndReduxProvider,
-} from '../../test-utils'
-import { SideNavMethods } from './SideNavMethods'
+} from '../../test-utils';
+import { SideNavMethods } from './SideNavMethods';
 
-const mockHistoryPush = jest.fn()
+const mockHistoryPush = jest.fn();
 jest.mock('react-router-dom', () => {
-  const ReactRouterDOM = jest.requireActual('react-router-dom')
+  const ReactRouterDOM = jest.requireActual('react-router-dom');
   return {
     ...ReactRouterDOM,
     useHistory: () => ({
       push: mockHistoryPush,
       location: globalThis.location,
     }),
-  }
-})
+  };
+});
 
 describe('SideNavMethods', () => {
-  const tag = 'Dashboard'
-  const methods = api.tags[tag]
-  const specKey = '3.1'
+  const tag = 'Dashboard';
+  const methods = api.tags[tag];
+  const specKey = '4.0';
 
   beforeEach(() => {
-    jest.clearAllMocks()
-  })
+    jest.clearAllMocks();
+  });
 
-  test('it renders provided methods', () => {
+  test('it renders provided methods', async () => {
     renderWithRouterAndReduxProvider(
       <SideNavMethods methods={methods} tag={tag} specKey={specKey} />
-    )
-    userEvent.click(screen.getByText(tag))
-    const sideNavItems = screen.getAllByRole('link')
-    expect(sideNavItems).toHaveLength(Object.keys(methods).length)
+    );
+    await userEvent.click(screen.getByText(tag));
+    const sideNavItems = screen.getAllByRole('link');
+    expect(sideNavItems).toHaveLength(Object.keys(methods).length);
     expect(sideNavItems[0]).toHaveAttribute(
       'href',
       `/${specKey}/methods/${tag}/${Object.values(methods)[0].name}`
-    )
-  })
+    );
+  });
 
-  test('tag expands and displays methods after clicked', () => {
+  test('tag expands and displays methods after clicked', async () => {
     renderWithRouterAndReduxProvider(
       <SideNavMethods methods={methods} tag={tag} specKey={specKey} />
-    )
-    const firstMethod = Object.values(methods)[0].schema.summary
-    expect(screen.queryByText(firstMethod)).not.toBeInTheDocument()
-    userEvent.click(screen.getByText(tag))
-    expect(mockHistoryPush).toHaveBeenCalledWith(`/${specKey}/methods/${tag}`)
-    expect(screen.getByRole('link', { name: firstMethod })).toBeInTheDocument()
+    );
+    const firstMethod = Object.values(methods)[0].schema.summary;
+    expect(screen.queryByText(firstMethod)).not.toBeInTheDocument();
+    await userEvent.click(screen.getByText(tag));
+    expect(mockHistoryPush).toHaveBeenCalledWith(`/${specKey}/methods/${tag}`);
+    expect(screen.getByRole('link', { name: firstMethod })).toBeInTheDocument();
     expect(screen.getAllByRole('link')).toHaveLength(
       Object.values(methods).length
-    )
-  })
+    );
+  });
 
-  test('expanded tag closes when clicked', () => {
+  test('expanded tag closes when clicked', async () => {
     renderWithRouterAndReduxProvider(
       <SideNavMethods
         methods={methods}
@@ -91,20 +91,20 @@ describe('SideNavMethods', () => {
         specKey={specKey}
         defaultOpen={true}
       />
-    )
-    const firstMethod = Object.values(methods)[0].schema.summary
-    expect(screen.getByRole('link', { name: firstMethod })).toBeInTheDocument()
+    );
+    const firstMethod = Object.values(methods)[0].schema.summary;
+    expect(screen.getByRole('link', { name: firstMethod })).toBeInTheDocument();
     expect(screen.getAllByRole('link')).toHaveLength(
       Object.values(methods).length
-    )
-    userEvent.click(screen.getByText(tag))
-    expect(mockHistoryPush).toHaveBeenCalledWith(`/${specKey}/methods`)
-    expect(screen.queryByText(firstMethod)).not.toBeInTheDocument()
-    expect(screen.queryByRole('link')).not.toBeInTheDocument()
-  })
+    );
+    await userEvent.click(screen.getByText(tag));
+    expect(mockHistoryPush).toHaveBeenCalledWith(`/${specKey}/methods`);
+    expect(screen.queryByText(firstMethod)).not.toBeInTheDocument();
+    expect(screen.queryByRole('link')).not.toBeInTheDocument();
+  });
 
-  test('it highlights text matching search pattern in both tag and methods', () => {
-    const store = createTestStore({ settings: { searchPattern: 'dash' } })
+  test('it highlights text matching search pattern in both tag and methods', async () => {
+    const store = createTestStore({ settings: { searchPattern: 'dash' } });
     renderWithRouterAndReduxProvider(
       <SideNavMethods
         methods={pick(methods, 'create_dashboard')}
@@ -113,12 +113,12 @@ describe('SideNavMethods', () => {
       />,
       undefined,
       store
-    )
-    userEvent.click(screen.getByText('Dash'))
-    const matches = screen.getAllByText(/dash/i)
-    expect(matches).toHaveLength(2)
+    );
+    await userEvent.click(screen.getByText('Dash'));
+    const matches = screen.getAllByText(/dash/i);
+    expect(matches).toHaveLength(2);
     matches.forEach((match) => {
-      expect(match).toContainHTML('<span class="hi">Dash</span>')
-    })
-  })
-})
+      expect(match).toContainHTML('<span class="hi">Dash</span>');
+    });
+  });
+});

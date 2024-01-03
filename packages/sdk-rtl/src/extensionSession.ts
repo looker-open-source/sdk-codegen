@@ -24,22 +24,25 @@
 
  */
 
-import type { IApiSettings } from './apiSettings'
-import type { ITransport, IRequestProps } from './transport'
-import type { IAuthSession } from './authSession'
+import type { IApiSettings } from './apiSettings';
+import type { IRequestProps, ITransport } from './transport';
+import type { IAuthSession } from './authSession';
 
 export class ExtensionSession implements IAuthSession {
-  sudoId = ''
-  transport: ITransport
+  sudoId = '';
+  transport: ITransport;
 
-  constructor(public settings: IApiSettings, transport: ITransport) {
-    this.settings = settings
-    this.transport = transport
+  constructor(
+    public settings: IApiSettings,
+    transport: ITransport
+  ) {
+    this.settings = settings;
+    this.transport = transport;
   }
 
   isAuthenticated() {
     // Assume if the extension exists then it is authenticated
-    return true
+    return true;
   }
 
   async authenticate(init: IRequestProps) {
@@ -49,17 +52,17 @@ export class ExtensionSession implements IAuthSession {
           init ? 'request property overrides' : ''
         } not supported from ExtensionSession`
       )
-    )
+    );
   }
 
   async getToken(): Promise<any> {
     return Promise.reject(
       Error('Access to token is not allowed from ExtensionSession')
-    )
+    );
   }
 
   isSudo(): boolean {
-    throw new Error('isSudo is not allowed from ExtensionSession')
+    throw new Error('isSudo is not allowed from ExtensionSession');
   }
 
   async login(sudoId?: string | number): Promise<any> {
@@ -67,11 +70,11 @@ export class ExtensionSession implements IAuthSession {
       Error(
         `Login ${sudoId ? 'for sudo' : ''} not supported from ExtensionSession`
       )
-    )
+    );
   }
 
   async logout(): Promise<boolean> {
-    return Promise.reject(Error('Logout not supported from ExtensionSession'))
+    return Promise.reject(Error('Logout not supported from ExtensionSession'));
   }
 
   reset(): void {

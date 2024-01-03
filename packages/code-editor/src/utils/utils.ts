@@ -23,11 +23,11 @@
  SOFTWARE.
 
  */
-import { theme } from '@looker/components'
-import type { Language } from 'prism-react-renderer'
-import { Prism } from 'prism-react-renderer'
-import blockTheme from 'prism-react-renderer/themes/vsDark'
-import inlineTheme from 'prism-react-renderer/themes/github'
+import { theme } from '@looker/components';
+import type { Language } from 'prism-react-renderer';
+import { Prism } from 'prism-react-renderer';
+import blockTheme from 'prism-react-renderer/themes/vsDark';
+import inlineTheme from 'prism-react-renderer/themes/github';
 
 /**
  * checks whether input is supported syntax highlighting language
@@ -35,12 +35,12 @@ import inlineTheme from 'prism-react-renderer/themes/github'
  * @returns boolean
  */
 export const instanceOfPrismLanguage = (languageName: string) => {
-  const extraHighlightingEngines = ['kotlin', 'csharp', 'swift', 'ruby']
+  const extraHighlightingEngines = ['kotlin', 'csharp', 'swift', 'ruby'];
   return (
     Object.keys(Prism.languages).includes(languageName) ||
     extraHighlightingEngines.includes(languageName)
-  )
-}
+  );
+};
 
 /**
  * gets highlighter language type for input language name
@@ -48,15 +48,15 @@ export const instanceOfPrismLanguage = (languageName: string) => {
  * @returns prism language if it exists
  */
 export const getPrismLanguage = (language: string): Language => {
-  language = language.toLowerCase()
+  language = language.toLowerCase();
   // TODO revert back to `go` in generator language definitions instead of using this
   if (language === 'golang') {
-    language = 'go'
+    language = 'go';
   } else if (language === 'c#') {
-    language = 'csharp'
+    language = 'csharp';
   }
-  return instanceOfPrismLanguage(language) ? (language as Language) : 'markup'
-}
+  return instanceOfPrismLanguage(language) ? (language as Language) : 'markup';
+};
 
 /**
  * applies package overrides to the default theme. Inline CodeDisplay uses githubLight theme, else uses vsCodeDark theme.
@@ -64,18 +64,18 @@ export const getPrismLanguage = (language: string): Language => {
  */
 export const getOverriddenTheme = (transparent: boolean, inline: boolean) => {
   if (inline) {
-    inlineTheme.plain.backgroundColor = theme.colors.ui1
-    inlineTheme.plain.border = `1px solid ${theme.colors.ui2}`
-    inlineTheme.plain.borderRadius = '4px'
-    inlineTheme.plain.padding = '4px'
-    inlineTheme.plain.fontSize = theme.fontSizes.small
-    return inlineTheme
+    inlineTheme.plain.backgroundColor = theme.colors.ui1;
+    inlineTheme.plain.border = `1px solid ${theme.colors.ui2}`;
+    inlineTheme.plain.borderRadius = '4px';
+    inlineTheme.plain.padding = '4px';
+    inlineTheme.plain.fontSize = theme.fontSizes.small;
+    return inlineTheme;
   } else if (transparent) {
-    blockTheme.plain.backgroundColor = 'none'
-    blockTheme.plain.padding = '0px'
+    blockTheme.plain.backgroundColor = 'none';
+    blockTheme.plain.padding = '0px';
   } else {
-    blockTheme.plain.backgroundColor = theme.colors.text
-    blockTheme.plain.padding = '1rem'
+    blockTheme.plain.backgroundColor = theme.colors.text;
+    blockTheme.plain.padding = '1rem';
   }
-  return blockTheme
-}
+  return blockTheme;
+};

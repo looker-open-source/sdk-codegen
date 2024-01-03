@@ -23,8 +23,8 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { render } from 'react-dom'
-import { StandaloneEmbedPlayground } from './StandaloneEmbedPlayground'
+import React from 'react';
+import { render } from 'react-dom';
+import { StandaloneEmbedPlayground } from './StandaloneEmbedPlayground';
 
-render(<StandaloneEmbedPlayground />, document.getElementById('container'))
+render(<StandaloneEmbedPlayground />, document.getElementById('container'));

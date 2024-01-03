@@ -24,21 +24,21 @@
 
  */
 
-import type { FC } from 'react'
-import React from 'react'
-import type { ApiModel, IMethod, IType } from '@looker/sdk-codegen'
-import { CollapserCard } from '@looker/run-it'
+import type { FC } from 'react';
+import React from 'react';
+import type { ApiModel, IMethod, IType } from '@looker/sdk-codegen';
+import { CollapserCard } from '@looker/run-it';
 
-import { useSelector } from 'react-redux'
-import { selectSearchPattern } from '../../state'
-import { DocReferenceItems } from './utils'
+import { useSelector } from 'react-redux';
+import { selectSearchPattern } from '../../state';
+import { DocReferenceItems } from './utils';
 
 interface DocReferencesProps {
-  typesUsed: IType[]
-  methodsUsedBy?: IMethod[]
-  typesUsedBy?: IType[]
-  specKey: string
-  api: ApiModel
+  typesUsed: IType[];
+  methodsUsedBy?: IMethod[];
+  typesUsedBy?: IType[];
+  specKey: string;
+  api: ApiModel;
 }
 
 /**
@@ -51,14 +51,14 @@ export const DocReferences: FC<DocReferencesProps> = ({
   methodsUsedBy = [],
   typesUsedBy = [],
 }) => {
-  const searchPattern = useSelector(selectSearchPattern)
+  const searchPattern = useSelector(selectSearchPattern);
 
   if (
     typesUsed.length === 0 &&
     methodsUsedBy.length === 0 &&
     typesUsedBy.length === 0
   )
-    return <></>
+    return <></>;
 
   return (
     <CollapserCard heading="References" id="references">
@@ -86,5 +86,5 @@ export const DocReferences: FC<DocReferencesProps> = ({
         )}
       </>
     </CollapserCard>
-  )
-}
+  );
+};

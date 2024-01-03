@@ -24,6 +24,7 @@
 
 import com.google.gson.Gson
 import com.looker.rtl.*
+import com.looker.rtl.SDKResponse.Companion.ERROR_BODY
 import com.looker.sdk.AGENT_TAG
 import com.looker.sdk.ENVIRONMENT_PREFIX
 import com.looker.sdk.LOOKER_APPID
@@ -34,7 +35,7 @@ import kotlin.test.assertTrue
 class TestTransport {
     val fullPath = "https://github.com/looker-open-source/sdk-codegen/"
     val base = "https://my.looker.com:19999"
-    val apiVersion = "3.1"
+    val apiVersion = "4.0"
     val userPath = "/user"
     val headers = mapOf(LOOKER_APPID to AGENT_TAG, "User-Agent" to AGENT_TAG)
 
@@ -127,7 +128,7 @@ class TestTransport {
 
     @Test
     fun testSummaryError() {
-        val payload = """Some kind of error happened! Text: "{"message":"Oops!","documentation_url":"MyBad"}""""
+        val payload = """Some kind of error happened! $ERROR_BODY: {"message":"Oops!","documentation_url":"MyBad"}"""
         val error = parseSDKError(payload)
         assertEquals("Oops!", error.message)
         assertTrue(error.errors.isEmpty())

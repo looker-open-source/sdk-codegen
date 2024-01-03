@@ -23,19 +23,19 @@
  SOFTWARE.
 
  */
-import type { FC } from 'react'
-import React from 'react'
-import { useSelector } from 'react-redux'
-import { Space, Heading, Span, Icon } from '@looker/components'
-import { ArrowDownward } from '@styled-icons/material/ArrowDownward'
-import { isLoadingState } from '../../data/common/selectors'
-import { Loading } from '../../components/Loading'
-import { JudgingList } from './components'
+import type { FC } from 'react';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { Heading, Icon, Space, Span } from '@looker/components';
+import { ArrowDownward } from '@styled-icons/material/ArrowDownward';
+import { isLoadingState } from '../../data/common/selectors';
+import { Loading } from '../../components/Loading';
+import { JudgingList } from './components';
 
 interface JudgingSceneProps {}
 
 export const JudgingScene: FC<JudgingSceneProps> = () => {
-  const isLoading = useSelector(isLoadingState)
+  const isLoading = useSelector(isLoadingState);
 
   return (
     <>
@@ -53,5 +53,5 @@ export const JudgingScene: FC<JudgingSceneProps> = () => {
       </Space>
       <JudgingList />
     </>
-  )
-}
+  );
+};

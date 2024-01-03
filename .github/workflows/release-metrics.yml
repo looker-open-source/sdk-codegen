@@ -18,16 +18,16 @@ jobs:
         uses: google-github-actions/setup-gcloud@v1.1.0
 
       - run: 'jq -c ''.release |
-             {
-               package_name: .name | split(" ")[0],
-               name,
-               tag_name,
-               version: .tag_name | split("-v")[1],
-               html_url,
-               target_commitish,
-               created_at,
-               published_at,
-               draft,
-               prerelease
-             }'' $GITHUB_EVENT_PATH > releases.json'
+          {
+          package_name: .name | split(" ")[0],
+          name,
+          tag_name,
+          version: .tag_name | split("-v")[1],
+          html_url,
+          target_commitish,
+          created_at,
+          published_at,
+          draft,
+          prerelease
+          }'' $GITHUB_EVENT_PATH > releases.json'
       - run: bq load --source_format=NEWLINE_DELIMITED_JSON metrics.releases releases.json

@@ -23,10 +23,10 @@
  SOFTWARE.
 
  */
-import React from 'react'
+import React from 'react';
 
 interface SomethingWentWrongGraphicProps {
-  altText?: string
+  altText?: string;
 }
 
 /**
@@ -200,8 +200,8 @@ const SomethingWentWrongGraphicImage: React.FC<
       fill="#202124"
     />
   </svg>
-)
+);
 
 export const SomethingWentWrongGraphic = React.memo(
   SomethingWentWrongGraphicImage
-)
+);

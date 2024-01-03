@@ -24,20 +24,20 @@
 
  */
 
-import type { FC } from 'react'
-import React from 'react'
+import type { FC } from 'react';
+import React from 'react';
 import {
-  Table,
-  TableBody,
-  Heading,
   Accordion2,
   Box2,
+  Heading,
+  Table,
+  TableBody,
   useToggle,
-} from '@looker/components'
-import type { IHackerProps } from '../../../models'
-import type { AgendaItems } from './agendaUtils'
-import { AgendaRow } from './AgendaRow'
-import { eraColor } from './agendaUtils'
+} from '@looker/components';
+import type { IHackerProps } from '../../../models';
+import type { AgendaItems } from './agendaUtils';
+import { AgendaRow } from './AgendaRow';
+import { eraColor } from './agendaUtils';
 
 /**
  * Capitalize first letter of each word
@@ -45,15 +45,15 @@ import { eraColor } from './agendaUtils'
  */
 const enTitle = (value: string) => {
   return value.replace(/\w\S*/g, function (txt) {
-    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
-  })
-}
+    return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+  });
+};
 
 interface AgendaProps {
-  era: string
-  agenda: AgendaItems
-  hacker: IHackerProps
-  defaultOpen?: boolean
+  era: string;
+  agenda: AgendaItems;
+  hacker: IHackerProps;
+  defaultOpen?: boolean;
 }
 
 export const AgendaEra: FC<AgendaProps> = ({
@@ -62,9 +62,9 @@ export const AgendaEra: FC<AgendaProps> = ({
   hacker,
   defaultOpen,
 }) => {
-  const { value, toggle } = useToggle(defaultOpen)
-  if (agenda.length < 1) return null
-  const color = eraColor(era)
+  const { value, toggle } = useToggle(defaultOpen);
+  if (agenda.length < 1) return null;
+  const color = eraColor(era);
   return (
     <Accordion2
       indicatorPosition="left"
@@ -100,5 +100,5 @@ export const AgendaEra: FC<AgendaProps> = ({
         </Table>
       </Box2>
     </Accordion2>
-  )
-}
+  );
+};

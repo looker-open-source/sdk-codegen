@@ -38,4 +38,4 @@ def all_lookml_models(
             transport_options=transport_options
     )
     assert isinstance(response, list)
-    return response`
+    return response`;

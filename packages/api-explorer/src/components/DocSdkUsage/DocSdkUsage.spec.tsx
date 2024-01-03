@@ -23,38 +23,38 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { screen } from '@testing-library/react'
-import { findExampleLanguages } from '@looker/sdk-codegen'
+import React from 'react';
+import { screen } from '@testing-library/react';
+import { findExampleLanguages } from '@looker/sdk-codegen';
 
-import { renderWithLode } from '../../test-utils'
-import { api, examples } from '../../test-data'
-import { DocSdkUsage } from './DocSdkUsage'
+import { renderWithLode } from '../../test-utils';
+import { api, examples } from '../../test-data';
+import { DocSdkUsage } from './DocSdkUsage';
 import {
-  prepareExampleDataTable,
   PER_PAGE_COUNT,
-  sortLanguagesByPreference,
   getFileNameFromPath,
-} from './utils'
+  prepareExampleDataTable,
+  sortLanguagesByPreference,
+} from './utils';
 
 describe('DocSdkUsage', () => {
   test('it renders links to sdk examples', () => {
-    const method = api.methods.run_look
-    const languages = findExampleLanguages(examples, method.name)
+    const method = api.methods.run_look;
+    const languages = findExampleLanguages(examples, method.name);
     const { pageExamples } = prepareExampleDataTable(
       languages,
       examples,
       method.operationId,
       1
-    )
-    renderWithLode(<DocSdkUsage method={method} />, examples)
-    expect(screen.getAllByRole('link')).toHaveLength(PER_PAGE_COUNT)
+    );
+    renderWithLode(<DocSdkUsage method={method} />, examples);
+    expect(screen.getAllByRole('link')).toHaveLength(PER_PAGE_COUNT);
 
     expect(
       screen.getAllByText(pageExamples[0].filename)[0].closest('a')
-    ).toHaveAttribute('href', pageExamples[0].permalink)
-  })
-})
+    ).toHaveAttribute('href', pageExamples[0].permalink);
+  });
+});
 
 describe('DocSdkUsage utils', () => {
   test('preferred language examples come first', () => {
@@ -63,12 +63,12 @@ describe('DocSdkUsage utils', () => {
         ['python', 'typescript', 'csharp'],
         'typescript'
       )
-    ).toEqual(['typescript', 'python', 'csharp'])
-  })
+    ).toEqual(['typescript', 'python', 'csharp']);
+  });
 
   test('can get filename from path', () => {
     expect(
       getFileNameFromPath('/sdk-codegen/packages/foo.py line 200')
-    ).toEqual('foo.py')
-  })
-})
+    ).toEqual('foo.py');
+  });
+});

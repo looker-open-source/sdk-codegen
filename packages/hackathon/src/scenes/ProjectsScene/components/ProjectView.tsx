@@ -24,14 +24,14 @@
 
  */
 
-import type { FC } from 'react'
-import React from 'react'
-import { useSelector } from 'react-redux'
-import { ExtMarkdown } from '@looker/extension-utils'
-import { getExtensionSDK } from '@looker/extension-sdk'
-import type { IProjectProps } from '../../../models'
-import { getTechnologies } from '../../../data/hack_session/selectors'
-import { getMembers, techDescriptions } from '../../utils'
+import type { FC } from 'react';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { ExtMarkdown } from '@looker/extension-utils';
+import { getExtensionSDK } from '@looker/extension-sdk';
+import type { IProjectProps } from '../../../models';
+import { getTechnologies } from '../../../data/hack_session/selectors';
+import { getMembers, techDescriptions } from '../../utils';
 
 type ProjectViewProps = Pick<
   IProjectProps,
@@ -41,7 +41,7 @@ type ProjectViewProps = Pick<
   | 'title'
   | 'project_type'
   | 'contestant'
->
+>;
 
 export const ProjectView: FC<ProjectViewProps> = ({
   description,
@@ -52,9 +52,9 @@ export const ProjectView: FC<ProjectViewProps> = ({
   contestant,
 }) => {
   const onClick = (_: string, href: string) =>
-    getExtensionSDK().openBrowserWindow(href)
+    getExtensionSDK().openBrowserWindow(href);
 
-  const availableTechnologies = useSelector(getTechnologies)
+  const availableTechnologies = useSelector(getTechnologies);
   const view = `# ${title}
 
 ${description}
@@ -66,6 +66,6 @@ ${description}
 **Project type**: ${project_type}
 
 **Contestant**: ${contestant ? 'Yes' : 'No'}
-`
-  return <ExtMarkdown source={view} linkClickHandler={onClick} />
-}
+`;
+  return <ExtMarkdown source={view} linkClickHandler={onClick} />;
+};

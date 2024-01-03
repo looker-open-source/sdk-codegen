@@ -24,45 +24,45 @@
 
  */
 
-import type { BaseSyntheticEvent, Dispatch, FC, FormEvent } from 'react'
-import React, { useState, useEffect } from 'react'
-import type { ValidationMessages, MessageBarIntent } from '@looker/components'
+import type { BaseSyntheticEvent, Dispatch, FC, FormEvent } from 'react';
+import React, { useEffect, useState } from 'react';
+import type { MessageBarIntent, ValidationMessages } from '@looker/components';
 import {
   Button,
   ButtonTransparent,
   Divider,
-  Fieldset,
   FieldText,
+  Fieldset,
   Form,
+  Link,
   MessageBar,
   Paragraph,
-  Link,
   Space,
   SpaceVertical,
   Tooltip,
-} from '@looker/components'
-import { CodeCopy } from '@looker/code-editor'
-import { appPath, getEnvAdaptor } from '@looker/extension-utils'
-import type { ILookerVersions } from '@looker/sdk-codegen'
+} from '@looker/components';
+import { CodeCopy } from '@looker/code-editor';
+import { appPath, getEnvAdaptor } from '@looker/extension-utils';
+import type { ILookerVersions } from '@looker/sdk-codegen';
 
-import { useLocation } from 'react-router-dom'
-import type { RunItValues } from '../..'
-import { CollapserCard, RunItHeading, DarkSpan, readyToLogin } from '../..'
+import { useLocation } from 'react-router-dom';
+import type { RunItValues } from '../..';
+import { CollapserCard, DarkSpan, RunItHeading, readyToLogin } from '../..';
 import {
-  getVersions,
   RunItConfigKey,
-  RunItNoConfig,
   RunItFormKey,
+  RunItNoConfig,
+  getVersions,
   validateUrl,
-} from './utils'
+} from './utils';
 
-const POSITIVE: MessageBarIntent = 'positive'
+const POSITIVE: MessageBarIntent = 'positive';
 
 interface IFieldValues {
-  baseUrl: string
-  webUrl: string
-  fetchIntent: MessageBarIntent
-  fetchResult: string
+  baseUrl: string;
+  webUrl: string;
+  fetchIntent: MessageBarIntent;
+  fetchResult: string;
 }
 
 const defaultFieldValues: IFieldValues = {
@@ -70,15 +70,15 @@ const defaultFieldValues: IFieldValues = {
   webUrl: '',
   fetchResult: '',
   fetchIntent: POSITIVE,
-}
+};
 
 interface ConfigFormProps {
   /** A collection type react state to store path, query and body parameters as entered by the user  */
-  requestContent: RunItValues
+  requestContent: RunItValues;
   /** Title for the config form */
-  title?: string
+  title?: string;
   /** A set state callback which allows for editing, setting or clearing OAuth configuration parameters if present */
-  setHasConfig?: Dispatch<boolean>
+  setHasConfig?: Dispatch<boolean>;
 }
 
 export const ConfigForm: FC<ConfigFormProps> = ({
@@ -86,14 +86,14 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   requestContent,
   setHasConfig,
 }) => {
-  const location = useLocation()
-  const redirect_uri = appPath(location, '/oauth')
-  const client_id = 'looker.api-explorer' // TODO make this configurable
-  const BASE_URL = 'baseUrl'
-  const WEB_URL = 'webUrl'
-  const FETCH_INTENT = 'fetchIntent'
-  const FETCH_RESULT = 'fetchResult'
-  const CRITICAL: MessageBarIntent = 'critical'
+  const location = useLocation();
+  const redirect_uri = appPath(location, '/oauth');
+  const client_id = 'looker.api-explorer'; // TODO make this configurable
+  const BASE_URL = 'baseUrl';
+  const WEB_URL = 'webUrl';
+  const FETCH_INTENT = 'fetchIntent';
+  const FETCH_RESULT = 'fetchResult';
+  const CRITICAL: MessageBarIntent = 'critical';
   const appConfig = `// client_guid=${client_id}
 {
   "redirect_uri": "${redirect_uri}",
@@ -101,24 +101,24 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   "description": "Looker API Explorer using CORS",
   "enabled": true
 }
-`
-  const adaptor = getEnvAdaptor()
-  const sdk = adaptor.sdk
+`;
+  const adaptor = getEnvAdaptor();
+  const sdk = adaptor.sdk;
   // See https://codesandbox.io/s/youthful-surf-0g27j?file=/src/index.tsx for a prototype from Luke
   // TODO see about useReducer to clean this up a bit more
-  title = title || 'RunIt Configuration'
+  title = title || 'RunIt Configuration';
 
   const getConfig = () => {
     // TODO: This is temporary until config settings are available in redux.
     // get configuration from storage, or default it
-    const data = localStorage.getItem(RunItConfigKey)
-    const result = data ? JSON.parse(data) : RunItNoConfig
-    return result
-  }
+    const data = localStorage.getItem(RunItConfigKey);
+    const result = data ? JSON.parse(data) : RunItNoConfig;
+    return result;
+  };
 
-  const config = getConfig()
-  const [fields, setFields] = useState<IFieldValues>(defaultFieldValues)
-  const [saved, setSaved] = useState<RunItValues>(config)
+  const config = getConfig();
+  const [fields, setFields] = useState<IFieldValues>(defaultFieldValues);
+  const [saved, setSaved] = useState<RunItValues>(config);
 
   const updateFields = (
     nameOrValues: string | Partial<IFieldValues>,
@@ -126,46 +126,46 @@ export const ConfigForm: FC<ConfigFormProps> = ({
   ) => {
     if (typeof nameOrValues === 'string') {
       setFields((previousFields) => {
-        return { ...previousFields, ...{ [nameOrValues]: value } }
-      })
+        return { ...previousFields, ...{ [nameOrValues]: value } };
+      });
     } else {
       setFields((previousFields) => {
-        return { ...previousFields, ...nameOrValues }
-      })
+        return { ...previousFields, ...nameOrValues };
+      });
     }
-  }
+  };
 
   useEffect(() => {
-    const data = getConfig()
-    const { base_url, looker_url } = data
-    setSaved(data)
+    const data = getConfig();
+    const { base_url, looker_url } = data;
+    setSaved(data);
     updateFields({
       [BASE_URL]: base_url,
       [WEB_URL]: looker_url,
       [FETCH_INTENT]:
         base_url !== '' && looker_url !== '' ? POSITIVE : CRITICAL,
-    })
-  }, [])
+    });
+  }, []);
 
   const [validationMessages, setValidationMessages] =
-    useState<ValidationMessages>({})
+    useState<ValidationMessages>({});
 
   const updateMessage = (intent: MessageBarIntent, message: string) => {
-    updateFields({ [FETCH_RESULT]: message, [FETCH_INTENT]: intent })
-  }
+    updateFields({ [FETCH_RESULT]: message, [FETCH_INTENT]: intent });
+  };
 
   const isConfigured = () => {
     return (
       saved !== RunItNoConfig &&
       fields[BASE_URL] === saved.base_url &&
       fields[WEB_URL] === saved.looker_url
-    )
-  }
+    );
+  };
 
   const fetchError = (message: string) => {
-    updateFields(WEB_URL, '')
-    updateMessage(CRITICAL, message)
-  }
+    updateFields(WEB_URL, '');
+    updateMessage(CRITICAL, message);
+  };
 
   const saveConfig = (baseUrl: string, webUrl: string) => {
     const data = {
@@ -173,108 +173,108 @@ export const ConfigForm: FC<ConfigFormProps> = ({
       looker_url: webUrl,
       client_id,
       redirect_uri,
-    }
+    };
     updateFields({
       [BASE_URL]: baseUrl,
       [WEB_URL]: webUrl,
-    })
+    });
     // TODO: replace when redux is introduced to run it
-    localStorage.setItem(RunItConfigKey, JSON.stringify(data))
-    if (setHasConfig) setHasConfig(true)
-    setSaved(data)
-    updateMessage(POSITIVE, `Saved ${webUrl} as OAuth server`)
-  }
+    localStorage.setItem(RunItConfigKey, JSON.stringify(data));
+    if (setHasConfig) setHasConfig(true);
+    setSaved(data);
+    updateMessage(POSITIVE, `Saved ${webUrl} as OAuth server`);
+  };
 
   const updateForm = async (_e: BaseSyntheticEvent, save: boolean) => {
-    updateMessage('inform', '')
-    const versionsUrl = `${fields.baseUrl}/versions`
+    updateMessage('inform', '');
+    const versionsUrl = `${fields.baseUrl}/versions`;
     try {
       const { web_server_url: webUrl, api_server_url: baseUrl } =
-        (await getVersions(versionsUrl)) as ILookerVersions
-      updateMessage(POSITIVE, 'Configuration is valid')
+        (await getVersions(versionsUrl)) as ILookerVersions;
+      updateMessage(POSITIVE, 'Configuration is valid');
       updateFields({
         [BASE_URL]: baseUrl,
         [WEB_URL]: webUrl,
-      })
+      });
       if (save) {
-        saveConfig(baseUrl, webUrl)
+        saveConfig(baseUrl, webUrl);
       }
     } catch (e: any) {
-      fetchError(e.message)
+      fetchError(e.message);
     }
-  }
+  };
 
   const handleSave = async (e: BaseSyntheticEvent) => {
-    await updateForm(e, true)
-  }
+    await updateForm(e, true);
+  };
 
   const handleVerify = async (e: BaseSyntheticEvent) => {
-    await updateForm(e, false)
-  }
+    await updateForm(e, false);
+  };
 
   const handleClear = async (_e: BaseSyntheticEvent) => {
     // TODO: replace when redux is introduced to run it
-    localStorage.removeItem(RunItConfigKey)
+    localStorage.removeItem(RunItConfigKey);
     updateFields({
       [BASE_URL]: '',
       [WEB_URL]: '',
       [FETCH_INTENT]: CRITICAL,
       [FETCH_RESULT]: '',
-    })
-    setSaved(RunItNoConfig)
-    if (setHasConfig) setHasConfig(false)
+    });
+    setSaved(RunItNoConfig);
+    if (setHasConfig) setHasConfig(false);
     if (isAuthenticated()) {
-      updateMessage('warn', 'Please reload the browser page to log out')
+      updateMessage('warn', 'Please reload the browser page to log out');
     }
-  }
+  };
 
   const handleUrlChange = (event: FormEvent<HTMLInputElement>) => {
-    const name = event.currentTarget.name
+    const name = event.currentTarget.name;
 
-    const newValidationMessages = { ...validationMessages }
+    const newValidationMessages = { ...validationMessages };
 
-    const url = validateUrl(event.currentTarget.value)
+    const url = validateUrl(event.currentTarget.value);
     if (url) {
-      delete newValidationMessages[name]
+      delete newValidationMessages[name];
       // Update URL if it's been cleaned up
-      event.currentTarget.value = url
+      event.currentTarget.value = url;
     } else {
       newValidationMessages[name] = {
         message: `'${event.currentTarget.value}' is not a valid url`,
         type: 'error',
-      }
+      };
     }
     updateFields({
       [event.currentTarget.name]: event.currentTarget.value,
       [WEB_URL]: '',
-    })
+    });
 
-    setValidationMessages(newValidationMessages)
-  }
+    setValidationMessages(newValidationMessages);
+  };
 
-  const isAuthenticated = () => sdk.authSession.isAuthenticated()
+  const isAuthenticated = () => sdk.authSession.isAuthenticated();
 
   const verifyButtonDisabled =
     fields.baseUrl.trim().length === 0 ||
-    Object.keys(validationMessages).length > 0
+    Object.keys(validationMessages).length > 0;
 
   const saveButtonDisabled =
-    verifyButtonDisabled || fields.webUrl.trim().length === 0 || isConfigured()
+    verifyButtonDisabled || fields.webUrl.trim().length === 0 || isConfigured();
 
-  const clearButtonDisabled = fields.baseUrl.trim().length === 0
+  const clearButtonDisabled = fields.baseUrl.trim().length === 0;
 
   const loginButtonDisabled =
-    verifyButtonDisabled || !isConfigured() || isAuthenticated()
+    verifyButtonDisabled || !isConfigured() || isAuthenticated();
 
   const handleLogin = async (e: BaseSyntheticEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (requestContent) {
       // TODO: Replace when redux is introduced to run it
-      localStorage.setItem(RunItFormKey, JSON.stringify(requestContent))
+      localStorage.setItem(RunItFormKey, JSON.stringify(requestContent));
     }
     // This will set storage variables and return to OAuthScene when successful
-    await adaptor.login()
-  }
+    await adaptor.login();
+  };
 
   return (
     <SpaceVertical gap="u2">
@@ -404,5 +404,5 @@ export const ConfigForm: FC<ConfigFormProps> = ({
         </SpaceVertical>
       </CollapserCard>
     </SpaceVertical>
-  )
-}
+  );
+};

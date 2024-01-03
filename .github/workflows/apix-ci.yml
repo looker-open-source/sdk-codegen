@@ -2,6 +2,7 @@ name: API Explorer CI
 on:
   pull_request:
     paths:
+      - package.json
       - packages/code-editor/**
       - packages/run-it/**
       - packages/api-explorer/**
@@ -13,6 +14,7 @@ on:
     branches:
       - main
     paths:
+      - package.json
       - packages/code-editor/**
       - packages/run-it/**
       - packages/api-explorer/**
@@ -37,7 +39,7 @@ jobs:
       matrix:
         os:
           - ubuntu
-        node-version: [16.x]
+        node-version: [18.x]
 
     steps:
       - name: Cancel Previous Runs

@@ -24,23 +24,23 @@
 
  */
 
-import type { RootState } from '../root_reducer'
-import type { IJudgingProps } from '../../models'
+import type { RootState } from '../root_reducer';
+import type { IJudgingProps } from '../../models';
 
 export const getJudgingsState = (state: RootState): IJudgingProps[] =>
-  state.judgingsState.judgings
+  state.judgingsState.judgings;
 
 export const getJudgingsLoadedState = (state: RootState): boolean =>
-  state.judgingsState.judgingsLoaded
+  state.judgingsState.judgingsLoaded;
 
 export const getJudgingState = (state: RootState): IJudgingProps | undefined =>
-  state.judgingsState.currentJudging
+  state.judgingsState.currentJudging;
 
 export const getJudgingUpdatedState = (state: RootState): boolean | undefined =>
-  state.judgingsState.judgingUpdated
+  state.judgingsState.judgingUpdated;
 
 export const getJudgingLoadedState = (state: RootState): boolean =>
-  state.judgingsState.judgingLoaded
+  state.judgingsState.judgingLoaded;
 
 export const getJudgingsPageNumState = (state: RootState): number =>
-  state.judgingsState.currentPageNum
+  state.judgingsState.currentPageNum;

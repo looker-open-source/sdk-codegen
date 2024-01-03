@@ -24,35 +24,35 @@
 
  */
 
-import type { ValidationMessages } from '@looker/components'
-import type { RootState } from '../root_reducer'
-import type { IProjectProps } from '../../models'
+import type { ValidationMessages } from '@looker/components';
+import type { RootState } from '../root_reducer';
+import type { IProjectProps } from '../../models';
 
 export const getProjectsState = (state: RootState): IProjectProps[] =>
-  state.projectsState.projects
+  state.projectsState.projects;
 
 export const getCurrentProjectsState = (state: RootState): IProjectProps[] =>
-  state.projectsState.currentProjects
+  state.projectsState.currentProjects;
 
 export const getProjectsLoadedState = (state: RootState): boolean =>
-  state.projectsState.projectsLoaded
+  state.projectsState.projectsLoaded;
 
 export const getProjectsPageNumState = (state: RootState): number =>
-  state.projectsState.currentPageNum
+  state.projectsState.currentPageNum;
 
 export const getProjectState = (state: RootState): IProjectProps | undefined =>
-  state.projectsState.currentProject
+  state.projectsState.currentProject;
 
 export const getValidationMessagesState = (
   state: RootState
-): ValidationMessages | undefined => state.projectsState.validationMessages
+): ValidationMessages | undefined => state.projectsState.validationMessages;
 
 export const getProjectUpdatedState = (state: RootState): boolean | undefined =>
-  state.projectsState.projectUpdated
+  state.projectsState.projectUpdated;
 
 export const getProjectLoadedState = (state: RootState): boolean =>
-  state.projectsState.projectLoaded
+  state.projectsState.projectLoaded;
 
 export const getIsProjectMemberState = (
   state: RootState
-): boolean | undefined => state.projectsState.isProjectMember
+): boolean | undefined => state.projectsState.isProjectMember;

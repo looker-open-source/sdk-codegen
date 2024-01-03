@@ -25,7 +25,7 @@
  */
 
 /**
- * 327 API models: 245 Spec, 0 Request, 60 Write, 22 Enum
+ * 338 API models: 255 Spec, 0 Request, 61 Write, 22 Enum
  */
 
 
@@ -129,7 +129,7 @@ public struct Alert: SDKModel {
 
     private var _cron: AnyString
     /**
-     * Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
+     * Vixie-Style crontab specification when to run. At minimum, it has to be longer than 15 minute intervals
      */
     public var cron: String {
         get { _cron.value }
@@ -7613,7 +7613,7 @@ public struct Dialect: SDKModel {
     }
 
     /**
-     * Suports streaming results (read-only)
+     * Supports streaming results (read-only)
      */
     public var supports_streaming: Bool?
 
@@ -7981,6 +7981,108 @@ public struct EgressIpAddresses: SDKModel {
 
 }
 
+public struct EmbedConfig: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _domain_allowlist = "domain_allowlist"
+        case _alert_url_allowlist = "alert_url_allowlist"
+        case _alert_url_param_owner = "alert_url_param_owner"
+        case _alert_url_label = "alert_url_label"
+        case sso_auth_enabled
+        case embed_cookieless_v2
+        case embed_content_navigation
+        case embed_content_management
+        case strict_sameorigin_for_login
+        case look_filters
+        case hide_look_navigation
+    }
+    private var _domain_allowlist: [AnyString]?
+    /**
+     * List of domains to allow for embedding
+     */
+    public var domain_allowlist: [String]? {
+        get { if let v = _domain_allowlist { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _domain_allowlist = v.map { AnyString.init($0) } } else { _domain_allowlist = nil } }
+    }
+
+    private var _alert_url_allowlist: [AnyString]?
+    /**
+     * List of base urls to allow for alert/schedule
+     */
+    public var alert_url_allowlist: [String]? {
+        get { if let v = _alert_url_allowlist { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _alert_url_allowlist = v.map { AnyString.init($0) } } else { _alert_url_allowlist = nil } }
+    }
+
+    private var _alert_url_param_owner: AnyString?
+    /**
+     * Owner of who defines the alert/schedule params on the base url
+     */
+    public var alert_url_param_owner: String? {
+        get { _alert_url_param_owner?.value }
+        set { _alert_url_param_owner = newValue.map(AnyString.init) }
+    }
+
+    private var _alert_url_label: AnyString?
+    /**
+     * Label for the alert/schedule url
+     */
+    public var alert_url_label: String? {
+        get { _alert_url_label?.value }
+        set { _alert_url_label = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Is SSO embedding enabled for this Looker
+     */
+    public var sso_auth_enabled: Bool?
+
+    /**
+     * Is Cookieless embedding enabled for this Looker
+     */
+    public var embed_cookieless_v2: Bool?
+
+    /**
+     * Is embed content navigation enabled for this looker
+     */
+    public var embed_content_navigation: Bool?
+
+    /**
+     * Is embed content management enabled for this Looker
+     */
+    public var embed_content_management: Bool?
+
+    /**
+     * When true, prohibits the use of Looker login pages in non-Looker iframes. When false, Looker login pages may be used in non-Looker hosted iframes.
+     */
+    public var strict_sameorigin_for_login: Bool?
+
+    /**
+     * When true, filters are enabled on embedded Looks
+     */
+    public var look_filters: Bool?
+
+    /**
+     * When true, removes navigation to Looks from embedded dashboards and explores.
+     */
+    public var hide_look_navigation: Bool?
+
+    public init(domain_allowlist: [String]? = nil, alert_url_allowlist: [String]? = nil, alert_url_param_owner: String? = nil, alert_url_label: String? = nil, sso_auth_enabled: Bool? = nil, embed_cookieless_v2: Bool? = nil, embed_content_navigation: Bool? = nil, embed_content_management: Bool? = nil, strict_sameorigin_for_login: Bool? = nil, look_filters: Bool? = nil, hide_look_navigation: Bool? = nil) {
+        if let v = domain_allowlist { _domain_allowlist = v.map { AnyString.init($0) } } else { _domain_allowlist = nil }
+        if let v = alert_url_allowlist { _alert_url_allowlist = v.map { AnyString.init($0) } } else { _alert_url_allowlist = nil }
+        self._alert_url_param_owner = alert_url_param_owner.map(AnyString.init)
+        self._alert_url_label = alert_url_label.map(AnyString.init)
+        self.sso_auth_enabled = sso_auth_enabled
+        self.embed_cookieless_v2 = embed_cookieless_v2
+        self.embed_content_navigation = embed_content_navigation
+        self.embed_content_management = embed_content_management
+        self.strict_sameorigin_for_login = strict_sameorigin_for_login
+        self.look_filters = look_filters
+        self.hide_look_navigation = hide_look_navigation
+    }
+
+}
+
 public struct EmbedCookielessSessionAcquire: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -7995,12 +8097,12 @@ public struct EmbedCookielessSessionAcquire: SDKModel {
         case _group_ids = "group_ids"
         case _external_group_id = "external_group_id"
         case user_attributes
-        case _session_reference_token = "session_reference_token"
         case _embed_domain = "embed_domain"
+        case _session_reference_token = "session_reference_token"
     }
     private var _session_length: AnyInt?
     /**
-     * Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
+     * Number of seconds the signed embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
      */
     public var session_length: Int64? {
         get { _session_length?.value }
@@ -8014,7 +8116,7 @@ public struct EmbedCookielessSessionAcquire: SDKModel {
 
     private var _external_user_id: AnyString?
     /**
-     * A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions.
+     * A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions. When the same external user id value is used for a new embed session, any existing session is terminated and existing access grants are replaced with the access grants associated with the new embed session.
      */
     public var external_user_id: String? {
         get { _external_user_id?.value }
@@ -8089,15 +8191,6 @@ public struct EmbedCookielessSessionAcquire: SDKModel {
      */
     public var user_attributes: StringDictionary<AnyCodable>?
 
-    private var _session_reference_token: AnyString?
-    /**
-     * Token referencing the embed session and is used to generate new authentication, navigation and api tokens.
-     */
-    public var session_reference_token: String? {
-        get { _session_reference_token?.value }
-        set { _session_reference_token = newValue.map(AnyString.init) }
-    }
-
     private var _embed_domain: AnyString?
     /**
      * The domain of the server embedding the Looker IFRAME. This is an alternative to specifying the domain in the embedded domain allow list in the Looker embed admin page.
@@ -8107,7 +8200,16 @@ public struct EmbedCookielessSessionAcquire: SDKModel {
         set { _embed_domain = newValue.map(AnyString.init) }
     }
 
-    public init(session_length: Int64? = nil, force_logout_login: Bool? = nil, external_user_id: String? = nil, first_name: String? = nil, last_name: String? = nil, user_timezone: String? = nil, permissions: [String]? = nil, models: [String]? = nil, group_ids: [String]? = nil, external_group_id: String? = nil, user_attributes: StringDictionary<AnyCodable>? = nil, session_reference_token: String? = nil, embed_domain: String? = nil) {
+    private var _session_reference_token: AnyString?
+    /**
+     * Token referencing the embed session and is used to generate new authentication, navigation and api tokens.
+     */
+    public var session_reference_token: String? {
+        get { _session_reference_token?.value }
+        set { _session_reference_token = newValue.map(AnyString.init) }
+    }
+
+    public init(session_length: Int64? = nil, force_logout_login: Bool? = nil, external_user_id: String? = nil, first_name: String? = nil, last_name: String? = nil, user_timezone: String? = nil, permissions: [String]? = nil, models: [String]? = nil, group_ids: [String]? = nil, external_group_id: String? = nil, user_attributes: StringDictionary<AnyCodable>? = nil, embed_domain: String? = nil, session_reference_token: String? = nil) {
         self._session_length = session_length.map(AnyInt.init)
         self.force_logout_login = force_logout_login
         self._external_user_id = external_user_id.map(AnyString.init)
@@ -8119,8 +8221,8 @@ public struct EmbedCookielessSessionAcquire: SDKModel {
         if let v = group_ids { _group_ids = v.map { AnyString.init($0) } } else { _group_ids = nil }
         self._external_group_id = external_group_id.map(AnyString.init)
         self.user_attributes = user_attributes
-        self._session_reference_token = session_reference_token.map(AnyString.init)
         self._embed_domain = embed_domain.map(AnyString.init)
+        self._session_reference_token = session_reference_token.map(AnyString.init)
     }
 
 }
@@ -8202,7 +8304,7 @@ public struct EmbedCookielessSessionAcquireResponse: SDKModel {
 
     private var _session_reference_token_ttl: AnyInt?
     /**
-     * Session reference token time to live in seconds. Note that this is the same as actual session.
+     * Session reference token time to live in seconds. Note that this is the same as actual embed session. The session is expired when the value is set to zero. It is important to note that the generate token endpoint does NOT return an error when the embed session has expired. If an embedding application needs to monitor expiration of embed sessions, check this property for a value of zero.
      */
     public var session_reference_token_ttl: Int64? {
         get { _session_reference_token_ttl?.value }
@@ -8365,7 +8467,7 @@ public struct EmbedParams: SDKModel {
 
     private var _session_length: AnyInt?
     /**
-     * Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
+     * Number of seconds the signed embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
      */
     public var session_length: Int64? {
         get { _session_length?.value }
@@ -8483,6 +8585,7 @@ public struct EmbedSsoParams: SDKModel {
         case _external_group_id = "external_group_id"
         case user_attributes
         case _secret_id = "secret_id"
+        case _embed_domain = "embed_domain"
     }
     private var _target_url: AnyString
     /**
@@ -8495,7 +8598,7 @@ public struct EmbedSsoParams: SDKModel {
 
     private var _session_length: AnyInt?
     /**
-     * Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
+     * Number of seconds the signed embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).
      */
     public var session_length: Int64? {
         get { _session_length?.value }
@@ -8509,7 +8612,7 @@ public struct EmbedSsoParams: SDKModel {
 
     private var _external_user_id: AnyString?
     /**
-     * A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions.
+     * A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions. When the same external user id value is used for a new embed session, any existing session is terminated and existing access grants are replaced with the access grants associated with the new embed session.
      */
     public var external_user_id: String? {
         get { _external_user_id?.value }
@@ -8593,7 +8696,16 @@ public struct EmbedSsoParams: SDKModel {
         set { _secret_id = newValue.map(AnyString.init) }
     }
 
-    public init(target_url: String, session_length: Int64? = nil, force_logout_login: Bool? = nil, external_user_id: String? = nil, first_name: String? = nil, last_name: String? = nil, user_timezone: String? = nil, permissions: [String]? = nil, models: [String]? = nil, group_ids: [String]? = nil, external_group_id: String? = nil, user_attributes: StringDictionary<AnyCodable>? = nil, secret_id: String? = nil) {
+    private var _embed_domain: AnyString?
+    /**
+     * Optional. URL of the domain hosting the signed embed URL. If provided and valid, the embed_domain will be added to the embed domain allowlist if it is not currently in the list
+     */
+    public var embed_domain: String? {
+        get { _embed_domain?.value }
+        set { _embed_domain = newValue.map(AnyString.init) }
+    }
+
+    public init(target_url: String, session_length: Int64? = nil, force_logout_login: Bool? = nil, external_user_id: String? = nil, first_name: String? = nil, last_name: String? = nil, user_timezone: String? = nil, permissions: [String]? = nil, models: [String]? = nil, group_ids: [String]? = nil, external_group_id: String? = nil, user_attributes: StringDictionary<AnyCodable>? = nil, secret_id: String? = nil, embed_domain: String? = nil) {
         self._target_url = AnyString.init(target_url)
         self._session_length = session_length.map(AnyInt.init)
         self.force_logout_login = force_logout_login
@@ -8607,10 +8719,11 @@ public struct EmbedSsoParams: SDKModel {
         self._external_group_id = external_group_id.map(AnyString.init)
         self.user_attributes = user_attributes
         self._secret_id = secret_id.map(AnyString.init)
+        self._embed_domain = embed_domain.map(AnyString.init)
     }
 
-    public init(_ target_url: String, session_length: Int64? = nil, force_logout_login: Bool? = nil, external_user_id: String? = nil, first_name: String? = nil, last_name: String? = nil, user_timezone: String? = nil, permissions: [String]? = nil, models: [String]? = nil, group_ids: [String]? = nil, external_group_id: String? = nil, user_attributes: StringDictionary<AnyCodable>? = nil, secret_id: String? = nil) {
-        self.init(target_url: target_url, session_length: session_length, force_logout_login: force_logout_login, external_user_id: external_user_id, first_name: first_name, last_name: last_name, user_timezone: user_timezone, permissions: permissions, models: models, group_ids: group_ids, external_group_id: external_group_id, user_attributes: user_attributes, secret_id: secret_id)
+    public init(_ target_url: String, session_length: Int64? = nil, force_logout_login: Bool? = nil, external_user_id: String? = nil, first_name: String? = nil, last_name: String? = nil, user_timezone: String? = nil, permissions: [String]? = nil, models: [String]? = nil, group_ids: [String]? = nil, external_group_id: String? = nil, user_attributes: StringDictionary<AnyCodable>? = nil, secret_id: String? = nil, embed_domain: String? = nil) {
+        self.init(target_url: target_url, session_length: session_length, force_logout_login: force_logout_login, external_user_id: external_user_id, first_name: first_name, last_name: last_name, user_timezone: user_timezone, permissions: permissions, models: models, group_ids: group_ids, external_group_id: external_group_id, user_attributes: user_attributes, secret_id: secret_id, embed_domain: embed_domain)
     }
 
 }
@@ -10591,7 +10704,7 @@ public struct IntegrationRequiredField: SDKModel {
 
     private var _any_tag: [AnyString]?
     /**
-     * If present, supercedes 'tag' and matches a field that has any of the provided tags. (read-only)
+     * If present, supersedes 'tag' and matches a field that has any of the provided tags. (read-only)
      */
     public var any_tag: [String]? {
         get { if let v = _any_tag { return v.map { $0.value } } else { return nil } }
@@ -10600,7 +10713,7 @@ public struct IntegrationRequiredField: SDKModel {
 
     private var _all_tags: [AnyString]?
     /**
-     * If present, supercedes 'tag' and matches a field that has all of the provided tags. (read-only)
+     * If present, supersedes 'tag' and matches a field that has all of the provided tags. (read-only)
      */
     public var all_tags: [String]? {
         get { if let v = _all_tags { return v.map { $0.value } } else { return nil } }
@@ -10712,22 +10825,329 @@ public enum InvestigativeContentType: String, Codable {
     case dashboard = "dashboard"
 }
 
-public struct JdbcInterface: SDKModel {
+public struct JsonBi: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
-        case _results = "results"
+        case big_query_metadata
+        case fields
+        case pivots
+        case has_subtotals
+        case has_totals
+        case _columns_truncated = "columns_truncated"
+        case _filter_expression = "filter_expression"
+        case filters
+        case _data = "data"
     }
-    private var _results: AnyString?
+    public var big_query_metadata: JsonBiBigQueryMetadata
+
+    public var fields: JsonBiFields
+
     /**
-     * JDBC Metadata to inflate Avatica response classes. (read-only)
+     * Pivots (read-only)
      */
-    public var results: String? {
-        get { _results?.value }
-        set { _results = newValue.map(AnyString.init) }
+    public var pivots: [JsonBiPivots]
+
+    /**
+     * If the query has subtotals (read-only)
+     */
+    public var has_subtotals: Bool
+
+    /**
+     * If the query has totals (read-only)
+     */
+    public var has_totals: Bool
+
+    private var _columns_truncated: AnyString
+    /**
+     * If the query results hit the maximum column limit and additional columns were truncated (read-only)
+     */
+    public var columns_truncated: String {
+        get { _columns_truncated.value }
+        set { _columns_truncated = AnyString.init(newValue) }
     }
 
-    public init(results: String? = nil) {
-        self._results = results.map(AnyString.init)
+    private var _filter_expression: AnyString
+    /**
+     * Filter expression applied to the query results (read-only)
+     */
+    public var filter_expression: String {
+        get { _filter_expression.value }
+        set { _filter_expression = AnyString.init(newValue) }
+    }
+
+    /**
+     * Filters applied to the query results (read-only)
+     */
+    public var filters: StringDictionary<AnyCodable>
+
+    private var _data: [AnyString]
+    /**
+     * Json query results (read-only)
+     */
+    public var data: [String] {
+        get { _data.map { $0.value } }
+        set { _data = newValue.map { AnyString.init($0) } }
+    }
+
+    public init(big_query_metadata: JsonBiBigQueryMetadata, fields: JsonBiFields, pivots: [JsonBiPivots], has_subtotals: Bool, has_totals: Bool, columns_truncated: String, filter_expression: String, filters: StringDictionary<AnyCodable>, data: [String]) {
+        self.big_query_metadata = big_query_metadata
+        self.fields = fields
+        self.pivots = pivots
+        self.has_subtotals = has_subtotals
+        self.has_totals = has_totals
+        self._columns_truncated = AnyString.init(columns_truncated)
+        self._filter_expression = AnyString.init(filter_expression)
+        self.filters = filters
+        self._data = data.map { AnyString.init($0) }
+    }
+
+    public init(_ big_query_metadata: JsonBiBigQueryMetadata, _ fields: JsonBiFields, _ pivots: [JsonBiPivots], _ has_subtotals: Bool, _ has_totals: Bool, _ columns_truncated: String, _ filter_expression: String, _ filters: StringDictionary<AnyCodable>, _ data: [String]) {
+        self.init(big_query_metadata: big_query_metadata, fields: fields, pivots: pivots, has_subtotals: has_subtotals, has_totals: has_totals, columns_truncated: columns_truncated, filter_expression: filter_expression, filters: filters, data: data)
+    }
+
+}
+
+public struct JsonBiBigQueryMetadata: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _total_bytes_processed = "total_bytes_processed"
+        case backend_cache_hit
+    }
+    private var _total_bytes_processed: AnyInt
+    /**
+     * Total bytes processed by the BigQuery job (read-only)
+     */
+    public var total_bytes_processed: Int64 {
+        get { _total_bytes_processed.value }
+        set { _total_bytes_processed = AnyInt.init(newValue) }
+    }
+
+    /**
+     * Return whether or not query results were served from the BigQuery cache. (read-only)
+     */
+    public var backend_cache_hit: Bool
+
+    public init(total_bytes_processed: Int64, backend_cache_hit: Bool) {
+        self._total_bytes_processed = AnyInt.init(total_bytes_processed)
+        self.backend_cache_hit = backend_cache_hit
+    }
+
+    public init(_ total_bytes_processed: Int64, _ backend_cache_hit: Bool) {
+        self.init(total_bytes_processed: total_bytes_processed, backend_cache_hit: backend_cache_hit)
+    }
+
+}
+
+public struct JsonBiField: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _sql = "sql"
+        case _view = "view"
+        case _dimension_group = "dimension_group"
+        case _category = "category"
+        case _field_group_label = "field_group_label"
+        case _name = "name"
+        case _type = "type"
+        case _view_label = "view_label"
+        case _label = "label"
+        case _field_group_variant = "field_group_variant"
+        case hidden
+        case _description = "description"
+    }
+    private var _sql: AnyString
+    /**
+     * SQL expressions for the field (read-only)
+     */
+    public var sql: String {
+        get { _sql.value }
+        set { _sql = AnyString.init(newValue) }
+    }
+
+    private var _view: AnyString
+    /**
+     * Explore name (read-only)
+     */
+    public var view: String {
+        get { _view.value }
+        set { _view = AnyString.init(newValue) }
+    }
+
+    private var _dimension_group: AnyString
+    /**
+     * Which dimension group created this dimension (read-only)
+     */
+    public var dimension_group: String {
+        get { _dimension_group.value }
+        set { _dimension_group = AnyString.init(newValue) }
+    }
+
+    private var _category: AnyString
+    /**
+     * Dimension, Measure, etc. (read-only)
+     */
+    public var category: String {
+        get { _category.value }
+        set { _category = AnyString.init(newValue) }
+    }
+
+    private var _field_group_label: AnyString
+    /**
+     * Field Group Label (read-only)
+     */
+    public var field_group_label: String {
+        get { _field_group_label.value }
+        set { _field_group_label = AnyString.init(newValue) }
+    }
+
+    private var _name: AnyString
+    /**
+     * Field Name (read-only)
+     */
+    public var name: String {
+        get { _name.value }
+        set { _name = AnyString.init(newValue) }
+    }
+
+    private var _type: AnyString
+    /**
+     * Field Type (read-only)
+     */
+    public var type: String {
+        get { _type.value }
+        set { _type = AnyString.init(newValue) }
+    }
+
+    private var _view_label: AnyString
+    /**
+     * View Label (read-only)
+     */
+    public var view_label: String {
+        get { _view_label.value }
+        set { _view_label = AnyString.init(newValue) }
+    }
+
+    private var _label: AnyString
+    /**
+     * Field Label (read-only)
+     */
+    public var label: String {
+        get { _label.value }
+        set { _label = AnyString.init(newValue) }
+    }
+
+    private var _field_group_variant: AnyString
+    /**
+     * Field Group Variant (read-only)
+     */
+    public var field_group_variant: String {
+        get { _field_group_variant.value }
+        set { _field_group_variant = AnyString.init(newValue) }
+    }
+
+    /**
+     * If the field is marked as hidden in the Lookml (read-only)
+     */
+    public var hidden: Bool
+
+    private var _description: AnyString
+    /**
+     * Field Description (read-only)
+     */
+    public var description: String {
+        get { _description.value }
+        set { _description = AnyString.init(newValue) }
+    }
+
+    public init(sql: String, view: String, dimension_group: String, category: String, field_group_label: String, name: String, type: String, view_label: String, label: String, field_group_variant: String, hidden: Bool, description: String) {
+        self._sql = AnyString.init(sql)
+        self._view = AnyString.init(view)
+        self._dimension_group = AnyString.init(dimension_group)
+        self._category = AnyString.init(category)
+        self._field_group_label = AnyString.init(field_group_label)
+        self._name = AnyString.init(name)
+        self._type = AnyString.init(type)
+        self._view_label = AnyString.init(view_label)
+        self._label = AnyString.init(label)
+        self._field_group_variant = AnyString.init(field_group_variant)
+        self.hidden = hidden
+        self._description = AnyString.init(description)
+    }
+
+    public init(_ sql: String, _ view: String, _ dimension_group: String, _ category: String, _ field_group_label: String, _ name: String, _ type: String, _ view_label: String, _ label: String, _ field_group_variant: String, _ hidden: Bool, _ description: String) {
+        self.init(sql: sql, view: view, dimension_group: dimension_group, category: category, field_group_label: field_group_label, name: name, type: type, view_label: view_label, label: label, field_group_variant: field_group_variant, hidden: hidden, description: description)
+    }
+
+}
+
+public struct JsonBiFields: SDKModel {
+    /**
+     * Dimensions represent a column in a table, or a computed value based on some sort of column manipulation or combination (read-only)
+     */
+    public var dimensions: [JsonBiField]
+
+    /**
+     * Measures are similar to aggregate functions in SQL (for example, COUNT, SUM, AVG) and represent information about multiple rows (read-only)
+     */
+    public var measures: [JsonBiField]
+
+    /**
+     * Pivots (read-only)
+     */
+    public var pivots: [JsonBiField]
+
+    public init(dimensions: [JsonBiField], measures: [JsonBiField], pivots: [JsonBiField]) {
+        self.dimensions = dimensions
+        self.measures = measures
+        self.pivots = pivots
+    }
+
+    public init(_ dimensions: [JsonBiField], _ measures: [JsonBiField], _ pivots: [JsonBiField]) {
+        self.init(dimensions: dimensions, measures: measures, pivots: pivots)
+    }
+
+}
+
+public struct JsonBiPivots: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _key = "key"
+        case data
+        case sort_values
+        case is_total
+    }
+    private var _key: AnyString
+    /**
+     * Pivot Column Value (read-only)
+     */
+    public var key: String {
+        get { _key.value }
+        set { _key = AnyString.init(newValue) }
+    }
+
+    /**
+     * Pivot Data (read-only)
+     */
+    public var data: StringDictionary<AnyCodable>
+
+    /**
+     * Pivot Sort Values (read-only)
+     */
+    public var sort_values: StringDictionary<AnyCodable>
+
+    /**
+     * If the value is a total (read-only)
+     */
+    public var is_total: Bool
+
+    public init(key: String, data: StringDictionary<AnyCodable>, sort_values: StringDictionary<AnyCodable>, is_total: Bool) {
+        self._key = AnyString.init(key)
+        self.data = data
+        self.sort_values = sort_values
+        self.is_total = is_total
+    }
+
+    public init(_ key: String, _ data: StringDictionary<AnyCodable>, _ sort_values: StringDictionary<AnyCodable>, _ is_total: Bool) {
+        self.init(key: key, data: data, sort_values: sort_values, is_total: is_total)
     }
 
 }
@@ -14610,6 +15030,30 @@ public struct Manifest: SDKModel {
 
 }
 
+public struct MarketplaceAutomation: SDKModel {
+    /**
+     * Whether marketplace auto installation is enabled
+     */
+    public var install_enabled: Bool?
+
+    /**
+     * Whether marketplace auto update is enabled for looker extensions
+     */
+    public var update_looker_enabled: Bool?
+
+    /**
+     * Whether marketplace auto update is enabled for third party extensions
+     */
+    public var update_third_party_enabled: Bool?
+
+    public init(install_enabled: Bool? = nil, update_looker_enabled: Bool? = nil, update_third_party_enabled: Bool? = nil) {
+        self.install_enabled = install_enabled
+        self.update_looker_enabled = update_looker_enabled
+        self.update_third_party_enabled = update_third_party_enabled
+    }
+
+}
+
 public struct MaterializePDT: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -17049,6 +17493,107 @@ public struct Query: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, id: String? = nil, _ model: String, _ view: String, fields: [String]? = nil, pivots: [String]? = nil, fill_fields: [String]? = nil, filters: StringDictionary<AnyCodable>? = nil, filter_expression: String? = nil, sorts: [String]? = nil, limit: String? = nil, column_limit: String? = nil, total: Bool? = nil, row_total: String? = nil, subtotals: [String]? = nil, vis_config: StringDictionary<AnyCodable>? = nil, filter_config: StringDictionary<AnyCodable>? = nil, visible_ui_sections: String? = nil, slug: String? = nil, dynamic_fields: String? = nil, client_id: String? = nil, share_url: String? = nil, expanded_share_url: String? = nil, url: String? = nil, query_timezone: String? = nil, has_table_calculations: Bool? = nil) {
         self.init(can: can, id: id, model: model, view: view, fields: fields, pivots: pivots, fill_fields: fill_fields, filters: filters, filter_expression: filter_expression, sorts: sorts, limit: limit, column_limit: column_limit, total: total, row_total: row_total, subtotals: subtotals, vis_config: vis_config, filter_config: filter_config, visible_ui_sections: visible_ui_sections, slug: slug, dynamic_fields: dynamic_fields, client_id: client_id, share_url: share_url, expanded_share_url: expanded_share_url, url: url, query_timezone: query_timezone, has_table_calculations: has_table_calculations)
+    }
+
+}
+
+public struct QueryFormats: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case json_bi
+        case _json = "json"
+        case _json_detail = "json_detail"
+        case _csv = "csv"
+        case _txt = "txt"
+        case _html = "html"
+        case _md = "md"
+        case _xlsx = "xlsx"
+        case _sql = "sql"
+    }
+    public var json_bi: JsonBi?
+
+    private var _json: AnyString?
+    /**
+     *  (read-only)
+     */
+    public var json: String? {
+        get { _json?.value }
+        set { _json = newValue.map(AnyString.init) }
+    }
+
+    private var _json_detail: AnyString?
+    /**
+     *  (read-only)
+     */
+    public var json_detail: String? {
+        get { _json_detail?.value }
+        set { _json_detail = newValue.map(AnyString.init) }
+    }
+
+    private var _csv: AnyString?
+    /**
+     *  (read-only)
+     */
+    public var csv: String? {
+        get { _csv?.value }
+        set { _csv = newValue.map(AnyString.init) }
+    }
+
+    private var _txt: AnyString?
+    /**
+     *  (read-only)
+     */
+    public var txt: String? {
+        get { _txt?.value }
+        set { _txt = newValue.map(AnyString.init) }
+    }
+
+    private var _html: AnyString?
+    /**
+     *  (read-only)
+     */
+    public var html: String? {
+        get { _html?.value }
+        set { _html = newValue.map(AnyString.init) }
+    }
+
+    private var _md: AnyString?
+    /**
+     *  (read-only)
+     */
+    public var md: String? {
+        get { _md?.value }
+        set { _md = newValue.map(AnyString.init) }
+    }
+
+    private var _xlsx: AnyString?
+    /**
+     *  (read-only)
+     */
+    public var xlsx: String? {
+        get { _xlsx?.value }
+        set { _xlsx = newValue.map(AnyString.init) }
+    }
+
+    private var _sql: AnyString?
+    /**
+     *  (read-only)
+     */
+    public var sql: String? {
+        get { _sql?.value }
+        set { _sql = newValue.map(AnyString.init) }
+    }
+
+    public init(json_bi: JsonBi? = nil, json: String? = nil, json_detail: String? = nil, csv: String? = nil, txt: String? = nil, html: String? = nil, md: String? = nil, xlsx: String? = nil, sql: String? = nil) {
+        self.json_bi = json_bi
+        self._json = json.map(AnyString.init)
+        self._json_detail = json_detail.map(AnyString.init)
+        self._csv = csv.map(AnyString.init)
+        self._txt = txt.map(AnyString.init)
+        self._html = html.map(AnyString.init)
+        self._md = md.map(AnyString.init)
+        self._xlsx = xlsx.map(AnyString.init)
+        self._sql = sql.map(AnyString.init)
     }
 
 }
@@ -19725,7 +20270,9 @@ public struct Setting: SDKModel {
         case extension_framework_enabled
         case extension_load_url_enabled
         case marketplace_auto_install_enabled
+        case marketplace_automation
         case marketplace_enabled
+        case _marketplace_site = "marketplace_site"
         case marketplace_terms_accepted
         case privatelabel_configuration
         case custom_welcome_email
@@ -19738,6 +20285,9 @@ public struct Setting: SDKModel {
         case _email_domain_allowlist = "email_domain_allowlist"
         case embed_cookieless_v2
         case embed_enabled
+        case embed_config
+        case login_notification_enabled
+        case _login_notification_text = "login_notification_text"
     }
     /**
      * Toggle extension framework on or off
@@ -19745,19 +20295,30 @@ public struct Setting: SDKModel {
     public var extension_framework_enabled: Bool?
 
     /**
-     * (DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
+     * (DEPRECATED) Toggle extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
      */
     public var extension_load_url_enabled: Bool?
 
     /**
-     * Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
+     * (DEPRECATED) Toggle marketplace auto install on or off. Deprecated - do not use. Auto install can now be enabled via marketplace automation settings
      */
     public var marketplace_auto_install_enabled: Bool?
+
+    public var marketplace_automation: MarketplaceAutomation?
 
     /**
      * Toggle marketplace on or off
      */
     public var marketplace_enabled: Bool?
+
+    private var _marketplace_site: AnyString?
+    /**
+     * Location of Looker marketplace CDN (read-only)
+     */
+    public var marketplace_site: String? {
+        get { _marketplace_site?.value }
+        set { _marketplace_site = newValue.map(AnyString.init) }
+    }
 
     /**
      * Accept marketplace terms by setting this value to true, or get the current status. Marketplace terms CANNOT be declined once accepted. Accepting marketplace terms automatically enables the marketplace. The marketplace can still be disabled after it has been enabled.
@@ -19816,7 +20377,7 @@ public struct Setting: SDKModel {
     }
 
     /**
-     * Toggle cookieless embed setting
+     * (DEPRECATED) Use embed_config.embed_cookieless_v2 instead. If embed_config.embed_cookieless_v2 is specified, it overrides this value.
      */
     public var embed_cookieless_v2: Bool?
 
@@ -19825,11 +20386,29 @@ public struct Setting: SDKModel {
      */
     public var embed_enabled: Bool?
 
-    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_enabled: Bool? = nil) {
+    public var embed_config: EmbedConfig?
+
+    /**
+     * Login notification enabled (read-only)
+     */
+    public var login_notification_enabled: Bool?
+
+    private var _login_notification_text: AnyString?
+    /**
+     * Login notification text (read-only)
+     */
+    public var login_notification_text: String? {
+        get { _login_notification_text?.value }
+        set { _login_notification_text = newValue.map(AnyString.init) }
+    }
+
+    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_site: String? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_enabled: Bool? = nil, embed_config: EmbedConfig? = nil, login_notification_enabled: Bool? = nil, login_notification_text: String? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
+        self.marketplace_automation = marketplace_automation
         self.marketplace_enabled = marketplace_enabled
+        self._marketplace_site = marketplace_site.map(AnyString.init)
         self.marketplace_terms_accepted = marketplace_terms_accepted
         self.privatelabel_configuration = privatelabel_configuration
         self.custom_welcome_email = custom_welcome_email
@@ -19842,6 +20421,9 @@ public struct Setting: SDKModel {
         if let v = email_domain_allowlist { _email_domain_allowlist = v.map { AnyString.init($0) } } else { _email_domain_allowlist = nil }
         self.embed_cookieless_v2 = embed_cookieless_v2
         self.embed_enabled = embed_enabled
+        self.embed_config = embed_config
+        self.login_notification_enabled = login_notification_enabled
+        self._login_notification_text = login_notification_text.map(AnyString.init)
     }
 
 }
@@ -20041,6 +20623,106 @@ public struct Snippet: SDKModel {
         self._name = name.map(AnyString.init)
         self._label = label.map(AnyString.init)
         self._sql = sql.map(AnyString.init)
+    }
+
+}
+
+public struct SqlInterfaceQuery: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _id = "id"
+        case _signature = "signature"
+    }
+    /**
+     * Operations the current user is able to perform on this object (read-only)
+     */
+    public var can: StringDictionary<Bool>?
+
+    private var _id: AnyInt?
+    /**
+     * Unique Id (read-only)
+     */
+    public var id: Int64? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyInt.init) }
+    }
+
+    private var _signature: AnyString
+    /**
+     * Calcite signature (read-only)
+     */
+    public var signature: String {
+        get { _signature.value }
+        set { _signature = AnyString.init(newValue) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, signature: String) {
+        self.can = can
+        self._id = id.map(AnyInt.init)
+        self._signature = AnyString.init(signature)
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, _ signature: String) {
+        self.init(can: can, id: id, signature: signature)
+    }
+
+}
+
+public struct SqlInterfaceQueryCreate: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _sql = "sql"
+        case jdbc_client
+    }
+    /**
+     * Operations the current user is able to perform on this object (read-only)
+     */
+    public var can: StringDictionary<Bool>?
+
+    private var _sql: AnyString
+    /**
+     * Original SQL request
+     */
+    public var sql: String {
+        get { _sql.value }
+        set { _sql = AnyString.init(newValue) }
+    }
+
+    /**
+     * Whether the query should be run for use in a JDBC Client. This changes the formatting of some datetime based values.
+     */
+    public var jdbc_client: Bool?
+
+    public init(can: StringDictionary<Bool>? = nil, sql: String, jdbc_client: Bool? = nil) {
+        self.can = can
+        self._sql = AnyString.init(sql)
+        self.jdbc_client = jdbc_client
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, _ sql: String, jdbc_client: Bool? = nil) {
+        self.init(can: can, sql: sql, jdbc_client: jdbc_client)
+    }
+
+}
+
+public struct SqlInterfaceQueryMetadata: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _results = "results"
+    }
+    private var _results: AnyString?
+    /**
+     * JDBC Metadata to inflate Avatica response classes. (read-only)
+     */
+    public var results: String? {
+        get { _results?.value }
+        set { _results = newValue.map(AnyString.init) }
+    }
+
+    public init(results: String? = nil) {
+        self._results = results.map(AnyString.init)
     }
 
 }
@@ -21658,7 +22340,7 @@ public struct UserAttribute: SDKModel {
 
     private var _type: AnyString
     /**
-     * Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")
+     * Type of user attribute ("string", "number", "datetime", "yesno", "zipcode", "advanced_filter_string", "advanced_filter_number")
      */
     public var type: String {
         get { _type.value }
@@ -22535,7 +23217,7 @@ public struct WriteAlert: SDKModel {
 
     private var _cron: AnyString
     /**
-     * Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals
+     * Vixie-Style crontab specification when to run. At minimum, it has to be longer than 15 minute intervals
      */
     public var cron: String {
         get { _cron.value }
@@ -27339,7 +28021,7 @@ public struct WriteSessionConfig: SDKModel {
 
 /**
  * Dynamic writeable type for Setting removes:
- * embed_enabled
+ * marketplace_site, embed_enabled, login_notification_enabled, login_notification_text
  */
 public struct WriteSetting: SDKModel {
 
@@ -27347,6 +28029,7 @@ public struct WriteSetting: SDKModel {
         case extension_framework_enabled
         case extension_load_url_enabled
         case marketplace_auto_install_enabled
+        case marketplace_automation
         case marketplace_enabled
         case marketplace_terms_accepted
         case privatelabel_configuration
@@ -27359,6 +28042,7 @@ public struct WriteSetting: SDKModel {
         case override_warnings
         case _email_domain_allowlist = "email_domain_allowlist"
         case embed_cookieless_v2
+        case embed_config
     }
     /**
      * Toggle extension framework on or off
@@ -27366,14 +28050,16 @@ public struct WriteSetting: SDKModel {
     public var extension_framework_enabled: Bool?
 
     /**
-     * (DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
+     * (DEPRECATED) Toggle extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
      */
     public var extension_load_url_enabled: Bool?
 
     /**
-     * Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.
+     * (DEPRECATED) Toggle marketplace auto install on or off. Deprecated - do not use. Auto install can now be enabled via marketplace automation settings
      */
     public var marketplace_auto_install_enabled: Bool?
+
+    public var marketplace_automation: MarketplaceAutomation?
 
     /**
      * Toggle marketplace on or off
@@ -27441,14 +28127,17 @@ public struct WriteSetting: SDKModel {
     }
 
     /**
-     * Toggle cookieless embed setting
+     * (DEPRECATED) Use embed_config.embed_cookieless_v2 instead. If embed_config.embed_cookieless_v2 is specified, it overrides this value.
      */
     public var embed_cookieless_v2: Bool?
 
-    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_enabled: Bool? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil) {
+    public var embed_config: EmbedConfig?
+
+    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_config: EmbedConfig? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
+        self.marketplace_automation = marketplace_automation
         self.marketplace_enabled = marketplace_enabled
         self.marketplace_terms_accepted = marketplace_terms_accepted
         self.privatelabel_configuration = privatelabel_configuration
@@ -27461,6 +28150,42 @@ public struct WriteSetting: SDKModel {
         self.override_warnings = override_warnings
         if let v = email_domain_allowlist { _email_domain_allowlist = v.map { AnyString.init($0) } } else { _email_domain_allowlist = nil }
         self.embed_cookieless_v2 = embed_cookieless_v2
+        self.embed_config = embed_config
+    }
+
+}
+
+/**
+ * Dynamic writeable type for SqlInterfaceQueryCreate removes:
+ * can
+ */
+public struct WriteSqlInterfaceQueryCreate: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _sql = "sql"
+        case jdbc_client
+    }
+    private var _sql: AnyString
+    /**
+     * Original SQL request
+     */
+    public var sql: String {
+        get { _sql.value }
+        set { _sql = AnyString.init(newValue) }
+    }
+
+    /**
+     * Whether the query should be run for use in a JDBC Client. This changes the formatting of some datetime based values.
+     */
+    public var jdbc_client: Bool?
+
+    public init(sql: String, jdbc_client: Bool? = nil) {
+        self._sql = AnyString.init(sql)
+        self.jdbc_client = jdbc_client
+    }
+
+    public init(_ sql: String, jdbc_client: Bool? = nil) {
+        self.init(sql: sql, jdbc_client: jdbc_client)
     }
 
 }
@@ -27743,7 +28468,7 @@ public struct WriteUserAttribute: SDKModel {
 
     private var _type: AnyString
     /**
-     * Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")
+     * Type of user attribute ("string", "number", "datetime", "yesno", "zipcode", "advanced_filter_string", "advanced_filter_number")
      */
     public var type: String {
         get { _type.value }

@@ -24,13 +24,13 @@
 
  */
 import {
-  qualifyMarkdownText,
-  getCodeLanguageFromTaggedText,
-  removeCodeLanguageTags,
   addCodeLanguageTags,
-} from './utils'
+  getCodeLanguageFromTaggedText,
+  qualifyMarkdownText,
+  removeCodeLanguageTags,
+} from './utils';
 
-export const toMdString = (textLines: string[]) => textLines.join('\n')
+export const toMdString = (textLines: string[]) => textLines.join('\n');
 
 describe('Markdown utils', () => {
   const example = [
@@ -48,47 +48,47 @@ describe('Markdown utils', () => {
     '}',
     '```',
     '',
-  ]
+  ];
   describe('search highlighting', () => {
-    const str = toMdString(example.slice(0, 2))
+    const str = toMdString(example.slice(0, 2));
     test('it returns original string when there are no matches', () => {
-      const result = qualifyMarkdownText(str, 'dashboard')
-      expect(result).toEqual(str)
-    })
+      const result = qualifyMarkdownText(str, 'dashboard');
+      expect(result).toEqual(str);
+    });
 
     test('it returns original string when no pattern is provided', () => {
-      const result = qualifyMarkdownText(str, '')
-      expect(result).toEqual(str)
-    })
+      const result = qualifyMarkdownText(str, '');
+      expect(result).toEqual(str);
+    });
 
     test('it wraps matches with mark tags', () => {
-      const result = qualifyMarkdownText(str, 'query')
+      const result = qualifyMarkdownText(str, 'query');
       expect(result).toEqual(
         toMdString([
           '# Run the <mark>query</mark> that is specified inline in the posted body.',
           'This allows running a <mark>query</mark> as defined in json in the posted body. This combines the two actions of posting & running a <mark>query</mark> into one step.',
         ])
-      )
-    })
-  })
+      );
+    });
+  });
   describe('syntax highlighting', () => {
     test('it returns original string when there are no code blocks', () => {
-      const str = toMdString(example.slice(0, 2))
-      const result = qualifyMarkdownText(str, '')
-      expect(result).toEqual(str)
-    })
+      const str = toMdString(example.slice(0, 2));
+      const result = qualifyMarkdownText(str, '');
+      expect(result).toEqual(str);
+    });
 
     test('it returns original string when code block syntax is unspecified', () => {
-      const str = toMdString(example)
-      const result = qualifyMarkdownText(str, '')
-      expect(result).toEqual(str)
-    })
+      const str = toMdString(example);
+      const result = qualifyMarkdownText(str, '');
+      expect(result).toEqual(str);
+    });
 
     test('it returns json syntax tag for json specified syntax', () => {
-      const newExample = [...example]
-      newExample[3] = '```json'
-      const str = toMdString(newExample)
-      const result = qualifyMarkdownText(str, '')
+      const newExample = [...example];
+      newExample[3] = '```json';
+      const str = toMdString(newExample);
+      const result = qualifyMarkdownText(str, '');
       expect(result).toEqual(
         toMdString([
           ...example.slice(0, 3),
@@ -96,44 +96,44 @@ describe('Markdown utils', () => {
           '<json/>',
           ...example.slice(4),
         ])
-      )
-    })
-  })
+      );
+    });
+  });
   describe('syntax highlighting helpers', () => {
-    const codeText = ['```', '  const foo: string = "bar"', '```']
+    const codeText = ['```', '  const foo: string = "bar"', '```'];
     test('it returns `markup` for untagged code text', () => {
-      const str = toMdString(codeText)
-      const result = getCodeLanguageFromTaggedText(str)
-      expect(result).toEqual('markup')
-    })
+      const str = toMdString(codeText);
+      const result = getCodeLanguageFromTaggedText(str);
+      expect(result).toEqual('markup');
+    });
 
     test('it returns `json` for json tagged code text', () => {
-      const newCodeText = [codeText[0], '<json/>', ...codeText.slice(1)]
-      const str = toMdString(newCodeText)
-      const result = getCodeLanguageFromTaggedText(str)
-      expect(result).toEqual('json')
-    })
+      const newCodeText = [codeText[0], '<json/>', ...codeText.slice(1)];
+      const str = toMdString(newCodeText);
+      const result = getCodeLanguageFromTaggedText(str);
+      expect(result).toEqual('json');
+    });
 
     test('it removes json tag for code text display', () => {
-      const newCodeText = [codeText[0], '<json/>', ...codeText.slice(1)]
-      const str = toMdString(newCodeText)
-      const result = removeCodeLanguageTags(str)
-      expect(result).toEqual(toMdString(codeText))
-    })
+      const newCodeText = [codeText[0], '<json/>', ...codeText.slice(1)];
+      const str = toMdString(newCodeText);
+      const result = removeCodeLanguageTags(str);
+      expect(result).toEqual(toMdString(codeText));
+    });
 
     test('it only removes syntax highlighting tags', () => {
-      const newCodeText = [codeText[0], '<foobarlang/>', ...codeText.slice(1)]
-      const str = toMdString(newCodeText)
-      const result = removeCodeLanguageTags(str)
-      expect(result).toEqual(str)
-    })
+      const newCodeText = [codeText[0], '<foobarlang/>', ...codeText.slice(1)];
+      const str = toMdString(newCodeText);
+      const result = removeCodeLanguageTags(str);
+      expect(result).toEqual(str);
+    });
 
     test('it adds syntax highlighting tags', () => {
-      const newCodeText = ['```ruby', ...codeText.slice(1)]
-      const resultCodeText = [codeText[0], '<ruby/>', ...codeText.slice(1)]
-      const str = toMdString(newCodeText)
-      const result = addCodeLanguageTags(str)
-      expect(result).toEqual(toMdString(resultCodeText))
-    })
-  })
-})
+      const newCodeText = ['```ruby', ...codeText.slice(1)];
+      const resultCodeText = [codeText[0], '<ruby/>', ...codeText.slice(1)];
+      const str = toMdString(newCodeText);
+      const result = addCodeLanguageTags(str);
+      expect(result).toEqual(toMdString(resultCodeText));
+    });
+  });
+});

@@ -1,23 +1,18 @@
-{% extends 'base.html' %}
-
-{% block header %}
-  <h1>{% block title %}New Post{% endblock %}</h1>
-{% endblock %}
-
-{% block content %}
-  <form method="post">
-
-    <label for="title">Title</label>
-    <input name="title" id="title" value="{{ request.form['title'] }}" required>
-    <label for="look_id">Look ID</label>
-    <select name="look_id" id="look_id">
-        <!-- If you check in the blog.py file, you see we are getting all the looks from the Looker instance and then passing an object called looks to this template. -->
-        {% for look in looks %}
-        <option value="{{look.id}}">#{{look.id}} — {{look.title}}</option>
-        {% endfor %}
-    </select>
-    <label for="body">Body</label>
-    <textarea name="body" id="body">{{ request.form['body'] }}</textarea>
-    <input type="submit" value="Save">
-  </form>
+{% extends 'base.html' %} {% block header %}
+<h1>{% block title %}New Post{% endblock %}</h1>
+{% endblock %} {% block content %}
+<form method="post">
+  <label for="title">Title</label>
+  <input name="title" id="title" value="{{ request.form['title'] }}" required />
+  <label for="look_id">Look ID</label>
+  <select name="look_id" id="look_id">
+    <!-- If you check in the blog.py file, you see we are getting all the looks from the Looker instance and then passing an object called looks to this template. -->
+    {% for look in looks %}
+    <option value="{{look.id}}">#{{look.id}} — {{look.title}}</option>
+    {% endfor %}
+  </select>
+  <label for="body">Body</label>
+  <textarea name="body" id="body">{{ request.form['body'] }}</textarea>
+  <input type="submit" value="Save" />
+</form>
 {% endblock %}

@@ -23,16 +23,16 @@
  SOFTWARE.
 
  */
-import type { MethodList } from '@looker/sdk-codegen'
+import type { MethodList } from '@looker/sdk-codegen';
 
 /**
  * Given a list of methods it returns a list of distinct operations
  * @param methods A list of methods
  */
 export const getOperations = (methods: MethodList) => {
-  const operationsSet = new Set<string>()
+  const operationsSet = new Set<string>();
   Object.values(methods).forEach((method) => {
-    operationsSet.add(method.httpMethod)
-  })
-  return Array.from(operationsSet.values())
-}
+    operationsSet.add(method.httpMethod);
+  });
+  return Array.from(operationsSet.values());
+};

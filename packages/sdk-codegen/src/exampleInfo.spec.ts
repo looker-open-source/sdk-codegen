@@ -23,30 +23,30 @@
  SOFTWARE.
 
  */
-import * as fs from 'fs'
-import path from 'path'
-import type { IExampleMine } from './exampleInfo'
-import { findExamples, findExampleLanguages } from './exampleInfo'
+import * as fs from 'fs';
+import path from 'path';
+import type { IExampleMine } from './exampleInfo';
+import { findExampleLanguages, findExamples } from './exampleInfo';
 
-const fileName = path.join(__dirname, '../../../examplesIndex.json')
-const file = fs.readFileSync(fileName, { encoding: 'utf-8' })
-const lode: IExampleMine = JSON.parse(file)
-const op = 'render_task'
+const fileName = path.join(__dirname, '../../../examplesIndex.json');
+const file = fs.readFileSync(fileName, { encoding: 'utf-8' });
+const lode: IExampleMine = JSON.parse(file);
+const op = 'render_task';
 
 describe('exampleInfo', () => {
   it('finds language examples for "render_task"', () => {
-    const actual = findExampleLanguages(lode, op)
-    expect(actual).toBeDefined()
-    expect(actual).toEqual(['Python', 'TypeScript', 'Kotlin', 'Ruby'])
+    const actual = findExampleLanguages(lode, op);
+    expect(actual).toBeDefined();
+    expect(actual).toEqual(['Python', 'TypeScript', 'Kotlin', 'Ruby']);
     actual.forEach((language) => {
-      const ex = findExamples(lode, language, op)
-      expect(ex).toBeDefined()
-      expect(ex.length).toBeGreaterThan(0)
-    })
-  })
+      const ex = findExamples(lode, language, op);
+      expect(ex).toBeDefined();
+      expect(ex.length).toBeGreaterThan(0);
+    });
+  });
   it('findExamples finds examples', () => {
-    const actual = findExamples(lode, 'typescript', 'me')
-    expect(actual).toBeDefined()
-    expect(actual.length).toBeGreaterThan(0)
-  })
-})
+    const actual = findExamples(lode, 'typescript', 'me');
+    expect(actual).toBeDefined();
+    expect(actual.length).toBeGreaterThan(0);
+  });
+});

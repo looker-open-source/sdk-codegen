@@ -24,10 +24,10 @@
 
  */
 
-import type { FC } from 'react'
-import React from 'react'
-import { Redirect, Route, Switch } from 'react-router-dom'
-import type { ApiModel } from '@looker/sdk-codegen'
+import type { FC } from 'react';
+import React from 'react';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import type { ApiModel } from '@looker/sdk-codegen';
 
 import {
   ErrorDetailScene,
@@ -36,14 +36,14 @@ import {
   MethodTagScene,
   TypeScene,
   TypeTagScene,
-} from '../scenes'
-import { DiffScene } from '../scenes/DiffScene'
-import { diffPath } from '../utils'
+} from '../scenes';
+import { DiffScene } from '../scenes/DiffScene';
+import { diffPath } from '../utils';
 
 interface AppRouterProps {
-  specKey: string
-  api: ApiModel
-  toggleNavigation: (target?: boolean) => void
+  specKey: string;
+  api: ApiModel;
+  toggleNavigation: (target?: boolean) => void;
 }
 
 export const AppRouter: FC<AppRouterProps> = ({
@@ -75,4 +75,4 @@ export const AppRouter: FC<AppRouterProps> = ({
       <TypeScene api={api} />
     </Route>
   </Switch>
-)
+);

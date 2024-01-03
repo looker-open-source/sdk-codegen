@@ -1,6 +1,6 @@
 {
   "name": "@looker/code-editor",
-  "version": "0.1.29",
+  "version": "0.1.30",
   "description": "A syntax highlighter Viewer and Editor for Looker SDK supported languages.",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
@@ -30,32 +30,32 @@
   },
   "devDependencies": {
     "@looker/components-test-utils": "^1.5.27",
-    "@looker/sdk-codegen": "^21.8.1",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^11.2.2",
-    "@testing-library/user-event": "^12.6.0",
-    "@types/react": "^16.14.2",
-    "@types/react-dom": "^16.9.6",
-    "@types/react-test-renderer": "^17.0.0",
-    "@types/styled-components": "^5.1.7",
+    "@looker/sdk-codegen": "21.8.2",
+    "@testing-library/jest-dom": "5.16.5",
+    "@testing-library/react": "12.1.5",
+    "@testing-library/user-event": "13.1.5",
+    "@types/react": "17.0.65",
+    "@types/react-dom": "^17.0.25",
+    "@types/react-test-renderer": "^17.0.9",
+    "@types/styled-components": "^5.1.26",
     "enzyme": "^3.11.0",
     "jest-config": "^29.4.1",
     "prismjs": "^1.23.0",
     "react-markdown": "^6.0.2",
-    "react-test-renderer": "^17.0.1",
+    "react-test-renderer": "^17.0.2",
     "rehype-raw": "^5.1.0",
     "remark-gfm": "^1.0.0",
     "style-loader": "^1.1.3",
-    "webpack-cli": "^3.3.11"
+    "webpack-cli": "5.0.1"
   },
   "dependencies": {
-    "@looker/components": "^4.1.1",
+    "@looker/components": "^4.1.3",
     "@looker/design-tokens": "^3.1.0",
     "prism-react-renderer": "^1.2.0",
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0",
-    "react-is": "^16.13.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-is": "^17.0.2",
     "react-simple-code-editor": "^0.11.0",
-    "styled-components": "^5.2.1"
+    "styled-components": "^5.3.1"
   }
 }

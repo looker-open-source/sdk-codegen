@@ -4,7 +4,7 @@ The Looker SDK for TypeScript/JavaScript works with Node and browser run-times. 
 
 This package supports using the Looker SDK in the browser. The [@looker/sdk-node](https://www.npmjs.com/package/@looker/sdk-node) package depends on this package (@looker/sdk) and [@looker/sdk-rtl](https://www.npmjs.com/package/@looker/sdk-rtl).
 
-The SDK uses a plug-in architecture (also known as dependency injection) for initializing that supports run-time specific transports (like `NodeTransport` and `BrowserTransport`) and different approaches for managing API authentication (like `NodeSession`, `BrowserSession`, `ProxySession`, and `CorsSession`).
+The SDK uses a plug-in architecture (also known as dependency injection) for initializing and supports run-time specific transports (like `NodeTransport` and `BrowserTransport`) and different approaches for managing API authentication (like `NodeSession`, `BrowserSession`, `ProxySession`, and `CorsSession`).
 
 Please [report any issues](https://github.com/looker-open-source/sdk-codegen/issues) encountered, and indicate the SDK language in the report.
 
@@ -66,9 +66,7 @@ The `looker.ini` configuration file and environment variables are _never_ used i
 
 ### Developing with multiple API versions
 
-Version API 4.0 is available and API 3.1 is deprecated. To support iterative migration to API 4.0 from API 3.1, the single Looker SDK package now supports multiple API versions for the generated SDK classes. Both API 3.1 and API 4.0 are supported for Node and browser-based use.
-
-`LookerBrowserSDK.init31()` and `Looker31SDK()` initialize the API 3.1 implementation of the SDK.
+Please use API 4.0. API 3.1 is deprecated and has been removed in Looker v23.18+.
 
 `LookerBrowserSDK.init40()` and `Looker40SDK()` initialize the API 4.1 implementation of the SDK.
 
@@ -88,35 +86,38 @@ By writing your own `getProxyToken()` visible to this class, any proxied authent
 
 ```typescript
 export class EmbedSession extends ProxySession {
-  constructor(public settings: IApiSettings, transport?: ITransport) {
-    super(settings, transport)
+  constructor(
+    public settings: IApiSettings,
+    transport?: ITransport
+  ) {
+    super(settings, transport);
   }
 
   async authenticate(props: any) {
     // get the auth token from the proxy server
-    const token = await getProxyToken()
+    const token = await getProxyToken();
     if (token) {
       // Assign the token, which will track its expiration time automatically
-      this.activeToken.setToken(token)
+      this.activeToken.setToken(token);
     }
 
     if (this.isAuthenticated()) {
       // Session is authenticated
       // set CORS mode (in this scenario)
-      props.mode = 'cors'
+      props.mode = 'cors';
 
       // remove any credentials attribute that may have been set
       // because the BrowserTransport defaults to having `same-origin` for credentials
-      delete props['credentials']
+      delete props['credentials'];
 
       // replace the headers argument with required values
       // Note: using new Headers() to construct the headers breaks CORS for the Looker API. Don't know why yet
       props.headers = {
         Authorization: `Bearer ${token.access_token}`,
         'x-looker-appid': agentTag,
-      }
+      };
     }
-    return props
+    return props;
   }
 }
 ```

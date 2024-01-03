@@ -23,21 +23,21 @@
  SOFTWARE.
 
  */
-import { codeGenerators } from '@looker/sdk-codegen'
+import { codeGenerators } from '@looker/sdk-codegen';
 
-import { getPrismLanguage } from './utils'
+import { getPrismLanguage } from './utils';
 
 describe('CodeDisplay utils', () => {
-  const allSdkLanguages: string[] = codeGenerators.map((gen) => gen.language)
+  const allSdkLanguages: string[] = codeGenerators.map((gen) => gen.language);
 
   test.each([...allSdkLanguages, 'html', 'json'])(
     'it can syntax highlight all supported sdk langs',
     (sdkLanguage) => {
-      expect(getPrismLanguage(sdkLanguage)).toBeTruthy()
+      expect(getPrismLanguage(sdkLanguage)).toBeTruthy();
     }
-  )
+  );
 
   test('it highlights as markup for unsupported/undefined language', () => {
-    expect(getPrismLanguage('foobar-lang')).toEqual('markup')
-  })
-})
+    expect(getPrismLanguage('foobar-lang')).toEqual('markup');
+  });
+});

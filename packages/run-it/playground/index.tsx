@@ -24,8 +24,8 @@
 
  */
 
-import React from 'react'
-import { render } from 'react-dom'
-import { RunItDemo } from './RunItDemo'
+import React from 'react';
+import { render } from 'react-dom';
+import { RunItDemo } from './RunItDemo';
 
-render(<RunItDemo />, document.getElementById('container'))
+render(<RunItDemo />, document.getElementById('container'));

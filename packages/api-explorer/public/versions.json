@@ -1,22 +1,16 @@
 {
   "looker_release_version": "21.12",
   "current_version": {
-    "version": "3.1",
-    "full_version": "3.1.0",
+    "version": "4.0",
+    "full_version": "4.0.23.18",
     "status": "current",
-    "swagger_url": "Looker.3.1.json"
+    "swagger_url": "Looker.4.0.json"
   },
   "supported_versions": [
     {
-      "version": "3.1",
-      "full_version": "3.1.0",
-      "status": "current",
-      "swagger_url": "/Looker.3.1.json"
-    },
-    {
       "version": "4.0",
       "full_version": "4.0.21.12",
-      "status": "beta",
+      "status": "current",
       "swagger_url": "/Looker.4.0.json"
     }
   ],

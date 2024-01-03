@@ -24,16 +24,16 @@
 
  */
 
-import React from 'react'
-import styled from 'styled-components'
-import type { TagList } from '@looker/sdk-codegen'
-import { SideNavMethods } from './SideNavMethods'
+import React from 'react';
+import styled from 'styled-components';
+import type { TagList } from '@looker/sdk-codegen';
+import { SideNavMethods } from './SideNavMethods';
 
 interface TagsProps {
-  tags: TagList
-  specKey: string
-  defaultOpen?: boolean
-  className?: string
+  tags: TagList;
+  specKey: string;
+  defaultOpen?: boolean;
+  className?: string;
 }
 
 export const SideNavMethodTags = styled(
@@ -52,4 +52,4 @@ export const SideNavMethodTags = styled(
   )
 )`
   padding: 0 ${({ theme }) => theme.space.large};
-`
+`;

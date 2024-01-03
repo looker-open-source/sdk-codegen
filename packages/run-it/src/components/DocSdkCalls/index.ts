@@ -24,5 +24,5 @@
 
  */
 
-export { getGenerators } from './callUtils'
-export { DocSdkCalls } from './DocSdkCalls'
+export { getGenerators } from './callUtils';
+export { DocSdkCalls } from './DocSdkCalls';

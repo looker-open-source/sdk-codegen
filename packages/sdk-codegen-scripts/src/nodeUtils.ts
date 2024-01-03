@@ -24,48 +24,41 @@
 
  */
 
-import * as fs from 'fs'
-import type { ExecSyncOptionsWithStringEncoding } from 'child_process'
-import { execSync } from 'child_process'
-import path from 'path'
-import { warn } from '@looker/sdk-codegen-utils'
+import * as fs from 'fs';
+import type { ExecSyncOptionsWithStringEncoding } from 'child_process';
+import { execSync } from 'child_process';
+import path from 'path';
+import { warn } from '@looker/sdk-codegen-utils';
 
-const utf8: BufferEncoding = 'utf-8'
-export const utf8Encoding = { encoding: utf8 }
+export const utf8 = 'utf-8';
 
 /**
  * Abstraction of reading a file so all refs go to one place
  * @param filePath name of file
- * @param encoding character encoding. defaults to utf-8
  * @returns {string}
  */
-export const readFileSync = (
-  filePath: string,
-  encoding: BufferEncoding = utf8
-) => fs.readFileSync(filePath, { encoding: encoding })
+export const readFileSync = (filePath: string) =>
+  fs.readFileSync(filePath, utf8);
 
-export const writeFileSync = (
-  filePath: string,
-  data: any,
-  encoding: BufferEncoding = utf8
-) => fs.writeFileSync(filePath, data, { encoding: encoding })
+export const writeFileSync = (filePath: string, data: any) =>
+  fs.writeFileSync(filePath, data, utf8);
 
 export const isDirSync = (filePath: string) => {
   try {
-    return fs.statSync(filePath).isDirectory()
+    return fs.statSync(filePath).isDirectory();
   } catch (e: any) {
     if (e.code === 'ENOENT') {
-      return false
+      return false;
     } else {
-      throw e
+      throw e;
     }
   }
-}
+};
 
-const homeToRoost = '../../../'
+const homeToRoost = '../../../';
 
-export const getRootPath = () => path.join(__dirname, homeToRoost)
-export const rootFile = (fileName = '') => path.join(getRootPath(), fileName)
+export const getRootPath = () => path.join(__dirname, homeToRoost);
+export const rootFile = (fileName = '') => path.join(getRootPath(), fileName);
 
 /**
  * Creates the directory if needed, converts content to JSON string, writes file
@@ -78,47 +71,47 @@ export const createJsonFile = (
   fileName: string,
   content: Record<string, unknown> | string
 ) => {
-  const fullName = rootFile(fileName)
-  const dir = path.dirname(fullName)
-  const data = typeof content === 'string' ? content : JSON.stringify(content)
-  if (!isDirSync(dir)) fs.mkdirSync(dir, { recursive: true })
-  fs.writeFileSync(fullName, data, utf8Encoding)
-  return fullName
-}
+  const fullName = rootFile(fileName);
+  const dir = path.dirname(fullName);
+  const data = typeof content === 'string' ? content : JSON.stringify(content);
+  if (!isDirSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(fullName, data, utf8);
+  return fullName;
+};
 
 export const isFileSync = (filePath: string) => {
   try {
-    return fs.statSync(filePath).isFile()
+    return fs.statSync(filePath).isFile();
   } catch (e: any) {
     if (e.code === 'ENOENT') {
-      return false
+      return false;
     } else {
-      throw e
+      throw e;
     }
   }
-}
+};
 
 export const quit = (err?: Error | string) => {
   if (err) {
     if (typeof err === 'string') {
-      const message = err
-      err = new Error('Failure')
-      err.message = message
+      const message = err;
+      err = new Error('Failure');
+      err.message = message;
     }
-    console.error(`Error: ${err.name}, ${err.message}`)
-    console.error(err.stack)
-    process.exit(1)
+    console.error(`Error: ${err.name}, ${err.message}`);
+    console.error(err.stack);
+    process.exit(1);
   } else {
-    process.exit(0)
+    process.exit(0);
   }
-  return '' // spoof return type for TypeScript to not complain
-}
+  return ''; // spoof return type for TypeScript to not complain
+};
 
 export const fail = (name: string, message: string) => {
-  const err = new Error(message)
-  err.name = name
-  return quit(err)
-}
+  const err = new Error(message);
+  err.name = name;
+  return quit(err);
+};
 
 export const run = (
   command: string,
@@ -132,17 +125,17 @@ export const run = (
     maxBuffer: 1024 * 2048,
     timeout: 300 * 1000,
     windowsHide: true,
-  }
+  };
   try {
     // const result = await spawnSync(command, args, options)
-    command += ' ' + args.join(' ')
-    return execSync(command, options)
+    command += ' ' + args.join(' ');
+    return execSync(command, options);
   } catch (e: any) {
     if (warning) {
-      warn(`${errMsg}: ${e.message}`)
-      return ''
+      warn(`${errMsg}: ${e.message}`);
+      return '';
     } else {
-      return quit(errMsg || e)
+      return quit(errMsg || e);
     }
   }
-}
+};

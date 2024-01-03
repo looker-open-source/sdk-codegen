@@ -24,20 +24,20 @@
 
  */
 
-import type { RootState } from '../root_reducer'
-import type { IHackerProps } from '../../models'
+import type { RootState } from '../root_reducer';
+import type { IHackerProps } from '../../models';
 
 export const getHackersState = (state: RootState): IHackerProps[] =>
-  state.hackersState.hackers
+  state.hackersState.hackers;
 
 export const getJudgesState = (state: RootState): IHackerProps[] =>
-  state.hackersState.judges
+  state.hackersState.judges;
 
 export const getAdminsState = (state: RootState): IHackerProps[] =>
-  state.hackersState.admins
+  state.hackersState.admins;
 
 export const getStaffState = (state: RootState): IHackerProps[] =>
-  state.hackersState.staff
+  state.hackersState.staff;
 
 export const getHackersPageNumState = (state: RootState): number =>
-  state.hackersState.currentPageNum
+  state.hackersState.currentPageNum;

@@ -24,34 +24,34 @@
 
  */
 
-import type { FC } from 'react'
-import React from 'react'
-import styled from 'styled-components'
+import type { FC } from 'react';
+import React from 'react';
+import styled from 'styled-components';
 import {
-  Icon,
-  Space,
-  IconButton,
   Heading,
+  Icon,
+  IconButton,
   Header as SemanticHeader,
-} from '@looker/components'
-import { LookerLogo } from '@looker/icons'
-import { Menu } from '@styled-icons/material/Menu'
-import type { SpecItem } from '@looker/sdk-codegen'
+  Space,
+} from '@looker/components';
+import { LookerLogo } from '@looker/icons';
+import { Menu } from '@styled-icons/material/Menu';
+import type { SpecItem } from '@looker/sdk-codegen';
 
-import { Link } from '../Link'
-import { SelectorContainer } from '../SelectorContainer'
+import { Link } from '../Link';
+import { SelectorContainer } from '../SelectorContainer';
 
 interface HeaderProps {
   /** Current selected spec */
-  spec: SpecItem
+  spec: SpecItem;
   /** Nav state setter */
-  toggleNavigation: (target?: boolean) => void
-  className?: string
+  toggleNavigation: (target?: boolean) => void;
+  className?: string;
 }
 
-export const HEADER_REM = 4
+export const HEADER_REM = 4;
 
-export const HEADER_TOGGLE_LABEL = 'Toggle Navigation'
+export const HEADER_TOGGLE_LABEL = 'Toggle Navigation';
 
 /**
  * Renders the API Explorer header
@@ -90,8 +90,8 @@ export const HeaderLayout: FC<HeaderProps> = ({
     </Space>
     <SelectorContainer spec={spec} />
   </SemanticHeader>
-)
+);
 
 export const Header = styled(HeaderLayout)`
   border-bottom: 1px solid ${({ theme }) => theme.colors.ui2};
-`
+`;

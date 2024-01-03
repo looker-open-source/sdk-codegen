@@ -23,16 +23,16 @@
  SOFTWARE.
 
  */
-import type { FC } from 'react'
-import React from 'react'
-import type { DiffCount } from '@looker/sdk-codegen'
-import { Code, Flex, Icon, Space } from '@looker/components'
-import { Add } from '@styled-icons/material/Add'
-import { ChangeHistory } from '@styled-icons/material/ChangeHistory'
-import { Remove } from '@styled-icons/material/Remove'
+import type { FC } from 'react';
+import React from 'react';
+import type { DiffCount } from '@looker/sdk-codegen';
+import { Code, Flex, Icon, Space } from '@looker/components';
+import { Add } from '@styled-icons/material/Add';
+import { ChangeHistory } from '@styled-icons/material/ChangeHistory';
+import { Remove } from '@styled-icons/material/Remove';
 
 interface DiffLegendProps {
-  count: DiffCount
+  count: DiffCount;
 }
 
 export const DiffLegend: FC<DiffLegendProps> = ({ count }) => {
@@ -63,5 +63,5 @@ export const DiffLegend: FC<DiffLegendProps> = ({ count }) => {
         </Space>
       )}
     </Flex>
-  )
-}
+  );
+};

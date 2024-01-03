@@ -24,15 +24,20 @@
 
  */
 
-import isEqual from 'lodash/isEqual'
-import React, { useState } from 'react'
-import { MemoryRouter } from 'react-router-dom'
-import { connectExtensionHost } from '@looker/extension-sdk'
-import { ErrorMessage } from '../ErrorMessage'
-import { RouteChangeListener } from '../RouteChangeListener'
-import { getInitialRouteEntries } from '../utils/get_initial_route_entries'
-import { setupClosePopoversListener } from '../utils/setup_close_popovers'
-import type { ExtensionConnectorProps, RouteData } from './types'
+import isEqual from 'lodash/isEqual';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { MemoryRouter } from 'react-router-dom';
+import type {
+  RawVisualizationData,
+  TileHostData,
+  TileSDKInternal,
+} from '@looker/extension-sdk';
+import { connectExtensionHost } from '@looker/extension-sdk';
+import { ErrorMessage } from '../ErrorMessage';
+import { RouteChangeListener } from '../RouteChangeListener';
+import { getInitialRouteEntries } from '../utils/get_initial_route_entries';
+import { setupClosePopoversListener } from '../utils/setup_close_popovers';
+import type { ExtensionConnectorProps, RouteData } from './types';
 
 /**
  * ExtensionConnector component. Provides access to the extension API and SDK (use
@@ -51,33 +56,65 @@ export const ExtensionConnector: React.FC<ExtensionConnectorProps> = ({
   chattyTimeout,
   children,
 }) => {
-  const [initialRouteData, setInitialRouteData] = useState<RouteData>()
-  const [hostRouteData, setHostRouteData] = useState<RouteData>({ route: '' })
-  const [initializing, setInitializing] = useState(true)
-  const [initializeError, setInitializeError] = useState<string>()
+  const contextDataRef = useRef(contextData);
+  const [initialRouteData, setInitialRouteData] = useState<RouteData>();
+  const [hostRouteData, setHostRouteData] = useState<RouteData>({ route: '' });
+  const [initializing, setInitializing] = useState(true);
+  const [initializeError, setInitializeError] = useState<string>();
 
-  const setInitialRouteAndRouteState = (route: string, routeState?: any) => {
-    if (hostTracksRoute) {
-      setInitialRouteData({ route, routeState })
-    }
-  }
+  useEffect(() => {
+    contextDataRef.current = contextData;
+  }, [contextData]);
 
-  const hostChangedRoute = (_route: string, routeState?: any) => {
-    const route = _route.startsWith('/') ? _route : '/' + _route
-    if (
-      route !== hostRouteData.route ||
-      !isEqual(routeState, hostRouteData.routeState)
-    ) {
-      setHostRouteData({ route, routeState })
+  const setInitialRouteAndRouteState = useCallback(
+    (route: string, routeState?: any) => {
+      if (hostTracksRoute) {
+        setInitialRouteData({ route, routeState });
+      }
+    },
+    [hostTracksRoute, setInitialRouteData]
+  );
+
+  const hostChangedRoute = useCallback(
+    (_route: string, routeState?: any) => {
+      const route = _route.startsWith('/') ? _route : '/' + _route;
+      if (
+        route !== hostRouteData.route ||
+        !isEqual(routeState, hostRouteData.routeState)
+      ) {
+        setHostRouteData({ route, routeState });
+        updateContextData({
+          route,
+          routeState,
+        });
+      }
+    },
+    [setHostRouteData, updateContextData]
+  );
+
+  const visualizationDataReceivedCallback = useCallback(
+    (visualizationData: RawVisualizationData) => {
       updateContextData({
-        ...contextData,
-        route,
-        routeState,
-      })
-    }
-  }
+        visualizationData,
+      });
+    },
+    [updateContextData]
+  );
 
-  React.useEffect(() => {
+  const tileHostDataChangedCallback = useCallback(
+    (partialHostData: Partial<TileHostData>) => {
+      if (contextDataRef.current.tileSDK) {
+        const { tileSDK } = contextDataRef.current;
+        (tileSDK as TileSDKInternal).tileHostDataChanged(partialHostData);
+        updateContextData({
+          tileHostData: tileSDK.tileHostData,
+        });
+      }
+    },
+    [updateContextData]
+  );
+
+  useEffect(() => {
     const initialize = async () => {
       try {
         const extensionHost = await connectExtensionHost({
@@ -85,27 +122,29 @@ export const ExtensionConnector: React.FC<ExtensionConnectorProps> = ({
           requiredLookerVersion,
           hostChangedRoute,
           chattyTimeout,
-        })
-        connectedCallback(extensionHost)
-        setInitializing(false)
+          visualizationDataReceivedCallback,
+          tileHostDataChangedCallback,
+        });
+        connectedCallback(extensionHost);
+        setInitializing(false);
       } catch (error: any) {
         // eslint-disable-next-line no-console
-        console.error(error)
-        setInitializeError(error.message || 'Extension failed to initialize.')
-        setInitializing(false)
+        console.error(error);
+        setInitializeError(error.message || 'Extension failed to initialize.');
+        setInitializing(false);
       }
-    }
-    initialize()
+    };
+    initialize();
     return () => {
-      unloadedCallback()
-    }
-  }, [])
+      unloadedCallback();
+    };
+  }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     return initializing
       ? undefined
-      : setupClosePopoversListener(contextData.extensionSDK)
-  }, [initializing])
+      : setupClosePopoversListener(contextData.extensionSDK);
+  }, [initializing]);
 
   return (
     <>
@@ -138,5 +177,5 @@ export const ExtensionConnector: React.FC<ExtensionConnectorProps> = ({
         </>
       )}
     </>
-  )
-}
+  );
+};

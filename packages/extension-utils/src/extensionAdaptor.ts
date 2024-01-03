@@ -24,21 +24,21 @@
 
  */
 
-import type { ExtensionSDK } from '@looker/extension-sdk'
-import type { IAPIMethods } from '@looker/sdk-rtl'
+import type { ExtensionSDK } from '@looker/extension-sdk';
+import type { IAPIMethods } from '@looker/sdk-rtl';
 import type {
+  IAuthAdaptor,
   IEnvironmentAdaptor,
   ThemeOverrides,
-  IAuthAdaptor,
-} from './adaptorUtils'
-import { getThemeOverrides } from './adaptorUtils'
+} from './adaptorUtils';
+import { getThemeOverrides } from './adaptorUtils';
 
 export class ExtensionAuthAdaptor implements IAuthAdaptor {
   constructor(public readonly sdk: IAPIMethods) {}
 
   async login() {
     // Noop for extensions. Authentication is not required in an extension context
-    return true
+    return true;
   }
 }
 
@@ -49,54 +49,57 @@ export class ExtensionAdaptor
   extends ExtensionAuthAdaptor
   implements IEnvironmentAdaptor
 {
-  _themeOverrides: ThemeOverrides
+  _themeOverrides: ThemeOverrides;
 
-  constructor(public extensionSdk: ExtensionSDK, sdk: IAPIMethods) {
-    super(sdk)
+  constructor(
+    public extensionSdk: ExtensionSDK,
+    sdk: IAPIMethods
+  ) {
+    super(sdk);
     this._themeOverrides = getThemeOverrides(
       (this.extensionSdk.lookerHostData || { hostType: 'standard' })
         .hostType === 'standard'
-    )
+    );
   }
 
   async copyToClipboard(location?: { pathname: string; search: string }) {
-    const { lookerHostData } = this.extensionSdk
+    const { lookerHostData } = this.extensionSdk;
     if (lookerHostData && location) {
-      const { hostOrigin, extensionId } = lookerHostData
-      const { pathname, search } = location
-      const url = `${hostOrigin}/extensions/${extensionId}${pathname}${search}`
-      await this.extensionSdk.clipboardWrite(url)
+      const { hostOrigin, extensionId } = lookerHostData;
+      const { pathname, search } = location;
+      const url = `${hostOrigin}/extensions/${extensionId}${pathname}${search}`;
+      await this.extensionSdk.clipboardWrite(url);
     }
   }
 
   isExtension() {
-    return true
+    return true;
   }
 
   async localStorageGetItem(key: string) {
-    return await this.extensionSdk.localStorageGetItem(key)
+    return await this.extensionSdk.localStorageGetItem(key);
   }
 
   async localStorageSetItem(key: string, value: string) {
-    await this.extensionSdk.localStorageSetItem(key, value)
+    await this.extensionSdk.localStorageSetItem(key, value);
   }
 
   async localStorageRemoveItem(key: string) {
-    await this.extensionSdk.localStorageRemoveItem(key)
+    await this.extensionSdk.localStorageRemoveItem(key);
   }
 
   themeOverrides(): ThemeOverrides {
-    return this._themeOverrides
+    return this._themeOverrides;
   }
 
   openBrowserWindow(url: string, target?: string) {
-    this.extensionSdk.openBrowserWindow(url, target)
+    this.extensionSdk.openBrowserWindow(url, target);
   }
 
   logError(error: Error, componentStack: string): void {
     this.extensionSdk.error({
       error: error,
       message: componentStack,
-    } as ErrorEvent)
+    } as ErrorEvent);
   }
 }

@@ -24,68 +24,68 @@
 
  */
 
-import nodeCrypto from 'crypto'
-import type { Request } from 'request'
-import rq from 'request'
+import nodeCrypto from 'crypto';
+import type { Request } from 'request';
+import rq from 'request';
 
-import rp from 'request-promise-native'
-import type { Readable } from 'readable-stream'
-import { PassThrough } from 'readable-stream'
-import { StatusCodeError } from 'request-promise-native/errors'
+import rp from 'request-promise-native';
+import type { Readable } from 'readable-stream';
+import { PassThrough } from 'readable-stream';
+import { StatusCodeError } from 'request-promise-native/errors';
 import {
   BaseTransport,
+  LookerAppId,
   ResponseMode,
+  agentPrefix,
   defaultTimeout,
   responseMode,
-  trace,
-  LookerAppId,
-  agentPrefix,
   safeBase64,
-} from '@looker/sdk-rtl'
+  trace,
+} from '@looker/sdk-rtl';
 import type {
   Authenticator,
   HttpMethod,
+  ICryptoHash,
+  IRawResponse,
+  IRequestHeaders,
   ISDKError,
   ITransportSettings,
   SDKResponse,
   Values,
-  IRequestHeaders,
-  IRawResponse,
-  ICryptoHash,
-} from '@looker/sdk-rtl'
+} from '@looker/sdk-rtl';
 
-const utf8 = 'utf8'
+const utf8 = 'utf8';
 
 const asString = (value: any): string => {
   if (value instanceof Buffer) {
-    return Buffer.from(value).toString(utf8)
+    return Buffer.from(value).toString(utf8);
   }
   if (value instanceof Object) {
-    return JSON.stringify(value)
+    return JSON.stringify(value);
   }
-  return value.toString()
-}
+  return value.toString();
+};
 
 export class NodeCryptoHash implements ICryptoHash {
   secureRandom(byteCount: number): string {
     // TODO update this to Node 18
-    return nodeCrypto.randomBytes(byteCount).toString('hex')
+    return nodeCrypto.randomBytes(byteCount).toString('hex');
   }
 
   async sha256Hash(message: string): Promise<string> {
-    const hash = nodeCrypto.createHash('sha256')
-    hash.update(message)
-    return safeBase64(new Uint8Array(hash.digest()))
+    const hash = nodeCrypto.createHash('sha256');
+    hash.update(message);
+    return safeBase64(new Uint8Array(hash.digest()));
   }
 }
 
 export type RequestOptions = rq.RequiredUriUrl &
   rp.RequestPromiseOptions &
-  rq.OptionsWithUrl
+  rq.OptionsWithUrl;
 
 export class NodeTransport extends BaseTransport {
   constructor(protected readonly options: ITransportSettings) {
-    super(options)
+    super(options);
   }
 
   async rawRequest(
@@ -103,16 +103,16 @@ export class NodeTransport extends BaseTransport {
       body,
       authenticator,
       options
-    )
-    const req = rp(init).promise()
-    let rawResponse: IRawResponse
+    );
+    const req = rp(init).promise();
+    let rawResponse: IRawResponse;
 
-    const requestStarted = Date.now()
-    let responseCompleted
+    const requestStarted = Date.now();
+    let responseCompleted;
     try {
-      const res = await req
-      responseCompleted = Date.now()
-      const resTyped = res as rq.Response
+      const res = await req;
+      responseCompleted = Date.now();
+      const resTyped = res as rq.Response;
       rawResponse = {
         method,
         url: resTyped.url || init.url.toString() || '',
@@ -124,33 +124,33 @@ export class NodeTransport extends BaseTransport {
         headers: res.headers,
         requestStarted,
         responseCompleted,
-      }
+      };
       // Update OK with response statusCode check
-      rawResponse.ok = this.ok(rawResponse)
+      rawResponse.ok = this.ok(rawResponse);
     } catch (e: any) {
-      let statusMessage = `${method} ${path}`
-      let statusCode = 404
-      let contentType = 'text'
-      let body
-      responseCompleted = Date.now()
+      let statusMessage = `${method} ${path}`;
+      let statusCode = 404;
+      let contentType = 'text';
+      let body;
+      responseCompleted = Date.now();
       if (e instanceof StatusCodeError) {
-        statusCode = e.statusCode
+        statusCode = e.statusCode;
         if (e.error instanceof Buffer) {
-          body = asString(e.error)
-          statusMessage += `: ${statusCode}`
+          body = asString(e.error);
+          statusMessage += `: ${statusCode}`;
         } else if (e.error instanceof Object) {
           // Capture error object as body
-          body = e.error
-          statusMessage += `: ${e.message}`
+          body = e.error;
+          statusMessage += `: ${e.message}`;
           // Clarify the error message
-          body.message = statusMessage
-          contentType = 'application/json'
+          body.message = statusMessage;
+          contentType = 'application/json';
         }
       } else if (e.error instanceof Buffer) {
-        body = asString(e.error)
+        body = asString(e.error);
       } else {
-        body = JSON.stringify(e)
-        contentType = 'application/json'
+        body = JSON.stringify(e);
+        contentType = 'application/json';
       }
       rawResponse = {
         method,
@@ -163,58 +163,58 @@ export class NodeTransport extends BaseTransport {
         headers: {},
         requestStarted,
         responseCompleted,
-      }
+      };
     }
-    return this.observer ? this.observer(rawResponse) : rawResponse
+    return this.observer ? this.observer(rawResponse) : rawResponse;
   }
 
   async parseResponse<TSuccess, TError>(res: IRawResponse) {
-    const mode = responseMode(res.contentType)
-    let response: SDKResponse<TSuccess, TError>
-    let error
+    const mode = responseMode(res.contentType);
+    let response: SDKResponse<TSuccess, TError>;
+    let error;
     if (!res.ok) {
       // Raw request had an error. Make sure it's a string before parsing the result
-      error = res.body
+      error = res.body;
       if (typeof error === 'string') {
         try {
-          error = JSON.parse(error)
+          error = JSON.parse(error);
         } catch {
-          error = { message: `Request failed: ${error}` }
+          error = { message: `Request failed: ${error}` };
         }
       }
-      response = { ok: false, error }
-      return response
+      response = { ok: false, error };
+      return response;
     }
-    let result = await res.body
+    let result = await res.body;
     if (mode === ResponseMode.string) {
       if (res.contentType.match(/^application\/.*\bjson\b/g)) {
         try {
           if (result instanceof Buffer) {
-            result = Buffer.from(result).toString(utf8)
+            result = Buffer.from(result).toString(utf8);
           }
           if (!(result instanceof Object)) {
-            result = JSON.parse(result.toString())
+            result = JSON.parse(result.toString());
           }
         } catch (err) {
-          error = err
+          error = err;
         }
       } else if (!error) {
         // Convert to string otherwise
-        result = asString(result)
+        result = asString(result);
       }
     } else {
       try {
-        result = Buffer.from(result ?? '').toString('binary')
+        result = Buffer.from(result ?? '').toString('binary');
       } catch (err) {
-        error = err
+        error = err;
       }
     }
     if (!error) {
-      response = { ok: true, value: result }
+      response = { ok: true, value: result };
     } else {
-      response = { ok: false, error: error as TError }
+      response = { ok: false, error: error as TError };
     }
-    return response
+    return response;
   }
 
   async request<TSuccess, TError>(
@@ -233,8 +233,8 @@ export class NodeTransport extends BaseTransport {
         body,
         authenticator,
         options
-      )
-      return await this.parseResponse<TSuccess, TError>(res)
+      );
+      return await this.parseResponse<TSuccess, TError>(res);
     } catch (e: any) {
       const error: ISDKError = {
         message:
@@ -242,8 +242,8 @@ export class NodeTransport extends BaseTransport {
             ? e.message
             : `The SDK call was not successful. The error was '${e}'.`,
         type: 'sdk_error',
-      }
-      return { error, ok: false }
+      };
+      return { error, ok: false };
     }
   }
 
@@ -253,22 +253,22 @@ export class NodeTransport extends BaseTransport {
    * @returns {request.Request}
    */
   protected requestor(props: RequestOptions): Request {
-    const method = props.method?.toString().toUpperCase() as HttpMethod
+    const method = props.method?.toString().toUpperCase() as HttpMethod;
     switch (method) {
       case 'GET':
-        return rq.get(props)
+        return rq.get(props);
       case 'PUT':
-        return rq.put(props)
+        return rq.put(props);
       case 'POST':
-        return rq.post(props)
+        return rq.post(props);
       case 'PATCH':
-        return rq.patch(props)
+        return rq.patch(props);
       case 'DELETE':
-        return rq.put(props)
+        return rq.put(props);
       case 'HEAD':
-        return rq.head(props)
+        return rq.head(props);
       default:
-        return rq.get(props)
+        return rq.get(props);
     }
   }
 
@@ -281,8 +281,8 @@ export class NodeTransport extends BaseTransport {
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
   ): Promise<TSuccess> {
-    const stream = new PassThrough()
-    const returnPromise = callback(stream)
+    const stream = new PassThrough();
+    const returnPromise = callback(stream);
     const init = await this.initRequest(
       method,
       path,
@@ -290,12 +290,12 @@ export class NodeTransport extends BaseTransport {
       body,
       authenticator,
       options
-    )
+    );
 
     const streamPromise = new Promise<void>((resolve, reject) => {
-      trace(`[stream] beginning stream via download url`, init)
-      let hasResolved = false
-      const req = this.requestor(init)
+      trace(`[stream] beginning stream via download url`, init);
+      let hasResolved = false;
+      const req = this.requestor(init);
 
       req
         .on('error', (err) => {
@@ -303,45 +303,45 @@ export class NodeTransport extends BaseTransport {
             trace(
               'ignoring ECONNRESET that occurred after streaming finished',
               init
-            )
+            );
           } else {
-            trace('streaming error', err)
-            reject(err)
+            trace('streaming error', err);
+            reject(err);
           }
         })
         .on('finish', () => {
-          trace(`[stream] streaming via download url finished`, init)
+          trace(`[stream] streaming via download url finished`, init);
         })
         .on('socket', (socket) => {
-          trace(`[stream] setting keepalive on socket`, init)
-          socket.setKeepAlive(true)
+          trace(`[stream] setting keepalive on socket`, init);
+          socket.setKeepAlive(true);
         })
         .on('abort', () => {
-          trace(`[stream] streaming via download url aborted`, init)
+          trace(`[stream] streaming via download url aborted`, init);
         })
         .on('response', () => {
-          trace(`[stream] got response from download url`, init)
+          trace(`[stream] got response from download url`, init);
         })
         .on('close', () => {
-          trace(`[stream] request stream closed`, init)
+          trace(`[stream] request stream closed`, init);
         })
         .pipe(stream)
         .on('error', (err) => {
-          trace(`[stream] PassThrough stream error`, err)
-          reject(err)
+          trace(`[stream] PassThrough stream error`, err);
+          reject(err);
         })
         .on('finish', () => {
-          trace(`[stream] PassThrough stream finished`, init)
-          resolve()
-          hasResolved = true
+          trace(`[stream] PassThrough stream finished`, init);
+          resolve();
+          hasResolved = true;
         })
         .on('close', () => {
-          trace(`[stream] PassThrough stream closed`, init)
-        })
-    })
+          trace(`[stream] PassThrough stream closed`, init);
+        });
+    });
 
-    const results = await Promise.all([returnPromise, streamPromise])
-    return results[0]
+    const results = await Promise.all([returnPromise, streamPromise]);
+    return results[0];
   }
 
   /**
@@ -350,8 +350,8 @@ export class NodeTransport extends BaseTransport {
    * @returns {boolean} true if the request should require full SSL verification
    */
   verifySsl(options?: Partial<ITransportSettings>) {
-    if (!options) options = this.options
-    return 'verify_ssl' in options ? options.verify_ssl : true
+    if (!options) options = this.options;
+    return 'verify_ssl' in options ? options.verify_ssl : true;
   }
 
   /**
@@ -360,9 +360,9 @@ export class NodeTransport extends BaseTransport {
    * @returns {number | undefined}
    */
   timeout(options?: Partial<ITransportSettings>): number {
-    if (!options) options = this.options
-    if ('timeout' in options && options.timeout) return options.timeout
-    return defaultTimeout
+    if (!options) options = this.options;
+    if ('timeout' in options && options.timeout) return options.timeout;
+    return defaultTimeout;
   }
 
   private async initRequest(
@@ -373,16 +373,16 @@ export class NodeTransport extends BaseTransport {
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
   ) {
-    options = options ? { ...this.options, ...options } : this.options
+    options = options ? { ...this.options, ...options } : this.options;
     if (!options.agentTag) {
-      options.agentTag = agentPrefix
+      options.agentTag = agentPrefix;
     }
     const headers: IRequestHeaders = {
       [LookerAppId]: options.agentTag,
       ...options.headers,
-    }
+    };
 
-    const requestPath = this.makeUrl(path, options, queryParams)
+    const requestPath = this.makeUrl(path, options, queryParams);
     let init: RequestOptions = {
       body: body || undefined,
       encoding: null,
@@ -398,14 +398,14 @@ export class NodeTransport extends BaseTransport {
 
       timeout: this.timeout(options) * 1000,
       url: requestPath,
-    }
-    if ('encoding' in options) init.encoding = options.encoding
+    };
+    if ('encoding' in options) init.encoding = options.encoding;
 
     if (authenticator) {
       // Automatic authentication process for the request
-      init = await authenticator(init)
+      init = await authenticator(init);
     }
-    return init
+    return init;
   }
 
   // /**

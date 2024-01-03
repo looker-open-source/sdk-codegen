@@ -28,23 +28,26 @@ import type {
   Authenticator,
   HttpMethod,
   IRawResponse,
-  ITransportSettings,
-  SDKResponse,
-  Values,
   IRequestHeaders,
   IRequestProps,
   ISDKError,
-} from '@looker/sdk-rtl'
-import { BaseTransport, agentPrefix, LookerAppId } from '@looker/sdk-rtl'
+  ITransportSettings,
+  SDKResponse,
+  Values,
+} from '@looker/sdk-rtl';
+import { BaseTransport, LookerAppId, agentPrefix } from '@looker/sdk-rtl';
 import type {
   ExtensionSDK,
   FetchCustomParameters,
   FetchProxyDataResponse,
-} from '@looker/extension-sdk'
+} from '@looker/extension-sdk';
 
 export class ExtensionProxyTransport extends BaseTransport {
-  constructor(public extensionSDK: ExtensionSDK, options: ITransportSettings) {
-    super(options)
+  constructor(
+    public extensionSDK: ExtensionSDK,
+    options: ITransportSettings
+  ) {
+    super(options);
   }
 
   private async initRequest(
@@ -54,22 +57,22 @@ export class ExtensionProxyTransport extends BaseTransport {
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
   ) {
-    const agentTag = options?.agentTag || agentPrefix
-    options = options ? { ...this.options, ...options } : this.options
-    const headers: IRequestHeaders = { [LookerAppId]: agentTag }
+    const agentTag = options?.agentTag || agentPrefix;
+    options = options ? { ...this.options, ...options } : this.options;
+    const headers: IRequestHeaders = { [LookerAppId]: agentTag };
     if (options && options.headers) {
       Object.entries(options.headers).forEach(([key, val]) => {
-        headers[key] = val
-      })
+        headers[key] = val;
+      });
     }
 
     // Make sure an empty body is undefined
     if (!body) {
-      body = undefined
+      body = undefined;
     } else {
       if (typeof body !== 'string') {
-        body = JSON.stringify(body)
-        headers['Content-Type'] = 'application/json'
+        body = JSON.stringify(body);
+        headers['Content-Type'] = 'application/json';
       }
     }
     let props: IRequestProps = {
@@ -78,14 +81,14 @@ export class ExtensionProxyTransport extends BaseTransport {
       headers,
       method,
       url: path,
-    }
+    };
 
     if (authenticator) {
       // Add authentication information to the request
-      props = await authenticator(props)
+      props = await authenticator(props);
     }
 
-    return props
+    return props;
   }
 
   parseResponse<TSuccess, TError>(
@@ -94,8 +97,8 @@ export class ExtensionProxyTransport extends BaseTransport {
     const result: SDKResponse<TSuccess, TError> = {
       ok: false,
       error: new Error('Should not be called!') as unknown as TError,
-    }
-    return Promise.resolve(result)
+    };
+    return Promise.resolve(result);
   }
 
   async rawRequest(
@@ -106,31 +109,31 @@ export class ExtensionProxyTransport extends BaseTransport {
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
   ): Promise<IRawResponse> {
-    options = { ...this.options, ...options }
-    const requestPath = this.makeUrl(path, options, queryParams)
+    options = { ...this.options, ...options };
+    const requestPath = this.makeUrl(path, options, queryParams);
     const props = await this.initRequest(
       method,
       requestPath,
       body,
       authenticator,
       options
-    )
+    );
     // const req = this.extensionSDK.fetchProxy(props.url)
     // Google services don't like LookerAppId header
-    delete props.headers[LookerAppId]
+    delete props.headers[LookerAppId];
     const fetchParams: FetchCustomParameters = {
       body: props.body,
       credentials: props.credentials,
       headers: props.headers,
       method: method as any,
-    }
-    const req = this.extensionSDK.fetchProxy(props.url, fetchParams)
+    };
+    const req = this.extensionSDK.fetchProxy(props.url, fetchParams);
 
-    const requestStarted = Date.now()
-    const res: FetchProxyDataResponse = await req
-    const responseCompleted = Date.now()
+    const requestStarted = Date.now();
+    const res: FetchProxyDataResponse = await req;
+    const responseCompleted = Date.now();
 
-    const contentType = String(res.headers['content-type'])
+    const contentType = String(res.headers['content-type']);
     // const mode = responseMode(contentType)
     // const responseBody =
     //   mode === ResponseMode.binary ? await res.body : await res.body.toString()
@@ -145,7 +148,7 @@ export class ExtensionProxyTransport extends BaseTransport {
       headers: res.headers,
       requestStarted,
       responseCompleted,
-    }
+    };
   }
 
   async request<TSuccess, TError>(
@@ -164,12 +167,12 @@ export class ExtensionProxyTransport extends BaseTransport {
         body,
         authenticator,
         options
-      )
+      );
       // The response body is already parsed to an object if it's JSON
       if (this.ok(res)) {
-        return { ok: true, value: res.body }
+        return { ok: true, value: res.body };
       } else {
-        return { error: res.body, ok: false }
+        return { error: res.body, ok: false };
       }
     } catch (e: any) {
       const error: ISDKError = {
@@ -178,8 +181,8 @@ export class ExtensionProxyTransport extends BaseTransport {
             ? e.message
             : `The SDK call was not successful. The error was '${e}'.`,
         type: 'sdk_error',
-      }
-      return { error, ok: false }
+      };
+      return { error, ok: false };
     }
   }
 
@@ -192,6 +195,6 @@ export class ExtensionProxyTransport extends BaseTransport {
     _authenticator?: Authenticator,
     _options?: Partial<ITransportSettings>
   ): Promise<T> {
-    return Promise.reject(new Error('stream is not implemented'))
+    return Promise.reject(new Error('stream is not implemented'));
   }
 }

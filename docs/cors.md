@@ -23,15 +23,15 @@ Included in this repository are scripts and source code that hopefully reduce th
 
 - [OAuth application registration](../packages/sdk-codegen-scripts/scripts/register.ts) is a Node script that can create and update an OAuth app configuration
 - a sample OAuth application configuration file [`appconfig.json`](../packages/sdk-codegen-scripts/scripts/appconfig.json) has the configuration for the stand-alone [API Explorer](../packages/api-explorer) in this repository
-- an [`OAuthConfigProvider`](../packages/extension-utils/src/authUtils.ts) from `@looker/extension-utils` to support OAuth handshakes with the Looker server 
+- an [`OAuthConfigProvider`](../packages/extension-utils/src/authUtils.ts) from `@looker/extension-utils` to support OAuth handshakes with the Looker server
 
 ## SDK support
 
 Because the OAuth workflow redirects the browser page to the Looker instance to authenticate, then back to your web application, the Browser's [sessionStorage](https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage) is used to persist some variables used by the SDK.
 
-### OAuth requests 
+### OAuth requests
 
-API Explorer uses a package called "RunIt" to make its API requests. The [`initRunItSDK` function](../packages/run-it/src/utils/RunItSDK.ts) uses the [`OAuthConfigProvider`](../packages/extension-utils/src/authUtils.ts). 
+API Explorer uses a package called "RunIt" to make its API requests. The [`initRunItSDK` function](../packages/run-it/src/utils/RunItSDK.ts) uses the [`OAuthConfigProvider`](../packages/extension-utils/src/authUtils.ts).
 This sets up the authentication session for OAuth.
 
 ### Automatic login

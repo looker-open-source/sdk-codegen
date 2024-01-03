@@ -24,140 +24,85 @@
 
  */
 
-import type { Looker31SDK, Looker40SDK } from '@looker/sdk'
+import type { Looker40SDK } from '@looker/sdk';
 import {
-  registerCore31SDK,
-  getCore31SDK,
-  unregisterCore31SDK,
-} from './core_sdk_31'
-import {
-  registerCore40SDK,
   getCore40SDK,
+  registerCore40SDK,
   unregisterCore40SDK,
-} from './core_sdk_40'
-import { registerCoreSDK2, getCoreSDK2, unregisterCoreSDK2 } from './core_sdk2'
-import { getCoreSDK } from './core_sdk'
+} from './core_sdk_40';
+import { getCoreSDK2, registerCoreSDK2, unregisterCoreSDK2 } from './core_sdk2';
 
 describe('coreSDK', () => {
   beforeEach(() => {
-    unregisterCore31SDK()
-    unregisterCore40SDK()
-  })
+    unregisterCore40SDK();
+  });
 
   it('errors when not initialized', () => {
     try {
-      getCore31SDK()
-      fail()
+      getCore40SDK();
+      fail();
     } catch (err) {
       // success - getCoreSDK should fail if not registered
     }
-  })
+  });
 
   it('returns sdk', () => {
-    const fakeSdk = jest.fn() as unknown
+    const fakeSdk = jest.fn() as unknown;
     try {
-      registerCore31SDK(fakeSdk as Looker31SDK)
-      expect(getCore31SDK()).toStrictEqual(fakeSdk)
-      expect(getCoreSDK()).toStrictEqual(fakeSdk)
+      registerCore40SDK(fakeSdk as Looker40SDK);
+      expect(getCore40SDK()).toStrictEqual(fakeSdk);
     } catch (err) {
-      fail(err)
+      fail(err);
     }
-  })
+  });
 
   it('does not allow multiple registrations', () => {
-    const fakeSdk = jest.fn() as unknown
+    const fakeSdk = jest.fn() as unknown;
     try {
-      registerCore31SDK(fakeSdk as Looker31SDK)
-      expect(getCore31SDK()).toStrictEqual(fakeSdk)
-      registerCore31SDK(fakeSdk as Looker31SDK)
-      fail()
+      registerCore40SDK(fakeSdk as Looker40SDK);
+      expect(getCore40SDK()).toStrictEqual(fakeSdk);
+      registerCore40SDK(fakeSdk as Looker40SDK);
+      fail();
     } catch (err) {
       // success - register should fail if called multiple times
     }
-  })
+  });
 
   it('unregisters', () => {
-    const fakeSdk = jest.fn() as unknown
+    const fakeSdk = jest.fn() as unknown;
     try {
-      registerCore31SDK(fakeSdk as Looker31SDK)
-      expect(getCore31SDK()).toStrictEqual(fakeSdk)
-      unregisterCore31SDK()
-      getCore31SDK()
-      fail()
+      registerCore40SDK(fakeSdk as Looker40SDK);
+      expect(getCore40SDK()).toStrictEqual(fakeSdk);
+      unregisterCore40SDK();
+      getCore40SDK();
+      fail();
     } catch (err) {
       // success - getCoreSDK should fail unregister
     }
-  })
-
-  it('errors when not initialized', () => {
-    try {
-      getCore40SDK()
-      fail()
-    } catch (err) {
-      // success - getCoreSDK should fail if not registered
-    }
-  })
-
-  it('returns sdk', () => {
-    const fakeSdk = jest.fn() as unknown
-    const fake31Sdk = jest.fn() as unknown
-    try {
-      registerCore31SDK(fake31Sdk as Looker31SDK)
-      registerCore40SDK(fakeSdk as Looker40SDK)
-      expect(getCore40SDK()).toStrictEqual(fakeSdk)
-      expect(getCoreSDK()).toStrictEqual(fake31Sdk)
-    } catch (err) {
-      fail(err)
-    }
-  })
-
-  it('does not allow multiple registrations', () => {
-    const fakeSdk = jest.fn() as unknown
-    try {
-      registerCore40SDK(fakeSdk as Looker40SDK)
-      expect(getCore40SDK()).toStrictEqual(fakeSdk)
-      registerCore40SDK(fakeSdk as Looker40SDK)
-      fail()
-    } catch (err) {
-      // success - register should fail if called multiple times
-    }
-  })
-
-  it('unregisters', () => {
-    const fakeSdk = jest.fn() as unknown
-    try {
-      registerCore40SDK(fakeSdk as Looker40SDK)
-      expect(getCore40SDK()).toStrictEqual(fakeSdk)
-      unregisterCore40SDK()
-      getCore40SDK()
-      fail()
-    } catch (err) {
-      // success - getCoreSDK should fail unregister
-    }
-  })
+  });
 
   it('SDK2 does not allow multiple registrations', () => {
-    const fakeSdk = jest.fn() as unknown
+    const fakeSdk = jest.fn() as unknown;
     try {
-      registerCoreSDK2(fakeSdk)
-      expect(getCoreSDK2()).toStrictEqual(fakeSdk)
-      registerCoreSDK2(fakeSdk)
-      fail()
+      registerCoreSDK2(fakeSdk);
+      expect(getCoreSDK2()).toStrictEqual(fakeSdk);
+      registerCoreSDK2(fakeSdk);
+      fail();
     } catch (err) {
       // success - register should fail if called multiple times
     }
-  })
+  });
 
   it('SDK2 unregisters', () => {
-    const fakeSdk = jest.fn() as unknown
+    const fakeSdk = jest.fn() as unknown;
     try {
-      registerCoreSDK2(fakeSdk)
-      expect(getCoreSDK2()).toStrictEqual(fakeSdk)
-      unregisterCoreSDK2()
-      getCoreSDK2()
-      fail()
+      registerCoreSDK2(fakeSdk);
+      expect(getCoreSDK2()).toStrictEqual(fakeSdk);
+      unregisterCoreSDK2();
+      getCoreSDK2();
+      fail();
     } catch (err) {
       // success - getCoreSDK2 should fail unregister
     }
-  })
-})
+  });
+});

@@ -23,17 +23,17 @@
  SOFTWARE.
 
  */
-import type { FC, ReactElement } from 'react'
-import React from 'react'
-import { Space, Box, Label } from '@looker/components'
+import type { FC, ReactElement } from 'react';
+import React from 'react';
+import { Box, Label, Space } from '@looker/components';
 
 interface FormItemProps {
   /** ID of input item for label */
-  id: string
+  id: string;
   /** Optional label. Defaults to an empty string so spacing is preserved */
-  label?: string | ReactElement
+  label?: string | ReactElement;
   /** Nested react elements */
-  children: ReactElement
+  children: ReactElement;
 }
 
 /**
@@ -43,7 +43,7 @@ interface FormItemProps {
  * @param label optional label
  */
 export const FormItem: FC<FormItemProps> = ({ id, children, label = ' ' }) => {
-  const key = `space_${id}`
+  const key = `space_${id}`;
   return (
     <Space id={key} key={key}>
       <Box key={`${key}_box`} width="120px" flexShrink={0}>
@@ -53,5 +53,5 @@ export const FormItem: FC<FormItemProps> = ({ id, children, label = ' ' }) => {
       </Box>
       {children}
     </Space>
-  )
-}
+  );
+};

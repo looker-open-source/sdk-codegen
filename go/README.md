@@ -4,7 +4,7 @@ The Go Looker SDK provides a convenient way to call your Looker instance's [Look
 
 ## Basic Usage
 
-Example code snippet below for basic SDK setup and usage. Also `git clone` this sdk-codegen repo and run the [example code](go/example/main.go). 
+Example code snippet below for basic SDK setup and usage. Also `git clone` this sdk-codegen repo and run the [example code](go/example/main.go).
 
 ```go
 import (
@@ -20,12 +20,12 @@ func main() {
     // environment
     cfg, err := rtl.NewSettingsFromEnv()
 
-    // Create new auth session with sdk settings. 
-    // The auth session will fetch/refresh the access 
-    // token from your Looker instance's `login` endpoint. 
+    // Create new auth session with sdk settings.
+    // The auth session will fetch/refresh the access
+    // token from your Looker instance's `login` endpoint.
     session := rtl.NewAuthSession(cfg)
 
-    // Create new instance of the Go Looker SDK 
+    // Create new instance of the Go Looker SDK
     sdk := v4.NewLookerSDK(session)
 
     // Call the Looker API e.g. get your user's name
@@ -38,7 +38,7 @@ func main() {
 
 ### Custom headers
 
-You can set custom headers on Looker Go SDK's requests. They can either be applied to all outgoing requests or per outgoing request. 
+You can set custom headers on Looker Go SDK's requests. They can either be applied to all outgoing requests or per outgoing request.
 
 #### Custom headers for all requests
 
@@ -53,7 +53,7 @@ func main() {
         "HeaderName1": "HeaderValue1",
         "HeaderName2": "HeaderValue2",
     }
-    
+
     session := rtl.NewAuthSession(cfg)
     sdk := v4.NewLookerSDK(session)
 }
@@ -77,13 +77,14 @@ func main() {
 }
 ```
 
-### Timeout 
+### Timeout
 
-You can set a custom timeout (in seconds) on Looker Go SDK's requests. The timeout defaults to 120 seconds. A timeout can either be applied to all outgoing requests or per outgoing request. 
+You can set a custom timeout (in seconds) on Looker Go SDK's requests. The timeout defaults to 120 seconds. A timeout can either be applied to all outgoing requests or per outgoing request.
 
 #### Timeout for all requests
 
-Set `timeout` in your sdk's looker.ini file then call `NewSettingsFromFile()`.  
+Set `timeout` in your sdk's looker.ini file then call `NewSettingsFromFile()`.
+
 ```YAML
 [Looker]
 timeout=60
@@ -92,6 +93,7 @@ timeout=60
 OR
 
 Set `LOOKERSDK_TIMEOUT` environment variable then call `NewSettingsFromEnv()`.
+
 ```bash
 LOOKERSDK_TIMEOUT=60
 ```

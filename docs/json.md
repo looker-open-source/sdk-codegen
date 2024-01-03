@@ -78,12 +78,12 @@ Given the following TypeScript interface:
 
 ```ts
 interface ITestModel {
-  string1: string
-  num1: number
-  string2: string
-  num2: number
-  string3: string
-  num3: number
+  string1: string;
+  num1: number;
+  string2: string;
+  num2: number;
+  string3: string;
+  num3: number;
 }
 ```
 
@@ -92,15 +92,15 @@ We want the TypeScript SDK to successfully deserialize the payload into `ITestMo
 This test passes:
 
 ```ts
-const typed = await sdkOk(xp.parseResponse<ITestModel, ISDKError>(resp))
-expect(typed.string1).toBe(1)
-expect(typed.num1).toBe(1)
-expect(typed.string2).toBe('2')
-expect(typed.num2).toBe('2')
-expect(typed.string3).toBe('3')
-expect(typed.num3).toBe(3)
-expect((typed as any).string4).toBe('4')
-expect((typed as any).num4).toBe(4)
+const typed = await sdkOk(xp.parseResponse<ITestModel, ISDKError>(resp));
+expect(typed.string1).toBe(1);
+expect(typed.num1).toBe(1);
+expect(typed.string2).toBe('2');
+expect(typed.num2).toBe('2');
+expect(typed.string3).toBe('3');
+expect(typed.num3).toBe(3);
+expect((typed as any).string4).toBe('4');
+expect((typed as any).num4).toBe(4);
 ```
 
 ### TypeScript caveats

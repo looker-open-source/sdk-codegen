@@ -23,15 +23,15 @@
  SOFTWARE.
 
  */
-import { useLocation } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
 import {
   selectTagFilter,
   useSettingActions,
   useSettingStoreState,
-} from '../../../state'
-import { isValidFilter, useNavigation } from '../../../utils'
+} from '../../../state';
+import { isValidFilter, useNavigation } from '../../../utils';
 
 /**
  * Hook for syncing tag scene URL params with the Redux store
@@ -39,30 +39,30 @@ import { isValidFilter, useNavigation } from '../../../utils'
  * Tag scene specific search parameters: 't'
  */
 export const useTagStoreSync = () => {
-  const location = useLocation()
-  const { navigate } = useNavigation()
-  const { setTagFilterAction } = useSettingActions()
-  const { initialized } = useSettingStoreState()
-  const selectedTagFilter = useSelector(selectTagFilter)
+  const location = useLocation();
+  const { navigate } = useNavigation();
+  const { setTagFilterAction } = useSettingActions();
+  const { initialized } = useSettingStoreState();
+  const selectedTagFilter = useSelector(selectTagFilter);
 
   useEffect(() => {
     if (initialized) {
-      const params = new URLSearchParams(location.search)
+      const params = new URLSearchParams(location.search);
 
       // syncing verb filter on tag scene page
-      const verbParam = params.get('t') || 'ALL'
-      const validVerbParam = isValidFilter(location.pathname, verbParam)
+      const verbParam = params.get('t') || 'ALL';
+      const validVerbParam = isValidFilter(location.pathname, verbParam);
       if (validVerbParam) {
-        setTagFilterAction({ tagFilter: verbParam.toUpperCase() })
+        setTagFilterAction({ tagFilter: verbParam.toUpperCase() });
       } else {
         // must confirm store tag filter param is valid for tag type before updating
         const verb = isValidFilter(location.pathname, selectedTagFilter)
           ? selectedTagFilter
-          : 'ALL'
+          : 'ALL';
         navigate(location.pathname, {
           t: verb === 'ALL' ? null : verb.toLowerCase(),
-        })
+        });
       }
     }
-  }, [initialized])
-}
+  }, [initialized]);
+};

@@ -24,7 +24,7 @@
 
  */
 
-import type { ITechnologyProps } from '../models'
+import type { ITechnologyProps } from '../models';
 
 export const techDescriptions = (
   ids: string[],
@@ -34,18 +34,18 @@ export const techDescriptions = (
     return technologies
       ?.filter((t) => ids.includes(t._id))
       .map((t) => t.description)
-      .join(', ')
+      .join(', ');
   } catch {
     // avoid sheet data errors
-    return ids.join(', ')
+    return ids.join(', ');
   }
-}
+};
 
 export const getMembers = (team: string[]) => {
   try {
-    return team.join(', ') || 'Nobody!'
+    return team.join(', ') || 'Nobody!';
   } catch {
     // avoid sheet data errors
-    return 'Error retrieving team members'
+    return 'Error retrieving team members';
   }
-}
+};

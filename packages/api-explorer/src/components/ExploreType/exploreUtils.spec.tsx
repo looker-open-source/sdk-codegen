@@ -24,63 +24,63 @@
 
  */
 
-import React from 'react'
-import { FieldString, IdeFileManifest } from '@looker/icons'
-import { CalendarToday } from '@styled-icons/material/CalendarToday'
-import { Code } from '@styled-icons/material/Code'
-import { Tag } from '@styled-icons/material-rounded/Tag'
-import { api40 as api } from '../../test-data'
-import { expandable, pickType, pickTypeProps, typeIcon } from './exploreUtils'
+import React from 'react';
+import { FieldString, IdeFileManifest } from '@looker/icons';
+import { CalendarToday } from '@styled-icons/material/CalendarToday';
+import { Code } from '@styled-icons/material/Code';
+import { Tag } from '@styled-icons/material-rounded/Tag';
+import { api40 as api } from '../../test-data';
+import { expandable, pickType, pickTypeProps, typeIcon } from './exploreUtils';
 
 describe('exploreUtils', () => {
   test('pickType', () => {
-    const method = api.methods.connection_tables
-    const responseType = method.primaryResponse.type
-    const type = pickType(responseType)
-    expect(type).toBeDefined()
-    expect(type.fullName).toEqual('SchemaTables')
-    const props = pickTypeProps(responseType)
-    expect(props).toBeDefined()
-    const names = Object.keys(props)
-    expect(names).toEqual(['name', 'is_default', 'tables', 'table_limit_hit'])
-  })
+    const method = api.methods.connection_tables;
+    const responseType = method.primaryResponse.type;
+    const type = pickType(responseType);
+    expect(type).toBeDefined();
+    expect(type.fullName).toEqual('SchemaTables');
+    const props = pickTypeProps(responseType);
+    expect(props).toBeDefined();
+    const names = Object.keys(props);
+    expect(names).toEqual(['name', 'is_default', 'tables', 'table_limit_hit']);
+  });
 
   test('iconType', () => {
-    const type = api.types.BoardSection
-    const actual = typeIcon(type)
-    expect(actual).toEqual({ icon: <Code />, title: 'BoardSection' })
-    const props = type.properties
+    const type = api.types.BoardSection;
+    const actual = typeIcon(type);
+    expect(actual).toEqual({ icon: <Code />, title: 'BoardSection' });
+    const props = type.properties;
     expect(typeIcon(props.can.type)).toEqual({
       icon: <IdeFileManifest />,
       title: 'Hash[boolean]',
-    })
+    });
     expect(typeIcon(props.created_at.type)).toEqual({
       icon: <CalendarToday />,
       title: 'datetime',
-    })
+    });
     expect(typeIcon(props.description.type)).toEqual({
       icon: <FieldString />,
       title: 'string',
-    })
-    const intProp = api.types.ColorStop.properties.offset
+    });
+    const intProp = api.types.ColorStop.properties.offset;
     expect(typeIcon(intProp.type)).toEqual({
       icon: <Tag />,
       title: 'int64',
-    })
-  })
+    });
+  });
 
   describe('expandable', () => {
     test('maxDepth -1 is always expandable', () => {
-      expect(expandable(20, -1)).toEqual(true)
-    })
+      expect(expandable(20, -1)).toEqual(true);
+    });
     test('maxDepth 0 is never expandable', () => {
-      expect(expandable(1, 0)).toEqual(false)
-    })
+      expect(expandable(1, 0)).toEqual(false);
+    });
     test('maxDepth 2 is expandable 2 levels deep', () => {
-      expect(expandable(0, 2)).toEqual(true)
-      expect(expandable(1, 2)).toEqual(true)
-      expect(expandable(2, 2)).toEqual(true)
-      expect(expandable(3, 2)).toEqual(false)
-    })
-  })
-})
+      expect(expandable(0, 2)).toEqual(true);
+      expect(expandable(1, 2)).toEqual(true);
+      expect(expandable(2, 2)).toEqual(true);
+      expect(expandable(3, 2)).toEqual(false);
+    });
+  });
+});

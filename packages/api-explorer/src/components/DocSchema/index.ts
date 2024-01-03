@@ -24,4 +24,4 @@
 
  */
 
-export { DocSchema } from './DocSchema'
+export { DocSchema } from './DocSchema';

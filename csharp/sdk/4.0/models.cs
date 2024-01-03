@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 327 API models: 245 Spec, 0 Request, 60 Write, 22 Enum
+/// 338 API models: 255 Spec, 0 Request, 61 Write, 22 Enum
 
 #nullable enable
 using System;
@@ -58,7 +58,7 @@ public class Alert : SdkModel
   /// <summary>This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".</summary>
   [JsonConverter(typeof(StringEnumConverter))]
   public ComparisonType comparison_type { get; set; }
-  /// <summary>Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals</summary>
+  /// <summary>Vixie-Style crontab specification when to run. At minimum, it has to be longer than 15 minute intervals</summary>
   public string cron { get; set; } = "";
   /// <summary>Domain for the custom url selected by the alert creator from the admin defined domain allowlist</summary>
   public string? custom_url_base { get; set; } = null;
@@ -1811,7 +1811,7 @@ public class Dialect : SdkModel
   public string? persistent_table_sortkeys { get; set; } = null;
   /// <summary>PDT distkey column (read-only)</summary>
   public string? persistent_table_distkey { get; set; } = null;
-  /// <summary>Suports streaming results (read-only)</summary>
+  /// <summary>Supports streaming results (read-only)</summary>
   public bool? supports_streaming { get; set; } = null;
   /// <summary>Should SQL Runner snippets automatically be run (read-only)</summary>
   public bool? automatically_run_sql_runner_snippets { get; set; } = null;
@@ -1922,13 +1922,39 @@ public class EgressIpAddresses : SdkModel
   public string[]? egress_ip_addresses { get; set; } = null;
 }
 
+public class EmbedConfig : SdkModel
+{
+  /// <summary>List of domains to allow for embedding</summary>
+  public string[]? domain_allowlist { get; set; } = null;
+  /// <summary>List of base urls to allow for alert/schedule</summary>
+  public string[]? alert_url_allowlist { get; set; } = null;
+  /// <summary>Owner of who defines the alert/schedule params on the base url</summary>
+  public string? alert_url_param_owner { get; set; } = null;
+  /// <summary>Label for the alert/schedule url</summary>
+  public string? alert_url_label { get; set; } = null;
+  /// <summary>Is SSO embedding enabled for this Looker</summary>
+  public bool? sso_auth_enabled { get; set; } = null;
+  /// <summary>Is Cookieless embedding enabled for this Looker</summary>
+  public bool? embed_cookieless_v2 { get; set; } = null;
+  /// <summary>Is embed content navigation enabled for this looker</summary>
+  public bool? embed_content_navigation { get; set; } = null;
+  /// <summary>Is embed content management enabled for this Looker</summary>
+  public bool? embed_content_management { get; set; } = null;
+  /// <summary>When true, prohibits the use of Looker login pages in non-Looker iframes. When false, Looker login pages may be used in non-Looker hosted iframes.</summary>
+  public bool? strict_sameorigin_for_login { get; set; } = null;
+  /// <summary>When true, filters are enabled on embedded Looks</summary>
+  public bool? look_filters { get; set; } = null;
+  /// <summary>When true, removes navigation to Looks from embedded dashboards and explores.</summary>
+  public bool? hide_look_navigation { get; set; } = null;
+}
+
 public class EmbedCookielessSessionAcquire : SdkModel
 {
-  /// <summary>Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).</summary>
+  /// <summary>Number of seconds the signed embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).</summary>
   public long? session_length { get; set; } = null;
   /// <summary>When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.</summary>
   public bool? force_logout_login { get; set; } = null;
-  /// <summary>A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions.</summary>
+  /// <summary>A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions. When the same external user id value is used for a new embed session, any existing session is terminated and existing access grants are replaced with the access grants associated with the new embed session.</summary>
   public string? external_user_id { get; set; } = null;
   /// <summary>First name of the embed user. Defaults to 'Embed' if not specified</summary>
   public string? first_name { get; set; } = null;
@@ -1946,10 +1972,10 @@ public class EmbedCookielessSessionAcquire : SdkModel
   public string? external_group_id { get; set; } = null;
   /// <summary>A dictionary of name-value pairs associating a Looker user attribute name with a value.</summary>
   public StringDictionary<object>? user_attributes { get; set; } = null;
-  /// <summary>Token referencing the embed session and is used to generate new authentication, navigation and api tokens.</summary>
-  public string? session_reference_token { get; set; } = null;
   /// <summary>The domain of the server embedding the Looker IFRAME. This is an alternative to specifying the domain in the embedded domain allow list in the Looker embed admin page.</summary>
   public string? embed_domain { get; set; } = null;
+  /// <summary>Token referencing the embed session and is used to generate new authentication, navigation and api tokens.</summary>
+  public string? session_reference_token { get; set; } = null;
 }
 
 public class EmbedCookielessSessionAcquireResponse : SdkModel
@@ -1968,7 +1994,7 @@ public class EmbedCookielessSessionAcquireResponse : SdkModel
   public long? api_token_ttl { get; set; } = null;
   /// <summary>Token referencing the actual embed session. It is used to generate new api, navigation and authentication tokens. api and navigation tokens are short lived and must be refreshed regularly. A new authentication token must be acquired for each IFRAME that is created. The session_reference_token should be kept secure, ideally in the embed hosts application server. </summary>
   public string? session_reference_token { get; set; } = null;
-  /// <summary>Session reference token time to live in seconds. Note that this is the same as actual session.</summary>
+  /// <summary>Session reference token time to live in seconds. Note that this is the same as actual embed session. The session is expired when the value is set to zero. It is important to note that the generate token endpoint does NOT return an error when the embed session has expired. If an embedding application needs to monitor expiration of embed sessions, check this property for a value of zero.</summary>
   public long? session_reference_token_ttl { get; set; } = null;
 }
 
@@ -2002,7 +2028,7 @@ public class EmbedParams : SdkModel
 {
   /// <summary>The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.</summary>
   public string target_url { get; set; } = "";
-  /// <summary>Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).</summary>
+  /// <summary>Number of seconds the signed embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).</summary>
   public long? session_length { get; set; } = null;
   /// <summary>When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.</summary>
   public bool? force_logout_login { get; set; } = null;
@@ -2031,11 +2057,11 @@ public class EmbedSsoParams : SdkModel
 {
   /// <summary>The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, `target_url` would look like: `https://mycompany.looker.com:9999/dashboards/34`. `target_uri` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, `target_uri` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.</summary>
   public string target_url { get; set; } = "";
-  /// <summary>Number of seconds the SSO embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).</summary>
+  /// <summary>Number of seconds the signed embed session will be valid after the embed session is started. Defaults to 300 seconds. Maximum session length accepted is 2592000 seconds (30 days).</summary>
   public long? session_length { get; set; } = null;
   /// <summary>When true, the embed session will purge any residual Looker login state (such as in browser cookies) before creating a new login state with the given embed user info. Defaults to true.</summary>
   public bool? force_logout_login { get; set; } = null;
-  /// <summary>A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions.</summary>
+  /// <summary>A value from an external system that uniquely identifies the embed user. Since the user_ids of Looker embed users may change with every embed session, external_user_id provides a way to assign a known, stable user identifier across multiple embed sessions. When the same external user id value is used for a new embed session, any existing session is terminated and existing access grants are replaced with the access grants associated with the new embed session.</summary>
   public string? external_user_id { get; set; } = null;
   /// <summary>First name of the embed user. Defaults to 'Embed' if not specified</summary>
   public string? first_name { get; set; } = null;
@@ -2055,6 +2081,8 @@ public class EmbedSsoParams : SdkModel
   public StringDictionary<object>? user_attributes { get; set; } = null;
   /// <summary>Id of the embed secret to use to sign this SSO url. If specified, the value must be an id of a valid (active) secret defined in the Looker instance. If not specified, the URL will be signed with the newest active embed secret defined in the Looker instance.</summary>
   public string? secret_id { get; set; } = null;
+  /// <summary>Optional. URL of the domain hosting the signed embed URL. If provided and valid, the embed_domain will be added to the embed domain allowlist if it is not currently in the list</summary>
+  public string? embed_domain { get; set; } = null;
 }
 
 public class EmbedUrlResponse : SdkModel
@@ -2537,9 +2565,9 @@ public class IntegrationRequiredField : SdkModel
 {
   /// <summary>Matches a field that has this tag. (read-only)</summary>
   public string? tag { get; set; } = null;
-  /// <summary>If present, supercedes 'tag' and matches a field that has any of the provided tags. (read-only)</summary>
+  /// <summary>If present, supersedes 'tag' and matches a field that has any of the provided tags. (read-only)</summary>
   public string[]? any_tag { get; set; } = null;
-  /// <summary>If present, supercedes 'tag' and matches a field that has all of the provided tags. (read-only)</summary>
+  /// <summary>If present, supersedes 'tag' and matches a field that has all of the provided tags. (read-only)</summary>
   public string[]? all_tags { get; set; } = null;
 }
 
@@ -2578,10 +2606,82 @@ public enum InvestigativeContentType
   dashboard
 }
 
-public class JdbcInterface : SdkModel
+public class JsonBi : SdkModel
 {
-  /// <summary>JDBC Metadata to inflate Avatica response classes. (read-only)</summary>
-  public string? results { get; set; } = null;
+  public JsonBiBigQueryMetadata big_query_metadata { get; set; } = null;
+  public JsonBiFields fields { get; set; } = null;
+  /// <summary>Pivots (read-only)</summary>
+  public JsonBiPivots[] pivots { get; set; } = null;
+  /// <summary>If the query has subtotals (read-only)</summary>
+  public bool has_subtotals { get; set; }
+  /// <summary>If the query has totals (read-only)</summary>
+  public bool has_totals { get; set; }
+  /// <summary>If the query results hit the maximum column limit and additional columns were truncated (read-only)</summary>
+  public string columns_truncated { get; set; } = "";
+  /// <summary>Filter expression applied to the query results (read-only)</summary>
+  public string filter_expression { get; set; } = "";
+  /// <summary>Filters applied to the query results (read-only)</summary>
+  public StringDictionary<string> filters { get; set; } = null;
+  /// <summary>Json query results (read-only)</summary>
+  public string[] data { get; set; } = null;
+}
+
+public class JsonBiBigQueryMetadata : SdkModel
+{
+  /// <summary>Total bytes processed by the BigQuery job (read-only)</summary>
+  public long total_bytes_processed { get; set; }
+  /// <summary>Return whether or not query results were served from the BigQuery cache. (read-only)</summary>
+  public bool backend_cache_hit { get; set; }
+}
+
+public class JsonBiField : SdkModel
+{
+  /// <summary>SQL expressions for the field (read-only)</summary>
+  public string sql { get; set; } = "";
+  /// <summary>Explore name (read-only)</summary>
+  public string view { get; set; } = "";
+  /// <summary>Which dimension group created this dimension (read-only)</summary>
+  public string dimension_group { get; set; } = "";
+  /// <summary>Dimension, Measure, etc. (read-only)</summary>
+  public string category { get; set; } = "";
+  /// <summary>Field Group Label (read-only)</summary>
+  public string field_group_label { get; set; } = "";
+  /// <summary>Field Name (read-only)</summary>
+  public string name { get; set; } = "";
+  /// <summary>Field Type (read-only)</summary>
+  public string type { get; set; } = "";
+  /// <summary>View Label (read-only)</summary>
+  public string view_label { get; set; } = "";
+  /// <summary>Field Label (read-only)</summary>
+  public string label { get; set; } = "";
+  /// <summary>Field Group Variant (read-only)</summary>
+  public string field_group_variant { get; set; } = "";
+  /// <summary>If the field is marked as hidden in the Lookml (read-only)</summary>
+  public bool hidden { get; set; }
+  /// <summary>Field Description (read-only)</summary>
+  public string description { get; set; } = "";
+}
+
+public class JsonBiFields : SdkModel
+{
+  /// <summary>Dimensions represent a column in a table, or a computed value based on some sort of column manipulation or combination (read-only)</summary>
+  public JsonBiField[] dimensions { get; set; } = null;
+  /// <summary>Measures are similar to aggregate functions in SQL (for example, COUNT, SUM, AVG) and represent information about multiple rows (read-only)</summary>
+  public JsonBiField[] measures { get; set; } = null;
+  /// <summary>Pivots (read-only)</summary>
+  public JsonBiField[] pivots { get; set; } = null;
+}
+
+public class JsonBiPivots : SdkModel
+{
+  /// <summary>Pivot Column Value (read-only)</summary>
+  public string key { get; set; } = "";
+  /// <summary>Pivot Data (read-only)</summary>
+  public StringDictionary<string> data { get; set; } = null;
+  /// <summary>Pivot Sort Values (read-only)</summary>
+  public StringDictionary<string> sort_values { get; set; } = null;
+  /// <summary>If the value is a total (read-only)</summary>
+  public bool is_total { get; set; }
 }
 
 public class LDAPConfig : SdkModel
@@ -3478,6 +3578,16 @@ public class Manifest : SdkModel
   public LocalizationSettings? localization_settings { get; set; }
 }
 
+public class MarketplaceAutomation : SdkModel
+{
+  /// <summary>Whether marketplace auto installation is enabled</summary>
+  public bool? install_enabled { get; set; } = null;
+  /// <summary>Whether marketplace auto update is enabled for looker extensions</summary>
+  public bool? update_looker_enabled { get; set; } = null;
+  /// <summary>Whether marketplace auto update is enabled for third party extensions</summary>
+  public bool? update_third_party_enabled { get; set; } = null;
+}
+
 public class MaterializePDT : SdkModel
 {
   /// <summary>The ID of the enqueued materialization task (read-only)</summary>
@@ -4096,6 +4206,27 @@ public class Query : SdkModel
   public string? query_timezone { get; set; } = null;
   /// <summary>Has Table Calculations (read-only)</summary>
   public bool? has_table_calculations { get; set; } = null;
+}
+
+public class QueryFormats : SdkModel
+{
+  public JsonBi? json_bi { get; set; }
+  /// <summary> (read-only)</summary>
+  public string? json { get; set; } = null;
+  /// <summary> (read-only)</summary>
+  public string? json_detail { get; set; } = null;
+  /// <summary> (read-only)</summary>
+  public string? csv { get; set; } = null;
+  /// <summary> (read-only)</summary>
+  public string? txt { get; set; } = null;
+  /// <summary> (read-only)</summary>
+  public string? html { get; set; } = null;
+  /// <summary> (read-only)</summary>
+  public string? md { get; set; } = null;
+  /// <summary> (read-only)</summary>
+  public string? xlsx { get; set; } = null;
+  /// <summary> (read-only)</summary>
+  public string? sql { get; set; } = null;
 }
 
 public class QueryTask : SdkModel
@@ -4735,12 +4866,15 @@ public class Setting : SdkModel
 {
   /// <summary>Toggle extension framework on or off</summary>
   public bool? extension_framework_enabled { get; set; } = null;
-  /// <summary>(DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.</summary>
+  /// <summary>(DEPRECATED) Toggle extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.</summary>
   public bool? extension_load_url_enabled { get; set; } = null;
-  /// <summary>Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.</summary>
+  /// <summary>(DEPRECATED) Toggle marketplace auto install on or off. Deprecated - do not use. Auto install can now be enabled via marketplace automation settings</summary>
   public bool? marketplace_auto_install_enabled { get; set; } = null;
+  public MarketplaceAutomation? marketplace_automation { get; set; }
   /// <summary>Toggle marketplace on or off</summary>
   public bool? marketplace_enabled { get; set; } = null;
+  /// <summary>Location of Looker marketplace CDN (read-only)</summary>
+  public string? marketplace_site { get; set; } = null;
   /// <summary>Accept marketplace terms by setting this value to true, or get the current status. Marketplace terms CANNOT be declined once accepted. Accepting marketplace terms automatically enables the marketplace. The marketplace can still be disabled after it has been enabled.</summary>
   public bool? marketplace_terms_accepted { get; set; } = null;
   public PrivatelabelConfiguration? privatelabel_configuration { get; set; }
@@ -4759,10 +4893,15 @@ public class Setting : SdkModel
   public bool? override_warnings { get; set; } = null;
   /// <summary>An array of Email Domain Allowlist of type string for Scheduled Content</summary>
   public string[]? email_domain_allowlist { get; set; } = null;
-  /// <summary>Toggle cookieless embed setting</summary>
+  /// <summary>(DEPRECATED) Use embed_config.embed_cookieless_v2 instead. If embed_config.embed_cookieless_v2 is specified, it overrides this value.</summary>
   public bool? embed_cookieless_v2 { get; set; } = null;
   /// <summary>True if embedding is enabled https://cloud.google.com/looker/docs/r/looker-core-feature-embed, false otherwise (read-only)</summary>
   public bool? embed_enabled { get; set; } = null;
+  public EmbedConfig? embed_config { get; set; }
+  /// <summary>Login notification enabled (read-only)</summary>
+  public bool? login_notification_enabled { get; set; } = null;
+  /// <summary>Login notification text (read-only)</summary>
+  public string? login_notification_text { get; set; } = null;
 }
 
 public class SmtpNodeStatus : SdkModel
@@ -4814,6 +4953,32 @@ public class Snippet : SdkModel
   public string? label { get; set; } = null;
   /// <summary>SQL text of the snippet (read-only)</summary>
   public string? sql { get; set; } = null;
+}
+
+public class SqlInterfaceQuery : SdkModel
+{
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
+  public StringDictionary<bool>? can { get; set; } = null;
+  /// <summary>Unique Id (read-only)</summary>
+  public long? id { get; set; } = null;
+  /// <summary>Calcite signature (read-only)</summary>
+  public string signature { get; set; } = "";
+}
+
+public class SqlInterfaceQueryCreate : SdkModel
+{
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
+  public StringDictionary<bool>? can { get; set; } = null;
+  /// <summary>Original SQL request</summary>
+  public string sql { get; set; } = "";
+  /// <summary>Whether the query should be run for use in a JDBC Client. This changes the formatting of some datetime based values.</summary>
+  public bool? jdbc_client { get; set; } = null;
+}
+
+public class SqlInterfaceQueryMetadata : SdkModel
+{
+  /// <summary>JDBC Metadata to inflate Avatica response classes. (read-only)</summary>
+  public string? results { get; set; } = null;
 }
 
 public class SqlQuery : SdkModel
@@ -5252,7 +5417,7 @@ public class UserAttribute : SdkModel
   public string name { get; set; } = "";
   /// <summary>Human-friendly label for user attribute</summary>
   public string label { get; set; } = "";
-  /// <summary>Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")</summary>
+  /// <summary>Type of user attribute ("string", "number", "datetime", "yesno", "zipcode", "advanced_filter_string", "advanced_filter_number")</summary>
   public string type { get; set; } = "";
   /// <summary>Default value for when no value is set on the user</summary>
   public string? default_value { get; set; } = null;
@@ -5492,7 +5657,7 @@ public class WriteAlert : SdkModel
   /// <summary>This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".</summary>
   [JsonConverter(typeof(StringEnumConverter))]
   public ComparisonType comparison_type { get; set; }
-  /// <summary>Vixie-Style crontab specification when to run. At minumum, it has to be longer than 15 minute intervals</summary>
+  /// <summary>Vixie-Style crontab specification when to run. At minimum, it has to be longer than 15 minute intervals</summary>
   public string cron { get; set; } = "";
   /// <summary>Domain for the custom url selected by the alert creator from the admin defined domain allowlist</summary>
   public string? custom_url_base { get; set; } = null;
@@ -6704,15 +6869,16 @@ public class WriteSessionConfig : SdkModel
 }
 
 /// Dynamic writeable type for Setting removes:
-/// embed_enabled
+/// marketplace_site, embed_enabled, login_notification_enabled, login_notification_text
 public class WriteSetting : SdkModel
 {
   /// <summary>Toggle extension framework on or off</summary>
   public bool? extension_framework_enabled { get; set; } = null;
-  /// <summary>(DEPRECATED) Toggle extension extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.</summary>
+  /// <summary>(DEPRECATED) Toggle extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.</summary>
   public bool? extension_load_url_enabled { get; set; } = null;
-  /// <summary>Toggle marketplace auto install on or off. Note that auto install only runs if marketplace is enabled.</summary>
+  /// <summary>(DEPRECATED) Toggle marketplace auto install on or off. Deprecated - do not use. Auto install can now be enabled via marketplace automation settings</summary>
   public bool? marketplace_auto_install_enabled { get; set; } = null;
+  public MarketplaceAutomation? marketplace_automation { get; set; }
   /// <summary>Toggle marketplace on or off</summary>
   public bool? marketplace_enabled { get; set; } = null;
   /// <summary>Accept marketplace terms by setting this value to true, or get the current status. Marketplace terms CANNOT be declined once accepted. Accepting marketplace terms automatically enables the marketplace. The marketplace can still be disabled after it has been enabled.</summary>
@@ -6737,8 +6903,19 @@ public class WriteSetting : SdkModel
   public bool? override_warnings { get; set; } = null;
   /// <summary>An array of Email Domain Allowlist of type string for Scheduled Content</summary>
   public string[]? email_domain_allowlist { get; set; } = null;
-  /// <summary>Toggle cookieless embed setting</summary>
+  /// <summary>(DEPRECATED) Use embed_config.embed_cookieless_v2 instead. If embed_config.embed_cookieless_v2 is specified, it overrides this value.</summary>
   public bool? embed_cookieless_v2 { get; set; } = null;
+  public EmbedConfig? embed_config { get; set; }
+}
+
+/// Dynamic writeable type for SqlInterfaceQueryCreate removes:
+/// can
+public class WriteSqlInterfaceQueryCreate : SdkModel
+{
+  /// <summary>Original SQL request</summary>
+  public string sql { get; set; } = "";
+  /// <summary>Whether the query should be run for use in a JDBC Client. This changes the formatting of some datetime based values.</summary>
+  public bool? jdbc_client { get; set; } = null;
 }
 
 /// Dynamic writeable type for SshServer removes:
@@ -6815,7 +6992,7 @@ public class WriteUserAttribute : SdkModel
   public string name { get; set; } = "";
   /// <summary>Human-friendly label for user attribute</summary>
   public string label { get; set; } = "";
-  /// <summary>Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")</summary>
+  /// <summary>Type of user attribute ("string", "number", "datetime", "yesno", "zipcode", "advanced_filter_string", "advanced_filter_number")</summary>
   public string type { get; set; } = "";
   /// <summary>Default value for when no value is set on the user</summary>
   public string? default_value { get; set; } = null;

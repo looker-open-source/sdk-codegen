@@ -24,13 +24,13 @@
 
  */
 
-import type { ValidationMessages } from '@looker/components'
-import type { AdminAction, AdminUserAttributes } from './actions'
-import { Actions } from './actions'
+import type { ValidationMessages } from '@looker/components';
+import type { AdminAction, AdminUserAttributes } from './actions';
+import { Actions } from './actions';
 
 export interface AdminState {
-  adminUserAttributes: AdminUserAttributes
-  validationMessages?: ValidationMessages
+  adminUserAttributes: AdminUserAttributes;
+  validationMessages?: ValidationMessages;
 }
 
 const defaultState: Readonly<AdminState> = Object.freeze({
@@ -40,7 +40,7 @@ const defaultState: Readonly<AdminState> = Object.freeze({
     sheetId: '',
     tokenServerUrl: '',
   },
-})
+});
 
 export const adminReducer = (
   state: AdminState = defaultState,
@@ -50,31 +50,31 @@ export const adminReducer = (
     case Actions.LOAD_USER_ATTRIBUTES_REQUEST:
       return {
         ...state,
-      }
+      };
     case Actions.LOAD_USER_ATTRIBUTES_RESPONSE:
       return {
         ...state,
         adminUserAttributes: action.payload,
-      }
+      };
     case Actions.UPDATE_USER_ATTRIBUTE_VALUES:
       return {
         ...state,
         adminUserAttributes: action.payload,
-      }
+      };
     case Actions.SAVE_USER_ATTRIBUTES_REQUEST:
       return {
         ...state,
         validationMessages: undefined,
-      }
+      };
     case Actions.SAVE_USER_ATTRIBUTES_RESPONSE: {
-      const { adminUserAttributes, validationMessages } = action.payload
+      const { adminUserAttributes, validationMessages } = action.payload;
       return {
         ...state,
         adminUserAttributes,
         validationMessages,
-      }
+      };
     }
     default:
-      return state
+      return state;
   }
-}
+};
