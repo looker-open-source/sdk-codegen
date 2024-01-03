@@ -50,9 +50,7 @@ describe('sdk generator test', () => {
       (a: IMethodResponse) => a.statusCode === 400
     );
     expect(response).toBeDefined();
-    if (response) {
-      expect(response.type.name).toEqual('Error');
-    }
+    expect(response?.type.name).toEqual('Error');
   });
 
   it('loads 204 methods with void response type', () => {
