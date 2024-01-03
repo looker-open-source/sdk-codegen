@@ -233,7 +233,7 @@ function* setupHackathonGroup(hackathonRole: IRole): SagaIterator {
     );
 
     const newRoleGroupIds: string[] = oldRoleGroups
-      .map((g) => g.id as string)
+      .map(g => g.id as string)
       .concat(newGroup.id as string);
 
     result = yield call(
@@ -305,7 +305,7 @@ function* getUserAttributeId(name: string): SagaIterator<string | undefined> {
     result
   );
 
-  return userAttributes.find((a) => a.name === name)?.id;
+  return userAttributes.find(a => a.name === name)?.id;
 }
 
 export function* registerAddUserSagas() {

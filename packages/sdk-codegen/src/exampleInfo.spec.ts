@@ -38,7 +38,7 @@ describe('exampleInfo', () => {
     const actual = findExampleLanguages(lode, op);
     expect(actual).toBeDefined();
     expect(actual).toEqual(['Python', 'TypeScript', 'Kotlin', 'Ruby']);
-    actual.forEach((language) => {
+    actual.forEach(language => {
       const ex = findExamples(lode, language, op);
       expect(ex).toBeDefined();
       expect(ex.length).toBeGreaterThan(0);

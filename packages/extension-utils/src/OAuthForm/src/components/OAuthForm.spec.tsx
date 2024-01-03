@@ -352,7 +352,7 @@ describe('ConfigForm', () => {
     expect(button).toBeEnabled();
 
     expect(screen.getByText('Configuration is valid')).toBeInTheDocument();
-    const helpMessage = screen.queryByText((text) =>
+    const helpMessage = screen.queryByText(text =>
       text.includes(
         'If API Explorer is also installed, the configuration below can be used to'
       )

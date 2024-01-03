@@ -54,6 +54,6 @@ function report() {
 
   console.log('\n### Summary ###\n');
   Object.values(results)
-    .filter((r) => r.summary)
-    .forEach((r) => console.log(r.summary));
+    .filter(r => r.summary)
+    .forEach(r => console.log(r.summary));
 }

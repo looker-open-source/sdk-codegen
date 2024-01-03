@@ -89,6 +89,6 @@ export class Registrations extends WhollyArtifact<
   }
 
   hackRegs(hackathon: Hackathon) {
-    return this.rows.filter((r) => r.hackathon_id === hackathon._id);
+    return this.rows.filter(r => r.hackathon_id === hackathon._id);
   }
 }

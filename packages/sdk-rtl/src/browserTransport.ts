@@ -51,7 +51,7 @@ import type { ICryptoHash } from './cryptoHash';
 export class BrowserCryptoHash implements ICryptoHash {
   arrayToHex(array: Uint8Array): string {
     return Array.from(array)
-      .map((b) => b.toString(16).padStart(2, '0'))
+      .map(b => b.toString(16).padStart(2, '0'))
       .join('');
   }
 

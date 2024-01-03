@@ -35,7 +35,7 @@ const textTypes = config.testData.content_types.string as [string];
 describe('Transport', () => {
   describe('Content Type mode', () => {
     it('binary', () => {
-      binaryTypes.forEach((x) => {
+      binaryTypes.forEach(x => {
         const actual = responseMode(x);
         if (actual !== ResponseMode.binary) {
           console.log(`${x} is not binary`);
@@ -45,7 +45,7 @@ describe('Transport', () => {
     });
 
     it('text or string', () => {
-      textTypes.forEach((x) => {
+      textTypes.forEach(x => {
         const actual = responseMode(x);
         if (actual !== ResponseMode.string) {
           console.log(`${x} is not text/string`);

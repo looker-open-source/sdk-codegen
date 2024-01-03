@@ -114,7 +114,7 @@ export const getAllFiles = (
 ) => {
   const files = fs.readdirSync(searchPath);
 
-  files.forEach((file) => {
+  files.forEach(file => {
     try {
       if (fs.statSync(searchPath + '/' + file).isDirectory()) {
         if (!skipFolder(file, ignorePaths))
@@ -367,7 +367,7 @@ export class ExampleMiner {
       };
       if (
         !fileCalls.find(
-          (f) =>
+          f =>
             f.line === fileCall.line &&
             f.column === fileCall.column &&
             f.sourceFile === fileCall.sourceFile
@@ -419,7 +419,7 @@ export class ExampleMiner {
   execute(sourcePath: string | null = null) {
     const dirPath = sourcePath ?? this.sourcePath;
     const files = getCodeFiles(dirPath);
-    files.forEach((f) => this.processFile(f));
+    files.forEach(f => this.processFile(f));
     return this.lode;
   }
 }

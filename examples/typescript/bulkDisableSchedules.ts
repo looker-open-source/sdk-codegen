@@ -47,7 +47,7 @@ const bulkDisableSchedules = async (
 ): Promise<boolean | Error> => {
   const schedules = await getSchedules(userID);
   try {
-    schedules.forEach(async (s) => {
+    schedules.forEach(async s => {
       if (s.id) {
         await sdk.ok(sdk.update_scheduled_plan(s.id, { enabled: false }));
       }

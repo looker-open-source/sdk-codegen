@@ -105,7 +105,7 @@ export class Hacker implements IHacker {
       this.user = user;
       if (
         user.credentials_api3 &&
-        user.credentials_api3.find((c) => !c.is_disabled)
+        user.credentials_api3.find(c => !c.is_disabled)
       )
         this.api3 = true;
     }
@@ -156,9 +156,9 @@ export class Hacker implements IHacker {
           fields: 'name,value',
         })
       );
-      this.locale = attribs.find((a) => a.name === 'locale')?.value || 'en';
+      this.locale = attribs.find(a => a.name === 'locale')?.value || 'en';
       this.timezone =
-        attribs.find((a) => a.name === 'timezone')?.value ||
+        attribs.find(a => a.name === 'timezone')?.value ||
         'America/Los_Angeles';
       return await this.assignRoles();
     }
@@ -248,7 +248,7 @@ export class Hackers extends TypedRows<Hacker> {
   }
 
   assign(users: ILookerUser[]) {
-    this.rows = users.map((u) => new Hacker(this.sdk, u));
+    this.rows = users.map(u => new Hacker(this.sdk, u));
     return this;
   }
 
@@ -274,11 +274,11 @@ export class Hackers extends TypedRows<Hacker> {
 
   private loadGroups() {
     this.users = this.rows.filter(
-      (h) => !(h.canJudge || h.canStaff || h.canAdmin)
+      h => !(h.canJudge || h.canStaff || h.canAdmin)
     );
-    this.staff = this.rows.filter((h) => h.canStaff);
-    this.judges = this.rows.filter((h) => h.canJudge);
-    this.admins = this.rows.filter((h) => h.canAdmin);
+    this.staff = this.rows.filter(h => h.canStaff);
+    this.judges = this.rows.filter(h => h.canJudge);
+    this.admins = this.rows.filter(h => h.canAdmin);
   }
 
   /**
@@ -319,7 +319,7 @@ export class Hackers extends TypedRows<Hacker> {
     }
 
     const regs = data.registrations.rows.filter(
-      (r) => r.hackathon_id === hackathon._id
+      r => r.hackathon_id === hackathon._id
     );
     const { admins, staff, judges } = await this.getSpecialUsers();
     for (const hacker of this.rows) {
@@ -355,7 +355,7 @@ export class Hackers extends TypedRows<Hacker> {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           this.sdk.role_users({ fields: 'id', role_id: adminRole.id! })
         );
-        admins = users.map((user) => user.id?.toString() || 'no id');
+        admins = users.map(user => user.id?.toString() || 'no id');
       }
       const judgeRole = roles.find(
         (r: IRole) => r.name?.match(/hackathon judge/i)
@@ -365,7 +365,7 @@ export class Hackers extends TypedRows<Hacker> {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           this.sdk.role_users({ fields: 'id', role_id: judgeRole.id! })
         );
-        judges = users.map((user) => user.id?.toString() || 'no id');
+        judges = users.map(user => user.id?.toString() || 'no id');
       }
       const staffRole = roles.find(
         (r: IRole) => r.name?.match(/hackathon staff/i)
@@ -375,7 +375,7 @@ export class Hackers extends TypedRows<Hacker> {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           this.sdk.role_users({ fields: 'id', role_id: staffRole.id! })
         );
-        staff = users.map((user) => user.id?.toString() || 'no id');
+        staff = users.map(user => user.id?.toString() || 'no id');
       }
     } catch (err) {
       // Likely caused by permission access failure for regular user who

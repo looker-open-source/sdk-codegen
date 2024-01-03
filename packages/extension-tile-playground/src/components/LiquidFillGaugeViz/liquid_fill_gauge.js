@@ -66,7 +66,7 @@ const idGenerator = (function () {
   };
 })();
 
-const createSvg = (element) => {
+const createSvg = element => {
   element.style.margin = '10px';
   element.style.fontFamily = `"Open Sans", "Helvetica", sans-serif`;
   element.innerHTML = `

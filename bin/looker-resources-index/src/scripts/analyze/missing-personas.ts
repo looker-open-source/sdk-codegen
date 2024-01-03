@@ -27,7 +27,7 @@ import type { Resource } from '../../types';
 
 export function missingPersonas(resources: Resource[]) {
   const resourcesMissingPersonas = resources.filter(
-    (r) => !r.personas || r.personas.length === 0
+    r => !r.personas || r.personas.length === 0
   );
 
   return {
@@ -36,7 +36,7 @@ export function missingPersonas(resources: Resource[]) {
         ? `✅\tAll ${resources.length} resources have personas defined`
         : `⚠️\t${resourcesMissingPersonas.length} of ${resources.length} resources are missing personas`,
     actionItems: resourcesMissingPersonas.map(
-      (r) => `No personas defined. \tResource ID: ${r.id}`
+      r => `No personas defined. \tResource ID: ${r.id}`
     ),
   };
 }

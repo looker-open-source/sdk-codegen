@@ -36,7 +36,7 @@ describe('DocOperation', () => {
   test('it renders SDK portion of a method', () => {
     renderWithTheme(<DocOperation method={method} />);
     expect(screen.getByText(method.name, { exact: false })).toBeInTheDocument();
-    method.allParams.forEach((param) => {
+    method.allParams.forEach(param => {
       expect(screen.getByText(param.name)).toBeInTheDocument();
     });
 

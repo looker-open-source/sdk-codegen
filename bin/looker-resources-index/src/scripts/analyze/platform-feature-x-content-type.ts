@@ -38,16 +38,16 @@ export function platformFeatureXContentType(resources: Resource[]) {
   const colField = 'contentTypes';
 
   const table = Object.fromEntries(
-    rows.map((row) => {
+    rows.map(row => {
       const resourcesForRow = resources.filter(
-        (rsc) => rsc[rowField]?.includes(row)
+        rsc => rsc[rowField]?.includes(row)
       );
       return [
         row,
         Object.fromEntries(
-          cols.map((col) => [
+          cols.map(col => [
             col,
-            resourcesForRow.filter((rsc) => rsc[colField]?.includes(col))
+            resourcesForRow.filter(rsc => rsc[colField]?.includes(col))
               .length || null,
           ])
         ),

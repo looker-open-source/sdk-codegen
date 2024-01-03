@@ -47,7 +47,7 @@ const runConnectionTests = async (): Promise<ConnectionTestObj[]> => {
   const connections = await getConnections();
   // loop through all connections run connection test and return connection test obj
   const tests: ConnectionTestObj[] = await Promise.all(
-    connections.map(async (c) => {
+    connections.map(async c => {
       try {
         const connection = await sdk.ok(
           sdk.test_connection(
@@ -59,7 +59,7 @@ const runConnectionTests = async (): Promise<ConnectionTestObj[]> => {
         return {
           connectionName: c.name,
           // test_connection returns and array of tests
-          tests: connection.map((c) => {
+          tests: connection.map(c => {
             return {
               name: c.name,
               status: c.status,

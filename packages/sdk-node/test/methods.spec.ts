@@ -299,7 +299,7 @@ describe('LookerNodeSDK', () => {
         const current = await sdk.ok(sdk.default_color_collection());
         expect(current).toBeDefined();
         const cols = await sdk.ok(sdk.all_color_collections());
-        const other = cols.find((c) => c.id !== current.id);
+        const other = cols.find(c => c.id !== current.id);
         expect(other).toBeDefined();
         // tests to stop lint from complaining
         if (other && other.id && current.id) {
@@ -357,7 +357,7 @@ describe('LookerNodeSDK', () => {
 
         // find users who are not the API user
         const others = all
-          .filter((u) => u.id !== apiUser.id && !u.is_disabled)
+          .filter(u => u.id !== apiUser.id && !u.is_disabled)
           .slice(0, 2);
         expect(others.length).toEqual(2);
         if (others.length > 1) {
@@ -557,7 +557,7 @@ describe('LookerNodeSDK', () => {
           })
         );
         expect(searched.length).toEqual(users.length);
-        const ids = new DelimArray<string>(searched.map((u) => u.id!));
+        const ids = new DelimArray<string>(searched.map(u => u.id!));
         const all = await sdk.ok(sdk.all_users({ ids }));
         expect(all.length).toEqual(users.length);
         await sdk.authSession.logout();
@@ -759,7 +759,7 @@ describe('LookerNodeSDK', () => {
             );
             expect(sql).toContain('SELECT');
             if (query.fields) {
-              query.fields.forEach((field) => {
+              query.fields.forEach(field => {
                 expect(sql).toContain(field);
               });
             }
@@ -775,7 +775,7 @@ describe('LookerNodeSDK', () => {
             expect(json.length).toBeLessThanOrEqual(limit);
             const row = json[0] as any;
             if (query.fields) {
-              query.fields.forEach((field) => {
+              query.fields.forEach(field => {
                 expect(field in row).toBeTruthy();
               });
             }

@@ -99,13 +99,13 @@ export class Hackathons extends WhollyArtifact<Hackathon, IHackathonProps> {
     if (!this.rows || this.rows.length === 0) return undefined;
     // Sort hackathons in chronological order by start time ... maybe we sort by the stop of judging instead?
     const sorted = this.rows.sort((a, b) => compareDates(a.date, b.date));
-    let current = sorted.find((h) => h.default);
+    let current = sorted.find(h => h.default);
     if (current) {
       this._hackathon = current as Hackathon;
       return this._hackathon;
     }
     const now = new Date().getTime();
-    current = sorted.find((hack) => hack.judging_stops.getTime() >= now);
+    current = sorted.find(hack => hack.judging_stops.getTime() >= now);
     if (!current) {
       // Finally, default to the last hackathon
       current = sorted[sorted.length - 1];

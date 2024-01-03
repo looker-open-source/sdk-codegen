@@ -18,7 +18,7 @@ const root = path.join(__dirname, '/../');
 let sdk = looker.LookerNodeSDK.init40();
 
 async function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 /** wait for the Looker CI image to be responsive */
@@ -52,9 +52,9 @@ const waitForLooker = async () => {
  * @param release to munge
  * @returns release version with _ instead of .
  */
-const ciVersion = (release) => release.replace('.', '_');
+const ciVersion = release => release.replace('.', '_');
 
-const ok = (result) => {
+const ok = result => {
   if (typeof result === 'string') {
     return true;
   }
@@ -62,7 +62,7 @@ const ok = (result) => {
   return false;
 };
 
-const run = (command) => {
+const run = command => {
   let result;
   try {
     console.info(`Running ${command} ...`);
@@ -101,7 +101,7 @@ const batch = (commands, release) => {
 };
 
 /** get the trimmed output of the command as a UTF-8 string */
-const execRead = (command) => {
+const execRead = command => {
   return proc.execSync(command, utf8).trim();
 };
 
@@ -113,7 +113,7 @@ const branchActive = () => execRead('git rev-parse --abbrev-ref HEAD');
  * @param branch name
  * @returns true if it exists
  */
-const branchExists = (branch) => {
+const branchExists = branch => {
   const checkRemote = `git ls-remote --heads origin "${branch}" | wc -l `;
   let result = execRead(checkRemote);
   if (result !== '1') {
@@ -128,13 +128,13 @@ const branchExists = (branch) => {
  * @param release either xx.xx or xx_xx
  * @returns sdk_<release>
  */
-const branchName = (release) => `sdk_${ciVersion(release)}`;
+const branchName = release => `sdk_${ciVersion(release)}`;
 
 /**
  * If currently on main, create or switch to the sdk_release branch
  * @param release version branch to create
  */
-const branchOffMain = (release) => {
+const branchOffMain = release => {
   let result = '';
   let current = branchActive();
   if (current === 'main') {
@@ -157,7 +157,7 @@ const branchOffMain = (release) => {
  * @param release version to check
  * @returns {Promise<boolean>}
  */
-const checkVersion = async (release) => {
+const checkVersion = async release => {
   try {
     const payload = await sdk.ok(sdk.versions());
     return payload.looker_release_version.startsWith(release);
@@ -171,7 +171,7 @@ const checkVersion = async (release) => {
  * Pull the specified Looker CI image and wait for it to be ready
  * @param release like '21.10'
  */
-const pullci = async (release) => {
+const pullci = async release => {
   const opts = {
     cwd: root,
     maxBuffer: 1024 * 1024,
@@ -185,7 +185,7 @@ const pullci = async (release) => {
 };
 
 /** Regen against the specified release and complete flows */
-const regen = async (release) => {
+const regen = async release => {
   console.info(`Generating SDKs for Looker ${release} ...`);
   if (ok(branchOffMain(release))) {
     const branch = branchActive();
@@ -217,6 +217,6 @@ const regen = async (release) => {
   } else {
     console.error('No release version was specified');
   }
-})().catch((e) => {
+})().catch(e => {
   console.error(e);
 });

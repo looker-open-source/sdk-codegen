@@ -73,7 +73,7 @@ const changeType = (type: Type) => {
 const changeParams = (method: Method) => {
   const params = cloneDeep(method.params);
   const changedParams = [];
-  params.forEach((param) => {
+  params.forEach(param => {
     changedParams.push(new Parameter(param, param.type));
   });
   params[0].required = !params[0].required;
@@ -366,9 +366,8 @@ describe('spec differ', () => {
       const actual = compareSpecs(lSpec, rSpec, betaCompare);
       expect(actual).toBeDefined();
       expect(actual.length).toBeGreaterThanOrEqual(
-        Object.values(lSpec.methods).filter(
-          (method) => method.status === 'beta'
-        ).length
+        Object.values(lSpec.methods).filter(method => method.status === 'beta')
+          .length
       );
     });
   });

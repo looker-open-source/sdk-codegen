@@ -139,7 +139,7 @@ class TypescriptFormatter extends BaseFormatter {
   }
 
   reformat(files: string[]) {
-    files.forEach((f) => {
+    files.forEach(f => {
       this.reformatFile(f);
     });
     return success(files);
@@ -147,7 +147,7 @@ class TypescriptFormatter extends BaseFormatter {
 
   reformatFile(fileName: string) {
     let source = '';
-    prettify(readFileSync(fileName)).then((r) => (source = r));
+    prettify(readFileSync(fileName)).then(r => (source = r));
     if (source) {
       fs.writeFileSync(fileName, source, utf8);
     }
@@ -351,7 +351,7 @@ export class FilesFormatter {
   }
 
   reformat(files?: string[]) {
-    if (files) files.forEach((f) => this.addFile(f));
+    if (files) files.forEach(f => this.addFile(f));
     Object.entries(this.files).forEach(([key, list]) => {
       if (key in fileFormatters) {
         fileFormatters[key].reformat(list);

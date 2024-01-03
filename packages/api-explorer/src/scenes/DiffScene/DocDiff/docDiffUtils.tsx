@@ -46,7 +46,7 @@ export const diffText = (
   let result = status ? `Status: ${status}\n` : '';
   result += gen.methodSignature(indent, method);
   if (row.bodyDiff) {
-    const args = method.bodyParams.map((p) =>
+    const args = method.bodyParams.map(p =>
       gen.declareParameter(indent, method, p)
     );
     result += `\nBody:\n${args.join('\n')}`;
@@ -56,7 +56,7 @@ export const diffText = (
   }
   if (row.responseDiff) {
     const bump = gen.bumper(indent);
-    const items = method.responses.map((r) => {
+    const items = method.responses.map(r => {
       return `${bump}Code: ${r.statusCode}
 ${bump}MIME: ${r.mediaType}
 ${bump}Type:${r.type.fullName}`;

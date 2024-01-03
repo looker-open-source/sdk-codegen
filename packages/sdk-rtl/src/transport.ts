@@ -426,8 +426,8 @@ export function encodeParams(values?: Values) {
 
   const keys = Object.keys(values);
   return keys
-    .filter((k) => values[k] !== undefined) // `null` and `false` will both be passed
-    .map((k) => k + '=' + encodeParam(values[k]))
+    .filter(k => values[k] !== undefined) // `null` and `false` will both be passed
+    .map(k => k + '=' + encodeParam(values[k]))
     .join('&');
 }
 

@@ -36,11 +36,11 @@ export function missingLanguages(resources: Resource[]) {
     ].includes(c);
 
   const resourcesRequiringLanguages = resources.filter(
-    (r) => r.contentTypes?.some(isTargetContentType)
+    r => r.contentTypes?.some(isTargetContentType)
   );
 
   const resourcesMissingLanguages = resourcesRequiringLanguages.filter(
-    (r) => !r.languages || r.languages.length === 0
+    r => !r.languages || r.languages.length === 0
   );
 
   return {
@@ -49,7 +49,7 @@ export function missingLanguages(resources: Resource[]) {
         ? `✅\tAll ${resourcesRequiringLanguages.length} resources that should have a language have one`
         : `⚠️\t${resourcesMissingLanguages.length} of ${resourcesRequiringLanguages.length} resources that should have a language are missing them`,
     actionItems: resourcesMissingLanguages.map(
-      (r) =>
+      r =>
         `No languages declared, with a contentType '${r.contentTypes.find(
           isTargetContentType
         )}'\tResource ID: ${r.id}`

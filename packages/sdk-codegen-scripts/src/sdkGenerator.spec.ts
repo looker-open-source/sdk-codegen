@@ -65,13 +65,13 @@ describe('sdk generator test', () => {
     // TODO we may remove this behavior if we decide API Explorer should display methods in natural order
     let keys = Object.keys(apiTestModel.methods);
     let sorted = keys.sort((a, b) => a.localeCompare(b));
-    let names = Object.values(apiTestModel.methods).map((item) => item.name);
+    let names = Object.values(apiTestModel.methods).map(item => item.name);
     expect(keys).toEqual(sorted);
     expect(names).toEqual(sorted);
 
     keys = Object.keys(apiTestModel.types);
     sorted = keys.sort((a, b) => a.localeCompare(b));
-    names = Object.values(apiTestModel.types).map((item) => item.name);
+    names = Object.values(apiTestModel.types).map(item => item.name);
     expect(keys).toEqual(sorted);
     expect(names).toEqual(sorted);
   });

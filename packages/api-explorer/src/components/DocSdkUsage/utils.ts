@@ -110,7 +110,7 @@ export function prepareExampleDataTable(
     const languageExamples = findExamples(examples, language, operationId);
     return [
       ...result,
-      ...languageExamples.map((exampleLink) => {
+      ...languageExamples.map(exampleLink => {
         return {
           filename: getFileNameFromPath(exampleLink.tooltip),
           line: exampleLink.lineNumber,

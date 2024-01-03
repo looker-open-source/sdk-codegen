@@ -65,7 +65,7 @@ describe('extension_sdk tests', () => {
         // noop
       },
       sendAndReceive: async (_eventName: string, ..._payload: any[]) =>
-        new Promise((resolve) => {
+        new Promise(resolve => {
           setTimeout(() => {
             resolve(['ss']);
           });
@@ -101,7 +101,7 @@ describe('extension_sdk tests', () => {
     return hostApi;
   };
 
-  it('creates client', (done) => {
+  it('creates client', done => {
     const sdk: Looker40SDK = LookerExtensionSDK.createClient(createHostApi());
     expect(sdk).toBeDefined();
     sdk
@@ -119,7 +119,7 @@ describe('extension_sdk tests', () => {
       });
   });
 
-  it('creates 40 client', (done) => {
+  it('creates 40 client', done => {
     const sdk = LookerExtensionSDK.create40Client(createHostApi());
     expect(sdk).toBeDefined();
     sdk.all_connections().then(() => {
@@ -131,7 +131,7 @@ describe('extension_sdk tests', () => {
     });
   });
 
-  it('creates exclusive 40 client', (done) => {
+  it('creates exclusive 40 client', done => {
     const sdk = LookerExtensionSDK40.createClient(createHostApi());
     expect(sdk).toBeDefined();
     sdk.all_connections().then(() => {

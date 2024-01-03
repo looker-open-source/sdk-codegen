@@ -62,7 +62,7 @@ const anyoneButMe = async (userId: number, emailPattern: string) => {
   }
   // find a user who is not the specified user
   const [other] = all
-    .filter((u) => u.id !== userId && !u.is_disabled)
+    .filter(u => u.id !== userId && !u.is_disabled)
     .slice(0, 1);
   return other;
 };

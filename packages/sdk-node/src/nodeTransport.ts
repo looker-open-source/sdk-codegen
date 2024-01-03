@@ -298,7 +298,7 @@ export class NodeTransport extends BaseTransport {
       const req = this.requestor(init);
 
       req
-        .on('error', (err) => {
+        .on('error', err => {
           if (hasResolved && (err as any).code === 'ECONNRESET') {
             trace(
               'ignoring ECONNRESET that occurred after streaming finished',
@@ -312,7 +312,7 @@ export class NodeTransport extends BaseTransport {
         .on('finish', () => {
           trace(`[stream] streaming via download url finished`, init);
         })
-        .on('socket', (socket) => {
+        .on('socket', socket => {
           trace(`[stream] setting keepalive on socket`, init);
           socket.setKeepAlive(true);
         })
@@ -326,7 +326,7 @@ export class NodeTransport extends BaseTransport {
           trace(`[stream] request stream closed`, init);
         })
         .pipe(stream)
-        .on('error', (err) => {
+        .on('error', err => {
           trace(`[stream] PassThrough stream error`, err);
           reject(err);
         })

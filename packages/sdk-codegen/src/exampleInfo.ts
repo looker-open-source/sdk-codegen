@@ -258,7 +258,7 @@ export const findExampleLanguages = (
   if (!all) return [];
   const result = new Set<string>();
   const keys = Object.keys(extensionToLanguage);
-  keys.forEach((key) => {
+  keys.forEach(key => {
     if (all.calls[key]) result.add((extensionToLanguage as any)[key]);
   });
   return Array.from(result);
@@ -280,7 +280,7 @@ export const findExamples = (
   const links: IExampleLink[] = [];
 
   if (all && exts.length > 0) {
-    exts.forEach((ext) => {
+    exts.forEach(ext => {
       const calls = all.calls[ext];
       if (calls) {
         calls.forEach((call: IFileCall) => {

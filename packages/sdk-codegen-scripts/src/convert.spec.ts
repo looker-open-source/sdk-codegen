@@ -443,7 +443,7 @@ describe('spec conversion', () => {
 
   describe('spec retrieval', () => {
     const onlyPublic = (specs: ISpecItem[]) => {
-      return specs.filter((v) => v.status !== 'undocumented');
+      return specs.filter(v => v.status !== 'undocumented');
     };
 
     it.skip('gets looker specs', async () => {
@@ -465,16 +465,16 @@ describe('spec conversion', () => {
        * 23.18 and later only has one API defined
        * expect(actual).toHaveLength(3)
        */
-      actual.forEach((spec) => {
+      actual.forEach(spec => {
         expect(spec.name).not.toEqual('');
         expect(spec.version).not.toEqual('');
         expect(spec.status).not.toEqual('');
         expect(spec.url).not.toEqual('');
         expect(isEmpty(spec.api)).toEqual(true);
       });
-      const current = actual.find((s) => s.status === 'current');
+      const current = actual.find(s => s.status === 'current');
       expect(current).toBeDefined();
-      actual.forEach((spec) => expect(isEmpty(spec.api)).toEqual(true));
+      actual.forEach(spec => expect(isEmpty(spec.api)).toEqual(true));
     });
 
     it('fetches and parses all specs', async () => {
@@ -483,7 +483,7 @@ describe('spec conversion', () => {
       versions.supported_versions = onlyPublic(versions.supported_versions);
       const links = getSpecLinks(versions);
       links.forEach(
-        (link) =>
+        link =>
           (link.url = link.url.replace(
             link.url.substring(0, link.url.indexOf('/api/')),
             config.baseUrl
@@ -495,7 +495,7 @@ describe('spec conversion', () => {
        * 23.18 and later only has one API defined
        * expect(actual).toHaveLength(3)
        */
-      actual.forEach((spec) => {
+      actual.forEach(spec => {
         expect(isEmpty(spec.api)).toEqual(false);
         expect(spec.api.version).not.toEqual('');
         expect(spec.api.description).not.toEqual('');

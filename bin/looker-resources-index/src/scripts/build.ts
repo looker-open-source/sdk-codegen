@@ -48,13 +48,13 @@ async function main() {
 
   if (priorResourceLock) {
     const modifiedResources = priorResources.filter(
-      (r) => priorResourceLock[r.id] !== resourceDigest(r)
+      r => priorResourceLock[r.id] !== resourceDigest(r)
     );
     if (modifiedResources.length) {
       console.error(
         "The output resources.json file seems to have been manually edited. The following id's have unexpected values:"
       );
-      modifiedResources.forEach((r) => console.error(' > ' + r.id));
+      modifiedResources.forEach(r => console.error(' > ' + r.id));
       console.error(
         'After ensuring that all manually modified data is reflected in the resource source data, delete the resource-lock.json file and re-build'
       );
@@ -63,7 +63,7 @@ async function main() {
   }
 
   const resourcesLock = Object.fromEntries(
-    resources.map((r) => [r.id, resourceDigest(r)])
+    resources.map(r => [r.id, resourceDigest(r)])
   );
 
   console.log('Writing resources.json');
@@ -82,7 +82,7 @@ function writeFile(fp: string, contents: string) {
       path.resolve(__dirname, fp),
       contents,
       { encoding: 'utf-8' },
-      (err) => {
+      err => {
         err ? reject(err) : resolve();
       }
     );

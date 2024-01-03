@@ -373,7 +373,7 @@ let response = await sdk.ok(sdk.${method.name}(`;
       lines.push('');
     }
 
-    params.forEach((p) => lines.push(`@param ${p}`));
+    params.forEach(p => lines.push(`@param ${p}`));
 
     const args = method.allParams;
     if (args.length) {
@@ -388,7 +388,7 @@ let response = await sdk.ok(sdk.${method.name}(`;
           `@param request composed interface "${requestType}" for complex method parameters`
         );
       } else {
-        args.forEach((p) =>
+        args.forEach(p =>
           lines.push(this.paramComment(p, this.paramMappedType(p, method)))
         );
       }
@@ -425,9 +425,7 @@ let response = await sdk.ok(sdk.${method.name}(`;
     } else {
       const args = method.allParams; // get the params in signature order
       if (args && args.length > 0)
-        args.forEach((p) =>
-          params.push(this.declareParameter(bump, method, p))
-        );
+        args.forEach(p => params.push(this.declareParameter(bump, method, p)));
       fragment =
         params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : '';
     }
@@ -514,7 +512,7 @@ let response = await sdk.ok(sdk.${method.name}(`;
       lines.push('');
     }
 
-    params.forEach((p) => lines.push(`@param ${p}`));
+    params.forEach(p => lines.push(`@param ${p}`));
 
     const args = method.allParams;
     if (args.length) {
@@ -529,7 +527,7 @@ let response = await sdk.ok(sdk.${method.name}(`;
           `@param request composed interface "${requestType}" for complex method parameters`
         );
       } else {
-        args.forEach((p) =>
+        args.forEach(p =>
           lines.push(this.paramComment(p, this.paramMappedType(p, method)))
         );
       }
@@ -557,7 +555,7 @@ let response = await sdk.ok(sdk.${method.name}(`;
     } else {
       const args = method.allParams;
       if (args && args.length > 0)
-        args.forEach((p) => {
+        args.forEach(p => {
           params.push(this.declareParameter('', method, p));
         });
       fragment = params.length > 0 ? `${params.join('; ')}` : '';
@@ -592,7 +590,7 @@ ${indent}>(${camelCase(method.name)}Slice)
 
     const headComment = this.customHeaderComment('custom slice', method);
     const args = method.allParams; // get the params in signature order
-    let argNames = args.map((p) => p.name);
+    let argNames = args.map(p => p.name);
 
     if (requestType) {
       fragment =
@@ -604,7 +602,7 @@ ${indent}>(${camelCase(method.name)}Slice)
       argNames = ['request'];
     } else {
       if (args && args.length > 0)
-        args.forEach((p) => {
+        args.forEach(p => {
           params.push(this.declareParameter('', method, p));
         });
       fragment = params.length > 0 ? `${params.join('; ')}` : '';
@@ -666,9 +664,7 @@ ${indent}})`;
     } else {
       const args = method.allParams; // get the params in signature order
       if (args && args.length > 0)
-        args.forEach((p) =>
-          params.push(this.declareParameter(bump, method, p))
-        );
+        args.forEach(p => params.push(this.declareParameter(bump, method, p)));
       fragment =
         params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : '';
     }
@@ -750,7 +746,7 @@ ${indent}})`;
 
   errorResponses(_indent: string, method: IMethod) {
     const results: string[] = method.errorResponses.map(
-      (r) => `${this.typeName(r.type)}`
+      r => `${this.typeName(r.type)}`
     );
     return results.join(' | ');
   }
@@ -798,7 +794,7 @@ ${indent}})`;
 
   argList(indent: string, args: Arg[], prefix?: string) {
     prefix = prefix || '';
-    const bits = args.map((a) => this.accessor(a, prefix));
+    const bits = args.map(a => this.accessor(a, prefix));
 
     return args && args.length !== 0
       ? `\n${indent}${bits.join(this.argDelimiter)}`
@@ -879,8 +875,8 @@ ${indent}})`;
     if (!this.api) return names;
     const types = this.api.types;
     Object.values(types)
-      .filter((type) => type.refCount > 0 && !type.intrinsic)
-      .forEach((type) => names.push(this.typeName(type)));
+      .filter(type => type.refCount > 0 && !type.intrinsic)
+      .forEach(type => names.push(this.typeName(type)));
     return names;
   }
 

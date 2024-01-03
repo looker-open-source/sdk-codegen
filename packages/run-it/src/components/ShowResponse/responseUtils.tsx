@@ -108,7 +108,7 @@ const getTypes = (json: any) => {
     switch (type) {
       case ItemType.Array:
       case ItemType.Object:
-        Object.keys(value).forEach((k) => {
+        Object.keys(value).forEach(k => {
           const v = value[k];
           types[1].add(itemType(v));
         });
@@ -255,53 +255,53 @@ export const responseHandlers: Responder[] = [
   // TODO: Add support for content type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet and pdf
   {
     label: 'json',
-    isRecognized: (contentType) => /application\/json/g.test(contentType),
-    component: (response) => ShowJSON(response),
+    isRecognized: contentType => /application\/json/g.test(contentType),
+    component: response => ShowJSON(response),
   },
   {
     label: 'html',
-    isRecognized: (contentType) => /text\/html/g.test(contentType),
-    component: (response) => ShowHTML(response),
+    isRecognized: contentType => /text\/html/g.test(contentType),
+    component: response => ShowHTML(response),
   },
   {
     label: 'csv',
-    isRecognized: (contentType) => /text\/csv/g.test(contentType),
-    component: (response) => ShowCSV(response),
+    isRecognized: contentType => /text\/csv/g.test(contentType),
+    component: response => ShowCSV(response),
   },
   {
     label: 'md',
-    isRecognized: (contentType) => /text\/markdown/g.test(contentType),
-    component: (response) => ShowMD(response),
+    isRecognized: contentType => /text\/markdown/g.test(contentType),
+    component: response => ShowMD(response),
   },
   // SVG would normally be considered a "string" because of the xml tag, so it must be checked before text
   {
     label: 'img',
-    isRecognized: (contentType) =>
+    isRecognized: contentType =>
       /image\/(png|jpg|jpeg|svg\+xml)/.test(contentType),
-    component: (response) => ShowImage(response),
+    component: response => ShowImage(response),
   },
   {
     // render task: 9d52f842b2c3f474970123302b2fa7e0
     label: 'pdf',
-    isRecognized: (contentType) => /application\/pdf/g.test(contentType),
-    component: (response) => ShowPDF(response),
+    isRecognized: contentType => /application\/pdf/g.test(contentType),
+    component: response => ShowPDF(response),
   },
   {
     label: 'sql',
-    isRecognized: (contentType) => /application\/sql/g.test(contentType),
-    component: (response) => ShowSQL(response),
+    isRecognized: contentType => /application\/sql/g.test(contentType),
+    component: response => ShowSQL(response),
   },
   {
     label: 'text',
-    isRecognized: (contentType) =>
+    isRecognized: contentType =>
       responseMode(contentType) === ResponseMode.string ||
       contentType === 'text',
-    component: (response) => ShowText(response),
+    component: response => ShowText(response),
   },
   {
     label: 'unknown',
     isRecognized: (contentType: string) => !!contentType,
-    component: (response) => ShowUnknown(response),
+    component: response => ShowUnknown(response),
   },
 ];
 
@@ -320,5 +320,5 @@ export const pickResponseHandler = (response: IRawResponse) => {
 export const fallbackResponseHandler = (): Responder => ({
   label: 'unknown',
   isRecognized: (contentType: string) => !!contentType,
-  component: (response) => ShowRaw(response),
+  component: response => ShowRaw(response),
 });

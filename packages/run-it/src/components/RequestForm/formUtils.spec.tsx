@@ -112,7 +112,7 @@ describe('formUtils', () => {
 
     describe.each(['int64', 'integer', 'float', 'double'])(
       '%s input type',
-      (type) => {
+      type => {
         const name = `Type ${type} item`;
         const description = `A simple item of type ${type}`;
         const NumberItem = initSimpleTestItem({

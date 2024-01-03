@@ -49,7 +49,7 @@ describe('extension_host_api tests', () => {
         // noop
       },
       sendAndReceive: async (_eventName: string, ..._payload: any[]) =>
-        new Promise((resolve) => {
+        new Promise(resolve => {
           setTimeout(() => {
             resolve(['ss']);
           });

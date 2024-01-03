@@ -41,7 +41,7 @@ const generateApiCredentials = async (
   );
   // filter those users for those with no api credentials (ie. empty array) and for those that have the role caller specifies
   const filteredUsers = usersWithoutCredentials.filter(
-    (u) => u.credentials_api3.length === 0 && u.role_ids.includes(roleID)
+    u => u.credentials_api3.length === 0 && u.role_ids.includes(roleID)
   );
   const res: Api3SuccessBody = {
     success: true,

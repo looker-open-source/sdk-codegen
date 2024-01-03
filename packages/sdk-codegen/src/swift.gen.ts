@@ -421,7 +421,7 @@ ${indent}}\n`;
     const inits: string[] = [];
     const posInits: string[] = [];
     const props = this.typeProperties(type);
-    props.forEach((prop) => {
+    props.forEach(prop => {
       const propName = this.reserve(prop.name);
       args.push(this.declareConstructorArg('', prop));
       posArgs.push(this.declarePositionalArg('', prop));
@@ -434,7 +434,7 @@ ${indent}}\n`;
       inits.join('\n') +
       `\n${indent}}`;
     let posInit = '';
-    if (props.some((p) => p.required)) {
+    if (props.some(p => p.required)) {
       posInit =
         `\n${indent}public init(` +
         `${posArgs.join(this.argDelimiter)}) {\n` +
@@ -492,9 +492,7 @@ ${indent}}\n`;
       const params: string[] = [];
       const args = method.allParams; // get the params in signature order
       if (args && args.length > 0)
-        args.forEach((p) =>
-          params.push(this.declareParameter(bump, method, p))
-        );
+        args.forEach(p => params.push(this.declareParameter(bump, method, p)));
       fragment =
         params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : '';
     }
@@ -560,7 +558,7 @@ ${indent}}\n`;
   codingKeys(indent: string, type: IType) {
     let special = false;
 
-    const keys = Object.values(type.properties).map((p) => {
+    const keys = Object.values(type.properties).map(p => {
       let name = this.reserve(p.name);
       let alias = '';
       const useIt = this.useAnyString(p) || this.useAnyInt(p);
@@ -781,8 +779,8 @@ ${indent}return result`;
     }
     const types = this.api.types;
     Object.values(types)
-      .filter((type) => type.refCount > 0 && !type.intrinsic)
-      .forEach((type) => names.push(`I${type.name}`));
+      .filter(type => type.refCount > 0 && !type.intrinsic)
+      .forEach(type => names.push(`I${type.name}`));
     // TODO import default constants if necessary
     // Object.values(types)
     //   .filter(type => type instanceof RequestType)

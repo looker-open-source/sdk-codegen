@@ -49,7 +49,7 @@ export const SelectTheme = () => {
 
   useEffect(() => {
     const themeOptions: SelectOptionObject[] = themes
-      .map((theme) => ({
+      .map(theme => ({
         value: theme.id!,
         label: theme.name,
       }))

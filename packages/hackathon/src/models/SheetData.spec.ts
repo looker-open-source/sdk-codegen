@@ -69,12 +69,12 @@ describe.skip('SheetData', () => {
     });
     describe('current hackathon detection', () => {
       test('always gets a hackathon', () => {
-        data.hackathons.rows.forEach((h) => (h.default = false));
+        data.hackathons.rows.forEach(h => (h.default = false));
         const actual = data.hackathons.getCurrentHackathon();
         expect(actual).toBeDefined();
       });
       test('gets next hackathon as current', () => {
-        data.hackathons.rows.forEach((h) => (h.default = false));
+        data.hackathons.rows.forEach(h => (h.default = false));
         data.hackathons.rows[data.hackathons.rows.length - 1].judging_stops =
           add(new Date(), { hours: 8 });
         const actual = data.hackathons.getCurrentHackathon();
@@ -94,14 +94,14 @@ describe.skip('SheetData', () => {
           const locked = await projects.lock(hackathon, true);
           expect(locked).toBeDefined();
           expect(locked.length).toBeGreaterThan(0);
-          locked.forEach((p) => {
+          locked.forEach(p => {
             expect(p.locked).toEqual(true);
             expect(p._hackathon_id).toEqual(hackathon._id);
           });
           const unlocked = await projects.lock(hackathon, false);
           expect(unlocked).toBeDefined();
           expect(unlocked.length).toBeGreaterThan(0);
-          unlocked.forEach((p) => {
+          unlocked.forEach(p => {
             expect(p.locked).toEqual(false);
             expect(p._hackathon_id).toEqual(hackathon._id);
           });

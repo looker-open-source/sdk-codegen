@@ -74,7 +74,7 @@ class SheetsClient {
 
   async getProject(projectId: string): Promise<IProjectProps | undefined> {
     const projects = await this.getProjects(false);
-    return projects.find((project) => project._id === projectId);
+    return projects.find(project => project._id === projectId);
   }
 
   async getCurrentProjects(hackathonId?: string): Promise<IProjectProps[]> {
@@ -227,11 +227,11 @@ class SheetsClient {
     if (hackathon) {
       const data = await this.getSheetData();
       await data.judgings.refresh();
-      let judgings = data.judgings.filterBy(hackathon).map((j) => j.toObject());
+      let judgings = data.judgings.filterBy(hackathon).map(j => j.toObject());
       const hacker = await this.getHacker();
       if (!hacker.canAdmin) {
         if (hacker.canJudge) {
-          judgings = judgings.filter((j) => j.user_id === hacker.id);
+          judgings = judgings.filter(j => j.user_id === hacker.id);
         } else {
           judgings = [];
         }
@@ -265,7 +265,7 @@ class SheetsClient {
       await this.loadHackers(data);
 
       const hacker: Hacker | undefined = this.hackers?.rows.find(
-        (h) => h.user.id === lookerUser.id
+        h => h.user.id === lookerUser.id
       );
 
       if (!hacker) {
@@ -309,19 +309,19 @@ class SheetsClient {
     staff: IHackerProps[];
   }> {
     const hackers =
-      this.hackers?.users?.map((hacker) =>
+      this.hackers?.users?.map(hacker =>
         this.decorateHacker(hacker.toObject(), hacker)
       ) || [];
     const judges =
-      this.hackers?.judges?.map((hacker) =>
+      this.hackers?.judges?.map(hacker =>
         this.decorateHacker(hacker.toObject(), hacker)
       ) || [];
     const admins =
-      this.hackers?.admins?.map((hacker) =>
+      this.hackers?.admins?.map(hacker =>
         this.decorateHacker(hacker.toObject(), hacker)
       ) || [];
     const staff =
-      this.hackers?.staff?.map((hacker) =>
+      this.hackers?.staff?.map(hacker =>
         this.decorateHacker(hacker.toObject(), hacker)
       ) || [];
 
@@ -348,7 +348,7 @@ class SheetsClient {
     const data = await this.getSheetData();
 
     let reg = data.registrations.rows.find(
-      (r) => r._user_id === user.id && r.hackathon_id === hackathon._id
+      r => r._user_id === user.id && r.hackathon_id === hackathon._id
     );
 
     if (!reg) {
@@ -437,21 +437,21 @@ class SheetsClient {
 
   private async updateJudges(project: Project, judges: string[]) {
     const addedJudges = judges.filter(
-      (judge) => !project.$judges.includes(judge)
+      judge => !project.$judges.includes(judge)
     );
     const deletedJudges = project.$judges.filter(
-      (judge) => !judges.includes(judge)
+      judge => !judges.includes(judge)
     );
     const hackerJudges = this.hackers?.judges;
 
     for (const judge of deletedJudges) {
-      const hackerJudge = hackerJudges?.find((hj) => hj.name === judge);
+      const hackerJudge = hackerJudges?.find(hj => hj.name === judge);
       if (hackerJudge) {
         await project.deleteJudge(hackerJudge);
       }
     }
     for (const judge of addedJudges) {
-      const hackerJudge = hackerJudges?.find((hj) => hj.name === judge);
+      const hackerJudge = hackerJudges?.find(hj => hj.name === judge);
       if (hackerJudge) {
         await project.addJudge(hackerJudge);
       }
@@ -538,7 +538,7 @@ class SheetsClient {
         projectProps.$team_count = projectProps.$members.length;
       }
       projectProps.technologies = projectProps.technologies.filter(
-        (v) => v !== ''
+        v => v !== ''
       );
       if (!projectProps.$techs) {
         projectProps.$techs = projects[index].$techs;

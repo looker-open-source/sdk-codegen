@@ -24,7 +24,7 @@
 
  */
 
-module.exports = (api) => {
+module.exports = api => {
   const isTest = api.env('test');
   api.cache(true);
 

@@ -271,7 +271,7 @@ export const swapXLookerTags = (spec: string) => {
     { pattern: /x-looker-values/gi, replacement: 'enum' },
     { pattern: /x-looker-deprecated/gi, replacement: 'deprecated' },
   ];
-  swaps.forEach((swap) => {
+  swaps.forEach(swap => {
     spec = spec.replace(swap.pattern, swap.replacement);
   });
   return spec;
@@ -488,7 +488,7 @@ export const convertResponses = (
     if (response.schema) {
       const content: any = {};
       formats.produces.forEach(
-        (format) => (content[format] = { schema: response.schema })
+        format => (content[format] = { schema: response.schema })
       );
       responses[code].content = content;
     }
@@ -690,8 +690,8 @@ export const getSpecLinks = (
     };
   };
   const specs = versions.supported_versions
-    .filter((v) => include(v))
-    .map((v) => deriveSpec(v));
+    .filter(v => include(v))
+    .map(v => deriveSpec(v));
   return specs;
 };
 

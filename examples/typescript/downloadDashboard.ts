@@ -99,7 +99,7 @@ const downloadDashboard = async (
     const result = await waitForRender(sdk, task.id!);
     if (result) {
       fileName = `${dashboard.title}.${format}`;
-      fs.writeFile(fileName, result, 'binary', (err) => {
+      fs.writeFile(fileName, result, 'binary', err => {
         if (err) {
           fileName = undefined;
           console.error(err);
