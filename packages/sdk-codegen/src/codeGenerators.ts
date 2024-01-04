@@ -49,7 +49,7 @@ export interface IGeneratorSpec {
 }
 
 // To disable generation of any language specification, just comment it out
-export const Generators: Array<IGeneratorSpec> = [
+export const Generators: IGeneratorSpec[] = [
   {
     factory: (api: ApiModel, versions?: IVersionInfo) =>
       new PythonGen(api, versions),
@@ -162,6 +162,6 @@ export const getCodeGenerator = (
   return undefined;
 };
 
-export const legacyLanguages = (): Array<IGeneratorSpec> => {
+export const legacyLanguages = (): IGeneratorSpec[] => {
   return Generators.filter(x => !!x.legacy);
 };
