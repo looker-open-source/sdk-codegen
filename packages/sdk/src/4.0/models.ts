@@ -25,7 +25,7 @@
  */
 
 /**
- * 404 API models: 255 Spec, 66 Request, 61 Write, 22 Enum
+ * 400 API models: 256 Spec, 61 Request, 61 Write, 22 Enum
  */
 
 import type { DelimArray, IDictionary } from '@looker/sdk-rtl';
@@ -4194,7 +4194,7 @@ export interface IIntegration {
    */
   params?: IIntegrationParam[];
   /**
-   * A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (read-only)
+   * A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "json_bi", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (read-only)
    */
   supported_formats?: SupportedFormats[];
   /**
@@ -4419,6 +4419,10 @@ export interface IJsonBi {
    * Filters applied to the query results (read-only)
    */
   filters: IDictionary<string>;
+  /**
+   * Raw sql query. Null if user does not have permission to view sql (read-only)
+   */
+  sql: string | null;
   /**
    * Json query results (read-only)
    */
@@ -5091,6 +5095,21 @@ export interface ILookBasic {
   user_id?: string | null;
 }
 
+export interface ILookmlFieldLink {
+  /**
+   * The name of the link as it would appear to users. (read-only)
+   */
+  label?: string;
+  /**
+   * URL the link will go to. (read-only)
+   */
+  url?: string;
+  /**
+   * A URL containing an image file to display with a link. (read-only)
+   */
+  icon_url?: string | null;
+}
+
 export interface ILookmlModel {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -5371,6 +5390,10 @@ export interface ILookmlModelExploreField {
    */
   dimension_group?: string | null;
   /**
+   * Drill fields declared for this field in LookML or default drills for certain types. (read-only)
+   */
+  drill_fields?: string[] | null;
+  /**
    * An array enumerating all the possible values that this field can contain. When null, there is no limit to the set of possible values this field can contain. (read-only)
    */
   enumerations?: ILookmlModelExploreFieldEnumeration[] | null;
@@ -5398,6 +5421,10 @@ export interface ILookmlModelExploreField {
    * Whether this field has a set of allowed_values specified in LookML. (read-only)
    */
   has_allowed_values?: boolean;
+  /**
+   * Whether this field has links or drill fields defined. (read-only)
+   */
+  has_drills_metadata?: boolean;
   /**
    * Whether this field should be hidden from the user interface. (read-only)
    */
@@ -5439,6 +5466,10 @@ export interface ILookmlModelExploreField {
    * A URL linking to the definition of this field in the LookML IDE. (read-only)
    */
   lookml_link?: string | null;
+  /**
+   * Links associated with this field. (read-only)
+   */
+  links?: ILookmlFieldLink[] | null;
   map_layer?: ILookmlModelExploreFieldMapLayer;
   /**
    * Whether this field is a measure. (read-only)
@@ -7534,24 +7565,6 @@ export interface IRequestAllIntegrations {
 }
 
 /**
- * Dynamically generated request type for all_lookml_models
- */
-export interface IRequestAllLookmlModels {
-  /**
-   * Requested fields.
-   */
-  fields?: string | null;
-  /**
-   * Number of results to return. (can be used with offset)
-   */
-  limit?: number | null;
-  /**
-   * Number of results to skip before returning any. (Defaults to 0 if not set when limit is used)
-   */
-  offset?: number | null;
-}
-
-/**
  * Dynamically generated request type for all_roles
  */
 export interface IRequestAllRoles {
@@ -7581,20 +7594,6 @@ export interface IRequestAllScheduledPlans {
    * Return scheduled plans belonging to all users (caller needs see_schedules permission)
    */
   all_users?: boolean | null;
-}
-
-/**
- * Dynamically generated request type for all_user_attributes
- */
-export interface IRequestAllUserAttributes {
-  /**
-   * Requested fields.
-   */
-  fields?: string | null;
-  /**
-   * Fields to order the results by. Sortable fields include: name, label
-   */
-  sorts?: string | null;
 }
 
 /**
@@ -8075,6 +8074,28 @@ export interface IRequestLogin {
    * client_secret part of API Key.
    */
   client_secret?: string | null;
+}
+
+/**
+ * Dynamically generated request type for lookml_model_explore
+ */
+export interface IRequestLookmlModelExplore {
+  /**
+   * Name of lookml model.
+   */
+  lookml_model_name: string;
+  /**
+   * Name of explore.
+   */
+  explore_name: string;
+  /**
+   * Requested fields.
+   */
+  fields?: string | null;
+  /**
+   * Whether response should include drill field metadata.
+   */
+  add_drills_metadata?: boolean | null;
 }
 
 /**
@@ -8972,98 +8993,6 @@ export interface IRequestSearchGroups {
 }
 
 /**
- * Dynamically generated request type for search_groups_with_hierarchy
- */
-export interface IRequestSearchGroupsWithHierarchy {
-  /**
-   * Requested fields.
-   */
-  fields?: string | null;
-  /**
-   * Number of results to return (used with `offset`).
-   */
-  limit?: number | null;
-  /**
-   * Number of results to skip before returning any (used with `limit`).
-   */
-  offset?: number | null;
-  /**
-   * Fields to sort by.
-   */
-  sorts?: string | null;
-  /**
-   * Combine given search criteria in a boolean OR expression
-   */
-  filter_or?: boolean | null;
-  /**
-   * Match group id.
-   */
-  id?: string | null;
-  /**
-   * Match group name.
-   */
-  name?: string | null;
-  /**
-   * Match group external_group_id.
-   */
-  external_group_id?: string | null;
-  /**
-   * Match group externally_managed.
-   */
-  externally_managed?: boolean | null;
-  /**
-   * Match group externally_orphaned.
-   */
-  externally_orphaned?: boolean | null;
-}
-
-/**
- * Dynamically generated request type for search_groups_with_roles
- */
-export interface IRequestSearchGroupsWithRoles {
-  /**
-   * Requested fields.
-   */
-  fields?: string | null;
-  /**
-   * Number of results to return (used with `offset`).
-   */
-  limit?: number | null;
-  /**
-   * Number of results to skip before returning any (used with `limit`).
-   */
-  offset?: number | null;
-  /**
-   * Fields to sort by.
-   */
-  sorts?: string | null;
-  /**
-   * Combine given search criteria in a boolean OR expression
-   */
-  filter_or?: boolean | null;
-  /**
-   * Match group id.
-   */
-  id?: string | null;
-  /**
-   * Match group name.
-   */
-  name?: string | null;
-  /**
-   * Match group external_group_id.
-   */
-  external_group_id?: string | null;
-  /**
-   * Match group externally_managed.
-   */
-  externally_managed?: boolean | null;
-  /**
-   * Match group externally_orphaned.
-   */
-  externally_orphaned?: boolean | null;
-}
-
-/**
  * Dynamically generated request type for search_looks
  */
 export interface IRequestSearchLooks {
@@ -9184,89 +9113,9 @@ export interface IRequestSearchModelSets {
 }
 
 /**
- * Dynamically generated request type for search_permission_sets
- */
-export interface IRequestSearchPermissionSets {
-  /**
-   * Requested fields.
-   */
-  fields?: string | null;
-  /**
-   * Number of results to return (used with `offset`).
-   */
-  limit?: number | null;
-  /**
-   * Number of results to skip before returning any (used with `limit`).
-   */
-  offset?: number | null;
-  /**
-   * Fields to sort by.
-   */
-  sorts?: string | null;
-  /**
-   * Match permission set id.
-   */
-  id?: string | null;
-  /**
-   * Match permission set name.
-   */
-  name?: string | null;
-  /**
-   * Match permission sets by all_access status.
-   */
-  all_access?: boolean | null;
-  /**
-   * Match permission sets by built_in status.
-   */
-  built_in?: boolean | null;
-  /**
-   * Combine given search criteria in a boolean OR expression.
-   */
-  filter_or?: boolean | null;
-}
-
-/**
  * Dynamically generated request type for search_roles
  */
 export interface IRequestSearchRoles {
-  /**
-   * Requested fields.
-   */
-  fields?: string | null;
-  /**
-   * Number of results to return (used with `offset`).
-   */
-  limit?: number | null;
-  /**
-   * Number of results to skip before returning any (used with `limit`).
-   */
-  offset?: number | null;
-  /**
-   * Fields to sort by.
-   */
-  sorts?: string | null;
-  /**
-   * Match role id.
-   */
-  id?: string | null;
-  /**
-   * Match role name.
-   */
-  name?: string | null;
-  /**
-   * Match roles by built_in status.
-   */
-  built_in?: boolean | null;
-  /**
-   * Combine given search criteria in a boolean OR expression.
-   */
-  filter_or?: boolean | null;
-}
-
-/**
- * Dynamically generated request type for search_roles_with_user_count
- */
-export interface IRequestSearchRolesWithUserCount {
   /**
    * Requested fields.
    */
@@ -10953,7 +10802,7 @@ export enum SupportedDownloadSettings {
 }
 
 /**
- * A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (Enum defined in Integration)
+ * A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "json_bi", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (Enum defined in Integration)
  */
 export enum SupportedFormats {
   txt = 'txt',
@@ -10963,6 +10812,7 @@ export enum SupportedFormats {
   json_label = 'json_label',
   json_detail = 'json_detail',
   json_detail_lite_stream = 'json_detail_lite_stream',
+  json_bi = 'json_bi',
   xlsx = 'xlsx',
   html = 'html',
   wysiwyg_pdf = 'wysiwyg_pdf',

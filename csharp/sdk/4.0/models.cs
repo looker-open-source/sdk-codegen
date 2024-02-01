@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 338 API models: 255 Spec, 0 Request, 61 Write, 22 Enum
+/// 339 API models: 256 Spec, 0 Request, 61 Write, 22 Enum
 
 #nullable enable
 using System;
@@ -2487,7 +2487,7 @@ public class Integration : SdkModel
   public bool? enabled { get; set; } = null;
   /// <summary>Array of params for the integration.</summary>
   public IntegrationParam[]? @params { get; set; } = null;
-  /// <summary>A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (read-only)</summary>
+  /// <summary>A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "json_bi", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (read-only)</summary>
   public SupportedFormats[]? supported_formats { get; set; } = null;
   /// <summary>A list of action types the integration supports. Valid values are: "cell", "query", "dashboard", "none". (read-only)</summary>
   public SupportedActionTypes[]? supported_action_types { get; set; } = null;
@@ -2622,6 +2622,8 @@ public class JsonBi : SdkModel
   public string filter_expression { get; set; } = "";
   /// <summary>Filters applied to the query results (read-only)</summary>
   public StringDictionary<string> filters { get; set; } = null;
+  /// <summary>Raw sql query. Null if user does not have permission to view sql (read-only)</summary>
+  public string sql { get; set; } = "";
   /// <summary>Json query results (read-only)</summary>
   public string[] data { get; set; } = null;
 }
@@ -3003,6 +3005,16 @@ public class LookBasic : SdkModel
   public string? user_id { get; set; } = null;
 }
 
+public class LookmlFieldLink : SdkModel
+{
+  /// <summary>The name of the link as it would appear to users. (read-only)</summary>
+  public string? label { get; set; } = null;
+  /// <summary>URL the link will go to. (read-only)</summary>
+  public string? url { get; set; } = null;
+  /// <summary>A URL containing an image file to display with a link. (read-only)</summary>
+  public string? icon_url { get; set; } = null;
+}
+
 public class LookmlModel : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
@@ -3164,6 +3176,8 @@ public class LookmlModelExploreField : SdkModel
   public string? description { get; set; } = null;
   /// <summary>Dimension group if this field is part of a dimension group. If not, this will be null. (read-only)</summary>
   public string? dimension_group { get; set; } = null;
+  /// <summary>Drill fields declared for this field in LookML or default drills for certain types. (read-only)</summary>
+  public string[]? drill_fields { get; set; } = null;
   /// <summary>An array enumerating all the possible values that this field can contain. When null, there is no limit to the set of possible values this field can contain. (read-only)</summary>
   public LookmlModelExploreFieldEnumeration[]? enumerations { get; set; } = null;
   /// <summary>An error message indicating a problem with the definition of this field. If there are no errors, this will be null. (read-only)</summary>
@@ -3179,6 +3193,8 @@ public class LookmlModelExploreField : SdkModel
   public long? fiscal_month_offset { get; set; } = null;
   /// <summary>Whether this field has a set of allowed_values specified in LookML. (read-only)</summary>
   public bool? has_allowed_values { get; set; } = null;
+  /// <summary>Whether this field has links or drill fields defined. (read-only)</summary>
+  public bool? has_drills_metadata { get; set; } = null;
   /// <summary>Whether this field should be hidden from the user interface. (read-only)</summary>
   public bool? hidden { get; set; } = null;
   /// <summary>Whether this field is a filter. (read-only)</summary>
@@ -3200,6 +3216,8 @@ public class LookmlModelExploreField : SdkModel
   public string? label_short { get; set; } = null;
   /// <summary>A URL linking to the definition of this field in the LookML IDE. (read-only)</summary>
   public string? lookml_link { get; set; } = null;
+  /// <summary>Links associated with this field. (read-only)</summary>
+  public LookmlFieldLink[]? links { get; set; } = null;
   public LookmlModelExploreFieldMapLayer? map_layer { get; set; }
   /// <summary>Whether this field is a measure. (read-only)</summary>
   public bool? measure { get; set; } = null;
@@ -5148,7 +5166,7 @@ public enum SupportedDownloadSettings
   url
 }
 
-/// A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (Enum defined in Integration)
+/// A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "json_bi", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (Enum defined in Integration)
 public enum SupportedFormats
 {
   [EnumMember(Value = "txt")]
@@ -5165,6 +5183,8 @@ public enum SupportedFormats
   json_detail,
   [EnumMember(Value = "json_detail_lite_stream")]
   json_detail_lite_stream,
+  [EnumMember(Value = "json_bi")]
+  json_bi,
   [EnumMember(Value = "xlsx")]
   xlsx,
   [EnumMember(Value = "html")]
