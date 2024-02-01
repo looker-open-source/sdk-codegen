@@ -4327,7 +4327,7 @@ open class LookerSDKStream: APIMethods {
      * You can use this function to change the string and integer properties of
      * a dashboard. Nested objects such as filters, dashboard elements, or dashboard layout components
      * cannot be modified by this function - use the update functions for the respective
-     * nested object types (like [update_dashboard_filter()](#!/3.1/Dashboard/update_dashboard_filter) to change a filter)
+     * nested object types (like [update_dashboard_filter()](#!/Dashboard/update_dashboard_filter) to change a filter)
      * to modify nested objects referenced by a dashboard.
      *
      * If you receive a 422 error response when updating a dashboard, be sure to look at the
@@ -6880,12 +6880,16 @@ open class LookerSDKStream: APIMethods {
          * @param {String} fields Requested fields.
          */
         fields: String? = nil,
+        /**
+         * @param {Bool} add_drills_metadata Whether response should include drill field metadata.
+         */
+        add_drills_metadata: Bool? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let path_lookml_model_name = encodeParam(lookml_model_name)
         let path_explore_name = encodeParam(explore_name)
         let result: SDKResponse<Data, SDKError> = self.get("/lookml_models/\(path_lookml_model_name)/explores/\(path_explore_name)", 
-            ["fields": fields], nil, options)
+            ["fields": fields, "add_drills_metadata": add_drills_metadata as Any?], nil, options)
         return result
     }
 

@@ -3050,7 +3050,7 @@ func (l *LookerSDK) Dashboard(
 // You can use this function to change the string and integer properties of
 // a dashboard. Nested objects such as filters, dashboard elements, or dashboard layout components
 // cannot be modified by this function - use the update functions for the respective
-// nested object types (like [update_dashboard_filter()](#!/3.1/Dashboard/update_dashboard_filter) to change a filter)
+// nested object types (like [update_dashboard_filter()](#!/Dashboard/update_dashboard_filter) to change a filter)
 // to modify nested objects referenced by a dashboard.
 //
 // If you receive a 422 error response when updating a dashboard, be sure to look at the
@@ -3872,7 +3872,7 @@ func (l *LookerSDK) SearchGroups(request RequestSearchGroups,
 // Boolean search params accept only "true" and "false" as values.
 //
 // GET /groups/search/with_roles -> []GroupSearch
-func (l *LookerSDK) SearchGroupsWithRoles(request RequestSearchGroupsWithRoles,
+func (l *LookerSDK) SearchGroupsWithRoles(request RequestSearchGroups,
 	options *rtl.ApiSettings) ([]GroupSearch, error) {
 	var result []GroupSearch
 	err := l.session.Do(&result, "GET", "/4.0", "/groups/search/with_roles", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "filter_or": request.FilterOr, "id": request.Id, "name": request.Name, "external_group_id": request.ExternalGroupId, "externally_managed": request.ExternallyManaged, "externally_orphaned": request.ExternallyOrphaned}, nil, options)
@@ -3907,7 +3907,7 @@ func (l *LookerSDK) SearchGroupsWithRoles(request RequestSearchGroupsWithRoles,
 // Boolean search params accept only "true" and "false" as values.
 //
 // GET /groups/search/with_hierarchy -> []GroupHierarchy
-func (l *LookerSDK) SearchGroupsWithHierarchy(request RequestSearchGroupsWithHierarchy,
+func (l *LookerSDK) SearchGroupsWithHierarchy(request RequestSearchGroups,
 	options *rtl.ApiSettings) ([]GroupHierarchy, error) {
 	var result []GroupHierarchy
 	err := l.session.Do(&result, "GET", "/4.0", "/groups/search/with_hierarchy", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "filter_or": request.FilterOr, "id": request.Id, "name": request.Name, "external_group_id": request.ExternalGroupId, "externally_managed": request.ExternallyManaged, "externally_orphaned": request.ExternallyOrphaned}, nil, options)
@@ -4467,7 +4467,7 @@ func (l *LookerSDK) MoveLook(
 // ### Get information about all lookml models.
 //
 // GET /lookml_models -> []LookmlModel
-func (l *LookerSDK) AllLookmlModels(request RequestAllLookmlModels,
+func (l *LookerSDK) AllLookmlModels(request RequestArtifactNamespaces,
 	options *rtl.ApiSettings) ([]LookmlModel, error) {
 	var result []LookmlModel
 	err := l.session.Do(&result, "GET", "/4.0", "/lookml_models", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset}, nil, options)
@@ -4531,15 +4531,12 @@ func (l *LookerSDK) DeleteLookmlModel(
 // ### Get information about a lookml model explore.
 //
 // GET /lookml_models/{lookml_model_name}/explores/{explore_name} -> LookmlModelExplore
-func (l *LookerSDK) LookmlModelExplore(
-	lookmlModelName string,
-	exploreName string,
-	fields string,
+func (l *LookerSDK) LookmlModelExplore(request RequestLookmlModelExplore,
 	options *rtl.ApiSettings) (LookmlModelExplore, error) {
-	lookmlModelName = url.PathEscape(lookmlModelName)
-	exploreName = url.PathEscape(exploreName)
+	request.LookmlModelName = url.PathEscape(request.LookmlModelName)
+	request.ExploreName = url.PathEscape(request.ExploreName)
 	var result LookmlModelExplore
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/lookml_models/%v/explores/%v", lookmlModelName, exploreName), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/lookml_models/%v/explores/%v", request.LookmlModelName, request.ExploreName), map[string]interface{}{"fields": request.Fields, "add_drills_metadata": request.AddDrillsMetadata}, nil, options)
 	return result, err
 
 }
@@ -6019,7 +6016,7 @@ func (l *LookerSDK) AllPermissions(
 // Boolean search params accept only "true" and "false" as values.
 //
 // GET /permission_sets/search -> []PermissionSet
-func (l *LookerSDK) SearchPermissionSets(request RequestSearchPermissionSets,
+func (l *LookerSDK) SearchPermissionSets(request RequestSearchModelSets,
 	options *rtl.ApiSettings) ([]PermissionSet, error) {
 	var result []PermissionSet
 	err := l.session.Do(&result, "GET", "/4.0", "/permission_sets/search", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "id": request.Id, "name": request.Name, "all_access": request.AllAccess, "built_in": request.BuiltIn, "filter_or": request.FilterOr}, nil, options)
@@ -6176,7 +6173,7 @@ func (l *LookerSDK) SearchRoles(request RequestSearchRoles,
 // Boolean search params accept only "true" and "false" as values.
 //
 // GET /roles/search/with_user_count -> []RoleSearch
-func (l *LookerSDK) SearchRolesWithUserCount(request RequestSearchRolesWithUserCount,
+func (l *LookerSDK) SearchRolesWithUserCount(request RequestSearchRoles,
 	options *rtl.ApiSettings) ([]RoleSearch, error) {
 	var result []RoleSearch
 	err := l.session.Do(&result, "GET", "/4.0", "/roles/search/with_user_count", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "id": request.Id, "name": request.Name, "built_in": request.BuiltIn, "filter_or": request.FilterOr}, nil, options)
@@ -7838,7 +7835,7 @@ func (l *LookerSDK) CreateEmbedUser(
 // ### Get information about all user attributes.
 //
 // GET /user_attributes -> []UserAttribute
-func (l *LookerSDK) AllUserAttributes(request RequestAllUserAttributes,
+func (l *LookerSDK) AllUserAttributes(request RequestAllBoardSections,
 	options *rtl.ApiSettings) ([]UserAttribute, error) {
 	var result []UserAttribute
 	err := l.session.Do(&result, "GET", "/4.0", "/user_attributes", map[string]interface{}{"fields": request.Fields, "sorts": request.Sorts}, nil, options)

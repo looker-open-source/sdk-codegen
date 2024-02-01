@@ -3786,7 +3786,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * You can use this function to change the string and integer properties of
      * a dashboard. Nested objects such as filters, dashboard elements, or dashboard layout components
      * cannot be modified by this function - use the update functions for the respective
-     * nested object types (like [update_dashboard_filter()](#!/3.1/Dashboard/update_dashboard_filter) to change a filter)
+     * nested object types (like [update_dashboard_filter()](#!/Dashboard/update_dashboard_filter) to change a filter)
      * to modify nested objects referenced by a dashboard.
      *
      * If you receive a 422 error response when updating a dashboard, be sure to look at the
@@ -5982,6 +5982,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * @param {String} lookml_model_name Name of lookml model.
      * @param {String} explore_name Name of explore.
      * @param {String} fields Requested fields.
+     * @param {Boolean} add_drills_metadata Whether response should include drill field metadata.
      *
      * GET /lookml_models/{lookml_model_name}/explores/{explore_name} -> LookmlModelExplore
      */
@@ -5989,12 +5990,16 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
         lookml_model_name: String,
         explore_name: String,
         fields: String? = null,
+        add_drills_metadata: Boolean? = null,
     ): SDKResponse {
         val path_lookml_model_name = encodeParam(lookml_model_name)
         val path_explore_name = encodeParam(explore_name)
         return this.get<LookmlModelExplore>(
             "/lookml_models/${path_lookml_model_name}/explores/${path_explore_name}",
-            mapOf("fields" to fields),
+            mapOf(
+                "fields" to fields,
+                "add_drills_metadata" to add_drills_metadata,
+            ),
         )
     }
 

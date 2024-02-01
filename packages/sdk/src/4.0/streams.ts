@@ -167,10 +167,8 @@ import type {
   IRequestAllGroupUsers,
   IRequestAllGroups,
   IRequestAllIntegrations,
-  IRequestAllLookmlModels,
   IRequestAllRoles,
   IRequestAllScheduledPlans,
-  IRequestAllUserAttributes,
   IRequestAllUsers,
   IRequestArtifact,
   IRequestArtifactNamespaces,
@@ -189,6 +187,7 @@ import type {
   IRequestGraphDerivedTablesForModel,
   IRequestGraphDerivedTablesForView,
   IRequestLogin,
+  IRequestLookmlModelExplore,
   IRequestModelFieldnameSuggestions,
   IRequestRoleUsers,
   IRequestRunGitConnectionTest,
@@ -210,13 +209,9 @@ import type {
   IRequestSearchDashboards,
   IRequestSearchFolders,
   IRequestSearchGroups,
-  IRequestSearchGroupsWithHierarchy,
-  IRequestSearchGroupsWithRoles,
   IRequestSearchLooks,
   IRequestSearchModelSets,
-  IRequestSearchPermissionSets,
   IRequestSearchRoles,
-  IRequestSearchRolesWithUserCount,
   IRequestSearchThemes,
   IRequestSearchUserLoginLockouts,
   IRequestSearchUsers,
@@ -5742,7 +5737,7 @@ export class Looker40SDKStream extends APIMethods {
    * You can use this function to change the string and integer properties of
    * a dashboard. Nested objects such as filters, dashboard elements, or dashboard layout components
    * cannot be modified by this function - use the update functions for the respective
-   * nested object types (like [update_dashboard_filter()](#!/3.1/Dashboard/update_dashboard_filter) to change a filter)
+   * nested object types (like [update_dashboard_filter()](#!/Dashboard/update_dashboard_filter) to change a filter)
    * to modify nested objects referenced by a dashboard.
    *
    * If you receive a 422 error response when updating a dashboard, be sure to look at the
@@ -7335,13 +7330,13 @@ export class Looker40SDKStream extends APIMethods {
    * GET /groups/search/with_roles -> IGroupSearch[]
    *
    * @param callback streaming output function
-   * @param request composed interface "IRequestSearchGroupsWithRoles" for complex method parameters
+   * @param request composed interface "IRequestSearchGroups" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async search_groups_with_roles(
     callback: (readable: Readable) => Promise<IGroupSearch[]>,
-    request: IRequestSearchGroupsWithRoles,
+    request: IRequestSearchGroups,
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IGroupSearch[]>(
@@ -7395,13 +7390,13 @@ export class Looker40SDKStream extends APIMethods {
    * GET /groups/search/with_hierarchy -> IGroupHierarchy[]
    *
    * @param callback streaming output function
-   * @param request composed interface "IRequestSearchGroupsWithHierarchy" for complex method parameters
+   * @param request composed interface "IRequestSearchGroups" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async search_groups_with_hierarchy(
     callback: (readable: Readable) => Promise<IGroupHierarchy[]>,
-    request: IRequestSearchGroupsWithHierarchy,
+    request: IRequestSearchGroups,
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IGroupHierarchy[]>(
@@ -8472,13 +8467,13 @@ export class Looker40SDKStream extends APIMethods {
    * GET /lookml_models -> ILookmlModel[]
    *
    * @param callback streaming output function
-   * @param request composed interface "IRequestAllLookmlModels" for complex method parameters
+   * @param request composed interface "IRequestArtifactNamespaces" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async all_lookml_models(
     callback: (readable: Readable) => Promise<ILookmlModel[]>,
-    request: IRequestAllLookmlModels,
+    request: IRequestArtifactNamespaces,
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ILookmlModel[]>(
@@ -8604,26 +8599,25 @@ export class Looker40SDKStream extends APIMethods {
    * GET /lookml_models/{lookml_model_name}/explores/{explore_name} -> ILookmlModelExplore
    *
    * @param callback streaming output function
-   * @param lookml_model_name Name of lookml model.
-   * @param explore_name Name of explore.
-   * @param fields Requested fields.
+   * @param request composed interface "IRequestLookmlModelExplore" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async lookml_model_explore(
     callback: (readable: Readable) => Promise<ILookmlModelExplore>,
-    lookml_model_name: string,
-    explore_name: string,
-    fields?: string,
+    request: IRequestLookmlModelExplore,
     options?: Partial<ITransportSettings>
   ) {
-    lookml_model_name = encodeParam(lookml_model_name);
-    explore_name = encodeParam(explore_name);
+    request.lookml_model_name = encodeParam(request.lookml_model_name);
+    request.explore_name = encodeParam(request.explore_name);
     return this.authStream<ILookmlModelExplore>(
       callback,
       'GET',
-      `/lookml_models/${lookml_model_name}/explores/${explore_name}`,
-      { fields },
+      `/lookml_models/${request.lookml_model_name}/explores/${request.explore_name}`,
+      {
+        fields: request.fields,
+        add_drills_metadata: request.add_drills_metadata,
+      },
       null,
       options
     );
@@ -11155,13 +11149,13 @@ export class Looker40SDKStream extends APIMethods {
    * GET /permission_sets/search -> IPermissionSet[]
    *
    * @param callback streaming output function
-   * @param request composed interface "IRequestSearchPermissionSets" for complex method parameters
+   * @param request composed interface "IRequestSearchModelSets" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async search_permission_sets(
     callback: (readable: Readable) => Promise<IPermissionSet[]>,
-    request: IRequestSearchPermissionSets,
+    request: IRequestSearchModelSets,
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IPermissionSet[]>(
@@ -11453,13 +11447,13 @@ export class Looker40SDKStream extends APIMethods {
    * GET /roles/search/with_user_count -> IRoleSearch[]
    *
    * @param callback streaming output function
-   * @param request composed interface "IRequestSearchRolesWithUserCount" for complex method parameters
+   * @param request composed interface "IRequestSearchRoles" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async search_roles_with_user_count(
     callback: (readable: Readable) => Promise<IRoleSearch[]>,
-    request: IRequestSearchRolesWithUserCount,
+    request: IRequestSearchRoles,
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IRoleSearch[]>(
@@ -14345,13 +14339,13 @@ export class Looker40SDKStream extends APIMethods {
    * GET /user_attributes -> IUserAttribute[]
    *
    * @param callback streaming output function
-   * @param request composed interface "IRequestAllUserAttributes" for complex method parameters
+   * @param request composed interface "IRequestAllBoardSections" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async all_user_attributes(
     callback: (readable: Readable) => Promise<IUserAttribute[]>,
-    request: IRequestAllUserAttributes,
+    request: IRequestAllBoardSections,
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IUserAttribute[]>(
