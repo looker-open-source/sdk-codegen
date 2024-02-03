@@ -3753,7 +3753,7 @@ namespace Looker.SDK.API40
   /// You can use this function to change the string and integer properties of
   /// a dashboard. Nested objects such as filters, dashboard elements, or dashboard layout components
   /// cannot be modified by this function - use the update functions for the respective
-  /// nested object types (like [update_dashboard_filter()](#!/3.1/Dashboard/update_dashboard_filter) to change a filter)
+  /// nested object types (like [update_dashboard_filter()](#!/Dashboard/update_dashboard_filter) to change a filter)
   /// to modify nested objects referenced by a dashboard.
   ///
   /// If you receive a 422 error response when updating a dashboard, be sure to look at the
@@ -5859,16 +5859,19 @@ namespace Looker.SDK.API40
   /// <param name="lookml_model_name">Name of lookml model.</param>
   /// <param name="explore_name">Name of explore.</param>
   /// <param name="fields">Requested fields.</param>
+  /// <param name="add_drills_metadata">Whether response should include drill field metadata.</param>
   public async Task<SdkResponse<LookmlModelExplore, Exception>> lookml_model_explore(
     string lookml_model_name,
     string explore_name,
     string? fields = null,
+    bool? add_drills_metadata = null,
     ITransportSettings? options = null)
 {  
       lookml_model_name = SdkUtils.EncodeParam(lookml_model_name);
       explore_name = SdkUtils.EncodeParam(explore_name);
     return await AuthRequest<LookmlModelExplore, Exception>(HttpMethod.Get, $"/lookml_models/{lookml_model_name}/explores/{explore_name}", new Values {
-      { "fields", fields }},null,options);
+      { "fields", fields },
+      { "add_drills_metadata", add_drills_metadata }},null,options);
   }
 
   #endregion LookmlModel: Manage LookML Models

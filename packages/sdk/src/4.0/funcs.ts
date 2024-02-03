@@ -170,10 +170,8 @@ import type {
   IRequestAllGroupUsers,
   IRequestAllGroups,
   IRequestAllIntegrations,
-  IRequestAllLookmlModels,
   IRequestAllRoles,
   IRequestAllScheduledPlans,
-  IRequestAllUserAttributes,
   IRequestAllUsers,
   IRequestArtifact,
   IRequestArtifactNamespaces,
@@ -192,6 +190,7 @@ import type {
   IRequestGraphDerivedTablesForModel,
   IRequestGraphDerivedTablesForView,
   IRequestLogin,
+  IRequestLookmlModelExplore,
   IRequestModelFieldnameSuggestions,
   IRequestRoleUsers,
   IRequestRunGitConnectionTest,
@@ -213,13 +212,9 @@ import type {
   IRequestSearchDashboards,
   IRequestSearchFolders,
   IRequestSearchGroups,
-  IRequestSearchGroupsWithHierarchy,
-  IRequestSearchGroupsWithRoles,
   IRequestSearchLooks,
   IRequestSearchModelSets,
-  IRequestSearchPermissionSets,
   IRequestSearchRoles,
-  IRequestSearchRolesWithUserCount,
   IRequestSearchThemes,
   IRequestSearchUserLoginLockouts,
   IRequestSearchUsers,
@@ -5348,7 +5343,7 @@ export const dashboard = async (
  * You can use this function to change the string and integer properties of
  * a dashboard. Nested objects such as filters, dashboard elements, or dashboard layout components
  * cannot be modified by this function - use the update functions for the respective
- * nested object types (like [update_dashboard_filter()](#!/3.1/Dashboard/update_dashboard_filter) to change a filter)
+ * nested object types (like [update_dashboard_filter()](#!/Dashboard/update_dashboard_filter) to change a filter)
  * to modify nested objects referenced by a dashboard.
  *
  * If you receive a 422 error response when updating a dashboard, be sure to look at the
@@ -6829,13 +6824,13 @@ export const search_groups = async (
  * GET /groups/search/with_roles -> IGroupSearch[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestSearchGroupsWithRoles" for complex method parameters
+ * @param request composed interface "IRequestSearchGroups" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const search_groups_with_roles = async (
   sdk: IAPIMethods,
-  request: IRequestSearchGroupsWithRoles,
+  request: IRequestSearchGroups,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroupSearch[], IError>> => {
   return sdk.get<IGroupSearch[], IError>(
@@ -6887,13 +6882,13 @@ export const search_groups_with_roles = async (
  * GET /groups/search/with_hierarchy -> IGroupHierarchy[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestSearchGroupsWithHierarchy" for complex method parameters
+ * @param request composed interface "IRequestSearchGroups" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const search_groups_with_hierarchy = async (
   sdk: IAPIMethods,
-  request: IRequestSearchGroupsWithHierarchy,
+  request: IRequestSearchGroups,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroupHierarchy[], IError>> => {
   return sdk.get<IGroupHierarchy[], IError>(
@@ -7882,13 +7877,13 @@ export const move_look = async (
  * GET /lookml_models -> ILookmlModel[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestAllLookmlModels" for complex method parameters
+ * @param request composed interface "IRequestArtifactNamespaces" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const all_lookml_models = async (
   sdk: IAPIMethods,
-  request: IRequestAllLookmlModels,
+  request: IRequestArtifactNamespaces,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILookmlModel[], IError>> => {
   return sdk.get<ILookmlModel[], IError>(
@@ -8004,24 +7999,23 @@ export const delete_lookml_model = async (
  * GET /lookml_models/{lookml_model_name}/explores/{explore_name} -> ILookmlModelExplore
  *
  * @param sdk IAPIMethods implementation
- * @param lookml_model_name Name of lookml model.
- * @param explore_name Name of explore.
- * @param fields Requested fields.
+ * @param request composed interface "IRequestLookmlModelExplore" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const lookml_model_explore = async (
   sdk: IAPIMethods,
-  lookml_model_name: string,
-  explore_name: string,
-  fields?: string,
+  request: IRequestLookmlModelExplore,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILookmlModelExplore, IError>> => {
-  lookml_model_name = encodeParam(lookml_model_name);
-  explore_name = encodeParam(explore_name);
+  request.lookml_model_name = encodeParam(request.lookml_model_name);
+  request.explore_name = encodeParam(request.explore_name);
   return sdk.get<ILookmlModelExplore, IError>(
-    `/lookml_models/${lookml_model_name}/explores/${explore_name}`,
-    { fields },
+    `/lookml_models/${request.lookml_model_name}/explores/${request.explore_name}`,
+    {
+      fields: request.fields,
+      add_drills_metadata: request.add_drills_metadata,
+    },
     null,
     options
   );
@@ -10392,13 +10386,13 @@ export const all_permissions = async (
  * GET /permission_sets/search -> IPermissionSet[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestSearchPermissionSets" for complex method parameters
+ * @param request composed interface "IRequestSearchModelSets" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const search_permission_sets = async (
   sdk: IAPIMethods,
-  request: IRequestSearchPermissionSets,
+  request: IRequestSearchModelSets,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IPermissionSet[], IError>> => {
   return sdk.get<IPermissionSet[], IError>(
@@ -10672,13 +10666,13 @@ export const search_roles = async (
  * GET /roles/search/with_user_count -> IRoleSearch[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestSearchRolesWithUserCount" for complex method parameters
+ * @param request composed interface "IRequestSearchRoles" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const search_roles_with_user_count = async (
   sdk: IAPIMethods,
-  request: IRequestSearchRolesWithUserCount,
+  request: IRequestSearchRoles,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IRoleSearch[], IError>> => {
   return sdk.get<IRoleSearch[], IError>(
@@ -13357,13 +13351,13 @@ export const create_embed_user = async (
  * GET /user_attributes -> IUserAttribute[]
  *
  * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestAllUserAttributes" for complex method parameters
+ * @param request composed interface "IRequestAllBoardSections" for complex method parameters
  * @param options one-time API call overrides
  *
  */
 export const all_user_attributes = async (
   sdk: IAPIMethods,
-  request: IRequestAllUserAttributes,
+  request: IRequestAllBoardSections,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUserAttribute[], IError>> => {
   return sdk.get<IUserAttribute[], IError>(

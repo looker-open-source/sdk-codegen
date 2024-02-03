@@ -25,7 +25,7 @@
  */
 
 /**
- * 338 API models: 255 Spec, 0 Request, 61 Write, 22 Enum
+ * 339 API models: 256 Spec, 0 Request, 61 Write, 22 Enum
  */
 
 
@@ -10384,7 +10384,7 @@ public struct Integration: SDKModel {
     public var params: [IntegrationParam]?
 
     /**
-     * A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (read-only)
+     * A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "json_bi", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (read-only)
      */
     public var supported_formats: [SupportedFormats]?
 
@@ -10836,6 +10836,7 @@ public struct JsonBi: SDKModel {
         case _columns_truncated = "columns_truncated"
         case _filter_expression = "filter_expression"
         case filters
+        case _sql = "sql"
         case _data = "data"
     }
     public var big_query_metadata: JsonBiBigQueryMetadata
@@ -10880,6 +10881,15 @@ public struct JsonBi: SDKModel {
      */
     public var filters: StringDictionary<AnyCodable>
 
+    private var _sql: AnyString
+    /**
+     * Raw sql query. Null if user does not have permission to view sql (read-only)
+     */
+    public var sql: String {
+        get { _sql.value }
+        set { _sql = AnyString.init(newValue) }
+    }
+
     private var _data: [AnyString]
     /**
      * Json query results (read-only)
@@ -10889,7 +10899,7 @@ public struct JsonBi: SDKModel {
         set { _data = newValue.map { AnyString.init($0) } }
     }
 
-    public init(big_query_metadata: JsonBiBigQueryMetadata, fields: JsonBiFields, pivots: [JsonBiPivots], has_subtotals: Bool, has_totals: Bool, columns_truncated: String, filter_expression: String, filters: StringDictionary<AnyCodable>, data: [String]) {
+    public init(big_query_metadata: JsonBiBigQueryMetadata, fields: JsonBiFields, pivots: [JsonBiPivots], has_subtotals: Bool, has_totals: Bool, columns_truncated: String, filter_expression: String, filters: StringDictionary<AnyCodable>, sql: String, data: [String]) {
         self.big_query_metadata = big_query_metadata
         self.fields = fields
         self.pivots = pivots
@@ -10898,11 +10908,12 @@ public struct JsonBi: SDKModel {
         self._columns_truncated = AnyString.init(columns_truncated)
         self._filter_expression = AnyString.init(filter_expression)
         self.filters = filters
+        self._sql = AnyString.init(sql)
         self._data = data.map { AnyString.init($0) }
     }
 
-    public init(_ big_query_metadata: JsonBiBigQueryMetadata, _ fields: JsonBiFields, _ pivots: [JsonBiPivots], _ has_subtotals: Bool, _ has_totals: Bool, _ columns_truncated: String, _ filter_expression: String, _ filters: StringDictionary<AnyCodable>, _ data: [String]) {
-        self.init(big_query_metadata: big_query_metadata, fields: fields, pivots: pivots, has_subtotals: has_subtotals, has_totals: has_totals, columns_truncated: columns_truncated, filter_expression: filter_expression, filters: filters, data: data)
+    public init(_ big_query_metadata: JsonBiBigQueryMetadata, _ fields: JsonBiFields, _ pivots: [JsonBiPivots], _ has_subtotals: Bool, _ has_totals: Bool, _ columns_truncated: String, _ filter_expression: String, _ filters: StringDictionary<AnyCodable>, _ sql: String, _ data: [String]) {
+        self.init(big_query_metadata: big_query_metadata, fields: fields, pivots: pivots, has_subtotals: has_subtotals, has_totals: has_totals, columns_truncated: columns_truncated, filter_expression: filter_expression, filters: filters, sql: sql, data: data)
     }
 
 }
@@ -12569,6 +12580,48 @@ public struct LookBasic: SDKModel {
 
 }
 
+public struct LookmlFieldLink: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _label = "label"
+        case _url = "url"
+        case _icon_url = "icon_url"
+    }
+    private var _label: AnyString?
+    /**
+     * The name of the link as it would appear to users. (read-only)
+     */
+    public var label: String? {
+        get { _label?.value }
+        set { _label = newValue.map(AnyString.init) }
+    }
+
+    private var _url: AnyString?
+    /**
+     * URL the link will go to. (read-only)
+     */
+    public var url: String? {
+        get { _url?.value }
+        set { _url = newValue.map(AnyString.init) }
+    }
+
+    private var _icon_url: AnyString?
+    /**
+     * A URL containing an image file to display with a link. (read-only)
+     */
+    public var icon_url: String? {
+        get { _icon_url?.value }
+        set { _icon_url = newValue.map(AnyString.init) }
+    }
+
+    public init(label: String? = nil, url: String? = nil, icon_url: String? = nil) {
+        self._label = label.map(AnyString.init)
+        self._url = url.map(AnyString.init)
+        self._icon_url = icon_url.map(AnyString.init)
+    }
+
+}
+
 public struct LookmlModel: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -13187,6 +13240,7 @@ public struct LookmlModelExploreField: SDKModel {
         case _default_filter_value = "default_filter_value"
         case _description = "description"
         case _dimension_group = "dimension_group"
+        case _drill_fields = "drill_fields"
         case enumerations
         case _error = "error"
         case _field_group_label = "field_group_label"
@@ -13194,6 +13248,7 @@ public struct LookmlModelExploreField: SDKModel {
         case fill_style
         case _fiscal_month_offset = "fiscal_month_offset"
         case has_allowed_values
+        case has_drills_metadata
         case hidden
         case is_filter
         case is_fiscal
@@ -13205,6 +13260,7 @@ public struct LookmlModelExploreField: SDKModel {
         case _label_from_parameter = "label_from_parameter"
         case _label_short = "label_short"
         case _lookml_link = "lookml_link"
+        case links
         case map_layer
         case measure
         case _name = "name"
@@ -13278,6 +13334,15 @@ public struct LookmlModelExploreField: SDKModel {
         set { _dimension_group = newValue.map(AnyString.init) }
     }
 
+    private var _drill_fields: [AnyString]?
+    /**
+     * Drill fields declared for this field in LookML or default drills for certain types. (read-only)
+     */
+    public var drill_fields: [String]? {
+        get { if let v = _drill_fields { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _drill_fields = v.map { AnyString.init($0) } } else { _drill_fields = nil } }
+    }
+
     /**
      * An array enumerating all the possible values that this field can contain. When null, there is no limit to the set of possible values this field can contain. (read-only)
      */
@@ -13328,6 +13393,11 @@ public struct LookmlModelExploreField: SDKModel {
      * Whether this field has a set of allowed_values specified in LookML. (read-only)
      */
     public var has_allowed_values: Bool?
+
+    /**
+     * Whether this field has links or drill fields defined. (read-only)
+     */
+    public var has_drills_metadata: Bool?
 
     /**
      * Whether this field should be hidden from the user interface. (read-only)
@@ -13396,6 +13466,11 @@ public struct LookmlModelExploreField: SDKModel {
         get { _lookml_link?.value }
         set { _lookml_link = newValue.map(AnyString.init) }
     }
+
+    /**
+     * Links associated with this field. (read-only)
+     */
+    public var links: [LookmlFieldLink]?
 
     public var map_layer: LookmlModelExploreFieldMapLayer?
 
@@ -13608,13 +13683,14 @@ public struct LookmlModelExploreField: SDKModel {
         set { _original_view = newValue.map(AnyString.init) }
     }
 
-    public init(align: Align? = nil, can_filter: Bool? = nil, category: Category? = nil, default_filter_value: String? = nil, description: String? = nil, dimension_group: String? = nil, enumerations: [LookmlModelExploreFieldEnumeration]? = nil, error: String? = nil, field_group_label: String? = nil, field_group_variant: String? = nil, fill_style: FillStyle? = nil, fiscal_month_offset: Int64? = nil, has_allowed_values: Bool? = nil, hidden: Bool? = nil, is_filter: Bool? = nil, is_fiscal: Bool? = nil, is_numeric: Bool? = nil, is_timeframe: Bool? = nil, can_time_filter: Bool? = nil, time_interval: LookmlModelExploreFieldTimeInterval? = nil, label: String? = nil, label_from_parameter: String? = nil, label_short: String? = nil, lookml_link: String? = nil, map_layer: LookmlModelExploreFieldMapLayer? = nil, measure: Bool? = nil, name: String? = nil, strict_value_format: Bool? = nil, parameter: Bool? = nil, permanent: Bool? = nil, primary_key: Bool? = nil, project_name: String? = nil, requires_refresh_on_sort: Bool? = nil, scope: String? = nil, sortable: Bool? = nil, source_file: String? = nil, source_file_path: String? = nil, sql: String? = nil, sql_case: [LookmlModelExploreFieldSqlCase]? = nil, filters: [LookmlModelExploreFieldMeasureFilters]? = nil, suggest_dimension: String? = nil, suggest_explore: String? = nil, suggestable: Bool? = nil, suggestions: [String]? = nil, tags: [String]? = nil, type: String? = nil, user_attribute_filter_types: [UserAttributeFilterTypes]? = nil, value_format: String? = nil, view: String? = nil, view_label: String? = nil, `dynamic`: Bool? = nil, week_start_day: WeekStartDay? = nil, times_used: Int64? = nil, original_view: String? = nil) {
+    public init(align: Align? = nil, can_filter: Bool? = nil, category: Category? = nil, default_filter_value: String? = nil, description: String? = nil, dimension_group: String? = nil, drill_fields: [String]? = nil, enumerations: [LookmlModelExploreFieldEnumeration]? = nil, error: String? = nil, field_group_label: String? = nil, field_group_variant: String? = nil, fill_style: FillStyle? = nil, fiscal_month_offset: Int64? = nil, has_allowed_values: Bool? = nil, has_drills_metadata: Bool? = nil, hidden: Bool? = nil, is_filter: Bool? = nil, is_fiscal: Bool? = nil, is_numeric: Bool? = nil, is_timeframe: Bool? = nil, can_time_filter: Bool? = nil, time_interval: LookmlModelExploreFieldTimeInterval? = nil, label: String? = nil, label_from_parameter: String? = nil, label_short: String? = nil, lookml_link: String? = nil, links: [LookmlFieldLink]? = nil, map_layer: LookmlModelExploreFieldMapLayer? = nil, measure: Bool? = nil, name: String? = nil, strict_value_format: Bool? = nil, parameter: Bool? = nil, permanent: Bool? = nil, primary_key: Bool? = nil, project_name: String? = nil, requires_refresh_on_sort: Bool? = nil, scope: String? = nil, sortable: Bool? = nil, source_file: String? = nil, source_file_path: String? = nil, sql: String? = nil, sql_case: [LookmlModelExploreFieldSqlCase]? = nil, filters: [LookmlModelExploreFieldMeasureFilters]? = nil, suggest_dimension: String? = nil, suggest_explore: String? = nil, suggestable: Bool? = nil, suggestions: [String]? = nil, tags: [String]? = nil, type: String? = nil, user_attribute_filter_types: [UserAttributeFilterTypes]? = nil, value_format: String? = nil, view: String? = nil, view_label: String? = nil, `dynamic`: Bool? = nil, week_start_day: WeekStartDay? = nil, times_used: Int64? = nil, original_view: String? = nil) {
         self.align = align
         self.can_filter = can_filter
         self.category = category
         self._default_filter_value = default_filter_value.map(AnyString.init)
         self._description = description.map(AnyString.init)
         self._dimension_group = dimension_group.map(AnyString.init)
+        if let v = drill_fields { _drill_fields = v.map { AnyString.init($0) } } else { _drill_fields = nil }
         self.enumerations = enumerations
         self._error = error.map(AnyString.init)
         self._field_group_label = field_group_label.map(AnyString.init)
@@ -13622,6 +13698,7 @@ public struct LookmlModelExploreField: SDKModel {
         self.fill_style = fill_style
         self._fiscal_month_offset = fiscal_month_offset.map(AnyInt.init)
         self.has_allowed_values = has_allowed_values
+        self.has_drills_metadata = has_drills_metadata
         self.hidden = hidden
         self.is_filter = is_filter
         self.is_fiscal = is_fiscal
@@ -13633,6 +13710,7 @@ public struct LookmlModelExploreField: SDKModel {
         self._label_from_parameter = label_from_parameter.map(AnyString.init)
         self._label_short = label_short.map(AnyString.init)
         self._lookml_link = lookml_link.map(AnyString.init)
+        self.links = links
         self.map_layer = map_layer
         self.measure = measure
         self._name = name.map(AnyString.init)
@@ -21339,7 +21417,7 @@ public enum SupportedDownloadSettings: String, Codable {
 }
 
 /**
- * A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (Enum defined in Integration)
+ * A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "json_bi", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (Enum defined in Integration)
  */
 public enum SupportedFormats: String, Codable {
     case txt = "txt"
@@ -21349,6 +21427,7 @@ public enum SupportedFormats: String, Codable {
     case json_label = "json_label"
     case json_detail = "json_detail"
     case json_detail_lite_stream = "json_detail_lite_stream"
+    case json_bi = "json_bi"
     case xlsx = "xlsx"
     case html = "html"
     case wysiwyg_pdf = "wysiwyg_pdf"

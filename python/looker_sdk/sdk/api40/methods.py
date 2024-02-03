@@ -35,6 +35,7 @@ from looker_sdk.rtl import transport
 
 
 class Looker40SDK(api_methods.APIMethods):
+
     # region Alert: Alert
 
     # Follow an alert.
@@ -4851,7 +4852,7 @@ class Looker40SDK(api_methods.APIMethods):
     # You can use this function to change the string and integer properties of
     # a dashboard. Nested objects such as filters, dashboard elements, or dashboard layout components
     # cannot be modified by this function - use the update functions for the respective
-    # nested object types (like [update_dashboard_filter()](#!/3.1/Dashboard/update_dashboard_filter) to change a filter)
+    # nested object types (like [update_dashboard_filter()](#!/Dashboard/update_dashboard_filter) to change a filter)
     # to modify nested objects referenced by a dashboard.
     #
     # If you receive a 422 error response when updating a dashboard, be sure to look at the
@@ -7550,6 +7551,8 @@ class Looker40SDK(api_methods.APIMethods):
         explore_name: str,
         # Requested fields.
         fields: Optional[str] = None,
+        # Whether response should include drill field metadata.
+        add_drills_metadata: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.LookmlModelExplore:
         """Get LookML Model Explore"""
@@ -7560,7 +7563,10 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path=f"/lookml_models/{lookml_model_name}/explores/{explore_name}",
                 structure=mdls.LookmlModelExplore,
-                query_params={"fields": fields},
+                query_params={
+                    "fields": fields,
+                    "add_drills_metadata": add_drills_metadata,
+                },
                 transport_options=transport_options,
             ),
         )
@@ -13193,6 +13199,3 @@ class Looker40SDK(api_methods.APIMethods):
         return response
 
     # endregion
-
-
-LookerSDK = Looker40SDK

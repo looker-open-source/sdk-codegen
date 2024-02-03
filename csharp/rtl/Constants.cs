@@ -61,7 +61,7 @@ namespace Looker.RTL
 
         public const string DefaultApiVersion = "4.0";
         public const string AgentPrefix = "CS-SDK";
-        public const string LookerVersion = "23.20";
+        public const string LookerVersion = "24.0";
 
         public const string Bearer = "Bearer";
         public const string LookerAppiId = "x-looker-appid";

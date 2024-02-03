@@ -351,7 +351,7 @@ class Transport(val options: TransportOptions) {
             finalizedRequestSettings.method.toString(),
             GenericUrl(finalizedRequestSettings.url),
             httpContent,
-        )
+        ).setSuppressUserAgentSuffix(true)
 
 // TODO get overrides parameter to work without causing compilation errors in UserSession
 //            overrides: TransportOptions? = null): SDKResponse {

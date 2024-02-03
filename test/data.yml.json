@@ -47,7 +47,10 @@
       "id": "#brand_query",
       "model": "thelook",
       "view": "products",
-      "fields": ["products.brand", "products.count"],
+      "fields": [
+        "products.brand",
+        "products.count"
+      ],
       "vis_config": {
         "type": "looker_column"
       },
@@ -59,7 +62,11 @@
       "id": "#dashboard_query_system_activity",
       "model": "system__activity",
       "view": "dashboard",
-      "fields": ["dashboard.id", "dashboard.title", "dashboard.count"],
+      "fields": [
+        "dashboard.id",
+        "dashboard.title",
+        "dashboard.count"
+      ],
       "vis_config": {
         "type": "looker_column"
       },
@@ -167,7 +174,10 @@
           "id": "#dashboard_query_system_activity",
           "model": "system__activity",
           "view": "dashboard",
-          "fields": ["dashboard.count", "dashboard.id"],
+          "fields": [
+            "dashboard.count",
+            "dashboard.id"
+          ],
           "limit": 100
         }
       ]

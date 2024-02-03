@@ -165,10 +165,8 @@ import type {
   IRequestAllGroupUsers,
   IRequestAllGroups,
   IRequestAllIntegrations,
-  IRequestAllLookmlModels,
   IRequestAllRoles,
   IRequestAllScheduledPlans,
-  IRequestAllUserAttributes,
   IRequestAllUsers,
   IRequestArtifact,
   IRequestArtifactNamespaces,
@@ -187,6 +185,7 @@ import type {
   IRequestGraphDerivedTablesForModel,
   IRequestGraphDerivedTablesForView,
   IRequestLogin,
+  IRequestLookmlModelExplore,
   IRequestModelFieldnameSuggestions,
   IRequestRoleUsers,
   IRequestRunGitConnectionTest,
@@ -208,13 +207,9 @@ import type {
   IRequestSearchDashboards,
   IRequestSearchFolders,
   IRequestSearchGroups,
-  IRequestSearchGroupsWithHierarchy,
-  IRequestSearchGroupsWithRoles,
   IRequestSearchLooks,
   IRequestSearchModelSets,
-  IRequestSearchPermissionSets,
   IRequestSearchRoles,
-  IRequestSearchRolesWithUserCount,
   IRequestSearchThemes,
   IRequestSearchUserLoginLockouts,
   IRequestSearchUsers,
@@ -3657,7 +3652,7 @@ export interface ILooker40SDK extends IAPIMethods {
    * You can use this function to change the string and integer properties of
    * a dashboard. Nested objects such as filters, dashboard elements, or dashboard layout components
    * cannot be modified by this function - use the update functions for the respective
-   * nested object types (like [update_dashboard_filter()](#!/3.1/Dashboard/update_dashboard_filter) to change a filter)
+   * nested object types (like [update_dashboard_filter()](#!/Dashboard/update_dashboard_filter) to change a filter)
    * to modify nested objects referenced by a dashboard.
    *
    * If you receive a 422 error response when updating a dashboard, be sure to look at the
@@ -4584,12 +4579,12 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * GET /groups/search/with_roles -> IGroupSearch[]
    *
-   * @param request composed interface "IRequestSearchGroupsWithRoles" for complex method parameters
+   * @param request composed interface "IRequestSearchGroups" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   search_groups_with_roles(
-    request: IRequestSearchGroupsWithRoles,
+    request: IRequestSearchGroups,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IGroupSearch[], IError>>;
 
@@ -4622,12 +4617,12 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * GET /groups/search/with_hierarchy -> IGroupHierarchy[]
    *
-   * @param request composed interface "IRequestSearchGroupsWithHierarchy" for complex method parameters
+   * @param request composed interface "IRequestSearchGroups" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   search_groups_with_hierarchy(
-    request: IRequestSearchGroupsWithHierarchy,
+    request: IRequestSearchGroups,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IGroupHierarchy[], IError>>;
 
@@ -5253,12 +5248,12 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * GET /lookml_models -> ILookmlModel[]
    *
-   * @param request composed interface "IRequestAllLookmlModels" for complex method parameters
+   * @param request composed interface "IRequestArtifactNamespaces" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   all_lookml_models(
-    request: IRequestAllLookmlModels,
+    request: IRequestArtifactNamespaces,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ILookmlModel[], IError>>;
 
@@ -5327,16 +5322,12 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * GET /lookml_models/{lookml_model_name}/explores/{explore_name} -> ILookmlModelExplore
    *
-   * @param lookml_model_name Name of lookml model.
-   * @param explore_name Name of explore.
-   * @param fields Requested fields.
+   * @param request composed interface "IRequestLookmlModelExplore" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   lookml_model_explore(
-    lookml_model_name: string,
-    explore_name: string,
-    fields?: string,
+    request: IRequestLookmlModelExplore,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ILookmlModelExplore, IError>>;
 
@@ -6940,12 +6931,12 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * GET /permission_sets/search -> IPermissionSet[]
    *
-   * @param request composed interface "IRequestSearchPermissionSets" for complex method parameters
+   * @param request composed interface "IRequestSearchModelSets" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   search_permission_sets(
-    request: IRequestSearchPermissionSets,
+    request: IRequestSearchModelSets,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IPermissionSet[], IError>>;
 
@@ -7117,12 +7108,12 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * GET /roles/search/with_user_count -> IRoleSearch[]
    *
-   * @param request composed interface "IRequestSearchRolesWithUserCount" for complex method parameters
+   * @param request composed interface "IRequestSearchRoles" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   search_roles_with_user_count(
-    request: IRequestSearchRolesWithUserCount,
+    request: IRequestSearchRoles,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IRoleSearch[], IError>>;
 
@@ -8957,12 +8948,12 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * GET /user_attributes -> IUserAttribute[]
    *
-   * @param request composed interface "IRequestAllUserAttributes" for complex method parameters
+   * @param request composed interface "IRequestAllBoardSections" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   all_user_attributes(
-    request: IRequestAllUserAttributes,
+    request: IRequestAllBoardSections,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IUserAttribute[], IError>>;
 
