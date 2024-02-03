@@ -26,6 +26,7 @@
     "packages/code-editor": {},
     "packages/extension-api-explorer": {},
     "packages/extension-playground": {},
+    "packages/extension-tile-playground": {},
     "packages/extension-sdk": {
       "component": "extension-sdk",
       "versioning": "always-bump-patch"
