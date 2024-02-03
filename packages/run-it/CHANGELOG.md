@@ -82,6 +82,13 @@
     - @looker/extension-utils bumped from ^0.1.31 to ^0.1.32
     - @looker/sdk bumped from ^23.20.0 to ^23.20.1
 
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-utils bumped from 0.1.32 to 0.1.33
+    * @looker/sdk bumped from 23.20.1 to 24.0.0
+
 ## [0.9.45](https://github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.44...run-it-v0.9.45) (2023-03-31)
 
 ### Features
