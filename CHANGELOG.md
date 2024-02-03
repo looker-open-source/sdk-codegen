@@ -1,5 +1,17 @@
 # Changelog
 
+## [24.0.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.21.0...sdk-codegen-all-v24.0.0) (2024-02-03)
+
+
+### Features
+
+* generate SDKs for Looker 24.0 ([#1426](https://github.com/looker-open-source/sdk-codegen/issues/1426)) ([8c42be7](https://github.com/looker-open-source/sdk-codegen/commit/8c42be7cede8594626f2f453ca937801a609efe4))
+
+
+### Bug Fixes
+
+* **Transport:** Disable automatic User Agent Suffix [clone of [#1420](https://github.com/looker-open-source/sdk-codegen/issues/1420)] ([#1423](https://github.com/looker-open-source/sdk-codegen/issues/1423)) ([aa6c173](https://github.com/looker-open-source/sdk-codegen/commit/aa6c173d47b5b260625eae5e5ebc542111c2395a))
+
 ## [23.21.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v23.20.0...sdk-codegen-all-v23.21.0) (2023-12-19)
 
 ### Features
