@@ -18,6 +18,7 @@
   "packages/wholly-sheet": "0.5.51",
   "python": "23.20.1",
   "packages/extension-playground": "1.0.12",
+  "packages/extension-tile-playground": "1.0.0", 
   "packages/embed-services": "23.20.1",
   "packages/embed-components": "23.20.1"
 }
