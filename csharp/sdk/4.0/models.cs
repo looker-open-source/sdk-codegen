@@ -3654,6 +3654,8 @@ public class MergeQuerySourceQuery : SdkModel
   public string? name { get; set; } = null;
   /// <summary>Id of the query to merge</summary>
   public string? query_id { get; set; } = null;
+  /// <summary>Slug of the query to merge</summary>
+  public string? query_slug { get; set; } = null;
 }
 
 public class MobileFeatureFlags : SdkModel

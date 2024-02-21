@@ -3843,11 +3843,13 @@ data class MergeQuery(
  * @property merge_fields An array defining which fields of the source query are mapped onto fields of the merge query
  * @property name Display name
  * @property query_id Id of the query to merge
+ * @property query_slug Slug of the query to merge
  */
 data class MergeQuerySourceQuery(
     var merge_fields: Array<MergeFields>? = null,
     var name: String? = null,
     var query_id: String? = null,
+    var query_slug: String? = null,
 ) : Serializable
 
 /**

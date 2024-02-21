@@ -15303,6 +15303,7 @@ public struct MergeQuerySourceQuery: SDKModel {
         case merge_fields
         case _name = "name"
         case _query_id = "query_id"
+        case _query_slug = "query_slug"
     }
     /**
      * An array defining which fields of the source query are mapped onto fields of the merge query
@@ -15327,10 +15328,20 @@ public struct MergeQuerySourceQuery: SDKModel {
         set { _query_id = newValue.map(AnyString.init) }
     }
 
-    public init(merge_fields: [MergeFields]? = nil, name: String? = nil, query_id: String? = nil) {
+    private var _query_slug: AnyString?
+    /**
+     * Slug of the query to merge
+     */
+    public var query_slug: String? {
+        get { _query_slug?.value }
+        set { _query_slug = newValue.map(AnyString.init) }
+    }
+
+    public init(merge_fields: [MergeFields]? = nil, name: String? = nil, query_id: String? = nil, query_slug: String? = nil) {
         self.merge_fields = merge_fields
         self._name = name.map(AnyString.init)
         self._query_id = query_id.map(AnyString.init)
+        self._query_slug = query_slug.map(AnyString.init)
     }
 
 }

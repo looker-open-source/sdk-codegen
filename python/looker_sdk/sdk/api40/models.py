@@ -8080,22 +8080,26 @@ class MergeQuerySourceQuery(model.Model):
         merge_fields: An array defining which fields of the source query are mapped onto fields of the merge query
         name: Display name
         query_id: Id of the query to merge
+        query_slug: Slug of the query to merge
     """
 
     merge_fields: Optional[Sequence["MergeFields"]] = None
     name: Optional[str] = None
     query_id: Optional[str] = None
+    query_slug: Optional[str] = None
 
     def __init__(
         self,
         *,
         merge_fields: Optional[Sequence["MergeFields"]] = None,
         name: Optional[str] = None,
-        query_id: Optional[str] = None
+        query_id: Optional[str] = None,
+        query_slug: Optional[str] = None
     ):
         self.merge_fields = merge_fields
         self.name = name
         self.query_id = query_id
+        self.query_slug = query_slug
 
 
 @attr.s(auto_attribs=True, init=False)
