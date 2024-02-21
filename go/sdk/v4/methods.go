@@ -576,7 +576,7 @@ func (l *LookerSDK) CreateSsoEmbedUrl(
 // "Powered by Looker" (PBL) web application.
 //
 // This is similar to Private Embedding (https://cloud.google.com/looker/docs/r/admin/embed/private-embed). Instead of
-// of logging into the Web UI to authenticate, the user has already authenticated against the API to be able to
+// logging into the Web UI to authenticate, the user has already authenticated against the API to be able to
 // make this call. However, unlike Private Embed where the user has access to any other part of the Looker UI,
 // the embed web session created by requesting the EmbedUrlResponse.url in a browser only has access to
 // content visible under the `/embed` context.
@@ -637,7 +637,7 @@ func (l *LookerSDK) ValidateEmbedUrl(
 // If the `session_reference_token` is provided but the session has expired, the token will be ignored and a
 // new embed session will be created. Note that the embed user definition will be updated in this scenario.
 //
-// If the credentials do not match the credentials associated with an exisiting session_reference_token, a
+// If the credentials do not match the credentials associated with an existing session_reference_token, a
 // 404 will be returned.
 //
 // The endpoint returns the following:
@@ -1074,7 +1074,7 @@ func (l *LookerSDK) DeactivateAppUser(
 //
 // Configuring OIDC impacts authentication for all users. This configuration should be done carefully.
 //
-// Looker maintains a single OIDC configuation. It can be read and updated. Updates only succeed if the new state will be valid (in the sense that all required fields are populated); it is up to you to ensure that the configuration is appropriate and correct).
+// Looker maintains a single OIDC configuration. It can be read and updated. Updates only succeed if the new state will be valid (in the sense that all required fields are populated); it is up to you to ensure that the configuration is appropriate and correct).
 //
 // OIDC is enabled or disabled for Looker using the **enabled** field.
 //
@@ -1204,7 +1204,7 @@ func (l *LookerSDK) ForcePasswordResetAtNextLoginForAllUsers(
 //
 // Configuring SAML impacts authentication for all users. This configuration should be done carefully.
 //
-// Looker maintains a single SAML configuation. It can be read and updated. Updates only succeed if the new state will be valid (in the sense that all required fields are populated); it is up to you to ensure that the configuration is appropriate and correct).
+// Looker maintains a single SAML configuration. It can be read and updated. Updates only succeed if the new state will be valid (in the sense that all required fields are populated); it is up to you to ensure that the configuration is appropriate and correct).
 //
 // SAML is enabled or disabled for Looker using the **enabled** field.
 //
@@ -2802,7 +2802,7 @@ func (l *LookerSDK) SearchContent(request RequestSearchContent,
 
 // ### Get an image representing the contents of a dashboard or look.
 //
-// The returned thumbnail is an abstract representation of the contents of a dashbord or look and does not
+// The returned thumbnail is an abstract representation of the contents of a dashboard or look and does not
 // reflect the actual data displayed in the respective visualizations.
 //
 // GET /content_thumbnail/{type}/{resource_id} -> string
@@ -2869,7 +2869,7 @@ func (l *LookerSDK) SearchContentViews(request RequestSearchContentViews,
 //
 // # DEPRECATED:  Use [content_thumbnail()](#!/Content/content_thumbnail)
 //
-// The returned thumbnail is an abstract representation of the contents of a dashbord or look and does not
+// The returned thumbnail is an abstract representation of the contents of a dashboard or look and does not
 // reflect the actual data displayed in the respective visualizations.
 //
 // GET /vector_thumbnail/{type}/{resource_id} -> string
@@ -3087,7 +3087,7 @@ func (l *LookerSDK) DeleteDashboard(
 
 }
 
-// ### Get Aggregate Table LookML for Each Query on a Dahboard
+// ### Get Aggregate Table LookML for Each Query on a Dashboard
 //
 // # Returns a JSON object that contains the dashboard id and Aggregate Table lookml
 //
@@ -3872,7 +3872,7 @@ func (l *LookerSDK) SearchGroups(request RequestSearchGroups,
 // Boolean search params accept only "true" and "false" as values.
 //
 // GET /groups/search/with_roles -> []GroupSearch
-func (l *LookerSDK) SearchGroupsWithRoles(request RequestSearchGroups,
+func (l *LookerSDK) SearchGroupsWithRoles(request RequestSearchGroupsWithRoles,
 	options *rtl.ApiSettings) ([]GroupSearch, error) {
 	var result []GroupSearch
 	err := l.session.Do(&result, "GET", "/4.0", "/groups/search/with_roles", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "filter_or": request.FilterOr, "id": request.Id, "name": request.Name, "external_group_id": request.ExternalGroupId, "externally_managed": request.ExternallyManaged, "externally_orphaned": request.ExternallyOrphaned}, nil, options)
@@ -3907,7 +3907,7 @@ func (l *LookerSDK) SearchGroupsWithRoles(request RequestSearchGroups,
 // Boolean search params accept only "true" and "false" as values.
 //
 // GET /groups/search/with_hierarchy -> []GroupHierarchy
-func (l *LookerSDK) SearchGroupsWithHierarchy(request RequestSearchGroups,
+func (l *LookerSDK) SearchGroupsWithHierarchy(request RequestSearchGroupsWithHierarchy,
 	options *rtl.ApiSettings) ([]GroupHierarchy, error) {
 	var result []GroupHierarchy
 	err := l.session.Do(&result, "GET", "/4.0", "/groups/search/with_hierarchy", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "filter_or": request.FilterOr, "id": request.Id, "name": request.Name, "external_group_id": request.ExternalGroupId, "externally_managed": request.ExternallyManaged, "externally_orphaned": request.ExternallyOrphaned}, nil, options)
@@ -4467,7 +4467,7 @@ func (l *LookerSDK) MoveLook(
 // ### Get information about all lookml models.
 //
 // GET /lookml_models -> []LookmlModel
-func (l *LookerSDK) AllLookmlModels(request RequestArtifactNamespaces,
+func (l *LookerSDK) AllLookmlModels(request RequestAllLookmlModels,
 	options *rtl.ApiSettings) ([]LookmlModel, error) {
 	var result []LookmlModel
 	err := l.session.Do(&result, "GET", "/4.0", "/lookml_models", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset}, nil, options)
@@ -5213,8 +5213,6 @@ func (l *LookerSDK) RunLookmlTest(request RequestRunLookmlTest,
 }
 
 // ### Creates a tag for the most recent commit, or a specific ref is a SHA is provided
-//
-// This is an internal-only, undocumented route.
 //
 // POST /projects/{project_id}/tag -> Project
 func (l *LookerSDK) TagRef(request RequestTagRef,
@@ -6016,7 +6014,7 @@ func (l *LookerSDK) AllPermissions(
 // Boolean search params accept only "true" and "false" as values.
 //
 // GET /permission_sets/search -> []PermissionSet
-func (l *LookerSDK) SearchPermissionSets(request RequestSearchModelSets,
+func (l *LookerSDK) SearchPermissionSets(request RequestSearchPermissionSets,
 	options *rtl.ApiSettings) ([]PermissionSet, error) {
 	var result []PermissionSet
 	err := l.session.Do(&result, "GET", "/4.0", "/permission_sets/search", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "id": request.Id, "name": request.Name, "all_access": request.AllAccess, "built_in": request.BuiltIn, "filter_or": request.FilterOr}, nil, options)
@@ -6039,6 +6037,7 @@ func (l *LookerSDK) PermissionSet(
 }
 
 // ### Update information about the permission set with a specific id.
+// Providing save_content permission alone will also provide you the abilities of save_looks and save_dashboards.
 //
 // PATCH /permission_sets/{permission_set_id} -> PermissionSet
 func (l *LookerSDK) UpdatePermissionSet(
@@ -6078,6 +6077,7 @@ func (l *LookerSDK) AllPermissionSets(
 }
 
 // ### Create a permission set with the specified information. Permission sets are used by Roles.
+// Providing save_content permission alone will also provide you the abilities of save_looks and save_dashboards.
 //
 // POST /permission_sets -> PermissionSet
 func (l *LookerSDK) CreatePermissionSet(
@@ -6173,7 +6173,7 @@ func (l *LookerSDK) SearchRoles(request RequestSearchRoles,
 // Boolean search params accept only "true" and "false" as values.
 //
 // GET /roles/search/with_user_count -> []RoleSearch
-func (l *LookerSDK) SearchRolesWithUserCount(request RequestSearchRoles,
+func (l *LookerSDK) SearchRolesWithUserCount(request RequestSearchRolesWithUserCount,
 	options *rtl.ApiSettings) ([]RoleSearch, error) {
 	var result []RoleSearch
 	err := l.session.Do(&result, "GET", "/4.0", "/roles/search/with_user_count", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "id": request.Id, "name": request.Name, "built_in": request.BuiltIn, "filter_or": request.FilterOr}, nil, options)
@@ -7835,7 +7835,7 @@ func (l *LookerSDK) CreateEmbedUser(
 // ### Get information about all user attributes.
 //
 // GET /user_attributes -> []UserAttribute
-func (l *LookerSDK) AllUserAttributes(request RequestAllBoardSections,
+func (l *LookerSDK) AllUserAttributes(request RequestAllUserAttributes,
 	options *rtl.ApiSettings) ([]UserAttribute, error) {
 	var result []UserAttribute
 	err := l.session.Do(&result, "GET", "/4.0", "/user_attributes", map[string]interface{}{"fields": request.Fields, "sorts": request.Sorts}, nil, options)

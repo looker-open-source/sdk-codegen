@@ -799,7 +799,7 @@ open class LookerSDKStream: APIMethods {
      * "Powered by Looker" (PBL) web application.
      *
      * This is similar to Private Embedding (https://cloud.google.com/looker/docs/r/admin/embed/private-embed). Instead of
-     * of logging into the Web UI to authenticate, the user has already authenticated against the API to be able to
+     * logging into the Web UI to authenticate, the user has already authenticated against the API to be able to
      * make this call. However, unlike Private Embed where the user has access to any other part of the Looker UI,
      * the embed web session created by requesting the EmbedUrlResponse.url in a browser only has access to
      * content visible under the `/embed` context.
@@ -870,7 +870,7 @@ open class LookerSDKStream: APIMethods {
      * If the `session_reference_token` is provided but the session has expired, the token will be ignored and a
      * new embed session will be created. Note that the embed user definition will be updated in this scenario.
      *
-     * If the credentials do not match the credentials associated with an exisiting session_reference_token, a
+     * If the credentials do not match the credentials associated with an existing session_reference_token, a
      * 404 will be returned.
      *
      * The endpoint returns the following:
@@ -1414,7 +1414,7 @@ open class LookerSDKStream: APIMethods {
      *
      * Configuring OIDC impacts authentication for all users. This configuration should be done carefully.
      *
-     * Looker maintains a single OIDC configuation. It can be read and updated. Updates only succeed if the new state will be valid (in the sense that all required fields are populated); it is up to you to ensure that the configuration is appropriate and correct).
+     * Looker maintains a single OIDC configuration. It can be read and updated. Updates only succeed if the new state will be valid (in the sense that all required fields are populated); it is up to you to ensure that the configuration is appropriate and correct).
      *
      * OIDC is enabled or disabled for Looker using the **enabled** field.
      *
@@ -1567,7 +1567,7 @@ open class LookerSDKStream: APIMethods {
      *
      * Configuring SAML impacts authentication for all users. This configuration should be done carefully.
      *
-     * Looker maintains a single SAML configuation. It can be read and updated. Updates only succeed if the new state will be valid (in the sense that all required fields are populated); it is up to you to ensure that the configuration is appropriate and correct).
+     * Looker maintains a single SAML configuration. It can be read and updated. Updates only succeed if the new state will be valid (in the sense that all required fields are populated); it is up to you to ensure that the configuration is appropriate and correct).
      *
      * SAML is enabled or disabled for Looker using the **enabled** field.
      *
@@ -3855,7 +3855,7 @@ open class LookerSDKStream: APIMethods {
     /**
      * ### Get an image representing the contents of a dashboard or look.
      *
-     * The returned thumbnail is an abstract representation of the contents of a dashbord or look and does not
+     * The returned thumbnail is an abstract representation of the contents of a dashboard or look and does not
      * reflect the actual data displayed in the respective visualizations.
      *
      * GET /content_thumbnail/{type}/{resource_id} -> String
@@ -4011,7 +4011,7 @@ open class LookerSDKStream: APIMethods {
      *
      * # DEPRECATED:  Use [content_thumbnail()](#!/Content/content_thumbnail)
      *
-     * The returned thumbnail is an abstract representation of the contents of a dashbord or look and does not
+     * The returned thumbnail is an abstract representation of the contents of a dashboard or look and does not
      * reflect the actual data displayed in the respective visualizations.
      *
      * GET /vector_thumbnail/{type}/{resource_id} -> String
@@ -4375,7 +4375,7 @@ open class LookerSDKStream: APIMethods {
     }
 
     /**
-     * ### Get Aggregate Table LookML for Each Query on a Dahboard
+     * ### Get Aggregate Table LookML for Each Query on a Dashboard
      *
      * Returns a JSON object that contains the dashboard id and Aggregate Table lookml
      *
@@ -7912,8 +7912,6 @@ open class LookerSDKStream: APIMethods {
     /**
      * ### Creates a tag for the most recent commit, or a specific ref is a SHA is provided
      *
-     * This is an internal-only, undocumented route.
-     *
      * POST /projects/{project_id}/tag -> Project
      */
     public func tag_ref(
@@ -9254,6 +9252,7 @@ open class LookerSDKStream: APIMethods {
 
     /**
      * ### Update information about the permission set with a specific id.
+     * Providing save_content permission alone will also provide you the abilities of save_looks and save_dashboards.
      *
      * PATCH /permission_sets/{permission_set_id} -> PermissionSet
      */
@@ -9309,6 +9308,7 @@ open class LookerSDKStream: APIMethods {
 
     /**
      * ### Create a permission set with the specified information. Permission sets are used by Roles.
+     * Providing save_content permission alone will also provide you the abilities of save_looks and save_dashboards.
      *
      * POST /permission_sets -> PermissionSet
      */
