@@ -193,7 +193,9 @@ const regen = async (release) => {
       return batch(
         [
           'yarn gen',
-          'bin/smoke typescript python kotlin',
+          'yarn fix', // Lint fix typescript
+          'pipenv run black python/looker_sdk/sdk/api40/*.py', // Lint fix python
+          './kotlin/gradlew -p kotlin spotlessApply', // Lint fix kotlin
           'git add -u',
           `git commit -m "feat: generate SDKs for Looker ${release}" -m "Release-As: ${release}.0"`,
           `git push origin ${branch}`,
@@ -214,6 +216,7 @@ const regen = async (release) => {
   const args = process.argv.slice(2);
   if (args.length >= 1) {
     await regen(args[0]);
+    console.info('If generated SDKs fail CI, run "bin/smoke [language]"  locally to verify and debug')
   } else {
     console.error('No release version was specified');
   }
