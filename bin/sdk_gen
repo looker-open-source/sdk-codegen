@@ -193,12 +193,12 @@ const regen = async (release) => {
       return batch(
         [
           'yarn gen',
-          'yarn fix', // Fixes eslint
-          'pipenv run black api40/*.py',
-          './kotlin/gradlew -p kotlin spotlessApply',  
-          // 'git add -u',
-          // `git commit -m "feat: generate SDKs for Looker ${release}" -m "Release-As: ${release}.0"`,
-          // `git push origin ${branch}`,
+          'yarn fix', // Lint fix typescript
+          'pipenv run black python/looker_sdk/sdk/api40/*.py', // Lint fix python
+          './kotlin/gradlew -p kotlin spotlessApply', // Lint fix kotlin
+          'git add -u',
+          `git commit -m "feat: generate SDKs for Looker ${release}" -m "Release-As: ${release}.0"`,
+          `git push origin ${branch}`,
           /* create PR
            */
         ],
