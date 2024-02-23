@@ -19,7 +19,7 @@
     "url": "https://github.com/looker-open-source/sdk-codegen/issues"
   },
   "engines": {
-    "node": ">=14",
+    "node": ">=18",
     "yarn": ">=1.22.0"
   },
   "scripts": {
