@@ -19,7 +19,7 @@ import time
 from typing import cast, Dict, Optional
 
 import looker_sdk
-from looker_sdk import models
+from looker_sdk import models40 as models
 
 sdk = looker_sdk.init40("../../looker.ini")
 
