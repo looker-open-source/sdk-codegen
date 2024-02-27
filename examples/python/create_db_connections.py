@@ -1,5 +1,5 @@
 import looker_sdk
-from looker_sdk import models
+from looker_sdk import models40 as models
 import base64
 
 with open("credentials_file.json", "rb") as f:

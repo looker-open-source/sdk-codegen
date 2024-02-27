@@ -7,7 +7,7 @@ Examples:
     $ python download_look.py "A simple look"
     $ python download_look.py "A simple look" 545 842 png
 
-Last modified: August 25, 2021
+Last modified: Feb 27 2024
 """
 
 import sys
@@ -15,7 +15,7 @@ import textwrap
 import time
 
 import looker_sdk
-from looker_sdk import models
+from looker_sdk import models40 as models
 
 sdk = looker_sdk.init40("../../looker.ini")
 

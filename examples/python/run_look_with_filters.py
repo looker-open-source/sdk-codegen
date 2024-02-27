@@ -16,7 +16,7 @@ import sys
 from typing import cast, Dict, List, Union
 
 import looker_sdk
-from looker_sdk import models, error
+from looker_sdk import models40 as models, error
 
 sdk = looker_sdk.init40("../../looker.ini")
 
