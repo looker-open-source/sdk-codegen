@@ -37,6 +37,8 @@ class ErrorDetail:
     field: field with error
     code: error code
     message: error info message
+    error_doc_url: URL that may point to additional useful information
+    error_doc: Markdown doc that may contain additional useful information
     """
 
     documentation_url: str
@@ -46,6 +48,16 @@ class ErrorDetail:
     error_doc_url: str = ""
     error_doc: str = ""
 
+    def __str__(self):
+        return f"""
+        *****
+        documentation_url: {self.documentation_url}
+        field:             {self.field}
+        code:              {self.code}
+        message:           {self.message}
+        error_doc_url:     {self.error_doc_url}
+        """
+
 
 @attr.s(auto_attribs=True)
 class SDKError(Exception):
@@ -53,6 +65,8 @@ class SDKError(Exception):
     message: main error info message
     errors: array of error details
     documentation_url: documentation link
+    error_doc_url: URL that may point to additional useful information
+    error_doc: Markdown doc that may contain additional useful information
     """
 
     message: str
@@ -60,6 +74,16 @@ class SDKError(Exception):
     documentation_url: str = attr.ib(default="", kw_only=True)
     error_doc_url: str = ""
     error_doc: str = ""
+
+    def __str__(self):
+        sep = "****\n"
+        return f"""
+    message:           {self.message}
+    documentation_url: {self.documentation_url}
+    error_doc_url:     {self.error_doc_url}
+    error details:
+    {sep.join(self.errors)}
+    """
 
 
 """Error Doc Helper class
