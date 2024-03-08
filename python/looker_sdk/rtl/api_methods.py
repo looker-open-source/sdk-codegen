@@ -87,7 +87,15 @@ class APIMethods:
             value = response.value.decode(encoding=encoding)
             sdk_error: error.SDKError
             try:
-                sdk_error = self.deserialize(data=value, structure=error.SDKError) # type: ignore
+                sdk_error = self.deserialize(data=value, structure=error.SDKError)  # type: ignore
+                helper = error.ErrorDocHelper()
+                (sdk_error.error_doc_url, sdk_error.error_doc) = (
+                    helper.parse_and_lookup(sdk_error.documentation_url)
+                )
+                for e in sdk_error.errors:
+                    (e.error_doc_url, e.error_doc) = helper.parse_and_lookup(
+                        e.documentation_url
+                    )
             except serialize.DeserializeError:
                 raise error.SDKError(value)
             raise sdk_error
