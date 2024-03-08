@@ -101,7 +101,7 @@ class ErrorDocHelper:
     RE_PATTERN: str = (
         """(https://docs\.looker\.com/r/err/|https://cloud\.google\.com/looker/docs/r/err/)(.*)/(\d{3})(.*)"""
     )
-    pattern = re.compile(RE_PATTERN)
+    pattern = re.compile(RE_PATTERN, flags=re.IGNORECASE)
 
     def get_index(self, url: str = ERROR_CODES_URL) -> None:
         r = requests.get(f"{url}index.json")
