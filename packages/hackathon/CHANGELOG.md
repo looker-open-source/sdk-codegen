@@ -166,6 +166,16 @@
     * @looker/sdk bumped from 24.0.0 to 24.2.0
     * @looker/wholly-artifact bumped from 0.1.14 to 0.1.15
 
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-sdk bumped from 24.2.0 to 24.2.1
+    * @looker/extension-sdk-react bumped from 24.2.0 to 24.2.1
+    * @looker/extension-utils bumped from 0.1.34 to 0.1.35
+    * @looker/sdk bumped from 24.2.0 to 24.2.1
+    * @looker/wholly-artifact bumped from 0.1.15 to 0.1.16
+
 ## [22.21.0](https://github.com/looker-open-source/sdk-codegen/compare/hackathon-v22.20.1...hackathon-v22.21.0) (2023-02-22)
 
 ### Features

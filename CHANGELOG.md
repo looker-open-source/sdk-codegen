@@ -1,5 +1,12 @@
 # Changelog
 
+## [24.3.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.2.0...sdk-codegen-all-v24.3.0) (2024-03-12)
+
+
+### Features
+
+* error-doc handling in python SDK ([#1440](https://github.com/looker-open-source/sdk-codegen/issues/1440)) ([21daada](https://github.com/looker-open-source/sdk-codegen/commit/21daada7f6c1ab52c861bd2e2a01a560cd0294f7))
+
 ## [24.2.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.0.0...sdk-codegen-all-v24.2.0) (2024-02-21)
 
 
