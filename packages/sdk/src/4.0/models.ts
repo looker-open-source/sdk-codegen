@@ -25,7 +25,7 @@
  */
 
 /**
- * 407 API models: 257 Spec, 67 Request, 61 Write, 22 Enum
+ * 406 API models: 256 Spec, 67 Request, 61 Write, 22 Enum
  */
 
 import type { DelimArray, IDictionary } from '@looker/sdk-rtl';
@@ -4393,11 +4393,40 @@ export enum InvestigativeContentType {
 }
 
 export interface IJsonBi {
-  metadata: IJsonBiMetadata;
+  big_query_metadata: IJsonBiBigQueryMetadata;
+  fields: IJsonBiFields;
+  /**
+   * Pivots (read-only)
+   */
+  pivots: IJsonBiPivots[];
+  /**
+   * If the query has subtotals (read-only)
+   */
+  has_subtotals: boolean;
+  /**
+   * If the query has totals (read-only)
+   */
+  has_totals: boolean;
+  /**
+   * If the query results hit the maximum column limit and additional columns were truncated (read-only)
+   */
+  columns_truncated: string;
+  /**
+   * Filter expression applied to the query results (read-only)
+   */
+  filter_expression: string | null;
+  /**
+   * Filters applied to the query results (read-only)
+   */
+  filters: IDictionary<string>;
+  /**
+   * Raw sql query. Null if user does not have permission to view sql (read-only)
+   */
+  sql: string | null;
   /**
    * Json query results (read-only)
    */
-  rows: string[];
+  data: string[];
 }
 
 export interface IJsonBiBigQueryMetadata {
@@ -4475,39 +4504,6 @@ export interface IJsonBiFields {
    * Pivots (read-only)
    */
   pivots: IJsonBiField[];
-}
-
-export interface IJsonBiMetadata {
-  big_query_metadata: IJsonBiBigQueryMetadata;
-  fields: IJsonBiFields;
-  /**
-   * Pivots (read-only)
-   */
-  pivots: IJsonBiPivots[];
-  /**
-   * If the query has subtotals (read-only)
-   */
-  has_subtotals: boolean;
-  /**
-   * If the query has totals (read-only)
-   */
-  has_totals: boolean;
-  /**
-   * If the query results hit the maximum column limit and additional columns were truncated (read-only)
-   */
-  columns_truncated: string;
-  /**
-   * Filter expression applied to the query results (read-only)
-   */
-  filter_expression: string | null;
-  /**
-   * Filters applied to the query results (read-only)
-   */
-  filters: IDictionary<string>;
-  /**
-   * Raw sql query. Null if user does not have permission to view sql (read-only)
-   */
-  sql: string | null;
 }
 
 export interface IJsonBiPivots {
