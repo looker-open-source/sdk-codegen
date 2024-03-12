@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [24.2.1](https://github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v24.2.0...looker_sdk-v24.2.1) (2024-03-12)
+
+
+### Features
+
+* error-doc handling in python SDK ([#1440](https://github.com/looker-open-source/sdk-codegen/issues/1440)) ([21daada](https://github.com/looker-open-source/sdk-codegen/commit/21daada7f6c1ab52c861bd2e2a01a560cd0294f7))
+
 ## [24.2.0](https://github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v24.0.0...looker_sdk-v24.2.0) (2024-02-21)
 
 
