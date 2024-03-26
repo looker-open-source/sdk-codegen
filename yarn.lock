@@ -2436,7 +2436,7 @@
   resolved "https://registry.yarnpkg.com/@looker/components-test-utils/-/components-test-utils-1.5.27.tgz#e008243385d825020b62e4f3c8f19e3a3a275435"
   integrity sha512-OnPdRB4YBXdKsfFygoNaz9zvlB6EIZTEnxRsvxyOI8zVD4RyHEYPpw7yQlPx+4cEOroTIIwFIFmuyHrK3Zs7Fw==
 
-"@looker/components@^4.1.3":
+"@looker/components@^4.1.1", "@looker/components@^4.1.3":
   version "4.1.3"
   resolved "https://registry.yarnpkg.com/@looker/components/-/components-4.1.3.tgz#c13f0c641ad39564810ef79211da70a92171044c"
   integrity sha512-CJLvg7CJI16PegYrSbT4zm8id1vg5zPviYJYOx8VcBg2/AnZszhKroYPoJhZRq4Kh/7+rnzeBhZLP1r972wnwA==
@@ -2466,6 +2466,31 @@
     "@styled-system/should-forward-prop" "5.1.5"
     polished "^4.1.3"
     styled-system "*"
+
+"@looker/embed-components@23.20.1":
+  version "23.20.1"
+  resolved "https://registry.yarnpkg.com/@looker/embed-components/-/embed-components-23.20.1.tgz#40a85665f3faeceaf52132ae3a521418c179db9e"
+  integrity sha512-fiuAWINDctdXHaPLRTB35I6v6EmTGIfDPY3L93BzqibE1m90NpCT4NpLaqok6csGHpFdoauSdmAz1ST+apb2gg==
+  dependencies:
+    "@looker/components" "^4.1.3"
+    "@looker/embed-services" "23.20.1"
+    "@looker/redux" "^0.0.1"
+    "@looker/sdk" "23.20.1"
+    "@looker/sdk-rtl" "21.6.1"
+    "@reduxjs/toolkit" "^1.9.3"
+    "@styled-icons/material-outlined" "^10.47.0"
+    react "16.14.0"
+    react-dom "16.14.0"
+    styled-components "^5.3.1"
+    typed-redux-saga "^1.5.0"
+
+"@looker/embed-services@23.20.1":
+  version "23.20.1"
+  resolved "https://registry.yarnpkg.com/@looker/embed-services/-/embed-services-23.20.1.tgz#651d7e9c84425bc105b1eea90f1ed17537d9e8b6"
+  integrity sha512-HdVsCwZh1bxek/TCMBReIP7vCq5E9gkO3DNnrBvvmo5mCy1trnp0vAV/CQboevKNVz7ExCd0pkN8YybLPib/1w==
+  dependencies:
+    "@looker/sdk" "^23.20.1"
+    "@looker/sdk-rtl" "^21.6.1"
 
 "@looker/eslint-config-oss@*", "@looker/eslint-config-oss@1.7.21":
   version "1.7.21"
@@ -2533,6 +2558,50 @@
     "@manypkg/get-packages" "1.1.3"
     jsonc-eslint-parser "2.1.0"
 
+"@looker/extension-sdk-react@^23.20.1":
+  version "23.20.1"
+  resolved "https://registry.yarnpkg.com/@looker/extension-sdk-react/-/extension-sdk-react-23.20.1.tgz#942aa58e12e67cca7dcec9e2cb84cb5bdab63aa5"
+  integrity sha512-soBis2FPeR+Dejqyz25AaqQABLv2K2CYjRhLYtJj4nJtQ/97r8Z8tWat8dVMbP0VckgS18K5ChgG3pg7/Kf5IQ==
+  dependencies:
+    "@looker/extension-sdk" "^23.20.1"
+    "@looker/sdk" "^23.20.1"
+    "@looker/sdk-rtl" "^21.6.1"
+    history "^4.9.0"
+    lodash "^4.17.20"
+
+"@looker/extension-sdk@^23.20.1":
+  version "23.20.1"
+  resolved "https://registry.yarnpkg.com/@looker/extension-sdk/-/extension-sdk-23.20.1.tgz#120ece8239fecc97abf831fd6d1afe2c948c7c04"
+  integrity sha512-11uhKxM+bXyfek7QIDlWW1YeUO2Wi82UknkWSualCzJPxBPl9QCXZQeP7H9A0t7hIuLl9nG4LFVRVjBjj0gWDQ==
+  dependencies:
+    "@looker/chatty" "2.3.9"
+    "@looker/sdk" "^23.20.1"
+    "@looker/sdk-rtl" "^21.6.1"
+    deepmerge "^4.2.2"
+    readable-stream "^3.4.0"
+    request "^2.88.0"
+    request-promise-native "^1.0.8"
+    semver "^7.3.4"
+
+"@looker/extension-utils@0.1.32":
+  version "0.1.32"
+  resolved "https://registry.yarnpkg.com/@looker/extension-utils/-/extension-utils-0.1.32.tgz#9b2693b3a08e44e2f30072e0d4b87ee76325a7c1"
+  integrity sha512-p+cjWkd9inpWMMnIT3SdYrk6NT/yhI4uV7VAE+hKwhlsjelN2yiaxEzTHG1FiEgV8iXpQZ+6piEP6LjhwG4lgA==
+  dependencies:
+    "@looker/code-editor" "^0.1.30"
+    "@looker/components" "^4.1.1"
+    "@looker/extension-sdk" "^23.20.1"
+    "@looker/extension-sdk-react" "^23.20.1"
+    "@looker/redux" "^0.0.1"
+    "@looker/sdk" "^23.20.1"
+    "@looker/sdk-rtl" "^21.6.1"
+    "@reduxjs/toolkit" "^1.9.3"
+    "@styled-icons/material" "^10.47.0"
+    react "^16.14.0"
+    react-redux "^7.2.3"
+    react-router-dom "^5.3.4"
+    typed-redux-saga "^1.5.0"
+
 "@looker/i18n@1.0.0", "@looker/i18n@^1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@looker/i18n/-/i18n-1.0.0.tgz#9b76a2b73b7c277b9f9fae89a14b715953964c95"
@@ -2553,6 +2622,17 @@
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/@looker/redux/-/redux-0.0.1.tgz#4decc5a78e207c1c63e5c114be2ecca4b3d09d44"
   integrity sha512-+gMHsg321OD9Cp0sMNkgcOIp1HtKs8kxNQMQD4XGFb2S8yfXtLRe7vnwghKCHfCiYkXEHLMUcFmBCEvSk7HlrA==
+
+"@looker/sdk@23.20.1", "@looker/sdk@^23.20.1":
+  version "23.20.1"
+  resolved "https://registry.yarnpkg.com/@looker/sdk/-/sdk-23.20.1.tgz#f4f5870989c7d2f1a39ca01164d9b5bb603d34c8"
+  integrity sha512-hdgUnqrbSwPsM4kJABoFhCCuc4K3D6uCb9L4fYq/9P6X2/2byLGNwFtpR93J4Cpw19tVVuL6CwYRAPL2OWTDdw==
+  dependencies:
+    "@looker/sdk-rtl" "^21.6.1"
+    ini "^1.3.8"
+    readable-stream "^3.4.0"
+    request "^2.88.0"
+    request-promise-native "^1.0.8"
 
 "@manypkg/find-root@^1.1.0":
   version "1.1.0"
@@ -14015,6 +14095,16 @@ react-diff-viewer@3.1.1:
     memoize-one "^5.0.4"
     prop-types "^15.6.2"
 
+react-dom@16.14.0:
+  version "16.14.0"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.14.0.tgz#7ad838ec29a777fb3c75c3a190f661cf92ab8b89"
+  integrity sha512-1gCeQXDLoIqMgqD3IO2Ah9bnf0w9kzhwN5q4FGnHZ67hBm9yePzB5JJAIQCc8x3pFnNlwFq4RidZggNAAkzWWw==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
+    scheduler "^0.19.1"
+
 react-dom@^17.0.2:
   version "17.0.2"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-17.0.2.tgz#ecffb6845e3ad8dbfcdc498f0d0a939736502c23"
@@ -14120,7 +14210,7 @@ react-markdown@^6.0.2:
     unist-util-visit "^2.0.0"
     vfile "^4.0.0"
 
-react-redux@^7.2.9:
+react-redux@^7.2.3, react-redux@^7.2.9:
   version "7.2.9"
   resolved "https://registry.yarnpkg.com/react-redux/-/react-redux-7.2.9.tgz#09488fbb9416a4efe3735b7235055442b042481d"
   integrity sha512-Gx4L3uM182jEEayZfRbI/G11ZpYdNAnBs70lFVMNdHJI76XYtR+7m0MN+eAs7UHBPhWXcnFPaS+9owSCJQHNpQ==
@@ -14193,7 +14283,7 @@ react-test-renderer@^17.0.2:
     react-shallow-renderer "^16.13.1"
     scheduler "^0.20.2"
 
-react@^17.0.2:
+react@16.14.0, react@^16.14.0, react@^17.0.2:
   version "17.0.2"
   resolved "https://registry.yarnpkg.com/react/-/react-17.0.2.tgz#d0b5cc516d29eb3eee383f75b62864cfb6800037"
   integrity sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==

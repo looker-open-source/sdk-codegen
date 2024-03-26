@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 339 API models: 256 Spec, 0 Request, 61 Write, 22 Enum
+/// 340 API models: 257 Spec, 0 Request, 61 Write, 22 Enum
 
 #nullable enable
 using System;
@@ -2608,24 +2608,9 @@ public enum InvestigativeContentType
 
 public class JsonBi : SdkModel
 {
-  public JsonBiBigQueryMetadata big_query_metadata { get; set; } = null;
-  public JsonBiFields fields { get; set; } = null;
-  /// <summary>Pivots (read-only)</summary>
-  public JsonBiPivots[] pivots { get; set; } = null;
-  /// <summary>If the query has subtotals (read-only)</summary>
-  public bool has_subtotals { get; set; }
-  /// <summary>If the query has totals (read-only)</summary>
-  public bool has_totals { get; set; }
-  /// <summary>If the query results hit the maximum column limit and additional columns were truncated (read-only)</summary>
-  public string columns_truncated { get; set; } = "";
-  /// <summary>Filter expression applied to the query results (read-only)</summary>
-  public string filter_expression { get; set; } = "";
-  /// <summary>Filters applied to the query results (read-only)</summary>
-  public StringDictionary<string> filters { get; set; } = null;
-  /// <summary>Raw sql query. Null if user does not have permission to view sql (read-only)</summary>
-  public string sql { get; set; } = "";
+  public JsonBiMetadata metadata { get; set; } = null;
   /// <summary>Json query results (read-only)</summary>
-  public string[] data { get; set; } = null;
+  public string[] rows { get; set; } = null;
 }
 
 public class JsonBiBigQueryMetadata : SdkModel
@@ -2672,6 +2657,26 @@ public class JsonBiFields : SdkModel
   public JsonBiField[] measures { get; set; } = null;
   /// <summary>Pivots (read-only)</summary>
   public JsonBiField[] pivots { get; set; } = null;
+}
+
+public class JsonBiMetadata : SdkModel
+{
+  public JsonBiBigQueryMetadata big_query_metadata { get; set; } = null;
+  public JsonBiFields fields { get; set; } = null;
+  /// <summary>Pivots (read-only)</summary>
+  public JsonBiPivots[] pivots { get; set; } = null;
+  /// <summary>If the query has subtotals (read-only)</summary>
+  public bool has_subtotals { get; set; }
+  /// <summary>If the query has totals (read-only)</summary>
+  public bool has_totals { get; set; }
+  /// <summary>If the query results hit the maximum column limit and additional columns were truncated (read-only)</summary>
+  public string columns_truncated { get; set; } = "";
+  /// <summary>Filter expression applied to the query results (read-only)</summary>
+  public string filter_expression { get; set; } = "";
+  /// <summary>Filters applied to the query results (read-only)</summary>
+  public StringDictionary<string> filters { get; set; } = null;
+  /// <summary>Raw sql query. Null if user does not have permission to view sql (read-only)</summary>
+  public string sql { get; set; } = "";
 }
 
 public class JsonBiPivots : SdkModel
