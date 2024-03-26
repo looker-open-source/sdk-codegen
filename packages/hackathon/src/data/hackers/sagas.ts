@@ -23,26 +23,26 @@
  SOFTWARE.
 
  */
-import { all, call, put, takeEvery } from 'redux-saga/effects'
-import { actionMessage, beginLoading, endLoading } from '../common/actions'
-import { sheetsClient } from '../sheets_client'
-import { Actions, allHackersResponse } from './actions'
+import { all, call, put, takeEvery } from 'redux-saga/effects';
+import { actionMessage, beginLoading, endLoading } from '../common/actions';
+import { sheetsClient } from '../sheets_client';
+import { Actions, allHackersResponse } from './actions';
 
 function* allHackersSaga() {
   try {
-    yield put(beginLoading())
+    yield put(beginLoading());
     const { hackers, judges, admins, staff } = yield call([
       sheetsClient,
       sheetsClient.getHackers,
-    ])
-    yield put(endLoading())
-    yield put(allHackersResponse(hackers, judges, staff, admins))
+    ]);
+    yield put(endLoading());
+    yield put(allHackersResponse(hackers, judges, staff, admins));
   } catch (err) {
-    console.error(err)
-    yield put(actionMessage('A problem occurred loading the data', 'critical'))
+    console.error(err);
+    yield put(actionMessage('A problem occurred loading the data', 'critical'));
   }
 }
 
 export function* registerHackersSagas() {
-  yield all([takeEvery(Actions.ALL_HACKERS_REQUEST, allHackersSaga)])
+  yield all([takeEvery(Actions.ALL_HACKERS_REQUEST, allHackersSaga)]);
 }

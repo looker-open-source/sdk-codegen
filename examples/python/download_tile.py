@@ -2,7 +2,7 @@ import sys
 import time
 
 import looker_sdk
-from looker_sdk import models
+from looker_sdk import models40 as models
 from looker_sdk.rtl import transport
 
 class MyTransportOptions(transport.PTransportSettings): timeout = 300

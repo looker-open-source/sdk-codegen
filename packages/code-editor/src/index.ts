@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-export * from './CodeCopy'
-export * from './CodeDisplay'
-export * from './CodeEditor'
-export * from './Markdown'
+export * from './CodeCopy';
+export * from './CodeDisplay';
+export * from './CodeEditor';
+export * from './Markdown';

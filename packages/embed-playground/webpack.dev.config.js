@@ -24,8 +24,8 @@
 
  */
 
-const path = require('path')
-const base = require('../../webpack.base.config')(__dirname)
+const path = require('path');
+const base = require('../../webpack.base.config')(__dirname);
 
 module.exports = {
   ...base,
@@ -48,4 +48,4 @@ module.exports = {
     },
   },
   devtool: 'inline-source-map',
-}
+};

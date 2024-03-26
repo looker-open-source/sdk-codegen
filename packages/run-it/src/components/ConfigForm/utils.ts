@@ -23,14 +23,14 @@
  SOFTWARE.
 
  */
-import type { ILookerVersions } from '@looker/sdk-codegen'
-import { BrowserTransport, DefaultSettings } from '@looker/sdk-rtl'
+import type { ILookerVersions } from '@looker/sdk-codegen';
+import { BrowserTransport, DefaultSettings } from '@looker/sdk-rtl';
 
-import type { RunItValues } from '../..'
+import type { RunItValues } from '../..';
 
-export const RunItConfigKey = 'RunItConfig'
-export const RunItFormKey = 'RunItForm'
-export const RunItNoConfig = { base_url: '', looker_url: '' }
+export const RunItConfigKey = 'RunItConfig';
+export const RunItFormKey = 'RunItForm';
+export const RunItNoConfig = { base_url: '', looker_url: '' };
 
 /**
  * Use the browser transport to GET a url
@@ -40,11 +40,11 @@ export const getUrl = async (url: string): Promise<string | RunItValues> => {
   const settings = {
     ...DefaultSettings(),
     ...{ base_url: url, verify_ssl: false },
-  }
-  const xp = new BrowserTransport(settings)
-  const response = await xp.rawRequest('GET', url)
-  return response.body
-}
+  };
+  const xp = new BrowserTransport(settings);
+  const response = await xp.rawRequest('GET', url);
+  return response.body;
+};
 
 /**
  * Gets the versions payload given a versions url
@@ -53,15 +53,15 @@ export const getUrl = async (url: string): Promise<string | RunItValues> => {
 export const getVersions = async (
   versionsUrl: string
 ): Promise<ILookerVersions | undefined> => {
-  let versions
+  let versions;
   try {
-    const content = await getUrl(versionsUrl)
-    versions = typeof content === 'string' ? JSON.parse(content) : content
+    const content = await getUrl(versionsUrl);
+    versions = typeof content === 'string' ? JSON.parse(content) : content;
   } catch {
-    throw new Error('Invalid server configuration')
+    throw new Error('Invalid server configuration');
   }
-  return versions
-}
+  return versions;
+};
 
 /**
  * Validates URL and standardizes it
@@ -70,10 +70,10 @@ export const getVersions = async (
  */
 export const validateUrl = (url: string): string => {
   try {
-    const result = new URL(url)
-    if (url.endsWith(':')) return url
-    return result.origin
+    const result = new URL(url);
+    if (url.endsWith(':')) return url;
+    return result.origin;
   } catch {
-    return ''
+    return '';
   }
-}
+};

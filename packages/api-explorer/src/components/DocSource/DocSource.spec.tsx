@@ -23,14 +23,13 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { screen, waitFor } from '@testing-library/react'
-import type { IDeclarationMine } from '@looker/sdk-codegen'
-import { codeSearchLink } from '@looker/sdk-codegen'
-import userEvent from '@testing-library/user-event'
-import { api } from '../../test-data'
-import { renderWithLode } from '../../test-utils'
-import { DocSource } from './DocSource'
+import React from 'react';
+import { fireEvent, screen } from '@testing-library/react';
+import type { IDeclarationMine } from '@looker/sdk-codegen';
+import { codeSearchLink } from '@looker/sdk-codegen';
+import { api } from '../../test-data';
+import { renderWithLode } from '../../test-utils';
+import { DocSource } from './DocSource';
 
 describe('DocSource', () => {
   const examples = {
@@ -56,10 +55,10 @@ describe('DocSource', () => {
         },
       },
     },
-  }
+  };
 
-  const method = api.methods.login
-  const type = api.types.Query
+  const method = api.methods.login;
+  const type = api.types.Query;
 
   const declarations: IDeclarationMine = {
     commitHash: '1546035fd531c14a1172c9ad5c5b70e5279c1980',
@@ -76,43 +75,40 @@ describe('DocSource', () => {
         sourceFile: 'lib/looker/core/controllers/auth_controller.rb',
       },
     },
-  }
+  };
 
   test('it renders a type declaration link', async () => {
-    renderWithLode(<DocSource type={type} />, examples, declarations)
-    const link = screen.getByRole('link')
-    const declaration = declarations.types.Query
+    renderWithLode(<DocSource type={type} />, examples, declarations);
+    const link = screen.getByRole('link');
+    const declaration = declarations.types.Query;
     const expected = codeSearchLink(
       declarations.remoteOrigin,
       declarations.commitHash,
       declaration.sourceFile,
       declaration.line
-    )
-    expect(link.closest('a')).toHaveAttribute('href', expected)
-    await waitFor(() => {
-      userEvent.hover(link)
-      expect(screen.getByRole('tooltip')).toHaveTextContent(
-        `${declaration.sourceFile}#L${declaration.line}`
-      )
-    })
-  })
+    );
+    expect(link.closest('a')).toHaveAttribute('href', expected);
+    fireEvent.mouseOver(link);
+    expect(screen.getByRole('tooltip')).toHaveTextContent(
+      `${declaration.sourceFile}#L${declaration.line}`
+    );
+  });
 
   test('it renders a method declaration link', async () => {
-    renderWithLode(<DocSource method={method} />, examples, declarations)
-    const link = screen.getByRole('link')
-    const declaration = declarations.methods['POST /login']
+    renderWithLode(<DocSource method={method} />, examples, declarations);
+    const link = screen.getByRole('link');
+    const declaration = declarations.methods['POST /login'];
     const expected = codeSearchLink(
       declarations.remoteOrigin,
       declarations.commitHash,
       declaration.sourceFile,
       declaration.line
-    )
-    expect(link.closest('a')).toHaveAttribute('href', expected)
-    await waitFor(() => {
-      userEvent.hover(link)
-      expect(screen.getByRole('tooltip')).toHaveTextContent(
-        `${declaration.sourceFile}#L${declaration.line}`
-      )
-    })
-  })
-})
+    );
+    expect(link.closest('a')).toHaveAttribute('href', expected);
+    // await userEvent.hover(link);
+    fireEvent.mouseOver(link);
+    expect(screen.getByRole('tooltip')).toHaveTextContent(
+      `${declaration.sourceFile}#L${declaration.line}`
+    );
+  });
+});

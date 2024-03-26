@@ -24,14 +24,14 @@
 
  */
 
-import * as H from 'history'
-import type { RouteData } from '../ExtensionConnector/types'
+import * as H from 'history';
+import type { RouteData } from '../ExtensionConnector/types';
 
 export const getInitialRouteEntries = (initialRouteData?: RouteData) => {
-  let initialEntries: H.LocationDescriptor[] | undefined
+  let initialEntries: H.LocationDescriptor[] | undefined;
   if (initialRouteData) {
-    const { route, routeState } = initialRouteData
-    initialEntries = [{ ...H.parsePath(route), state: routeState }]
+    const { route, routeState } = initialRouteData;
+    initialEntries = [{ ...H.parsePath(route), state: routeState }];
   }
-  return initialEntries
-}
+  return initialEntries;
+};

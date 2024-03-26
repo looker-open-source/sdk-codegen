@@ -24,29 +24,30 @@
 
  */
 
-import { connectExtensionHost } from './connect_extension_host'
-import * as globalListener from './global_listener'
-import type { ExtensionNotification } from './types'
-import { ExtensionNotificationType, MountPoint } from './types'
+import { connectExtensionHost } from './connect_extension_host';
+import * as globalListener from './global_listener';
+import type { ExtensionNotification } from './types';
+import { ExtensionNotificationType, MountPoint } from './types';
 
-let channel: any
+let channel: any;
 class MockMessageChannel {
   port1: any = {
     postMessage: () => {
       // noop
     },
-  }
+  };
 
-  port2: any = {}
+  port2: any = {};
   constructor() {
-    channel = this
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    channel = this;
   }
 }
 
 // Simulate the sync message
 const simulateChattySyncMessage = () => {
-  channel.port1.onmessage({ data: { action: 0 } })
-}
+  channel.port1.onmessage({ data: { action: 0 } });
+};
 
 // Simulate extension notification
 const simulateExtensionNotification = (message: ExtensionNotification) => {
@@ -61,37 +62,37 @@ const simulateExtensionNotification = (message: ExtensionNotification) => {
           sequence: 0,
         },
       },
-    })
-  })
-}
+    });
+  });
+};
 
 describe('connect_extension_host tests', () => {
-  let originalConsoleError: any
-  let registerHostApiSpy: jest.SpyInstance
+  let originalConsoleError: any;
+  let registerHostApiSpy: jest.SpyInstance;
 
   beforeEach(() => {
     // Silence console error messages
-    originalConsoleError = console.error
-    console.error = jest.fn()
-    ;(global as any).MessageChannel = MockMessageChannel
-    registerHostApiSpy = jest.spyOn(globalListener as any, 'registerHostApi')
-  })
+    originalConsoleError = console.error;
+    console.error = jest.fn();
+    (global as any).MessageChannel = MockMessageChannel;
+    registerHostApiSpy = jest.spyOn(globalListener as any, 'registerHostApi');
+  });
 
   afterEach(() => {
-    registerHostApiSpy.mockReset()
-    console.error = originalConsoleError
-  })
+    registerHostApiSpy.mockReset();
+    console.error = originalConsoleError;
+  });
 
   it('handles basic connection', (done) => {
     connectExtensionHost({}).then((extensionHost: any) => {
-      expect(extensionHost).toBeDefined()
-      expect(extensionHost.chattyHost).toBeDefined()
-      expect(extensionHost.restoreRoute).not.toBeDefined()
-      expect(registerHostApiSpy).toBeCalled()
-      expect(globalListener.getExtensionSDK()).toEqual(extensionHost)
-      done()
-    })
-    simulateChattySyncMessage()
+      expect(extensionHost).toBeDefined();
+      expect(extensionHost.chattyHost).toBeDefined();
+      expect(extensionHost.restoreRoute).not.toBeDefined();
+      expect(registerHostApiSpy).toBeCalled();
+      expect(globalListener.getExtensionSDK()).toEqual(extensionHost);
+      done();
+    });
+    simulateChattySyncMessage();
     simulateExtensionNotification({
       type: ExtensionNotificationType.INITIALIZE,
       payload: {
@@ -104,26 +105,26 @@ describe('connect_extension_host tests', () => {
         extensionId: 'a::b',
         mountPoint: MountPoint.standalone,
       },
-    })
-  })
+    });
+  });
 
   it('handles connection with callback and initial route', (done) => {
-    const initializedCallback = jest.fn()
-    const setInitialRoute = jest.fn()
+    const initializedCallback = jest.fn();
+    const setInitialRoute = jest.fn();
     connectExtensionHost({
       initializedCallback,
       setInitialRoute,
       requiredLookerVersion: '>=7.14.0',
       chattyTimeout: -1,
     }).then((extensionHost: any) => {
-      expect(extensionHost).toBeDefined()
-      expect(extensionHost.chattyHost).toBeDefined()
-      expect(extensionHost.setInitialRoute).toEqual(setInitialRoute)
-      expect(initializedCallback).toHaveBeenCalledWith(undefined)
-      expect(setInitialRoute).toHaveBeenCalledWith('/', { hello: 'world' })
-      done()
-    })
-    simulateChattySyncMessage()
+      expect(extensionHost).toBeDefined();
+      expect(extensionHost.chattyHost).toBeDefined();
+      expect(extensionHost.setInitialRoute).toEqual(setInitialRoute);
+      expect(initializedCallback).toHaveBeenCalledWith(undefined);
+      expect(setInitialRoute).toHaveBeenCalledWith('/', { hello: 'world' });
+      done();
+    });
+    simulateChattySyncMessage();
     simulateExtensionNotification({
       type: ExtensionNotificationType.INITIALIZE,
       payload: {
@@ -138,12 +139,12 @@ describe('connect_extension_host tests', () => {
         extensionId: 'a::b',
         mountPoint: MountPoint.standalone,
       },
-    })
-  })
+    });
+  });
 
   it('rejects when looker version is not supported', (done) => {
-    const initializedCallback = jest.fn()
-    const setInitialRoute = jest.fn()
+    const initializedCallback = jest.fn();
+    const setInitialRoute = jest.fn();
     connectExtensionHost({
       initializedCallback,
       setInitialRoute,
@@ -151,10 +152,10 @@ describe('connect_extension_host tests', () => {
     }).catch((error: any) => {
       expect(error.message).toEqual(
         'Extension requires Looker version >=7.16.0, got 7.14.0'
-      )
-      done()
-    })
-    simulateChattySyncMessage()
+      );
+      done();
+    });
+    simulateChattySyncMessage();
     simulateExtensionNotification({
       type: ExtensionNotificationType.INITIALIZE,
       payload: {
@@ -169,6 +170,6 @@ describe('connect_extension_host tests', () => {
         extensionId: 'a::b',
         mountPoint: MountPoint.standalone,
       },
-    })
-  })
-})
+    });
+  });
+});

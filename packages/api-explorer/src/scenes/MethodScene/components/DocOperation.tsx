@@ -23,16 +23,16 @@
  SOFTWARE.
 
  */
-import type { FC } from 'react'
-import React from 'react'
-import type { IMethod } from '@looker/sdk-codegen'
-import { Code, Flex, SpaceVertical, Text } from '@looker/components'
-import { MethodBadge } from '@looker/run-it'
+import type { FC } from 'react';
+import React from 'react';
+import type { IMethod } from '@looker/sdk-codegen';
+import { Code, Flex, SpaceVertical, Text } from '@looker/components';
+import { MethodBadge } from '@looker/run-it';
 
-import { DocPseudo } from '../../../components'
+import { DocPseudo } from '../../../components';
 
 interface DocOperationProps {
-  method: IMethod
+  method: IMethod;
 }
 
 export const DocOperation: FC<DocOperationProps> = ({ method }) => (
@@ -51,4 +51,4 @@ export const DocOperation: FC<DocOperationProps> = ({ method }) => (
       </Flex>
     </MethodBadge>
   </SpaceVertical>
-)
+);

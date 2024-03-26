@@ -24,82 +24,82 @@
 
  */
 
-import type { Readable } from 'readable-stream'
+import type { Readable } from 'readable-stream';
 import type {
-  ISDKError,
-  SDKResponse,
-  ITransportSettings,
-  HttpMethod,
   Authenticator,
-  IRequestProps,
-  IRequestHeaders,
-  Values,
+  HttpMethod,
   IRawResponse,
-} from './transport'
+  IRequestHeaders,
+  IRequestProps,
+  ISDKError,
+  ITransportSettings,
+  SDKResponse,
+  Values,
+} from './transport';
 import {
-  trace,
   LookerAppId,
-  agentPrefix,
-  responseMode,
   ResponseMode,
-  safeBase64,
+  agentPrefix,
   isErrorLike,
-} from './transport'
-import { BaseTransport } from './baseTransport'
-import type { ICryptoHash } from './cryptoHash'
+  responseMode,
+  safeBase64,
+  trace,
+} from './transport';
+import { BaseTransport } from './baseTransport';
+import type { ICryptoHash } from './cryptoHash';
 
 export class BrowserCryptoHash implements ICryptoHash {
   arrayToHex(array: Uint8Array): string {
     return Array.from(array)
       .map((b) => b.toString(16).padStart(2, '0'))
-      .join('')
+      .join('');
   }
 
   fromBase64(str: string) {
     return atob(str)
       .split('')
       .map(function (c) {
-        return c.charCodeAt(0)
-      })
+        return c.charCodeAt(0);
+      });
   }
 
   secureRandom(byteCount: number): string {
-    const bytes = new Uint8Array(byteCount)
-    window.crypto.getRandomValues(bytes)
-    return this.arrayToHex(bytes)
+    const bytes = new Uint8Array(byteCount);
+    window.crypto.getRandomValues(bytes);
+    return this.arrayToHex(bytes);
   }
 
   async sha256Hash(message: string): Promise<string> {
-    const msgUint8 = new TextEncoder().encode(message)
-    const hashBuffer = await window.crypto.subtle.digest('SHA-256', msgUint8)
-    return safeBase64(new Uint8Array(hashBuffer))
+    const msgUint8 = new TextEncoder().encode(message);
+    const hashBuffer = await window.crypto.subtle.digest('SHA-256', msgUint8);
+    return safeBase64(new Uint8Array(hashBuffer));
   }
 }
 
 export class BrowserTransport extends BaseTransport {
   constructor(protected readonly options: ITransportSettings) {
-    super(options)
+    super(options);
   }
 
   /** Does this browser have the necessary performance APIs? */
   static supportsPerformance() {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    return !!(performance && performance.mark && performance.measure)
+    return !!(performance && performance.mark && performance.measure);
   }
 
-  private static _trackPerf = false
+  private static _trackPerf = false;
 
   public static get trackPerformance() {
-    return this._trackPerf
+    return this._trackPerf;
   }
 
   public static set trackPerformance(value: boolean) {
-    this._trackPerf = value && BrowserTransport.supportsPerformance()
+    this._trackPerf = value && BrowserTransport.supportsPerformance();
   }
 
-  static startMark = 'A'
-  static endMark = 'B'
+  static startMark = 'A';
+  static endMark = 'B';
 
   /**
    * Create a performance mark
@@ -109,11 +109,11 @@ export class BrowserTransport extends BaseTransport {
    */
   static mark(name: string, tag: string) {
     if (this.trackPerformance) {
-      const mark = `${name}-${tag}`
-      performance.mark(mark)
-      return mark
+      const mark = `${name}-${tag}`;
+      performance.mark(mark);
+      return mark;
     }
-    return ''
+    return '';
   }
 
   /**
@@ -125,14 +125,14 @@ export class BrowserTransport extends BaseTransport {
    *
    */
   static markName(url: string) {
-    if (!this.trackPerformance) return ''
+    if (!this.trackPerformance) return '';
 
-    const entries = performance.getEntriesByName(url, 'resource')
+    const entries = performance.getEntriesByName(url, 'resource');
     if (entries.length > 0) {
-      const last = entries[entries.length - 1]
-      return `${url}-${last.startTime}`
+      const last = entries[entries.length - 1];
+      return `${url}-${last.startTime}`;
     }
-    return url
+    return url;
   }
 
   /**
@@ -140,7 +140,7 @@ export class BrowserTransport extends BaseTransport {
    * @param name to use as prefix of mark. Use `markName()` to determine the name
    */
   static markStart(name: string) {
-    return BrowserTransport.mark(name, BrowserTransport.startMark)
+    return BrowserTransport.mark(name, BrowserTransport.startMark);
   }
 
   /**
@@ -155,15 +155,15 @@ export class BrowserTransport extends BaseTransport {
   static markEnd(url: string, startName: string) {
     if (this.trackPerformance) {
       // Find the resource entry and use it to create the measure name
-      const measureName = this.markName(url)
-      const end = BrowserTransport.mark(measureName, BrowserTransport.endMark)
-      performance.measure(measureName, startName, end)
+      const measureName = this.markName(url);
+      const end = BrowserTransport.mark(measureName, BrowserTransport.endMark);
+      performance.measure(measureName, startName, end);
       // Marks have been processed into a measure, so remove them
-      performance.clearMarks(startName)
-      performance.clearMarks(end)
-      return measureName
+      performance.clearMarks(startName);
+      performance.clearMarks(end);
+      return measureName;
     }
-    return ''
+    return '';
   }
 
   async rawRequest(
@@ -174,38 +174,38 @@ export class BrowserTransport extends BaseTransport {
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
   ): Promise<IRawResponse> {
-    options = { ...this.options, ...options }
-    const requestPath = this.makeUrl(path, options, queryParams)
+    options = { ...this.options, ...options };
+    const requestPath = this.makeUrl(path, options, queryParams);
     const props = await this.initRequest(
       method,
       requestPath,
       body,
       authenticator,
       options
-    )
+    );
     const req = fetch(
       props.url,
       props // Weird package issues with unresolved imports for RequestInit :(
-    )
+    );
 
-    const requestStarted = Date.now()
-    const res = await req
-    const responseCompleted = Date.now()
+    const requestStarted = Date.now();
+    const res = await req;
+    const responseCompleted = Date.now();
 
     // Start tracking the time it takes to convert the response
     const started = BrowserTransport.markStart(
       BrowserTransport.markName(requestPath)
-    )
-    const contentType = String(res.headers.get('content-type'))
-    const mode = responseMode(contentType)
+    );
+    const contentType = String(res.headers.get('content-type'));
+    const mode = responseMode(contentType);
     const responseBody =
-      mode === ResponseMode.binary ? await res.blob() : await res.text()
+      mode === ResponseMode.binary ? await res.blob() : await res.text();
     if (!('fromRequest' in options)) {
       // Request will markEnd, so don't mark the end here
-      BrowserTransport.markEnd(requestPath, started)
+      BrowserTransport.markEnd(requestPath, started);
     }
-    const headers = {}
-    res.headers.forEach((value, key) => (headers[key] = value))
+    const headers: { [key: string]: any } = {};
+    res.headers.forEach((value, key) => (headers[key] = value));
     const response: IRawResponse = {
       method,
       url: requestPath,
@@ -218,10 +218,10 @@ export class BrowserTransport extends BaseTransport {
       headers,
       requestStarted,
       responseCompleted,
-    }
+    };
     // Update OK with response statusCode check
-    response.ok = this.ok(response)
-    return this.observer ? this.observer(response) : response
+    response.ok = this.ok(response);
+    return this.observer ? this.observer(response) : response;
   }
 
   /**
@@ -231,53 +231,53 @@ export class BrowserTransport extends BaseTransport {
   async parseResponse<TSuccess, TError>(
     res: IRawResponse
   ): Promise<SDKResponse<TSuccess, TError>> {
-    const perfMark = res.startMark || ''
+    const perfMark = res.startMark || '';
     if (!res.ok) {
       // Raw request had an error. Make sure it's a string before parsing the result
-      let error = res.body
+      let error = res.body;
       if (typeof error === 'string') {
         try {
-          error = JSON.parse(error)
+          error = JSON.parse(error);
         } catch {
-          error = { message: `Request failed: ${error}` }
+          error = { message: `Request failed: ${error}` };
         }
       }
-      const response: SDKResponse<TSuccess, TError> = { ok: false, error }
-      return response
+      const response: SDKResponse<TSuccess, TError> = { ok: false, error };
+      return response;
     }
 
-    let value
-    let error
+    let value;
+    let error;
     if (res.contentType.match(/application\/json/g)) {
       try {
-        value = JSON.parse(await res.body)
-        BrowserTransport.markEnd(res.url, perfMark)
+        value = JSON.parse(await res.body);
+        BrowserTransport.markEnd(res.url, perfMark);
       } catch (err) {
-        error = err
-        BrowserTransport.markEnd(res.url, perfMark)
+        error = err;
+        BrowserTransport.markEnd(res.url, perfMark);
       }
     } else if (
       res.contentType === 'text' ||
       res.contentType.startsWith('text/')
     ) {
-      value = res.body.toString()
-      BrowserTransport.markEnd(res.url, perfMark)
+      value = res.body.toString();
+      BrowserTransport.markEnd(res.url, perfMark);
     } else {
       try {
-        BrowserTransport.markEnd(res.url, perfMark)
-        value = res.body
+        BrowserTransport.markEnd(res.url, perfMark);
+        value = res.body;
       } catch (err) {
-        BrowserTransport.markEnd(res.url, perfMark)
-        error = err
+        BrowserTransport.markEnd(res.url, perfMark);
+        error = err;
       }
     }
-    let result: SDKResponse<TSuccess, TError>
+    let result: SDKResponse<TSuccess, TError>;
     if (error) {
-      result = { ok: false, error: error as TError }
+      result = { ok: false, error: error as TError };
     } else {
-      result = { ok: true, value }
+      result = { ok: true, value };
     }
-    return result
+    return result;
   }
 
   async request<TSuccess, TError>(
@@ -290,7 +290,7 @@ export class BrowserTransport extends BaseTransport {
   ): Promise<SDKResponse<TSuccess, TError>> {
     try {
       if (BrowserTransport.trackPerformance) {
-        options = { ...options, ...{ fromRequest: true } }
+        options = { ...options, ...{ fromRequest: true } };
       }
       const res = await this.rawRequest(
         method,
@@ -299,22 +299,21 @@ export class BrowserTransport extends BaseTransport {
         body,
         authenticator,
         options
-      )
+      );
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      const result: SDKResponse<TSuccess, TError> = await this.parseResponse(
-        res
-      )
-      return result
+      const result: SDKResponse<TSuccess, TError> =
+        await this.parseResponse(res);
+      return result;
     } catch (e: unknown) {
-      if (!isErrorLike(e)) throw e
+      if (!isErrorLike(e)) throw e;
       const error: ISDKError = {
         message:
           typeof e.message === 'string'
             ? e.message
             : `The SDK call was not successful. The error was '${e}'.`,
         type: 'sdk_error',
-      }
-      return { error, ok: false }
+      };
+      return { error, ok: false };
     }
   }
 
@@ -325,22 +324,22 @@ export class BrowserTransport extends BaseTransport {
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
   ) {
-    const agentTag = options?.agentTag || agentPrefix
-    options = options ? { ...this.options, ...options } : this.options
-    const headers: IRequestHeaders = { [LookerAppId]: agentTag }
+    const agentTag = options?.agentTag || agentPrefix;
+    options = options ? { ...this.options, ...options } : this.options;
+    const headers: IRequestHeaders = { [LookerAppId]: agentTag };
     if (options && options.headers) {
       Object.entries(options.headers).forEach(([key, val]) => {
-        headers[key] = val
-      })
+        headers[key] = val;
+      });
     }
 
     // Make sure an empty body is undefined
     if (!body) {
-      body = undefined
+      body = undefined;
     } else {
       if (typeof body !== 'string') {
-        body = JSON.stringify(body)
-        headers['Content-Type'] = 'application/json'
+        body = JSON.stringify(body);
+        headers['Content-Type'] = 'application/json';
       }
     }
     let props: IRequestProps = {
@@ -349,14 +348,14 @@ export class BrowserTransport extends BaseTransport {
       headers,
       method,
       url: path,
-    }
+    };
 
     if (authenticator) {
       // Add authentication information to the request
-      props = await authenticator(props)
+      props = await authenticator(props);
     }
 
-    return props
+    return props;
   }
 
   // TODO finish this method
@@ -369,18 +368,18 @@ export class BrowserTransport extends BaseTransport {
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
   ): Promise<TSuccess> {
-    options = options ? { ...this.options, ...options } : this.options
+    options = options ? { ...this.options, ...options } : this.options;
     // const stream = new PassThrough()
     // const returnPromise = callback(stream)
-    const requestPath = this.makeUrl(path, options, queryParams)
+    const requestPath = this.makeUrl(path, options, queryParams);
     const props = await this.initRequest(
       method,
       requestPath,
       body,
       authenticator,
       options
-    )
-    trace(`[stream] attempting to stream via download url`, props)
+    );
+    trace(`[stream] attempting to stream via download url`, props);
 
     return Promise.reject<TSuccess>(
       // Silly error message to prevent linter from complaining about unused variables
@@ -389,7 +388,7 @@ export class BrowserTransport extends BaseTransport {
       Error(
         `Streaming for callback ${props.method} ${props.requestPath} is not implemented`
       )
-    )
+    );
 
     /*
     TODO complete this for the browser implementation

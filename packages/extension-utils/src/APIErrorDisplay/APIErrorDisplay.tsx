@@ -24,17 +24,17 @@
 
  */
 
-import React from 'react'
-import type { LookerSDKError } from '@looker/sdk-rtl'
-import { Heading, SpaceVertical } from '@looker/components'
-import { APIErrorContent } from './APIErrorContent'
-import { errorHeading } from './utils'
+import React from 'react';
+import type { LookerSDKError } from '@looker/sdk-rtl';
+import { Heading, SpaceVertical } from '@looker/components';
+import { APIErrorContent } from './APIErrorContent';
+import { errorHeading } from './utils';
 
 export interface APIErrorDisplayProps {
   /** Populated SDK error information, which may contain detailed errors */
-  error: LookerSDKError
+  error: LookerSDKError;
   /** true to retrieve the markdown error document from the CDN and display it instead of a link */
-  showDoc?: boolean
+  showDoc?: boolean;
 }
 
 /**
@@ -55,5 +55,5 @@ export const APIErrorDisplay = ({
         </SpaceVertical>
       )}
     </>
-  )
-}
+  );
+};

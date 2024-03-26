@@ -23,14 +23,14 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { Tab2, Tabs2 } from '@looker/components'
-import type { KeyedCollection } from '@looker/sdk-codegen'
-import type { FC } from 'react'
-import { DocCode } from '../DocCode'
+import React from 'react';
+import { Tab2, Tabs2 } from '@looker/components';
+import type { KeyedCollection } from '@looker/sdk-codegen';
+import type { FC } from 'react';
+import { DocCode } from '../DocCode';
 
 interface DocDeclarationsProps {
-  declarations: KeyedCollection<string>
+  declarations: KeyedCollection<string>;
 }
 
 /**
@@ -45,4 +45,4 @@ export const DocDeclarations: FC<DocDeclarationsProps> = ({ declarations }) => (
       </Tab2>
     ))}
   </Tabs2>
-)
+);

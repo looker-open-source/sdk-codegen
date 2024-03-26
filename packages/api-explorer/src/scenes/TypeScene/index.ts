@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { TypeScene } from './TypeScene'
+export { TypeScene } from './TypeScene';

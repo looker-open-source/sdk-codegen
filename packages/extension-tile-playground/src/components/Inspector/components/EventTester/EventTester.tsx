@@ -23,140 +23,106 @@
  SOFTWARE.
 
  */
-import React, { useCallback, useContext, useState } from 'react'
-import type { MouseEvent } from 'react'
+import React, { useCallback, useContext, useState } from 'react';
+import type { MouseEvent } from 'react';
 import {
-  Space,
   Accordion2,
+  ButtonOutline,
   Card,
   CardContent,
-  Grid,
-  ButtonOutline,
   FieldToggleSwitch,
-} from '@looker/components'
-import { ExtensionContext40 } from '@looker/extension-sdk-react'
+  Grid,
+  Space,
+} from '@looker/components';
+import { ExtensionContext40 } from '@looker/extension-sdk-react';
 
 export const EventTester: React.FC = () => {
   const {
     extensionSDK,
     tileSDK,
+    visualizationSDK,
     tileHostData: { dashboardFilters },
-  } = useContext(ExtensionContext40)
-  const [runDashboard, setRunDashboard] = useState(false)
+  } = useContext(ExtensionContext40);
+  const [runDashboard, setRunDashboard] = useState(false);
 
-  const addErrorsClick = useCallback(() => {
-    tileSDK.addErrors(
-      {
-        title: 'Oh no',
-        message: "I've fallen and I can't get up!",
-        group: 'error_group_1',
-      },
-      {
-        title: 'Oh no',
-        message: 'I pressed the wrong button!',
-        group: 'error_group_2',
-      }
-    )
-  }, [tileSDK])
+  const addErrorClick = useCallback(() => {
+    tileSDK.addError({
+      title: 'Oh no',
+      message: "I've fallen and I can't get up!",
+      group: 'error_group_1',
+    });
+  }, [tileSDK]);
 
-  const partiallyClearErrorsClick = useCallback(() => {
-    tileSDK.clearErrors('error_group_1')
-  }, [tileSDK])
-
-  const clearAllErrorsClick = useCallback(() => {
-    tileSDK.clearErrors()
-  }, [tileSDK])
-
-  const triggerClick = useCallback(
-    (event: MouseEvent) => {
-      // Taken from custom visualizations 2
-      const defaultColors = {
-        red: '#F36254',
-        green: '#4FBC89',
-        yellow: '#FCF758',
-        white: '#FFFFFF',
-      }
-      tileSDK.trigger(
-        'updateConfig',
-        [
-          { lowColor: defaultColors.red },
-          { midColor: defaultColors.white },
-          { highColor: defaultColors.green },
-        ],
-        event
-      )
-    },
-    [tileSDK]
-  )
+  const clearErrorClick = useCallback(() => {
+    tileSDK.clearError();
+  }, [tileSDK]);
 
   const toggleCrossFilterClick = useCallback(
     (event: MouseEvent) => {
       // TODO pivot and row data needs to be populated
-      tileSDK.toggleCrossFilter({ pivot: {} as any, row: {} as any }, event)
+      tileSDK.toggleCrossFilter({ pivot: {} as any, row: {} as any }, event);
     },
     [tileSDK]
-  )
+  );
 
   const openDrillMenuClick = useCallback(
     (event: MouseEvent) => {
       // TODO links data needs to be populated
-      tileSDK.openDrillMenu({ links: [] }, event)
+      tileSDK.openDrillMenu({ links: [] }, event);
     },
     [tileSDK]
-  )
+  );
 
   const runDashboardClick = useCallback(() => {
-    tileSDK.runDashboard()
-  }, [tileSDK])
+    tileSDK.runDashboard();
+  }, [tileSDK]);
 
   const stopDashboardClick = useCallback(() => {
-    tileSDK.stopDashboard()
-  }, [tileSDK])
+    tileSDK.stopDashboard();
+  }, [tileSDK]);
 
   const updateFiltersClick = useCallback(() => {
-    const updatedFilter = {}
+    const updatedFilter: any = {};
     Object.entries(dashboardFilters || {}).forEach(([key, value]) => {
-      updatedFilter[key] = value
+      updatedFilter[key] = value;
       if (key === 'State') {
         updatedFilter[key] =
-          value === 'California' ? 'Washington' : 'California'
+          value === 'California' ? 'Washington' : 'California';
       } else if (typeof value === 'string') {
-        updatedFilter[key] = value.split('').reverse().join('')
+        updatedFilter[key] = value.split('').reverse().join('');
       }
-    })
-    tileSDK.updateFilters(updatedFilter, runDashboard)
-  }, [tileSDK, dashboardFilters, runDashboard])
+    });
+    tileSDK.updateFilters(updatedFilter, runDashboard);
+  }, [tileSDK, dashboardFilters, runDashboard]);
 
   const openScheduleDialogClick = useCallback(() => {
-    tileSDK.openScheduleDialog()
-  }, [tileSDK])
+    tileSDK.openScheduleDialog();
+  }, [tileSDK]);
 
   const updateTileClick = useCallback(() => {
-    extensionSDK.updateTitle(`Update tile title ${new Date().getSeconds()}`)
-  }, [extensionSDK])
+    extensionSDK.updateTitle(`Update tile title ${new Date().getSeconds()}`);
+  }, [extensionSDK]);
+
+  const updateRowLimit = useCallback(() => {
+    visualizationSDK.updateRowLimit(100);
+  }, [visualizationSDK]);
 
   return (
     <Card>
       <CardContent>
         <Accordion2 label="Event Tester" defaultOpen>
           <Grid columns={2} mt="medium">
-            <ButtonOutline onClick={addErrorsClick} width="100%">
-              Test add errors
+            <ButtonOutline onClick={addErrorClick} width="100%">
+              Test add error
             </ButtonOutline>
-            <ButtonOutline onClick={partiallyClearErrorsClick} width="100%">
-              Test partially clear errors
+            <ButtonOutline onClick={clearErrorClick} width="100%">
+              Test clear error
             </ButtonOutline>
-            <ButtonOutline onClick={clearAllErrorsClick} width="100%">
-              Test clear all errors
-            </ButtonOutline>
-            <ButtonOutline onClick={triggerClick} width="100%">
-              Test trigger
+            <ButtonOutline onClick={updateRowLimit} width="100%">
+              Test Update Row Limit
             </ButtonOutline>
             <ButtonOutline onClick={openDrillMenuClick} width="100%">
               Test open drill menu
-            </ButtonOutline>
-            <ButtonOutline onClick={toggleCrossFilterClick} width="100%">
-              Test toggle cross filter
             </ButtonOutline>
             <ButtonOutline onClick={runDashboardClick} width="100%">
               Test run dashboard
@@ -176,6 +142,9 @@ export const EventTester: React.FC = () => {
                 on={runDashboard}
               ></FieldToggleSwitch>
             </Space>
+            <ButtonOutline onClick={toggleCrossFilterClick} width="100%">
+              Test toggle cross filter
+            </ButtonOutline>
             <ButtonOutline onClick={openScheduleDialogClick} width="100%">
               Test open schedule dialog
             </ButtonOutline>
@@ -186,5 +155,5 @@ export const EventTester: React.FC = () => {
         </Accordion2>
       </CardContent>
     </Card>
-  )
-}
+  );
+};

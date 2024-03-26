@@ -29,62 +29,62 @@ import type {
   IApiSettings,
   IRequestProps,
   ITransport,
-} from '@looker/sdk-rtl'
-import { AuthSession, AuthToken, sdkError } from '@looker/sdk-rtl'
-import type { ExtensionSDK } from '@looker/extension-sdk'
-import { defaultScopes } from '@looker/wholly-sheet'
+} from '@looker/sdk-rtl';
+import { AuthSession, AuthToken, sdkError } from '@looker/sdk-rtl';
+import type { ExtensionSDK } from '@looker/extension-sdk';
+import { defaultScopes } from '@looker/wholly-sheet';
 
 export class GAuthToken extends AuthToken {
   constructor(access_token?: string, expiry_date?: number) {
-    let token = {} as IAccessToken
+    let token = {} as IAccessToken;
     if (access_token && expiry_date) {
-      const expSeconds = Math.floor((expiry_date - Date.now()) / 1000)
+      const expSeconds = Math.floor((expiry_date - Date.now()) / 1000);
       token = {
         access_token,
         token_type: 'Bearer',
         expires_in: expSeconds,
-      }
+      };
     }
-    super(token)
+    super(token);
   }
 }
 
 export class GAuthSession extends AuthSession {
-  activeToken = new GAuthToken()
-  sudoId = ''
+  activeToken = new GAuthToken();
+  sudoId = '';
 
   constructor(
     protected readonly extensionSDK: ExtensionSDK,
     public settings: IApiSettings,
     public transport: ITransport
   ) {
-    super(settings, transport)
+    super(settings, transport);
   }
 
   async authenticate(props: IRequestProps) {
-    const token = await this.getToken()
+    const token = await this.getToken();
     if (token && token.access_token) {
       // props.mode = 'cors'
       // delete props.credentials
 
       const suffix =
         (props.url.includes('?') ? '&' : '?') +
-        `access_token=${token.access_token}`
-      props.url += suffix
+        `access_token=${token.access_token}`;
+      props.url += suffix;
       // props.headers.Authorization = `Bearer ${token.access_token}`
     }
-    return props
+    return props;
   }
 
   async getToken() {
     if (!this.isAuthenticated()) {
-      await this.login()
+      await this.login();
     }
-    return this.activeToken
+    return this.activeToken;
   }
 
   isAuthenticated(): boolean {
-    return this.activeToken.isActive()
+    return this.activeToken.isActive();
   }
 
   async login(_sudoId?: string | number) {
@@ -94,7 +94,7 @@ export class GAuthSession extends AuthSession {
         'looker_client_secret'
       ),
       scope: defaultScopes.join(' '),
-    }
+    };
     try {
       const response = await this.extensionSDK.serverProxy(
         `${this.settings.base_url}/access_token`,
@@ -105,16 +105,16 @@ export class GAuthSession extends AuthSession {
           },
           body: JSON.stringify(requestBody),
         }
-      )
-      const { access_token, expiry_date } = response.body
-      this.activeToken = new GAuthToken(access_token, expiry_date)
+      );
+      const { access_token, expiry_date } = response.body;
+      this.activeToken = new GAuthToken(access_token, expiry_date);
     } catch (error: any) {
-      throw sdkError({ message: error.message })
+      throw sdkError({ message: error.message });
     }
   }
 
   reset() {
-    this.sudoId = ''
-    this.activeToken.reset()
+    this.sudoId = '';
+    this.activeToken.reset();
   }
 }

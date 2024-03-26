@@ -23,22 +23,27 @@
  SOFTWARE.
 
  */
-import type { FC } from 'react'
-import React from 'react'
-import type { DataTableColumns } from '@looker/components'
-import { DataTableItem, Tooltip, Text, DataTableCell } from '@looker/components'
-import styled from 'styled-components'
-import type { LoadTimes } from './perfUtils'
-import { perfRound } from './perfUtils'
+import type { FC } from 'react';
+import React from 'react';
+import type { DataTableColumns } from '@looker/components';
+import {
+  DataTableCell,
+  DataTableItem,
+  Text,
+  Tooltip,
+} from '@looker/components';
+import styled from 'styled-components';
+import type { LoadTimes } from './perfUtils';
+import { perfRound } from './perfUtils';
 
 /**
  * An array of columns defining the PerfTable
  * @param all true to include all columns
  */
 export const perfTableColumns = (all = false) => {
-  const numericColumns = all ? 9 : 6
-  const urlWidth = all ? 13 : 20
-  const numWidth = (100 - urlWidth) / numericColumns + 1
+  const numericColumns = all ? 9 : 6;
+  const urlWidth = all ? 13 : 20;
+  const numWidth = (100 - urlWidth) / numericColumns + 1;
   const result = [
     {
       canSort: true,
@@ -48,7 +53,7 @@ export const perfTableColumns = (all = false) => {
       type: 'string',
       widthPercent: urlWidth,
     },
-  ]
+  ];
   if (all) {
     result.push(
       {
@@ -75,7 +80,7 @@ export const perfTableColumns = (all = false) => {
         type: 'number',
         widthPercent: numWidth,
       }
-    )
+    );
   }
   result.push(
     {
@@ -126,13 +131,13 @@ export const perfTableColumns = (all = false) => {
       type: 'number',
       widthPercent: numWidth,
     }
-  )
-  return result as DataTableColumns
-}
+  );
+  return result as DataTableColumns;
+};
 
 interface MetricProps {
-  value: number
-  description: string
+  value: number;
+  description: string;
 }
 
 /**
@@ -142,7 +147,7 @@ const Metric: FC<MetricProps> = ({ value, description }) => (
   <Tooltip placement="right" textAlign="left" content={<>{description}</>}>
     <span>{value}</span>
   </Tooltip>
-)
+);
 
 /**
  * Helper function to create a metric data cell
@@ -153,7 +158,7 @@ const metric = (value: number, description: string) => (
   <>
     <Metric value={value} description={`${description} (${value} ms)`} />
   </>
-)
+);
 
 /**
  * Styling override to align url paths to the right and truncate to the left
@@ -165,15 +170,15 @@ export const UrlText = styled(Text)`
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-`
+`;
 
 /**
  * Special url value display handling
  * @param value is the url to massage
  */
 const urlColumn = (value: string) => {
-  const url = new URL(value)
-  const path = `${url.pathname}${url.search}`
+  const url = new URL(value);
+  const path = `${url.pathname}${url.search}`;
   return (
     <>
       <Tooltip content={value}>
@@ -182,8 +187,8 @@ const urlColumn = (value: string) => {
         </UrlText>
       </Tooltip>
     </>
-  )
-}
+  );
+};
 
 /**
  * Creates the extra performance columns if showAllColumns is true
@@ -191,7 +196,7 @@ const urlColumn = (value: string) => {
  * @param showAllColumns toggle for showing or skipping these performance columns
  */
 const extraPerfColumns = (item: LoadTimes, showAllColumns = false) => {
-  if (!showAllColumns) return <></>
+  if (!showAllColumns) return <></>;
   return (
     <>
       <DataTableCell>
@@ -213,8 +218,8 @@ const extraPerfColumns = (item: LoadTimes, showAllColumns = false) => {
         )}
       </DataTableCell>
     </>
-  )
-}
+  );
+};
 
 /**
  * Generates PerfTable rows from an array of resource load times
@@ -228,7 +233,7 @@ export const createTableRows = (
   showAllColumns = false
 ) =>
   data.map((item, index) => {
-    const id = `${item.name}.${index}`
+    const id = `${item.name}.${index}`;
     return (
       <DataTableItem id={id} key={id} onClick={onSelect.bind(null, item)}>
         <DataTableCell>{urlColumn(item.name)}</DataTableCell>
@@ -270,5 +275,5 @@ export const createTableRows = (
           )}
         </DataTableCell>
       </DataTableItem>
-    )
-  })
+    );
+  });

@@ -24,25 +24,25 @@
 
  */
 
-import type { FC } from 'react'
-import React from 'react'
+import type { FC } from 'react';
+import React from 'react';
 
-import { Heading, SpaceVertical, Paragraph, Span } from '@looker/components'
-import { getExtensionSDK } from '@looker/extension-sdk'
-import { ExtMarkdown } from '@looker/extension-utils'
-import type { IHackerProps } from '../../models'
-import { Agenda } from './components'
-import { localAgenda } from './agenda'
+import { Heading, Paragraph, SpaceVertical, Span } from '@looker/components';
+import { getExtensionSDK } from '@looker/extension-sdk';
+import { ExtMarkdown } from '@looker/extension-utils';
+import type { IHackerProps } from '../../models';
+import { Agenda } from './components';
+import { localAgenda } from './agenda';
 
 interface HomeSceneProps {
-  hacker: IHackerProps
+  hacker: IHackerProps;
 }
 
 export const HomeScene: FC<HomeSceneProps> = ({ hacker }) => {
-  const schedule = localAgenda(hacker.locale)
-  const host = getExtensionSDK().lookerHostData?.hostUrl
+  const schedule = localAgenda(hacker.locale);
+  const host = getExtensionSDK().lookerHostData?.hostUrl;
   const onClick = (_: string, href: string) =>
-    getExtensionSDK().openBrowserWindow(href)
+    getExtensionSDK().openBrowserWindow(href);
 
   const intro =
     hacker.locale === 'ja_JP'
@@ -53,9 +53,9 @@ export const HomeScene: FC<HomeSceneProps> = ({ hacker }) => {
       : `### Our [Hackathon FAQ](https://docs.google.com/document/d/e/2PACX-1vTGRC2Y8FgJ0tFc6Uxc6ktV24lNgZPnNNvyyh3b4o0schX9VlL5AmNICuYzwKAB0xJl3xUQ8c4kuM9k/pub) contains all event details! 
 *By accessing this hackathon application, you accept the [official rules](https://docs.google.com/document/d/e/2PACX-1vTNdWv2e21BiTOspuyj8S_FN0mDmsT-bVyjr6OCMeWTbBvuA6UaoVSUy69OBy8WCElCl7_-L877WSb2/pub).*<br>
 *Change your [account](${host}/account) timezone to display times in your timezone.*<br>
-*Change your [account](${host}/account) locale to \`ja_JP\` to display the agenda in Japanese.*`
+*Change your [account](${host}/account) locale to \`ja_JP\` to display the agenda in Japanese.*`;
 
-  const headingText = hacker.locale === 'ja_JP' ? 'アジェンダ' : 'Agenda'
+  const headingText = hacker.locale === 'ja_JP' ? 'アジェンダ' : 'Agenda';
 
   return (
     <>
@@ -71,5 +71,5 @@ export const HomeScene: FC<HomeSceneProps> = ({ hacker }) => {
         <Agenda schedule={schedule} hacker={hacker} />
       </SpaceVertical>
     </>
-  )
-}
+  );
+};

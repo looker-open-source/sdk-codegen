@@ -24,10 +24,10 @@
 
  */
 
-import type { FC } from 'react'
-import React, { useState, useEffect } from 'react'
-import type { ApiModel, DiffRow, SpecList } from '@looker/sdk-codegen'
-import { useRouteMatch } from 'react-router-dom'
+import type { FC } from 'react';
+import React, { useEffect, useState } from 'react';
+import type { ApiModel, DiffRow, SpecList } from '@looker/sdk-codegen';
+import { useRouteMatch } from 'react-router-dom';
 import {
   Box,
   Flex,
@@ -36,15 +36,15 @@ import {
   Label,
   Select,
   SelectMulti,
-} from '@looker/components'
-import { SyncAlt } from '@styled-icons/material/SyncAlt'
-import { useSelector } from 'react-redux'
+} from '@looker/components';
+import { SyncAlt } from '@styled-icons/material/SyncAlt';
+import { useSelector } from 'react-redux';
 
-import { ApixSection } from '../../components'
-import { selectCurrentSpec, selectSpecs } from '../../state'
-import { diffPath, getApixAdaptor, useNavigation } from '../../utils'
-import { diffSpecs, standardDiffToggles } from './diffUtils'
-import { DocDiff } from './DocDiff'
+import { ApixSection } from '../../components';
+import { selectCurrentSpec, selectSpecs } from '../../state';
+import { diffPath, getApixAdaptor, useNavigation } from '../../utils';
+import { diffSpecs, standardDiffToggles } from './diffUtils';
+import { DocDiff } from './DocDiff';
 
 const diffToggles = [
   {
@@ -71,88 +71,88 @@ const diffToggles = [
     label: 'Response',
     value: 'response',
   },
-]
+];
 
 export interface DiffSceneProps {
-  toggleNavigation: (target?: boolean) => void
+  toggleNavigation: (target?: boolean) => void;
 }
 
 const validateParam = (specs: SpecList, specKey = '') => {
-  return specs[specKey] ? specKey : ''
-}
+  return specs[specKey] ? specKey : '';
+};
 
 export const DiffScene: FC<DiffSceneProps> = ({ toggleNavigation }) => {
-  const adaptor = getApixAdaptor()
-  const { navigate } = useNavigation()
-  const spec = useSelector(selectCurrentSpec)
-  const specs = useSelector(selectSpecs)
-  const currentSpecKey = spec.key
-  const match = useRouteMatch<{ l: string; r: string }>(`/:l/${diffPath}/:r?`)
-  const l = validateParam(specs, match?.params.l)
-  const r = validateParam(specs, match?.params.r)
+  const adaptor = getApixAdaptor();
+  const { navigate } = useNavigation();
+  const spec = useSelector(selectCurrentSpec);
+  const specs = useSelector(selectSpecs);
+  const currentSpecKey = spec.key;
+  const match = useRouteMatch<{ l: string; r: string }>(`/:l/${diffPath}/:r?`);
+  const l = validateParam(specs, match?.params.l);
+  const r = validateParam(specs, match?.params.r);
 
   const options = Object.entries(specs).map(([key, spec]) => ({
     value: key,
     label: `${key} (${spec.status})`,
-  }))
+  }));
 
-  const [leftKey, setLeftKey] = useState<string>(l || currentSpecKey)
-  const [rightKey, setRightKey] = useState<string>(r || '')
-  const [leftApi, setLeftApi] = useState<ApiModel>(specs[leftKey].api!)
+  const [leftKey, setLeftKey] = useState<string>(l || currentSpecKey);
+  const [rightKey, setRightKey] = useState<string>(r || '');
+  const [leftApi, setLeftApi] = useState<ApiModel>(specs[leftKey].api!);
   const [rightApi, setRightApi] = useState<ApiModel>(() =>
     rightKey ? specs[rightKey].api! : specs[leftKey].api!
-  )
-  const [toggles, setToggles] = useState<string[]>(standardDiffToggles)
+  );
+  const [toggles, setToggles] = useState<string[]>(standardDiffToggles);
 
   useEffect(() => {
     if (r !== rightKey) {
-      setRightKey(r)
+      setRightKey(r);
     }
-  }, [r, rightKey])
+  }, [r, rightKey]);
 
   useEffect(() => {
     if (l !== leftKey) {
-      setLeftKey(l)
+      setLeftKey(l);
     }
-  }, [l, leftKey])
+  }, [l, leftKey]);
 
   useEffect(() => {
-    toggleNavigation(false)
-  }, [])
+    toggleNavigation(false);
+  }, []);
 
-  const [delta, setDelta] = useState<DiffRow[]>([])
+  const [delta, setDelta] = useState<DiffRow[]>([]);
 
   const handleLeftChange = (newLeft: string) => {
-    navigate(`/${newLeft}/${diffPath}/${rightKey}`)
-  }
+    navigate(`/${newLeft}/${diffPath}/${rightKey}`);
+  };
   const handleRightChange = (newRight: string) => {
-    navigate(`/${leftKey}/${diffPath}/${newRight}`)
-  }
+    navigate(`/${leftKey}/${diffPath}/${newRight}`);
+  };
 
   const handleSwitch = () => {
-    navigate(`/${rightKey}/${diffPath}/${leftKey}`)
-  }
+    navigate(`/${rightKey}/${diffPath}/${leftKey}`);
+  };
 
   useEffect(() => {
-    adaptor.fetchSpec(specs[leftKey]).then((spec) => setLeftApi(spec.api!))
-  }, [leftKey])
+    adaptor.fetchSpec(specs[leftKey]).then((spec) => setLeftApi(spec.api!));
+  }, [leftKey]);
 
   useEffect(() => {
     if (rightKey in specs) {
-      adaptor.fetchSpec(specs[rightKey]).then((spec) => setRightApi(spec.api!))
+      adaptor.fetchSpec(specs[rightKey]).then((spec) => setRightApi(spec.api!));
     }
-  }, [rightKey])
+  }, [rightKey]);
 
   useEffect(() => {
     if (leftApi && rightApi) {
-      setDelta([...diffSpecs(leftApi, rightApi, toggles)])
+      setDelta([...diffSpecs(leftApi, rightApi, toggles)]);
     }
-  }, [leftApi, rightApi, toggles])
+  }, [leftApi, rightApi, toggles]);
 
   const handleTogglesChange = (values?: string[]) => {
-    const newToggles = values || []
-    setToggles(newToggles)
-  }
+    const newToggles = values || [];
+    setToggles(newToggles);
+  };
 
   return (
     <ApixSection>
@@ -212,5 +212,5 @@ export const DiffScene: FC<DiffSceneProps> = ({ toggleNavigation }) => {
         rightSpec={rightApi}
       />
     </ApixSection>
-  )
-}
+  );
+};

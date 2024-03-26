@@ -25,24 +25,24 @@
  */
 
 export interface CodeDisplayProps {
-  code: string
-  language?: string
-  pattern?: string
-  transparent?: boolean
-  inline?: boolean
-  lineNumbers?: boolean
+  code: string;
+  language?: string;
+  pattern?: string;
+  transparent?: boolean;
+  inline?: boolean;
+  lineNumbers?: boolean;
 }
 
 export type TokenOutputProps = {
-  key?: React.Key
-  style?: any
-  className: string
-  children: string
-  [otherProp: string]: any
-}
+  key?: React.Key;
+  style?: any;
+  className: string;
+  children: string;
+  [otherProp: string]: any;
+};
 
 export interface LineItemProps {
-  index: number
-  tokenProps: TokenOutputProps
-  pattern: string
+  index: number;
+  tokenProps: TokenOutputProps;
+  pattern: string;
 }

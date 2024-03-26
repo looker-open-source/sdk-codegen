@@ -24,14 +24,14 @@
 
  */
 
-export * from './Hackathons'
-export * from './Hacker'
-export * from './Registrations'
-export * from './Projects'
-export * from './SheetData'
-export * from './Technologies'
-export * from './TeamMembers'
-export * from './Judgings'
-export * from './Users'
-export * from './sheetUtils'
-export * from './SheetRow'
+export * from './Hackathons';
+export * from './Hacker';
+export * from './Registrations';
+export * from './Projects';
+export * from './SheetData';
+export * from './Technologies';
+export * from './TeamMembers';
+export * from './Judgings';
+export * from './Users';
+export * from './sheetUtils';
+export * from './SheetRow';

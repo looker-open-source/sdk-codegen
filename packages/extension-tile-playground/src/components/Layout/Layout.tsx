@@ -23,13 +23,13 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import type { ReactNode } from 'react'
-import { Flex, Box2 } from '@looker/components'
+import React from 'react';
+import type { ReactNode } from 'react';
+import { Box2, Flex } from '@looker/components';
 
 export interface LayoutProps {
-  children: ReactNode
-  right: ReactNode
+  children: ReactNode;
+  right: ReactNode;
 }
 
 export const Layout: React.FC<LayoutProps> = ({ children, right }) => {
@@ -40,5 +40,5 @@ export const Layout: React.FC<LayoutProps> = ({ children, right }) => {
       </Box2>
       <Box2>{right}</Box2>
     </Flex>
-  )
-}
+  );
+};

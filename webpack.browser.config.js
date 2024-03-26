@@ -23,10 +23,10 @@
  SOFTWARE.
 
  */
-const webpack = require('webpack')
+const webpack = require('webpack');
 
 const BundleAnalyzerPlugin =
-  require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+  require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = function () {
   return {
@@ -41,5 +41,5 @@ module.exports = function () {
       }),
     ],
     devtool: 'source-map',
-  }
-}
+  };
+};

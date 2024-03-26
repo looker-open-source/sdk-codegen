@@ -23,12 +23,12 @@
  SOFTWARE.
 
  */
-import type { RootState } from '../store'
+import type { RootState } from '../store';
 
-const selectLodeState = (state: RootState) => state.lodes
+const selectLodeState = (state: RootState) => state.lodes;
 
 export const selectExamplesLode = (state: RootState) =>
-  selectLodeState(state).examples
+  selectLodeState(state).examples;
 
 export const selectDeclarationsLode = (state: RootState) =>
-  selectLodeState(state).declarations
+  selectLodeState(state).declarations;

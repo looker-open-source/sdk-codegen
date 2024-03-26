@@ -23,28 +23,28 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { renderWithTheme } from '@looker/components-test-utils'
-import { screen, fireEvent, waitFor } from '@testing-library/react'
+import React from 'react';
+import { renderWithTheme } from '@looker/components-test-utils';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 
-import { api } from '../../test-data'
-import { DocRateLimited } from './DocRateLimited'
+import { api } from '../../test-data';
+import { DocRateLimited } from './DocRateLimited';
 
 describe('DocRateLimited', () => {
-  const rateLimitedMethod = api.methods.test_connection
+  const rateLimitedMethod = api.methods.test_connection;
   test('it renders', () => {
-    renderWithTheme(<DocRateLimited method={rateLimitedMethod} />)
-    expect(screen.getByText('rate_limited')).toBeInTheDocument()
-  })
+    renderWithTheme(<DocRateLimited method={rateLimitedMethod} />);
+    expect(screen.getByText('rate_limited')).toBeInTheDocument();
+  });
 
   test('it displays a tooltip with the right information on hover', async () => {
-    renderWithTheme(<DocRateLimited method={rateLimitedMethod} />)
-    const badge = screen.getByText('rate_limited')
-    fireEvent.mouseOver(badge)
+    renderWithTheme(<DocRateLimited method={rateLimitedMethod} />);
+    const badge = screen.getByText('rate_limited');
+    fireEvent.mouseOver(badge);
     await waitFor(() => {
       expect(screen.getByRole('tooltip')).toHaveTextContent(
         'This endpoint is rate limited.'
-      )
-    })
-  })
-})
+      );
+    });
+  });
+});

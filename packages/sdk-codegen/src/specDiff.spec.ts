@@ -24,61 +24,61 @@
 
  */
 
-import { readFileSync } from 'fs'
-import cloneDeep from 'lodash/cloneDeep'
-import pick from 'lodash/pick'
-import type { OperationObject } from 'openapi3-ts'
+import { readFileSync } from 'fs';
+import cloneDeep from 'lodash/cloneDeep';
+import pick from 'lodash/pick';
+import type { OperationObject } from 'openapi3-ts';
 
-import type { DiffRow } from './specDiff'
+import type { DiffRow } from './specDiff';
 import {
   compareParams,
   compareSpecs,
   compareTypes,
   includeDiffs,
   startCount,
-} from './specDiff'
-import { rootFile, TestConfig } from './testUtils'
-import type { PropertyList, IApiModel, IMethod } from './sdkModels'
-import { Type, Method, Parameter, ApiModel } from './sdkModels'
+} from './specDiff';
+import { TestConfig, rootFile } from './testUtils';
+import type { IApiModel, IMethod, PropertyList } from './sdkModels';
+import { ApiModel, Method, Parameter, Type } from './sdkModels';
 
-const config = TestConfig()
-const apiTestModel = config.apiTestModel
+const config = TestConfig();
+const apiTestModel = config.apiTestModel;
 
 /**
  * Returns an array containing the key and the value of the first enumerable object property
  * @param props A key/value collection of type properties
  */
 const firstProperty = (props: PropertyList) =>
-  cloneDeep(Object.entries(props)[0])
+  cloneDeep(Object.entries(props)[0]);
 
 /**
  * Changes the name and inverts the required property of the given type
  * @param type
  */
 const changeType = (type: Type) => {
-  const result = new Type(type.schema, type.name)
+  const result = new Type(type.schema, type.name);
   Object.entries(type.properties).forEach(([propKey, propVal]) => {
-    result.properties[propKey] = propVal
-  })
-  const [name, value] = firstProperty(result.properties)
-  value.required = !value.required
-  result.properties[name] = value
-  return result
-}
+    result.properties[propKey] = propVal;
+  });
+  const [name, value] = firstProperty(result.properties);
+  value.required = !value.required;
+  result.properties[name] = value;
+  return result;
+};
 
 /**
  * Inverts the required property for the first param of the given method
  * @param method
  */
 const changeParams = (method: Method) => {
-  const params = cloneDeep(method.params)
-  const changedParams = []
+  const params = cloneDeep(method.params);
+  const changedParams = [];
   params.forEach((param) => {
-    changedParams.push(new Parameter(param, param.type))
-  })
-  params[0].required = !params[0].required
-  return params
-}
+    changedParams.push(new Parameter(param, param.type));
+  });
+  params[0].required = !params[0].required;
+  return params;
+};
 
 /**
  * Returns a copy of the given method with changes to the first param and first
@@ -86,7 +86,7 @@ const changeParams = (method: Method) => {
  * @param method
  */
 export const changeMethod = (method: Method) => {
-  const params = changeParams(method)
+  const params = changeParams(method);
 
   const result = new Method(
     apiTestModel,
@@ -95,92 +95,92 @@ export const changeMethod = (method: Method) => {
     method.schema as OperationObject,
     params,
     method.responses
-  )
-  result.type = changeType(result.type as Type)
-  return result
-}
+  );
+  result.type = changeType(result.type as Type);
+  return result;
+};
 
 describe('spec differ', () => {
   describe('compareTypes', () => {
-    const lType = apiTestModel.types.Dashboard
+    const lType = apiTestModel.types.Dashboard;
 
     it('should return undefined if types are identical', () => {
-      const count = startCount()
-      const actual = compareTypes(lType, lType, count)
-      expect(actual).toBeUndefined()
-      expect(count).toEqual(startCount())
-    })
+      const count = startCount();
+      const actual = compareTypes(lType, lType, count);
+      expect(actual).toBeUndefined();
+      expect(count).toEqual(startCount());
+    });
 
     it('should return an object containing all non matching entries', () => {
-      const [key, lProp] = firstProperty(lType.properties)
-      const rType = changeType(lType as Type)
-      const count = startCount()
-      const actual = compareTypes(lType, rType, count)
-      expect(actual).toBeDefined()
+      const [key, lProp] = firstProperty(lType.properties);
+      const rType = changeType(lType as Type);
+      const count = startCount();
+      const actual: any = compareTypes(lType, rType, count);
+      expect(actual).toBeDefined();
       if (actual) {
-        expect(actual[key]).toBeDefined()
-        expect(actual[key].lhs).toEqual(lProp.summary())
+        expect(actual[key]).toBeDefined();
+        expect(actual[key].lhs).toEqual(lProp.summary());
         expect(actual[key].rhs).toEqual(
           firstProperty(rType.properties)[1].summary()
-        )
+        );
         expect(count).toEqual({
           added: 0,
           changed: 1,
           removed: 0,
-        })
+        });
       }
-    })
-  })
+    });
+  });
 
   describe('compareParams', () => {
-    const lMethod = apiTestModel.methods.create_look
+    const lMethod = apiTestModel.methods.create_look;
 
     it('should return undefined if methods are identical', () => {
-      const count = startCount()
-      const actual = compareParams(lMethod, lMethod, count)
-      expect(actual).toBeUndefined()
-      expect(count).toEqual(startCount())
-    })
+      const count = startCount();
+      const actual = compareParams(lMethod, lMethod, count);
+      expect(actual).toBeUndefined();
+      expect(count).toEqual(startCount());
+    });
 
     it('should return an object containing all non matching entries', () => {
-      const count = startCount()
-      const rMethod = changeMethod(lMethod as Method)
-      const actual = compareParams(lMethod, rMethod, count)
-      expect(actual).toBeDefined()
+      const count = startCount();
+      const rMethod = changeMethod(lMethod as Method);
+      const actual = compareParams(lMethod, rMethod, count);
+      expect(actual).toBeDefined();
       if (actual) {
-        expect(actual.lhs).toEqual(lMethod.signature())
-        expect(actual.rhs).toEqual(rMethod.signature())
+        expect(actual.lhs).toEqual(lMethod.signature());
+        expect(actual.rhs).toEqual(rMethod.signature());
         expect(count).toEqual({
           added: 0,
           changed: 1,
           removed: 0,
-        })
+        });
       }
-    })
-  })
+    });
+  });
 
   describe('compareSpecs', () => {
-    let lSpec: IApiModel
-    let rSpec: IApiModel
+    let lSpec: IApiModel;
+    let rSpec: IApiModel;
     beforeEach(() => {
-      lSpec = cloneDeep(apiTestModel)
-      rSpec = cloneDeep(apiTestModel)
-    })
+      lSpec = cloneDeep(apiTestModel);
+      rSpec = cloneDeep(apiTestModel);
+    });
 
     it('should compare two identical specs', () => {
-      const actual = compareSpecs(lSpec, lSpec)
-      expect(actual).toBeDefined()
-      expect(actual).toHaveLength(0)
-    })
+      const actual = compareSpecs(lSpec, lSpec);
+      expect(actual).toBeDefined();
+      expect(actual).toHaveLength(0);
+    });
 
     it('should compare two specs with no overlap', () => {
-      const lMethod = lSpec.methods.create_look
-      const rMethod = rSpec.methods.create_query
-      lSpec.methods = { create_look: lMethod }
-      rSpec.methods = { create_query: rMethod }
-      const actual = compareSpecs(lSpec, rSpec)
-      expect(actual).toBeDefined()
-      expect(actual).toHaveLength(2)
+      const lMethod = lSpec.methods.create_look;
+      const rMethod = rSpec.methods.create_query;
+      lSpec.methods = { create_look: lMethod };
+      rSpec.methods = { create_query: rMethod };
+      const actual = compareSpecs(lSpec, rSpec);
+      expect(actual).toBeDefined();
+      expect(actual).toHaveLength(2);
       // TODO get this working again?
       expect(actual).toEqual(
         expect.arrayContaining([
@@ -215,66 +215,66 @@ describe('spec differ', () => {
             typeDiff: '',
           },
         ])
-      )
-    })
+      );
+    });
 
     it.skip('should not overcount', () => {
       const spec31 = ApiModel.fromString(
         readFileSync(rootFile('spec/Looker.3.1.oas.json'), 'utf-8')
-      )
+      );
       const spec40 = ApiModel.fromString(
         readFileSync(rootFile('spec/Looker.4.0.oas.json'), 'utf-8')
-      )
-      const lMethod = spec31.methods.create_look
-      expect(lMethod.status).toEqual('stable')
-      const rMethod = spec40.methods.create_look
-      expect(rMethod.status).toEqual('beta')
-      spec31.methods = { create_look: lMethod }
-      spec40.methods = { create_look: rMethod }
-      const actual = compareSpecs(spec31, spec40)
-      expect(actual).toBeDefined()
-      expect(actual).toHaveLength(1)
+      );
+      const lMethod = spec31.methods.create_look;
+      expect(lMethod.status).toEqual('stable');
+      const rMethod = spec40.methods.create_look;
+      expect(rMethod.status).toEqual('beta');
+      spec31.methods = { create_look: lMethod };
+      spec40.methods = { create_look: rMethod };
+      const actual = compareSpecs(spec31, spec40);
+      expect(actual).toBeDefined();
+      expect(actual).toHaveLength(1);
       expect(actual[0].diffCount).toEqual({
         added: 0,
         changed: 9,
         removed: 3,
-      })
-    })
+      });
+    });
 
     it.skip('should count changes and additions', () => {
       const spec31 = ApiModel.fromString(
         readFileSync(rootFile('spec/Looker.3.1.oas.json'), 'utf-8')
-      )
+      );
       const spec40 = ApiModel.fromString(
         readFileSync(rootFile('spec/Looker.4.0.oas.json'), 'utf-8')
-      )
-      const lMethod = spec31.methods.search_dashboards
-      expect(lMethod.status).toEqual('stable')
-      const rMethod = spec40.methods.search_dashboards
-      expect(rMethod.status).toEqual('beta')
-      spec31.methods = { search_dashboards: lMethod }
-      spec40.methods = { search_dashboards: rMethod }
-      const actual = compareSpecs(spec31, spec40)
-      expect(actual).toBeDefined()
-      expect(actual).toHaveLength(1)
+      );
+      const lMethod = spec31.methods.search_dashboards;
+      expect(lMethod.status).toEqual('stable');
+      const rMethod = spec40.methods.search_dashboards;
+      expect(rMethod.status).toEqual('beta');
+      spec31.methods = { search_dashboards: lMethod };
+      spec40.methods = { search_dashboards: rMethod };
+      const actual = compareSpecs(spec31, spec40);
+      expect(actual).toBeDefined();
+      expect(actual).toHaveLength(1);
       expect(actual[0].diffCount).toEqual({
         added: 4,
         changed: 18,
         removed: 3,
-      })
-    })
+      });
+    });
 
     it('should work with internal matches', () => {
       // const match1 = lSpec.methods.create_look
-      const match2 = lSpec.methods.create_query
+      const match2 = lSpec.methods.create_query;
       lSpec.methods = pick(lSpec.methods, [
         'create_dashboard',
         'create_look',
         'create_query',
         'user',
-      ])
-      rSpec.methods = pick(rSpec.methods, ['create_look', 'create_query'])
-      rSpec.methods.create_query = changeMethod(match2 as Method)
+      ]);
+      rSpec.methods = pick(rSpec.methods, ['create_look', 'create_query']);
+      rSpec.methods.create_query = changeMethod(match2 as Method);
 
       // const expected = [
       //   {
@@ -294,29 +294,33 @@ describe('spec differ', () => {
       //     paramsDiff: expect.stringContaining('lhs'),
       //   },
       // ]
-      let actual = compareSpecs(lSpec, rSpec)
-      expect(actual).toHaveLength(3)
+      let actual = compareSpecs(lSpec, rSpec);
+      expect(actual).toHaveLength(3);
       // TODO correct this check
       // expect(actual).toEqual(expect.arrayContaining(expected))
 
       /** The left spec is now the shorter one */
-      actual = compareSpecs(rSpec, lSpec)
-      expect(actual).toHaveLength(3)
+      actual = compareSpecs(rSpec, lSpec);
+      expect(actual).toHaveLength(3);
       // TODO correct this check
       // expect(actual).toEqual(expect.arrayContaining(expected))
-    })
+    });
 
     it('should work with boundary matches', () => {
       // const match1 = lSpec.methods.create_dashboard
-      const match2 = lSpec.methods.user
+      const match2 = lSpec.methods.user;
       lSpec.methods = pick(lSpec.methods, [
         'create_dashboard',
         'create_look',
         'create_query',
         'user',
-      ])
-      rSpec.methods = pick(rSpec.methods, ['create_dashboard', 'group', 'user'])
-      rSpec.methods.user = changeMethod(match2 as Method)
+      ]);
+      rSpec.methods = pick(rSpec.methods, [
+        'create_dashboard',
+        'group',
+        'user',
+      ]);
+      rSpec.methods.user = changeMethod(match2 as Method);
 
       // const expected = [
       //   {
@@ -336,36 +340,36 @@ describe('spec differ', () => {
       //     paramsDiff: expect.stringContaining('lhs'),
       //   },
       // ]
-      let actual = compareSpecs(lSpec, rSpec)
-      expect(actual).toHaveLength(4)
+      let actual = compareSpecs(lSpec, rSpec);
+      expect(actual).toHaveLength(4);
       // TODO fix this check
       // expect(actual).toEqual(expect.arrayContaining(expected))
 
-      actual = compareSpecs(rSpec, lSpec)
-      expect(actual).toHaveLength(4)
+      actual = compareSpecs(rSpec, lSpec);
+      expect(actual).toHaveLength(4);
       // TODO fix this check
       // expect(actual).toEqual(expect.arrayContaining(expected))
-    })
+    });
 
     it('should compare with filter', () => {
-      const leftFile = rootFile('/spec/Looker.3.1.oas.json')
-      const lSpec = ApiModel.fromString(readFileSync(leftFile, 'utf-8'))
-      const rightFile = rootFile('/spec/Looker.4.0.oas.json')
-      const rSpec = ApiModel.fromString(readFileSync(rightFile, 'utf-8'))
+      const leftFile = rootFile('/spec/Looker.3.1.oas.json');
+      const lSpec = ApiModel.fromString(readFileSync(leftFile, 'utf-8'));
+      const rightFile = rootFile('/spec/Looker.4.0.oas.json');
+      const rSpec = ApiModel.fromString(readFileSync(rightFile, 'utf-8'));
 
       const betaCompare = (
         delta: DiffRow,
         lMethod?: IMethod,
         rMethod?: IMethod
-      ) => includeDiffs(delta, lMethod, rMethod) || lMethod?.status === 'beta'
+      ) => includeDiffs(delta, lMethod, rMethod) || lMethod?.status === 'beta';
 
-      const actual = compareSpecs(lSpec, rSpec, betaCompare)
-      expect(actual).toBeDefined()
+      const actual = compareSpecs(lSpec, rSpec, betaCompare);
+      expect(actual).toBeDefined();
       expect(actual.length).toBeGreaterThanOrEqual(
         Object.values(lSpec.methods).filter(
           (method) => method.status === 'beta'
         ).length
-      )
-    })
-  })
-})
+      );
+    });
+  });
+});

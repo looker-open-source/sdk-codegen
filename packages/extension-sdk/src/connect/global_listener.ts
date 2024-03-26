@@ -24,10 +24,10 @@
 
  */
 
-import { logError, logWarn } from '../util'
-import type { ExtensionHostApi, ExtensionSDK } from './types'
+import { logError, logWarn } from '../util';
+import type { ExtensionHostApi, ExtensionSDK } from './types';
 
-let _hostApi: ExtensionHostApi | undefined
+let _hostApi: ExtensionHostApi | undefined;
 
 const errorListener = (event: ErrorEvent) => {
   if (_hostApi) {
@@ -40,19 +40,19 @@ const errorListener = (event: ErrorEvent) => {
     // is ignored as it has already been reported.
     if (event.error) {
       if (!event.error._looker_reported) {
-        _hostApi.error(event)
-        event.error._looker_reported = true
+        _hostApi.error(event);
+        event.error._looker_reported = true;
       }
     } else {
-      _hostApi.error(event)
+      _hostApi.error(event);
     }
   } else {
     logError(
       'Extension has unhandled error. Reporting on console as Looker host api not initialized',
       event
-    )
+    );
   }
-}
+};
 
 /**
  * Listen for unload events and send message to host.
@@ -61,24 +61,24 @@ const errorListener = (event: ErrorEvent) => {
  */
 const beforeUnloadListener = () => {
   if (_hostApi) {
-    _hostApi.unloaded()
-    logWarn('Extension is being unloaded')
+    _hostApi.unloaded();
+    logWarn('Extension is being unloaded');
   }
-}
+};
 
 const setupGlobalListeners = () => {
-  window.addEventListener('error', errorListener)
-  window.addEventListener('beforeunload', beforeUnloadListener)
-}
+  window.addEventListener('error', errorListener);
+  window.addEventListener('beforeunload', beforeUnloadListener);
+};
 
-setupGlobalListeners()
+setupGlobalListeners();
 
 /**
  * Register the api with the error listener.
  */
 export const registerHostApi = (hostApi: ExtensionHostApi) => {
-  _hostApi = hostApi
-}
+  _hostApi = hostApi;
+};
 
 /**
  * Static reference to extension SDK.
@@ -86,7 +86,7 @@ export const registerHostApi = (hostApi: ExtensionHostApi) => {
  */
 export const getExtensionSDK = (): ExtensionSDK => {
   if (_hostApi && _hostApi.lookerHostData) {
-    return _hostApi
+    return _hostApi;
   }
-  throw new Error('ExtensionSDK not initialized')
-}
+  throw new Error('ExtensionSDK not initialized');
+};

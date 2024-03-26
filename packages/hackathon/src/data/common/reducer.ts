@@ -24,20 +24,20 @@
 
  */
 
-import type { CommonAction } from './actions'
-import { Actions } from './actions'
+import type { CommonAction } from './actions';
+import { Actions } from './actions';
 
 export interface MessageDetail {
-  messageText: string
-  intent: 'critical' | 'inform' | 'positive' | 'warn'
+  messageText: string;
+  intent: 'critical' | 'inform' | 'positive' | 'warn';
 }
 
 export interface CommonState {
-  message?: MessageDetail
-  loading: boolean
+  message?: MessageDetail;
+  loading: boolean;
 }
 
-const defaultState: Readonly<CommonState> = Object.freeze({ loading: false })
+const defaultState: Readonly<CommonState> = Object.freeze({ loading: false });
 
 export const commonReducer = (
   state: CommonState = defaultState,
@@ -50,31 +50,31 @@ export const commonReducer = (
         message: { messageText: action.payload.message, intent: 'critical' },
         // TODO: Remove. Error does not necessarily means loading is finished.
         loading: false,
-      }
+      };
     case Actions.MESSAGE:
       return {
         ...state,
         message: action.payload,
         // TODO: Remove. Message does not necessarily means loading is finished.
         loading: false,
-      }
+      };
     case Actions.MESSAGE_CLEAR:
       return {
         ...state,
         message: undefined,
-      }
+      };
     case Actions.BEGIN_LOADING:
       return {
         ...state,
         message: undefined,
         loading: true,
-      }
+      };
     case Actions.END_LOADING:
       return {
         ...state,
         loading: false,
-      }
+      };
     default:
-      return state
+      return state;
   }
-}
+};

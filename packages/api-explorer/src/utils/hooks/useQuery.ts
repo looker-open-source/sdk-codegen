@@ -23,14 +23,14 @@
  SOFTWARE.
 
  */
-import { useMemo } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
 
 /**
  * Hook for retrieving query params
  */
 export const useQuery = () => {
-  const { search } = useLocation()
+  const { search } = useLocation();
 
-  return useMemo(() => new URLSearchParams(search), [search])
-}
+  return useMemo(() => new URLSearchParams(search), [search]);
+};

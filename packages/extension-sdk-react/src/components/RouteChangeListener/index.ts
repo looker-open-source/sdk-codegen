@@ -24,5 +24,5 @@
 
  */
 
-export * from './types'
-export * from './RouteChangeListener'
+export * from './types';
+export * from './RouteChangeListener';

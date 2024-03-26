@@ -24,5 +24,5 @@
 
  */
 
-export { RequestForm } from './RequestForm'
-export { validateBody } from './formUtils'
+export { RequestForm } from './RequestForm';
+export { validateBody } from './formUtils';

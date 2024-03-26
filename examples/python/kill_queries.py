@@ -9,11 +9,10 @@ Example:
 
 Authors: Lan
 
-Last modified: July 18, 2021
+Last modified: Feb 27 2024
 """
 
 import looker_sdk
-from looker_sdk import models40
 sdk = looker_sdk.init40(config_file='../looker.ini', section='Looker')
 
 

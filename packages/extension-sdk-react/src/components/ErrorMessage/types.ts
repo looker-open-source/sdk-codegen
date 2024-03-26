@@ -25,5 +25,5 @@
  */
 
 export interface ErrorMessageProps {
-  errorMessage: string
+  errorMessage: string;
 }

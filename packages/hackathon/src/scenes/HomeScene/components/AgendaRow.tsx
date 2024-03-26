@@ -24,28 +24,28 @@
 
  */
 
-import type { FC } from 'react'
-import React from 'react'
-import { TableRow, TableDataCell, Heading, Span } from '@looker/components'
-import { ExtMarkdown } from '@looker/extension-utils'
-import { getExtensionSDK } from '@looker/extension-sdk'
-import type { IHackerProps } from '../../../models'
-import { gapDate, gapDiff, gapTime, zoneDate } from './agendaUtils'
-import type { AgendaTime, IAgendaItem } from './agendaUtils'
+import type { FC } from 'react';
+import React from 'react';
+import { Heading, Span, TableDataCell, TableRow } from '@looker/components';
+import { ExtMarkdown } from '@looker/extension-utils';
+import { getExtensionSDK } from '@looker/extension-sdk';
+import type { IHackerProps } from '../../../models';
+import { gapDate, gapDiff, gapTime, zoneDate } from './agendaUtils';
+import type { AgendaTime, IAgendaItem } from './agendaUtils';
 
 interface AgendaCardProps {
-  item: IAgendaItem
-  hacker: IHackerProps
-  color: string
+  item: IAgendaItem;
+  hacker: IHackerProps;
+  color: string;
 }
 
 export const AgendaRow: FC<AgendaCardProps> = ({ item, hacker, color }) => {
   const onClick = (_: string, href: string) =>
-    getExtensionSDK().openBrowserWindow(href)
+    getExtensionSDK().openBrowserWindow(href);
 
-  const current: AgendaTime = zoneDate(new Date(), hacker.timezone)
-  const start = zoneDate(item.start, hacker.timezone)
-  const stop = zoneDate(item.stop!, hacker.timezone)
+  const current: AgendaTime = zoneDate(new Date(), hacker.timezone);
+  const start = zoneDate(item.start, hacker.timezone);
+  const stop = zoneDate(item.stop!, hacker.timezone);
   return (
     <TableRow>
       <TableDataCell width="20%">
@@ -65,5 +65,5 @@ export const AgendaRow: FC<AgendaCardProps> = ({ item, hacker, color }) => {
         </Span>
       </TableDataCell>
     </TableRow>
-  )
-}
+  );
+};

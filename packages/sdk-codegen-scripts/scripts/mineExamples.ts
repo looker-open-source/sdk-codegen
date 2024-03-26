@@ -24,22 +24,22 @@
 
  */
 
-import * as path from 'path'
-import * as fs from 'fs'
-import { ExampleMiner } from '../src/exampleMiner'
-;(() => {
-  const args = process.argv.slice(2)
-  const total = args.length
-  const root = path.join(__dirname, '/../../../')
-  const sourcePath = total < 1 ? root : path.join(root, args[0])
-  const indexFile = path.join(sourcePath, '/examplesIndex.json')
-  console.log(`Mining examples from ${sourcePath} ...`)
-  const miner = new ExampleMiner(sourcePath)
-  const result = miner.execute()
+import * as path from 'path';
+import * as fs from 'fs';
+import { ExampleMiner } from '../src/exampleMiner';
+(() => {
+  const args = process.argv.slice(2);
+  const total = args.length;
+  const root = path.join(__dirname, '/../../../');
+  const sourcePath = total < 1 ? root : path.join(root, args[0]);
+  const indexFile = path.join(sourcePath, '/examplesIndex.json');
+  console.log(`Mining examples from ${sourcePath} ...`);
+  const miner = new ExampleMiner(sourcePath);
+  const result = miner.execute();
   fs.writeFileSync(indexFile, JSON.stringify(result, null, 2), {
     encoding: 'utf-8',
-  })
+  });
   console.log(
     `${Object.entries(result.nuggets).length} nuggets written to ${indexFile}`
-  )
-})()
+  );
+})();

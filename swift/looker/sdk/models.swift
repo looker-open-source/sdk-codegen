@@ -25,7 +25,7 @@
  */
 
 /**
- * 332 API models: 249 Spec, 0 Request, 61 Write, 22 Enum
+ * 339 API models: 256 Spec, 0 Request, 61 Write, 22 Enum
  */
 
 
@@ -8304,7 +8304,7 @@ public struct EmbedCookielessSessionAcquireResponse: SDKModel {
 
     private var _session_reference_token_ttl: AnyInt?
     /**
-     * Session reference token time to live in seconds. Note that this is the same as actual session.
+     * Session reference token time to live in seconds. Note that this is the same as actual embed session. The session is expired when the value is set to zero. It is important to note that the generate token endpoint does NOT return an error when the embed session has expired. If an embedding application needs to monitor expiration of embed sessions, check this property for a value of zero.
      */
     public var session_reference_token_ttl: Int64? {
         get { _session_reference_token_ttl?.value }
@@ -10384,7 +10384,7 @@ public struct Integration: SDKModel {
     public var params: [IntegrationParam]?
 
     /**
-     * A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (read-only)
+     * A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "json_bi", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (read-only)
      */
     public var supported_formats: [SupportedFormats]?
 
@@ -10823,6 +10823,344 @@ public struct InternalHelpResourcesContent: SDKModel {
  */
 public enum InvestigativeContentType: String, Codable {
     case dashboard = "dashboard"
+}
+
+public struct JsonBi: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case big_query_metadata
+        case fields
+        case pivots
+        case has_subtotals
+        case has_totals
+        case _columns_truncated = "columns_truncated"
+        case _filter_expression = "filter_expression"
+        case filters
+        case _sql = "sql"
+        case _data = "data"
+    }
+    public var big_query_metadata: JsonBiBigQueryMetadata
+
+    public var fields: JsonBiFields
+
+    /**
+     * Pivots (read-only)
+     */
+    public var pivots: [JsonBiPivots]
+
+    /**
+     * If the query has subtotals (read-only)
+     */
+    public var has_subtotals: Bool
+
+    /**
+     * If the query has totals (read-only)
+     */
+    public var has_totals: Bool
+
+    private var _columns_truncated: AnyString
+    /**
+     * If the query results hit the maximum column limit and additional columns were truncated (read-only)
+     */
+    public var columns_truncated: String {
+        get { _columns_truncated.value }
+        set { _columns_truncated = AnyString.init(newValue) }
+    }
+
+    private var _filter_expression: AnyString
+    /**
+     * Filter expression applied to the query results (read-only)
+     */
+    public var filter_expression: String {
+        get { _filter_expression.value }
+        set { _filter_expression = AnyString.init(newValue) }
+    }
+
+    /**
+     * Filters applied to the query results (read-only)
+     */
+    public var filters: StringDictionary<AnyCodable>
+
+    private var _sql: AnyString
+    /**
+     * Raw sql query. Null if user does not have permission to view sql (read-only)
+     */
+    public var sql: String {
+        get { _sql.value }
+        set { _sql = AnyString.init(newValue) }
+    }
+
+    private var _data: [AnyString]
+    /**
+     * Json query results (read-only)
+     */
+    public var data: [String] {
+        get { _data.map { $0.value } }
+        set { _data = newValue.map { AnyString.init($0) } }
+    }
+
+    public init(big_query_metadata: JsonBiBigQueryMetadata, fields: JsonBiFields, pivots: [JsonBiPivots], has_subtotals: Bool, has_totals: Bool, columns_truncated: String, filter_expression: String, filters: StringDictionary<AnyCodable>, sql: String, data: [String]) {
+        self.big_query_metadata = big_query_metadata
+        self.fields = fields
+        self.pivots = pivots
+        self.has_subtotals = has_subtotals
+        self.has_totals = has_totals
+        self._columns_truncated = AnyString.init(columns_truncated)
+        self._filter_expression = AnyString.init(filter_expression)
+        self.filters = filters
+        self._sql = AnyString.init(sql)
+        self._data = data.map { AnyString.init($0) }
+    }
+
+    public init(_ big_query_metadata: JsonBiBigQueryMetadata, _ fields: JsonBiFields, _ pivots: [JsonBiPivots], _ has_subtotals: Bool, _ has_totals: Bool, _ columns_truncated: String, _ filter_expression: String, _ filters: StringDictionary<AnyCodable>, _ sql: String, _ data: [String]) {
+        self.init(big_query_metadata: big_query_metadata, fields: fields, pivots: pivots, has_subtotals: has_subtotals, has_totals: has_totals, columns_truncated: columns_truncated, filter_expression: filter_expression, filters: filters, sql: sql, data: data)
+    }
+
+}
+
+public struct JsonBiBigQueryMetadata: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _total_bytes_processed = "total_bytes_processed"
+        case backend_cache_hit
+    }
+    private var _total_bytes_processed: AnyInt
+    /**
+     * Total bytes processed by the BigQuery job (read-only)
+     */
+    public var total_bytes_processed: Int64 {
+        get { _total_bytes_processed.value }
+        set { _total_bytes_processed = AnyInt.init(newValue) }
+    }
+
+    /**
+     * Return whether or not query results were served from the BigQuery cache. (read-only)
+     */
+    public var backend_cache_hit: Bool
+
+    public init(total_bytes_processed: Int64, backend_cache_hit: Bool) {
+        self._total_bytes_processed = AnyInt.init(total_bytes_processed)
+        self.backend_cache_hit = backend_cache_hit
+    }
+
+    public init(_ total_bytes_processed: Int64, _ backend_cache_hit: Bool) {
+        self.init(total_bytes_processed: total_bytes_processed, backend_cache_hit: backend_cache_hit)
+    }
+
+}
+
+public struct JsonBiField: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _sql = "sql"
+        case _view = "view"
+        case _dimension_group = "dimension_group"
+        case _category = "category"
+        case _field_group_label = "field_group_label"
+        case _name = "name"
+        case _type = "type"
+        case _view_label = "view_label"
+        case _label = "label"
+        case _field_group_variant = "field_group_variant"
+        case hidden
+        case _description = "description"
+    }
+    private var _sql: AnyString
+    /**
+     * SQL expressions for the field (read-only)
+     */
+    public var sql: String {
+        get { _sql.value }
+        set { _sql = AnyString.init(newValue) }
+    }
+
+    private var _view: AnyString
+    /**
+     * Explore name (read-only)
+     */
+    public var view: String {
+        get { _view.value }
+        set { _view = AnyString.init(newValue) }
+    }
+
+    private var _dimension_group: AnyString
+    /**
+     * Which dimension group created this dimension (read-only)
+     */
+    public var dimension_group: String {
+        get { _dimension_group.value }
+        set { _dimension_group = AnyString.init(newValue) }
+    }
+
+    private var _category: AnyString
+    /**
+     * Dimension, Measure, etc. (read-only)
+     */
+    public var category: String {
+        get { _category.value }
+        set { _category = AnyString.init(newValue) }
+    }
+
+    private var _field_group_label: AnyString
+    /**
+     * Field Group Label (read-only)
+     */
+    public var field_group_label: String {
+        get { _field_group_label.value }
+        set { _field_group_label = AnyString.init(newValue) }
+    }
+
+    private var _name: AnyString
+    /**
+     * Field Name (read-only)
+     */
+    public var name: String {
+        get { _name.value }
+        set { _name = AnyString.init(newValue) }
+    }
+
+    private var _type: AnyString
+    /**
+     * Field Type (read-only)
+     */
+    public var type: String {
+        get { _type.value }
+        set { _type = AnyString.init(newValue) }
+    }
+
+    private var _view_label: AnyString
+    /**
+     * View Label (read-only)
+     */
+    public var view_label: String {
+        get { _view_label.value }
+        set { _view_label = AnyString.init(newValue) }
+    }
+
+    private var _label: AnyString
+    /**
+     * Field Label (read-only)
+     */
+    public var label: String {
+        get { _label.value }
+        set { _label = AnyString.init(newValue) }
+    }
+
+    private var _field_group_variant: AnyString
+    /**
+     * Field Group Variant (read-only)
+     */
+    public var field_group_variant: String {
+        get { _field_group_variant.value }
+        set { _field_group_variant = AnyString.init(newValue) }
+    }
+
+    /**
+     * If the field is marked as hidden in the Lookml (read-only)
+     */
+    public var hidden: Bool
+
+    private var _description: AnyString
+    /**
+     * Field Description (read-only)
+     */
+    public var description: String {
+        get { _description.value }
+        set { _description = AnyString.init(newValue) }
+    }
+
+    public init(sql: String, view: String, dimension_group: String, category: String, field_group_label: String, name: String, type: String, view_label: String, label: String, field_group_variant: String, hidden: Bool, description: String) {
+        self._sql = AnyString.init(sql)
+        self._view = AnyString.init(view)
+        self._dimension_group = AnyString.init(dimension_group)
+        self._category = AnyString.init(category)
+        self._field_group_label = AnyString.init(field_group_label)
+        self._name = AnyString.init(name)
+        self._type = AnyString.init(type)
+        self._view_label = AnyString.init(view_label)
+        self._label = AnyString.init(label)
+        self._field_group_variant = AnyString.init(field_group_variant)
+        self.hidden = hidden
+        self._description = AnyString.init(description)
+    }
+
+    public init(_ sql: String, _ view: String, _ dimension_group: String, _ category: String, _ field_group_label: String, _ name: String, _ type: String, _ view_label: String, _ label: String, _ field_group_variant: String, _ hidden: Bool, _ description: String) {
+        self.init(sql: sql, view: view, dimension_group: dimension_group, category: category, field_group_label: field_group_label, name: name, type: type, view_label: view_label, label: label, field_group_variant: field_group_variant, hidden: hidden, description: description)
+    }
+
+}
+
+public struct JsonBiFields: SDKModel {
+    /**
+     * Dimensions represent a column in a table, or a computed value based on some sort of column manipulation or combination (read-only)
+     */
+    public var dimensions: [JsonBiField]
+
+    /**
+     * Measures are similar to aggregate functions in SQL (for example, COUNT, SUM, AVG) and represent information about multiple rows (read-only)
+     */
+    public var measures: [JsonBiField]
+
+    /**
+     * Pivots (read-only)
+     */
+    public var pivots: [JsonBiField]
+
+    public init(dimensions: [JsonBiField], measures: [JsonBiField], pivots: [JsonBiField]) {
+        self.dimensions = dimensions
+        self.measures = measures
+        self.pivots = pivots
+    }
+
+    public init(_ dimensions: [JsonBiField], _ measures: [JsonBiField], _ pivots: [JsonBiField]) {
+        self.init(dimensions: dimensions, measures: measures, pivots: pivots)
+    }
+
+}
+
+public struct JsonBiPivots: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _key = "key"
+        case data
+        case sort_values
+        case is_total
+    }
+    private var _key: AnyString
+    /**
+     * Pivot Column Value (read-only)
+     */
+    public var key: String {
+        get { _key.value }
+        set { _key = AnyString.init(newValue) }
+    }
+
+    /**
+     * Pivot Data (read-only)
+     */
+    public var data: StringDictionary<AnyCodable>
+
+    /**
+     * Pivot Sort Values (read-only)
+     */
+    public var sort_values: StringDictionary<AnyCodable>
+
+    /**
+     * If the value is a total (read-only)
+     */
+    public var is_total: Bool
+
+    public init(key: String, data: StringDictionary<AnyCodable>, sort_values: StringDictionary<AnyCodable>, is_total: Bool) {
+        self._key = AnyString.init(key)
+        self.data = data
+        self.sort_values = sort_values
+        self.is_total = is_total
+    }
+
+    public init(_ key: String, _ data: StringDictionary<AnyCodable>, _ sort_values: StringDictionary<AnyCodable>, _ is_total: Bool) {
+        self.init(key: key, data: data, sort_values: sort_values, is_total: is_total)
+    }
+
 }
 
 public struct LDAPConfig: SDKModel {
@@ -12242,6 +12580,48 @@ public struct LookBasic: SDKModel {
 
 }
 
+public struct LookmlFieldLink: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _label = "label"
+        case _url = "url"
+        case _icon_url = "icon_url"
+    }
+    private var _label: AnyString?
+    /**
+     * The name of the link as it would appear to users. (read-only)
+     */
+    public var label: String? {
+        get { _label?.value }
+        set { _label = newValue.map(AnyString.init) }
+    }
+
+    private var _url: AnyString?
+    /**
+     * URL the link will go to. (read-only)
+     */
+    public var url: String? {
+        get { _url?.value }
+        set { _url = newValue.map(AnyString.init) }
+    }
+
+    private var _icon_url: AnyString?
+    /**
+     * A URL containing an image file to display with a link. (read-only)
+     */
+    public var icon_url: String? {
+        get { _icon_url?.value }
+        set { _icon_url = newValue.map(AnyString.init) }
+    }
+
+    public init(label: String? = nil, url: String? = nil, icon_url: String? = nil) {
+        self._label = label.map(AnyString.init)
+        self._url = url.map(AnyString.init)
+        self._icon_url = icon_url.map(AnyString.init)
+    }
+
+}
+
 public struct LookmlModel: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -12860,6 +13240,7 @@ public struct LookmlModelExploreField: SDKModel {
         case _default_filter_value = "default_filter_value"
         case _description = "description"
         case _dimension_group = "dimension_group"
+        case _drill_fields = "drill_fields"
         case enumerations
         case _error = "error"
         case _field_group_label = "field_group_label"
@@ -12867,6 +13248,7 @@ public struct LookmlModelExploreField: SDKModel {
         case fill_style
         case _fiscal_month_offset = "fiscal_month_offset"
         case has_allowed_values
+        case has_drills_metadata
         case hidden
         case is_filter
         case is_fiscal
@@ -12878,6 +13260,7 @@ public struct LookmlModelExploreField: SDKModel {
         case _label_from_parameter = "label_from_parameter"
         case _label_short = "label_short"
         case _lookml_link = "lookml_link"
+        case links
         case map_layer
         case measure
         case _name = "name"
@@ -12951,6 +13334,15 @@ public struct LookmlModelExploreField: SDKModel {
         set { _dimension_group = newValue.map(AnyString.init) }
     }
 
+    private var _drill_fields: [AnyString]?
+    /**
+     * Drill fields declared for this field in LookML or default drills for certain types. (read-only)
+     */
+    public var drill_fields: [String]? {
+        get { if let v = _drill_fields { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _drill_fields = v.map { AnyString.init($0) } } else { _drill_fields = nil } }
+    }
+
     /**
      * An array enumerating all the possible values that this field can contain. When null, there is no limit to the set of possible values this field can contain. (read-only)
      */
@@ -13001,6 +13393,11 @@ public struct LookmlModelExploreField: SDKModel {
      * Whether this field has a set of allowed_values specified in LookML. (read-only)
      */
     public var has_allowed_values: Bool?
+
+    /**
+     * Whether this field has links or drill fields defined. (read-only)
+     */
+    public var has_drills_metadata: Bool?
 
     /**
      * Whether this field should be hidden from the user interface. (read-only)
@@ -13069,6 +13466,11 @@ public struct LookmlModelExploreField: SDKModel {
         get { _lookml_link?.value }
         set { _lookml_link = newValue.map(AnyString.init) }
     }
+
+    /**
+     * Links associated with this field. (read-only)
+     */
+    public var links: [LookmlFieldLink]?
 
     public var map_layer: LookmlModelExploreFieldMapLayer?
 
@@ -13281,13 +13683,14 @@ public struct LookmlModelExploreField: SDKModel {
         set { _original_view = newValue.map(AnyString.init) }
     }
 
-    public init(align: Align? = nil, can_filter: Bool? = nil, category: Category? = nil, default_filter_value: String? = nil, description: String? = nil, dimension_group: String? = nil, enumerations: [LookmlModelExploreFieldEnumeration]? = nil, error: String? = nil, field_group_label: String? = nil, field_group_variant: String? = nil, fill_style: FillStyle? = nil, fiscal_month_offset: Int64? = nil, has_allowed_values: Bool? = nil, hidden: Bool? = nil, is_filter: Bool? = nil, is_fiscal: Bool? = nil, is_numeric: Bool? = nil, is_timeframe: Bool? = nil, can_time_filter: Bool? = nil, time_interval: LookmlModelExploreFieldTimeInterval? = nil, label: String? = nil, label_from_parameter: String? = nil, label_short: String? = nil, lookml_link: String? = nil, map_layer: LookmlModelExploreFieldMapLayer? = nil, measure: Bool? = nil, name: String? = nil, strict_value_format: Bool? = nil, parameter: Bool? = nil, permanent: Bool? = nil, primary_key: Bool? = nil, project_name: String? = nil, requires_refresh_on_sort: Bool? = nil, scope: String? = nil, sortable: Bool? = nil, source_file: String? = nil, source_file_path: String? = nil, sql: String? = nil, sql_case: [LookmlModelExploreFieldSqlCase]? = nil, filters: [LookmlModelExploreFieldMeasureFilters]? = nil, suggest_dimension: String? = nil, suggest_explore: String? = nil, suggestable: Bool? = nil, suggestions: [String]? = nil, tags: [String]? = nil, type: String? = nil, user_attribute_filter_types: [UserAttributeFilterTypes]? = nil, value_format: String? = nil, view: String? = nil, view_label: String? = nil, `dynamic`: Bool? = nil, week_start_day: WeekStartDay? = nil, times_used: Int64? = nil, original_view: String? = nil) {
+    public init(align: Align? = nil, can_filter: Bool? = nil, category: Category? = nil, default_filter_value: String? = nil, description: String? = nil, dimension_group: String? = nil, drill_fields: [String]? = nil, enumerations: [LookmlModelExploreFieldEnumeration]? = nil, error: String? = nil, field_group_label: String? = nil, field_group_variant: String? = nil, fill_style: FillStyle? = nil, fiscal_month_offset: Int64? = nil, has_allowed_values: Bool? = nil, has_drills_metadata: Bool? = nil, hidden: Bool? = nil, is_filter: Bool? = nil, is_fiscal: Bool? = nil, is_numeric: Bool? = nil, is_timeframe: Bool? = nil, can_time_filter: Bool? = nil, time_interval: LookmlModelExploreFieldTimeInterval? = nil, label: String? = nil, label_from_parameter: String? = nil, label_short: String? = nil, lookml_link: String? = nil, links: [LookmlFieldLink]? = nil, map_layer: LookmlModelExploreFieldMapLayer? = nil, measure: Bool? = nil, name: String? = nil, strict_value_format: Bool? = nil, parameter: Bool? = nil, permanent: Bool? = nil, primary_key: Bool? = nil, project_name: String? = nil, requires_refresh_on_sort: Bool? = nil, scope: String? = nil, sortable: Bool? = nil, source_file: String? = nil, source_file_path: String? = nil, sql: String? = nil, sql_case: [LookmlModelExploreFieldSqlCase]? = nil, filters: [LookmlModelExploreFieldMeasureFilters]? = nil, suggest_dimension: String? = nil, suggest_explore: String? = nil, suggestable: Bool? = nil, suggestions: [String]? = nil, tags: [String]? = nil, type: String? = nil, user_attribute_filter_types: [UserAttributeFilterTypes]? = nil, value_format: String? = nil, view: String? = nil, view_label: String? = nil, `dynamic`: Bool? = nil, week_start_day: WeekStartDay? = nil, times_used: Int64? = nil, original_view: String? = nil) {
         self.align = align
         self.can_filter = can_filter
         self.category = category
         self._default_filter_value = default_filter_value.map(AnyString.init)
         self._description = description.map(AnyString.init)
         self._dimension_group = dimension_group.map(AnyString.init)
+        if let v = drill_fields { _drill_fields = v.map { AnyString.init($0) } } else { _drill_fields = nil }
         self.enumerations = enumerations
         self._error = error.map(AnyString.init)
         self._field_group_label = field_group_label.map(AnyString.init)
@@ -13295,6 +13698,7 @@ public struct LookmlModelExploreField: SDKModel {
         self.fill_style = fill_style
         self._fiscal_month_offset = fiscal_month_offset.map(AnyInt.init)
         self.has_allowed_values = has_allowed_values
+        self.has_drills_metadata = has_drills_metadata
         self.hidden = hidden
         self.is_filter = is_filter
         self.is_fiscal = is_fiscal
@@ -13306,6 +13710,7 @@ public struct LookmlModelExploreField: SDKModel {
         self._label_from_parameter = label_from_parameter.map(AnyString.init)
         self._label_short = label_short.map(AnyString.init)
         self._lookml_link = lookml_link.map(AnyString.init)
+        self.links = links
         self.map_layer = map_layer
         self.measure = measure
         self._name = name.map(AnyString.init)
@@ -14898,6 +15303,7 @@ public struct MergeQuerySourceQuery: SDKModel {
         case merge_fields
         case _name = "name"
         case _query_id = "query_id"
+        case _query_slug = "query_slug"
     }
     /**
      * An array defining which fields of the source query are mapped onto fields of the merge query
@@ -14922,10 +15328,20 @@ public struct MergeQuerySourceQuery: SDKModel {
         set { _query_id = newValue.map(AnyString.init) }
     }
 
-    public init(merge_fields: [MergeFields]? = nil, name: String? = nil, query_id: String? = nil) {
+    private var _query_slug: AnyString?
+    /**
+     * Slug of the query to merge
+     */
+    public var query_slug: String? {
+        get { _query_slug?.value }
+        set { _query_slug = newValue.map(AnyString.init) }
+    }
+
+    public init(merge_fields: [MergeFields]? = nil, name: String? = nil, query_id: String? = nil, query_slug: String? = nil) {
         self.merge_fields = merge_fields
         self._name = name.map(AnyString.init)
         self._query_id = query_id.map(AnyString.init)
+        self._query_slug = query_slug.map(AnyString.init)
     }
 
 }
@@ -17166,6 +17582,107 @@ public struct Query: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, id: String? = nil, _ model: String, _ view: String, fields: [String]? = nil, pivots: [String]? = nil, fill_fields: [String]? = nil, filters: StringDictionary<AnyCodable>? = nil, filter_expression: String? = nil, sorts: [String]? = nil, limit: String? = nil, column_limit: String? = nil, total: Bool? = nil, row_total: String? = nil, subtotals: [String]? = nil, vis_config: StringDictionary<AnyCodable>? = nil, filter_config: StringDictionary<AnyCodable>? = nil, visible_ui_sections: String? = nil, slug: String? = nil, dynamic_fields: String? = nil, client_id: String? = nil, share_url: String? = nil, expanded_share_url: String? = nil, url: String? = nil, query_timezone: String? = nil, has_table_calculations: Bool? = nil) {
         self.init(can: can, id: id, model: model, view: view, fields: fields, pivots: pivots, fill_fields: fill_fields, filters: filters, filter_expression: filter_expression, sorts: sorts, limit: limit, column_limit: column_limit, total: total, row_total: row_total, subtotals: subtotals, vis_config: vis_config, filter_config: filter_config, visible_ui_sections: visible_ui_sections, slug: slug, dynamic_fields: dynamic_fields, client_id: client_id, share_url: share_url, expanded_share_url: expanded_share_url, url: url, query_timezone: query_timezone, has_table_calculations: has_table_calculations)
+    }
+
+}
+
+public struct QueryFormats: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case json_bi
+        case _json = "json"
+        case _json_detail = "json_detail"
+        case _csv = "csv"
+        case _txt = "txt"
+        case _html = "html"
+        case _md = "md"
+        case _xlsx = "xlsx"
+        case _sql = "sql"
+    }
+    public var json_bi: JsonBi?
+
+    private var _json: AnyString?
+    /**
+     *  (read-only)
+     */
+    public var json: String? {
+        get { _json?.value }
+        set { _json = newValue.map(AnyString.init) }
+    }
+
+    private var _json_detail: AnyString?
+    /**
+     *  (read-only)
+     */
+    public var json_detail: String? {
+        get { _json_detail?.value }
+        set { _json_detail = newValue.map(AnyString.init) }
+    }
+
+    private var _csv: AnyString?
+    /**
+     *  (read-only)
+     */
+    public var csv: String? {
+        get { _csv?.value }
+        set { _csv = newValue.map(AnyString.init) }
+    }
+
+    private var _txt: AnyString?
+    /**
+     *  (read-only)
+     */
+    public var txt: String? {
+        get { _txt?.value }
+        set { _txt = newValue.map(AnyString.init) }
+    }
+
+    private var _html: AnyString?
+    /**
+     *  (read-only)
+     */
+    public var html: String? {
+        get { _html?.value }
+        set { _html = newValue.map(AnyString.init) }
+    }
+
+    private var _md: AnyString?
+    /**
+     *  (read-only)
+     */
+    public var md: String? {
+        get { _md?.value }
+        set { _md = newValue.map(AnyString.init) }
+    }
+
+    private var _xlsx: AnyString?
+    /**
+     *  (read-only)
+     */
+    public var xlsx: String? {
+        get { _xlsx?.value }
+        set { _xlsx = newValue.map(AnyString.init) }
+    }
+
+    private var _sql: AnyString?
+    /**
+     *  (read-only)
+     */
+    public var sql: String? {
+        get { _sql?.value }
+        set { _sql = newValue.map(AnyString.init) }
+    }
+
+    public init(json_bi: JsonBi? = nil, json: String? = nil, json_detail: String? = nil, csv: String? = nil, txt: String? = nil, html: String? = nil, md: String? = nil, xlsx: String? = nil, sql: String? = nil) {
+        self.json_bi = json_bi
+        self._json = json.map(AnyString.init)
+        self._json_detail = json_detail.map(AnyString.init)
+        self._csv = csv.map(AnyString.init)
+        self._txt = txt.map(AnyString.init)
+        self._html = html.map(AnyString.init)
+        self._md = md.map(AnyString.init)
+        self._xlsx = xlsx.map(AnyString.init)
+        self._sql = sql.map(AnyString.init)
     }
 
 }
@@ -19858,6 +20375,8 @@ public struct Setting: SDKModel {
         case embed_cookieless_v2
         case embed_enabled
         case embed_config
+        case login_notification_enabled
+        case _login_notification_text = "login_notification_text"
     }
     /**
      * Toggle extension framework on or off
@@ -19958,7 +20477,21 @@ public struct Setting: SDKModel {
 
     public var embed_config: EmbedConfig?
 
-    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_site: String? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_enabled: Bool? = nil, embed_config: EmbedConfig? = nil) {
+    /**
+     * Login notification enabled (read-only)
+     */
+    public var login_notification_enabled: Bool?
+
+    private var _login_notification_text: AnyString?
+    /**
+     * Login notification text (read-only)
+     */
+    public var login_notification_text: String? {
+        get { _login_notification_text?.value }
+        set { _login_notification_text = newValue.map(AnyString.init) }
+    }
+
+    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_site: String? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_enabled: Bool? = nil, embed_config: EmbedConfig? = nil, login_notification_enabled: Bool? = nil, login_notification_text: String? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
@@ -19978,6 +20511,8 @@ public struct Setting: SDKModel {
         self.embed_cookieless_v2 = embed_cookieless_v2
         self.embed_enabled = embed_enabled
         self.embed_config = embed_config
+        self.login_notification_enabled = login_notification_enabled
+        self._login_notification_text = login_notification_text.map(AnyString.init)
     }
 
 }
@@ -20893,7 +21428,7 @@ public enum SupportedDownloadSettings: String, Codable {
 }
 
 /**
- * A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (Enum defined in Integration)
+ * A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "json_bi", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (Enum defined in Integration)
  */
 public enum SupportedFormats: String, Codable {
     case txt = "txt"
@@ -20903,6 +21438,7 @@ public enum SupportedFormats: String, Codable {
     case json_label = "json_label"
     case json_detail = "json_detail"
     case json_detail_lite_stream = "json_detail_lite_stream"
+    case json_bi = "json_bi"
     case xlsx = "xlsx"
     case html = "html"
     case wysiwyg_pdf = "wysiwyg_pdf"
@@ -21894,7 +22430,7 @@ public struct UserAttribute: SDKModel {
 
     private var _type: AnyString
     /**
-     * Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")
+     * Type of user attribute ("string", "number", "datetime", "yesno", "zipcode", "advanced_filter_string", "advanced_filter_number")
      */
     public var type: String {
         get { _type.value }
@@ -27575,7 +28111,7 @@ public struct WriteSessionConfig: SDKModel {
 
 /**
  * Dynamic writeable type for Setting removes:
- * marketplace_site, embed_enabled
+ * marketplace_site, embed_enabled, login_notification_enabled, login_notification_text
  */
 public struct WriteSetting: SDKModel {
 
@@ -28022,7 +28558,7 @@ public struct WriteUserAttribute: SDKModel {
 
     private var _type: AnyString
     /**
-     * Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")
+     * Type of user attribute ("string", "number", "datetime", "yesno", "zipcode", "advanced_filter_string", "advanced_filter_number")
      */
     public var type: String {
         get { _type.value }

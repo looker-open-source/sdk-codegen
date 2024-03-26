@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { pythonTestCode } from './codeBlob'
+export { pythonTestCode } from './codeBlob';

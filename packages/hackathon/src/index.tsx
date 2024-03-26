@@ -23,16 +23,16 @@
  SOFTWARE.
 
  */
-import * as React from 'react'
-import * as ReactDOM from 'react-dom'
-import { ExtensionProvider } from '@looker/extension-sdk-react'
-import { Provider } from 'react-redux'
-import { Hackathon } from './Hackathon'
-import store from './data/store'
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import { ExtensionProvider } from '@looker/extension-sdk-react';
+import { Provider } from 'react-redux';
+import { Hackathon } from './Hackathon';
+import store from './data/store';
 
 window.addEventListener('DOMContentLoaded', (_) => {
-  const root = document.createElement('div')
-  document.body.appendChild(root)
+  const root = document.createElement('div');
+  document.body.appendChild(root);
   ReactDOM.render(
     <ExtensionProvider requiredLookerVersion=">=21.3.0">
       <Provider store={store}>
@@ -40,5 +40,5 @@ window.addEventListener('DOMContentLoaded', (_) => {
       </Provider>
     </ExtensionProvider>,
     root
-  )
-})
+  );
+});

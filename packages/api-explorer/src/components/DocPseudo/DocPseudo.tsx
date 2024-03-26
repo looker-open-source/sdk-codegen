@@ -24,21 +24,21 @@
 
  */
 
-import type { FC } from 'react'
-import React from 'react'
-import { Code, Flex } from '@looker/components'
-import type { IMethod } from '@looker/sdk-codegen'
+import type { FC } from 'react';
+import React from 'react';
+import { Code, Flex } from '@looker/components';
+import type { IMethod } from '@looker/sdk-codegen';
 
-import { DocPrimaryResponse } from './DocPrimaryResponse'
-import { DocParams } from './DocParams'
+import { DocPrimaryResponse } from './DocPrimaryResponse';
+import { DocParams } from './DocParams';
 
 export interface PseudoProps {
-  method: IMethod
+  method: IMethod;
 }
 
 export const DocPseudo: FC<PseudoProps> = ({ method }) => {
-  const args = method.allParams
-  const resType = method.primaryResponse
+  const args = method.allParams;
+  const resType = method.primaryResponse;
 
   return (
     <Flex alignItems="flex-start">
@@ -49,5 +49,5 @@ export const DocPseudo: FC<PseudoProps> = ({ method }) => {
         <DocPrimaryResponse response={resType} />
       </Code>
     </Flex>
-  )
-}
+  );
+};

@@ -24,7 +24,7 @@
 
  */
 
-import type { ValidationMessages } from '@looker/components'
+import type { ValidationMessages } from '@looker/components';
 
 export enum Actions {
   LOAD_USER_ATTRIBUTES_REQUEST = 'LOAD_USER_ATTRIBUTES_REQUEST',
@@ -35,37 +35,37 @@ export enum Actions {
 }
 
 export interface AdminUserAttributes {
-  lookerClientId: string
-  lookerClientSecret: string
-  sheetId: string
-  tokenServerUrl: string
+  lookerClientId: string;
+  lookerClientSecret: string;
+  sheetId: string;
+  tokenServerUrl: string;
 }
 
 export interface LoadUserAttributesRequestAction {
-  type: Actions.LOAD_USER_ATTRIBUTES_REQUEST
+  type: Actions.LOAD_USER_ATTRIBUTES_REQUEST;
 }
 
 export interface LoadUserAttributesResponseAction {
-  type: Actions.LOAD_USER_ATTRIBUTES_RESPONSE
-  payload: AdminUserAttributes
+  type: Actions.LOAD_USER_ATTRIBUTES_RESPONSE;
+  payload: AdminUserAttributes;
 }
 
 export interface UpdateAttributeValuesAction {
-  type: Actions.UPDATE_USER_ATTRIBUTE_VALUES
-  payload: AdminUserAttributes
+  type: Actions.UPDATE_USER_ATTRIBUTE_VALUES;
+  payload: AdminUserAttributes;
 }
 
 export interface SaveUserAttributesRequestAction {
-  type: Actions.SAVE_USER_ATTRIBUTES_REQUEST
-  payload: AdminUserAttributes
+  type: Actions.SAVE_USER_ATTRIBUTES_REQUEST;
+  payload: AdminUserAttributes;
 }
 
 export interface SaveUserAttributesResponseAction {
-  type: Actions.SAVE_USER_ATTRIBUTES_RESPONSE
+  type: Actions.SAVE_USER_ATTRIBUTES_RESPONSE;
   payload: {
-    adminUserAttributes: AdminUserAttributes
-    validationMessages?: ValidationMessages
-  }
+    adminUserAttributes: AdminUserAttributes;
+    validationMessages?: ValidationMessages;
+  };
 }
 
 export type AdminAction =
@@ -73,33 +73,33 @@ export type AdminAction =
   | LoadUserAttributesResponseAction
   | UpdateAttributeValuesAction
   | SaveUserAttributesRequestAction
-  | SaveUserAttributesResponseAction
+  | SaveUserAttributesResponseAction;
 
 export const loadUserAttributesRequest =
   (): LoadUserAttributesRequestAction => ({
     type: Actions.LOAD_USER_ATTRIBUTES_REQUEST,
-  })
+  });
 
 export const loadUserAttributesResponse = (
   adminUserAttributes: AdminUserAttributes
 ): LoadUserAttributesResponseAction => ({
   type: Actions.LOAD_USER_ATTRIBUTES_RESPONSE,
   payload: adminUserAttributes,
-})
+});
 
 export const updateAttributeValues = (
   adminUserAttributes: AdminUserAttributes
 ): UpdateAttributeValuesAction => ({
   type: Actions.UPDATE_USER_ATTRIBUTE_VALUES,
   payload: adminUserAttributes,
-})
+});
 
 export const saveUserAttributesRequest = (
   adminUserAttributes: AdminUserAttributes
 ): SaveUserAttributesRequestAction => ({
   type: Actions.SAVE_USER_ATTRIBUTES_REQUEST,
   payload: adminUserAttributes,
-})
+});
 
 export const saveUserAttributesResponse = (
   adminUserAttributes: AdminUserAttributes,
@@ -107,4 +107,4 @@ export const saveUserAttributesResponse = (
 ): SaveUserAttributesResponseAction => ({
   type: Actions.SAVE_USER_ATTRIBUTES_RESPONSE,
   payload: { adminUserAttributes, validationMessages },
-})
+});

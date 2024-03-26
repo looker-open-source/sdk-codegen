@@ -23,28 +23,28 @@
  SOFTWARE.
 
  */
-import { createSlice } from '@reduxjs/toolkit'
-import { createSliceHooks } from '@looker/redux'
-import type { IAPIMethods } from '@looker/sdk-rtl'
-import type { PayloadAction } from '@reduxjs/toolkit'
-import { saga } from './sagas'
+import { createSlice } from '@reduxjs/toolkit';
+import { createSliceHooks } from '@looker/redux';
+import type { IAPIMethods } from '@looker/sdk-rtl';
+import type { PayloadAction } from '@reduxjs/toolkit';
+import { saga } from './sagas';
 
 export interface FactoryState {
-  initialized: boolean
-  error?: string
+  initialized: boolean;
+  error?: string;
 }
 
 export const defaultFactoryState: FactoryState = {
   initialized: false,
-}
+};
 
 export interface InitFactoryAction {
-  sdk: IAPIMethods
+  sdk: IAPIMethods;
 }
 
-type SetFailureAction = Record<'error', string>
+type SetFailureAction = Record<'error', string>;
 
-export const FACTORY_SLICE_NAME = 'factory'
+export const FACTORY_SLICE_NAME = 'factory';
 
 export const factorySlice = createSlice({
   name: FACTORY_SLICE_NAME,
@@ -54,19 +54,19 @@ export const factorySlice = createSlice({
       // noop
     },
     initFactorySuccessAction(state) {
-      state.initialized = true
+      state.initialized = true;
     },
     destroyFactoryAction() {
       // noop
     },
     setFailureAction(state, action: PayloadAction<SetFailureAction>) {
-      state.error = action.payload.error
+      state.error = action.payload.error;
     },
   },
-})
+});
 
-export const factoryActions = factorySlice.actions
+export const factoryActions = factorySlice.actions;
 export const {
   useActions: useFactoryActions,
   useStoreState: useFactoryStoreState,
-} = createSliceHooks(factorySlice, saga)
+} = createSliceHooks(factorySlice, saga);

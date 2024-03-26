@@ -23,20 +23,20 @@
  SOFTWARE.
 
  */
-import type { ReactElement } from 'react'
-import React from 'react'
-import { useToggle, Accordion2, Divider, Box2 } from '@looker/components'
-import { ArrowRight } from '@styled-icons/material/ArrowRight'
-import { ArrowDropDown } from '@styled-icons/material/ArrowDropDown'
+import type { ReactElement } from 'react';
+import React from 'react';
+import { Accordion2, Box2, Divider, useToggle } from '@looker/components';
+import { ArrowRight } from '@styled-icons/material/ArrowRight';
+import { ArrowDropDown } from '@styled-icons/material/ArrowDropDown';
 
-import { RunItHeading } from '../common'
+import { RunItHeading } from '../common';
 
 interface CollapserCardProps {
-  id?: string
-  heading: string
-  children: ReactElement
-  defaultOpen?: boolean
-  divider?: boolean
+  id?: string;
+  heading: string;
+  children: ReactElement;
+  defaultOpen?: boolean;
+  divider?: boolean;
 }
 
 /**
@@ -49,8 +49,8 @@ export const CollapserCard = ({
   defaultOpen = true,
   divider = true,
 }: CollapserCardProps) => {
-  const level = divider ? 'h3' : 'h4'
-  const { value, toggle } = useToggle(defaultOpen)
+  const level = divider ? 'h3' : 'h4';
+  const { value, toggle } = useToggle(defaultOpen);
 
   return (
     <Box2 display="flex" flexDirection="column">
@@ -66,5 +66,5 @@ export const CollapserCard = ({
         <Box2 pb="xlarge">{children}</Box2>
       </Accordion2>
     </Box2>
-  )
-}
+  );
+};

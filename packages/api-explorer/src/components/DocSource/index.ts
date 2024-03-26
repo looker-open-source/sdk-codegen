@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { DocSource } from './DocSource'
+export { DocSource } from './DocSource';

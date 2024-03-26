@@ -23,12 +23,12 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { ExtensionProvider40 } from '@looker/extension-sdk-react'
-import { TileExtension } from './TileExtension'
+import React from 'react';
+import { ExtensionProvider40 } from '@looker/extension-sdk-react';
+import { TileExtension } from './TileExtension';
 
 export const App = () => (
   <ExtensionProvider40>
     <TileExtension />
   </ExtensionProvider40>
-)
+);

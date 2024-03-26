@@ -24,40 +24,40 @@
 
  */
 
-export const matchCharset = ';.*charset='
+export const matchCharset = ';.*charset=';
 
 /**
  * Does this content type say it's utf-8?
  * @type {string} Regular expression for matching charset=utf-8 in Content-Type
  */
-export const matchCharsetUtf8 = `${matchCharset}.*\\butf-8\\b`
+export const matchCharsetUtf8 = `${matchCharset}.*\\butf-8\\b`;
 
 /**
  * Matching rules for string/text types. String matches must be checked *before* binary matches
  * @type {string} Regular expression for matching Content-Type headers
  */
-export const matchModeString = `(^application\\/.*(\\bjson\\b|\\bxml\\b|\\bsql\\b|\\bgraphql\\b|\\bjavascript\\b|\\bx-www-form-urlencoded\\b)|^text\\/|.*\\+xml\\b|${matchCharset})`
+export const matchModeString = `(^application\\/.*(\\bjson\\b|\\bxml\\b|\\bsql\\b|\\bgraphql\\b|\\bjavascript\\b|\\bx-www-form-urlencoded\\b)|^text\\/|.*\\+xml\\b|${matchCharset})`;
 
 /**
  * Matching rules for all binary or unknown types. Binary matches must be checked *after* string matches
  * @type {string} Regular expression for matching Content-Type headers
  */
 export const matchModeBinary =
-  '^image\\/|^audio\\/|^video\\/|^font\\/|^application\\/|^multipart\\/'
+  '^image\\/|^audio\\/|^video\\/|^font\\/|^application\\/|^multipart\\/';
 
 /**
  * Does this string mean "true"
  * @param {string} value
  * @returns {boolean} true if matching a `true` value, false otherwise
  */
-export const isTrue = (value: string) => /^(true|t|yes|y|1)$/i.test(value)
+export const isTrue = (value: string) => /^(true|t|yes|y|1)$/i.test(value);
 
 /**
  * Does this string mean "false"
  * @param {string} value
  * @returns {boolean} true if matching a `false` value, false otherwise
  */
-export const isFalse = (value: string) => /^(false|f|no|n|0)$/i.test(value)
+export const isFalse = (value: string) => /^(false|f|no|n|0)$/i.test(value);
 
 /**
  * Return true, false, or default boolean value for string representation of boolean
@@ -66,10 +66,10 @@ export const isFalse = (value: string) => /^(false|f|no|n|0)$/i.test(value)
  * @returns {boolean} true or false
  */
 export const boolDefault = (value: string, defaultBool = false) => {
-  if (isTrue(value)) return true
-  if (isFalse(value)) return false
-  return defaultBool
-}
+  if (isTrue(value)) return true;
+  if (isFalse(value)) return false;
+  return defaultBool;
+};
 
 /**
  * strip surrounding quotes from a string if it is uniformly quoted
@@ -77,26 +77,26 @@ export const boolDefault = (value: string, defaultBool = false) => {
  * @returns {string | null} unquoted string if it begins and ends with the same character out of `\` " '`
  */
 export const unquote = (value: string | undefined | null): string => {
-  if (!value) return ''
+  if (!value) return '';
   if (/^['"`]/.test(value)) {
-    const quote = value.substring(0, 1)
+    const quote = value.substring(0, 1);
     // Strip surrounding quotes?
-    if (value.endsWith(quote)) return value.substring(1, value.length - 1)
+    if (value.endsWith(quote)) return value.substring(1, value.length - 1);
   }
-  return value
-}
+  return value;
+};
 
 /**
  * Documented type alias because URL assignment construction is not compatible with API parameters
  */
-export type Url = string
+export type Url = string;
 
 /** Documented type to clarify SDK hash types */
 export interface IDictionary<T> {
-  [key: string]: T
+  [key: string]: T;
 }
 
 /**
  * Documented type alias for password spec
  */
-export type Password = string
+export type Password = string;

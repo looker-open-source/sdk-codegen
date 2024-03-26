@@ -24,4 +24,4 @@
 
  */
 
-export { DocDiff } from './DocDiff'
+export { DocDiff } from './DocDiff';

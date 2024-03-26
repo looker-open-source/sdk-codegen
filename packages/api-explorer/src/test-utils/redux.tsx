@@ -24,59 +24,63 @@
 
  */
 
-import type { ReactElement } from 'react'
-import React from 'react'
-import { Provider } from 'react-redux'
-import type { Store } from 'redux'
-import { renderWithTheme } from '@looker/components-test-utils'
-import type { RenderOptions } from '@testing-library/react'
-import { createStore } from '@looker/redux'
-import { BrowserAdaptor, registerEnvAdaptor } from '@looker/extension-utils'
-import { initRunItSdk } from '@looker/run-it'
+import type { ReactElement } from 'react';
+import React from 'react';
+import { Provider } from 'react-redux';
+import type { Store } from 'redux';
+import { renderWithTheme } from '@looker/components-test-utils';
+import type { RenderOptions } from '@testing-library/react';
+import { createStore } from '@looker/redux';
+import { BrowserAdaptor, registerEnvAdaptor } from '@looker/extension-utils';
+import { initRunItSdk } from '@looker/run-it';
 
-import type { LodesState, RootState, SettingState, SpecState } from '../state'
+import type { LodesState, RootState, SettingState, SpecState } from '../state';
 import {
-  settingsSlice,
   defaultLodesState,
   defaultSettingsState,
-  lodesSlice,
   defaultSpecsState,
+  lodesSlice,
+  settingsSlice,
   specsSlice,
-} from '../state'
-import { specState } from '../test-data'
-import { renderWithRouter } from './router'
+} from '../state';
+import { specState } from '../test-data';
+import { renderWithRouter } from './router';
 
 export const withReduxProvider = (
   consumers: ReactElement<any>,
   store: Store<RootState> = createTestStore()
 ) => {
-  registerEnvAdaptor(new BrowserAdaptor(initRunItSdk()))
-  return <Provider store={store}>{consumers}</Provider>
-}
+  registerEnvAdaptor(new BrowserAdaptor(initRunItSdk()));
+  return <Provider store={store}>{consumers}</Provider>;
+};
 
 export const renderWithReduxProvider = (
   consumers: ReactElement<any>,
   store?: Store<RootState>,
-  options?: Omit<RenderOptions, 'queries'>
-) => renderWithTheme(withReduxProvider(consumers, store), options)
+  options?: Omit<RenderOptions<any>, 'queries'>
+) => renderWithTheme(withReduxProvider(consumers, store), options);
 
 export const renderWithRouterAndReduxProvider = (
   consumers: ReactElement<any>,
   initialEntries: string[] = ['/'],
   store?: Store<RootState>,
-  options?: Omit<RenderOptions, 'queries'>
+  options?: Omit<RenderOptions<any>, 'queries'>
 ) =>
-  renderWithRouter(withReduxProvider(consumers, store), initialEntries, options)
+  renderWithRouter(
+    withReduxProvider(consumers, store),
+    initialEntries,
+    options
+  );
 
 export const preloadedState: RootState = {
   settings: defaultSettingsState,
   lodes: defaultLodesState,
   specs: defaultSpecsState,
-}
+};
 
 type DeepPartial<T> = {
-  [P in keyof T]?: DeepPartial<T[P]>
-}
+  [P in keyof T]?: DeepPartial<T[P]>;
+};
 
 export const createTestStore = (overrides?: DeepPartial<RootState>) =>
   createStore({
@@ -99,4 +103,4 @@ export const createTestStore = (overrides?: DeepPartial<RootState>) =>
       lodes: lodesSlice.reducer,
       specs: specsSlice.reducer,
     },
-  })
+  });

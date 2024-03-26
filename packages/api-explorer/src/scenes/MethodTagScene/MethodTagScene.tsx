@@ -23,72 +23,77 @@
  SOFTWARE.
 
  */
-import type { FC } from 'react'
-import React, { useEffect, useState } from 'react'
-import { useHistory, useLocation, useParams } from 'react-router-dom'
-import { Grid, ButtonToggle, ButtonItem } from '@looker/components'
-import type { ApiModel } from '@looker/sdk-codegen'
-import { useSelector } from 'react-redux'
-import { ApixSection, DocTitle, DocMethodSummary, Link } from '../../components'
-import { buildMethodPath, isValidFilter, useNavigation } from '../../utils'
-import { selectTagFilter, useSettingActions } from '../../state'
-import { useTagStoreSync } from '../utils'
-import { getOperations } from './utils'
+import type { FC } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
+import { ButtonItem, ButtonToggle, Grid } from '@looker/components';
+import type { ApiModel } from '@looker/sdk-codegen';
+import { useSelector } from 'react-redux';
+import {
+  ApixSection,
+  DocMethodSummary,
+  DocTitle,
+  Link,
+} from '../../components';
+import { buildMethodPath, isValidFilter, useNavigation } from '../../utils';
+import { selectTagFilter, useSettingActions } from '../../state';
+import { useTagStoreSync } from '../utils';
+import { getOperations } from './utils';
 
 interface MethodTagSceneProps {
-  api: ApiModel
+  api: ApiModel;
 }
 
 interface MethodTagSceneParams {
-  specKey: string
-  methodTag: string
+  specKey: string;
+  methodTag: string;
 }
 
 export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
-  const { specKey, methodTag } = useParams<MethodTagSceneParams>()
-  const location = useLocation()
-  const history = useHistory()
-  const methods = api.tags[methodTag]
+  const { specKey, methodTag } = useParams<MethodTagSceneParams>();
+  const location = useLocation();
+  const history = useHistory();
+  const methods = api.tags[methodTag];
   const { navigate, buildPathWithGlobalParams, navigateWithGlobalParams } =
-    useNavigation()
-  const selectedTagFilter = useSelector(selectTagFilter)
-  const { setTagFilterAction } = useSettingActions()
-  const [tagFilter, setTagFilter] = useState(selectedTagFilter)
-  useTagStoreSync()
+    useNavigation();
+  const selectedTagFilter = useSelector(selectTagFilter);
+  const { setTagFilterAction } = useSettingActions();
+  const [tagFilter, setTagFilter] = useState(selectedTagFilter);
+  useTagStoreSync();
 
   const handleChange = (filter: string) => {
     navigate(location.pathname, {
       t: filter === 'ALL' ? null : filter.toLowerCase(),
-    })
-  }
+    });
+  };
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(location.search)
-    let verbParam = searchParams.get('t') || 'ALL'
+    const searchParams = new URLSearchParams(location.search);
+    let verbParam = searchParams.get('t') || 'ALL';
     verbParam = isValidFilter(location.pathname, verbParam)
       ? verbParam.toUpperCase()
-      : 'ALL'
+      : 'ALL';
     setTagFilterAction({
       tagFilter: verbParam,
-    })
-  }, [location.search])
+    });
+  }, [location.search]);
 
   useEffect(() => {
-    setTagFilter(selectedTagFilter)
-  }, [selectedTagFilter])
+    setTagFilter(selectedTagFilter);
+  }, [selectedTagFilter]);
 
   useEffect(() => {
     if (!methods) {
-      navigateWithGlobalParams(`/${specKey}/methods`)
+      navigateWithGlobalParams(`/${specKey}/methods`);
     }
-  }, [history, methods])
+  }, [history, methods]);
   if (!methods) {
-    return <></>
+    return <></>;
   }
   const tag = Object.values(api.spec.tags!).find(
     (tag) => tag.name === methodTag
-  )!
-  const operations = getOperations(methods)
+  )!;
+  const operations = getOperations(methods);
 
   return (
     <ApixSection>
@@ -125,5 +130,5 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
           )
       )}
     </ApixSection>
-  )
-}
+  );
+};

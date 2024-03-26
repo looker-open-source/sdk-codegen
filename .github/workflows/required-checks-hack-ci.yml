@@ -44,6 +44,7 @@ jobs:
         with:
           filters: |
             apix:
+              - package.json
               - packages/code-editor/**/*
               - packages/run-it/**/*
               - packages/api-explorer/**/*
@@ -51,11 +52,13 @@ jobs:
               - packages/extension-utils/**/*
               - .github/workflows/apix-ci.yml
             codegen:
+              - package.json
               - packages/sdk-codegen/**/*
               - packages/sdk-codegen-utils/**/*
               - packages/sdk-codegen-scripts/**/*
               - .github/workflows/codegen-ci.yml
             hackathon:
+              - package.json
               - packages/wholly-sheet/**/*
               - packages/hackathon/**/*
               - .github/workflows/hackathon-ci.yml
@@ -67,6 +70,7 @@ jobs:
               - docs/resources/**/*
               - .github/workflows/resources-ci.yml
             tssdk:
+              - package.json
               - packages/sdk/**/*
               - packages/sdk-rtl/**/*
               - packages/sdk-node/**/*

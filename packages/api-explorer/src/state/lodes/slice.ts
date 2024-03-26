@@ -23,30 +23,30 @@
  SOFTWARE.
 
  */
-import { createSliceHooks } from '@looker/redux'
-import type { IDeclarationMine, IExampleMine } from '@looker/sdk-codegen'
-import type { PayloadAction } from '@reduxjs/toolkit'
-import { createSlice } from '@reduxjs/toolkit'
+import { createSliceHooks } from '@looker/redux';
+import type { IDeclarationMine, IExampleMine } from '@looker/sdk-codegen';
+import type { PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
-import { saga } from './sagas'
+import { saga } from './sagas';
 
 export interface LodesState {
-  examples?: IExampleMine
-  declarations?: IDeclarationMine
-  error?: Error
+  examples?: IExampleMine;
+  declarations?: IDeclarationMine;
+  error?: Error;
 }
 
 export const defaultLodesState: LodesState = {
   examples: undefined,
   declarations: undefined,
-}
+};
 
 export interface InitPayload {
-  examplesLodeUrl?: string
-  declarationsLodeUrl?: string
+  examplesLodeUrl?: string;
+  declarationsLodeUrl?: string;
 }
 
-type InitSuccessAction = LodesState
+type InitSuccessAction = LodesState;
 
 export const lodesSlice = createSlice({
   name: 'lodes',
@@ -55,15 +55,15 @@ export const lodesSlice = createSlice({
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     initLodesAction(_state, _action: PayloadAction<InitPayload>) {},
     initLodesSuccessAction(state, action: PayloadAction<InitSuccessAction>) {
-      state.examples = action.payload.examples
-      state.declarations = action.payload.declarations
+      state.examples = action.payload.examples;
+      state.declarations = action.payload.declarations;
     },
     initLodesFailureAction(state, action: PayloadAction<Error>) {
-      state.error = action.payload
+      state.error = action.payload;
     },
   },
-})
+});
 
-export const lodeActions = lodesSlice.actions
+export const lodeActions = lodesSlice.actions;
 export const { useActions: useLodeActions, useStoreState: useLodesStoreState } =
-  createSliceHooks(lodesSlice, saga)
+  createSliceHooks(lodesSlice, saga);

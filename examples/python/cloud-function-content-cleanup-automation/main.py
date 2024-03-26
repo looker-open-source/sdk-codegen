@@ -12,11 +12,11 @@ Search `todo` to:
 - Update NOTIFICATION_EMAIL_ADDRESS (email address for content deletion notification).
 - Toggle dry run of automation off/on.
 
-Last modified: March 2023
+Last modified: Feb 27 2024
 """
 
 import looker_sdk
-from looker_sdk import models40
+from looker_sdk import models40 as models
 from looker_sdk import error
 from google.cloud import storage
 from google.cloud import exceptions
@@ -85,7 +85,7 @@ def get_unused_content_query_id(days: int):
     """ Get a re-useable query ID for a System Activity query which returns all content that hasn't been used in at least 90 (default) days. 
     This query ID can be used to run the query and send a schedule with the query's results. 
     """
-    unused_content_query = models40.WriteQuery(
+    unused_content_query = models.WriteQuery(
         model="system__activity",
         view="content_usage",
         fields=[
@@ -128,7 +128,7 @@ def get_deleted_content_query_id(days: int):
     """ Get a re-usable query ID for a System Activity query which returns all content that's been soft deleted for 90+ (default) days. 
     This query ID can be used to run the query and send a schedule with the query's results. 
     """
-    deleted_query = models40.WriteQuery(
+    deleted_query = models.WriteQuery(
         model="system__activity",
         view="content_usage",
         fields=[
@@ -180,7 +180,7 @@ def send_content_notification(query_id: str, delete_type: str, address: str):
     """
     created_date = datetime.today().strftime('%Y-%m-%d')
 
-    scheduled_plan_destination_body = models40.ScheduledPlanDestination(
+    scheduled_plan_destination_body = models.ScheduledPlanDestination(
         format="csv",
         type="email",
         address=address,
@@ -189,7 +189,7 @@ def send_content_notification(query_id: str, delete_type: str, address: str):
         apply_formatting=False,
         apply_vis=False
     )
-    unused_content_notification = models40.WriteScheduledPlan(
+    unused_content_notification = models.WriteScheduledPlan(
         name=f"[Looker Automation] {delete_type.capitalize()} deleted content ({created_date}).",
         query_id=query_id,
         scheduled_plan_destination=[
@@ -230,8 +230,8 @@ def get_look_ids(content: list):
 def soft_delete_dashboard(dashboard_id: str):
     """ Soft delete the given dashboard. """
     # todo: to toggle off safe mode and soft delete dashboards, comment out `deleted=False`` line and uncomment `deleted=True` line
-    dashboard = models40.WriteDashboard(deleted=False)
-    # dashboard = models40.WriteDashboard(deleted=True)
+    dashboard = models.WriteDashboard(deleted=False)
+    # dashboard = models.WriteDashboard(deleted=True)
     try:
         sdk.update_dashboard(dashboard_id, body=dashboard)
         print(f"Successfully soft deleted dashboard: {dashboard_id}")
@@ -242,8 +242,8 @@ def soft_delete_dashboard(dashboard_id: str):
 def soft_delete_look(look_id: str):
     """ Soft delete the given look. """
     # todo: to toggle off safe mode and soft delete Looks, comment out `deleted=False`` line and uncomment `deleted=True` line
-    look = models40.WriteLookWithQuery(deleted=False)
-    # look = models40.WriteLookWithQuery(deleted=True)
+    look = models.WriteLookWithQuery(deleted=False)
+    # look = models.WriteLookWithQuery(deleted=True)
     try:
         sdk.update_look(look_id, body=look)
         print(f"Successfully soft deleted Look: {look_id}")

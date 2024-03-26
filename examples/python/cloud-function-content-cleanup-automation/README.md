@@ -211,13 +211,13 @@ The following steps assume deployment using the Google Cloud UI Console.
 
 ```python
 import looker_sdk
-from looker_sdk import models40
+from looker_sdk import models40 as models
 
 config_file = "looker.ini"
 sdk = looker_sdk.init40(config_file)
 
 def restore_soft_delete_dashboard(dashboard_id):
-    dashboard = models40.WriteDashboard(deleted=False)
+    dashboard = models.WriteDashboard(deleted=False)
     try:
         sdk.update_dashboard(str(dashboard_id), body=dashboard)
         print(f"Successfully restored dashboard {dashboard_id}")
@@ -225,7 +225,7 @@ def restore_soft_delete_dashboard(dashboard_id):
         print(f"Error: {e}")
 
 def restore_soft_delete_look(look_id):
-    look = models40.WriteLookWithQuery(deleted=False)
+    look = models.WriteLookWithQuery(deleted=False)
     try:
         sdk.update_look(str(look_id), body=look)
         print(f"Successfully restored look {look_id}")

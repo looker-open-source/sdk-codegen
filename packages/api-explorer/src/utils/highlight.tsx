@@ -24,7 +24,7 @@
 
  */
 
-import React from 'react'
+import React from 'react';
 
 /**
  * Returns an HTML string with matches wrapped with with span tags
@@ -33,26 +33,26 @@ import React from 'react'
  * @returns content with highlighted matches
  */
 export const highlightHTML = (pattern: string, content: string) => {
-  let highlightedContent
+  let highlightedContent;
   if (!pattern) {
-    highlightedContent = content
+    highlightedContent = content;
   } else {
     try {
-      const target = new RegExp(`(${pattern})`, 'gi')
-      const contentArray = content.split(target)
+      const target = new RegExp(`(${pattern})`, 'gi');
+      const contentArray = content.split(target);
       highlightedContent = contentArray.map((str, index) => {
         if (target.test(str)) {
           return (
             <span key={index} className={'hi'}>
               {str}
             </span>
-          )
+          );
         }
-        return str
-      })
+        return str;
+      });
     } catch (e) {
-      highlightedContent = content
+      highlightedContent = content;
     }
   }
-  return highlightedContent
-}
+  return highlightedContent;
+};

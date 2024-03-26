@@ -24,14 +24,14 @@
 
  */
 
-import type { IExampleMine } from '@looker/sdk-codegen'
-import { findExamples } from '@looker/sdk-codegen'
-import type { DataTableColumns } from '@looker/components'
-import { theme } from '@looker/components'
+import type { IExampleMine } from '@looker/sdk-codegen';
+import { findExamples } from '@looker/sdk-codegen';
+import type { DataTableColumns } from '@looker/components';
+import { theme } from '@looker/components';
 
-export const PER_PAGE_COUNT = 10
+export const PER_PAGE_COUNT = 10;
 
-export const EMPTY_STRING = ''
+export const EMPTY_STRING = '';
 
 export const exampleColumns: DataTableColumns = [
   {
@@ -58,23 +58,23 @@ export const exampleColumns: DataTableColumns = [
     type: 'number',
     size: 20,
   },
-]
+];
 
 export interface ExampleLinkTableRow {
-  filename: string
-  language: string
-  line: string
-  permalink: string
-  description: string
+  filename: string;
+  language: string;
+  line: string;
+  permalink: string;
+  description: string;
 }
 
 export interface DataTablePage {
   /** array of sdk examples for a given page */
-  pageExamples: ExampleLinkTableRow[]
+  pageExamples: ExampleLinkTableRow[];
   /** the page limit of the larger example set */
-  pageLimit: number
+  pageLimit: number;
   /** flag for whether or not to paginate results */
-  paginate: boolean
+  paginate: boolean;
 }
 
 /**
@@ -83,10 +83,10 @@ export interface DataTablePage {
  * @returns file name
  */
 export function getFileNameFromPath(path: string): string {
-  const lastForwardSlash = path.lastIndexOf('/')
+  const lastForwardSlash = path.lastIndexOf('/');
   return lastForwardSlash === -1
     ? path
-    : path.slice(lastForwardSlash + 1, path.indexOf(' '))
+    : path.slice(lastForwardSlash + 1, path.indexOf(' '));
 }
 
 /**
@@ -107,7 +107,7 @@ export function prepareExampleDataTable(
     result: ExampleLinkTableRow[],
     language: string
   ) {
-    const languageExamples = findExamples(examples, language, operationId)
+    const languageExamples = findExamples(examples, language, operationId);
     return [
       ...result,
       ...languageExamples.map((exampleLink) => {
@@ -117,21 +117,20 @@ export function prepareExampleDataTable(
           language: language.toLowerCase(),
           permalink: exampleLink.permalink,
           description: exampleLink.description,
-        }
+        };
       }),
-    ]
-  },
-  [])
+    ];
+  }, []);
 
   const pageExamples = tableExamples.filter(
     (example, index) =>
       example &&
       index + 1 > (currentPage - 1) * PER_PAGE_COUNT &&
       index + 1 <= currentPage * PER_PAGE_COUNT
-  )
+  );
 
-  const pageLimit = Math.ceil(tableExamples.length / PER_PAGE_COUNT)
-  const paginate = tableExamples.length > PER_PAGE_COUNT
+  const pageLimit = Math.ceil(tableExamples.length / PER_PAGE_COUNT);
+  const paginate = tableExamples.length > PER_PAGE_COUNT;
 
   if (tableExamples.length > PER_PAGE_COUNT) {
     while (pageExamples.length !== PER_PAGE_COUNT) {
@@ -141,10 +140,10 @@ export function prepareExampleDataTable(
         language: EMPTY_STRING,
         permalink: pageExamples.length.toString(),
         description: EMPTY_STRING,
-      })
+      });
     }
   }
-  return { pageExamples, pageLimit, paginate }
+  return { pageExamples, pageLimit, paginate };
 }
 
 /**
@@ -152,7 +151,7 @@ export function prepareExampleDataTable(
  * @param hide whether or not to hide bottom border
  */
 export function getTableItemBottomBorder(hide: boolean): string {
-  return hide ? 'none' : `solid 1px ${theme.colors.ui2}`
+  return hide ? 'none' : `solid 1px ${theme.colors.ui2}`;
 }
 
 /**
@@ -167,6 +166,6 @@ export function sortLanguagesByPreference(
   languages.some(
     (item, idx) =>
       item === sdkLanguage && languages.unshift(languages.splice(idx, 1)[0])
-  )
-  return languages
+  );
+  return languages;
 }

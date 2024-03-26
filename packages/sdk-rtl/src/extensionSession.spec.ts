@@ -24,22 +24,22 @@
 
  */
 
-import { DefaultSettings } from './apiSettings'
-import { ExtensionSession } from './extensionSession'
-import type { IHostConnection } from './extensionTransport'
-import { ExtensionTransport } from './extensionTransport'
+import { DefaultSettings } from './apiSettings';
+import { ExtensionSession } from './extensionSession';
+import type { IHostConnection } from './extensionTransport';
+import { ExtensionTransport } from './extensionTransport';
 
 describe('ExtensionSession', () => {
-  let session: ExtensionSession
+  let session: ExtensionSession;
   beforeEach(() => {
-    const settings = DefaultSettings()
-    const transport = new ExtensionTransport(settings, {} as IHostConnection)
-    session = new ExtensionSession(settings, transport)
-  })
+    const settings = DefaultSettings();
+    const transport = new ExtensionTransport(settings, {} as IHostConnection);
+    session = new ExtensionSession(settings, transport);
+  });
 
   it('isAuthenticated', () => {
-    expect(session.isAuthenticated()).toEqual(true)
-  })
+    expect(session.isAuthenticated()).toEqual(true);
+  });
 
   it('authenticate not supported', (done) => {
     session
@@ -49,40 +49,40 @@ describe('ExtensionSession', () => {
         url: 'http://example.com',
       })
       .then(() => {
-        fail('authenticate should fail')
+        fail('authenticate should fail');
       })
       .catch((error: any) => {
-        expect(error).toBeDefined()
-        done()
-      })
-  })
+        expect(error).toBeDefined();
+        done();
+      });
+  });
 
   it('isSudo not supported', () => {
     try {
-      session.isSudo()
-      fail('isSudo should fail')
+      session.isSudo();
+      fail('isSudo should fail');
     } catch (error) {
-      expect(error).toBeDefined()
+      expect(error).toBeDefined();
     }
-  })
+  });
 
   it('logout not supported', (done) => {
     session
       .logout()
       .then(() => {
-        fail('logout should fail')
+        fail('logout should fail');
       })
       .catch((error: any) => {
-        expect(error).toBeDefined()
-        done()
-      })
-  })
+        expect(error).toBeDefined();
+        done();
+      });
+  });
 
   it('reset is noop', () => {
     try {
-      session.reset()
+      session.reset();
     } catch (error) {
-      fail('expected reset to noop')
+      fail('expected reset to noop');
     }
-  })
-})
+  });
+});

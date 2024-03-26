@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export * from './UsersScene'
+export * from './UsersScene';

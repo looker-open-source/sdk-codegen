@@ -23,32 +23,32 @@
  SOFTWARE.
 
  */
-import type { Dispatch } from 'react'
-import { createSliceHooks } from '@looker/redux'
-import { createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
+import type { Dispatch } from 'react';
+import { createSliceHooks } from '@looker/redux';
+import { createSlice } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
 import type {
   MessageBarIntent,
   ValidationMessageProps,
   ValidationMessages,
-} from '@looker/components'
-import omit from 'lodash/omit'
-import type { ConfigValues } from '../utils'
-import { saga } from './sagas'
+} from '@looker/components';
+import omit from 'lodash/omit';
+import type { ConfigValues } from '../utils';
+import { saga } from './sagas';
 
-export const SLICE_NAME = 'OAuthForm'
+export const SLICE_NAME = 'OAuthForm';
 export interface MessageBarData {
-  intent: MessageBarIntent
-  text: string
+  intent: MessageBarIntent;
+  text: string;
 }
 
 export interface OAuthFormState {
-  apiServerUrl: string
-  fetchedUrl: string
-  webUrl: string
-  messageBar: MessageBarData
-  validationMessages: ValidationMessages
-  savedConfig: ConfigValues
+  apiServerUrl: string;
+  fetchedUrl: string;
+  webUrl: string;
+  messageBar: MessageBarData;
+  validationMessages: ValidationMessages;
+  savedConfig: ConfigValues;
 }
 
 export const defaultOAuthFormState: OAuthFormState = {
@@ -61,34 +61,34 @@ export const defaultOAuthFormState: OAuthFormState = {
   },
   validationMessages: {},
   savedConfig: { base_url: '', looker_url: '' },
-}
+};
 
 export interface ClearConfigActionPayload {
-  configKey: string
-  setHasConfig?: Dispatch<boolean>
-  isAuthenticated: boolean
+  configKey: string;
+  setHasConfig?: Dispatch<boolean>;
+  isAuthenticated: boolean;
 }
 
 export interface SetUrlActionPayload {
-  name: string
-  value: string
+  name: string;
+  value: string;
 }
 
 interface UpdateValidationMessagesPayload {
-  elementName: string
-  newMessage: ValidationMessageProps | null
+  elementName: string;
+  newMessage: ValidationMessageProps | null;
 }
 
 export interface SaveConfigPayload {
-  configKey: string
-  setHasConfig?: Dispatch<boolean>
-  client_id: string
-  redirect_uri: string
+  configKey: string;
+  setHasConfig?: Dispatch<boolean>;
+  client_id: string;
+  redirect_uri: string;
 }
 
 export interface SaveConfigSuccessPayload {
-  base_url: string
-  looker_url: string
+  base_url: string;
+  looker_url: string;
 }
 
 export const OAuthFormSlice = createSlice({
@@ -99,32 +99,32 @@ export const OAuthFormSlice = createSlice({
       // noop
     },
     initSuccessAction(state, action: PayloadAction<ConfigValues>) {
-      state.apiServerUrl = action.payload.base_url
-      state.webUrl = action.payload.looker_url
+      state.apiServerUrl = action.payload.base_url;
+      state.webUrl = action.payload.looker_url;
     },
     setUrlAction(_state, _action: PayloadAction<SetUrlActionPayload>) {
       // noop
     },
     setUrlActionSuccess(state, action: PayloadAction<string>) {
-      state.apiServerUrl = action.payload
-      state.webUrl = ''
+      state.apiServerUrl = action.payload;
+      state.webUrl = '';
     },
     updateValidationMessages(
       state,
       action: PayloadAction<UpdateValidationMessagesPayload>
     ) {
-      let newValidationMessages = state.validationMessages
+      let newValidationMessages = state.validationMessages;
 
       if (action.payload.newMessage !== null) {
         newValidationMessages[action.payload.elementName] =
-          action.payload.newMessage
+          action.payload.newMessage;
       } else {
         newValidationMessages = omit(
           newValidationMessages,
           action.payload.elementName
-        )
+        );
       }
-      state.validationMessages = newValidationMessages
+      state.validationMessages = newValidationMessages;
     },
     clearConfigAction(
       _state,
@@ -133,21 +133,21 @@ export const OAuthFormSlice = createSlice({
       // noop
     },
     clearConfigActionSuccess() {
-      return { ...defaultOAuthFormState }
+      return { ...defaultOAuthFormState };
     },
     verifyConfigAction(state) {
-      state.fetchedUrl = `${state.apiServerUrl}/versions`
+      state.fetchedUrl = `${state.apiServerUrl}/versions`;
     },
     verifyConfigActionSuccess(state, action: PayloadAction<string>) {
       state.messageBar = {
         intent: 'positive',
         text: `Configuration is valid`,
-      }
-      state.webUrl = action.payload
+      };
+      state.webUrl = action.payload;
     },
     verifyConfigActionFailure(state, action: PayloadAction<string>) {
-      state.messageBar = { intent: 'critical', text: action.payload }
-      state.webUrl = ''
+      state.messageBar = { intent: 'critical', text: action.payload };
+      state.webUrl = '';
     },
     saveConfigAction(_state, _action: PayloadAction<SaveConfigPayload>) {
       // noop
@@ -156,30 +156,30 @@ export const OAuthFormSlice = createSlice({
       state,
       action: PayloadAction<SaveConfigSuccessPayload>
     ) {
-      const { base_url, looker_url } = action.payload
+      const { base_url, looker_url } = action.payload;
       state.savedConfig = {
         base_url,
         looker_url,
-      }
+      };
       state.messageBar = {
         intent: 'positive',
         text: `Saved ${looker_url} as OAuth server`,
-      }
+      };
     },
     clearMessageBarAction(state) {
-      state.messageBar.text = ''
+      state.messageBar.text = '';
     },
     updateMessageBarAction(state, action: PayloadAction<MessageBarData>) {
-      state.messageBar = action.payload
+      state.messageBar = action.payload;
     },
     setFailureAction(state, action: PayloadAction<string>) {
-      state.messageBar = { intent: 'critical', text: action.payload }
+      state.messageBar = { intent: 'critical', text: action.payload };
     },
   },
-})
+});
 
-export const OAuthFormActions = OAuthFormSlice.actions
+export const OAuthFormActions = OAuthFormSlice.actions;
 export const {
   useActions: useOAuthFormActions,
   useStoreState: useOAuthFormState,
-} = createSliceHooks(OAuthFormSlice, saga)
+} = createSliceHooks(OAuthFormSlice, saga);

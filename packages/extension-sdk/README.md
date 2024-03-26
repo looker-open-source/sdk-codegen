@@ -32,23 +32,22 @@ The Extension SDK must establish a connection with its host before further funct
 import {
   connectExtensionHost,
   LookerExtensionSDK40,
-} from '@looker/extension-sdk'
-;(async () => {
+} from '@looker/extension-sdk';
+(async () => {
   // This `extensionSDK` can perform extension-specific actions
-  const extensionSdk = await connectExtensionHost()
+  const extensionSdk = await connectExtensionHost();
   // This `coreSDK` is an automatically credentialed variant of the standard Looker Core SDK for performing API calls
-  const coreSDK = LookerExtensionSDK40.createClient(extensionSdk)
-  const result = await sdk40.me()
-  const name = result.ok ? result.value.display_name : 'Unknown'
+  const coreSDK = LookerExtensionSDK40.createClient(extensionSdk);
+  const result = await sdk40.me();
+  const name = result.ok ? result.value.display_name : 'Unknown';
 
   // DO OTHER THINGS
-})()
+})();
 ```
 
 The following create methods are also available
 
 - `LookerExtensionSDK.createClient(extensionSDK)` creates a Looker40SDK instance.
-- `LookerExtensionSDK.create31Client(extensionSDK)` creates a Looker31SDK instance, which is deprecated.
 
 #### Connection configuration
 
@@ -108,11 +107,11 @@ async function runLook(coreSDK) {
   var result = await coreSDK.run_look({
     look_id: look_id,
     result_format: 'json',
-  })
+  });
   if (result.ok) {
     // do something with result
   } else {
-    console.error('Something went wrong:', result.error)
+    console.error('Something went wrong:', result.error);
   }
 }
 ```
@@ -120,7 +119,7 @@ async function runLook(coreSDK) {
 ### Update browser window title
 
 ```ts
-extensionSDK.updateTitle('Change the window title')
+extensionSDK.updateTitle('Change the window title');
 ```
 
 ### Navigation and Links
@@ -128,13 +127,13 @@ extensionSDK.updateTitle('Change the window title')
 To navigate the host context to a new page:
 
 ```ts
-extensionSDK.updateLocation('/dashboards/37')
+extensionSDK.updateLocation('/dashboards/37');
 ```
 
 Or to open a new tab:
 
 ```ts
-extensionSDK.openBrowserWindow('/dashboards/37', '_blank')
+extensionSDK.openBrowserWindow('/dashboards/37', '_blank');
 ```
 
 ### Close host popovers
@@ -144,7 +143,7 @@ close when the extension is active. The extension may request that the Looker ho
 any open popovers.
 
 ```ts
-extensionSDK.closeHostPopovers()
+extensionSDK.closeHostPopovers();
 ```
 
 ### Local storage
@@ -156,14 +155,14 @@ from the regular browser localstorage API which is synchronous.
 
 ```ts
 // Save to localstorage
-await extensionSDK.localStorageSetItem('data', JSON.stringify(myDataObj))
+await extensionSDK.localStorageSetItem('data', JSON.stringify(myDataObj));
 
 // Read from localstorage
-const value = await extensionSDK.localStorageGetItem('data')
-const myDataObj = JSON.parse(value)
+const value = await extensionSDK.localStorageGetItem('data');
+const myDataObj = JSON.parse(value);
 
 // Remove from localstorage
-await extensionSDK.localStorageRemoveItem('data')
+await extensionSDK.localStorageRemoveItem('data');
 ```
 
 ### Clipboard
@@ -172,7 +171,7 @@ await extensionSDK.localStorageRemoveItem('data')
 is not given read access to the clipboard.
 
 ```ts
-extensionSDK.clipboardWrite('Hello Clipboard')
+extensionSDK.clipboardWrite('Hello Clipboard');
 ```
 
 ### User Attributes
@@ -186,13 +185,13 @@ extension `kitchensink::kitchensink`, key name `my_attribute` becomes `kitchensi
 
 ```ts
 // Read from system user attribute
-const locale = await extensionSDK.userAttributeGetItem('locale')
+const locale = await extensionSDK.userAttributeGetItem('locale');
 
 // Save to scoped user attribute
-await extensionSDK.userAttributeSetItem('my_attribute', 'value')
+await extensionSDK.userAttributeSetItem('my_attribute', 'value');
 
 // Read from scoped user attribute
-const value = await extensionSDK.userAttributeGetItem('my_attribute')
+const value = await extensionSDK.userAttributeGetItem('my_attribute');
 ```
 
 ### External API
@@ -212,8 +211,8 @@ try {
       scope: GOOGLE_SCOPES,
       response_type: 'token',
     }
-  )
-  const { access_token, expires_in } = response
+  );
+  const { access_token, expires_in } = response;
   // The user is authenticated, it does not mean the user is authorized.
   // There may be further work for the extension to do.
 } catch (error) {
@@ -236,7 +235,7 @@ try {
       response_type: 'code',
     },
     'GET'
-  )
+  );
   const { access_token } = await extensionSDK.oauth2ExchangeCodeForToken(
     'https://github.com/login/oauth/access_token',
     {
@@ -244,7 +243,7 @@ try {
       client_secret: extensionSDK.createSecretKeyTag('github_secret_key'),
       code: response.code,
     }
-  )
+  );
   // The user is authenticated, it does not mean the user is authorized.
   // There may be further work for the extension to do.
 } catch (error) {
@@ -270,7 +269,7 @@ try {
       scope: AUTH0_SCOPES,
     },
     'GET'
-  )
+  );
   // Note, no secret key
   const { access_token } = await extensionSDK.oauth2ExchangeCodeForToken(
     'https://github.com/login/oauth/access_token',
@@ -279,7 +278,7 @@ try {
       client_id: AUTH0_CLIENT_ID,
       code: response.code,
     }
-  )
+  );
   // The user is authenticated, it does not mean the user is authorized.
   // There may be further work for the extension to do.
 } catch (error) {
@@ -422,7 +421,7 @@ Extensions can be mounted in the following locations:
 - Dashboard popup launched from a tile settings menu.
 
 ```ts
-extensionSDK.spartanLogout()
+extensionSDK.spartanLogout();
 ```
 
 ## Related Projects

@@ -6,9 +6,9 @@ The main location that the data is maintained is in `src/resource-data/resources
 
 The main output of these scripts is a JSON file in `../../docs/resources` intended to be checked in to git and consumed via CDN. You may also import the typescript exports from this folder, for example to benefit from type declarations.
 
-* Before use, install dependencies with `yarn install`
-* To run tests & reports about the resources data, `yarn run analyze`
-* To build the distributable JSON file, run `yarn run build`
+- Before use, install dependencies with `yarn install`
+- To run tests & reports about the resources data, `yarn run analyze`
+- To build the distributable JSON file, run `yarn run build`
 
 ## Sample Use Cases
 

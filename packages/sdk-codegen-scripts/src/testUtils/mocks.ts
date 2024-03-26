@@ -24,14 +24,14 @@
 
  */
 
-import type { ICryptoHash } from '@looker/sdk-rtl'
+import type { ICryptoHash } from '@looker/sdk-rtl';
 
 export class MockCrypto implements ICryptoHash {
   secureRandom(_byteCount: number): string {
-    return 'feedface'
+    return 'feedface';
   }
 
   sha256Hash(_message: string): Promise<string> {
-    return Promise.resolve('baadf00d')
+    return Promise.resolve('baadf00d');
   }
 }

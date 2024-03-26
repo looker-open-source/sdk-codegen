@@ -24,18 +24,22 @@
 
  */
 
-import type { Agent } from 'https'
-import type { Headers } from 'request'
-import type { Readable } from 'readable-stream'
-import { matchCharsetUtf8, matchModeBinary, matchModeString } from './constants'
-import { DelimArray } from './delimArray'
-import { LookerSDKError } from './lookerSDKError'
+import type { Agent } from 'https';
+import type { Headers } from 'request';
+import type { Readable } from 'readable-stream';
+import {
+  matchCharsetUtf8,
+  matchModeBinary,
+  matchModeString,
+} from './constants';
+import { DelimArray } from './delimArray';
+import { LookerSDKError } from './lookerSDKError';
 
-export const agentPrefix = 'TS-SDK'
-export const LookerAppId = 'x-looker-appid'
+export const agentPrefix = 'TS-SDK';
+export const LookerAppId = 'x-looker-appid';
 
 /** Set to `true` to follow streaming process */
-const tracing = false
+const tracing = false;
 
 /**
  * trivial tracing function that should be replaced with a log plugin
@@ -45,10 +49,10 @@ const tracing = false
 export function trace(message: string, info?: any) {
   if (tracing) {
     // eslint-disable-next-line no-console
-    console.debug(message)
+    console.debug(message);
     if (info) {
       // eslint-disable-next-line no-console
-      console.debug({ info })
+      console.debug({ info });
     }
   }
 }
@@ -64,25 +68,25 @@ export enum ResponseMode {
  * MIME patterns for string content types
  * @type {RegExp}
  */
-export const contentPatternString = new RegExp(matchModeString, 'i')
+export const contentPatternString = new RegExp(matchModeString, 'i');
 
 /**
  * MIME patterns for "binary" content types
  * @type {RegExp}
  */
-export const contentPatternBinary = new RegExp(matchModeBinary, 'i')
+export const contentPatternBinary = new RegExp(matchModeBinary, 'i');
 
 /**
  * MIME pattern for UTF8 charset attribute
  * @type {RegExp}
  */
-export const charsetUtf8Pattern = new RegExp(matchCharsetUtf8, 'i')
+export const charsetUtf8Pattern = new RegExp(matchCharsetUtf8, 'i');
 
 /**
  * Default request timeout
  * @type {number} default request timeout is 120 seconds, or two minutes
  */
-export const defaultTimeout = 120
+export const defaultTimeout = 120;
 
 /** Recognized HTTP methods */
 export type HttpMethod =
@@ -92,7 +96,7 @@ export type HttpMethod =
   | 'DELETE'
   | 'PATCH'
   | 'TRACE'
-  | 'HEAD'
+  | 'HEAD';
 
 /**
  * HTTP status codes
@@ -164,36 +168,36 @@ export enum StatusCode {
 /** Untyped basic HTTP response type for "raw" HTTP requests */
 export interface IRawResponse {
   /** Http method of the request */
-  method: HttpMethod
+  method: HttpMethod;
   /** ok is `true` if the response is successful, `false` otherwise */
-  ok: boolean
+  ok: boolean;
   /** HTTP request url */
-  url: string
+  url: string;
   /** HTTP response code */
-  statusCode: number
+  statusCode: number;
   /** HTTP response status message text */
-  statusMessage: string
+  statusMessage: string;
   /** MIME type of the response from the HTTP response header */
-  contentType: string
+  contentType: string;
   /** The body of the HTTP response, without any additional processing */
-  body: any
+  body: any;
   /** Optional performance tracking starting mark name */
-  startMark?: string
+  startMark?: string;
   /** Response headers */
-  headers: IRequestHeaders
+  headers: IRequestHeaders;
   /** Request start time */
-  requestStarted: number
+  requestStarted: number;
   /** Completion time for request */
-  responseCompleted: number
+  responseCompleted: number;
 }
 
 /** IRawResponse observer function type */
-export type RawObserver = (raw: IRawResponse) => IRawResponse
+export type RawObserver = (raw: IRawResponse) => IRawResponse;
 
 /** Transport plug-in interface */
 export interface ITransport {
   /** Observer lambda to process raw responses */
-  observer: RawObserver | undefined
+  observer: RawObserver | undefined;
 
   /**
    * HTTP request function for atomic, fully downloaded raw HTTP responses
@@ -215,7 +219,7 @@ export interface ITransport {
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
-  ): Promise<IRawResponse>
+  ): Promise<IRawResponse>;
 
   /**
    * HTTP request function for atomic, fully downloaded responses
@@ -234,7 +238,7 @@ export interface ITransport {
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<TSuccess, TError>>
+  ): Promise<SDKResponse<TSuccess, TError>>;
 
   /**
    * Processes the raw response, converting it into an SDKResponse
@@ -242,7 +246,7 @@ export interface ITransport {
    */
   parseResponse<TSuccess, TError>(
     raw: IRawResponse
-  ): Promise<SDKResponse<TSuccess, TError>>
+  ): Promise<SDKResponse<TSuccess, TError>>;
 
   /**
    * HTTP request function for a streamable response
@@ -264,38 +268,38 @@ export interface ITransport {
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
-  ): Promise<T>
+  ): Promise<T>;
 }
 
 /** A successful SDK call. */
 export interface ISDKSuccessResponse<T> {
   /** Whether the SDK call was successful. */
-  ok: true
+  ok: true;
   /** The object returned by the SDK call. */
-  value: T
+  value: T;
 }
 
 /** An errant SDK call. */
 export interface ISDKErrorResponse<T> {
   /** Whether the SDK call was successful. */
-  ok: false
+  ok: false;
   /** The error object returned by the SDK call. */
-  error: T
+  error: T;
 }
 
 /** An error representing an issue in the SDK, like a network or parsing error. */
 export interface ISDKError {
-  type: 'sdk_error'
-  message: string
+  type: 'sdk_error';
+  message: string;
 }
 
 export type SDKResponse<TSuccess, TError> =
   | ISDKSuccessResponse<TSuccess>
-  | ISDKErrorResponse<TError | ISDKError>
+  | ISDKErrorResponse<TError | ISDKError>;
 
 /** Generic collection */
 export interface IRequestHeaders {
-  [key: string]: string
+  [key: string]: string;
 }
 
 /**
@@ -303,51 +307,51 @@ export interface IRequestHeaders {
  * TODO: Trim this down to what is required
  */
 export interface IRequestProps {
-  [key: string]: any
+  [key: string]: any;
   /** full url for request, including any query params */
-  url: string
+  url: string;
 
   /** body of request. optional */
-  body?: any
+  body?: any;
   /** headers for request. optional */
-  headers: IRequestHeaders
+  headers: IRequestHeaders;
   /** Http method for request. required. */
-  method: HttpMethod
+  method: HttpMethod;
   /** Redirect processing for request. optional */
-  redirect?: any
+  redirect?: any;
   /** Credentials to use */
-  credentials?: 'include' | 'omit' | 'same-origin' | undefined
+  credentials?: 'include' | 'omit' | 'same-origin' | undefined;
 
   /** http.Agent instance, allows custom proxy, certificate etc. */
-  agent?: Agent
+  agent?: Agent;
   /** support gzip/deflate content encoding. false to disable */
-  compress?: boolean
+  compress?: boolean;
   /** maximum redirect count. 0 to not follow redirect */
-  follow?: number
+  follow?: number;
   /** maximum response body size in bytes */
-  size?: number
+  size?: number;
   /** req/res timeout in ms, it resets on redirect. 0 to disable (OS limit applies) */
-  timeout?: number
+  timeout?: number;
 }
 
 /** General purpose authentication callback */
-export type Authenticator = (props: any) => any
+export type Authenticator = (props: any) => any;
 
 /** Interface for API transport values */
 export interface ITransportSettings {
-  [key: string]: any
+  [key: string]: any;
   /** base URL of API REST web service */
-  base_url: string
+  base_url: string;
   /** standard headers to provide in all transport requests */
-  headers?: Headers
+  headers?: Headers;
   /** whether to verify ssl certs or not. Defaults to true */
-  verify_ssl: boolean
+  verify_ssl: boolean;
   /** request timeout in seconds. Default to 30 */
-  timeout: number
+  timeout: number;
   /** encoding override */
-  encoding?: string | null
+  encoding?: string | null;
   /** agent tag to use for the SDK requests */
-  agentTag: string
+  agentTag: string;
 }
 
 /**
@@ -357,12 +361,12 @@ export interface ITransportSettings {
  */
 export function responseMode(contentType: string) {
   if (contentType.match(contentPatternString)) {
-    return ResponseMode.string
+    return ResponseMode.string;
   }
   if (contentType.match(contentPatternBinary)) {
-    return ResponseMode.binary
+    return ResponseMode.binary;
   }
-  return ResponseMode.unknown
+  return ResponseMode.unknown;
 }
 
 /**
@@ -371,11 +375,11 @@ export function responseMode(contentType: string) {
  * @returns match if it exists
  */
 export function isUtf8(contentType: string) {
-  return contentType.match(/;.*\bcharset\b=\butf-8\b/i)
+  return contentType.match(/;.*\bcharset\b=\butf-8\b/i);
 }
 
 /** Used for name/value pair collections like for QueryParams */
-export type Values = { [key: string]: any } | null | undefined
+export type Values = { [key: string]: any } | null | undefined;
 
 /**
  * Encode parameter if not already encoded
@@ -387,29 +391,29 @@ export type Values = { [key: string]: any } | null | undefined
  */
 export function encodeParam(value: any) {
   if (value instanceof Date) {
-    value = value.toISOString()
+    value = value.toISOString();
   } else if (value instanceof DelimArray) {
-    value = value.toString()
+    value = value.toString();
   }
   // check for object type to prevent "[object Object]" as the value.toString()
   let encoded =
-    typeof value === 'object' ? JSON.stringify(value) : value.toString()
+    typeof value === 'object' ? JSON.stringify(value) : value.toString();
 
   // decodeURIComponent throws URIError if there is a % character
   // without it being part of an encoded
   try {
-    const decoded = decodeURIComponent(value)
+    const decoded = decodeURIComponent(value);
     if (value === decoded) {
-      encoded = encodeURIComponent(value)
+      encoded = encodeURIComponent(value);
     }
   } catch (e) {
     if (e instanceof URIError) {
-      encoded = encodeURIComponent(value)
+      encoded = encodeURIComponent(value);
     } else {
-      throw e
+      throw e;
     }
   }
-  return encoded
+  return encoded;
 }
 
 /**
@@ -418,13 +422,13 @@ export function encodeParam(value: any) {
  * @returns {string} query string parameter formatted values. Both `false` and `null` are included. Only `undefined` are omitted.
  */
 export function encodeParams(values?: Values) {
-  if (!values) return ''
+  if (!values) return '';
 
-  const keys = Object.keys(values)
+  const keys = Object.keys(values);
   return keys
     .filter((k) => values[k] !== undefined) // `null` and `false` will both be passed
     .map((k) => k + '=' + encodeParam(values[k]))
-    .join('&')
+    .join('&');
 }
 
 /**
@@ -434,38 +438,38 @@ export function encodeParams(values?: Values) {
  */
 export function addQueryParams(path: string, obj?: Values) {
   if (!obj) {
-    return path
+    return path;
   }
-  const qp = encodeParams(obj)
-  return `${path}${qp ? '?' + qp : ''}`
+  const qp = encodeParams(obj);
+  return `${path}${qp ? '?' + qp : ''}`;
 }
 
-const utf8 = 'utf-8'
+const utf8 = 'utf-8';
 
 /**
  * Convert this value to a string representation however we can do it
  * @param val
  */
 function bufferString(val: any) {
-  let result = 'Unknown error'
+  let result = 'Unknown error';
   try {
-    const decoder = new TextDecoder(utf8)
-    result = decoder.decode(val)
+    const decoder = new TextDecoder(utf8);
+    result = decoder.decode(val);
   } catch (e: any) {
     // Supremely ugly hack. If we get here, we must be in Node (or IE 11, but who cares about that?)
     // Node requires an import from `util` for TextDecoder to be found BUT it "just has" Buffer unless WebPack messes us up
     try {
       if (val instanceof Buffer) {
-        result = Buffer.from(val).toString(utf8)
+        result = Buffer.from(val).toString(utf8);
       } else {
-        result = JSON.stringify(val)
+        result = JSON.stringify(val);
       }
     } catch (err: any) {
       // The fallback logic here will at least give us some information about the error being thrown
-      result = JSON.stringify(val)
+      result = JSON.stringify(val);
     }
   }
-  return result
+  return result;
 }
 
 /**
@@ -475,35 +479,35 @@ function bufferString(val: any) {
  */
 export function sdkError(response: any) {
   if (typeof response === 'string') {
-    return new LookerSDKError(response)
+    return new LookerSDKError(response);
   }
   if ('error' in response) {
-    const error = response.error
+    const error = response.error;
     if (typeof error === 'string') {
-      return new LookerSDKError(error)
+      return new LookerSDKError(error);
     }
     // Try to get most specific error first
     if ('error' in error) {
-      const result = bufferString(error.error)
-      return new LookerSDKError(result)
+      const result = bufferString(error.error);
+      return new LookerSDKError(result);
     }
     if ('message' in error) {
       return new LookerSDKError(response.error.message.toString(), {
         errors: error.errors,
         documentation_url: error.documentation_url,
-      })
+      });
     }
     if ('statusMessage' in error) {
-      return new LookerSDKError(error.statusMessage)
+      return new LookerSDKError(error.statusMessage);
     }
-    const result = bufferString(error)
-    return new LookerSDKError(result)
+    const result = bufferString(error);
+    return new LookerSDKError(result);
   }
   if ('message' in response) {
-    return new LookerSDKError(response.message)
+    return new LookerSDKError(response.message);
   }
-  const error = JSON.stringify(response)
-  return new LookerSDKError(`Unknown error with SDK method ${error}`)
+  const error = JSON.stringify(response);
+  return new LookerSDKError(`Unknown error with SDK method ${error}`);
 }
 
 /** A helper method for simplifying error handling of SDK responses.
@@ -532,11 +536,11 @@ export function sdkError(response: any) {
 export async function sdkOk<TSuccess, TError>(
   promise: Promise<SDKResponse<TSuccess, TError>>
 ) {
-  const result = await promise
+  const result = await promise;
   if (result.ok) {
-    return result.value
+    return result.value;
   } else {
-    throw sdkError(result)
+    throw sdkError(result);
   }
 }
 
@@ -545,8 +549,8 @@ export async function sdkOk<TSuccess, TError>(
  * @param u8 byte array to convert
  */
 export function safeBase64(u8: Uint8Array) {
-  const rawBase64 = btoa(String.fromCharCode(...u8))
-  return rawBase64.replace(/\+/g, '-').replace(/\//g, '_')
+  const rawBase64 = btoa(String.fromCharCode(...u8));
+  return rawBase64.replace(/\+/g, '-').replace(/\//g, '_');
 }
 
 /**
@@ -554,13 +558,11 @@ export function safeBase64(u8: Uint8Array) {
  * @param error a value of unknown type
  * @return boolean true if the error has a `message` key of type string.
  */
-export function isErrorLike<T extends unknown>(
-  error: T
-): error is T & { message: string } {
-  if (typeof error !== 'object') return false
-  if (!error) return false
-  if (!Object.prototype.hasOwnProperty.call(error, 'message')) return false
+export function isErrorLike<T>(error: T): error is T & { message: string } {
+  if (typeof error !== 'object') return false;
+  if (!error) return false;
+  if (!Object.prototype.hasOwnProperty.call(error, 'message')) return false;
   if (typeof (error as unknown as { message: unknown }).message !== 'string')
-    return false
-  return true
+    return false;
+  return true;
 }

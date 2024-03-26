@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 332 API models: 249 Spec, 0 Request, 61 Write, 22 Enum
+/// 339 API models: 256 Spec, 0 Request, 61 Write, 22 Enum
 
 #nullable enable
 using System;
@@ -1994,7 +1994,7 @@ public class EmbedCookielessSessionAcquireResponse : SdkModel
   public long? api_token_ttl { get; set; } = null;
   /// <summary>Token referencing the actual embed session. It is used to generate new api, navigation and authentication tokens. api and navigation tokens are short lived and must be refreshed regularly. A new authentication token must be acquired for each IFRAME that is created. The session_reference_token should be kept secure, ideally in the embed hosts application server. </summary>
   public string? session_reference_token { get; set; } = null;
-  /// <summary>Session reference token time to live in seconds. Note that this is the same as actual session.</summary>
+  /// <summary>Session reference token time to live in seconds. Note that this is the same as actual embed session. The session is expired when the value is set to zero. It is important to note that the generate token endpoint does NOT return an error when the embed session has expired. If an embedding application needs to monitor expiration of embed sessions, check this property for a value of zero.</summary>
   public long? session_reference_token_ttl { get; set; } = null;
 }
 
@@ -2487,7 +2487,7 @@ public class Integration : SdkModel
   public bool? enabled { get; set; } = null;
   /// <summary>Array of params for the integration.</summary>
   public IntegrationParam[]? @params { get; set; } = null;
-  /// <summary>A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (read-only)</summary>
+  /// <summary>A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "json_bi", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (read-only)</summary>
   public SupportedFormats[]? supported_formats { get; set; } = null;
   /// <summary>A list of action types the integration supports. Valid values are: "cell", "query", "dashboard", "none". (read-only)</summary>
   public SupportedActionTypes[]? supported_action_types { get; set; } = null;
@@ -2604,6 +2604,86 @@ public enum InvestigativeContentType
 {
   [EnumMember(Value = "dashboard")]
   dashboard
+}
+
+public class JsonBi : SdkModel
+{
+  public JsonBiBigQueryMetadata big_query_metadata { get; set; } = null;
+  public JsonBiFields fields { get; set; } = null;
+  /// <summary>Pivots (read-only)</summary>
+  public JsonBiPivots[] pivots { get; set; } = null;
+  /// <summary>If the query has subtotals (read-only)</summary>
+  public bool has_subtotals { get; set; }
+  /// <summary>If the query has totals (read-only)</summary>
+  public bool has_totals { get; set; }
+  /// <summary>If the query results hit the maximum column limit and additional columns were truncated (read-only)</summary>
+  public string columns_truncated { get; set; } = "";
+  /// <summary>Filter expression applied to the query results (read-only)</summary>
+  public string filter_expression { get; set; } = "";
+  /// <summary>Filters applied to the query results (read-only)</summary>
+  public StringDictionary<string> filters { get; set; } = null;
+  /// <summary>Raw sql query. Null if user does not have permission to view sql (read-only)</summary>
+  public string sql { get; set; } = "";
+  /// <summary>Json query results (read-only)</summary>
+  public string[] data { get; set; } = null;
+}
+
+public class JsonBiBigQueryMetadata : SdkModel
+{
+  /// <summary>Total bytes processed by the BigQuery job (read-only)</summary>
+  public long total_bytes_processed { get; set; }
+  /// <summary>Return whether or not query results were served from the BigQuery cache. (read-only)</summary>
+  public bool backend_cache_hit { get; set; }
+}
+
+public class JsonBiField : SdkModel
+{
+  /// <summary>SQL expressions for the field (read-only)</summary>
+  public string sql { get; set; } = "";
+  /// <summary>Explore name (read-only)</summary>
+  public string view { get; set; } = "";
+  /// <summary>Which dimension group created this dimension (read-only)</summary>
+  public string dimension_group { get; set; } = "";
+  /// <summary>Dimension, Measure, etc. (read-only)</summary>
+  public string category { get; set; } = "";
+  /// <summary>Field Group Label (read-only)</summary>
+  public string field_group_label { get; set; } = "";
+  /// <summary>Field Name (read-only)</summary>
+  public string name { get; set; } = "";
+  /// <summary>Field Type (read-only)</summary>
+  public string type { get; set; } = "";
+  /// <summary>View Label (read-only)</summary>
+  public string view_label { get; set; } = "";
+  /// <summary>Field Label (read-only)</summary>
+  public string label { get; set; } = "";
+  /// <summary>Field Group Variant (read-only)</summary>
+  public string field_group_variant { get; set; } = "";
+  /// <summary>If the field is marked as hidden in the Lookml (read-only)</summary>
+  public bool hidden { get; set; }
+  /// <summary>Field Description (read-only)</summary>
+  public string description { get; set; } = "";
+}
+
+public class JsonBiFields : SdkModel
+{
+  /// <summary>Dimensions represent a column in a table, or a computed value based on some sort of column manipulation or combination (read-only)</summary>
+  public JsonBiField[] dimensions { get; set; } = null;
+  /// <summary>Measures are similar to aggregate functions in SQL (for example, COUNT, SUM, AVG) and represent information about multiple rows (read-only)</summary>
+  public JsonBiField[] measures { get; set; } = null;
+  /// <summary>Pivots (read-only)</summary>
+  public JsonBiField[] pivots { get; set; } = null;
+}
+
+public class JsonBiPivots : SdkModel
+{
+  /// <summary>Pivot Column Value (read-only)</summary>
+  public string key { get; set; } = "";
+  /// <summary>Pivot Data (read-only)</summary>
+  public StringDictionary<string> data { get; set; } = null;
+  /// <summary>Pivot Sort Values (read-only)</summary>
+  public StringDictionary<string> sort_values { get; set; } = null;
+  /// <summary>If the value is a total (read-only)</summary>
+  public bool is_total { get; set; }
 }
 
 public class LDAPConfig : SdkModel
@@ -2925,6 +3005,16 @@ public class LookBasic : SdkModel
   public string? user_id { get; set; } = null;
 }
 
+public class LookmlFieldLink : SdkModel
+{
+  /// <summary>The name of the link as it would appear to users. (read-only)</summary>
+  public string? label { get; set; } = null;
+  /// <summary>URL the link will go to. (read-only)</summary>
+  public string? url { get; set; } = null;
+  /// <summary>A URL containing an image file to display with a link. (read-only)</summary>
+  public string? icon_url { get; set; } = null;
+}
+
 public class LookmlModel : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
@@ -3086,6 +3176,8 @@ public class LookmlModelExploreField : SdkModel
   public string? description { get; set; } = null;
   /// <summary>Dimension group if this field is part of a dimension group. If not, this will be null. (read-only)</summary>
   public string? dimension_group { get; set; } = null;
+  /// <summary>Drill fields declared for this field in LookML or default drills for certain types. (read-only)</summary>
+  public string[]? drill_fields { get; set; } = null;
   /// <summary>An array enumerating all the possible values that this field can contain. When null, there is no limit to the set of possible values this field can contain. (read-only)</summary>
   public LookmlModelExploreFieldEnumeration[]? enumerations { get; set; } = null;
   /// <summary>An error message indicating a problem with the definition of this field. If there are no errors, this will be null. (read-only)</summary>
@@ -3101,6 +3193,8 @@ public class LookmlModelExploreField : SdkModel
   public long? fiscal_month_offset { get; set; } = null;
   /// <summary>Whether this field has a set of allowed_values specified in LookML. (read-only)</summary>
   public bool? has_allowed_values { get; set; } = null;
+  /// <summary>Whether this field has links or drill fields defined. (read-only)</summary>
+  public bool? has_drills_metadata { get; set; } = null;
   /// <summary>Whether this field should be hidden from the user interface. (read-only)</summary>
   public bool? hidden { get; set; } = null;
   /// <summary>Whether this field is a filter. (read-only)</summary>
@@ -3122,6 +3216,8 @@ public class LookmlModelExploreField : SdkModel
   public string? label_short { get; set; } = null;
   /// <summary>A URL linking to the definition of this field in the LookML IDE. (read-only)</summary>
   public string? lookml_link { get; set; } = null;
+  /// <summary>Links associated with this field. (read-only)</summary>
+  public LookmlFieldLink[]? links { get; set; } = null;
   public LookmlModelExploreFieldMapLayer? map_layer { get; set; }
   /// <summary>Whether this field is a measure. (read-only)</summary>
   public bool? measure { get; set; } = null;
@@ -3558,6 +3654,8 @@ public class MergeQuerySourceQuery : SdkModel
   public string? name { get; set; } = null;
   /// <summary>Id of the query to merge</summary>
   public string? query_id { get; set; } = null;
+  /// <summary>Slug of the query to merge</summary>
+  public string? query_slug { get; set; } = null;
 }
 
 public class MobileFeatureFlags : SdkModel
@@ -4128,6 +4226,27 @@ public class Query : SdkModel
   public string? query_timezone { get; set; } = null;
   /// <summary>Has Table Calculations (read-only)</summary>
   public bool? has_table_calculations { get; set; } = null;
+}
+
+public class QueryFormats : SdkModel
+{
+  public JsonBi? json_bi { get; set; }
+  /// <summary> (read-only)</summary>
+  public string? json { get; set; } = null;
+  /// <summary> (read-only)</summary>
+  public string? json_detail { get; set; } = null;
+  /// <summary> (read-only)</summary>
+  public string? csv { get; set; } = null;
+  /// <summary> (read-only)</summary>
+  public string? txt { get; set; } = null;
+  /// <summary> (read-only)</summary>
+  public string? html { get; set; } = null;
+  /// <summary> (read-only)</summary>
+  public string? md { get; set; } = null;
+  /// <summary> (read-only)</summary>
+  public string? xlsx { get; set; } = null;
+  /// <summary> (read-only)</summary>
+  public string? sql { get; set; } = null;
 }
 
 public class QueryTask : SdkModel
@@ -4799,6 +4918,10 @@ public class Setting : SdkModel
   /// <summary>True if embedding is enabled https://cloud.google.com/looker/docs/r/looker-core-feature-embed, false otherwise (read-only)</summary>
   public bool? embed_enabled { get; set; } = null;
   public EmbedConfig? embed_config { get; set; }
+  /// <summary>Login notification enabled (read-only)</summary>
+  public bool? login_notification_enabled { get; set; } = null;
+  /// <summary>Login notification text (read-only)</summary>
+  public string? login_notification_text { get; set; } = null;
 }
 
 public class SmtpNodeStatus : SdkModel
@@ -5045,7 +5168,7 @@ public enum SupportedDownloadSettings
   url
 }
 
-/// A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (Enum defined in Integration)
+/// A list of data formats the integration supports. If unspecified, the default is all data formats. Valid values are: "txt", "csv", "inline_json", "json", "json_label", "json_detail", "json_detail_lite_stream", "json_bi", "xlsx", "html", "wysiwyg_pdf", "assembled_pdf", "wysiwyg_png", "csv_zip". (Enum defined in Integration)
 public enum SupportedFormats
 {
   [EnumMember(Value = "txt")]
@@ -5062,6 +5185,8 @@ public enum SupportedFormats
   json_detail,
   [EnumMember(Value = "json_detail_lite_stream")]
   json_detail_lite_stream,
+  [EnumMember(Value = "json_bi")]
+  json_bi,
   [EnumMember(Value = "xlsx")]
   xlsx,
   [EnumMember(Value = "html")]
@@ -5314,7 +5439,7 @@ public class UserAttribute : SdkModel
   public string name { get; set; } = "";
   /// <summary>Human-friendly label for user attribute</summary>
   public string label { get; set; } = "";
-  /// <summary>Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")</summary>
+  /// <summary>Type of user attribute ("string", "number", "datetime", "yesno", "zipcode", "advanced_filter_string", "advanced_filter_number")</summary>
   public string type { get; set; } = "";
   /// <summary>Default value for when no value is set on the user</summary>
   public string? default_value { get; set; } = null;
@@ -6766,7 +6891,7 @@ public class WriteSessionConfig : SdkModel
 }
 
 /// Dynamic writeable type for Setting removes:
-/// marketplace_site, embed_enabled
+/// marketplace_site, embed_enabled, login_notification_enabled, login_notification_text
 public class WriteSetting : SdkModel
 {
   /// <summary>Toggle extension framework on or off</summary>
@@ -6889,7 +7014,7 @@ public class WriteUserAttribute : SdkModel
   public string name { get; set; } = "";
   /// <summary>Human-friendly label for user attribute</summary>
   public string label { get; set; } = "";
-  /// <summary>Type of user attribute ("string", "number", "datetime", "yesno", "zipcode")</summary>
+  /// <summary>Type of user attribute ("string", "number", "datetime", "yesno", "zipcode", "advanced_filter_string", "advanced_filter_number")</summary>
   public string type { get; set; } = "";
   /// <summary>Default value for when no value is set on the user</summary>
   public string? default_value { get; set; } = null;

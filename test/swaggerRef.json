@@ -2558,7 +2558,7 @@
         "tags": ["Dashboard"],
         "operationId": "update_dashboard",
         "summary": "Update Dashboard",
-        "description": "### Update a dashboard\n\nYou can use this function to change the string and integer properties of\na dashboard. Nested objects such as filters, dashboard elements, or dashboard layout components\ncannot be modified by this function - use the update functions for the respective\nnested object types (like [update_dashboard_filter()](#!/3.1/Dashboard/update_dashboard_filter) to change a filter)\nto modify nested objects referenced by a dashboard.\n\nIf you receive a 422 error response when updating a dashboard, be sure to look at the\nresponse body for information about exactly which fields are missing or contain invalid data.\n",
+        "description": "### Update a dashboard\n\nYou can use this function to change the string and integer properties of\na dashboard. Nested objects such as filters, dashboard elements, or dashboard layout components\ncannot be modified by this function - use the update functions for the respective\nnested object types (like [update_dashboard_filter()](#!/4.0/Dashboard/update_dashboard_filter) to change a filter)\nto modify nested objects referenced by a dashboard.\n\nIf you receive a 422 error response when updating a dashboard, be sure to look at the\nresponse body for information about exactly which fields are missing or contain invalid data.\n",
         "parameters": [
           {
             "name": "dashboard_id",

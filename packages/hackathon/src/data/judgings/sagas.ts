@@ -23,35 +23,35 @@
  SOFTWARE.
 
  */
-import { all, call, put, takeEvery, select } from 'redux-saga/effects'
-import type { SagaIterator } from 'redux-saga'
-import { actionMessage, beginLoading, endLoading } from '../common/actions'
-import type { IJudgingProps } from '../../models'
-import { sheetsClient } from '../sheets_client'
+import { all, call, put, select, takeEvery } from 'redux-saga/effects';
+import type { SagaIterator } from 'redux-saga';
+import { actionMessage, beginLoading, endLoading } from '../common/actions';
+import type { IJudgingProps } from '../../models';
+import { sheetsClient } from '../sheets_client';
 import type {
   GetJudgingRequestAction,
   SaveJudgingRequestAction,
-} from './actions'
+} from './actions';
 import {
   Actions,
-  getJudgingsResponse,
   getJudgingResponse,
+  getJudgingsResponse,
   saveJudgingResponse,
-} from './actions'
-import { getJudgingsState } from './selectors'
+} from './actions';
+import { getJudgingsState } from './selectors';
 
 function* getJudgingsSaga(): SagaIterator<IJudgingProps[]> {
-  let judgings: IJudgingProps[] = []
+  let judgings: IJudgingProps[] = [];
   try {
-    yield put(beginLoading())
-    judgings = yield call([sheetsClient, sheetsClient.getJudgings])
-    yield put(getJudgingsResponse(judgings))
-    yield put(endLoading())
+    yield put(beginLoading());
+    judgings = yield call([sheetsClient, sheetsClient.getJudgings]);
+    yield put(getJudgingsResponse(judgings));
+    yield put(endLoading());
   } catch (err) {
-    console.error(err)
-    yield put(actionMessage('A problem occurred loading the data', 'critical'))
+    console.error(err);
+    yield put(actionMessage('A problem occurred loading the data', 'critical'));
   }
-  return judgings
+  return judgings;
 }
 
 function* getJudgingSaga({
@@ -59,38 +59,38 @@ function* getJudgingSaga({
 }: GetJudgingRequestAction): SagaIterator {
   try {
     // Pull judging out of state.
-    const state = yield select()
-    let judgings = getJudgingsState(state)
+    const state = yield select();
+    let judgings = getJudgingsState(state);
     if (judgings.length === 0) {
       // judgings are lost on page reload so load them
-      judgings = yield getJudgingsSaga() as any
+      judgings = yield getJudgingsSaga() as any;
     }
-    const judging = judgings.find((j) => j._id === judgingId)
-    yield put(getJudgingResponse(judging))
+    const judging = judgings.find((j) => j._id === judgingId);
+    yield put(getJudgingResponse(judging));
   } catch (err) {
-    console.error(err)
-    yield put(actionMessage('A problem occurred loading the data', 'critical'))
+    console.error(err);
+    yield put(actionMessage('A problem occurred loading the data', 'critical'));
   }
 }
 
 function* saveJudgingSaga(action: SaveJudgingRequestAction): SagaIterator {
   try {
-    yield put(beginLoading())
+    yield put(beginLoading());
     const judging = yield call(
       [sheetsClient, sheetsClient.saveJudging],
       action.payload
-    )
-    yield put(saveJudgingResponse(judging, true))
-    yield put(actionMessage('Judging has been saved', 'positive'))
+    );
+    yield put(saveJudgingResponse(judging, true));
+    yield put(actionMessage('Judging has been saved', 'positive'));
   } catch (err) {
-    console.error(err)
-    yield put(saveJudgingResponse(action.payload, false))
-    yield put(actionMessage('A problem occurred loading the data', 'critical'))
+    console.error(err);
+    yield put(saveJudgingResponse(action.payload, false));
+    yield put(actionMessage('A problem occurred loading the data', 'critical'));
   }
 }
 
 export function* registerJudgingsSagas() {
-  yield all([takeEvery(Actions.GET_JUDGINGS_REQUEST, getJudgingsSaga)])
-  yield all([takeEvery(Actions.GET_JUDGING_REQUEST, getJudgingSaga)])
-  yield all([takeEvery(Actions.SAVE_JUDGING_REQUEST, saveJudgingSaga)])
+  yield all([takeEvery(Actions.GET_JUDGINGS_REQUEST, getJudgingsSaga)]);
+  yield all([takeEvery(Actions.GET_JUDGING_REQUEST, getJudgingSaga)]);
+  yield all([takeEvery(Actions.SAVE_JUDGING_REQUEST, saveJudgingSaga)]);
 }

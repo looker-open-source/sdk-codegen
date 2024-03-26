@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import type { IExampleMine } from '@looker/sdk-codegen'
+import type { IExampleMine } from '@looker/sdk-codegen';
 
 // prettier-ignore
 export const examples: IExampleMine = {

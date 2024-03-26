@@ -24,8 +24,8 @@
 
  */
 
-import { updateSpecs } from './utils'
-;(async () => {
-  console.warn('Did you remove the specs in the /specs folder?')
-  await updateSpecs()
-})()
+import { updateSpecs } from './utils';
+(async () => {
+  console.warn('Did you remove the specs in the /specs folder?');
+  await updateSpecs();
+})();

@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export * from './VisualizationData'
+export * from './VisualizationData';

@@ -23,8 +23,8 @@
  SOFTWARE.
 
  */
-import type { FC } from 'react'
-import React, { useState, useEffect } from 'react'
+import type { FC } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Card,
@@ -32,27 +32,27 @@ import {
   DataTableItem,
   Icon,
   Link,
-  Space,
   Pagination,
-} from '@looker/components'
-import type { IMethod } from '@looker/sdk-codegen'
-import { findExampleLanguages } from '@looker/sdk-codegen'
-import { CollapserCard } from '@looker/run-it'
-import { InsertDriveFile } from '@styled-icons/material-outlined/InsertDriveFile'
-import { useSelector } from 'react-redux'
+  Space,
+} from '@looker/components';
+import type { IMethod } from '@looker/sdk-codegen';
+import { findExampleLanguages } from '@looker/sdk-codegen';
+import { CollapserCard } from '@looker/run-it';
+import { InsertDriveFile } from '@styled-icons/material-outlined/InsertDriveFile';
+import { useSelector } from 'react-redux';
 
-import { selectSdkLanguage, selectExamplesLode } from '../../state'
+import { selectExamplesLode, selectSdkLanguage } from '../../state';
 import {
-  exampleColumns,
   EMPTY_STRING,
-  prepareExampleDataTable,
   PER_PAGE_COUNT,
+  exampleColumns,
+  prepareExampleDataTable,
   sortLanguagesByPreference,
-} from './utils'
-import { DocSdkExampleCell } from './DocSdkExampleCell'
+} from './utils';
+import { DocSdkExampleCell } from './DocSdkExampleCell';
 
 interface DocSdkUsageProps {
-  method: IMethod
+  method: IMethod;
 }
 
 /**
@@ -60,39 +60,40 @@ interface DocSdkUsageProps {
  *  links to the source files
  */
 export const DocSdkUsage: FC<DocSdkUsageProps> = ({ method }) => {
-  const examples = useSelector(selectExamplesLode)
-  const sdkLanguage = useSelector(selectSdkLanguage)
-  const [page, setPage] = useState(1)
+  const examples = useSelector(selectExamplesLode);
+  const sdkLanguage = useSelector(selectSdkLanguage);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
-    setPage(1)
-  }, [method])
+    setPage(1);
+  }, [method]);
 
-  if (!examples) return <></>
-  let languages = findExampleLanguages(examples, method.name)
-  if (languages.length === 0) return <></>
+  if (!examples) return <></>;
+  let languages = findExampleLanguages(examples, method.name);
+  if (languages.length === 0) return <></>;
 
-  languages = sortLanguagesByPreference(languages, sdkLanguage)
+  languages = sortLanguagesByPreference(languages, sdkLanguage);
 
   const { pageExamples, pageLimit, paginate } = prepareExampleDataTable(
     languages,
     examples,
     method.operationId,
     page
-  )
+  );
 
-  if (pageExamples.length === 0) return <></>
+  if (pageExamples.length === 0) return <></>;
 
   return (
     <CollapserCard id="examples" heading="SDK Examples">
       <Card height="auto" px="small" py="xsmall" mt="small">
         <DataTable caption="SDK Examples" columns={exampleColumns}>
           {pageExamples.map((exampleRow, i) => {
-            const isEmptyItem = exampleRow.filename === EMPTY_STRING
+            const isEmptyItem = exampleRow.filename === EMPTY_STRING;
             const isLastItem =
-              (i + 1) % PER_PAGE_COUNT === 0 || i + 1 === pageExamples.length
-            const nextItemEmpty = pageExamples[i + 1]?.filename === EMPTY_STRING
-            const hidden = isEmptyItem || isLastItem || nextItemEmpty
+              (i + 1) % PER_PAGE_COUNT === 0 || i + 1 === pageExamples.length;
+            const nextItemEmpty =
+              pageExamples[i + 1]?.filename === EMPTY_STRING;
+            const hidden = isEmptyItem || isLastItem || nextItemEmpty;
             return (
               <DataTableItem
                 id={exampleRow.permalink}
@@ -126,7 +127,7 @@ export const DocSdkUsage: FC<DocSdkUsageProps> = ({ method }) => {
                   {exampleRow.line}
                 </DocSdkExampleCell>
               </DataTableItem>
-            )
+            );
           })}
         </DataTable>
         {paginate && (
@@ -135,12 +136,12 @@ export const DocSdkUsage: FC<DocSdkUsageProps> = ({ method }) => {
               current={page}
               pages={pageLimit}
               onChange={(nextPage) => {
-                setPage(nextPage)
+                setPage(nextPage);
               }}
             />
           </Box>
         )}
       </Card>
     </CollapserCard>
-  )
-}
+  );
+};

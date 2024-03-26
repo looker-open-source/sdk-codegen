@@ -8,9 +8,9 @@ The Looker SDK for Kotlin provides a convenient way to communicate with the Look
 
 The Looker SDK can be used in a Kotlin application in 3 steps:
 
-* configure
-* install
-* use
+- configure
+- install
+- use
 
 ### Configure the SDK for your Looker server
 

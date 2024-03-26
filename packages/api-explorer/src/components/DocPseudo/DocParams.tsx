@@ -23,14 +23,14 @@
  SOFTWARE.
 
  */
-import type { IParameter } from '@looker/sdk-codegen'
-import type { FC } from 'react'
-import React, { Fragment } from 'react'
+import type { IParameter } from '@looker/sdk-codegen';
+import type { FC } from 'react';
+import React, { Fragment } from 'react';
 
-import { DocParam } from './DocParam'
+import { DocParam } from './DocParam';
 
 export interface DocArgsProps {
-  parameters: IParameter[]
+  parameters: IParameter[];
 }
 
 export const DocParams: FC<DocArgsProps> = ({ parameters }) => (
@@ -42,4 +42,4 @@ export const DocParams: FC<DocArgsProps> = ({ parameters }) => (
       </Fragment>
     ))}
   </>
-)
+);

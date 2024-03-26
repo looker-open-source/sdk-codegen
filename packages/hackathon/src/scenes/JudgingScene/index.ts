@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export * from './JudgingScene'
+export * from './JudgingScene';

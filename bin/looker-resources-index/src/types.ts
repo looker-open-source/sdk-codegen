@@ -25,15 +25,15 @@
  */
 
 export interface Resource {
-  id: ResourceId
-  title: LocaleString
-  description: LocaleString
-  url: LocaleString
+  id: ResourceId;
+  title: LocaleString;
+  description: LocaleString;
+  url: LocaleString;
 
   // Optional
-  isGoogleResource?: boolean
-  isHackathonSpecific?: boolean
-  thumbnailImageUrl?: LocaleString
+  isGoogleResource?: boolean;
+  isHackathonSpecific?: boolean;
+  thumbnailImageUrl?: LocaleString;
   // publishDate
   // lastUpdate
   // authorNames
@@ -41,13 +41,13 @@ export interface Resource {
   // some form of rating or quality metric?
 
   // Optional "tags"
-  contentTypes?: ContentType[]
-  platformFeatures?: PlatformFeature[]
-  languages?: Language[]
-  licenses?: License[]
-  relatedResources?: ResourceId[]
-  personas?: Persona[]
-  tags?: string[]
+  contentTypes?: ContentType[];
+  platformFeatures?: PlatformFeature[];
+  languages?: Language[];
+  licenses?: License[];
+  relatedResources?: ResourceId[];
+  personas?: Persona[];
+  tags?: string[];
 }
 
 export enum ContentType {
@@ -116,5 +116,5 @@ export enum Persona {
   other = 'other',
 }
 
-export type ResourceId = string
-export type LocaleString = string | Record<string, string>
+export type ResourceId = string;
+export type LocaleString = string | Record<string, string>;

@@ -799,7 +799,7 @@ open class LookerSDKStream: APIMethods {
      * "Powered by Looker" (PBL) web application.
      *
      * This is similar to Private Embedding (https://cloud.google.com/looker/docs/r/admin/embed/private-embed). Instead of
-     * of logging into the Web UI to authenticate, the user has already authenticated against the API to be able to
+     * logging into the Web UI to authenticate, the user has already authenticated against the API to be able to
      * make this call. However, unlike Private Embed where the user has access to any other part of the Looker UI,
      * the embed web session created by requesting the EmbedUrlResponse.url in a browser only has access to
      * content visible under the `/embed` context.
@@ -870,7 +870,7 @@ open class LookerSDKStream: APIMethods {
      * If the `session_reference_token` is provided but the session has expired, the token will be ignored and a
      * new embed session will be created. Note that the embed user definition will be updated in this scenario.
      *
-     * If the credentials do not match the credentials associated with an exisiting session_reference_token, a
+     * If the credentials do not match the credentials associated with an existing session_reference_token, a
      * 404 will be returned.
      *
      * The endpoint returns the following:
@@ -929,6 +929,13 @@ open class LookerSDKStream: APIMethods {
      * - Navigation token.
      * The generate tokens endpoint should be called every time the Looker client asks for a token (except for the
      * first time when the tokens returned by the acquire_session endpoint should be used).
+     *
+     * #### Embed session expiration handling
+     *
+     * This endpoint does NOT return an error when the embed session expires. This is to simplify processing
+     * in the caller as errors can happen for non session expiration reasons. Instead the endpoint returns
+     * the session time to live in the `session_reference_token_ttl` response property. If this property
+     * contains a zero, the embed session has expired.
      *
      * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
      *
@@ -1407,7 +1414,7 @@ open class LookerSDKStream: APIMethods {
      *
      * Configuring OIDC impacts authentication for all users. This configuration should be done carefully.
      *
-     * Looker maintains a single OIDC configuation. It can be read and updated. Updates only succeed if the new state will be valid (in the sense that all required fields are populated); it is up to you to ensure that the configuration is appropriate and correct).
+     * Looker maintains a single OIDC configuration. It can be read and updated. Updates only succeed if the new state will be valid (in the sense that all required fields are populated); it is up to you to ensure that the configuration is appropriate and correct).
      *
      * OIDC is enabled or disabled for Looker using the **enabled** field.
      *
@@ -1560,7 +1567,7 @@ open class LookerSDKStream: APIMethods {
      *
      * Configuring SAML impacts authentication for all users. This configuration should be done carefully.
      *
-     * Looker maintains a single SAML configuation. It can be read and updated. Updates only succeed if the new state will be valid (in the sense that all required fields are populated); it is up to you to ensure that the configuration is appropriate and correct).
+     * Looker maintains a single SAML configuration. It can be read and updated. Updates only succeed if the new state will be valid (in the sense that all required fields are populated); it is up to you to ensure that the configuration is appropriate and correct).
      *
      * SAML is enabled or disabled for Looker using the **enabled** field.
      *
@@ -3848,7 +3855,7 @@ open class LookerSDKStream: APIMethods {
     /**
      * ### Get an image representing the contents of a dashboard or look.
      *
-     * The returned thumbnail is an abstract representation of the contents of a dashbord or look and does not
+     * The returned thumbnail is an abstract representation of the contents of a dashboard or look and does not
      * reflect the actual data displayed in the respective visualizations.
      *
      * GET /content_thumbnail/{type}/{resource_id} -> String
@@ -4004,7 +4011,7 @@ open class LookerSDKStream: APIMethods {
      *
      * # DEPRECATED:  Use [content_thumbnail()](#!/Content/content_thumbnail)
      *
-     * The returned thumbnail is an abstract representation of the contents of a dashbord or look and does not
+     * The returned thumbnail is an abstract representation of the contents of a dashboard or look and does not
      * reflect the actual data displayed in the respective visualizations.
      *
      * GET /vector_thumbnail/{type}/{resource_id} -> String
@@ -4320,7 +4327,7 @@ open class LookerSDKStream: APIMethods {
      * You can use this function to change the string and integer properties of
      * a dashboard. Nested objects such as filters, dashboard elements, or dashboard layout components
      * cannot be modified by this function - use the update functions for the respective
-     * nested object types (like [update_dashboard_filter()](#!/3.1/Dashboard/update_dashboard_filter) to change a filter)
+     * nested object types (like [update_dashboard_filter()](#!/Dashboard/update_dashboard_filter) to change a filter)
      * to modify nested objects referenced by a dashboard.
      *
      * If you receive a 422 error response when updating a dashboard, be sure to look at the
@@ -4368,7 +4375,7 @@ open class LookerSDKStream: APIMethods {
     }
 
     /**
-     * ### Get Aggregate Table LookML for Each Query on a Dahboard
+     * ### Get Aggregate Table LookML for Each Query on a Dashboard
      *
      * Returns a JSON object that contains the dashboard id and Aggregate Table lookml
      *
@@ -6614,7 +6621,7 @@ open class LookerSDKStream: APIMethods {
      * | result_format | Description
      * | :-----------: | :--- |
      * | json | Plain json
-     * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+     * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
      * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
      * | csv | Comma separated values with a header
      * | txt | Tab separated values with a header
@@ -6873,12 +6880,16 @@ open class LookerSDKStream: APIMethods {
          * @param {String} fields Requested fields.
          */
         fields: String? = nil,
+        /**
+         * @param {Bool} add_drills_metadata Whether response should include drill field metadata.
+         */
+        add_drills_metadata: Bool? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let path_lookml_model_name = encodeParam(lookml_model_name)
         let path_explore_name = encodeParam(explore_name)
         let result: SDKResponse<Data, SDKError> = self.get("/lookml_models/\(path_lookml_model_name)/explores/\(path_explore_name)", 
-            ["fields": fields], nil, options)
+            ["fields": fields, "add_drills_metadata": add_drills_metadata as Any?], nil, options)
         return result
     }
 
@@ -7901,8 +7912,6 @@ open class LookerSDKStream: APIMethods {
     /**
      * ### Creates a tag for the most recent commit, or a specific ref is a SHA is provided
      *
-     * This is an internal-only, undocumented route.
-     *
      * POST /projects/{project_id}/tag -> Project
      */
     public func tag_ref(
@@ -8071,21 +8080,13 @@ open class LookerSDKStream: APIMethods {
          */
         server_table_calcs: Bool? = nil,
         /**
-         * @param {Int64} image_width DEPRECATED. Render width for image formats. Note that this parameter is always ignored by this method.
-         */
-        image_width: Int64? = nil,
-        /**
-         * @param {Int64} image_height DEPRECATED. Render height for image formats. Note that this parameter is always ignored by this method.
-         */
-        image_height: Int64? = nil,
-        /**
          * @param {String} fields Requested fields
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let result: SDKResponse<Data, SDKError> = self.post("/query_tasks", 
-            ["limit": limit, "apply_formatting": apply_formatting as Any?, "apply_vis": apply_vis as Any?, "cache": cache as Any?, "generate_drill_links": generate_drill_links as Any?, "force_production": force_production as Any?, "cache_only": cache_only as Any?, "path_prefix": path_prefix, "rebuild_pdts": rebuild_pdts as Any?, "server_table_calcs": server_table_calcs as Any?, "image_width": image_width, "image_height": image_height, "fields": fields], try! self.encode(body), options)
+            ["limit": limit, "apply_formatting": apply_formatting as Any?, "apply_vis": apply_vis as Any?, "cache": cache as Any?, "generate_drill_links": generate_drill_links as Any?, "force_production": force_production as Any?, "cache_only": cache_only as Any?, "path_prefix": path_prefix, "rebuild_pdts": rebuild_pdts as Any?, "server_table_calcs": server_table_calcs as Any?, "fields": fields], try! self.encode(body), options)
         return result
     }
 
@@ -8165,7 +8166,7 @@ open class LookerSDKStream: APIMethods {
      * will be in the message of the 400 error response, but not as detailed as expressed in `json_detail.errors`.
      * These data formats can only carry row data, and error info is not row data.
      *
-     * GET /query_tasks/{query_task_id}/results -> String
+     * GET /query_tasks/{query_task_id}/results -> QueryTask
      */
     public func query_task_results(
         /**
@@ -8296,7 +8297,7 @@ open class LookerSDKStream: APIMethods {
      * | result_format | Description
      * | :-----------: | :--- |
      * | json | Plain json
-     * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+     * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
      * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
      * | csv | Comma separated values with a header
      * | txt | Tab separated values with a header
@@ -8423,7 +8424,7 @@ open class LookerSDKStream: APIMethods {
      * | result_format | Description
      * | :-----------: | :--- |
      * | json | Plain json
-     * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+     * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
      * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
      * | csv | Comma separated values with a header
      * | txt | Tab separated values with a header
@@ -8547,7 +8548,7 @@ open class LookerSDKStream: APIMethods {
      * | result_format | Description
      * | :-----------: | :--- |
      * | json | Plain json
-     * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+     * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
      * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
      * | csv | Comma separated values with a header
      * | txt | Tab separated values with a header
@@ -8713,8 +8714,6 @@ open class LookerSDKStream: APIMethods {
      * Execute a SQL Runner query in a given result_format.
      *
      * POST /sql_queries/{slug}/run/{result_format} -> String
-     *
-     * **Note**: Binary content may be returned by this method.
      */
     public func run_sql_query(
         /**
@@ -9253,6 +9252,7 @@ open class LookerSDKStream: APIMethods {
 
     /**
      * ### Update information about the permission set with a specific id.
+     * Providing save_content permission alone will also provide you the abilities of save_looks and save_dashboards.
      *
      * PATCH /permission_sets/{permission_set_id} -> PermissionSet
      */
@@ -9308,6 +9308,7 @@ open class LookerSDKStream: APIMethods {
 
     /**
      * ### Create a permission set with the specified information. Permission sets are used by Roles.
+     * Providing save_content permission alone will also provide you the abilities of save_looks and save_dashboards.
      *
      * POST /permission_sets -> PermissionSet
      */
@@ -10219,12 +10220,8 @@ open class LookerSDKStream: APIMethods {
      * | md | Simple markdown
      * | xlsx | MS Excel spreadsheet
      * | sql | Returns the generated SQL rather than running the query
-     * | png | A PNG image of the visualization of the query
-     * | jpg | A JPG image of the visualization of the query
      *
-     * GET /sql_interface_queries/{query_id}/run/{result_format} -> String
-     *
-     * **Note**: Binary content may be returned by this method.
+     * GET /sql_interface_queries/{query_id}/run/{result_format} -> QueryFormats
      */
     public func run_sql_interface_query(
         /**

@@ -34,7 +34,7 @@ from looker_sdk.rtl import requests_transport
 from looker_sdk.rtl import serialize
 from looker_sdk.rtl import transport
 from looker_sdk.sdk import constants
-from looker_sdk.sdk.api31 import models
+from looker_sdk.sdk.api40 import models
 
 
 @pytest.fixture(scope="module")
@@ -43,9 +43,9 @@ def api() -> api_methods.APIMethods:
         filename="../looker.ini", env_prefix=constants.environment_prefix
     )
     transport = requests_transport.RequestsTransport.configure(settings)
-    auth = auth_session.AuthSession(settings, transport, serialize.deserialize31, "3.1")
+    auth = auth_session.AuthSession(settings, transport, serialize.deserialize40, "4.0")
     return api_methods.APIMethods(
-        auth, serialize.deserialize31, serialize.serialize31, transport, "3.1"
+        auth, serialize.deserialize40, serialize.serialize40, transport, "4.0"
     )
 
 
@@ -204,10 +204,10 @@ def test_return_raises_an_SDKError_for_bad_responses(api):
 @pytest.mark.parametrize(
     "method_path, expected_url",
     [
-        ("/user", "/api/3.1/user"),
-        ("user", "/api/3.1/user"),
-        ("/user/1", "/api/3.1/user/1"),
-        ("user/1", "/api/3.1/user/1"),
+        ("/user", "/api/4.0/user"),
+        ("user", "/api/4.0/user"),
+        ("/user/1", "/api/4.0/user/1"),
+        ("user/1", "/api/4.0/user/1"),
     ],
 )
 def test_api_versioned_url_is_built_properly(

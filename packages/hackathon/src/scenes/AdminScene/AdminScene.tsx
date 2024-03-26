@@ -23,47 +23,47 @@
  SOFTWARE.
 
  */
-import type { FC } from 'react'
-import React, { useEffect } from 'react'
+import type { FC } from 'react';
+import React, { useEffect } from 'react';
 import {
-  TabList,
-  Tab,
-  TabPanels,
-  TabPanel,
   Heading,
   SpaceVertical,
-} from '@looker/components'
-import { useHistory, useRouteMatch } from 'react-router-dom'
-import { Routes } from '../../routes/AppRouter'
-import { getTabInfo } from '../../utils'
-import { UserAttributes } from './components/UserAttributes'
-import { AddUsers } from './components/AddUsers'
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+} from '@looker/components';
+import { useHistory, useRouteMatch } from 'react-router-dom';
+import { Routes } from '../../routes/AppRouter';
+import { getTabInfo } from '../../utils';
+import { UserAttributes } from './components/UserAttributes';
+import { AddUsers } from './components/AddUsers';
 
-const tabnames = ['general', 'config', 'addusers']
+const tabnames = ['general', 'config', 'addusers'];
 
 export const AdminScene: FC = () => {
-  const history = useHistory()
+  const history = useHistory();
   const match = useRouteMatch<{ func: string; tabname: string }>(
     '/:func/:tabname'
-  )
+  );
 
   useEffect(() => {
-    const currentTabname = match?.params?.tabname
-    const { tabname } = getTabInfo(tabnames, currentTabname)
+    const currentTabname = match?.params?.tabname;
+    const { tabname } = getTabInfo(tabnames, currentTabname);
     if (tabname !== currentTabname) {
-      history.push(`${Routes.ADMIN}/${tabname}`)
+      history.push(`${Routes.ADMIN}/${tabname}`);
     }
-  }, [history, match])
+  }, [history, match]);
 
   const onSelectTab = (index: number) => {
-    const currentTabname = match?.params?.tabname
-    const tabname = tabnames[index]
+    const currentTabname = match?.params?.tabname;
+    const tabname = tabnames[index];
     if (tabname !== currentTabname) {
-      history.push(`${Routes.ADMIN}/${tabname}`)
+      history.push(`${Routes.ADMIN}/${tabname}`);
     }
-  }
+  };
 
-  const { tabIndex } = getTabInfo(tabnames, match?.params?.tabname)
+  const { tabIndex } = getTabInfo(tabnames, match?.params?.tabname);
 
   return (
     <>
@@ -92,5 +92,5 @@ export const AdminScene: FC = () => {
         </TabPanels>
       </SpaceVertical>
     </>
-  )
-}
+  );
+};

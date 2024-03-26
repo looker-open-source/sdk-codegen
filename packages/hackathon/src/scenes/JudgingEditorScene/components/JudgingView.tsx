@@ -24,14 +24,14 @@
 
  */
 
-import type { FC } from 'react'
-import React, { Fragment } from 'react'
-import { ExtMarkdown } from '@looker/extension-utils'
-import type { IJudgingProps } from '../../../models'
-import { ProjectView } from '../../ProjectsScene/components'
+import type { FC } from 'react';
+import React, { Fragment } from 'react';
+import { ExtMarkdown } from '@looker/extension-utils';
+import type { IJudgingProps } from '../../../models';
+import { ProjectView } from '../../ProjectsScene/components';
 
 interface JudgingViewProps {
-  judging: IJudgingProps
+  judging: IJudgingProps;
 }
 
 export const JudgingView: FC<JudgingViewProps> = ({ judging }) => {
@@ -48,8 +48,8 @@ export const JudgingView: FC<JudgingViewProps> = ({ judging }) => {
 ### Judge's notes
 
 ${judging.notes.length !== 0 ? judging.notes : 'N/A'}
-`
-  const view = <ExtMarkdown source={markdown} />
+`;
+  const view = <ExtMarkdown source={markdown} />;
   const projectView = (
     <ProjectView
       title={judging.$title}
@@ -59,12 +59,12 @@ ${judging.notes.length !== 0 ? judging.notes : 'N/A'}
       project_type={judging.$project_type}
       contestant={judging.$contestant}
     />
-  )
+  );
 
   return (
     <Fragment>
       {view}
       {projectView}
     </Fragment>
-  )
-}
+  );
+};

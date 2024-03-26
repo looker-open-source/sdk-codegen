@@ -23,9 +23,9 @@
  SOFTWARE.
 
  */
-import { ApiModel } from '@looker/sdk-codegen'
+import { ApiModel } from '@looker/sdk-codegen';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const spec = require('../../../../spec/Looker.3.1.oas.json')
+const spec = require('../../../../spec/Looker.4.0.oas.json');
 
-export const api = ApiModel.fromJson(spec)
+export const api = ApiModel.fromJson(spec);

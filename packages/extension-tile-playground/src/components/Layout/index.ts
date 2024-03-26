@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export * from './Layout'
+export * from './Layout';

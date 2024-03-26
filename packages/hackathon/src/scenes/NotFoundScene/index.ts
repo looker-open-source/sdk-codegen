@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export * from './NotFoundScene'
+export * from './NotFoundScene';

@@ -24,12 +24,12 @@
 
  */
 
-import type { ITransport, IRequestProps } from './transport'
-import { LookerAppId } from './transport'
-import { BrowserTransport } from './browserTransport'
-import { OAuthSession } from './oauthSession'
-import { BrowserServices } from './browserServices'
-import type { IApiSettings } from './apiSettings'
+import type { IRequestProps, ITransport } from './transport';
+import { LookerAppId } from './transport';
+import { BrowserTransport } from './browserTransport';
+import { OAuthSession } from './oauthSession';
+import { BrowserServices } from './browserServices';
+import type { IApiSettings } from './apiSettings';
 
 /**
  * An AuthSession class intended for use with CORS requests
@@ -47,13 +47,16 @@ import type { IApiSettings } from './apiSettings'
  *
  */
 export class BrowserSession extends OAuthSession {
-  constructor(public settings: IApiSettings, transport?: ITransport) {
+  constructor(
+    public settings: IApiSettings,
+    transport?: ITransport
+  ) {
     super(
       new BrowserServices({
         settings,
         transport: transport || new BrowserTransport(settings),
       })
-    )
+    );
   }
 
   /**
@@ -65,36 +68,36 @@ export class BrowserSession extends OAuthSession {
    *
    */
   async authenticate(props: IRequestProps) {
-    props = await super.authenticate(props)
+    props = await super.authenticate(props);
     if (this.isAuthenticated()) {
       /**
        * Session is authenticated
        * set CORS mode
        */
-      props.mode = 'cors'
+      props.mode = 'cors';
 
       /**
        * remove any credentials attribute that may have been set
        */
-      delete props.credentials
+      delete props.credentials;
 
       const headers = {
         /** Provide the authentication information */
         Authorization: `Bearer ${this.activeToken.access_token}`,
         /** Identify the SDK */
         [LookerAppId]: this.settings.agentTag,
-      }
+      };
       /**
        * replace the headers argument with required values
        * Note: using new Headers() to construct the headers breaks CORS for the Looker API. Don't know why yet
        */
       if (props.headers) {
-        props.headers = { ...props.headers, ...headers }
+        props.headers = { ...props.headers, ...headers };
       } else {
-        props.headers = headers
+        props.headers = headers;
       }
     }
 
-    return props
+    return props;
   }
 }

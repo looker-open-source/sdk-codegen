@@ -705,7 +705,7 @@ namespace Looker.SDK.API40
   /// "Powered by Looker" (PBL) web application.
   ///
   /// This is similar to Private Embedding (https://cloud.google.com/looker/docs/r/admin/embed/private-embed). Instead of
-  /// of logging into the Web UI to authenticate, the user has already authenticated against the API to be able to
+  /// logging into the Web UI to authenticate, the user has already authenticated against the API to be able to
   /// make this call. However, unlike Private Embed where the user has access to any other part of the Looker UI,
   /// the embed web session created by requesting the EmbedUrlResponse.url in a browser only has access to
   /// content visible under the `/embed` context.
@@ -771,7 +771,7 @@ namespace Looker.SDK.API40
   /// If the `session_reference_token` is provided but the session has expired, the token will be ignored and a
   /// new embed session will be created. Note that the embed user definition will be updated in this scenario.
   ///
-  /// If the credentials do not match the credentials associated with an exisiting session_reference_token, a
+  /// If the credentials do not match the credentials associated with an existing session_reference_token, a
   /// 404 will be returned.
   ///
   /// The endpoint returns the following:
@@ -825,6 +825,13 @@ namespace Looker.SDK.API40
   /// - Navigation token.
   /// The generate tokens endpoint should be called every time the Looker client asks for a token (except for the
   /// first time when the tokens returned by the acquire_session endpoint should be used).
+  ///
+  /// #### Embed session expiration handling
+  ///
+  /// This endpoint does NOT return an error when the embed session expires. This is to simplify processing
+  /// in the caller as errors can happen for non session expiration reasons. Instead the endpoint returns
+  /// the session time to live in the `session_reference_token_ttl` response property. If this property
+  /// contains a zero, the embed session has expired.
   ///
   /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
   ///
@@ -1245,7 +1252,7 @@ namespace Looker.SDK.API40
   ///
   /// Configuring OIDC impacts authentication for all users. This configuration should be done carefully.
   ///
-  /// Looker maintains a single OIDC configuation. It can be read and updated. Updates only succeed if the new state will be valid (in the sense that all required fields are populated); it is up to you to ensure that the configuration is appropriate and correct).
+  /// Looker maintains a single OIDC configuration. It can be read and updated. Updates only succeed if the new state will be valid (in the sense that all required fields are populated); it is up to you to ensure that the configuration is appropriate and correct).
   ///
   /// OIDC is enabled or disabled for Looker using the **enabled** field.
   ///
@@ -1385,7 +1392,7 @@ namespace Looker.SDK.API40
   ///
   /// Configuring SAML impacts authentication for all users. This configuration should be done carefully.
   ///
-  /// Looker maintains a single SAML configuation. It can be read and updated. Updates only succeed if the new state will be valid (in the sense that all required fields are populated); it is up to you to ensure that the configuration is appropriate and correct).
+  /// Looker maintains a single SAML configuration. It can be read and updated. Updates only succeed if the new state will be valid (in the sense that all required fields are populated); it is up to you to ensure that the configuration is appropriate and correct).
   ///
   /// SAML is enabled or disabled for Looker using the **enabled** field.
   ///
@@ -3349,7 +3356,7 @@ namespace Looker.SDK.API40
 
   /// ### Get an image representing the contents of a dashboard or look.
   ///
-  /// The returned thumbnail is an abstract representation of the contents of a dashbord or look and does not
+  /// The returned thumbnail is an abstract representation of the contents of a dashboard or look and does not
   /// reflect the actual data displayed in the respective visualizations.
   ///
   /// GET /content_thumbnail/{type}/{resource_id} -> string
@@ -3482,7 +3489,7 @@ namespace Looker.SDK.API40
   ///
   /// # DEPRECATED:  Use [content_thumbnail()](#!/Content/content_thumbnail)
   ///
-  /// The returned thumbnail is an abstract representation of the contents of a dashbord or look and does not
+  /// The returned thumbnail is an abstract representation of the contents of a dashboard or look and does not
   /// reflect the actual data displayed in the respective visualizations.
   ///
   /// GET /vector_thumbnail/{type}/{resource_id} -> string
@@ -3746,7 +3753,7 @@ namespace Looker.SDK.API40
   /// You can use this function to change the string and integer properties of
   /// a dashboard. Nested objects such as filters, dashboard elements, or dashboard layout components
   /// cannot be modified by this function - use the update functions for the respective
-  /// nested object types (like [update_dashboard_filter()](#!/3.1/Dashboard/update_dashboard_filter) to change a filter)
+  /// nested object types (like [update_dashboard_filter()](#!/Dashboard/update_dashboard_filter) to change a filter)
   /// to modify nested objects referenced by a dashboard.
   ///
   /// If you receive a 422 error response when updating a dashboard, be sure to look at the
@@ -3787,7 +3794,7 @@ namespace Looker.SDK.API40
     return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/dashboards/{dashboard_id}", null,null,options);
   }
 
-  /// ### Get Aggregate Table LookML for Each Query on a Dahboard
+  /// ### Get Aggregate Table LookML for Each Query on a Dashboard
   ///
   /// Returns a JSON object that contains the dashboard id and Aggregate Table lookml
   ///
@@ -5639,7 +5646,7 @@ namespace Looker.SDK.API40
   /// | result_format | Description
   /// | :-----------: | :--- |
   /// | json | Plain json
-  /// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+  /// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
   /// | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
   /// | csv | Comma separated values with a header
   /// | txt | Tab separated values with a header
@@ -5852,16 +5859,19 @@ namespace Looker.SDK.API40
   /// <param name="lookml_model_name">Name of lookml model.</param>
   /// <param name="explore_name">Name of explore.</param>
   /// <param name="fields">Requested fields.</param>
+  /// <param name="add_drills_metadata">Whether response should include drill field metadata.</param>
   public async Task<SdkResponse<LookmlModelExplore, Exception>> lookml_model_explore(
     string lookml_model_name,
     string explore_name,
     string? fields = null,
+    bool? add_drills_metadata = null,
     ITransportSettings? options = null)
 {  
       lookml_model_name = SdkUtils.EncodeParam(lookml_model_name);
       explore_name = SdkUtils.EncodeParam(explore_name);
     return await AuthRequest<LookmlModelExplore, Exception>(HttpMethod.Get, $"/lookml_models/{lookml_model_name}/explores/{explore_name}", new Values {
-      { "fields", fields }},null,options);
+      { "fields", fields },
+      { "add_drills_metadata", add_drills_metadata }},null,options);
   }
 
   #endregion LookmlModel: Manage LookML Models
@@ -6746,8 +6756,6 @@ namespace Looker.SDK.API40
 
   /// ### Creates a tag for the most recent commit, or a specific ref is a SHA is provided
   ///
-  /// This is an internal-only, undocumented route.
-  ///
   /// POST /projects/{project_id}/tag -> Project
   ///
   /// <returns>
@@ -6863,8 +6871,6 @@ namespace Looker.SDK.API40
   /// <param name="path_prefix">Prefix to use for drill links (url encoded).</param>
   /// <param name="rebuild_pdts">Rebuild PDTS used in query.</param>
   /// <param name="server_table_calcs">Perform table calculations on query results</param>
-  /// <param name="image_width">DEPRECATED. Render width for image formats. Note that this parameter is always ignored by this method.</param>
-  /// <param name="image_height">DEPRECATED. Render height for image formats. Note that this parameter is always ignored by this method.</param>
   /// <param name="fields">Requested fields</param>
   public async Task<SdkResponse<QueryTask, Exception>> create_query_task(
     WriteCreateQueryTask body,
@@ -6878,8 +6884,6 @@ namespace Looker.SDK.API40
     string? path_prefix = null,
     bool? rebuild_pdts = null,
     bool? server_table_calcs = null,
-    long? image_width = null,
-    long? image_height = null,
     string? fields = null,
     ITransportSettings? options = null)
 {  
@@ -6894,8 +6898,6 @@ namespace Looker.SDK.API40
       { "path_prefix", path_prefix },
       { "rebuild_pdts", rebuild_pdts },
       { "server_table_calcs", server_table_calcs },
-      { "image_width", image_width },
-      { "image_height", image_height },
       { "fields", fields }},body,options);
   }
 
@@ -6968,11 +6970,11 @@ namespace Looker.SDK.API40
   /// will be in the message of the 400 error response, but not as detailed as expressed in `json_detail.errors`.
   /// These data formats can only carry row data, and error info is not row data.
   ///
-  /// GET /query_tasks/{query_task_id}/results -> string
+  /// GET /query_tasks/{query_task_id}/results -> QueryTask
   ///
   /// <returns>
-  /// <c>string</c> The query results. (text)
-  /// <c>string</c> The query results. (application/json)
+  /// <c>QueryTask</c> query_task (text)
+  /// <c>QueryTask</c> query_task (application/json)
   /// <c>string</c> The query is not finished (text)
   /// <c>string</c> The query is not finished (application/json)
   /// </returns>
@@ -7089,7 +7091,7 @@ namespace Looker.SDK.API40
   /// | result_format | Description
   /// | :-----------: | :--- |
   /// | json | Plain json
-  /// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+  /// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
   /// | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
   /// | csv | Comma separated values with a header
   /// | txt | Tab separated values with a header
@@ -7203,7 +7205,7 @@ namespace Looker.SDK.API40
   /// | result_format | Description
   /// | :-----------: | :--- |
   /// | json | Plain json
-  /// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+  /// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
   /// | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
   /// | csv | Comma separated values with a header
   /// | txt | Tab separated values with a header
@@ -7314,7 +7316,7 @@ namespace Looker.SDK.API40
   /// | result_format | Description
   /// | :-----------: | :--- |
   /// | json | Plain json
-  /// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+  /// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
   /// | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
   /// | csv | Comma separated values with a header
   /// | txt | Tab separated values with a header
@@ -7464,13 +7466,9 @@ namespace Looker.SDK.API40
   ///
   /// POST /sql_queries/{slug}/run/{result_format} -> string
   ///
-  /// **Note**: Binary content may be returned by this method.
-  ///
   /// <returns>
   /// <c>string</c> SQL Runner Query (text)
   /// <c>string</c> SQL Runner Query (application/json)
-  /// <c>string</c> SQL Runner Query (image/png)
-  /// <c>string</c> SQL Runner Query (image/jpeg)
   /// </returns>
   ///
   /// <param name="slug">slug of query</param>
@@ -7920,6 +7918,7 @@ namespace Looker.SDK.API40
   }
 
   /// ### Update information about the permission set with a specific id.
+  /// Providing save_content permission alone will also provide you the abilities of save_looks and save_dashboards.
   ///
   /// PATCH /permission_sets/{permission_set_id} -> PermissionSet
   ///
@@ -7966,6 +7965,7 @@ namespace Looker.SDK.API40
   }
 
   /// ### Create a permission set with the specified information. Permission sets are used by Roles.
+  /// Providing save_content permission alone will also provide you the abilities of save_looks and save_dashboards.
   ///
   /// POST /permission_sets -> PermissionSet
   ///
@@ -8769,18 +8769,12 @@ namespace Looker.SDK.API40
   /// | md | Simple markdown
   /// | xlsx | MS Excel spreadsheet
   /// | sql | Returns the generated SQL rather than running the query
-  /// | png | A PNG image of the visualization of the query
-  /// | jpg | A JPG image of the visualization of the query
   ///
-  /// GET /sql_interface_queries/{query_id}/run/{result_format} -> string
-  ///
-  /// **Note**: Binary content may be returned by this method.
+  /// GET /sql_interface_queries/{query_id}/run/{result_format} -> QueryFormats
   ///
   /// <returns>
-  /// <c>string</c> SQL Interface Query (text)
-  /// <c>string</c> SQL Interface Query (application/json)
-  /// <c>string</c> SQL Interface Query (image/png)
-  /// <c>string</c> SQL Interface Query (image/jpeg)
+  /// <c>QueryFormats</c> Query Formats (text)
+  /// <c>QueryFormats</c> Query Formats (application/json)
   /// </returns>
   ///
   /// <param name="query_id">Integer id of query</param>

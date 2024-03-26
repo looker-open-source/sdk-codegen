@@ -24,22 +24,22 @@
 
  */
 
-import React, { useState } from 'react'
-import type { ExtensionHostApi } from '@looker/extension-sdk'
-import { LookerExtensionSDK } from '@looker/extension-sdk'
-import type { ILooker40SDK, Looker40SDK } from '@looker/sdk'
+import React, { useState } from 'react';
+import type { ExtensionHostApi } from '@looker/extension-sdk';
+import { LookerExtensionSDK } from '@looker/extension-sdk';
+import type { ILooker40SDK, Looker40SDK } from '@looker/sdk';
 import type {
   BaseExtensionContextData,
   ExtensionProviderProps,
-} from '../ExtensionConnector'
-import { ExtensionConnector } from '../ExtensionConnector'
-import { registerCore40SDK, unregisterCore40SDK } from '../../sdk/core_sdk_40'
+} from '../ExtensionConnector';
+import { ExtensionConnector } from '../ExtensionConnector';
+import { registerCore40SDK, unregisterCore40SDK } from '../../sdk/core_sdk_40';
 
 /**
  * Extension context data
  */
 export interface ExtensionContextData40 extends BaseExtensionContextData {
-  coreSDK: ILooker40SDK
+  coreSDK: ILooker40SDK;
 }
 
 /**
@@ -47,7 +47,7 @@ export interface ExtensionContextData40 extends BaseExtensionContextData {
  */
 export const ExtensionContext40 = React.createContext<ExtensionContextData40>(
   undefined as any // no one will ever see this undefined!
-)
+);
 
 export interface ExtensionProvider40Props extends ExtensionProviderProps {}
 
@@ -56,18 +56,18 @@ export interface ExtensionProvider40Props extends ExtensionProviderProps {}
  * ExtensionContext40) and react routing services.
  */
 export function ExtensionProvider40(props: ExtensionProvider40Props) {
-  const { children, ...rest } = props
+  const { children, ...rest } = props;
   const [extensionData, setExtensionData] = useState<ExtensionContextData40>(
     {} as ExtensionContextData40
-  )
+  );
 
   const connectedCallback = (extensionHost: ExtensionHostApi) => {
     const coreSDK: ILooker40SDK =
-      LookerExtensionSDK.create40Client(extensionHost)
-    registerCore40SDK(coreSDK as Looker40SDK)
-    const { visualizationSDK, tileSDK, lookerHostData } = extensionHost
-    const { visualizationData } = visualizationSDK
-    const { tileHostData } = tileSDK
+      LookerExtensionSDK.create40Client(extensionHost);
+    registerCore40SDK(coreSDK as Looker40SDK);
+    const { visualizationSDK, tileSDK, lookerHostData } = extensionHost;
+    const { visualizationData } = visualizationSDK;
+    const { tileHostData } = tileSDK;
     setExtensionData((previousState: any) => {
       return {
         ...previousState,
@@ -78,13 +78,13 @@ export function ExtensionProvider40(props: ExtensionProvider40Props) {
         visualizationData,
         tileHostData,
         lookerHostData,
-      }
-    })
-  }
+      };
+    });
+  };
 
   const unloadedCallback = () => {
-    unregisterCore40SDK()
-  }
+    unregisterCore40SDK();
+  };
 
   const updateContextData = (
     updatedContextData: Partial<BaseExtensionContextData>
@@ -93,9 +93,9 @@ export function ExtensionProvider40(props: ExtensionProvider40Props) {
       return {
         ...previousState,
         ...updatedContextData,
-      }
-    })
-  }
+      };
+    });
+  };
 
   return (
     <ExtensionContext40.Provider value={extensionData}>
@@ -109,5 +109,5 @@ export function ExtensionProvider40(props: ExtensionProvider40Props) {
         {children}
       </ExtensionConnector>
     </ExtensionContext40.Provider>
-  )
+  );
 }

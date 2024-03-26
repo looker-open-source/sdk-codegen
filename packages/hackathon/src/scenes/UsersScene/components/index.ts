@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export * from './HackerList'
+export * from './HackerList';

@@ -23,25 +23,25 @@
  SOFTWARE.
 
  */
-import type { Resource } from '../../types'
-import { PlatformFeature, ContentType } from '../../types'
+import type { Resource } from '../../types';
+import { PlatformFeature, ContentType } from '../../types';
 
 export function platformFeatureXContentType(resources: Resource[]) {
-  const rows = Object.keys(PlatformFeature) as PlatformFeature[]
-  const rowField = 'platformFeatures'
+  const rows = Object.keys(PlatformFeature) as PlatformFeature[];
+  const rowField = 'platformFeatures';
   const cols = [
     ContentType.demo,
     ContentType.sandbox,
     ContentType.sampleCode,
     ContentType.reference,
-  ]
-  const colField = 'contentTypes'
+  ];
+  const colField = 'contentTypes';
 
   const table = Object.fromEntries(
     rows.map((row) => {
-      const resourcesForRow = resources.filter((rsc) =>
-        rsc[rowField]?.includes(row)
-      )
+      const resourcesForRow = resources.filter(
+        (rsc) => rsc[rowField]?.includes(row)
+      );
       return [
         row,
         Object.fromEntries(
@@ -51,11 +51,11 @@ export function platformFeatureXContentType(resources: Resource[]) {
               .length || null,
           ])
         ),
-      ]
+      ];
     })
-  )
+  );
 
   return {
     table,
-  }
+  };
 }

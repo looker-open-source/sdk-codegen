@@ -24,6 +24,6 @@
 
  */
 
-export * from './JudgingForm'
-export * from './JudgingView'
-export * from './JudgingViewDialog'
+export * from './JudgingForm';
+export * from './JudgingView';
+export * from './JudgingViewDialog';

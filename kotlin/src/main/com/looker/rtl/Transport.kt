@@ -105,7 +105,7 @@ enum class HttpMethod {
     PUT,
     DELETE,
     PATCH,
-    HEAD
+    HEAD,
 }
 
 enum class HttpTransports(val label: String) {
@@ -288,7 +288,7 @@ class Transport(val options: TransportOptions) {
                     ApacheHttpTransport.newDefaultHttpClientBuilder().disableCookieManagement()
                 if (!options.verifySSL) {
                     val sslBuilder = SSLContextBuilder().loadTrustMaterial(null) {
-                        _, _ ->
+                            _, _ ->
                         true
                     }
                     val sslSocketFactory = SSLConnectionSocketFactory(sslBuilder.build())
@@ -350,8 +350,8 @@ class Transport(val options: TransportOptions) {
         val request: HttpRequest = requestFactory.buildRequest(
             finalizedRequestSettings.method.toString(),
             GenericUrl(finalizedRequestSettings.url),
-            httpContent
-        )
+            httpContent,
+        ).setSuppressUserAgentSuffix(true)
 
 // TODO get overrides parameter to work without causing compilation errors in UserSession
 //            overrides: TransportOptions? = null): SDKResponse {

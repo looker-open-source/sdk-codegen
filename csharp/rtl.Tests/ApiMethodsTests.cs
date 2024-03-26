@@ -26,14 +26,6 @@ namespace sdkrtl.Tests
         }
         
         [Fact]
-        public void Version31Test()
-        {
-            var sdk = new ApiMethods(Auth(), "3.1");
-            var agentTag = $"{Constants.AgentPrefix} {Constants.LookerVersion}.3.1";
-            Assert.Equal(agentTag,sdk.AuthSession.Settings.AgentTag);
-        }
-        
-        [Fact]
         public void Version40Test()
         {
             var sdk = new ApiMethods(Auth(), "4.0");

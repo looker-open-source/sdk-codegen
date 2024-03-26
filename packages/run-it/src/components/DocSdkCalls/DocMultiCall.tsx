@@ -23,14 +23,14 @@
  SOFTWARE.
 
  */
-import type { FC } from 'react'
-import React from 'react'
-import { Tabs2, Tab2 } from '@looker/components'
-import { CodeCopy } from '@looker/code-editor'
+import type { FC } from 'react';
+import React from 'react';
+import { Tab2, Tabs2 } from '@looker/components';
+import { CodeCopy } from '@looker/code-editor';
 
 interface DocMultiCallProps {
   /** An object with keys representing the language and values for call syntax */
-  calls: Record<string, string>
+  calls: Record<string, string>;
 }
 
 /**
@@ -44,4 +44,4 @@ export const DocMultiCall: FC<DocMultiCallProps> = ({ calls }) => (
       </Tab2>
     ))}
   </Tabs2>
-)
+);

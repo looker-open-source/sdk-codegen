@@ -24,37 +24,37 @@
 
  */
 
-import type { IRowModelProps, ITabTable } from '@looker/wholly-artifact'
-import { WhollyArtifact } from '@looker/wholly-artifact'
-import { getCore40SDK } from '@looker/extension-sdk-react'
+import type { IRowModelProps, ITabTable } from '@looker/wholly-artifact';
+import { WhollyArtifact } from '@looker/wholly-artifact';
+import { getCore40SDK } from '@looker/extension-sdk-react';
 
-import type { ISheetRow } from './SheetRow'
-import { SheetRow } from './SheetRow'
-import type { SheetData } from './SheetData'
+import type { ISheetRow } from './SheetRow';
+import { SheetRow } from './SheetRow';
+import type { SheetData } from './SheetData';
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface ITechnologyProps extends IRowModelProps {
-  description: string
+  description: string;
 }
 
 export interface ITechnology extends ITechnologyProps, ISheetRow {}
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export class Technology extends SheetRow<ITechnology> {
-  description = ''
+  description = '';
   constructor(values?: any) {
-    super()
+    super();
     // IMPORTANT: this must be done after super() constructor is called so keys are established
     // there may be a way to overload the constructor so this isn't necessary but pattern hasn't been found
-    this.assign(values)
+    this.assign(values);
   }
 
   tableName() {
-    return 'Technology'
+    return 'Technology';
   }
 
   toObject(): ITechnologyProps {
-    return super.toObject() as ITechnologyProps
+    return super.toObject() as ITechnologyProps;
   }
 }
 
@@ -63,10 +63,10 @@ export class Technologies extends WhollyArtifact<Technology, ITechnologyProps> {
     public readonly data: SheetData,
     public readonly table: ITabTable
   ) {
-    super(getCore40SDK(), table)
+    super(getCore40SDK(), table);
   }
 
   typeRow<Technology>(values?: any) {
-    return new Technology(values) as unknown as Technology
+    return new Technology(values) as unknown as Technology;
   }
 }

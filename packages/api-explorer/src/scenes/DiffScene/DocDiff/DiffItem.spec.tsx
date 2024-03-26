@@ -23,48 +23,48 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { Router } from 'react-router'
-import type { MemoryHistory } from 'history'
-import { createMemoryHistory } from 'history'
-import { renderWithTheme } from '@looker/components-test-utils'
-import { screen, fireEvent } from '@testing-library/react'
-import { api } from '../../../test-data'
-import { DiffMethodLink } from './DiffItem'
+import React from 'react';
+import { Router } from 'react-router';
+import type { MemoryHistory } from 'history';
+import { createMemoryHistory } from 'history';
+import { renderWithTheme } from '@looker/components-test-utils';
+import { fireEvent, screen } from '@testing-library/react';
+import { api } from '../../../test-data';
+import { DiffMethodLink } from './DiffItem';
 
 describe('DiffMethodLink', () => {
-  const method = api.methods.create_dashboard
-  const specKey = '4.0'
-  let history: MemoryHistory
+  const method = api.methods.create_dashboard;
+  const specKey = '4.0';
+  let history: MemoryHistory;
 
   beforeEach(() => {
-    history = createMemoryHistory()
-  })
+    history = createMemoryHistory();
+  });
 
   test('it renders method and navigates on click', () => {
-    const pushSpy = jest.spyOn(history, 'push')
+    const pushSpy = jest.spyOn(history, 'push');
     renderWithTheme(
       <Router history={history}>
         <DiffMethodLink method={method} specKey={specKey} />
       </Router>
-    )
-    const link = screen.getByRole('link')
-    expect(link).toHaveTextContent(`${method.name} for ${specKey}`)
-    fireEvent.click(link)
+    );
+    const link = screen.getByRole('link');
+    expect(link).toHaveTextContent(`${method.name} for ${specKey}`);
+    fireEvent.click(link);
     expect(pushSpy).toHaveBeenCalledWith({
       pathname: `/${specKey}/methods/${method.schema.tags[0]}/${method.name}`,
       search: '',
-    })
-  })
+    });
+  });
 
   test('it renders missing method and does not navigate on click', () => {
     renderWithTheme(
       <Router history={history}>
         <DiffMethodLink method={undefined} specKey={specKey} />
       </Router>
-    )
-    const s = `Missing in ${specKey}`
-    expect(screen.getByText(s)).toBeInTheDocument()
-    expect(screen.queryByRole('link')).not.toBeInTheDocument()
-  })
-})
+    );
+    const s = `Missing in ${specKey}`;
+    expect(screen.getByText(s)).toBeInTheDocument();
+    expect(screen.queryByRole('link')).not.toBeInTheDocument();
+  });
+});

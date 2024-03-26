@@ -25,10 +25,10 @@
  */
 export const logError = (message?: any, ...optionalParams: any[]) => {
   // eslint-disable-next-line no-console
-  console.error(message, optionalParams)
-}
+  console.error(message, optionalParams);
+};
 
 export const logWarn = (message?: any, ...optionalParams: any[]) => {
   // eslint-disable-next-line no-console
-  console.warn(message, optionalParams)
-}
+  console.warn(message, optionalParams);
+};

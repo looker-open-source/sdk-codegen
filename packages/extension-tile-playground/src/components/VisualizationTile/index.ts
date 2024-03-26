@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export * from './VisualizationTile'
+export * from './VisualizationTile';

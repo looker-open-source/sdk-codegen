@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { DocReferences } from './DocReferences'
+export { DocReferences } from './DocReferences';

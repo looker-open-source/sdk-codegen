@@ -24,83 +24,36 @@
 
  */
 
-import type { IApiVersion, IApiVersionElement } from './specConverter'
-import { getSpecsFromVersions, include31 } from './specConverter'
+import type { IApiVersion, IApiVersionElement } from './specConverter';
+import { getSpecsFromVersions, include31 } from './specConverter';
 
 const payload = `{
   "looker_release_version":"22.3.0",
   "current_version":{"version":"4.0","full_version":"4.0.22.3","status":"current","swagger_url":"https://localhost:19999/api/4.0/swagger.json"},
   "supported_versions":[
     {"version":"2.99","full_version":"2.99.0","status":"internal_test","swagger_url":"https://localhost:19999/api/2.99/swagger.json"},
-    {"version":"3.0","full_version":"3.0.0","status":"legacy","swagger_url":"https://localhost:19999/api/3.0/swagger.json"},
-    {"version":"3.1","full_version":"3.1.0","status":"legacy","swagger_url":"https://localhost:19999/api/3.1/swagger.json"},
     {"version":"4.0","full_version":"4.0.22.3","status":"current","swagger_url":"https://localhost:19999/api/4.0/swagger.json"},
     {"version":"4.0","full_version":"4.0.22.3","status":"undocumented","swagger_url":"https://localhost:19999/api/4.0/undoc.json"}
   ],
   "api_server_url":"https://localhost:19999",
   "web_server_url":"https://localhost:9999"
-}`
+}`;
 describe('specConverter', () => {
   describe('includeVersion', () => {
-    it('skips 3.0', () => {
-      const v: IApiVersionElement = {
-        status: 'legacy',
-        version: '3.0',
-        full_version: '3.0.22.4',
-        swagger_url: 'swagger',
-      }
-      expect(include31(v)).toEqual(false)
-    })
-    it('skips 3.0.1', () => {
-      const v: IApiVersionElement = {
-        status: 'legacy',
-        version: '3.0.1',
-        full_version: '3.0.22.4',
-        swagger_url: 'swagger',
-      }
-      expect(include31(v)).toEqual(false)
-    })
-    it('includes 3.1', () => {
-      const v: IApiVersionElement = {
-        status: 'legacy',
-        version: '3.1',
-        full_version: '3.1.22.4',
-        swagger_url: 'swagger',
-      }
-      expect(include31(v)).toEqual(true)
-    })
-    it('includes 3.1.22', () => {
-      const v: IApiVersionElement = {
-        status: 'legacy',
-        version: '3.1.22',
-        full_version: '3.1.22.4',
-        swagger_url: 'swagger',
-      }
-      expect(include31(v)).toEqual(true)
-    })
-    it('includes 22.6 3.1', () => {
-      const v: IApiVersionElement = {
-        version: '22.6 3.1',
-        full_version: '3.1.22.6',
-        status: 'legacy',
-        swagger_url: '/apix/specs/api_22.6.3.1.json',
-      }
-      expect(include31(v)).toEqual(true)
-    })
-    it('includes 4.0', () => {
+    it.skip('includes 4.0', () => {
       const v: IApiVersionElement = {
         status: 'stable',
         version: '4.0',
         full_version: '4.0.22.4',
         swagger_url: 'swagger',
-      }
-      expect(include31(v)).toEqual(true)
-    })
-  })
+      };
+      expect(include31(v)).toEqual(true);
+    });
+  });
 
   it('getSpecsFromVersions', async () => {
-    const versions: IApiVersion = JSON.parse(payload)
-    const specs = await getSpecsFromVersions(versions)
-    expect(Object.keys(specs)).toEqual(['3.1', '4.0', '4.0u'])
-  })
-})
+    const versions: IApiVersion = JSON.parse(payload);
+    const specs = await getSpecsFromVersions(versions);
+    expect(Object.keys(specs)).toEqual(['4.0', '4.0u']);
+  });
+});

@@ -24,19 +24,19 @@
 
  */
 
-import { runConfig } from './legacyGenerator'
-import { SDKConfig } from './sdkConfig'
-import { quit } from './nodeUtils'
-;(async () => {
+import { runConfig } from './legacyGenerator';
+import { SDKConfig } from './sdkConfig';
+import { quit } from './nodeUtils';
+(async () => {
   try {
-    const config = SDKConfig()
+    const config = SDKConfig();
     // Look for the Looker config section and only run that one
-    const name = 'Looker'
-    const props = config[name]
-    const args = process.argv.slice(2)
+    const name = 'Looker';
+    const props = config[name];
+    const args = process.argv.slice(2);
 
-    await runConfig(name, props, args)
+    await runConfig(name, props, args);
   } catch (e: any) {
-    quit(e)
+    quit(e);
   }
-})()
+})();
