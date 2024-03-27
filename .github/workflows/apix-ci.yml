@@ -1,27 +1,5 @@
 name: API Explorer CI
 on:
-  pull_request:
-    paths:
-      - package.json
-      - packages/code-editor/**
-      - packages/run-it/**
-      - packages/api-explorer/**
-      - packages/extension-api-explorer/**
-      - packages/extension-utils/**
-      - .github/workflows/apix-ci.yml
-
-  push:
-    branches:
-      - main
-    paths:
-      - package.json
-      - packages/code-editor/**
-      - packages/run-it/**
-      - packages/api-explorer/**
-      - packages/extension-api-explorer/**
-      - packages/extension-utils/**
-      - .github/workflows/apix-ci.yml
-
   workflow_dispatch:
 
 env:
