@@ -25,7 +25,7 @@
  */
 
 /**
- * 339 API models: 256 Spec, 0 Request, 61 Write, 22 Enum
+ * 340 API models: 257 Spec, 0 Request, 61 Write, 22 Enum
  */
 
 
@@ -10828,92 +10828,27 @@ public enum InvestigativeContentType: String, Codable {
 public struct JsonBi: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
-        case big_query_metadata
-        case fields
-        case pivots
-        case has_subtotals
-        case has_totals
-        case _columns_truncated = "columns_truncated"
-        case _filter_expression = "filter_expression"
-        case filters
-        case _sql = "sql"
-        case _data = "data"
+        case metadata
+        case _rows = "rows"
     }
-    public var big_query_metadata: JsonBiBigQueryMetadata
+    public var metadata: JsonBiMetadata
 
-    public var fields: JsonBiFields
-
-    /**
-     * Pivots (read-only)
-     */
-    public var pivots: [JsonBiPivots]
-
-    /**
-     * If the query has subtotals (read-only)
-     */
-    public var has_subtotals: Bool
-
-    /**
-     * If the query has totals (read-only)
-     */
-    public var has_totals: Bool
-
-    private var _columns_truncated: AnyString
-    /**
-     * If the query results hit the maximum column limit and additional columns were truncated (read-only)
-     */
-    public var columns_truncated: String {
-        get { _columns_truncated.value }
-        set { _columns_truncated = AnyString.init(newValue) }
-    }
-
-    private var _filter_expression: AnyString
-    /**
-     * Filter expression applied to the query results (read-only)
-     */
-    public var filter_expression: String {
-        get { _filter_expression.value }
-        set { _filter_expression = AnyString.init(newValue) }
-    }
-
-    /**
-     * Filters applied to the query results (read-only)
-     */
-    public var filters: StringDictionary<AnyCodable>
-
-    private var _sql: AnyString
-    /**
-     * Raw sql query. Null if user does not have permission to view sql (read-only)
-     */
-    public var sql: String {
-        get { _sql.value }
-        set { _sql = AnyString.init(newValue) }
-    }
-
-    private var _data: [AnyString]
+    private var _rows: [AnyString]
     /**
      * Json query results (read-only)
      */
-    public var data: [String] {
-        get { _data.map { $0.value } }
-        set { _data = newValue.map { AnyString.init($0) } }
+    public var rows: [String] {
+        get { _rows.map { $0.value } }
+        set { _rows = newValue.map { AnyString.init($0) } }
     }
 
-    public init(big_query_metadata: JsonBiBigQueryMetadata, fields: JsonBiFields, pivots: [JsonBiPivots], has_subtotals: Bool, has_totals: Bool, columns_truncated: String, filter_expression: String, filters: StringDictionary<AnyCodable>, sql: String, data: [String]) {
-        self.big_query_metadata = big_query_metadata
-        self.fields = fields
-        self.pivots = pivots
-        self.has_subtotals = has_subtotals
-        self.has_totals = has_totals
-        self._columns_truncated = AnyString.init(columns_truncated)
-        self._filter_expression = AnyString.init(filter_expression)
-        self.filters = filters
-        self._sql = AnyString.init(sql)
-        self._data = data.map { AnyString.init($0) }
+    public init(metadata: JsonBiMetadata, rows: [String]) {
+        self.metadata = metadata
+        self._rows = rows.map { AnyString.init($0) }
     }
 
-    public init(_ big_query_metadata: JsonBiBigQueryMetadata, _ fields: JsonBiFields, _ pivots: [JsonBiPivots], _ has_subtotals: Bool, _ has_totals: Bool, _ columns_truncated: String, _ filter_expression: String, _ filters: StringDictionary<AnyCodable>, _ sql: String, _ data: [String]) {
-        self.init(big_query_metadata: big_query_metadata, fields: fields, pivots: pivots, has_subtotals: has_subtotals, has_totals: has_totals, columns_truncated: columns_truncated, filter_expression: filter_expression, filters: filters, sql: sql, data: data)
+    public init(_ metadata: JsonBiMetadata, _ rows: [String]) {
+        self.init(metadata: metadata, rows: rows)
     }
 
 }
@@ -11114,6 +11049,88 @@ public struct JsonBiFields: SDKModel {
 
     public init(_ dimensions: [JsonBiField], _ measures: [JsonBiField], _ pivots: [JsonBiField]) {
         self.init(dimensions: dimensions, measures: measures, pivots: pivots)
+    }
+
+}
+
+public struct JsonBiMetadata: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case big_query_metadata
+        case fields
+        case pivots
+        case has_subtotals
+        case has_totals
+        case _columns_truncated = "columns_truncated"
+        case _filter_expression = "filter_expression"
+        case filters
+        case _sql = "sql"
+    }
+    public var big_query_metadata: JsonBiBigQueryMetadata
+
+    public var fields: JsonBiFields
+
+    /**
+     * Pivots (read-only)
+     */
+    public var pivots: [JsonBiPivots]
+
+    /**
+     * If the query has subtotals (read-only)
+     */
+    public var has_subtotals: Bool
+
+    /**
+     * If the query has totals (read-only)
+     */
+    public var has_totals: Bool
+
+    private var _columns_truncated: AnyString
+    /**
+     * If the query results hit the maximum column limit and additional columns were truncated (read-only)
+     */
+    public var columns_truncated: String {
+        get { _columns_truncated.value }
+        set { _columns_truncated = AnyString.init(newValue) }
+    }
+
+    private var _filter_expression: AnyString
+    /**
+     * Filter expression applied to the query results (read-only)
+     */
+    public var filter_expression: String {
+        get { _filter_expression.value }
+        set { _filter_expression = AnyString.init(newValue) }
+    }
+
+    /**
+     * Filters applied to the query results (read-only)
+     */
+    public var filters: StringDictionary<AnyCodable>
+
+    private var _sql: AnyString
+    /**
+     * Raw sql query. Null if user does not have permission to view sql (read-only)
+     */
+    public var sql: String {
+        get { _sql.value }
+        set { _sql = AnyString.init(newValue) }
+    }
+
+    public init(big_query_metadata: JsonBiBigQueryMetadata, fields: JsonBiFields, pivots: [JsonBiPivots], has_subtotals: Bool, has_totals: Bool, columns_truncated: String, filter_expression: String, filters: StringDictionary<AnyCodable>, sql: String) {
+        self.big_query_metadata = big_query_metadata
+        self.fields = fields
+        self.pivots = pivots
+        self.has_subtotals = has_subtotals
+        self.has_totals = has_totals
+        self._columns_truncated = AnyString.init(columns_truncated)
+        self._filter_expression = AnyString.init(filter_expression)
+        self.filters = filters
+        self._sql = AnyString.init(sql)
+    }
+
+    public init(_ big_query_metadata: JsonBiBigQueryMetadata, _ fields: JsonBiFields, _ pivots: [JsonBiPivots], _ has_subtotals: Bool, _ has_totals: Bool, _ columns_truncated: String, _ filter_expression: String, _ filters: StringDictionary<AnyCodable>, _ sql: String) {
+        self.init(big_query_metadata: big_query_metadata, fields: fields, pivots: pivots, has_subtotals: has_subtotals, has_totals: has_totals, columns_truncated: columns_truncated, filter_expression: filter_expression, filters: filters, sql: sql)
     }
 
 }
