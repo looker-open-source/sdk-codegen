@@ -1,5 +1,13 @@
 # Changelog
 
+## [24.4.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.3.0...sdk-codegen-all-v24.4.0) (2024-04-05)
+
+
+### Features
+
+* add Shadow plugin to build shaded Kotlin jars ([#1345](https://github.com/looker-open-source/sdk-codegen/issues/1345)) ([dfab079](https://github.com/looker-open-source/sdk-codegen/commit/dfab0796f5b2f147307445cb301649cffd6ebe68))
+* generate SDKs for Looker 24.4 ([#1450](https://github.com/looker-open-source/sdk-codegen/issues/1450)) ([2dd742c](https://github.com/looker-open-source/sdk-codegen/commit/2dd742c5e9523f0d46e0cc6fbba137edb1a9e1ab))
+
 ## [24.3.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.2.0...sdk-codegen-all-v24.3.0) (2024-03-12)
 
 
