@@ -106,9 +106,8 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: tssdk-test-results
+          name: tssdk-test-results-${{ matrix.os }}-${{ matrix.node-version }}
           path: results/tssdk
-          overwrite: true
 
   setup:
     uses: looker-open-source/reusable-actions/.github/workflows/supported-versions.yml@main
@@ -176,9 +175,8 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: tssdk-test-results
+          name: tssdk-test-results-${{ matrix.os }}-${{ matrix.node-version }}-${{ matrix.looker }}
           path: results/tssdk
-          overwrite: true
 
   publish-test-results:
     needs: [unit, integration]
