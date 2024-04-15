@@ -94,9 +94,8 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: python-test-results
+          name: python-test-results-${{ matrix.os }}-${{ matrix.python-version }}
           path: python/results/
-          overwrite: true
 
   integration:
     needs: [unit, setup]
@@ -213,9 +212,8 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
-          name: python-test-results
+          name: python-test-results-${{ matrix.os }}-${{ matrix.looker }}
           path: python/results/
-          overwrite: true
 
   twine:
     needs: [unit, integration]
