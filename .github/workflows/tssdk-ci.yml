@@ -199,4 +199,4 @@ jobs:
           report_individual_runs: true
           hide_comments: orphaned commits
           check_run_annotations_branch: '*'
-          files: 'artifacts/tssdk-test-results/*.xml'
+          files: 'artifacts/tssdk-test-results*/*.xml'
