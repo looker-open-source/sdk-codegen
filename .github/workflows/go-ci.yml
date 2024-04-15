@@ -205,4 +205,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           report_individual_runs: true
           check_run_annotations_branch: '*'
-          files: 'artifacts/${{ env.JUNIT_ARTIFACT_DIR }}/*.xml'
+          files: 'artifacts/${{ env.JUNIT_ARTIFACT_DIR }}*/*.xml'
