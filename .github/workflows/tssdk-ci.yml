@@ -197,6 +197,5 @@ jobs:
           check_name: Typescript Tests
           github_token: ${{ secrets.GITHUB_TOKEN }}
           report_individual_runs: true
-          hide_comments: orphaned commits
           check_run_annotations_branch: '*'
           files: 'artifacts/tssdk-test-results*/*.xml'
