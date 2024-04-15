@@ -108,6 +108,7 @@ jobs:
         with:
           name: tssdk-test-results
           path: results/tssdk
+          overwrite: true
 
   setup:
     uses: looker-open-source/reusable-actions/.github/workflows/supported-versions.yml@main
@@ -177,6 +178,7 @@ jobs:
         with:
           name: tssdk-test-results
           path: results/tssdk
+          overwrite: true
 
   publish-test-results:
     needs: [unit, integration]
