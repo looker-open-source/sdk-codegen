@@ -251,7 +251,7 @@ jobs:
       - name: Check Results Files Exist
         id: check-results-exist
         run: |
-          if [[ $(ls -l artifacts/python-test-results/*.xml 2> /dev/null | wc -l) -ge "1" ]]; then
+          if [[ $(ls -l artifacts/python-test-results*/*.xml 2> /dev/null | wc -l) -ge "1" ]]; then
             exit 0
           else
             curl --request POST \
@@ -281,4 +281,4 @@ jobs:
           report_individual_runs: true
           hide_comments: orphaned commits
           check_run_annotations_branch: '*'
-          files: 'artifacts/python-test-results/*.xml'
+          files: 'artifacts/python-test-results*/*.xml'
