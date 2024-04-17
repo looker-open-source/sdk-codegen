@@ -37,9 +37,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Repo Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - uses: tony84727/changed-file-filter@v0.2.2
+      - uses: tony84727/changed-file-filter@v0.2.3
         id: filter
         with:
           filters: |

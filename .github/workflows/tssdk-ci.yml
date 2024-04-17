@@ -47,15 +47,15 @@ jobs:
 
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.11.0
+        uses: styfle/cancel-workflow-action@0.12.1
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Repo Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -104,9 +104,9 @@ jobs:
 
       - name: Upload ts unit test results
         if: ${{ always() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: tssdk-test-results
+          name: tssdk-test-results-${{ matrix.os }}-${{ matrix.node-version }}
           path: results/tssdk
 
   setup:
@@ -129,7 +129,7 @@ jobs:
 
     steps:
       - name: Repo Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v1.0.0
@@ -155,7 +155,7 @@ jobs:
           docker logs -f looker-sdk-codegen-ci --until=30s &
 
       - name: Install Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -173,9 +173,9 @@ jobs:
 
       - name: Upload integration test results
         if: ${{ always() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: tssdk-test-results
+          name: tssdk-test-results-${{ matrix.os }}-${{ matrix.node-version }}-${{ matrix.looker }}
           path: results/tssdk
 
   publish-test-results:
@@ -185,7 +185,7 @@ jobs:
 
     steps:
       - name: Download Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           path: artifacts
 
@@ -197,6 +197,5 @@ jobs:
           check_name: Typescript Tests
           github_token: ${{ secrets.GITHUB_TOKEN }}
           report_individual_runs: true
-          hide_comments: orphaned commits
           check_run_annotations_branch: '*'
-          files: 'artifacts/tssdk-test-results/*.xml'
+          files: 'artifacts/tssdk-test-results*/*.xml'
