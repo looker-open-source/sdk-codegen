@@ -99,7 +99,7 @@ class ErrorDocHelper:
     ERROR_CODES_URL: str = "https://static-a.cdn.looker.app/errorcodes/"
     lookup_dict: Dict[str, Dict[str, str]] = {}
     RE_PATTERN: str = (
-        """(https://docs\.looker\.com/r/err/|https://cloud\.google\.com/looker/docs/r/err/)(.*)/(\d{3})(.*)"""
+        r'(https://docs\.looker\.com/r/err/|https://cloud\.google\.com/looker/docs/r/err/)(.*)/(\d{3})(.*)'
     )
     pattern = re.compile(RE_PATTERN, flags=re.IGNORECASE)
 
