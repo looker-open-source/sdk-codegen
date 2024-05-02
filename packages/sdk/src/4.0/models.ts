@@ -25,7 +25,7 @@
  */
 
 /**
- * 407 API models: 257 Spec, 67 Request, 61 Write, 22 Enum
+ * 408 API models: 258 Spec, 67 Request, 61 Write, 22 Enum
  */
 
 import type { DelimArray, IDictionary } from '@looker/sdk-rtl';
@@ -2845,6 +2845,10 @@ export interface IDBConnection {
    * PDT builds on this connection can be kicked off and cancelled via API.
    */
   pdt_api_control_enabled?: boolean | null;
+  /**
+   * Enable database connection pooling.
+   */
+  connection_pooling?: boolean;
 }
 
 export interface IDBConnectionBase {
@@ -3169,6 +3173,10 @@ export interface IDialectInfoOptions {
    * Username is required (read-only)
    */
   username_required?: boolean;
+  /**
+   * Has support for connection pooling (read-only)
+   */
+  supports_connection_pooling?: boolean;
 }
 
 export interface IDigestEmails {
@@ -4475,6 +4483,10 @@ export interface IJsonBiFields {
    * Pivots (read-only)
    */
   pivots: IJsonBiField[];
+  /**
+   * Table Calculations (beta: May not be included) (read-only)
+   */
+  table_calculations?: IJsonBiTableCalc[];
 }
 
 export interface IJsonBiMetadata {
@@ -4527,6 +4539,33 @@ export interface IJsonBiPivots {
    * If the value is a total (read-only)
    */
   is_total: boolean;
+}
+
+export interface IJsonBiTableCalc {
+  /**
+   * Table Calc Name (read-only)
+   */
+  name: string | null;
+  /**
+   * Table Calc Label (read-only)
+   */
+  label: string | null;
+  /**
+   * Alignment (read-only)
+   */
+  align: string | null;
+  /**
+   * Evaluated table calculation expression (read-only)
+   */
+  expression: string | null;
+  /**
+   * Value format (read-only)
+   */
+  value_format: string | null;
+  /**
+   * If table calculation is a measure (read-only)
+   */
+  measure: boolean | null;
 }
 
 export interface ILDAPConfig {
@@ -12699,6 +12738,10 @@ export interface IWriteDBConnection {
    * PDT builds on this connection can be kicked off and cancelled via API.
    */
   pdt_api_control_enabled?: boolean | null;
+  /**
+   * Enable database connection pooling.
+   */
+  connection_pooling?: boolean;
 }
 
 /**
