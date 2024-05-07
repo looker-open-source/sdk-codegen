@@ -128,6 +128,14 @@
     * @looker/extension-sdk-react bumped from 24.2.1 to 24.4.0
     * @looker/sdk bumped from 24.2.1 to 24.4.0
 
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-sdk bumped from 24.4.0 to 24.8.0
+    * @looker/extension-sdk-react bumped from 24.4.0 to 24.8.0
+    * @looker/sdk bumped from 24.4.0 to 24.8.0
+
 ## 1.0.0 (2023-02-22)
 
 ### Features
