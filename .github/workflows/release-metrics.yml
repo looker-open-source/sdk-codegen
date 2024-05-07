@@ -9,7 +9,7 @@ jobs:
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v1.0.0
         with:
-          credentials_json: ${{ secrets.GCP_AR_READER_SA_KEY }}
+          credentials_json: ${{ secrets.GCP_BQ_METRICS_KEY }}
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           create_credentials_file: true
           export_environment_variables: true
