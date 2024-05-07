@@ -25,7 +25,7 @@
  */
 
 /**
- * 340 API models: 257 Spec, 0 Request, 61 Write, 22 Enum
+ * 341 API models: 258 Spec, 0 Request, 61 Write, 22 Enum
  */
 
 
@@ -6804,6 +6804,7 @@ public struct DBConnection: SDKModel {
         case always_retry_failed_builds
         case cost_estimate_enabled
         case pdt_api_control_enabled
+        case connection_pooling
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -7146,7 +7147,12 @@ public struct DBConnection: SDKModel {
      */
     public var pdt_api_control_enabled: Bool?
 
-    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, uses_oauth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, supports_data_studio_link: Bool? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil) {
+    /**
+     * Enable database connection pooling.
+     */
+    public var connection_pooling: Bool?
+
+    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, uses_oauth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, supports_data_studio_link: Bool? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil) {
         self.can = can
         self._name = name.map(AnyString.init)
         self.dialect = dialect
@@ -7194,6 +7200,7 @@ public struct DBConnection: SDKModel {
         self.always_retry_failed_builds = always_retry_failed_builds
         self.cost_estimate_enabled = cost_estimate_enabled
         self.pdt_api_control_enabled = pdt_api_control_enabled
+        self.connection_pooling = connection_pooling
     }
 
 }
@@ -7858,7 +7865,12 @@ public struct DialectInfoOptions: SDKModel {
      */
     public var username_required: Bool?
 
-    public init(additional_params: Bool? = nil, after_connect_statements: Bool? = nil, analytical_view_dataset: Bool? = nil, auth: Bool? = nil, cost_estimate: Bool? = nil, disable_context_comment: Bool? = nil, host: Bool? = nil, instance_name: Bool? = nil, max_billing_gigabytes: Bool? = nil, oauth_credentials: Bool? = nil, pdts_for_oauth: Bool? = nil, port: Bool? = nil, project_name: Bool? = nil, schema: Bool? = nil, service_account_credentials: Bool? = nil, ssl: Bool? = nil, timezone: Bool? = nil, tmp_table: Bool? = nil, tns: Bool? = nil, username: Bool? = nil, username_required: Bool? = nil) {
+    /**
+     * Has support for connection pooling (read-only)
+     */
+    public var supports_connection_pooling: Bool?
+
+    public init(additional_params: Bool? = nil, after_connect_statements: Bool? = nil, analytical_view_dataset: Bool? = nil, auth: Bool? = nil, cost_estimate: Bool? = nil, disable_context_comment: Bool? = nil, host: Bool? = nil, instance_name: Bool? = nil, max_billing_gigabytes: Bool? = nil, oauth_credentials: Bool? = nil, pdts_for_oauth: Bool? = nil, port: Bool? = nil, project_name: Bool? = nil, schema: Bool? = nil, service_account_credentials: Bool? = nil, ssl: Bool? = nil, timezone: Bool? = nil, tmp_table: Bool? = nil, tns: Bool? = nil, username: Bool? = nil, username_required: Bool? = nil, supports_connection_pooling: Bool? = nil) {
         self.additional_params = additional_params
         self.after_connect_statements = after_connect_statements
         self.analytical_view_dataset = analytical_view_dataset
@@ -7880,6 +7892,7 @@ public struct DialectInfoOptions: SDKModel {
         self.tns = tns
         self.username = username
         self.username_required = username_required
+        self.supports_connection_pooling = supports_connection_pooling
     }
 
 }
@@ -11041,14 +11054,20 @@ public struct JsonBiFields: SDKModel {
      */
     public var pivots: [JsonBiField]
 
-    public init(dimensions: [JsonBiField], measures: [JsonBiField], pivots: [JsonBiField]) {
+    /**
+     * Table Calculations (beta: May not be included) (read-only)
+     */
+    public var table_calculations: [JsonBiTableCalc]?
+
+    public init(dimensions: [JsonBiField], measures: [JsonBiField], pivots: [JsonBiField], table_calculations: [JsonBiTableCalc]? = nil) {
         self.dimensions = dimensions
         self.measures = measures
         self.pivots = pivots
+        self.table_calculations = table_calculations
     }
 
-    public init(_ dimensions: [JsonBiField], _ measures: [JsonBiField], _ pivots: [JsonBiField]) {
-        self.init(dimensions: dimensions, measures: measures, pivots: pivots)
+    public init(_ dimensions: [JsonBiField], _ measures: [JsonBiField], _ pivots: [JsonBiField], table_calculations: [JsonBiTableCalc]? = nil) {
+        self.init(dimensions: dimensions, measures: measures, pivots: pivots, table_calculations: table_calculations)
     }
 
 }
@@ -11176,6 +11195,81 @@ public struct JsonBiPivots: SDKModel {
 
     public init(_ key: String, _ data: StringDictionary<AnyCodable>, _ sort_values: StringDictionary<AnyCodable>, _ is_total: Bool) {
         self.init(key: key, data: data, sort_values: sort_values, is_total: is_total)
+    }
+
+}
+
+public struct JsonBiTableCalc: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _name = "name"
+        case _label = "label"
+        case _align = "align"
+        case _expression = "expression"
+        case _value_format = "value_format"
+        case measure
+    }
+    private var _name: AnyString
+    /**
+     * Table Calc Name (read-only)
+     */
+    public var name: String {
+        get { _name.value }
+        set { _name = AnyString.init(newValue) }
+    }
+
+    private var _label: AnyString
+    /**
+     * Table Calc Label (read-only)
+     */
+    public var label: String {
+        get { _label.value }
+        set { _label = AnyString.init(newValue) }
+    }
+
+    private var _align: AnyString
+    /**
+     * Alignment (read-only)
+     */
+    public var align: String {
+        get { _align.value }
+        set { _align = AnyString.init(newValue) }
+    }
+
+    private var _expression: AnyString
+    /**
+     * Evaluated table calculation expression (read-only)
+     */
+    public var expression: String {
+        get { _expression.value }
+        set { _expression = AnyString.init(newValue) }
+    }
+
+    private var _value_format: AnyString
+    /**
+     * Value format (read-only)
+     */
+    public var value_format: String {
+        get { _value_format.value }
+        set { _value_format = AnyString.init(newValue) }
+    }
+
+    /**
+     * If table calculation is a measure (read-only)
+     */
+    public var measure: Bool
+
+    public init(name: String, label: String, align: String, expression: String, value_format: String, measure: Bool) {
+        self._name = AnyString.init(name)
+        self._label = AnyString.init(label)
+        self._align = AnyString.init(align)
+        self._expression = AnyString.init(expression)
+        self._value_format = AnyString.init(value_format)
+        self.measure = measure
+    }
+
+    public init(_ name: String, _ label: String, _ align: String, _ expression: String, _ value_format: String, _ measure: Bool) {
+        self.init(name: name, label: label, align: align, expression: expression, value_format: value_format, measure: measure)
     }
 
 }
@@ -25077,6 +25171,7 @@ public struct WriteDBConnection: SDKModel {
         case always_retry_failed_builds
         case cost_estimate_enabled
         case pdt_api_control_enabled
+        case connection_pooling
     }
     private var _name: AnyString?
     /**
@@ -25350,7 +25445,12 @@ public struct WriteDBConnection: SDKModel {
      */
     public var pdt_api_control_enabled: Bool?
 
-    public init(name: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: WriteDBConnectionOverride? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil) {
+    /**
+     * Enable database connection pooling.
+     */
+    public var connection_pooling: Bool?
+
+    public init(name: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: WriteDBConnectionOverride? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil) {
         self._name = name.map(AnyString.init)
         self._host = host.map(AnyString.init)
         self._port = port.map(AnyString.init)
@@ -25386,6 +25486,7 @@ public struct WriteDBConnection: SDKModel {
         self.always_retry_failed_builds = always_retry_failed_builds
         self.cost_estimate_enabled = cost_estimate_enabled
         self.pdt_api_control_enabled = pdt_api_control_enabled
+        self.connection_pooling = connection_pooling
     }
 
 }

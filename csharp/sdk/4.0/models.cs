@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 340 API models: 257 Spec, 0 Request, 61 Write, 22 Enum
+/// 341 API models: 258 Spec, 0 Request, 61 Write, 22 Enum
 
 #nullable enable
 using System;
@@ -1689,6 +1689,8 @@ public class DBConnection : SdkModel
   public bool? cost_estimate_enabled { get; set; } = null;
   /// <summary>PDT builds on this connection can be kicked off and cancelled via API.</summary>
   public bool? pdt_api_control_enabled { get; set; } = null;
+  /// <summary>Enable database connection pooling.</summary>
+  public bool? connection_pooling { get; set; } = null;
 }
 
 public class DBConnectionBase : SdkModel
@@ -1890,6 +1892,8 @@ public class DialectInfoOptions : SdkModel
   public bool? username { get; set; } = null;
   /// <summary>Username is required (read-only)</summary>
   public bool? username_required { get; set; } = null;
+  /// <summary>Has support for connection pooling (read-only)</summary>
+  public bool? supports_connection_pooling { get; set; } = null;
 }
 
 public class DigestEmails : SdkModel
@@ -2657,6 +2661,8 @@ public class JsonBiFields : SdkModel
   public JsonBiField[] measures { get; set; } = null;
   /// <summary>Pivots (read-only)</summary>
   public JsonBiField[] pivots { get; set; } = null;
+  /// <summary>Table Calculations (beta: May not be included) (read-only)</summary>
+  public JsonBiTableCalc[]? table_calculations { get; set; } = null;
 }
 
 public class JsonBiMetadata : SdkModel
@@ -2689,6 +2695,22 @@ public class JsonBiPivots : SdkModel
   public StringDictionary<string> sort_values { get; set; } = null;
   /// <summary>If the value is a total (read-only)</summary>
   public bool is_total { get; set; }
+}
+
+public class JsonBiTableCalc : SdkModel
+{
+  /// <summary>Table Calc Name (read-only)</summary>
+  public string name { get; set; } = "";
+  /// <summary>Table Calc Label (read-only)</summary>
+  public string label { get; set; } = "";
+  /// <summary>Alignment (read-only)</summary>
+  public string align { get; set; } = "";
+  /// <summary>Evaluated table calculation expression (read-only)</summary>
+  public string expression { get; set; } = "";
+  /// <summary>Value format (read-only)</summary>
+  public string value_format { get; set; } = "";
+  /// <summary>If table calculation is a measure (read-only)</summary>
+  public bool measure { get; set; }
 }
 
 public class LDAPConfig : SdkModel
@@ -6199,6 +6221,8 @@ public class WriteDBConnection : SdkModel
   public bool? cost_estimate_enabled { get; set; } = null;
   /// <summary>PDT builds on this connection can be kicked off and cancelled via API.</summary>
   public bool? pdt_api_control_enabled { get; set; } = null;
+  /// <summary>Enable database connection pooling.</summary>
+  public bool? connection_pooling { get; set; } = null;
 }
 
 /// Dynamic writeable type for DBConnectionOverride removes:
