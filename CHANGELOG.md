@@ -1,5 +1,18 @@
 # Changelog
 
+## [24.8.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.4.0...sdk-codegen-all-v24.8.0) (2024-05-07)
+
+
+### Features
+
+* generate SDKs for Looker 24.6 ([#1455](https://github.com/looker-open-source/sdk-codegen/issues/1455)) ([f093b8d](https://github.com/looker-open-source/sdk-codegen/commit/f093b8db8813e853e0600c86c0f97b68478d7eb8))
+* generate SDKs for Looker 24.8 ([#1462](https://github.com/looker-open-source/sdk-codegen/issues/1462)) ([79228ad](https://github.com/looker-open-source/sdk-codegen/commit/79228adaff67bde216383801711c8cd7a2464edf))
+
+
+### Bug Fixes
+
+* backslash in regex causing warnings - switch to raw string ([#1461](https://github.com/looker-open-source/sdk-codegen/issues/1461)) ([6781219](https://github.com/looker-open-source/sdk-codegen/commit/6781219fe87a9dd3c39ac107cdb099261d97ec93))
+
 ## [24.4.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.3.0...sdk-codegen-all-v24.4.0) (2024-04-05)
 
 
