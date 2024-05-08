@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v1.0.0
+        uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.GCP_BQ_METRICS_KEY }}
           project_id: ${{ secrets.GCP_PROJECT_ID }}
@@ -15,7 +15,7 @@ jobs:
           export_environment_variables: true
 
       - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1.1.0
+        uses: google-github-actions/setup-gcloud@v2
 
       - run: 'jq -c ''.release |
           {
