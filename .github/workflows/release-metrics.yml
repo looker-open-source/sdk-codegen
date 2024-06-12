@@ -30,4 +30,9 @@ jobs:
           draft,
           prerelease
           }'' $GITHUB_EVENT_PATH > releases.json'
+
+      # Avoid rate limit exceeded error in bq load step
+      - name: Sleep for random time
+        run: sleep $((RANDOM % 120))
+
       - run: bq load --source_format=NEWLINE_DELIMITED_JSON metrics.releases releases.json
