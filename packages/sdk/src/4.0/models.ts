@@ -3082,6 +3082,10 @@ export interface IDialectInfo {
    */
   label_for_database_equivalent?: string | null;
   /**
+   * What the dialect calls the equivalent of a schema-level namespace (read-only)
+   */
+  label_for_schema_equivalent?: string | null;
+  /**
    * The name of the dialect (read-only)
    */
   name?: string | null;
@@ -3542,6 +3546,10 @@ export interface IExternalOauthApplication {
    * (Write-Only) The OAuth Client Secret for this application
    */
   client_secret?: string;
+  /**
+   * The OAuth Tenant ID for this application
+   */
+  tenant_id?: string | null;
   /**
    * The database dialect for this application.
    */
@@ -7136,7 +7144,7 @@ export interface IQuery {
    */
   fill_fields?: string[] | null;
   /**
-   * Filters
+   * Filters will contain data pertaining to complex filters that do not contain "or" conditions. When "or" conditions are present, filter data will be found on the `filter_expression` property.
    */
   filters?: IDictionary<string> | null;
   /**
@@ -12832,6 +12840,10 @@ export interface IWriteExternalOauthApplication {
    */
   client_secret?: string;
   /**
+   * The OAuth Tenant ID for this application
+   */
+  tenant_id?: string | null;
+  /**
    * The database dialect for this application.
    */
   dialect_name?: string | null;
@@ -13570,7 +13582,7 @@ export interface IWriteQuery {
    */
   fill_fields?: string[] | null;
   /**
-   * Filters
+   * Filters will contain data pertaining to complex filters that do not contain "or" conditions. When "or" conditions are present, filter data will be found on the `filter_expression` property.
    */
   filters?: IDictionary<string> | null;
   /**

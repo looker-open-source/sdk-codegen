@@ -7686,6 +7686,7 @@ public struct DialectInfo: SDKModel {
         case installed
         case _label = "label"
         case _label_for_database_equivalent = "label_for_database_equivalent"
+        case _label_for_schema_equivalent = "label_for_schema_equivalent"
         case _name = "name"
         case supported_options
     }
@@ -7735,6 +7736,15 @@ public struct DialectInfo: SDKModel {
         set { _label_for_database_equivalent = newValue.map(AnyString.init) }
     }
 
+    private var _label_for_schema_equivalent: AnyString?
+    /**
+     * What the dialect calls the equivalent of a schema-level namespace (read-only)
+     */
+    public var label_for_schema_equivalent: String? {
+        get { _label_for_schema_equivalent?.value }
+        set { _label_for_schema_equivalent = newValue.map(AnyString.init) }
+    }
+
     private var _name: AnyString?
     /**
      * The name of the dialect (read-only)
@@ -7746,13 +7756,14 @@ public struct DialectInfo: SDKModel {
 
     public var supported_options: DialectInfoOptions?
 
-    public init(can: StringDictionary<Bool>? = nil, default_max_connections: String? = nil, default_port: String? = nil, installed: Bool? = nil, label: String? = nil, label_for_database_equivalent: String? = nil, name: String? = nil, supported_options: DialectInfoOptions? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, default_max_connections: String? = nil, default_port: String? = nil, installed: Bool? = nil, label: String? = nil, label_for_database_equivalent: String? = nil, label_for_schema_equivalent: String? = nil, name: String? = nil, supported_options: DialectInfoOptions? = nil) {
         self.can = can
         self._default_max_connections = default_max_connections.map(AnyString.init)
         self._default_port = default_port.map(AnyString.init)
         self.installed = installed
         self._label = label.map(AnyString.init)
         self._label_for_database_equivalent = label_for_database_equivalent.map(AnyString.init)
+        self._label_for_schema_equivalent = label_for_schema_equivalent.map(AnyString.init)
         self._name = name.map(AnyString.init)
         self.supported_options = supported_options
     }
@@ -8804,6 +8815,7 @@ public struct ExternalOauthApplication: SDKModel {
         case _name = "name"
         case _client_id = "client_id"
         case _client_secret = "client_secret"
+        case _tenant_id = "tenant_id"
         case _dialect_name = "dialect_name"
         case created_at
     }
@@ -8848,6 +8860,15 @@ public struct ExternalOauthApplication: SDKModel {
         set { _client_secret = newValue.map(AnyString.init) }
     }
 
+    private var _tenant_id: AnyString?
+    /**
+     * The OAuth Tenant ID for this application
+     */
+    public var tenant_id: String? {
+        get { _tenant_id?.value }
+        set { _tenant_id = newValue.map(AnyString.init) }
+    }
+
     private var _dialect_name: AnyString?
     /**
      * The database dialect for this application.
@@ -8862,12 +8883,13 @@ public struct ExternalOauthApplication: SDKModel {
      */
     public var created_at: Date?
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, client_id: String? = nil, client_secret: String? = nil, dialect_name: String? = nil, created_at: Date? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, client_id: String? = nil, client_secret: String? = nil, tenant_id: String? = nil, dialect_name: String? = nil, created_at: Date? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
         self._name = name.map(AnyString.init)
         self._client_id = client_id.map(AnyString.init)
         self._client_secret = client_secret.map(AnyString.init)
+        self._tenant_id = tenant_id.map(AnyString.init)
         self._dialect_name = dialect_name.map(AnyString.init)
         self.created_at = created_at
     }
@@ -17512,7 +17534,7 @@ public struct Query: SDKModel {
     }
 
     /**
-     * Filters
+     * Filters will contain data pertaining to complex filters that do not contain "or" conditions. When "or" conditions are present, filter data will be found on the `filter_expression` property.
      */
     public var filters: StringDictionary<AnyCodable>?
 
@@ -25673,6 +25695,7 @@ public struct WriteExternalOauthApplication: SDKModel {
         case _name = "name"
         case _client_id = "client_id"
         case _client_secret = "client_secret"
+        case _tenant_id = "tenant_id"
         case _dialect_name = "dialect_name"
     }
     private var _name: AnyString?
@@ -25702,6 +25725,15 @@ public struct WriteExternalOauthApplication: SDKModel {
         set { _client_secret = newValue.map(AnyString.init) }
     }
 
+    private var _tenant_id: AnyString?
+    /**
+     * The OAuth Tenant ID for this application
+     */
+    public var tenant_id: String? {
+        get { _tenant_id?.value }
+        set { _tenant_id = newValue.map(AnyString.init) }
+    }
+
     private var _dialect_name: AnyString?
     /**
      * The database dialect for this application.
@@ -25711,10 +25743,11 @@ public struct WriteExternalOauthApplication: SDKModel {
         set { _dialect_name = newValue.map(AnyString.init) }
     }
 
-    public init(name: String? = nil, client_id: String? = nil, client_secret: String? = nil, dialect_name: String? = nil) {
+    public init(name: String? = nil, client_id: String? = nil, client_secret: String? = nil, tenant_id: String? = nil, dialect_name: String? = nil) {
         self._name = name.map(AnyString.init)
         self._client_id = client_id.map(AnyString.init)
         self._client_secret = client_secret.map(AnyString.init)
+        self._tenant_id = tenant_id.map(AnyString.init)
         self._dialect_name = dialect_name.map(AnyString.init)
     }
 
@@ -27385,7 +27418,7 @@ public struct WriteQuery: SDKModel {
     }
 
     /**
-     * Filters
+     * Filters will contain data pertaining to complex filters that do not contain "or" conditions. When "or" conditions are present, filter data will be found on the `filter_expression` property.
      */
     public var filters: StringDictionary<AnyCodable>?
 

@@ -4069,6 +4069,7 @@ class DialectInfo(model.Model):
         installed: Is the supporting driver installed
         label: The human-readable label of the connection
         label_for_database_equivalent: What the dialect calls the equivalent of a normal SQL table
+        label_for_schema_equivalent: What the dialect calls the equivalent of a schema-level namespace
         name: The name of the dialect
         supported_options:
     """
@@ -4079,6 +4080,7 @@ class DialectInfo(model.Model):
     installed: Optional[bool] = None
     label: Optional[str] = None
     label_for_database_equivalent: Optional[str] = None
+    label_for_schema_equivalent: Optional[str] = None
     name: Optional[str] = None
     supported_options: Optional["DialectInfoOptions"] = None
 
@@ -4091,6 +4093,7 @@ class DialectInfo(model.Model):
         installed: Optional[bool] = None,
         label: Optional[str] = None,
         label_for_database_equivalent: Optional[str] = None,
+        label_for_schema_equivalent: Optional[str] = None,
         name: Optional[str] = None,
         supported_options: Optional["DialectInfoOptions"] = None
     ):
@@ -4100,6 +4103,7 @@ class DialectInfo(model.Model):
         self.installed = installed
         self.label = label
         self.label_for_database_equivalent = label_for_database_equivalent
+        self.label_for_schema_equivalent = label_for_schema_equivalent
         self.name = name
         self.supported_options = supported_options
 
@@ -4675,6 +4679,7 @@ class ExternalOauthApplication(model.Model):
         name: The name of this application.  For Snowflake connections, this should be the name of the host database.
         client_id: The OAuth Client ID for this application
         client_secret: (Write-Only) The OAuth Client Secret for this application
+        tenant_id: The OAuth Tenant ID for this application
         dialect_name: The database dialect for this application.
         created_at: Creation time for this application
     """
@@ -4684,6 +4689,7 @@ class ExternalOauthApplication(model.Model):
     name: Optional[str] = None
     client_id: Optional[str] = None
     client_secret: Optional[str] = None
+    tenant_id: Optional[str] = None
     dialect_name: Optional[str] = None
     created_at: Optional[datetime.datetime] = None
 
@@ -4695,6 +4701,7 @@ class ExternalOauthApplication(model.Model):
         name: Optional[str] = None,
         client_id: Optional[str] = None,
         client_secret: Optional[str] = None,
+        tenant_id: Optional[str] = None,
         dialect_name: Optional[str] = None,
         created_at: Optional[datetime.datetime] = None
     ):
@@ -4703,6 +4710,7 @@ class ExternalOauthApplication(model.Model):
         self.name = name
         self.client_id = client_id
         self.client_secret = client_secret
+        self.tenant_id = tenant_id
         self.dialect_name = dialect_name
         self.created_at = created_at
 
@@ -9288,7 +9296,7 @@ class Query(model.Model):
         fields: Fields
         pivots: Pivots
         fill_fields: Fill Fields
-        filters: Filters
+        filters: Filters will contain data pertaining to complex filters that do not contain "or" conditions. When "or" conditions are present, filter data will be found on the `filter_expression` property.
         filter_expression: Filter Expression
         sorts: Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.
         limit: Limit
@@ -13675,12 +13683,14 @@ class WriteExternalOauthApplication(model.Model):
             name: The name of this application.  For Snowflake connections, this should be the name of the host database.
             client_id: The OAuth Client ID for this application
             client_secret: (Write-Only) The OAuth Client Secret for this application
+            tenant_id: The OAuth Tenant ID for this application
             dialect_name: The database dialect for this application.
     """
 
     name: Optional[str] = None
     client_id: Optional[str] = None
     client_secret: Optional[str] = None
+    tenant_id: Optional[str] = None
     dialect_name: Optional[str] = None
 
     def __init__(
@@ -13689,11 +13699,13 @@ class WriteExternalOauthApplication(model.Model):
         name: Optional[str] = None,
         client_id: Optional[str] = None,
         client_secret: Optional[str] = None,
+        tenant_id: Optional[str] = None,
         dialect_name: Optional[str] = None
     ):
         self.name = name
         self.client_id = client_id
         self.client_secret = client_secret
+        self.tenant_id = tenant_id
         self.dialect_name = dialect_name
 
 
@@ -14576,7 +14588,7 @@ class WriteQuery(model.Model):
             fields: Fields
             pivots: Pivots
             fill_fields: Fill Fields
-            filters: Filters
+            filters: Filters will contain data pertaining to complex filters that do not contain "or" conditions. When "or" conditions are present, filter data will be found on the `filter_expression` property.
             filter_expression: Filter Expression
             sorts: Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.
             limit: Limit

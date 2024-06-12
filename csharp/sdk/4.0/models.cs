@@ -1843,6 +1843,8 @@ public class DialectInfo : SdkModel
   public string? label { get; set; } = null;
   /// <summary>What the dialect calls the equivalent of a normal SQL table (read-only)</summary>
   public string? label_for_database_equivalent { get; set; } = null;
+  /// <summary>What the dialect calls the equivalent of a schema-level namespace (read-only)</summary>
+  public string? label_for_schema_equivalent { get; set; } = null;
   /// <summary>The name of the dialect (read-only)</summary>
   public string? name { get; set; } = null;
   public DialectInfoOptions? supported_options { get; set; }
@@ -2115,6 +2117,8 @@ public class ExternalOauthApplication : SdkModel
   public string? client_id { get; set; } = null;
   /// <summary>(Write-Only) The OAuth Client Secret for this application</summary>
   public string? client_secret { get; set; } = null;
+  /// <summary>The OAuth Tenant ID for this application</summary>
+  public string? tenant_id { get; set; } = null;
   /// <summary>The database dialect for this application.</summary>
   public string? dialect_name { get; set; } = null;
   /// <summary>Creation time for this application (read-only)</summary>
@@ -4215,7 +4219,7 @@ public class Query : SdkModel
   public string[]? pivots { get; set; } = null;
   /// <summary>Fill Fields</summary>
   public string[]? fill_fields { get; set; } = null;
-  /// <summary>Filters</summary>
+  /// <summary>Filters will contain data pertaining to complex filters that do not contain "or" conditions. When "or" conditions are present, filter data will be found on the `filter_expression` property.</summary>
   public StringDictionary<string>? filters { get; set; } = null;
   /// <summary>Filter Expression</summary>
   public string? filter_expression { get; set; } = null;
@@ -6276,6 +6280,8 @@ public class WriteExternalOauthApplication : SdkModel
   public string? client_id { get; set; } = null;
   /// <summary>(Write-Only) The OAuth Client Secret for this application</summary>
   public string? client_secret { get; set; } = null;
+  /// <summary>The OAuth Tenant ID for this application</summary>
+  public string? tenant_id { get; set; } = null;
   /// <summary>The database dialect for this application.</summary>
   public string? dialect_name { get; set; } = null;
 }
@@ -6708,7 +6714,7 @@ public class WriteQuery : SdkModel
   public string[]? pivots { get; set; } = null;
   /// <summary>Fill Fields</summary>
   public string[]? fill_fields { get; set; } = null;
-  /// <summary>Filters</summary>
+  /// <summary>Filters will contain data pertaining to complex filters that do not contain "or" conditions. When "or" conditions are present, filter data will be found on the `filter_expression` property.</summary>
   public StringDictionary<string>? filters { get; set; } = null;
   /// <summary>Filter Expression</summary>
   public string? filter_expression { get; set; } = null;
