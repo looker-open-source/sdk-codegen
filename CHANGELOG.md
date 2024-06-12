@@ -1,5 +1,17 @@
 # Changelog
 
+## [24.10.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.8.0...sdk-codegen-all-v24.10.0) (2024-06-12)
+
+
+### Features
+
+* generate SDKs for Looker 24.10 ([#1472](https://github.com/looker-open-source/sdk-codegen/issues/1472)) ([5f8b10d](https://github.com/looker-open-source/sdk-codegen/commit/5f8b10dd43d8e688644e7d28a7318c06ccee1877))
+
+
+### Bug Fixes
+
+* **deps:** limit cattrs to versions &lt;23.2 ([#1469](https://github.com/looker-open-source/sdk-codegen/issues/1469)) ([b01b08d](https://github.com/looker-open-source/sdk-codegen/commit/b01b08d96c35cf44beadf677b6d4a2ecf1d52c19)), closes [#1468](https://github.com/looker-open-source/sdk-codegen/issues/1468)
+
 ## [24.8.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.4.0...sdk-codegen-all-v24.8.0) (2024-05-07)
 
 
