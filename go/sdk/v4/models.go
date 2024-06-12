@@ -1045,6 +1045,7 @@ type DialectInfo struct {
 	Installed                  *bool               `json:"installed,omitempty"`                     // Is the supporting driver installed
 	Label                      *string             `json:"label,omitempty"`                         // The human-readable label of the connection
 	LabelForDatabaseEquivalent *string             `json:"label_for_database_equivalent,omitempty"` // What the dialect calls the equivalent of a normal SQL table
+	LabelForSchemaEquivalent   *string             `json:"label_for_schema_equivalent,omitempty"`   // What the dialect calls the equivalent of a schema-level namespace
 	Name                       *string             `json:"name,omitempty"`                          // The name of the dialect
 	SupportedOptions           *DialectInfoOptions `json:"supported_options,omitempty"`
 }
@@ -1197,6 +1198,7 @@ type ExternalOauthApplication struct {
 	Name         *string          `json:"name,omitempty"`          // The name of this application.  For Snowflake connections, this should be the name of the host database.
 	ClientId     *string          `json:"client_id,omitempty"`     // The OAuth Client ID for this application
 	ClientSecret *string          `json:"client_secret,omitempty"` // (Write-Only) The OAuth Client Secret for this application
+	TenantId     *string          `json:"tenant_id,omitempty"`     // The OAuth Tenant ID for this application
 	DialectName  *string          `json:"dialect_name,omitempty"`  // The database dialect for this application.
 	CreatedAt    *time.Time       `json:"created_at,omitempty"`    // Creation time for this application
 }
@@ -2353,7 +2355,7 @@ type Query struct {
 	Fields               *[]string               `json:"fields,omitempty"`                 // Fields
 	Pivots               *[]string               `json:"pivots,omitempty"`                 // Pivots
 	FillFields           *[]string               `json:"fill_fields,omitempty"`            // Fill Fields
-	Filters              *map[string]interface{} `json:"filters,omitempty"`                // Filters
+	Filters              *map[string]interface{} `json:"filters,omitempty"`                // Filters will contain data pertaining to complex filters that do not contain "or" conditions. When "or" conditions are present, filter data will be found on the `filter_expression` property.
 	FilterExpression     *string                 `json:"filter_expression,omitempty"`      // Filter Expression
 	Sorts                *[]string               `json:"sorts,omitempty"`                  // Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.
 	Limit                *string                 `json:"limit,omitempty"`                  // Limit
@@ -4241,6 +4243,7 @@ type WriteExternalOauthApplication struct {
 	Name         *string `json:"name,omitempty"`          // The name of this application.  For Snowflake connections, this should be the name of the host database.
 	ClientId     *string `json:"client_id,omitempty"`     // The OAuth Client ID for this application
 	ClientSecret *string `json:"client_secret,omitempty"` // (Write-Only) The OAuth Client Secret for this application
+	TenantId     *string `json:"tenant_id,omitempty"`     // The OAuth Tenant ID for this application
 	DialectName  *string `json:"dialect_name,omitempty"`  // The database dialect for this application.
 }
 
@@ -4500,7 +4503,7 @@ type WriteQuery struct {
 	Fields            *[]string               `json:"fields,omitempty"`              // Fields
 	Pivots            *[]string               `json:"pivots,omitempty"`              // Pivots
 	FillFields        *[]string               `json:"fill_fields,omitempty"`         // Fill Fields
-	Filters           *map[string]interface{} `json:"filters,omitempty"`             // Filters
+	Filters           *map[string]interface{} `json:"filters,omitempty"`             // Filters will contain data pertaining to complex filters that do not contain "or" conditions. When "or" conditions are present, filter data will be found on the `filter_expression` property.
 	FilterExpression  *string                 `json:"filter_expression,omitempty"`   // Filter Expression
 	Sorts             *[]string               `json:"sorts,omitempty"`               // Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.
 	Limit             *string                 `json:"limit,omitempty"`               // Limit

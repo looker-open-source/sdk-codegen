@@ -12874,6 +12874,7 @@ class Looker40SDK(api_methods.APIMethods):
     # associated credentials.  Will overwrite all associated email addresses with
     # the value supplied in the 'email' body param.
     # The user's 'is_disabled' status must be true.
+    # If the user has a credential email, they will receive a verification email and the user will be disabled until they verify the email
     #
     # Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
     #

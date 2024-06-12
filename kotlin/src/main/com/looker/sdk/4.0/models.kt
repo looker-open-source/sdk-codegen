@@ -1936,6 +1936,7 @@ data class Dialect(
  * @property installed Is the supporting driver installed (read-only)
  * @property label The human-readable label of the connection (read-only)
  * @property label_for_database_equivalent What the dialect calls the equivalent of a normal SQL table (read-only)
+ * @property label_for_schema_equivalent What the dialect calls the equivalent of a schema-level namespace (read-only)
  * @property name The name of the dialect (read-only)
  * @property supported_options
  */
@@ -1946,6 +1947,7 @@ data class DialectInfo(
     var installed: Boolean? = null,
     var label: String? = null,
     var label_for_database_equivalent: String? = null,
+    var label_for_schema_equivalent: String? = null,
     var name: String? = null,
     var supported_options: DialectInfoOptions? = null,
 ) : Serializable
@@ -2225,6 +2227,7 @@ data class Error(
  * @property name The name of this application.  For Snowflake connections, this should be the name of the host database.
  * @property client_id The OAuth Client ID for this application
  * @property client_secret (Write-Only) The OAuth Client Secret for this application
+ * @property tenant_id The OAuth Tenant ID for this application
  * @property dialect_name The database dialect for this application.
  * @property created_at Creation time for this application (read-only)
  */
@@ -2234,6 +2237,7 @@ data class ExternalOauthApplication(
     var name: String? = null,
     var client_id: String? = null,
     var client_secret: String? = null,
+    var tenant_id: String? = null,
     var dialect_name: String? = null,
     var created_at: Date? = null,
 ) : Serializable
@@ -4417,7 +4421,7 @@ enum class PullRequestMode : Serializable {
  * @property fields Fields
  * @property pivots Pivots
  * @property fill_fields Fill Fields
- * @property filters Filters
+ * @property filters Filters will contain data pertaining to complex filters that do not contain "or" conditions. When "or" conditions are present, filter data will be found on the `filter_expression` property.
  * @property filter_expression Filter Expression
  * @property sorts Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.
  * @property limit Limit
@@ -6551,12 +6555,14 @@ data class WriteEmbedSecret(
  * @property name The name of this application.  For Snowflake connections, this should be the name of the host database.
  * @property client_id The OAuth Client ID for this application
  * @property client_secret (Write-Only) The OAuth Client Secret for this application
+ * @property tenant_id The OAuth Tenant ID for this application
  * @property dialect_name The database dialect for this application.
  */
 data class WriteExternalOauthApplication(
     var name: String? = null,
     var client_id: String? = null,
     var client_secret: String? = null,
+    var tenant_id: String? = null,
     var dialect_name: String? = null,
 ) : Serializable
 
@@ -7021,7 +7027,7 @@ data class WriteProject(
  * @property fields Fields
  * @property pivots Pivots
  * @property fill_fields Fill Fields
- * @property filters Filters
+ * @property filters Filters will contain data pertaining to complex filters that do not contain "or" conditions. When "or" conditions are present, filter data will be found on the `filter_expression` property.
  * @property filter_expression Filter Expression
  * @property sorts Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.
  * @property limit Limit
