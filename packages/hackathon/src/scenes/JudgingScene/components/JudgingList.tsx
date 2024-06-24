@@ -54,9 +54,11 @@ import { canDoJudgingAction } from '../../../utils'
 import { PAGE_SIZE } from '../../../constants'
 import { JudgingViewDialog } from '../../JudgingEditorScene'
 
-interface JudgingListProps {}
+interface JudgingListProps {
+  filterJudging: boolean
+}
 
-export const JudgingList: FC<JudgingListProps> = () => {
+export const JudgingList: FC<JudgingListProps> = ({ filterJudging }) => {
   const dispatch = useDispatch()
   const history = useHistory()
   const columns = useSelector(getJudgingsHeadings)
@@ -111,16 +113,16 @@ export const JudgingList: FC<JudgingListProps> = () => {
     )
   }
 
-  const totalPages = Math.ceil(judgings.length / PAGE_SIZE)
-
-  const startIdx = (currentPage - 1) * PAGE_SIZE
-
   let filteredJudgings = judgings
-  if (!hacker.canAdmin) {
+  if (filterJudging) {
     filteredJudgings = filteredJudgings.filter(
       (judging) => judging.user_id === hacker.id
     )
   }
+
+  const totalPages = Math.ceil(filteredJudgings.length / PAGE_SIZE)
+
+  const startIdx = (currentPage - 1) * PAGE_SIZE
 
   const rows = filteredJudgings
     .slice(startIdx, startIdx + PAGE_SIZE)

@@ -44,8 +44,8 @@ export const HomeScene: FC<HomeSceneProps> = ({ hacker }) => {
   const onClick = (_: string, href: string) =>
     getExtensionSDK().openBrowserWindow(href)
 
-  const intro = `### Our [Hackathon FAQ](https://docs.google.com/document/d/e/2PACX-1vRA4eULptTLp0NicGzpuoonZ3IDu1j6uUIHz9fARmBpeiOzVwv28BstXdgKdbwEUPKQqwli2ZgoWnY7/pub) contains all event details! Please [join the Discord](https://discord.gg/Td3kndyXtc) for communication!
-*By accessing this hackathon application, you accept the [official rules](https://docs.google.com/document/u/1/d/e/2PACX-1vQaw9eAeRc5YEir6AQzB7iefyaWz87G9hmqHhD-5Vg9xciXIURD_0yQEfC4a-XWQ1Keyv-oOdWoOUhL/pub).*<br>
+  const intro = `### Our [Hackathon FAQ](https://docs.google.com/document/d/e/2PACX-1vQc1dLGX9JwOmlFtMWb6miaRV5Id-DO6y22WPsgZ2ANv8aiCoaTvqto18DS5vC09UwiI19xVdwnHniP/pub) contains all event details! Please [join the Discord](https://discord.gg/N9EGGEzBjw) for communication!
+*By accessing this hackathon application, you accept the [official rules](https://docs.google.com/document/d/e/2PACX-1vQk-UJ6G5NR-zfWndbXU3pmV88GIUgsb5M9L2dkTEbgTCsUaAUYtzUMkKfo5hGFxz3vxGnzrV2JvWD6/pub).*<br>
 *Change your [account](${host}/account) timezone to display times in your timezone.*<br>`
 
   return (

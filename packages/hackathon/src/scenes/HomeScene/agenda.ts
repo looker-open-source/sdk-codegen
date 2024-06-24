@@ -27,7 +27,7 @@
 import { add } from 'date-fns'
 import { zonedTimeToUtc } from 'date-fns-tz'
 import type { AgendaItems } from './components'
-const day1 = zonedTimeToUtc('2023-12-05 00:00:00', 'America/Los_Angeles')
+const day1 = zonedTimeToUtc('2024-06-25 00:00:00', 'America/Los_Angeles')
 const day2 = add(day1, { days: 1 })
 const day3 = add(day2, { days: 1 })
 let current = day1
@@ -44,8 +44,7 @@ export const agenda = [
     stop: later(day1, 9.5),
     description: {
       en: `## **Welcome & Kickoff**
-On your mark, get set, GO! Meet you hackathon staff and get setup for success. <br>[**Live session link**](https://meet.google.com/dtt-fett-duo
-)`,
+On your mark, get set, GO! Meet you hackathon staff and get setup for success. <br>[**Live session link**](https://meet.google.com/upu-atoe-kcq)`,
     },
   },
   {
@@ -53,7 +52,7 @@ On your mark, get set, GO! Meet you hackathon staff and get setup for success. <
     stop: later(day1, 13),
     description: {
       en: `### Office Hours (AMER + EMEA)
-Have a question? Meet your Looker, Google Data Studio, and other staff and ask them.Ask questions in [**discord #help channel**](https://discord.gg/ZH79hP3uGc).`,
+Have a question? Meet your Looker, Looker Studio, and other staff and ask them.Ask questions in [**discord #help channel**](https://discord.gg/ZH79hP3uGc).`,
     },
   },
   {
@@ -61,7 +60,7 @@ Have a question? Meet your Looker, Google Data Studio, and other staff and ask t
     stop: later(day1, 22),
     description: {
       en: `### Office Hours (AMER + APAC)
-Have a question? Meet your Looker, Google Data Studio, and other staff and ask them.Ask questions in [**discord #help channel**](https://discord.gg/ZH79hP3uGc).`,
+Have a question? Meet your Looker, Looker Studio, and other staff and ask them.Ask questions in [**discord #help channel**](https://discord.gg/ZH79hP3uGc).`,
     },
   },
   {
@@ -69,7 +68,7 @@ Have a question? Meet your Looker, Google Data Studio, and other staff and ask t
     stop: later(day2, 4),
     description: {
       en: `### Office Hours (EMEA + APAC)
-Have a question? Meet your Looker, Google Data Studio, and other staff and ask them.Ask questions in [**discord #help channel**](https://discord.gg/ZH79hP3uGc).`,
+Have a question? Meet your Looker, Looker Studio, and other staff and ask them.Ask questions in [**discord #help channel**](https://discord.gg/ZH79hP3uGc).`,
     },
   },
   {
@@ -77,7 +76,7 @@ Have a question? Meet your Looker, Google Data Studio, and other staff and ask t
     stop: later(day2, 11),
     description: {
       en: `### Office Hours (EMEA + AMER + APAC)
-Have a question? Meet your Looker, Google Data Studio, and other staff and ask them.Ask questions in [**discord #help channel**](https://discord.gg/ZH79hP3uGc).`,
+Have a question? Meet your Looker, Looker Studio, and other staff and ask them.Ask questions in [**discord #help channel**](https://discord.gg/ZH79hP3uGc).`,
     },
   },
   {
@@ -85,7 +84,7 @@ Have a question? Meet your Looker, Google Data Studio, and other staff and ask t
     stop: later(day2, 11.5),
     description: {
       en: `## **Half-way Check In**
-Half way there! Let’s check in on how you’re doing and go over how judging works.<br>[**Live session link**](https://meet.google.com/hev-gjgs-xug)`,
+Half way there! Let’s check in on how you’re doing and go over how judging works.<br>[**Live session link**](https://meet.google.com/wbj-rofi-vow)`,
     },
   },
   {
@@ -93,7 +92,7 @@ Half way there! Let’s check in on how you’re doing and go over how judging w
     stop: later(day2, 13),
     description: {
       en: `## **Break Time**
-Virtually chill out with your fellow Cloud BI Developers and play some trivia! <br>[**Live session link**](https://meet.google.com/wjv-rbep-cbe).`,
+Virtually chill out with your fellow Looker developers and play some trivia! <br>[**Live session link**](https://meet.google.com/ceu-qrec-efv).`,
     },
   },
   {
@@ -101,7 +100,7 @@ Virtually chill out with your fellow Cloud BI Developers and play some trivia! <
     stop: later(day2, 15.5),
     description: {
       en: `### Office Hours (AMER + EMEA)
-Have a question? Meet your Looker, Google Data Studio, and other staff and ask them.Ask questions in [**discord #help channel**](https://discord.gg/ZH79hP3uGc).`,
+Have a question? Meet your Looker, Looker Studio, and other staff and ask them.Ask questions in [**discord #help channel**](https://discord.gg/ZH79hP3uGc).`,
     },
   },
   {
@@ -109,7 +108,7 @@ Have a question? Meet your Looker, Google Data Studio, and other staff and ask t
     stop: later(day2, 22),
     description: {
       en: `### Office Hours (AMER + APAC)
-Have a question? Meet your Looker, Google Data Studio, and other staff and ask them.Ask questions in [**discord #help channel**](https://discord.gg/ZH79hP3uGc).`,
+Have a question? Meet your Looker, Looker Studio, and other staff and ask them.Ask questions in [**discord #help channel**](https://discord.gg/ZH79hP3uGc).`,
     },
   },
   {
@@ -117,7 +116,7 @@ Have a question? Meet your Looker, Google Data Studio, and other staff and ask t
     stop: later(day3, 4),
     description: {
       en: `### Office Hours (EMEA + APAC)
-Have a question? Meet your Looker, Google Data Studio, and other staff and ask them.Ask questions in [**discord #help channel**](https://discord.gg/ZH79hP3uGc).`,
+Have a question? Meet your Looker, Looker Studio, and other staff and ask them.Ask questions in [**discord #help channel**](https://discord.gg/ZH79hP3uGc).`,
     },
   },
   {
@@ -125,7 +124,7 @@ Have a question? Meet your Looker, Google Data Studio, and other staff and ask t
     stop: later(day3, 10),
     description: {
       en: `### Office Hours (EMEA + AMER + APAC)
-Have a question? Meet your Looker, Google Data Studio, and other staff and ask them.Ask questions in [**discord #help channel**](https://discord.gg/ZH79hP3uGc).`,
+Have a question? Meet your Looker, Looker Studio, and other staff and ask them.Ask questions in [**discord #help channel**](https://discord.gg/ZH79hP3uGc).`,
     },
   },
   {
@@ -149,7 +148,7 @@ Please update your project description with your deliverables beforehand.`,
     stop: later(day3, 14),
     description: {
       en: `## **Winners Ceremony with Demos**
-Checkout which projects made “Best Hack” and “Nearly Best Hack” and watch some project demos!<br>[**Live session link**](https://meet.google.com/jbu-oakc-hyk).`,
+Checkout which projects made “Best Hack” and “Nearly Best Hack” and watch some project demos!<br>[**Live session link**](https://meet.google.com/udt-kgcb-mkj).`,
     },
   },
   {
@@ -157,7 +156,7 @@ Checkout which projects made “Best Hack” and “Nearly Best Hack” and watc
     stop: later(day3, 15),
     description: {
       en: `## **~Happy~ Hacky Hour**
-Grab a drink and virtually chill out with your fellow hackers and hackathon staff!<br>[**Live session link**](https://meet.google.com/dvm-jrxy-mgf)`,
+Grab a drink and virtually chill out with your fellow hackers and hackathon staff!<br>[**Live session link**](https://meet.google.com/udt-kgcb-mkj)`,
     },
   },
 ]

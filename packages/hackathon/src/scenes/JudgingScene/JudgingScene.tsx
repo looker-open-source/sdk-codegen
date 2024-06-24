@@ -24,18 +24,21 @@
 
  */
 import type { FC } from 'react'
-import React from 'react'
+import React, { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { Space, Heading, Span, Icon } from '@looker/components'
+import { Space, Heading, Span, Icon, ButtonOutline } from '@looker/components'
 import { ArrowDownward } from '@styled-icons/material/ArrowDownward'
 import { isLoadingState } from '../../data/common/selectors'
 import { Loading } from '../../components/Loading'
 import { JudgingList } from './components'
+import { getHackerState } from '../../data/hack_session/selectors'
 
 interface JudgingSceneProps {}
 
 export const JudgingScene: FC<JudgingSceneProps> = () => {
   const isLoading = useSelector(isLoadingState)
+  const [filterJudging, setfilterJudging] = useState(true);
+  const hacker = useSelector(getHackerState)
 
   return (
     <>
@@ -43,6 +46,9 @@ export const JudgingScene: FC<JudgingSceneProps> = () => {
         <Space>
           <Heading as="h2" fontSize="xxxlarge" fontWeight="medium">
             Judgings
+            {hacker.canAdmin && 
+              <ButtonOutline onClick={() => setfilterJudging(!filterJudging)}>Toggle Filtering</ButtonOutline>
+            }
           </Heading>
           {isLoading && <Loading message={'Processing judgings...'} />}
         </Space>
@@ -51,7 +57,7 @@ export const JudgingScene: FC<JudgingSceneProps> = () => {
         </Span>
         <Icon color={'inform'} pr="u1" icon={<ArrowDownward />} />
       </Space>
-      <JudgingList />
+      <JudgingList filterJudging={filterJudging}/>
     </>
   )
 }
