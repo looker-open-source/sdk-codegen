@@ -188,6 +188,13 @@
     * @looker/run-it bumped from 0.9.60 to 0.9.61
     * @looker/sdk bumped from 24.8.0 to 24.10.0
 
+## [22.21.19](https://github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v22.21.18...extension-api-explorer-v22.21.19) (2024-06-28)
+
+
+### Bug Fixes
+
+* allow cloud.google.com for the API Explorer extension ([#1477](https://github.com/looker-open-source/sdk-codegen/issues/1477)) ([98a687e](https://github.com/looker-open-source/sdk-codegen/commit/98a687e45b42512bc7fb45727d4eec2c86e8372d))
+
 ## [22.21.6](https://github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v22.21.5...extension-api-explorer-v22.21.6) (2023-06-15)
 
 ### Bug Fixes

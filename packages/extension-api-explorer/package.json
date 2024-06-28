@@ -1,6 +1,6 @@
 {
   "name": "@looker/extension-api-explorer",
-  "version": "22.21.18",
+  "version": "22.21.19",
   "description": "Looker API Explorer extension",
   "main": "dist/bundle.js",
   "sideEffects": false,

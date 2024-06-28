@@ -1,8 +1,8 @@
 {
-  ".": "24.10.0",
+  ".": "24.10.1",
   "packages/api-explorer": "0.9.61",
   "packages/code-editor": "0.1.30",
-  "packages/extension-api-explorer": "22.21.18",
+  "packages/extension-api-explorer": "22.21.19",
   "packages/extension-sdk": "24.10.0",
   "packages/extension-sdk-react": "24.10.0",
   "packages/extension-utils": "0.1.38",
