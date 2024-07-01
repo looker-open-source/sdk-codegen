@@ -118,3 +118,46 @@ func main() {
     }
 }
 ```
+### Custom Context
+
+If you want even greater control over the lifecycle of the HTTP requests consider providing a [context](https://pkg.go.dev/context). Contexts can be set for all requests or per request.
+
+#### Custom Context for all requests
+
+Follow the example code snippet below if you want all requests to use the same context:
+
+```go
+import "context"
+
+func main() {
+    // sets a timeout of 5 minutes
+    ctx, cancel := context.WithTimout(context.Background(), 5*time.Minute)
+    defer cancel()
+    
+    cfg, err := rtl.NewSettingsFromFile("path/to/looker.ini", nil)
+    cfg.Context = ctx
+
+    session := rtl.NewAuthSession(cfg)
+    sdk := v4.NewLookerSDK(session)
+}
+```
+
+#### Custom Context per request
+
+Follow the example here to set a context for a specific request. **This will override any context set in the SDK config as outlined in the previous section.**
+
+```go
+import "context"
+
+func main() {
+    // sets a timeout of 5 minutes
+    ctx, cancel := context.WithTimout(context.Background(), 5*time.Minute)
+    defer cancel()
+    
+    cfg, err := rtl.NewSettingsFromFile("path/to/looker.ini", nil)
+    session := rtl.NewAuthSession(cfg)
+    sdk := v4.NewLookerSDK(session)
+
+    sdk.Me("", &ApiSettings{Context: ctx})
+}
+```
