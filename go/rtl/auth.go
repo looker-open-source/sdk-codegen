@@ -134,7 +134,7 @@ func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars m
 	} else if s.Config.Context != nil {
 		ctx = s.Config.Context
 	} else {
-		// create request context with timeout
+		// create request context with timeout from options or else config or else 120 seconds
 		var timeoutInSeconds int32 = 120 //seconds
 		if s.Config.Timeout != 0 {
 			timeoutInSeconds = s.Config.Timeout
