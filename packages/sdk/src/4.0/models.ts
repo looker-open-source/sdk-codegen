@@ -25,7 +25,7 @@
  */
 
 /**
- * 408 API models: 258 Spec, 67 Request, 61 Write, 22 Enum
+ * 409 API models: 259 Spec, 67 Request, 61 Write, 22 Enum
  */
 
 import type { DelimArray, IDictionary } from '@looker/sdk-rtl';
@@ -4180,6 +4180,17 @@ export interface IImportedProject {
   is_remote?: boolean;
 }
 
+export interface IInstanceConfig {
+  /**
+   * Feature flags enabled on the instance (read-only)
+   */
+  feature_flags?: IDictionary<boolean>;
+  /**
+   * License features enabled on the instance (read-only)
+   */
+  license_features?: IDictionary<boolean>;
+}
+
 export interface IIntegration {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -4492,9 +4503,9 @@ export interface IJsonBiFields {
    */
   pivots: IJsonBiField[];
   /**
-   * Table Calculations (beta: May not be included) (read-only)
+   * Table Calculations (read-only)
    */
-  table_calculations?: IJsonBiTableCalc[];
+  table_calculations: IJsonBiTableCalc[];
 }
 
 export interface IJsonBiMetadata {
@@ -10621,6 +10632,7 @@ export interface ISessionConfig {
 }
 
 export interface ISetting {
+  instance_config?: IInstanceConfig;
   /**
    * Toggle extension framework on or off
    */
@@ -13958,7 +13970,7 @@ export interface IWriteSessionConfig {
 
 /**
  * Dynamic writeable type for Setting removes:
- * marketplace_site, embed_enabled, login_notification_enabled, login_notification_text
+ * instance_config, marketplace_site, embed_enabled, login_notification_enabled, login_notification_text
  */
 export interface IWriteSetting {
   /**

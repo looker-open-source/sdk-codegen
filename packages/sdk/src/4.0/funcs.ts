@@ -1113,8 +1113,11 @@ export const delete_embed_secret = async (
  *
  * This function does not strictly require all group_ids, user attribute names, or model names to exist at the moment the
  * embed url is created. Unknown group_id, user attribute names or model names will be passed through to the output URL.
+ * Because of this, **these parameters are not validated** when the API call is made.
  *
- * To diagnose potential problems with an SSO embed URL, you can copy the signed URL into the Embed URI Validator text box in `<your looker instance>/admin/embed`.
+ * The [Get Embed Url](https://cloud.google.com/looker/docs/r/get-signed-url) dialog can be used to determine and validate the correct permissions for signing an embed url.
+ * This dialog also provides the SDK syntax for the API call to make. Alternatively, you can copy the signed URL into the Embed URI Validator text box
+ * in `<your looker instance>/admin/embed` to diagnose potential problems.
  *
  * The `secret_id` parameter is optional. If specified, its value must be the id of an active secret defined in the Looker instance.
  * if not specified, the URL will be signed using the most recent active signing secret. If there is no active secret for signing embed urls,
@@ -3706,6 +3709,7 @@ export const mobile_settings = async (
  *  - data_connector_default_enabled
  *  - extension_framework_enabled
  *  - extension_load_url_enabled
+ *  - instance_config
  *  - marketplace_auto_install_enabled
  *  - marketplace_automation
  *  - marketplace_terms_accepted
@@ -3749,6 +3753,7 @@ export const get_setting = async (
  *  - data_connector_default_enabled
  *  - extension_framework_enabled
  *  - extension_load_url_enabled
+ *  - instance_config
  *  - marketplace_auto_install_enabled
  *  - marketplace_automation
  *  - marketplace_terms_accepted
