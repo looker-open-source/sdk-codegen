@@ -1,6 +1,6 @@
 {
   "name": "@looker/extension-api-explorer",
-  "version": "22.21.18",
+  "version": "22.21.19",
   "description": "Looker API Explorer extension",
   "main": "dist/bundle.js",
   "sideEffects": false,
@@ -15,14 +15,14 @@
     "watch": "yarn lerna exec --scope @looker/extension-api-explorer --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "dependencies": {
-    "@looker/api-explorer": "0.9.61",
+    "@looker/api-explorer": "0.9.62",
     "@looker/components": "^4.1.3",
-    "@looker/extension-sdk": "24.10.0",
-    "@looker/extension-sdk-react": "24.10.0",
-    "@looker/extension-utils": "0.1.38",
+    "@looker/extension-sdk": "24.12.0",
+    "@looker/extension-sdk-react": "24.12.0",
+    "@looker/extension-utils": "0.1.39",
     "@looker/icons": "^1.5.21",
-    "@looker/run-it": "0.9.61",
-    "@looker/sdk": "24.10.0",
+    "@looker/run-it": "0.9.62",
+    "@looker/sdk": "24.12.0",
     "@looker/sdk-codegen": "21.8.2",
     "@styled-icons/material": "^10.47.0",
     "@styled-icons/material-outlined": "^10.47.0",
