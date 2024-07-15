@@ -1,5 +1,17 @@
 # Changelog
 
+## [24.12.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.10.0...sdk-codegen-all-v24.12.0) (2024-07-15)
+
+
+### Features
+
+* generate SDKs for Looker 24.12 ([#1483](https://github.com/looker-open-source/sdk-codegen/issues/1483)) ([fba2a3a](https://github.com/looker-open-source/sdk-codegen/commit/fba2a3a7cee7863a3765c6bb40d8a897063ef225))
+
+
+### Bug Fixes
+
+* allow cloud.google.com for the API Explorer extension ([#1477](https://github.com/looker-open-source/sdk-codegen/issues/1477)) ([98a687e](https://github.com/looker-open-source/sdk-codegen/commit/98a687e45b42512bc7fb45727d4eec2c86e8372d))
+
 ## [24.10.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.8.0...sdk-codegen-all-v24.10.0) (2024-06-12)
 
 
