@@ -25,7 +25,7 @@
  */
 
 /**
- * 341 API models: 258 Spec, 0 Request, 61 Write, 22 Enum
+ * 342 API models: 259 Spec, 0 Request, 61 Write, 22 Enum
  */
 
 
@@ -10345,6 +10345,24 @@ public struct ImportedProject: SDKModel {
 
 }
 
+public struct InstanceConfig: SDKModel {
+    /**
+     * Feature flags enabled on the instance (read-only)
+     */
+    public var feature_flags: StringDictionary<Bool>?
+
+    /**
+     * License features enabled on the instance (read-only)
+     */
+    public var license_features: StringDictionary<Bool>?
+
+    public init(feature_flags: StringDictionary<Bool>? = nil, license_features: StringDictionary<Bool>? = nil) {
+        self.feature_flags = feature_flags
+        self.license_features = license_features
+    }
+
+}
+
 public struct Integration: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -11077,18 +11095,18 @@ public struct JsonBiFields: SDKModel {
     public var pivots: [JsonBiField]
 
     /**
-     * Table Calculations (beta: May not be included) (read-only)
+     * Table Calculations (read-only)
      */
-    public var table_calculations: [JsonBiTableCalc]?
+    public var table_calculations: [JsonBiTableCalc]
 
-    public init(dimensions: [JsonBiField], measures: [JsonBiField], pivots: [JsonBiField], table_calculations: [JsonBiTableCalc]? = nil) {
+    public init(dimensions: [JsonBiField], measures: [JsonBiField], pivots: [JsonBiField], table_calculations: [JsonBiTableCalc]) {
         self.dimensions = dimensions
         self.measures = measures
         self.pivots = pivots
         self.table_calculations = table_calculations
     }
 
-    public init(_ dimensions: [JsonBiField], _ measures: [JsonBiField], _ pivots: [JsonBiField], table_calculations: [JsonBiTableCalc]? = nil) {
+    public init(_ dimensions: [JsonBiField], _ measures: [JsonBiField], _ pivots: [JsonBiField], _ table_calculations: [JsonBiTableCalc]) {
         self.init(dimensions: dimensions, measures: measures, pivots: pivots, table_calculations: table_calculations)
     }
 
@@ -20489,6 +20507,7 @@ public struct SessionConfig: SDKModel {
 public struct Setting: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
+        case instance_config
         case extension_framework_enabled
         case extension_load_url_enabled
         case marketplace_auto_install_enabled
@@ -20511,6 +20530,8 @@ public struct Setting: SDKModel {
         case login_notification_enabled
         case _login_notification_text = "login_notification_text"
     }
+    public var instance_config: InstanceConfig?
+
     /**
      * Toggle extension framework on or off
      */
@@ -20624,7 +20645,8 @@ public struct Setting: SDKModel {
         set { _login_notification_text = newValue.map(AnyString.init) }
     }
 
-    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_site: String? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_enabled: Bool? = nil, embed_config: EmbedConfig? = nil, login_notification_enabled: Bool? = nil, login_notification_text: String? = nil) {
+    public init(instance_config: InstanceConfig? = nil, extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_site: String? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_enabled: Bool? = nil, embed_config: EmbedConfig? = nil, login_notification_enabled: Bool? = nil, login_notification_text: String? = nil) {
+        self.instance_config = instance_config
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
@@ -28262,7 +28284,7 @@ public struct WriteSessionConfig: SDKModel {
 
 /**
  * Dynamic writeable type for Setting removes:
- * marketplace_site, embed_enabled, login_notification_enabled, login_notification_text
+ * instance_config, marketplace_site, embed_enabled, login_notification_enabled, login_notification_text
  */
 public struct WriteSetting: SDKModel {
 

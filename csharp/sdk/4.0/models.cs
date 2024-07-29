@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 341 API models: 258 Spec, 0 Request, 61 Write, 22 Enum
+/// 342 API models: 259 Spec, 0 Request, 61 Write, 22 Enum
 
 #nullable enable
 using System;
@@ -2479,6 +2479,14 @@ public class ImportedProject : SdkModel
   public bool? is_remote { get; set; } = null;
 }
 
+public class InstanceConfig : SdkModel
+{
+  /// <summary>Feature flags enabled on the instance (read-only)</summary>
+  public StringDictionary<bool>? feature_flags { get; set; } = null;
+  /// <summary>License features enabled on the instance (read-only)</summary>
+  public StringDictionary<bool>? license_features { get; set; } = null;
+}
+
 public class Integration : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
@@ -2665,8 +2673,8 @@ public class JsonBiFields : SdkModel
   public JsonBiField[] measures { get; set; } = null;
   /// <summary>Pivots (read-only)</summary>
   public JsonBiField[] pivots { get; set; } = null;
-  /// <summary>Table Calculations (beta: May not be included) (read-only)</summary>
-  public JsonBiTableCalc[]? table_calculations { get; set; } = null;
+  /// <summary>Table Calculations (read-only)</summary>
+  public JsonBiTableCalc[] table_calculations { get; set; } = null;
 }
 
 public class JsonBiMetadata : SdkModel
@@ -4915,6 +4923,7 @@ public class SessionConfig : SdkModel
 
 public class Setting : SdkModel
 {
+  public InstanceConfig? instance_config { get; set; }
   /// <summary>Toggle extension framework on or off</summary>
   public bool? extension_framework_enabled { get; set; } = null;
   /// <summary>(DEPRECATED) Toggle extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.</summary>
@@ -6926,7 +6935,7 @@ public class WriteSessionConfig : SdkModel
 }
 
 /// Dynamic writeable type for Setting removes:
-/// marketplace_site, embed_enabled, login_notification_enabled, login_notification_text
+/// instance_config, marketplace_site, embed_enabled, login_notification_enabled, login_notification_text
 public class WriteSetting : SdkModel
 {
   /// <summary>Toggle extension framework on or off</summary>
