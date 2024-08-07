@@ -118,3 +118,57 @@ func main() {
     }
 }
 ```
+### Custom Context
+
+If you want even greater control over the lifecycle of the HTTP requests consider providing a [context](https://pkg.go.dev/context). Contexts can be set for all requests or per request.
+
+If you wish to include timeout functionality in your custom context then you should leverage [context.WithTimeout](https://pkg.go.dev/context#WithTimeout).
+
+> Note: Setting a context will override any "Timeout" settings that you have applied! 
+
+#### Custom Context for all requests
+
+Follow the example code snippet below if you want all requests to use the same context:
+
+```go
+import "context"
+
+func main() {
+    // sets a timeout of 5 minutes
+    ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
+    defer cancel()
+    
+    cfg, err := rtl.NewSettingsFromFile("path/to/looker.ini", nil)
+    cfg.Context = ctx
+
+    session := rtl.NewAuthSession(cfg)
+    sdk := v4.NewLookerSDK(session)
+}
+```
+
+> Note: A context set here will also apply to background requests to fetch/refresh oauth tokens, which are normally separated from contexts set via the Timeout property.
+
+#### Custom Context per request
+
+Follow the example here to set a context for a specific request.
+
+> Note: This will override any "Timeout" settings that you have applied, as well as any context set in the SDK config as outlined in the previus section!
+
+```go
+import "context"
+
+func main() {
+    // sets a timeout of 5 minutes
+    ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
+    defer cancel()
+    
+    cfg, err := rtl.NewSettingsFromFile("path/to/looker.ini", nil)
+    session := rtl.NewAuthSession(cfg)
+    sdk := v4.NewLookerSDK(session)
+
+    sdk.Me("", &ApiSettings{Context: ctx})
+}
+```
+
+> Note: Setting a context per request will NOT affect the context used for the background token fetching requests. If you have also set a context for all requests as mentioned above then that context
+will still be used for the token requests, otherwise the SDK will fall back on using a completely separate context for the token fetching requests.
