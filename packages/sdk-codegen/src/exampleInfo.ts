@@ -24,7 +24,7 @@
 
  */
 
-import type { KeyedCollection } from './sdkModels';
+import type { ArgValues, KeyedCollection } from './sdkModels';
 
 export interface ISDKCall {
   /** SDK variable name for the call found */
@@ -205,7 +205,7 @@ export const exampleLink = (
 
 // TODO create one data set for extensionToLanguage and getLanguageExtensions
 /** map file extension to language name */
-export const extensionToLanguage = {
+export const extensionToLanguage: ArgValues = {
   '.py': 'Python',
   '.ts': 'TypeScript',
   '.tsx': 'TypeScript',
@@ -259,7 +259,7 @@ export const findExampleLanguages = (
   const result = new Set<string>();
   const keys = Object.keys(extensionToLanguage);
   keys.forEach((key) => {
-    if (all.calls[key]) result.add((extensionToLanguage as any)[key]);
+    if (all.calls[key]) result.add(extensionToLanguage[key]);
   });
   return Array.from(result);
 };

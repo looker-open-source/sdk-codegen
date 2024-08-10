@@ -26,6 +26,8 @@
 
 import * as fs from 'fs';
 import path from 'path';
+import * as yaml from 'js-yaml';
+import { findRootSync } from '@manypkg/find-root';
 import { config } from 'dotenv';
 
 const utf8 = 'utf-8';
@@ -42,9 +44,15 @@ export interface ITestConfig {
   testIni: string;
 }
 
-const homeToRoost = '../../../../';
+let rootPath = '';
+/** fully resolved root dir of the repository */
+export const getRootPath = (): string => {
+  if (!rootPath) {
+    rootPath = findRootSync(__dirname).rootDir;
+  }
+  return rootPath;
+};
 
-export const getRootPath = () => path.join(__dirname, homeToRoost);
 export const rootFile = (fileName = '') => path.join(getRootPath(), fileName);
 export const readFile = (fileName: string) => fs.readFileSync(fileName, utf8);
 
@@ -56,12 +64,14 @@ export const readFile = (fileName: string) => fs.readFileSync(fileName, utf8);
  */
 export const TestConfig = (rootPath = ''): ITestConfig => {
   config();
-  const testFile = 'data.yml.json';
+  const testFile = 'data.yml';
   rootPath = rootPath || getRootPath();
   let localIni = process.env.LOOKERSDK_INI || rootFile('looker.ini');
-  const testPath = rootFile('test/');
+  const testPath = `${rootPath}/packages/sdk-codegen-utils/data/`;
   const dataFile = `${testPath}${testFile}`;
-  const testData = JSON.parse(fs.readFileSync(dataFile, utf8));
+  const testData: any = fs.existsSync(dataFile)
+    ? yaml.load(fs.readFileSync(dataFile, utf8))
+    : {};
   let testIni = `${rootPath}${testData.iniFile}`;
 
   // If .ini files don't exist, don't try to read them downstream and expect environment variables to be set

@@ -32,8 +32,8 @@ import type {
   IProperty,
   IType,
 } from './sdkModels';
-import { EnumType, describeParam, strBody } from './sdkModels';
-import type { CodeAssignment, IMappedType } from './codeGen';
+import { describeParam, EnumType, strBody } from './sdkModels';
+import type { IMappedType, CodeAssignment } from './codeGen';
 import { CodeGen } from './codeGen';
 
 export class PythonGen extends CodeGen {
@@ -567,7 +567,7 @@ ${this.hooks.join('\n')}
         default:
           throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`);
       }
-      const mt: IMappedType = { default: defaultValue, name: name };
+      const mt: IMappedType = { default: defaultValue, name };
       if (asVal) {
         mt.asVal = asVal;
       }
@@ -582,7 +582,7 @@ ${this.hooks.join('\n')}
       !!type.customType
     );
     const result = pythonTypes[type.name];
-    return result || { default: this.nullStr, name: name };
+    return result || { default: this.nullStr, name };
   }
 
   typeMapMethods(type: IType) {

@@ -37,9 +37,6 @@ describe('Transport', () => {
     it('binary', () => {
       binaryTypes.forEach((x) => {
         const actual = responseMode(x);
-        if (actual !== ResponseMode.binary) {
-          console.log(`${x} is not binary`);
-        }
         expect(actual).toEqual(ResponseMode.binary);
       });
     });
@@ -47,9 +44,6 @@ describe('Transport', () => {
     it('text or string', () => {
       textTypes.forEach((x) => {
         const actual = responseMode(x);
-        if (actual !== ResponseMode.string) {
-          console.log(`${x} is not text/string`);
-        }
         expect(actual).toEqual(ResponseMode.string);
       });
     });

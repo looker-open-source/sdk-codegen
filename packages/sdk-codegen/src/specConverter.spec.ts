@@ -24,8 +24,8 @@
 
  */
 
-import type { IApiVersion, IApiVersionElement } from './specConverter';
-import { getSpecsFromVersions, include31 } from './specConverter';
+import type { IApiVersion } from './specConverter';
+import { getSpecsFromVersions } from './specConverter';
 
 const payload = `{
   "looker_release_version":"22.3.0",
@@ -38,19 +38,9 @@ const payload = `{
   "api_server_url":"https://localhost:19999",
   "web_server_url":"https://localhost:9999"
 }`;
-describe('specConverter', () => {
-  describe('includeVersion', () => {
-    it.skip('includes 4.0', () => {
-      const v: IApiVersionElement = {
-        status: 'stable',
-        version: '4.0',
-        full_version: '4.0.22.4',
-        swagger_url: 'swagger',
-      };
-      expect(include31(v)).toEqual(true);
-    });
-  });
+/* eslint-disable jest/no-disabled-tests */
 
+describe('specConverter', () => {
   it('getSpecsFromVersions', async () => {
     const versions: IApiVersion = JSON.parse(payload);
     const specs = await getSpecsFromVersions(versions);

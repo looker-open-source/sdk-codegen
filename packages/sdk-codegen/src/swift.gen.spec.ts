@@ -24,7 +24,7 @@
 
  */
 
-import { TestConfig } from './testUtils';
+import { TestConfig } from '@looker/sdk-codegen-utils';
 import type { IEnumType } from './sdkModels';
 import { SwiftGen } from './swift.gen';
 
@@ -411,14 +411,18 @@ public enum PermissionType: String, Codable {
       const expected = `public struct EmbedParams: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
-        case target_url
+        case _target_url = "target_url"
         case _session_length = "session_length"
         case force_logout_login
     }
+    private var _target_url: AnyString
     /**
      * The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, \`target_url\` would look like: \`https://mycompany.looker.com:9999/dashboards/34\`. \`target_uri\` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, \`target_uri\` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.
      */
-    public var target_url: URI
+    public var target_url: String {
+        get { _target_url.value }
+        set { _target_url = AnyString.init(newValue) }
+    }
 
     private var _session_length: AnyInt?
     /**
@@ -434,13 +438,13 @@ public enum PermissionType: String, Codable {
      */
     public var force_logout_login: Bool?
 
-    public init(target_url: URI, session_length: Int64? = nil, force_logout_login: Bool? = nil) {
-        self.target_url = target_url
+    public init(target_url: String, session_length: Int64? = nil, force_logout_login: Bool? = nil) {
+        self._target_url = AnyString.init(target_url)
         self._session_length = session_length.map(AnyInt.init)
         self.force_logout_login = force_logout_login
     }
 
-    public init(_ target_url: URI, session_length: Int64? = nil, force_logout_login: Bool? = nil) {
+    public init(_ target_url: String, session_length: Int64? = nil, force_logout_login: Bool? = nil) {
         self.init(target_url: target_url, session_length: session_length, force_logout_login: force_logout_login)
     }
 

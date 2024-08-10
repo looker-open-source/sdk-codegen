@@ -26,7 +26,31 @@
 
 import { readFileSync } from 'fs';
 import type * as OAS from 'openapi3-ts';
-import { TestConfig, rootFile } from './testUtils';
+import { TestConfig, testFile } from '@looker/sdk-codegen-utils';
+import {
+  ApiModel,
+  ArrayType,
+  camelCase,
+  criteriaToSet,
+  DelimArrayType,
+  describeParam,
+  EnumType,
+  firstCase,
+  IntrinsicType,
+  isSpecialName,
+  keyValues,
+  mayQuote,
+  MetaType,
+  Method,
+  methodRefs,
+  safeName,
+  parseFields,
+  SearchAll,
+  SearchCriterion,
+  setToCriteria,
+  titleCase,
+  typeRefs,
+} from './sdkModels';
 import type {
   IEnumType,
   IMethod,
@@ -37,31 +61,70 @@ import type {
   SearchCriterionTerm,
   TagList,
 } from './sdkModels';
-import {
-  ApiModel,
-  ArrayType,
-  DelimArrayType,
-  EnumType,
-  IntrinsicType,
-  MetaType,
-  Method,
-  SearchAll,
-  SearchCriterion,
-  camelCase,
-  criteriaToSet,
-  describeParam,
-  firstCase,
-  isSpecialName,
-  keyValues,
-  mayQuote,
-  methodRefs,
-  safeName,
-  setToCriteria,
-  titleCase,
-  typeRefs,
-} from './sdkModels';
+import type { IDictionary, Url, Password } from '@looker/sdk-rtl';
+/* eslint-disable jest/no-disabled-tests */
 
 describe('sdkModels', () => {
+  describe('parseFields', () => {
+    it('allows empty expression', () => {
+      expect(parseFields('')).toEqual({});
+      expect(parseFields(' ')).toEqual({});
+    });
+
+    it('ignores extra commas and spaces', () => {
+      const actual = parseFields(',orders,users( id , ,),items  ,   ');
+      expect(actual).toEqual({
+        orders: 'orders',
+        users: { id: 'id' },
+        items: 'items',
+      });
+    });
+
+    it('rejects mismatched parens', () => {
+      expect(parseFields('a(b(c))')).toEqual({ a: { b: { c: 'c' } } });
+      expect(() => parseFields('a((id)')).toThrow(`Unexpected '(' after 'a('`);
+      expect(() => parseFields('a(id))')).toThrow(
+        `Unexpected ')' after 'a(id)'`
+      );
+    });
+
+    it('nests fields', () => {
+      const fields =
+        'orders,items,users(id, first_name, last_name, contacts(id, email))';
+      let actual = parseFields('id,name,cat');
+      expect(actual).toEqual({ id: 'id', name: 'name', cat: 'cat' });
+      actual = parseFields(',orders,users(id),items,');
+      expect(actual).toEqual({
+        orders: 'orders',
+        users: { id: 'id' },
+        items: 'items',
+      });
+      actual = parseFields(fields);
+      expect(actual).toEqual({
+        orders: 'orders',
+        items: 'items',
+        users: {
+          id: 'id',
+          first_name: 'first_name',
+          last_name: 'last_name',
+          contacts: { id: 'id', email: 'email' },
+        },
+      });
+      actual = parseFields('orders,users(id),items');
+      expect(actual).toEqual({
+        orders: 'orders',
+        users: { id: 'id' },
+        items: 'items',
+      });
+      actual = parseFields('orders,users(*),items');
+      expect(actual).toEqual({
+        orders: 'orders',
+        users: { '*': '*' },
+        items: 'items',
+      });
+    });
+  });
+
   describe('enum naming', () => {
     const rf: OAS.SchemaObject = {
       name: 'result_format',
@@ -106,7 +169,7 @@ describe('sdkModels', () => {
     };
 
     // Only change description. Should end up as the same enum
-    const rf4: OAS.SchemaObject = { ...rf, ...{ description: 'RF4' } };
+    const rf4: OAS.SchemaObject = { ...rf, description: 'RF4' };
 
     it('enum types are renamed and not overwritten', () => {
       const api = new ApiModel({} as OAS.OpenAPIObject);
@@ -134,7 +197,7 @@ describe('sdkModels', () => {
   });
 
   describe('fromSpec', () => {
-    let config;
+    let config: any;
     let apiTestModel: ApiModel;
     beforeAll(() => {
       config = TestConfig();
@@ -147,10 +210,410 @@ describe('sdkModels', () => {
     };
 
     it('API 4 models', () => {
-      const api4 = readFileSync(rootFile('spec/Looker.4.0.oas.json'), 'utf-8');
+      const api4 = readFileSync(testFile('Looker.4.0.oas.json'), 'utf-8');
       const api = ApiModel.fromString(api4);
       const actual = Object.keys(api.typeTags);
       expect(actual).toHaveLength(31);
+    });
+
+    describe('data mocking', () => {
+      interface IProject {}
+      interface IMockType {
+        any: any;
+        /**
+         * Operations the current user is able to perform on this object (read-only)
+         */
+        can: IDictionary<boolean>;
+        id: string;
+        bool: boolean;
+        uri: Url;
+        url: Url;
+        date: Date;
+        datetime: Date;
+        password: Password;
+        byte: string; // binary
+        binary: string; // binary
+        email?: string; // email
+        uuid?: string; // uuid
+        hostname?: string; // hostname
+        ipv4?: string; // ipv4
+        ipv6?: string; // ipv6
+        integer: number;
+        int32: number;
+        int64: number;
+        number: number;
+        double: number;
+        float: number;
+        /**
+         * Fields on which to run subtotals
+         */
+        subtotals: string[] | null;
+        /**
+         * The local state of each project in the workspace (read-only)
+         */
+        projects: IProject[] | null;
+      }
+
+      it('type.mockType', () => {
+        const mockType = apiTestModel.types.MockType;
+        for (const key in mockType.properties) {
+          // Make sure all properties are mocked because explicitly declaring
+          // them all as required is tedious
+          mockType.properties[key].required = true;
+        }
+        const actual = mockType.mockType<IMockType>();
+        const expected: IMockType = {
+          any: {
+            a: 1,
+            b: 'two',
+          },
+          binary: '01',
+          bool: true,
+          byte: 'A',
+          can: {
+            a: true,
+          },
+          date: new Date(2024, 0, 5),
+          datetime: new Date(2024, 0, 5, 1),
+          double: 2.2,
+          email: 'email@example.com',
+          float: 1.1,
+          hostname: 'https://hostname',
+          id: 'id',
+          int32: 1,
+          int64: 64,
+          integer: 1,
+          ipv4: '127.0.0.1',
+          ipv6: '::1',
+          number: 1.1,
+          password: '*',
+          projects: [{}],
+          subtotals: ['subtotals'],
+          uri: 'urn:uri',
+          url: 'https://url.mock',
+          uuid: 'uuid-uuid',
+        };
+
+        expect(actual).toEqual(expected);
+      });
+
+      describe('type.mock', () => {
+        it('mocks arrays results', () => {
+          const mockType = apiTestModel.methods.all_timezones.returnType?.type!;
+          const expected = [
+            {
+              group: 'group',
+              label: 'label',
+              value: 'value',
+            },
+          ];
+          const actual = mockType.mock({ fields: '*' });
+          expect(actual).toStrictEqual(expected);
+        });
+
+        it('mocks empty values', () => {
+          const mockType = apiTestModel.types.MockType;
+          const expected = {
+            any: {},
+            binary: '',
+            bool: false,
+            byte: '',
+            can: {},
+            date: new Date(1970, 0, 1),
+            datetime: new Date(1970, 0, 1),
+            double: 0,
+            email: '',
+            float: 0,
+            hostname: '',
+            id: '',
+            int32: 0,
+            int64: 0,
+            integer: 0,
+            ipv4: '',
+            ipv6: '',
+            number: 0,
+            password: '',
+            projects: [],
+            subtotals: [],
+            uri: '',
+            url: '',
+            uuid: '',
+          };
+          const actual = mockType.mock({ fields: '*', empty: true });
+          expect(actual).toEqual(expected);
+        });
+
+        it('mocks empty values and keeps overrides', () => {
+          const mockType = apiTestModel.types.MockType;
+          const expected = {
+            bool: true,
+            email: '',
+            float: 3.14,
+            hostname: 'foo',
+            id: '',
+            int32: 0,
+          };
+          const actual = mockType.mock({
+            fields: 'bool,email,float,hostname,id,int32',
+            empty: true,
+            override: {
+              bool: 'true',
+              hostname: 'foo',
+              float: '3.14',
+              extra: 'not there',
+            },
+          });
+          expect(actual).toEqual(expected);
+        });
+
+        it('mocks nested arrays', () => {
+          const mockType = apiTestModel.types.MockType;
+          const expected = {
+            subtotals: ['subtotals'],
+          };
+          const actual = mockType.mock({ fields: 'subtotals' });
+          expect(actual).toEqual(expected);
+        });
+
+        it('converts override types', () => {
+          const mockType = apiTestModel.types.MockType;
+          const expected = {
+            id: '42',
+            subtotals: ['subtotals'],
+            double: 4.4,
+            bool: true,
+            int32: 66,
+          };
+          const actual = mockType.mock({
+            fields: 'id,subtotals,',
+            override: { id: 42, int32: '66', double: '4.4', bool: '1' },
+          });
+          expect(actual).toEqual(expected);
+        });
+
+        it('rejects invalid overrides', () => {
+          const mockType = apiTestModel.types.MockType;
+          const expected = {
+            subtotals: ['subtotals'],
+          };
+          const actual = mockType.mock({
+            fields: 'subtotals',
+            override: { foo: 1, bar: 'A' },
+          });
+          expect(actual).toEqual(expected);
+        });
+
+        it('mocks required types by default', () => {
+          const mockType = apiTestModel.types.MockType;
+          for (const key in mockType.properties) {
+            // Make sure all properties are mocked because explicitly declaring
+            // them all as required is tedious
+            mockType.properties[key].required = true;
+          }
+          const expected = {
+            any: {
+              a: 1,
+              b: 'two',
+            },
+            binary: '01',
+            bool: true,
+            byte: 'A',
+            can: {
+              a: true,
+            },
+            date: new Date(2024, 0, 5),
+            datetime: new Date(2024, 0, 5, 1),
+            double: 2.2,
+            email: 'email@example.com',
+            float: 1.1,
+            hostname: 'https://hostname',
+            id: 'id',
+            int32: 1,
+            int64: 64,
+            integer: 1,
+            ipv4: '127.0.0.1',
+            ipv6: '::1',
+            number: 1.1,
+            password: '*',
+            projects: [{}],
+            subtotals: ['subtotals'],
+            uri: 'urn:uri',
+            url: 'https://url.mock',
+            uuid: 'uuid-uuid',
+          };
+          const actual = mockType.mock();
+          expect(actual).toEqual(expected);
+        });
+
+        it('supports groups', () => {
+          const mockType = apiTestModel.types.MockType;
+          for (const key in mockType.properties) {
+            // disable mocking all properties by default
+            mockType.properties[key].required = false;
+          }
+          const actual = mockType.mock({
+            fields: 'projects(git_username,git_password),hostname,password',
+          });
+          expect(actual).toEqual({
+            hostname: 'https://hostname',
+            password: '*',
+            projects: [
+              {
+                git_password: 'git_password',
+                git_username: 'git_username',
+              },
+            ],
+          });
+        });
+
+        it('supports asterisk', () => {
+          const mockType = apiTestModel.types.MockType;
+          for (const key in mockType.properties) {
+            // disable mocking all properties by default
+            mockType.properties[key].required = false;
+          }
+          const expected = {
+            any: {
+              a: 1,
+              b: 'two',
+            },
+            binary: '01',
+            bool: true,
+            byte: 'A',
+            can: {
+              a: true,
+            },
+            date: new Date(2024, 0, 5),
+            datetime: new Date(2024, 0, 5, 1),
+            double: 2.2,
+            email: 'email@example.com',
+            float: 1.1,
+            hostname: 'https://hostname',
+            id: 'id',
+            int32: 1,
+            int64: 64,
+            integer: 1,
+            ipv4: '127.0.0.1',
+            ipv6: '::1',
+            number: 1.1,
+            password: '*',
+            projects: [{}],
+            subtotals: ['subtotals'],
+            uri: 'urn:uri',
+            url: 'https://url.mock',
+            uuid: 'uuid-uuid',
+          };
+          const actual = mockType.mock({ fields: '*' });
+          expect(actual).toEqual(expected);
+        });
+
+        it('supports nested asterisk', () => {
+          const mockType = apiTestModel.types.MockType;
+          for (const key in mockType.properties) {
+            // disable mocking all properties by default
+            mockType.properties[key].required = false;
+          }
+          const expected = {
+            projects: [
+              {
+                allow_warnings: true,
+                can: {
+                  a: true,
+                },
+                dependency_status: 'dependency_status',
+                deploy_secret: 'deploy_secret',
+                git_application_server_http_port: 64,
+                git_application_server_http_scheme:
+                  'git_application_server_http_scheme',
+                git_password: 'git_password',
+                git_password_user_attribute: 'git_password_user_attribute',
+                git_production_branch_name: 'git_production_branch_name',
+                git_release_mgmt_enabled: true,
+                git_remote_url: 'git_remote_url',
+                git_service_name: 'git_service_name',
+                git_username: 'git_username',
+                git_username_user_attribute: 'git_username_user_attribute',
+                id: 'id',
+                is_example: true,
+                name: 'name',
+                pull_request_mode: 'off',
+                unset_deploy_secret: true,
+                use_git_cookie_auth: true,
+                uses_git: true,
+                validation_required: true,
+              },
+            ],
+          };
+          const actual = mockType.mock({ fields: 'projects(*)' });
+          expect(actual).toEqual(expected);
+        });
+
+        it('mocks required properties by default', () => {
+          const query = apiTestModel.types.Query;
+          const actual = query.mock();
+          expect(actual).toEqual({ model: 'model', view: 'view' });
+        });
+
+        it('mocks only requested properties', () => {
+          const query = apiTestModel.types.Query;
+          const actual = query.mock({ fields: 'id,fields,filters' });
+          expect(actual).toEqual({
+            id: 'id',
+            fields: ['fields'],
+            filters: { a: 'filters' },
+          });
+        });
+
+        it('mocks an enum', () => {
+          const fillStyle = apiTestModel.types.FillStyle;
+          const actual = fillStyle.mock();
+          expect(actual).toEqual('enumeration');
+        });
+
+        it('mocks a complex property type', () => {
+          const task = apiTestModel.types.QueryTask;
+          const actual = task.mock({ fields: 'query' });
+          expect(actual).toEqual({ query: { model: 'model', view: 'view' } });
+        });
+
+        it('overrides with default properties', () => {
+          const query = apiTestModel.types.Query;
+          const actual = query.mock({ override: { limit: '42' } });
+          expect(actual).toEqual({
+            model: 'model',
+            view: 'view',
+            limit: '42',
+          });
+        });
+
+        it('overrides with requested properties', () => {
+          const query = apiTestModel.types.Query;
+          const actual = query.mock({
+            fields: 'id,fields,filters',
+            override: { limit: '42' },
+          });
+          expect(actual).toEqual({
+            id: 'id',
+            fields: ['fields'],
+            filters: { a: 'filters' },
+            limit: '42',
+          });
+        });
+
+        it('rejects duplicate keys', () => {
+          const query = apiTestModel.types.Query;
+          expect(() => query.mock({ fields: 'id,id,fields,filters' })).toThrow(
+            `Duplicate 'id' found`
+          );
+        });
+
+        it('rejects missing fields', () => {
+          const query = apiTestModel.types.Query;
+          expect(() => query.mock({ fields: 'id,foo,fields,filters' })).toThrow(
+            `No property named 'foo' in type Query`
+          );
+        });
+      });
     });
 
     describe('ordering', () => {
@@ -366,10 +829,8 @@ describe('sdkModels', () => {
         expect(method).toBeDefined();
         const actual = apiTestModel.getRequestType(method);
         expect(actual).toBeDefined();
-        if (actual) {
-          expect(actual.properties.title).toBeDefined();
-          expect(actual.name).toEqual('RequestSearchLooks');
-        }
+        expect(actual?.properties.title).toBeDefined();
+        expect(actual?.name).toEqual('RequestSearchLooks');
       });
 
       it('search_folders', () => {
@@ -377,13 +838,13 @@ describe('sdkModels', () => {
         expect(method).toBeDefined();
         const actual = apiTestModel.getRequestType(method);
         expect(actual).toBeDefined();
-        if (actual) {
-          expect(actual.properties.fields).toBeDefined();
-          expect(actual.name).toEqual('RequestSearchFolders');
-        }
+        expect(actual?.properties.fields).toBeDefined();
+        expect(actual?.name).toEqual('RequestSearchFolders');
       });
 
-      it('detects recursive types', () => {
+      // eslint-ignore-next-line
+      it.skip('detects recursive types', () => {
+        // TODO we need to mock up a recursive type to test now that this is no longer recursive
         let type = apiTestModel.types.LookmlModelExploreField;
         let actual = type.isRecursive();
         expect(actual).toEqual(true);
@@ -440,11 +901,9 @@ describe('sdkModels', () => {
         expect(type).toBeDefined();
         const actual = apiTestModel.mayGetWriteableType(type);
         expect(actual).toBeDefined();
-        /* eslint-disable jest-dom/prefer-required */
         expect(type.properties.query_id.required).toEqual(true);
         expect(type.properties.result_format.required).toEqual(true);
         expect(type.properties.source.required).toEqual(false);
-        /* eslint-enable jest-dom/prefer-required */
         expect(Object.keys(type.requiredProperties)).toEqual([
           'query_id',
           'result_format',
@@ -467,30 +926,32 @@ describe('sdkModels', () => {
 
       it('generates writeable type for nested types with some readonly properties', () => {
         const setting = apiTestModel.types.Setting;
-        const whitelabel = apiTestModel.types.WhitelabelConfiguration;
-        const prop = setting.properties.whitelabel;
-        expect(prop.type).toEqual(whitelabel);
+        const privateLabel = apiTestModel.types.PrivatelabelConfiguration;
+        const prop = setting.properties.privatelabel_configuration;
+        expect(prop.type).toEqual(privateLabel);
         expect(prop.readOnly).toEqual(false);
-        expect(whitelabel.readOnly).toEqual(false);
+        expect(privateLabel.readOnly).toEqual(false);
         const type = apiTestModel.mayGetWriteableType(setting);
         expect(type).toBeDefined();
         // Code concession for linting that doesn't understand "toBeDefined()" test
         expect(type?.name).toEqual('WriteSetting');
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        const writeWhite = type!.properties.whitelabel;
-        expect(writeWhite).toBeDefined();
-        expect(writeWhite.type.name).toEqual('WriteWhitelabelConfiguration');
-        const whiteProps = writeWhite.type.properties;
-        expect(whiteProps.can).toBeUndefined();
-        expect(whiteProps.id).toBeUndefined();
-        expect(whiteProps.logo_file).toBeDefined();
-        expect(whiteProps.logo_url).toBeUndefined();
-        expect(whiteProps.favicon_file).toBeDefined();
-        expect(whiteProps.favicon_url).toBeUndefined();
-        expect(whiteProps.default_title).toBeDefined();
+        const writePrivate = type!.properties.privatelabel_configuration;
+        expect(writePrivate).toBeDefined();
+        expect(writePrivate.type.name).toEqual(
+          'WritePrivatelabelConfiguration'
+        );
+        const privateProps = writePrivate.type.properties;
+        expect(privateProps.can).toBeUndefined();
+        expect(privateProps.id).toBeUndefined();
+        expect(privateProps.logo_file).toBeDefined();
+        expect(privateProps.logo_url).toBeUndefined();
+        expect(privateProps.favicon_file).toBeDefined();
+        expect(privateProps.favicon_url).toBeUndefined();
+        expect(privateProps.default_title).toBeDefined();
       });
 
-      it('generates and annotates a writeable type collection ', () => {
+      it('generates and annotates a writeable type collection', () => {
         const source = apiTestModel.types.MergeQuery;
         const actual = apiTestModel.mayGetWriteableType(source);
         const props = actual?.properties;
@@ -593,7 +1054,7 @@ describe('sdkModels', () => {
           expect(type).toBeDefined();
           const writeable = type.writeable;
           expect(type.readOnly).toEqual(false);
-          expect(writeable).toHaveLength(18);
+          expect(writeable).toHaveLength(20);
         });
 
         it('writeableType', () => {
@@ -601,13 +1062,11 @@ describe('sdkModels', () => {
           expect(type).toBeDefined();
           const actual = apiTestModel.mayGetWriteableType(type);
           expect(actual).toBeDefined();
-          if (actual) {
-            expect(actual.properties.body_text).toBeDefined();
-            expect(actual.properties.body_text_as_html).not.toBeDefined();
-            expect(actual.properties.dashboard_id).toBeDefined();
-            expect(actual.properties.edit_uri).not.toBeDefined();
-            expect(actual.properties.look_id).toBeDefined();
-          }
+          expect(actual?.properties.body_text).toBeDefined();
+          expect(actual?.properties.body_text_as_html).not.toBeDefined();
+          expect(actual?.properties.dashboard_id).toBeDefined();
+          expect(actual?.properties.edit_uri).not.toBeDefined();
+          expect(actual?.properties.look_id).toBeDefined();
         });
       });
     });
@@ -690,6 +1149,7 @@ describe('sdkModels', () => {
           'cell',
           'query',
           'dashboard',
+          'none',
         ]);
         checkEnumArray(type, 'supported_formattings', [
           'formatted',
@@ -701,10 +1161,6 @@ describe('sdkModels', () => {
       it('enum from string type', () => {
         const type = apiTestModel.types.Project;
         expect(type).toBeDefined();
-        checkSingleEnum(type, 'git_application_server_http_scheme', [
-          'http',
-          'https',
-        ]);
         checkSingleEnum(type, 'pull_request_mode', [
           'off',
           'links',
@@ -833,8 +1289,8 @@ describe('sdkModels', () => {
       });
     });
 
-    const allMethods = (tags: TagList): Array<IMethod> => {
-      const result: Array<IMethod> = [];
+    const allMethods = (tags: TagList): IMethod[] => {
+      const result: IMethod[] = [];
       Object.entries(tags).forEach(([, methods]) => {
         Object.entries(methods).forEach(([, method]) => {
           result.push(method);
@@ -862,7 +1318,8 @@ describe('sdkModels', () => {
           expect(parents).toEqual(new Set(['DashboardElement[]', 'Dashboard']));
         });
 
-        it('determines parent type of enum types', () => {
+        it.skip('determines parent type of enum types', () => {
+          // TODO find or mock another type to test here since this no longer exists
           const enumType = apiTestModel.types.LinkedContentType;
           const parents = enumType.parentTypes;
           expect(parents).toEqual(new Set(['Command']));
@@ -949,7 +1406,7 @@ describe('sdkModels', () => {
         );
         expect(methods).toHaveLength(methodKeys.length);
         expect(methodKeys.join(' ')).toEqual(
-          'create_dashboard dashboard folder_dashboards import_lookml_dashboard search_dashboards sync_lookml_dashboard update_dashboard'
+          'copy_dashboard create_dashboard create_dashboard_from_lookml dashboard folder_dashboards import_dashboard_from_lookml import_lookml_dashboard move_dashboard search_dashboards sync_lookml_dashboard update_dashboard'
         );
       });
 
@@ -1040,9 +1497,9 @@ describe('sdkModels', () => {
         it('search anywhere', () => {
           const actual = apiTestModel.search('dashboard', modelAndTypeNames);
           const methods = allMethods(actual.tags);
-          expect(Object.entries(methods)).toHaveLength(33);
+          expect(Object.entries(methods)).toHaveLength(38);
           const types = Object.entries(actual.types);
-          expect(types).toHaveLength(29);
+          expect(types).toHaveLength(32);
         });
 
         it('search special names', () => {
@@ -1067,7 +1524,7 @@ describe('sdkModels', () => {
             modelAndTypeNames
           );
           let methods = allMethods(actual.tags);
-          expect(Object.entries(methods)).toHaveLength(18);
+          expect(Object.entries(methods)).toHaveLength(23);
           expect(Object.entries(actual.types)).toHaveLength(1);
           actual = apiTestModel.search(
             '\\bdashboardbase\\b',
@@ -1081,14 +1538,14 @@ describe('sdkModels', () => {
         it('search for slug', () => {
           const actual = apiTestModel.search('\\bslug\\b', standardSet);
           const methods = allMethods(actual.tags);
-          expect(Object.entries(methods)).toHaveLength(33);
-          expect(Object.entries(actual.types)).toHaveLength(21);
+          expect(Object.entries(methods)).toHaveLength(42);
+          expect(Object.entries(actual.types)).toHaveLength(28);
         });
 
         it('find rate_limited endpoints', () => {
           const actual = apiTestModel.search('rate_limited', SearchAll);
           const methods = allMethods(actual.tags);
-          expect(Object.entries(methods)).toHaveLength(11);
+          expect(Object.entries(methods)).toHaveLength(18);
           expect(Object.entries(actual.types)).toHaveLength(0);
         });
 
@@ -1100,40 +1557,40 @@ describe('sdkModels', () => {
           const actual = apiTestModel.search('rate_limited.*db_query');
           expect(actual).toBeDefined();
           const methods = allMethods(actual.tags);
-          expect(Object.entries(methods)).toHaveLength(2);
+          expect(Object.entries(methods)).toHaveLength(3);
           expect(Object.entries(actual.types)).toHaveLength(0);
         });
 
         it('just model names', () => {
           const actual = apiTestModel.search('\\bdashboard\\b', modelNames);
           const methods = allMethods(actual.tags);
-          expect(Object.entries(methods)).toHaveLength(16);
+          expect(Object.entries(methods)).toHaveLength(21);
           expect(Object.entries(actual.types)).toHaveLength(0);
         });
 
         it('deprecated items', () => {
           const actual = apiTestModel.search('deprecated', statusCriteria);
-          expect(Object.entries(allMethods(actual.tags))).toHaveLength(8);
-          expect(Object.entries(actual.types)).toHaveLength(3);
+          expect(Object.entries(allMethods(actual.tags))).toHaveLength(27);
+          expect(Object.entries(actual.types)).toHaveLength(19);
         });
 
         it('beta items', () => {
           const actual = apiTestModel.search('beta', statusCriteria);
-          expect(Object.entries(allMethods(actual.tags))).toHaveLength(238);
+          expect(Object.entries(allMethods(actual.tags))).toHaveLength(13);
           const types = Object.entries(actual.types);
-          expect(types).toHaveLength(129);
+          expect(types).toHaveLength(15);
         });
 
         it('stable items', () => {
           const actual = apiTestModel.search('stable', statusCriteria);
           const methods = allMethods(actual.tags);
-          expect(Object.entries(methods)).toHaveLength(155);
-          expect(Object.entries(actual.types)).toHaveLength(91);
+          expect(Object.entries(methods)).toHaveLength(410);
+          expect(Object.entries(actual.types)).toHaveLength(240);
         });
 
         it('db queries', () => {
           const actual = apiTestModel.search('db_query', activityCriteria);
-          expect(Object.entries(allMethods(actual.tags))).toHaveLength(37);
+          expect(Object.entries(allMethods(actual.tags))).toHaveLength(39);
           expect(Object.entries(actual.types)).toHaveLength(0);
         });
       });
@@ -1210,7 +1667,7 @@ describe('sdkModels', () => {
       describe('method tagging', () => {
         it('methods are tagged', () => {
           const actual = apiTestModel.tags;
-          expect(Object.entries(actual)).toHaveLength(28);
+          expect(Object.entries(actual)).toHaveLength(31);
         });
 
         it('methods are in the right tag', () => {
@@ -1222,7 +1679,7 @@ describe('sdkModels', () => {
       describe('type tagging', () => {
         it('types are tagged', () => {
           const actual = apiTestModel.typeTags;
-          expect(Object.entries(actual)).toHaveLength(28);
+          expect(Object.entries(actual)).toHaveLength(31);
         });
 
         it('types are in the right tag', () => {

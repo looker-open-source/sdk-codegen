@@ -39,9 +39,9 @@ import {
   ArrayType,
   EnumType,
   HashType,
-  Type,
   mayQuote,
   strBody,
+  Type,
 } from './sdkModels';
 import type { SpecItem } from './specConverter';
 
@@ -234,6 +234,9 @@ export interface ICodeGen {
   /** Use named/keyword arguments in calling syntax */
   useNamedArguments: boolean;
 
+  /** Mainly for TypeScript SDK tree-shaking support. True produces slices.ext */
+  useSlices: boolean;
+
   /** Mainly for TypeScript SDK tree-shaking support. True produces funcs.ext */
   useFunctions: boolean;
 
@@ -398,6 +401,18 @@ export interface ICodeGen {
   functionsPrologue(indent: string): string;
 
   /**
+   * standard code to insert at the top of the generated "hooks" file(s)
+   * @param indent code indentation
+   */
+  hooksPrologue(indent: string): string;
+
+  /**
+   * standard code to insert at the top of the generated "mocks" file(s)
+   * @param indent code indentation
+   */
+  mocksPrologue(indent: string): string;
+
+  /**
    * standard code to insert at the top of the generated "methodsInterface" file(s)
    * @param indent code indentation
    */
@@ -414,6 +429,18 @@ export interface ICodeGen {
    * @param indent code indentation
    */
   functionsEpilogue(indent: string): string;
+
+  /**
+   * generated code to append to the bottom of the generated "hooks" file(s)
+   * @param indent code indentation
+   */
+  hooksEpilogue(indent: string): string;
+
+  /**
+   * generated code to append to the bottom of the generated "mocks" file(s)
+   * @param indent code indentation
+   */
+  mocksEpilogue(indent: string): string;
 
   /**
    * standard code to insert at the top of the generated "streams" file(s)
@@ -619,6 +646,22 @@ export interface ICodeGen {
   declareFunction(indent: string, method: IMethod): string;
 
   /**
+   * declares the hook/slice for a function
+   * @param indent code indentation
+   * @param method structure of method to declare
+   * @returns the declaration code for the hook
+   */
+  declareHook(indent: string, method: IMethod): string;
+
+  /**
+   * declares the mock handler for a method
+   * @param indent code indentation
+   * @param method structure of method to declare
+   * @returns the declaration code for the mock method
+   */
+  declareMock(indent: string, method: IMethod): string;
+
+  /**
    * generates the method's interface declaration
    * @param indent code indentation
    * @param method structure of method to declare
@@ -749,6 +792,7 @@ export abstract class CodeGen implements ICodeGen {
   useNamedParameters = true;
   useNamedArguments = true;
   useFunctions = false;
+  useSlices = false;
   useInterfaces = false;
 
   // makeTheCall definitions
@@ -819,6 +863,22 @@ export abstract class CodeGen implements ICodeGen {
     return '';
   }
 
+  hooksPrologue(_indent: string): string {
+    return '';
+  }
+
+  hooksEpilogue(_indent: string): string {
+    return '';
+  }
+
+  mocksPrologue(_indent: string): string {
+    return '';
+  }
+
+  mocksEpilogue(_indent: string): string {
+    return '';
+  }
+
   interfacesPrologue(_indent: string): string {
     return '';
   }
@@ -884,6 +944,14 @@ export abstract class CodeGen implements ICodeGen {
   abstract declareMethod(indent: string, method: IMethod): string;
 
   declareFunction(_indent: string, _method: IMethod): string {
+    return '';
+  }
+
+  declareHook(_indent: string, _method: IMethod): string {
+    return '';
+  }
+
+  declareMock(_indent: string, _method: IMethod): string {
     return '';
   }
 
@@ -1297,6 +1365,7 @@ export abstract class CodeGen implements ICodeGen {
   requestTypeName(method: IMethod): string {
     if (!this.useRequest(method)) return '';
     const request = this.api.getRequestType(method);
+    // PB: determines if there is a request object vs flat list
     if (!request) return '';
     request.refCount++;
     method.addType(this.api, request);

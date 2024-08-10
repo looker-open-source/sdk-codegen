@@ -24,11 +24,11 @@
 
  */
 import * as fs from 'fs';
-import path from 'path';
 import type { IExampleMine } from './exampleInfo';
-import { findExampleLanguages, findExamples } from './exampleInfo';
+import { findExamples, findExampleLanguages } from './exampleInfo';
+import { testFile } from '@looker/sdk-codegen-utils';
 
-const fileName = path.join(__dirname, '../../../examplesIndex.json');
+const fileName = testFile('examplesIndex.json');
 const file = fs.readFileSync(fileName, { encoding: 'utf-8' });
 const lode: IExampleMine = JSON.parse(file);
 const op = 'render_task';

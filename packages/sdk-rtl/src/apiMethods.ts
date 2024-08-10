@@ -28,6 +28,7 @@ import type { Readable } from 'readable-stream';
 import type {
   Authenticator,
   HttpMethod,
+  IAPIMethods,
   ITransportSettings,
   SDKResponse,
   Values,
@@ -54,138 +55,6 @@ export const functionalSdk = (
       : authSession.settings.base_url + '/api/' + apiVersion;
   return sdk;
 };
-
-export interface IAPIMethods {
-  authSession: IAuthSession;
-  sdkVersion: string;
-  apiPath: string;
-  apiVersion: string;
-
-  /** A helper method for simplifying error handling of SDK responses.
-   *
-   * Pass in a promise returned by any SDK method, and it will return a promise
-   * that rejects if the `SDKResponse` is not `ok`. This will swallow the type
-   * information in the error case, but allows you to route all the error cases
-   * into a single promise rejection.
-   *
-   * The promise will have an `Error` rejection reason with a string `message`.
-   * If the server error contains a `message` field, it will be provided, otherwise a
-   * generic message will occur.
-   *
-   * ```ts
-   * const sdk = LookerSDK({...})
-   * let look
-   * try {
-   *    look = await sdk.ok(sdk.create_look({...}))
-   *    // do something with look
-   * }
-   * catch(e) {
-   *    // handle error case
-   * }
-   * ```
-   */
-  ok<TSuccess, TError>(
-    promise: Promise<SDKResponse<TSuccess, TError>>
-  ): Promise<TSuccess>;
-
-  /**
-   * Determine whether the url should be an API path, relative from base_url, or is already fully specified override
-   * @param path Request path
-   * @param options Transport settings
-   * @param authenticator optional callback
-   * @returns the fully specified request path including any query string parameters
-   */
-  makePath(
-    path: string,
-    options: Partial<ITransportSettings>,
-    authenticator?: Authenticator
-  ): string;
-
-  /**
-   *
-   * A helper method to add authentication to an API request for deserialization
-   *
-   * @param {HttpMethod} method type of HTTP method
-   * @param {string} path API endpoint path
-   * @param {any} queryParams Optional query params collection for request
-   * @param {any} body Optional body for request
-   * @param {Partial<ITransportSettings>} options Optional overrides like timeout and verify_ssl
-   */
-  authRequest<TSuccess, TError>(
-    method: HttpMethod,
-    path: string,
-    queryParams?: Values,
-    body?: any,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<TSuccess, TError>>;
-
-  /**
-   * A helper method to add authentication to an API request for streaming
-   * @param {(readable: Readable) => Promise<T>} callback
-   * @param {HttpMethod} method
-   * @param {string} path
-   * @param queryParams
-   * @param body
-   * @param {Partial<ITransportSettings>} options
-   * @returns {Promise<T>}
-   */
-  authStream<T>(
-    callback: (readable: Readable) => Promise<T>,
-    method: HttpMethod,
-    path: string,
-    queryParams?: Values,
-    body?: any,
-    options?: Partial<ITransportSettings>
-  ): Promise<T>;
-
-  /** Make a GET request */
-  get<TSuccess, TError>(
-    path: string,
-    queryParams?: Values,
-    body?: any,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<TSuccess, TError>>;
-
-  /** Make a HEAD request */
-  head<TSuccess, TError>(
-    path: string,
-    queryParams?: Values,
-    body?: any,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<TSuccess, TError>>;
-
-  /** Make a DELETE request */
-  delete<TSuccess, TError>(
-    path: string,
-    queryParams?: Values,
-    body?: any,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<TSuccess, TError>>;
-
-  /** Make a POST request */
-  post<TSuccess, TError>(
-    path: string,
-    queryParams?: Values,
-    body?: any,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<TSuccess, TError>>;
-
-  /** Make a PUT request */
-  put<TSuccess, TError>(
-    path: string,
-    queryParams?: Values,
-    body?: any,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<TSuccess, TError>>;
-
-  /** Make a PATCH request */
-  patch<TSuccess, TError>(
-    path: string,
-    queryParams?: Values,
-    body?: any,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<TSuccess, TError>>;
-}
 
 export class APIMethods implements IAPIMethods {
   private _apiPath = '';

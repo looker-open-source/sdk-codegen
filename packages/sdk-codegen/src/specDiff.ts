@@ -25,13 +25,14 @@
  */
 
 import type {
-  ArgValues,
-  IApiModel,
   IMethod,
   IType,
   KeyedCollection,
+  IApiModel,
+  IParameter,
+  ArgValues,
 } from './sdkModels';
-import { ArrayType, EnumType } from './sdkModels';
+import { EnumType, ArrayType } from './sdkModels';
 
 interface ITypeDelta {
   lhs: string;
@@ -195,8 +196,8 @@ export const compareParams = (
 ) => {
   const lParams: ArgValues = {};
   const rParams: ArgValues = {};
-  lMethod.allParams.forEach((p) => (lParams[p.name] = p));
-  rMethod.allParams.forEach((p) => (rParams[p.name] = p));
+  lMethod.allParams.forEach((p: IParameter) => (lParams[p.name] = p));
+  rMethod.allParams.forEach((p: IParameter) => (rParams[p.name] = p));
   // TODO typediff the matching body types?
   countDiffs(
     count,
@@ -359,7 +360,7 @@ export interface DiffRow {
  * @param lMethod
  * @param rMethod
  */
-const computeDiff = (lMethod?: IMethod, rMethod?: IMethod) => {
+const computeDiff = (lMethod?: IMethod, rMethod?: IMethod): DiffRow => {
   if (!lMethod && !rMethod) throw new Error('At least one method is required.');
 
   const count = startCount();
@@ -411,9 +412,11 @@ const computeDiff = (lMethod?: IMethod, rMethod?: IMethod) => {
       responseDiff: '',
       diffCount: count,
     };
+  } else {
+    result = {} as DiffRow;
   }
 
-  return result!;
+  return result;
 };
 
 export type DiffFilter = (
@@ -434,7 +437,7 @@ export type DiffFilter = (
  */
 export const includeDiffs: DiffFilter = (delta, lMethod, rMethod) =>
   !lMethod ||
-  !rMethod! ||
+  !rMethod ||
   delta.lStatus !== delta.rStatus ||
   !!delta.paramsDiff ||
   !!delta.typeDiff ||

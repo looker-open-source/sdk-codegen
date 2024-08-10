@@ -29,6 +29,7 @@ import { StatusCode, addQueryParams } from './transport';
 import type {
   Authenticator,
   HttpMethod,
+  IRawRequest,
   IRawResponse,
   ITransport,
   ITransportSettings,
@@ -78,13 +79,12 @@ export abstract class BaseTransport implements ITransport {
 
   /**
    * Request a streaming response
-   * @param {HttpMethod} method
-   * @param {string} path Request path
+   * @param method HTTP method
+   * @param path Request path
    * @param queryParams query parameters for the request
    * @param body http body to include with request
-   * @param {Authenticator} authenticator callback to add authentication information to the request
-   * @param {Partial<ITransportSettings>} options transport option overrides
-   * @returns {Promise<TSuccess>} the streaming response
+   * @param authenticator callback to add authentication information to the request
+   * @param options transport settings overrides
    */
   abstract request<TSuccess, TError>(
     method: HttpMethod,
@@ -99,13 +99,13 @@ export abstract class BaseTransport implements ITransport {
    * Request a streaming response
    * @param {(readable: _Readable.Readable) => Promise<TSuccess>} callback A function will be called with a Node.js or
    *  Browser `Readable` object. The readable object represents the streaming data.
-   * @param {HttpMethod} method
-   * @param {string} path Request path
-   * @param queryParams query parameters for the request
+   * @param method HTTP method
+   * @param path Request path
+   * @param queryParams parameters for the request
    * @param body http body to include with request
-   * @param {Authenticator} authenticator callback to add authentication information to the request
-   * @param {Partial<ITransportSettings>} options transport option overrides
-   * @returns {Promise<TSuccess>} the streaming response
+   * @param authenticator callback to add authentication information to the request
+   * @param options transport settings overrides
+   * @returns the streaming response
    */
   abstract stream<TSuccess>(
     callback: (readable: Readable) => Promise<TSuccess>,
@@ -137,4 +137,6 @@ export abstract class BaseTransport implements ITransport {
     path = addQueryParams(path, queryParams);
     return path;
   }
+
+  abstract retry(wait: IRawRequest): Promise<IRawResponse>;
 }

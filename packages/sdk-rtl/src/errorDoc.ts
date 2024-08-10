@@ -24,7 +24,7 @@
 
  */
 
-import type { IAPIMethods } from './apiMethods';
+import type { IAPIMethods } from './transport';
 import { sdkOk } from './transport';
 
 export interface IErrorDocItem {

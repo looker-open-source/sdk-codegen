@@ -80,11 +80,13 @@ export interface LookerSDKError extends Error {
 }
 
 export const LookerSDKError: ILookerSDKErrorConstructor =
-  /* #__PURE__*/ (() => {
+  /* #__PURE__ */ (() => {
     'use strict';
     const LookerSDKErrorConstructor = function LookerSDKError(
       this: LookerSDKError | undefined,
-      ...[
+      ...errorArguments
+    ) {
+      const [
         message,
         {
           errors,
@@ -99,11 +101,7 @@ export const LookerSDKError: ILookerSDKErrorConstructor =
         AugmentErrorOptions<
           Parameters<ErrorConstructor>,
           ILookerSDKErrorOptions
-        >
-    ) {
-      // handle null in addition to undefined
-      errors ??= [];
-      documentation_url ??= '';
+        > = errorArguments;
 
       // The `super()` call. At present, Error() and new Error() are
       // indistinguishable, but use whatever we were invoked with in case
@@ -138,8 +136,10 @@ export const LookerSDKError: ILookerSDKErrorConstructor =
       // which are implemented as plain JavaScript objects where all
       // properties are enumerable.
       Object.defineProperty(error, 'message', { enumerable: true });
-      (error as LookerSDKError).errors = errors;
-      (error as LookerSDKError).documentation_url = documentation_url;
+
+      // handle null in addition to undefined
+      (error as LookerSDKError).errors = errors ?? [];
+      (error as LookerSDKError).documentation_url = documentation_url ?? '';
 
       return error;
     } as ILookerSDKErrorConstructor;

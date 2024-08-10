@@ -37,11 +37,13 @@
   "dependencies": {
     "@looker/sdk-codegen-utils": "21.0.11",
     "@looker/sdk-rtl": "21.6.1",
-    "blueimp-md5": "^2.13.0",
+    "blueimp-md5": "2.18.0",
     "openapi3-ts": "2.0.2"
   },
   "gitHead": "308cb8c61290837e71345a5ef6fb17be9285990e",
   "devDependencies": {
-    "lodash": "4.17.21"
+    "lodash": "4.17.21",
+    "@types/blueimp-md5": "2.18.2",
+    "@looker/sdk-codegen-utils": "21.0.11"
   }
 }

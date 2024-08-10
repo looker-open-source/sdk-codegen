@@ -26,8 +26,14 @@
 
 import * as OAS from 'openapi3-ts';
 import md5 from 'blueimp-md5';
+import isEmpty from 'lodash/isEmpty';
 import type { HttpMethod } from '@looker/sdk-rtl';
-import { ResponseMode, StatusCode, responseMode } from '@looker/sdk-rtl';
+import {
+  DelimArray,
+  ResponseMode,
+  responseMode,
+  StatusCode,
+} from '@looker/sdk-rtl';
 
 /**
  * Handy specification references
@@ -69,6 +75,94 @@ export enum TypeOfType {
   /** This is an EnumType */
   Complex,
 }
+
+/**
+ * parses a fields string, creating nested keys if found
+ * @param fields comma and parenthesis delimited field group expression
+ */
+export const parseFields = (fields: FieldsSpec) => {
+  function splitConsideringParentheses(segment: string) {
+    // builds a list of the parts of a request string from the input
+    const parts: string[] = [];
+    // builds up a new string of what constitutes a building block of the query
+    let currentPart = '';
+    // openParentheses emulates a stack to determine where
+    // a parenthesis ends
+    let openParentheses = 0;
+    let lastChar = '';
+    function charCheck(char: string) {
+      if (lastChar === char) {
+        if (char === '(' || (char === ')' && openParentheses < 0)) {
+          throw new Error(
+            `Unexpected '${char}' after '${currentPart}' parens:${openParentheses}`
+          );
+        }
+      }
+    }
+
+    for (const char of segment) {
+      if (char === '(') {
+        openParentheses++;
+        charCheck(char);
+      } else if (char === ')') {
+        openParentheses--;
+        charCheck(char);
+      }
+
+      // if we hit a comma and the open parenthesis stack is empty, take the
+      // currentPart and reset it, otherwise, continue building
+      if (char === ',' && openParentheses === 0) {
+        parts.push(currentPart);
+        currentPart = '';
+      } else {
+        currentPart += char;
+      }
+      lastChar = char;
+    }
+    if (currentPart) {
+      parts.push(currentPart);
+    }
+    return parts;
+  }
+
+  // helper function to recursively parse each segment of the string
+  function parseSegment(segment: string) {
+    const parts = splitConsideringParentheses(segment);
+    const result: ArgValues = {};
+
+    parts.forEach((part) => {
+      // split each part into a key and any nested string
+      let [key, nestedStr] = part.split(/\((.+)/);
+      key = key.trim();
+      if (nestedStr) {
+        nestedStr = nestedStr.slice(0, -1); // Remove the closing parenthesis
+        if (key in result) {
+          throw new Error(`Duplicate '${key}' found`);
+        }
+        result[key] = parseSegment(nestedStr);
+      } else {
+        const p = part.trim();
+        if (p in result) {
+          throw new Error(`Duplicate '${key}' found`);
+        }
+        if (p) result[p] = p;
+      }
+    });
+    return result;
+  }
+
+  if (typeof fields === 'string') {
+    fields = fields.trim();
+    if (!fields) return {};
+    return parseSegment(fields);
+  } else if (Array.isArray(fields)) {
+    const result: ArgValues = {};
+    fields.forEach((f) => (result[f] = f));
+    return result;
+  }
+  // Presume this is already a keyed collection and just return it
+  return fields;
+};
 
 /**
  * Get the enum for the class of the type
@@ -136,7 +230,7 @@ export const camelCase = (value: string) => {
 export const titleCase = (value: string) => {
   if (!value) return '';
   value = camelCase(value);
-  return value[0].toLocaleUpperCase() + value.substr(1);
+  return value[0].toLocaleUpperCase() + value.substring(1);
 };
 
 /**
@@ -150,7 +244,7 @@ export const titleCase = (value: string) => {
 export const firstCase = (value: string) => {
   if (!value) return '';
   value = camelCase(value);
-  return value[0].toLocaleUpperCase() + value.substr(1).toLocaleLowerCase();
+  return value[0].toLocaleUpperCase() + value.substring(1).toLocaleLowerCase();
 };
 
 export interface IModel {}
@@ -442,6 +536,34 @@ export enum MetaType {
   Enumerated = 'Enumerated',
 }
 
+/**
+ * Options for type and property mocks
+ */
+export interface ITypeMock {
+  /**
+   * Optional names of properties to be mocked for the return value.
+   *
+   * **Default behavior**: For a property that is *not required*,
+   * the default return value is `undefined`. If the property is
+   * *required* and is a complex type, the required properties of the
+   * type will be returned by calling `Type.mock()` with exactly the
+   * same parameters provided to `Property.mock()`, where the same
+   * rules apply. If `undefined` is returned to `Type.mock()` from
+   * its `Property.mock()` calls, that property will be omitted
+   * from the `Type.mock()` return. If `*` is used, all fields in
+   * a complex type are mocked.
+   */
+  fields?: FieldsSpec;
+  /**
+   * optional override value(s) for mocked data return. Can be either a single
+   * string value, or a hash of key/value items
+   */
+  override?: string | ArgValues | ((response: any, mocked: any) => any);
+  httpCode?: number;
+  /** true to use "empty" values for the mock data. Applies to all mocked values */
+  empty?: boolean;
+}
+
 export interface IType extends ISymbol {
   /**
    * key/value collection of properties for this type
@@ -552,6 +674,12 @@ export interface IType extends ISymbol {
    */
   metaType: MetaType;
 
+  /** Generate consistent, correctly typed mock data for the property */
+  mock(options?: ITypeMock): any | undefined;
+
+  /** Generate typed, consistent, correctly typed mock data for the property */
+  mockType<T>(options?: ITypeMock): T;
+
   /**
    * Hacky workaround for inexplicable instanceof failures
    * @param {string} className name of class to check
@@ -610,7 +738,7 @@ export interface IMethodResponse {
  * @param types to categorize
  */
 export const tagTypes = (api: ApiModel, types: TypeList) => {
-  const typeTags: any = {};
+  const typeTags: ArgValues = {};
   Object.entries(types)
     .filter(([_, type]) => !type.intrinsic)
     .forEach(([name, type]) => {
@@ -670,6 +798,8 @@ class MethodResponse implements IMethodResponse {
   }
 }
 
+export type FieldsSpec = string | string[] | ArgValues;
+
 export interface IProperty extends ITypedSymbol {
   required: boolean;
   nullable: boolean;
@@ -677,6 +807,13 @@ export interface IProperty extends ITypedSymbol {
   readOnly: boolean;
   writeOnly: boolean;
   deprecated: boolean;
+  schema: OAS.SchemaObject;
+  owner: string;
+
+  /**
+   * Generate consistent, correctly typed mock data for the property
+   */
+  mock(options?: ITypeMock): any | undefined;
 
   searchString(include: SearchCriteria): string;
 
@@ -787,6 +924,120 @@ class SchemadSymbol extends Symbol implements ISchemadSymbol {
   }
 }
 
+/**
+ * return the mocked data value for the type, or undefined
+ * @param propertyName of property
+ * @param type to mock
+ * @param override optional data to coerce to type
+ * @param empty true to make mocked value an "empty" value. Defaults to false
+ */
+const mockData = (
+  propertyName: string,
+  type: IType,
+  override?: any,
+  empty = false
+) => {
+  const over = override !== undefined;
+  const stringer = (mocked: string) => {
+    if (over) {
+      return String(override);
+    }
+    if (empty) {
+      return '';
+    }
+    return mocked;
+  };
+  const inter = (mocked: number) => {
+    if (over) {
+      return parseInt(override, 10);
+    }
+    if (empty) {
+      return 0;
+    }
+    return mocked;
+  };
+
+  const floater = (mocked: number) => {
+    if (over) {
+      return parseFloat(override);
+    }
+    if (empty) {
+      return 0.0;
+    }
+    return mocked;
+  };
+
+  const dater = (mocked: Date) => {
+    if (over) {
+      return new Date(override);
+    }
+    if (empty) {
+      return new Date(1970, 0, 1);
+    }
+    return mocked;
+  };
+
+  const booler = (mocked: boolean) => {
+    if (over) {
+      return Boolean(override);
+    }
+    if (empty) {
+      return false;
+    }
+    return mocked;
+  };
+
+  const anyer = (mocked: any) => {
+    if (over) {
+      return override;
+    }
+    if (empty) {
+      return {};
+    }
+    return mocked;
+  };
+
+  const dataMocks: Record<string, { value: any }> = {
+    any: { value: anyer({ a: 1, b: 'two' }) },
+    boolean: { value: booler(true) },
+    byte: { value: stringer('A') },
+    binary: { value: stringer('01') },
+    date: { value: dater(new Date(2024, 0, 5)) },
+    datetime: { value: dater(new Date(2024, 0, 5, 1)) },
+    double: { value: floater(2.2) },
+    float: { value: floater(1.1) },
+    int32: { value: inter(32) },
+    int64: { value: inter(64) },
+    integer: { value: inter(1) },
+    number: { value: inter(2) },
+    object: { value: anyer({ [propertyName]: 1 }) },
+    password: { value: stringer('*') },
+    string: { value: stringer(propertyName) },
+    uri: { value: stringer(`urn:${propertyName}`) },
+    url: { value: stringer(`https://${propertyName}.mock`) },
+    email: { value: stringer(`${propertyName}@example.com`) },
+    uuid: { value: stringer(`uuid-${propertyName}`) },
+    hostname: { value: stringer(`https://${propertyName}`) },
+    ipv4: { value: stringer('127.0.0.1') },
+    ipv6: { value: stringer('::1') },
+    void: { value: over ? override : null },
+  };
+
+  return dataMocks[type.name] ?? override;
+};
+
+/**
+ * Default mocking options for type and property mock
+ * @param options to default for mock() call
+ */
+const mockOptions = (options: ITypeMock) => {
+  return {
+    fields: options?.fields ? options?.fields : '',
+    override: options?.override ?? {},
+    empty: options?.empty ?? false,
+  };
+};
+
 export class Property extends SchemadSymbol implements IProperty {
   required = false;
   nullable = false;
@@ -801,7 +1052,7 @@ export class Property extends SchemadSymbol implements IProperty {
     required: string[] = []
   ) {
     super(name, type, schema, owner);
-    this.required = !!(
+    this.required = Boolean(
       required.includes(name) || schema.required?.includes(name)
     );
     this.nullable =
@@ -811,7 +1062,7 @@ export class Property extends SchemadSymbol implements IProperty {
   }
 
   private tag(key: string) {
-    return this[key as keyof Property] ? ` ${key}` : '';
+    return (this as ArgValues)[key] ? ` ${key}` : '';
   }
 
   summary() {
@@ -849,6 +1100,57 @@ export class Property extends SchemadSymbol implements IProperty {
     return (
       rx.test(this.searchString(criteria)) || this.type.search(rx, criteria)
     );
+  }
+
+  mock(options: ITypeMock = {}): any | undefined {
+    const { fields, override, empty } = mockOptions(options);
+    if (isEmpty(fields) && !this.required) return undefined; // don't mock by default
+    const keys = parseFields(fields);
+    if (!isEmpty(fields) && !(this.name in keys)) return undefined; // not requested, don't mock
+    const type = this.type;
+
+    if (type.elementType) {
+      // This is a structure with nested types.
+      const el = type.elementType;
+      // Default intrinsic string type values to the name of this type
+      const over =
+        el.intrinsic && (el as unknown as IntrinsicType).isString
+          ? this.name
+          : override;
+      // if fields spec does not have a list of keys for this property, treat nested scope as defaulting
+      const scope =
+        typeof keys[this.name] === 'string' ? undefined : keys[this.name];
+      // For complex types, just pass the mock call on down
+      const opts = el.intrinsic
+        ? { fields: el.name, override: over }
+        : { fields: scope, override };
+      const val = el.mock(opts);
+      switch (type.className) {
+        case 'ArrayType':
+          return empty ? [] : [val];
+        case 'HashType':
+          return empty ? {} : { a: val };
+        case 'DelimArrayType':
+          return empty ? new DelimArray([]) : new DelimArray([val]);
+        case 'EnumType':
+          const et = type as unknown as EnumType;
+          return et.values[0];
+      }
+      throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`);
+    }
+
+    if (type.name) {
+      if (type.intrinsic) {
+        const data = mockData(this.name, type, undefined, empty);
+        return data.value;
+      }
+      // This property is a complex type so only use overrides with default
+      // property names typically don't match the case of the type name, and
+      // matching must be case-sensitive
+      return type.mock({ override, empty });
+    } else {
+      throw new Error('Cannot output a nameless type.');
+    }
   }
 }
 
@@ -894,7 +1196,7 @@ export class Parameter extends SchemadSymbol implements IParameter {
   }
 
   private tag(key: string) {
-    return this[key as keyof Parameter] ? ` ${key}` : '';
+    return (this as ArgValues)[key] ? ` ${key}` : '';
   }
 
   signature() {
@@ -1418,7 +1720,7 @@ export class Method extends SchemadSymbol implements IMethod {
 
   get errorResponses() {
     // TODO use lodash?
-    const result = [];
+    const result: IMethodResponse[] = [];
     const map = new Map();
     for (const item of this.responses.filter((r) => r.statusCode >= 400)) {
       if (!map.has(item.type.name)) {
@@ -1627,7 +1929,7 @@ export class Type implements IType {
         const type = prop.type;
         const w = type.intrinsic ? undefined : api.mayGetWriteableType(type);
         if (w) {
-          const writeProp = { ...prop, ...{ type: w } };
+          const writeProp = { ...prop, type: w };
           result.push(writeProp);
         } else {
           result.push(prop);
@@ -1701,6 +2003,82 @@ export class Type implements IType {
     return !!Object.entries(this.properties).find(
       ([, prop]) => prop.hasSpecialNeeds
     );
+  }
+
+  mock(options: ITypeMock = {}): any | undefined {
+    const { fields, override, empty } = mockOptions(options);
+    const isArray = this.className === 'ArrayType';
+    const props = isArray
+      ? (this as unknown as ArrayType).elementType.properties
+      : this.properties;
+    // prune invalid keys from the override list
+    if (typeof override !== 'string' && typeof override !== 'function') {
+      for (const key in override) {
+        if (!(key in props)) {
+          delete override[key];
+        } else {
+          // coerce override type for scalar properties
+          const prop = props[key];
+          if (prop.type.intrinsic) {
+            override[key] = mockData(
+              key,
+              prop.type,
+              override[key],
+              empty
+            ).value;
+          }
+        }
+      }
+    }
+    let keys = parseFields(fields);
+    if (keys['*']) {
+      // add all properties, but default their nested fields if they'd have any
+      const merge: ArgValues = {};
+      Object.keys(props).forEach((k) => (merge[k] = k));
+      keys = { ...merge, ...keys };
+      delete keys['*'];
+    } else if (isEmpty(fields)) {
+      // default to required properties
+      for (const [key, prop] of Object.entries(props)) {
+        if (prop.required) {
+          keys[key] = key;
+        }
+      }
+    }
+
+    const overKeys =
+      typeof override === 'string' || typeof override === 'function';
+
+    let result: ArgValues = {};
+    Object.keys(keys).forEach((k) => {
+      const v = keys[k];
+      const over = overKeys ? undefined : override[k];
+      const p = props[k];
+      // Check if there are nested values for this key or just the default
+      const scope = v === k ? k : { [k]: v };
+      if (!p) {
+        throw new Error(`No property named '${k}' in type ${this.name}`);
+      }
+      // const nested = p.schema?.items?.$ref;
+
+      const val =
+        typeof override === 'function'
+          ? p.mock({ fields: scope, empty })
+          : p.mock({ fields: scope, override: over, empty });
+      if (val !== undefined) {
+        result[k] = val;
+      }
+    });
+    if (typeof override !== 'string') {
+      // we've got keyed values to apply to the type
+      result = { ...result, ...override };
+    }
+    return result;
+  }
+
+  mockType<T>(options: ITypeMock = {}): T {
+    const result = this.mock(options);
+    return result as unknown as T;
   }
 
   load(api: ApiModel): void {
@@ -1840,6 +2218,14 @@ export class ArrayType extends Type {
   get readOnly() {
     return this.elementType.readOnly;
   }
+
+  mock(options: ITypeMock = {}): any | undefined {
+    const result = super.mock(options);
+    if (Array.isArray(result)) {
+      return result;
+    }
+    return [result];
+  }
 }
 
 export class EnumType extends Type implements IEnumType {
@@ -1899,6 +2285,10 @@ export class EnumType extends Type implements IEnumType {
     // register the enum hash value
     enums[hash] = this;
     return name;
+  }
+
+  override mock(options: ITypeMock = {}): any | undefined {
+    return this.values[0];
   }
 
   searchString(criteria: SearchCriteria): string {
@@ -1965,12 +2355,15 @@ export class IntrinsicType extends Type {
   static stringTypes = [
     'string',
     'uri',
+    'url',
     'email',
     'uuid',
-    'uri',
     'hostname',
+    'password',
     'ipv4',
     'ipv6',
+    'byte',
+    'binary',
   ];
 
   isString = false;
@@ -1979,6 +2372,12 @@ export class IntrinsicType extends Type {
     super({}, name);
     this.customType = '';
     this.isString = IntrinsicType.stringTypes.includes(name);
+  }
+
+  override mock(options: ITypeMock = {}) {
+    const { override, empty } = mockOptions(options);
+    if (this.isString && typeof override === 'string') return override;
+    return mockData(this.name, this, undefined, empty).value;
   }
 
   get className(): string {
@@ -2089,15 +2488,19 @@ export class ApiModel implements ISymbolTable, IApiModel {
       'int64',
       'boolean',
       'object',
-      'uri',
       'float',
       'double',
       'void',
+      'date',
       'datetime',
+      'binary',
+      'byte',
       'email',
       'uuid',
       'uri',
+      'url',
       'hostname',
+      'password',
       'ipv4',
       'ipv6',
       'any',
@@ -2271,8 +2674,9 @@ export class ApiModel implements ISymbolTable, IApiModel {
       if (schema.type === 'integer' && schema.format === 'int64') {
         return this.types.int64;
       }
-      if (schema.type === 'number' && schema.format) {
-        return this.types[schema.format];
+      if (schema.type === 'number') {
+        if (schema.format) return this.types[schema.format];
+        return this.types.float;
       }
       if (schema.type === 'array' && schema.items) {
         const resolved = this.resolveType(schema.items);
@@ -2425,8 +2829,8 @@ export class ApiModel implements ISymbolTable, IApiModel {
     return this.enumTypes;
   }
 
-  makeWriteableType(type: IType): WriteType {
-    const writer = new WriteType(this, type);
+  makeWriteableType(type: IType) {
+    const writer: WriteType = new WriteType(this, type);
     this.types[writer.name] = writer;
     return writer;
   }
@@ -2654,7 +3058,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
     if (!OAS.isReferenceObject(obj)) {
       const req = obj as OAS.RequestBodyObject;
       if ('required' in req) {
-        required = req.required!;
+        required = Boolean(req.required);
       }
     }
 
@@ -2679,6 +3083,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
       // TODO need to understand headers or links
       Object.keys(content).forEach((key) => {
         const media = content[key];
+        /* eslint-disable @typescript-eslint/no-non-null-assertion */
         const schema = media.schema!;
         if (OAS.isReferenceObject(schema)) {
           type = this.resolveType(schema.$ref);
@@ -2695,7 +3100,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
         description: '',
         location: strBody,
         name: strBody,
-        required: required, // TODO capture description
+        required, // TODO capture description
       } as Partial<IParameter>,
       type
     );

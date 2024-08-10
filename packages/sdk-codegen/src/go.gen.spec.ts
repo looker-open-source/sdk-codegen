@@ -24,7 +24,7 @@
 
  */
 
-import { TestConfig } from './testUtils';
+import { TestConfig } from '@looker/sdk-codegen-utils';
 import type { IEnumType } from './sdkModels';
 import { GoGen } from './go.gen';
 

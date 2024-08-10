@@ -25,7 +25,7 @@
  */
 
 import { DelimArray } from '@looker/sdk-rtl';
-import { TestConfig } from './testUtils';
+import { TestConfig } from '@looker/sdk-codegen-utils';
 import type { IEnumType } from './sdkModels';
 import { KotlinGen } from './kotlin.gen';
 
@@ -80,8 +80,7 @@ enum class PermissionType : Serializable {
       expect(actual).toEqual(expected);
     });
 
-    // TODO a different PR broke this, need to fix it
-    it.skip('special needs', () => {
+    it('special needs', () => {
       const type = apiTestModel.types.HyphenType;
       const actual = gen.declareType('', type);
       const expected = `/**
@@ -138,7 +137,7 @@ data class HyphenType (
       const inputs = { look_id: 17 };
       const method = apiTestModel.methods.look;
       const actual = gen.makeTheCall(method, inputs);
-      const expected = `val response = await sdk.ok<LookWithQuery>(sdk.look(17))`;
+      const expected = `val response = await sdk.ok<LookWithQuery>(sdk.look("17"))`;
       expect(actual).toEqual(expected);
     });
 
@@ -147,7 +146,7 @@ data class HyphenType (
       const method = apiTestModel.methods.look;
       const actual = gen.makeTheCall(method, inputs);
       const expected = `val response = await sdk.ok<LookWithQuery>(sdk.look(
-    17, fields = "${fields}"))`;
+    "17", fields = "${fields}"))`;
       expect(actual).toEqual(expected);
     });
 
@@ -165,7 +164,7 @@ data class HyphenType (
       const method = apiTestModel.methods.update_look;
       const actual = gen.makeTheCall(method, inputs);
       const expected = `val response = await sdk.ok<LookWithQuery>(sdk.update_look(
-    17, WriteLookWithQuery(
+    "17", WriteLookWithQuery(
         title = "test title",
         description = "gen test",
         query = WriteQuery(
@@ -182,7 +181,7 @@ data class HyphenType (
       const method = apiTestModel.methods.run_look;
       const actual = gen.makeTheCall(method, inputs);
       const expected = `val response = await sdk.ok<String>(sdk.run_look(
-    17, "png", limit = 10))`;
+    "17", "png", limit = 10))`;
       expect(actual).toEqual(expected);
     });
 
@@ -197,7 +196,7 @@ data class HyphenType (
       const actual = gen.makeTheCall(method, inputs);
       const expected = `val response = await sdk.ok<QueryTask>(sdk.create_query_task(
     WriteCreateQueryTask(
-        query_id = 1,
+        query_id = "1",
         result_format = ResultFormat.csv
     )))`;
       expect(actual).toEqual(expected);
@@ -210,7 +209,7 @@ data class HyphenType (
       const method = apiTestModel.methods.all_users;
       const actual = gen.makeTheCall(method, inputs);
       const expected = `val response = await sdk.ok<Array<User>>(sdk.all_users(
-    ids = DelimArray<Long>(arrayOf(1,2,3))))`;
+    ids = DelimArray<String>(arrayOf(1,2,3))))`;
       expect(actual).toEqual(expected);
     });
 
@@ -261,7 +260,7 @@ data class HyphenType (
                     )
                 ),
                 name = "first query",
-                query_id = 1
+                query_id = "1"
             ),
             MergeQuerySourceQuery(
                 merge_fields = arrayOf(
@@ -271,7 +270,7 @@ data class HyphenType (
                     )
                 ),
                 name = "second query",
-                query_id = 2
+                query_id = "2"
             )
         )
     ), fields = "id,user_id,title,description"))`;
@@ -345,14 +344,17 @@ data class HyphenType (
         refresh_interval = "",
         folder = WriteFolderBase(),
         title = "",
+        slug = "",
+        preferred_viewer = "",
+        alert_sync_with_dashboard_filter_enabled = false,
         background_color = "",
         crossfilter_enabled = false,
         deleted = false,
+        filters_bar_collapsed = false,
         load_configuration = "",
         lookml_link_id = "",
         show_filters_bar = false,
         show_title = false,
-        slug = "",
         folder_id = "",
         text_tile_text_color = "",
         tile_background_color = "",
@@ -366,8 +368,7 @@ data class HyphenType (
             tile_background_color = "",
             tile_shadow = false,
             key_color = ""
-        ),
-        preferred_viewer = ""
+        )
     )))`;
       const actual = gen.makeTheCall(method, inputs);
       expect(actual).toEqual(expected);
@@ -436,7 +437,7 @@ data class HyphenType (
             )
         ),
         name = "first query",
-        query_id = 1
+        query_id = "1"
     )`;
         const actual = gen.assignType(gen.indentStr, type, inputs);
         expect(actual).toEqual(expected);
@@ -479,7 +480,7 @@ data class HyphenType (
             )
         ),
         name = "first query",
-        query_id = 1
+        query_id = "1"
     ),
     MergeQuerySourceQuery(
         merge_fields = arrayOf(
@@ -489,7 +490,7 @@ data class HyphenType (
             )
         ),
         name = "second query",
-        query_id = 2
+        query_id = "2"
     )
 )`;
         expect(actual).toEqual(expected);

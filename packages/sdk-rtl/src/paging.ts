@@ -25,12 +25,12 @@
  */
 
 import type {
+  IAPIMethods,
   IRawResponse,
   ITransportSettings,
   SDKResponse,
 } from './transport';
 import { sdkOk } from './transport';
-import type { IAPIMethods } from './apiMethods';
 import type { BaseTransport } from './baseTransport';
 
 export const LinkHeader = 'Link';

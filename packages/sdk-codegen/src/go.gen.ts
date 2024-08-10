@@ -46,7 +46,7 @@ const align = (str: string, size: number): string => {
  * AlignColumnWriter writes text aligned by column width, it is used to keep the go struct formatting consistent.
  */
 class AlignColumnWriter {
-  private rows: Array<string[]> = [];
+  private rows: string[][] = [];
   private sizes: number[] = [];
 
   writeRow(...cols: string[]) {
@@ -320,7 +320,7 @@ export class GoGen extends CodeGen {
   httpPath(path: string, prefix?: string) {
     prefix = prefix || '';
     if (path.indexOf('{') >= 0) {
-      const vars: Array<string> = [];
+      const vars: string[] = [];
       const str = path.replace(/({.*?})/g, (group) => {
         vars.push(
           this.accessor(group.replace('{', '').replace('}', ''), prefix)

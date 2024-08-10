@@ -40,6 +40,7 @@ export class LookerExtensionSDK {
    */
   static create40Client(hostConnection: ExtensionHostApi): Looker40SDK {
     return _LookerExtensionSDK.createClient(
+      hostConnection,
       new SdkConnection(hostConnection, ApiVersion.sdk40),
       Looker40SDK
     );

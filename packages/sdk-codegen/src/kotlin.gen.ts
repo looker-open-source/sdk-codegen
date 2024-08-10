@@ -26,15 +26,15 @@
 
 import type {
   Arg,
-  ArgValues,
   EnumValueType,
   IMethod,
   IParameter,
   IProperty,
   IType,
+  ArgValues,
 } from './sdkModels';
-import { EnumType, describeParam, mayQuote } from './sdkModels';
-import type { CodeAssignment, IMappedType } from './codeGen';
+import { describeParam, EnumType, mayQuote } from './sdkModels';
+import type { IMappedType, CodeAssignment } from './codeGen';
 import { CodeGen, commentBlock } from './codeGen';
 
 export class KotlinGen extends CodeGen {
