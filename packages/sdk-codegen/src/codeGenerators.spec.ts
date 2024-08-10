@@ -24,8 +24,8 @@
 
  */
 
-import { findGenerator, getCodeGenerator } from './codeGenerators';
 import { TestConfig } from '@looker/sdk-codegen-utils';
+import { findGenerator, getCodeGenerator } from './codeGenerators';
 const config = TestConfig();
 
 describe('generator factory', () => {

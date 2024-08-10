@@ -24,9 +24,9 @@
 
  */
 import * as fs from 'fs';
-import type { IExampleMine } from './exampleInfo';
-import { findExamples, findExampleLanguages } from './exampleInfo';
 import { testFile } from '@looker/sdk-codegen-utils';
+import type { IExampleMine } from './exampleInfo';
+import { findExampleLanguages, findExamples } from './exampleInfo';
 
 const fileName = testFile('examplesIndex.json');
 const file = fs.readFileSync(fileName, { encoding: 'utf-8' });

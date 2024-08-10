@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import type { IMine, IFileCall, SourceLink } from './exampleInfo';
+import type { IFileCall, IMine, SourceLink } from './exampleInfo';
 import { permaLink } from './exampleInfo';
 import type { KeyedCollection } from './sdkModels';
 

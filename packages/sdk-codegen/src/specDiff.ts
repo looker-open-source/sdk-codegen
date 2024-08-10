@@ -25,14 +25,14 @@
  */
 
 import type {
+  ArgValues,
+  IApiModel,
   IMethod,
+  IParameter,
   IType,
   KeyedCollection,
-  IApiModel,
-  IParameter,
-  ArgValues,
 } from './sdkModels';
-import { EnumType, ArrayType } from './sdkModels';
+import { ArrayType, EnumType } from './sdkModels';
 
 interface ITypeDelta {
   lhs: string;

@@ -28,6 +28,7 @@ import type { Readable } from 'readable-stream';
 import type {
   Authenticator,
   HttpMethod,
+  IRawRequest,
   IRawResponse,
   IRequestHeaders,
   IRequestProps,
@@ -35,21 +36,20 @@ import type {
   ITransportSettings,
   SDKResponse,
   Values,
-  IRawRequest,
 } from './transport';
 import {
   LookerAppId,
   ResponseMode,
   agentPrefix,
+  canRetry,
+  initResponse,
   isErrorLike,
+  pauseForRetry,
   responseMode,
+  retryError,
+  retryWait,
   safeBase64,
   trace,
-  initResponse,
-  pauseForRetry,
-  canRetry,
-  retryWait,
-  retryError,
 } from './transport';
 import { BaseTransport } from './baseTransport';
 import type { ICryptoHash } from './cryptoHash';

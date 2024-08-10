@@ -25,7 +25,7 @@
  */
 
 import fetchMock, { enableFetchMocks } from 'jest-fetch-mock';
-import { sdkOk, StatusCode } from './transport';
+import { StatusCode, sdkOk } from './transport';
 import * as sleepUtils from './sleep';
 import { BrowserTransport } from './browserTransport';
 import type {

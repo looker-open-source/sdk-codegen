@@ -29,6 +29,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import pick from 'lodash/pick';
 import type { OperationObject } from 'openapi3-ts';
 
+import { TestConfig, testFile } from '@looker/sdk-codegen-utils';
 import type { DiffRow, TypeDelta } from './specDiff';
 import {
   compareParams,
@@ -37,9 +38,8 @@ import {
   includeDiffs,
   startCount,
 } from './specDiff';
-import { testFile, TestConfig } from '@looker/sdk-codegen-utils';
-import type { PropertyList, IApiModel, IMethod } from './sdkModels';
-import { Type, Method, Parameter, ApiModel } from './sdkModels';
+import type { IApiModel, IMethod, PropertyList } from './sdkModels';
+import { ApiModel, Method, Parameter, Type } from './sdkModels';
 
 const config = TestConfig();
 const apiTestModel = config.apiTestModel;

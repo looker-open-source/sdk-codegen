@@ -32,8 +32,8 @@ import type {
   IProperty,
   IType,
 } from './sdkModels';
-import { describeParam, EnumType, strBody } from './sdkModels';
-import type { IMappedType, CodeAssignment } from './codeGen';
+import { EnumType, describeParam, strBody } from './sdkModels';
+import type { CodeAssignment, IMappedType } from './codeGen';
 import { CodeGen } from './codeGen';
 
 export class PythonGen extends CodeGen {

@@ -27,26 +27,27 @@
 import { readFileSync } from 'fs';
 import type * as OAS from 'openapi3-ts';
 import { TestConfig, testFile } from '@looker/sdk-codegen-utils';
+import type { IDictionary, Password, Url } from '@looker/sdk-rtl';
 import {
   ApiModel,
   ArrayType,
+  DelimArrayType,
+  EnumType,
+  IntrinsicType,
+  MetaType,
+  Method,
+  SearchAll,
+  SearchCriterion,
   camelCase,
   criteriaToSet,
-  DelimArrayType,
   describeParam,
-  EnumType,
   firstCase,
-  IntrinsicType,
   isSpecialName,
   keyValues,
   mayQuote,
-  MetaType,
-  Method,
   methodRefs,
-  safeName,
   parseFields,
-  SearchAll,
-  SearchCriterion,
+  safeName,
   setToCriteria,
   titleCase,
   typeRefs,
@@ -61,7 +62,6 @@ import type {
   SearchCriterionTerm,
   TagList,
 } from './sdkModels';
-import type { IDictionary, Url, Password } from '@looker/sdk-rtl';
 /* eslint-disable jest/no-disabled-tests */
 
 describe('sdkModels', () => {

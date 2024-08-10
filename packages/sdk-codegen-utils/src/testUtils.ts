@@ -25,12 +25,12 @@
  */
 
 import * as fs from 'fs';
-import * as yaml from 'js-yaml';
 import path from 'path';
+import * as yaml from 'js-yaml';
 import isEmpty from 'lodash/isEmpty';
 import { findRootSync } from '@manypkg/find-root';
 import type { IApiConfig } from '@looker/sdk-node';
-import { ApiConfig, readEnvConfig, NodeSession } from '@looker/sdk-node';
+import { ApiConfig, NodeSession, readEnvConfig } from '@looker/sdk-node';
 import { ApiModel, upgradeSpecObject } from '@looker/sdk-codegen';
 import type {
   IAPIMethods,
@@ -40,7 +40,7 @@ import type {
 } from '@looker/sdk-rtl';
 import { ApiSettings } from '@looker/sdk-rtl';
 /* eslint-disable no-restricted-imports */
-import { functionalSdk40, Looker40SDK } from '@looker/sdk';
+import { Looker40SDK, functionalSdk40 } from '@looker/sdk';
 
 const utf8 = 'utf-8';
 
@@ -119,7 +119,7 @@ export const mockApiSpec = () => {
  * Fully resolved path to a file in the codegen test data folder
  * @param filename to path. It can start with folders
  */
-export const testFile = (filename: string = ''): string =>
+export const testFile = (filename = ''): string =>
   path.join(rootFile('/packages/sdk-codegen-utils/data/'), filename);
 
 export class MeldSettings extends ApiSettings {

@@ -31,8 +31,8 @@ import type { HttpMethod } from '@looker/sdk-rtl';
 import {
   DelimArray,
   ResponseMode,
-  responseMode,
   StatusCode,
+  responseMode,
 } from '@looker/sdk-rtl';
 
 /**

@@ -39,9 +39,9 @@ import {
   ArrayType,
   EnumType,
   HashType,
+  Type,
   mayQuote,
   strBody,
-  Type,
 } from './sdkModels';
 import type { SpecItem } from './specConverter';
 

@@ -24,8 +24,8 @@
 
  */
 
-import { CSharpGen } from './csharp.gen';
 import { TestConfig } from '@looker/sdk-codegen-utils';
+import { CSharpGen } from './csharp.gen';
 
 const config = TestConfig();
 const apiTestModel = config.apiTestModel;
