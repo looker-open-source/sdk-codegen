@@ -47,9 +47,9 @@ export class LookerExtensionSDK {
   }
 
   /**
-   * Creates a [[LookerSDK]] object.
+   * Creates a [[LookerSDK]] 4.0 object.
    */
-  static createClient(hostConnection: ExtensionHostApi) {
+  static createClient(hostConnection: ExtensionHostApi): Looker40SDK {
     return LookerExtensionSDK.create40Client(hostConnection);
   }
 }

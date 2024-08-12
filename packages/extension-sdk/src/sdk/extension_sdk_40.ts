@@ -39,9 +39,11 @@ export class LookerExtensionSDK40 {
    * @param hostConnection extension host API
    */
   static createClient(hostConnection: ExtensionHostApi): Looker40SDK {
+    const connection = new SdkConnection(hostConnection, ApiVersion.sdk40);
     return _LookerExtensionSDK.createClient(
-      new SdkConnection(hostConnection, ApiVersion.sdk40),
-      Looker40SDK
+      connection,
+      Looker40SDK,
+        hostConnection.
     );
   }
 }

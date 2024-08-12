@@ -25,33 +25,38 @@
  */
 
 import nodeCrypto from 'crypto';
-import type { Request } from 'request';
-import rq from 'request';
-
-import rp from 'request-promise-native';
+import fetch from 'node-fetch';
 import type { Readable } from 'readable-stream';
 import { PassThrough } from 'readable-stream';
-import { StatusCodeError } from 'request-promise-native/errors';
-import {
-  BaseTransport,
-  LookerAppId,
-  ResponseMode,
-  agentPrefix,
-  defaultTimeout,
-  responseMode,
-  safeBase64,
-  trace,
-} from '@looker/sdk-rtl';
+
 import type {
   Authenticator,
   HttpMethod,
-  ICryptoHash,
-  IRawResponse,
-  IRequestHeaders,
   ISDKError,
   ITransportSettings,
   SDKResponse,
   Values,
+  IRequestHeaders,
+  IRawResponse,
+  ICryptoHash,
+  IRawRequest,
+  IRequestProps,
+} from '@looker/sdk-rtl';
+import {
+  defaultTimeout,
+  responseMode,
+  ResponseMode,
+  trace,
+  LookerAppId,
+  agentPrefix,
+  safeBase64,
+  BaseTransport,
+  canRetry,
+  initResponse,
+  pauseForRetry,
+  retryWait,
+  retryError,
+  BrowserTransport,
 } from '@looker/sdk-rtl';
 
 const utf8 = 'utf8';
@@ -68,7 +73,6 @@ const asString = (value: any): string => {
 
 export class NodeCryptoHash implements ICryptoHash {
   secureRandom(byteCount: number): string {
-    // TODO update this to Node 18
     return nodeCrypto.randomBytes(byteCount).toString('hex');
   }
 
@@ -79,13 +83,93 @@ export class NodeCryptoHash implements ICryptoHash {
   }
 }
 
-export type RequestOptions = rq.RequiredUriUrl &
-  rp.RequestPromiseOptions &
-  rq.OptionsWithUrl;
-
 export class NodeTransport extends BaseTransport {
   constructor(protected readonly options: ITransportSettings) {
     super(options);
+  }
+
+  /**
+   * Standard retry where requests will be retried based on configured
+   * transport settings. If retry is not enabled, no requests will be retried
+   *
+   * This default retry pattern implements the "full" jitter algorithm
+   * documented in https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/
+   *
+   * @param request options for HTTP request
+   */
+  async retry(request: IRawRequest): Promise<IRawResponse> {
+    const { method, path, queryParams, body, authenticator, options } = request;
+    const newOpts = { ...this.options, options };
+    const requestPath = this.makeUrl(path, newOpts, queryParams);
+    const waiter = newOpts.waitHandler || retryWait;
+    const props = await this.initRequest(
+      method,
+      requestPath,
+      body,
+      authenticator,
+      newOpts
+    );
+    let response = initResponse(method, requestPath);
+    // TODO assign to MaxTries when retry is opt-out instead of opt-in
+    const maxRetries = newOpts.maxTries ?? 1; // MaxTries
+    let attempt = 1;
+    while (attempt <= maxRetries) {
+      const req = fetch(
+        props.url,
+        props // Weird package issues with unresolved imports for RequestInit :(
+      );
+
+      const requestStarted = Date.now();
+      const res = await req;
+      const responseCompleted = Date.now();
+
+      // Start tracking the time it takes to convert the response
+      const started = BrowserTransport.markStart(
+        BrowserTransport.markName(requestPath)
+      );
+      const contentType = String(res.headers.get('content-type'));
+      const mode = responseMode(contentType);
+      const responseBody =
+        mode === ResponseMode.binary ? await res.blob() : await res.text();
+      if (!('fromRequest' in newOpts)) {
+        // Request will markEnd, so don't mark the end here
+        BrowserTransport.markEnd(requestPath, started);
+      }
+      const headers: { [key: string]: any } = {};
+      res.headers.forEach((value, key) => (headers[key] = value));
+      response = {
+        method,
+        url: requestPath,
+        body: responseBody,
+        contentType,
+        statusCode: res.status,
+        statusMessage: res.statusText,
+        startMark: started,
+        headers,
+        requestStarted,
+        responseCompleted,
+        ok: true,
+      };
+      response.ok = this.ok(response);
+      if (canRetry(response.statusCode) && attempt < maxRetries) {
+        const result = await pauseForRetry(request, response, attempt, waiter);
+        if (result.response === 'cancel') {
+          if (result.reason) {
+            response.statusMessage = result.reason;
+          }
+          break;
+        } else if (result.response === 'error') {
+          if (result.reason) {
+            response.statusMessage = result.reason;
+          }
+          return retryError(response);
+        }
+      } else {
+        break;
+      }
+      attempt++;
+    }
+    return response;
   }
 
   async rawRequest(
@@ -96,76 +180,15 @@ export class NodeTransport extends BaseTransport {
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
   ): Promise<IRawResponse> {
-    const init: RequestOptions = await this.initRequest(
+    const response = await this.retry({
       method,
       path,
       queryParams,
       body,
       authenticator,
-      options
-    );
-    const req = rp(init).promise();
-    let rawResponse: IRawResponse;
-
-    const requestStarted = Date.now();
-    let responseCompleted;
-    try {
-      const res = await req;
-      responseCompleted = Date.now();
-      const resTyped = res as rq.Response;
-      rawResponse = {
-        method,
-        url: resTyped.url || init.url.toString() || '',
-        body: await resTyped.body,
-        contentType: String(resTyped.headers['content-type']),
-        ok: true,
-        statusCode: resTyped.statusCode,
-        statusMessage: resTyped.statusMessage,
-        headers: res.headers,
-        requestStarted,
-        responseCompleted,
-      };
-      // Update OK with response statusCode check
-      rawResponse.ok = this.ok(rawResponse);
-    } catch (e: any) {
-      let statusMessage = `${method} ${path}`;
-      let statusCode = 404;
-      let contentType = 'text';
-      let body;
-      responseCompleted = Date.now();
-      if (e instanceof StatusCodeError) {
-        statusCode = e.statusCode;
-        if (e.error instanceof Buffer) {
-          body = asString(e.error);
-          statusMessage += `: ${statusCode}`;
-        } else if (e.error instanceof Object) {
-          // Capture error object as body
-          body = e.error;
-          statusMessage += `: ${e.message}`;
-          // Clarify the error message
-          body.message = statusMessage;
-          contentType = 'application/json';
-        }
-      } else if (e.error instanceof Buffer) {
-        body = asString(e.error);
-      } else {
-        body = JSON.stringify(e);
-        contentType = 'application/json';
-      }
-      rawResponse = {
-        method,
-        url: init.url.toString(),
-        body,
-        contentType,
-        ok: false,
-        statusCode,
-        statusMessage,
-        headers: {},
-        requestStarted,
-        responseCompleted,
-      };
-    }
-    return this.observer ? this.observer(rawResponse) : rawResponse;
+      options,
+    });
+    return this.observer ? this.observer(response) : response;
   }
 
   async parseResponse<TSuccess, TError>(res: IRawResponse) {
@@ -195,7 +218,7 @@ export class NodeTransport extends BaseTransport {
           if (!(result instanceof Object)) {
             result = JSON.parse(result.toString());
           }
-        } catch (err) {
+        } catch (err: any) {
           error = err;
         }
       } else if (!error) {
@@ -205,7 +228,7 @@ export class NodeTransport extends BaseTransport {
     } else {
       try {
         result = Buffer.from(result ?? '').toString('binary');
-      } catch (err) {
+      } catch (err: any) {
         error = err;
       }
     }
@@ -247,31 +270,6 @@ export class NodeTransport extends BaseTransport {
     }
   }
 
-  /**
-   * Http method dispatcher from general-purpose request properties
-   * @param props
-   * @returns {request.Request}
-   */
-  protected requestor(props: RequestOptions): Request {
-    const method = props.method?.toString().toUpperCase() as HttpMethod;
-    switch (method) {
-      case 'GET':
-        return rq.get(props);
-      case 'PUT':
-        return rq.put(props);
-      case 'POST':
-        return rq.post(props);
-      case 'PATCH':
-        return rq.patch(props);
-      case 'DELETE':
-        return rq.put(props);
-      case 'HEAD':
-        return rq.head(props);
-      default:
-        return rq.get(props);
-    }
-  }
-
   async stream<TSuccess>(
     callback: (readable: Readable) => Promise<TSuccess>,
     method: HttpMethod,
@@ -282,11 +280,14 @@ export class NodeTransport extends BaseTransport {
     options?: Partial<ITransportSettings>
   ): Promise<TSuccess> {
     const stream = new PassThrough();
+    // TODO we're not using streaming internally but this should be fixed eventually
+    // @ts-ignore
     const returnPromise = callback(stream);
+    const newOpts = { ...this.options, ...options };
+    const requestPath = this.makeUrl(path, newOpts, queryParams);
     const init = await this.initRequest(
       method,
-      path,
-      queryParams,
+      requestPath,
       body,
       authenticator,
       options
@@ -294,50 +295,9 @@ export class NodeTransport extends BaseTransport {
 
     const streamPromise = new Promise<void>((resolve, reject) => {
       trace(`[stream] beginning stream via download url`, init);
-      let hasResolved = false;
-      const req = this.requestor(init);
-
-      req
-        .on('error', (err) => {
-          if (hasResolved && (err as any).code === 'ECONNRESET') {
-            trace(
-              'ignoring ECONNRESET that occurred after streaming finished',
-              init
-            );
-          } else {
-            trace('streaming error', err);
-            reject(err);
-          }
-        })
-        .on('finish', () => {
-          trace(`[stream] streaming via download url finished`, init);
-        })
-        .on('socket', (socket) => {
-          trace(`[stream] setting keepalive on socket`, init);
-          socket.setKeepAlive(true);
-        })
-        .on('abort', () => {
-          trace(`[stream] streaming via download url aborted`, init);
-        })
-        .on('response', () => {
-          trace(`[stream] got response from download url`, init);
-        })
-        .on('close', () => {
-          trace(`[stream] request stream closed`, init);
-        })
-        .pipe(stream)
-        .on('error', (err) => {
-          trace(`[stream] PassThrough stream error`, err);
-          reject(err);
-        })
-        .on('finish', () => {
-          trace(`[stream] PassThrough stream finished`, init);
-          resolve();
-          hasResolved = true;
-        })
-        .on('close', () => {
-          trace(`[stream] PassThrough stream closed`, init);
-        });
+      // see original streaming implementation in
+      // https://github.com/looker-open-source/sdk-codegen/blob/98a687e45b42512bc7fb45727d4eec2c86e8372d/packages/sdk-node/src/nodeTransport.ts#L298
+      return Promise.reject(new Error('Need to reimplement'));
     });
 
     const results = await Promise.all([returnPromise, streamPromise]);
@@ -346,8 +306,8 @@ export class NodeTransport extends BaseTransport {
 
   /**
    * should the request verify SSL?
-   * @param {Partial<ITransportSettings>} options Defaults to the instance options values
-   * @returns {boolean} true if the request should require full SSL verification
+   * @param options Defaults to the instance options values
+   * @returns true if the request should require full SSL verification
    */
   verifySsl(options?: Partial<ITransportSettings>) {
     if (!options) options = this.options;
@@ -356,8 +316,7 @@ export class NodeTransport extends BaseTransport {
 
   /**
    * Request timeout in seconds
-   * @param {Partial<ITransportSettings>} options Defaults to the instance options values
-   * @returns {number | undefined}
+   * @param options Defaults to the instance options values
    */
   timeout(options?: Partial<ITransportSettings>): number {
     if (!options) options = this.options;
@@ -368,139 +327,42 @@ export class NodeTransport extends BaseTransport {
   private async initRequest(
     method: HttpMethod,
     path: string,
-    queryParams?: any,
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
   ) {
+    const agentTag = options?.agentTag || agentPrefix;
     options = options ? { ...this.options, ...options } : this.options;
-    if (!options.agentTag) {
-      options.agentTag = agentPrefix;
+    const headers: IRequestHeaders = { [LookerAppId]: agentTag };
+    if (options && options.headers) {
+      Object.entries(options.headers).forEach(([key, val]) => {
+        headers[key] = val;
+      });
     }
-    const headers: IRequestHeaders = {
-      [LookerAppId]: options.agentTag,
-      ...options.headers,
-    };
 
-    const requestPath = this.makeUrl(path, options, queryParams);
-    let init: RequestOptions = {
-      body: body || undefined,
-      encoding: null,
-      headers: headers,
-      json: body && typeof body !== 'string',
-      // null = requests are returned as binary so `Content-Type` dictates response format
+    // Make sure an empty body is undefined
+    if (!body) {
+      body = undefined;
+    } else {
+      if (typeof body !== 'string') {
+        body = JSON.stringify(body);
+        headers['Content-Type'] = 'application/json';
+      }
+    }
+    // TODO need to add timeout back
+    let props: IRequestProps = {
+      body,
+      credentials: 'same-origin',
+      headers,
       method,
-
-      rejectUnauthorized: this.verifySsl(options),
-
-      // If body is a string, pass as is
-      resolveWithFullResponse: true,
-
-      timeout: this.timeout(options) * 1000,
-      url: requestPath,
+      url: path,
     };
-    if ('encoding' in options) init.encoding = options.encoding;
 
     if (authenticator) {
-      // Automatic authentication process for the request
-      init = await authenticator(init);
+      // Add authentication information to the request
+      props = await authenticator(props);
     }
-    return init;
-  }
 
-  // /**
-  //  * A streaming helper for the "json" data format. It handles automatically parsing
-  //  * the JSON in a streaming fashion. You just need to implement a function that will
-  //  * be called for each row.
-  //  *
-  //  * ```ts
-  //  * await request.streamJson((row) => {
-  //  *   // This will be called for each row of data
-  //  * })
-  //  * ```
-  //  *
-  //  * @returns A promise that will be resolved when streaming is complete.
-  //  * @param onRow A function that will be called for each streamed row, with the row as the first argument.
-  //  */
-  // async streamJson(onRow: (row: { [fieldName: string]: any }) => void) {
-  //   return new Promise<void>((resolve, reject) => {
-  //     let rows = 0
-  //     this.stream(async (readable) => {
-  //       oboe(readable)
-  //         .node("![*]", this.safeOboe(readable, reject, (row) => {
-  //           rows++
-  //           onRow(row)
-  //         }))
-  //         .done(() => {
-  //           winston.info(`[streamJson] oboe reports done`, {...this.logInfo, rows})
-  //         })
-  //     }).then(() => {
-  //       winston.info(`[streamJson] complete`, {...this.logInfo, rows})
-  //       resolve()
-  //     }).catch((error) => {
-  //       // This error should not be logged as it could come from an action
-  //       // which might decide to include user information in the error message
-  //       winston.info(`[streamJson] reported an error`, {...this.logInfo, rows})
-  //       reject(error)
-  //     })
-  //   })
-  // }
-  //
-  // /**
-  //  * A streaming helper for the "json_detail" data format. It handles automatically parsing
-  //  * the JSON in a streaming fashion. You can implement an `onFields` callback to get
-  //  * the field metadata, and an `onRow` callback for each row of data.
-  //  *
-  //  * ```ts
-  //  * await request.streamJsonDetail({
-  //  *   onFields: (fields) => {
-  //  *     // This will be called when fields are available
-  //  *   },
-  //  *   onRow: (row) => {
-  //  *     // This will be called for each row of data
-  //  *   },
-  //  * })
-  //  * ```
-  //  *
-  //  * @returns A promise that will be resolved when streaming is complete.
-  //  * @param callbacks An object consisting of several callbacks that will be called
-  //  * when various parts of the data are parsed.
-  //  */
-  // async streamJsonDetail(callbacks: {
-  //   onRow: (row: JsonDetailRow) => void,
-  //   onFields?: (fields: Fieldset) => void,
-  //   onRanAt?: (iso8601string: string) => void,
-  // }) {
-  //   return new Promise<void>((resolve, reject) => {
-  //     let rows = 0
-  //     this.stream(async (readable) => {
-  //       oboe(readable)
-  //         .node("data.*", this.safeOboe(readable, reject, (row) => {
-  //           rows++
-  //           callbacks.onRow(row)
-  //         }))
-  //         .node("!.fields", this.safeOboe(readable, reject, (fields) => {
-  //           if (callbacks.onFields) {
-  //             callbacks.onFields(fields)
-  //           }
-  //         }))
-  //         .node("!.ran_at", this.safeOboe(readable, reject, (ranAt) => {
-  //           if (callbacks.onRanAt) {
-  //             callbacks.onRanAt(ranAt)
-  //           }
-  //         }))
-  //         .done(() => {
-  //           winston.info(`[streamJsonDetail] oboe reports done`, {...this.logInfo, rows})
-  //         })
-  //     }).then(() => {
-  //       winston.info(`[streamJsonDetail] complete`, {...this.logInfo, rows})
-  //       resolve()
-  //     }).catch((error) => {
-  //       // This error should not be logged as it could come from an action
-  //       // which might decide to include user information in the error message
-  //       winston.info(`[streamJsonDetail] reported an error`, {...this.logInfo, rows})
-  //       reject(error)
-  //     })
-  //   })
-  // }
+    return props;
+  }
 }

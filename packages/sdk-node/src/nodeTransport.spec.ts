@@ -25,7 +25,7 @@
  */
 
 import type { IRawResponse, ITransportSettings } from '@looker/sdk-rtl';
-import { StatusCode } from '@looker/sdk-rtl';
+import { sdkOk, StatusCode } from '@looker/sdk-rtl';
 import { NodeCryptoHash, NodeTransport } from './nodeTransport';
 
 describe('NodeTransport', () => {
@@ -106,6 +106,64 @@ describe('NodeTransport', () => {
     });
   });
 
+  it('does a standard get', async () => {
+    const xp = new NodeTransport({} as ITransportSettings);
+    const actual = await xp.rawRequest('GET', 'https://example.com');
+    expect(actual).toBeDefined();
+  });
+
+  it('just deserializes JSON into an object', async () => {
+    const xp = new NodeTransport({} as ITransportSettings);
+    interface ITestModel {
+      string1: string;
+      num1: number;
+      string2: string;
+      num2: number;
+      string3: string;
+      num3: number;
+    }
+    const resp: IRawResponse = {
+      headers: {},
+      url: '',
+      ok: true,
+      contentType: 'application/json',
+      statusCode: 200,
+      statusMessage: 'mock',
+      method: 'GET',
+      body: `
+{
+  "string1": 1,
+  "num1": 1,
+  "string2": "2",
+  "num2": "2",
+  "string3": "3",
+  "num3": 3,
+  "string4": "4",
+  "num4": 4
+}
+`,
+      requestStarted: 1000,
+      responseCompleted: 2000,
+    };
+    const untyped: any = await sdkOk(xp.parseResponse(resp));
+    expect(untyped.string1).toBe(1);
+    expect(untyped.num1).toBe(1);
+    expect(untyped.string2).toBe('2');
+    expect(untyped.num2).toBe('2');
+    expect(untyped.string3).toBe('3');
+    expect(untyped.num3).toBe(3);
+    expect(untyped.string4).toBe('4');
+    expect(untyped.num4).toBe(4);
+    const typed = await sdkOk(xp.parseResponse<ITestModel, ISDKError>(resp));
+    expect(typed.string1).toBe(1);
+    expect(typed.num1).toBe(1);
+    expect(typed.string2).toBe('2');
+    expect(typed.num2).toBe('2');
+    expect(typed.string3).toBe('3');
+    expect(typed.num3).toBe(3);
+    expect((typed as any).string4).toBe('4');
+    expect((typed as any).num4).toBe(4);
+  });
   describe('NodeCryptoHash', () => {
     test('secureRandom', () => {
       const hasher = new NodeCryptoHash();
