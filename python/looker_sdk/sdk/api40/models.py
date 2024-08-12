@@ -2192,6 +2192,8 @@ class CredentialsEmail(model.Model):
         logged_in_at: Timestamp for most recent login using credential
         password_reset_url: Url with one-time use secret token that the user can use to reset password
         account_setup_url: Url with one-time use secret token that the user can use to setup account
+        password_reset_url_expired: Is password_reset_url expired or not present?
+        account_setup_url_expired: Is account_setup_url expired or not present?
         type: Short name for the type of this kind of credential
         url: Link to get this item
         user_url: Link to get this user
@@ -2206,6 +2208,8 @@ class CredentialsEmail(model.Model):
     logged_in_at: Optional[str] = None
     password_reset_url: Optional[str] = None
     account_setup_url: Optional[str] = None
+    password_reset_url_expired: Optional[bool] = None
+    account_setup_url_expired: Optional[bool] = None
     type: Optional[str] = None
     url: Optional[str] = None
     user_url: Optional[str] = None
@@ -2222,6 +2226,8 @@ class CredentialsEmail(model.Model):
         logged_in_at: Optional[str] = None,
         password_reset_url: Optional[str] = None,
         account_setup_url: Optional[str] = None,
+        password_reset_url_expired: Optional[bool] = None,
+        account_setup_url_expired: Optional[bool] = None,
         type: Optional[str] = None,
         url: Optional[str] = None,
         user_url: Optional[str] = None
@@ -2235,6 +2241,8 @@ class CredentialsEmail(model.Model):
         self.logged_in_at = logged_in_at
         self.password_reset_url = password_reset_url
         self.account_setup_url = account_setup_url
+        self.password_reset_url_expired = password_reset_url_expired
+        self.account_setup_url_expired = account_setup_url_expired
         self.type = type
         self.url = url
         self.user_url = user_url
@@ -2253,6 +2261,8 @@ class CredentialsEmailSearch(model.Model):
         logged_in_at: Timestamp for most recent login using credential
         password_reset_url: Url with one-time use secret token that the user can use to reset password
         account_setup_url: Url with one-time use secret token that the user can use to setup account
+        password_reset_url_expired: Is password_reset_url expired or not present?
+        account_setup_url_expired: Is account_setup_url expired or not present?
         type: Short name for the type of this kind of credential
         url: Link to get this item
         user_url: Link to get this user
@@ -2267,6 +2277,8 @@ class CredentialsEmailSearch(model.Model):
     logged_in_at: Optional[str] = None
     password_reset_url: Optional[str] = None
     account_setup_url: Optional[str] = None
+    password_reset_url_expired: Optional[bool] = None
+    account_setup_url_expired: Optional[bool] = None
     type: Optional[str] = None
     url: Optional[str] = None
     user_url: Optional[str] = None
@@ -2283,6 +2295,8 @@ class CredentialsEmailSearch(model.Model):
         logged_in_at: Optional[str] = None,
         password_reset_url: Optional[str] = None,
         account_setup_url: Optional[str] = None,
+        password_reset_url_expired: Optional[bool] = None,
+        account_setup_url_expired: Optional[bool] = None,
         type: Optional[str] = None,
         url: Optional[str] = None,
         user_url: Optional[str] = None
@@ -2296,6 +2310,8 @@ class CredentialsEmailSearch(model.Model):
         self.logged_in_at = logged_in_at
         self.password_reset_url = password_reset_url
         self.account_setup_url = account_setup_url
+        self.password_reset_url_expired = password_reset_url_expired
+        self.account_setup_url_expired = account_setup_url_expired
         self.type = type
         self.url = url
         self.user_url = user_url
@@ -3581,6 +3597,7 @@ class DBConnection(model.Model):
         username: Username for server authentication
         password: (Write-Only) Password for server authentication
         uses_oauth: Whether the connection uses OAuth for authentication.
+        uses_instance_oauth: Whether the integration uses the oauth instance account.
         certificate: (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
         file_type: (Write-Only) Certificate keyfile type - .json or .p12
         database: Database name
@@ -3588,6 +3605,8 @@ class DBConnection(model.Model):
         query_timezone: Timezone to use in queries
         schema: Schema name
         max_connections: Maximum number of concurrent connection to use
+        max_queries: Maximum number of concurrent queries to begin on this connection
+        max_queries_per_user: Maximum number of concurrent queries per user to begin on this connection
         max_billing_gigabytes: Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
         ssl: Use SSL/TLS when connecting to server
         verify_ssl: Verify the SSL
@@ -3616,9 +3635,14 @@ class DBConnection(model.Model):
         disable_context_comment: When disable_context_comment is true comment will not be added to SQL
         oauth_application_id: An External OAuth Application to use for authenticating to the database
         always_retry_failed_builds: When true, error PDTs will be retried every regenerator cycle
+        uses_application_default_credentials: Whether the connection should authenticate with the Application Default Credentials of the host environment (limited to GCP and certain dialects).
+        impersonated_service_account: An alternative Service Account to use for querying datasets (used primarily with `uses_application_default_credentials`) (limited to GCP and certain dialects).
         cost_estimate_enabled: When true, query cost estimate will be displayed in explore.
         pdt_api_control_enabled: PDT builds on this connection can be kicked off and cancelled via API.
         connection_pooling: Enable database connection pooling.
+        default_bq_connection: When true, represents that this connection is the default BQ connection.
+        bq_storage_project_id: The project id of the default BigQuery storage project.
+        bq_roles_verified: When true, represents that all project roles have been verified.
     """
 
     can: Optional[MutableMapping[str, bool]] = None
@@ -3631,6 +3655,7 @@ class DBConnection(model.Model):
     username: Optional[str] = None
     password: Optional[str] = None
     uses_oauth: Optional[bool] = None
+    uses_instance_oauth: Optional[bool] = None
     certificate: Optional[str] = None
     file_type: Optional[str] = None
     database: Optional[str] = None
@@ -3638,6 +3663,8 @@ class DBConnection(model.Model):
     query_timezone: Optional[str] = None
     schema: Optional[str] = None
     max_connections: Optional[int] = None
+    max_queries: Optional[int] = None
+    max_queries_per_user: Optional[int] = None
     max_billing_gigabytes: Optional[str] = None
     ssl: Optional[bool] = None
     verify_ssl: Optional[bool] = None
@@ -3666,9 +3693,14 @@ class DBConnection(model.Model):
     disable_context_comment: Optional[bool] = None
     oauth_application_id: Optional[str] = None
     always_retry_failed_builds: Optional[bool] = None
+    uses_application_default_credentials: Optional[bool] = None
+    impersonated_service_account: Optional[str] = None
     cost_estimate_enabled: Optional[bool] = None
     pdt_api_control_enabled: Optional[bool] = None
     connection_pooling: Optional[bool] = None
+    default_bq_connection: Optional[bool] = None
+    bq_storage_project_id: Optional[str] = None
+    bq_roles_verified: Optional[bool] = None
 
     def __init__(
         self,
@@ -3683,6 +3715,7 @@ class DBConnection(model.Model):
         username: Optional[str] = None,
         password: Optional[str] = None,
         uses_oauth: Optional[bool] = None,
+        uses_instance_oauth: Optional[bool] = None,
         certificate: Optional[str] = None,
         file_type: Optional[str] = None,
         database: Optional[str] = None,
@@ -3690,6 +3723,8 @@ class DBConnection(model.Model):
         query_timezone: Optional[str] = None,
         schema: Optional[str] = None,
         max_connections: Optional[int] = None,
+        max_queries: Optional[int] = None,
+        max_queries_per_user: Optional[int] = None,
         max_billing_gigabytes: Optional[str] = None,
         ssl: Optional[bool] = None,
         verify_ssl: Optional[bool] = None,
@@ -3718,9 +3753,14 @@ class DBConnection(model.Model):
         disable_context_comment: Optional[bool] = None,
         oauth_application_id: Optional[str] = None,
         always_retry_failed_builds: Optional[bool] = None,
+        uses_application_default_credentials: Optional[bool] = None,
+        impersonated_service_account: Optional[str] = None,
         cost_estimate_enabled: Optional[bool] = None,
         pdt_api_control_enabled: Optional[bool] = None,
-        connection_pooling: Optional[bool] = None
+        connection_pooling: Optional[bool] = None,
+        default_bq_connection: Optional[bool] = None,
+        bq_storage_project_id: Optional[str] = None,
+        bq_roles_verified: Optional[bool] = None
     ):
         self.can = can
         self.name = name
@@ -3732,6 +3772,7 @@ class DBConnection(model.Model):
         self.username = username
         self.password = password
         self.uses_oauth = uses_oauth
+        self.uses_instance_oauth = uses_instance_oauth
         self.certificate = certificate
         self.file_type = file_type
         self.database = database
@@ -3739,6 +3780,8 @@ class DBConnection(model.Model):
         self.query_timezone = query_timezone
         self.schema = schema
         self.max_connections = max_connections
+        self.max_queries = max_queries
+        self.max_queries_per_user = max_queries_per_user
         self.max_billing_gigabytes = max_billing_gigabytes
         self.ssl = ssl
         self.verify_ssl = verify_ssl
@@ -3767,9 +3810,14 @@ class DBConnection(model.Model):
         self.disable_context_comment = disable_context_comment
         self.oauth_application_id = oauth_application_id
         self.always_retry_failed_builds = always_retry_failed_builds
+        self.uses_application_default_credentials = uses_application_default_credentials
+        self.impersonated_service_account = impersonated_service_account
         self.cost_estimate_enabled = cost_estimate_enabled
         self.pdt_api_control_enabled = pdt_api_control_enabled
         self.connection_pooling = connection_pooling
+        self.default_bq_connection = default_bq_connection
+        self.bq_storage_project_id = bq_storage_project_id
+        self.bq_roles_verified = bq_roles_verified
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -9954,6 +10002,7 @@ class RunningQueries(model.Model):
         status: Status description
         runtime: Number of seconds elapsed running the Query
         sql: SQL text of the query as run
+        sql_interface_sql: SQL text of the SQL Interface query as run
     """
 
     can: Optional[MutableMapping[str, bool]] = None
@@ -9977,6 +10026,7 @@ class RunningQueries(model.Model):
     status: Optional[str] = None
     runtime: Optional[float] = None
     sql: Optional[str] = None
+    sql_interface_sql: Optional[str] = None
 
     def __init__(
         self,
@@ -10001,7 +10051,8 @@ class RunningQueries(model.Model):
         message: Optional[str] = None,
         status: Optional[str] = None,
         runtime: Optional[float] = None,
-        sql: Optional[str] = None
+        sql: Optional[str] = None,
+        sql_interface_sql: Optional[str] = None
     ):
         self.can = can
         self.id = id
@@ -10024,6 +10075,7 @@ class RunningQueries(model.Model):
         self.status = status
         self.runtime = runtime
         self.sql = sql
+        self.sql_interface_sql = sql_interface_sql
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -10869,6 +10921,8 @@ class Setting(model.Model):
         embed_config:
         login_notification_enabled: Login notification enabled
         login_notification_text: Login notification text
+        dashboard_auto_refresh_restriction: Toggle Dashboard Auto Refresh restriction
+        dashboard_auto_refresh_minimum_interval: Minimum time interval for dashboard element automatic refresh. Examples: (30 seconds, 1 minute)
     """
 
     instance_config: Optional["InstanceConfig"] = None
@@ -10893,6 +10947,8 @@ class Setting(model.Model):
     embed_config: Optional["EmbedConfig"] = None
     login_notification_enabled: Optional[bool] = None
     login_notification_text: Optional[str] = None
+    dashboard_auto_refresh_restriction: Optional[bool] = None
+    dashboard_auto_refresh_minimum_interval: Optional[str] = None
 
     def __init__(
         self,
@@ -10918,7 +10974,9 @@ class Setting(model.Model):
         embed_enabled: Optional[bool] = None,
         embed_config: Optional["EmbedConfig"] = None,
         login_notification_enabled: Optional[bool] = None,
-        login_notification_text: Optional[str] = None
+        login_notification_text: Optional[str] = None,
+        dashboard_auto_refresh_restriction: Optional[bool] = None,
+        dashboard_auto_refresh_minimum_interval: Optional[str] = None
     ):
         self.instance_config = instance_config
         self.extension_framework_enabled = extension_framework_enabled
@@ -10942,6 +11000,10 @@ class Setting(model.Model):
         self.embed_config = embed_config
         self.login_notification_enabled = login_notification_enabled
         self.login_notification_text = login_notification_text
+        self.dashboard_auto_refresh_restriction = dashboard_auto_refresh_restriction
+        self.dashboard_auto_refresh_minimum_interval = (
+            dashboard_auto_refresh_minimum_interval
+        )
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -11867,7 +11929,7 @@ class User(model.Model):
         looker_versions: Array of strings representing the Looker versions that this user has used (this only goes back as far as '3.54.0')
         models_dir_validated: User's dev workspace has been checked for presence of applicable production projects
         personal_folder_id: ID of user's personal folder
-        presumed_looker_employee: User is identified as an employee of Looker
+        presumed_looker_employee: (DEPRECATED) User is identified as an employee of Looker
         role_ids: Array of ids of the roles for this user
         sessions: Active sessions
         ui_state: Per user dictionary of undocumented state information owned by the Looker UI.
@@ -13010,7 +13072,7 @@ class WriteCreateQueryTask(model.Model):
 class WriteCredentialsEmail(model.Model):
     """
         Dynamic writeable type for CredentialsEmail removes:
-    can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, type, url, user_url
+    can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, password_reset_url_expired, account_setup_url_expired, type, url, user_url
 
         Attributes:
             email: EMail address used for user login
@@ -13453,7 +13515,7 @@ class WriteDatagroup(model.Model):
 class WriteDBConnection(model.Model):
     """
         Dynamic writeable type for DBConnection removes:
-    can, dialect, snippets, pdts_enabled, uses_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed
+    can, dialect, snippets, pdts_enabled, uses_oauth, uses_instance_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, bq_roles_verified
 
         Attributes:
             name: Name of the connection. Also used as the unique identifier
@@ -13468,6 +13530,8 @@ class WriteDBConnection(model.Model):
             query_timezone: Timezone to use in queries
             schema: Schema name
             max_connections: Maximum number of concurrent connection to use
+            max_queries: Maximum number of concurrent queries to begin on this connection
+            max_queries_per_user: Maximum number of concurrent queries per user to begin on this connection
             max_billing_gigabytes: Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
             ssl: Use SSL/TLS when connecting to server
             verify_ssl: Verify the SSL
@@ -13490,9 +13554,12 @@ class WriteDBConnection(model.Model):
             disable_context_comment: When disable_context_comment is true comment will not be added to SQL
             oauth_application_id: An External OAuth Application to use for authenticating to the database
             always_retry_failed_builds: When true, error PDTs will be retried every regenerator cycle
+            uses_application_default_credentials: Whether the connection should authenticate with the Application Default Credentials of the host environment (limited to GCP and certain dialects).
+            impersonated_service_account: An alternative Service Account to use for querying datasets (used primarily with `uses_application_default_credentials`) (limited to GCP and certain dialects).
             cost_estimate_enabled: When true, query cost estimate will be displayed in explore.
             pdt_api_control_enabled: PDT builds on this connection can be kicked off and cancelled via API.
             connection_pooling: Enable database connection pooling.
+            bq_storage_project_id: The project id of the default BigQuery storage project.
     """
 
     name: Optional[str] = None
@@ -13507,6 +13574,8 @@ class WriteDBConnection(model.Model):
     query_timezone: Optional[str] = None
     schema: Optional[str] = None
     max_connections: Optional[int] = None
+    max_queries: Optional[int] = None
+    max_queries_per_user: Optional[int] = None
     max_billing_gigabytes: Optional[str] = None
     ssl: Optional[bool] = None
     verify_ssl: Optional[bool] = None
@@ -13528,9 +13597,12 @@ class WriteDBConnection(model.Model):
     disable_context_comment: Optional[bool] = None
     oauth_application_id: Optional[str] = None
     always_retry_failed_builds: Optional[bool] = None
+    uses_application_default_credentials: Optional[bool] = None
+    impersonated_service_account: Optional[str] = None
     cost_estimate_enabled: Optional[bool] = None
     pdt_api_control_enabled: Optional[bool] = None
     connection_pooling: Optional[bool] = None
+    bq_storage_project_id: Optional[str] = None
 
     def __init__(
         self,
@@ -13547,6 +13619,8 @@ class WriteDBConnection(model.Model):
         query_timezone: Optional[str] = None,
         schema: Optional[str] = None,
         max_connections: Optional[int] = None,
+        max_queries: Optional[int] = None,
+        max_queries_per_user: Optional[int] = None,
         max_billing_gigabytes: Optional[str] = None,
         ssl: Optional[bool] = None,
         verify_ssl: Optional[bool] = None,
@@ -13568,9 +13642,12 @@ class WriteDBConnection(model.Model):
         disable_context_comment: Optional[bool] = None,
         oauth_application_id: Optional[str] = None,
         always_retry_failed_builds: Optional[bool] = None,
+        uses_application_default_credentials: Optional[bool] = None,
+        impersonated_service_account: Optional[str] = None,
         cost_estimate_enabled: Optional[bool] = None,
         pdt_api_control_enabled: Optional[bool] = None,
-        connection_pooling: Optional[bool] = None
+        connection_pooling: Optional[bool] = None,
+        bq_storage_project_id: Optional[str] = None
     ):
         self.name = name
         self.host = host
@@ -13584,6 +13661,8 @@ class WriteDBConnection(model.Model):
         self.query_timezone = query_timezone
         self.schema = schema
         self.max_connections = max_connections
+        self.max_queries = max_queries
+        self.max_queries_per_user = max_queries_per_user
         self.max_billing_gigabytes = max_billing_gigabytes
         self.ssl = ssl
         self.verify_ssl = verify_ssl
@@ -13605,9 +13684,12 @@ class WriteDBConnection(model.Model):
         self.disable_context_comment = disable_context_comment
         self.oauth_application_id = oauth_application_id
         self.always_retry_failed_builds = always_retry_failed_builds
+        self.uses_application_default_credentials = uses_application_default_credentials
+        self.impersonated_service_account = impersonated_service_account
         self.cost_estimate_enabled = cost_estimate_enabled
         self.pdt_api_control_enabled = pdt_api_control_enabled
         self.connection_pooling = connection_pooling
+        self.bq_storage_project_id = bq_storage_project_id
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -15087,6 +15169,8 @@ class WriteSetting(model.Model):
             email_domain_allowlist: An array of Email Domain Allowlist of type string for Scheduled Content
             embed_cookieless_v2: (DEPRECATED) Use embed_config.embed_cookieless_v2 instead. If embed_config.embed_cookieless_v2 is specified, it overrides this value.
             embed_config:
+            dashboard_auto_refresh_restriction: Toggle Dashboard Auto Refresh restriction
+            dashboard_auto_refresh_minimum_interval: Minimum time interval for dashboard element automatic refresh. Examples: (30 seconds, 1 minute)
     """
 
     extension_framework_enabled: Optional[bool] = None
@@ -15106,6 +15190,8 @@ class WriteSetting(model.Model):
     email_domain_allowlist: Optional[Sequence[str]] = None
     embed_cookieless_v2: Optional[bool] = None
     embed_config: Optional["EmbedConfig"] = None
+    dashboard_auto_refresh_restriction: Optional[bool] = None
+    dashboard_auto_refresh_minimum_interval: Optional[str] = None
 
     def __init__(
         self,
@@ -15126,7 +15212,9 @@ class WriteSetting(model.Model):
         override_warnings: Optional[bool] = None,
         email_domain_allowlist: Optional[Sequence[str]] = None,
         embed_cookieless_v2: Optional[bool] = None,
-        embed_config: Optional["EmbedConfig"] = None
+        embed_config: Optional["EmbedConfig"] = None,
+        dashboard_auto_refresh_restriction: Optional[bool] = None,
+        dashboard_auto_refresh_minimum_interval: Optional[str] = None
     ):
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
@@ -15145,6 +15233,10 @@ class WriteSetting(model.Model):
         self.email_domain_allowlist = email_domain_allowlist
         self.embed_cookieless_v2 = embed_cookieless_v2
         self.embed_config = embed_config
+        self.dashboard_auto_refresh_restriction = dashboard_auto_refresh_restriction
+        self.dashboard_auto_refresh_minimum_interval = (
+            dashboard_auto_refresh_minimum_interval
+        )
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -15270,7 +15362,7 @@ class WriteUser(model.Model):
 
         Attributes:
             credentials_email: Dynamic writeable type for CredentialsEmail removes:
-    can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, type, url, user_url
+    can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, password_reset_url_expired, account_setup_url_expired, type, url, user_url
             first_name: First name
             home_folder_id: ID string for user's home folder
             is_disabled: Account has been disabled

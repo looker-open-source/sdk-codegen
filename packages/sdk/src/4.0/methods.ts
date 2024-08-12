@@ -25,7 +25,7 @@
  */
 
 /**
- * 464 API methods
+ * 465 API methods
  */
 
 import type {
@@ -3489,6 +3489,8 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *  - allow_user_timezones
    *  - custom_welcome_email
    *  - data_connector_default_enabled
+   *  - dashboard_auto_refresh_restriction
+   *  - dashboard_auto_refresh_minimum_interval
    *  - extension_framework_enabled
    *  - extension_load_url_enabled
    *  - instance_config
@@ -3531,6 +3533,8 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *  - allow_user_timezones
    *  - custom_welcome_email
    *  - data_connector_default_enabled
+   *  - dashboard_auto_refresh_restriction
+   *  - dashboard_auto_refresh_minimum_interval
    *  - extension_framework_enabled
    *  - extension_load_url_enabled
    *  - instance_config
@@ -3997,6 +4001,34 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   > {
     return this.post<IExternalOauthApplication, IError | IValidationError>(
       '/external_oauth_applications',
+      null,
+      body,
+      options
+    );
+  }
+
+  /**
+   * ### Update an OAuth Application's client secret.
+   *
+   * This is an OAuth Application which Looker uses to access external systems.
+   *
+   * PATCH /external_oauth_applications/{client_id} -> IExternalOauthApplication
+   *
+   * @param client_id The client ID of the OAuth App to update
+   * @param body Partial<IWriteExternalOauthApplication>
+   * @param options one-time API call overrides
+   *
+   */
+  async update_external_oauth_application(
+    client_id: string,
+    body: Partial<IWriteExternalOauthApplication>,
+    options?: Partial<ITransportSettings>
+  ): Promise<
+    SDKResponse<IExternalOauthApplication, IError | IValidationError>
+  > {
+    client_id = encodeParam(client_id);
+    return this.patch<IExternalOauthApplication, IError | IValidationError>(
+      `/external_oauth_applications/${client_id}`,
       null,
       body,
       options

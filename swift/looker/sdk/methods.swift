@@ -25,7 +25,7 @@
  */
 
 /**
- * 464 API methods
+ * 465 API methods
  */
 
 
@@ -2848,6 +2848,8 @@ open class LookerSDK: APIMethods {
      *  - allow_user_timezones
      *  - custom_welcome_email
      *  - data_connector_default_enabled
+     *  - dashboard_auto_refresh_restriction
+     *  - dashboard_auto_refresh_minimum_interval
      *  - extension_framework_enabled
      *  - extension_load_url_enabled
      *  - instance_config
@@ -2886,6 +2888,8 @@ open class LookerSDK: APIMethods {
      *  - allow_user_timezones
      *  - custom_welcome_email
      *  - data_connector_default_enabled
+     *  - dashboard_auto_refresh_restriction
+     *  - dashboard_auto_refresh_minimum_interval
      *  - extension_framework_enabled
      *  - extension_load_url_enabled
      *  - instance_config
@@ -3285,6 +3289,29 @@ open class LookerSDK: APIMethods {
         options: ITransportSettings? = nil
     ) -> SDKResponse<ExternalOauthApplication, SDKError> {
         let result: SDKResponse<ExternalOauthApplication, SDKError> = self.post("/external_oauth_applications", nil, try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Update an OAuth Application's client secret.
+     *
+     * This is an OAuth Application which Looker uses to access external systems.
+     *
+     * PATCH /external_oauth_applications/{client_id} -> ExternalOauthApplication
+     */
+    public func update_external_oauth_application(
+        /**
+         * @param {String} client_id The client ID of the OAuth App to update
+         */
+        _ client_id: String,
+        /**
+         * @param {WriteExternalOauthApplication} body
+         */
+        _ body: WriteExternalOauthApplication,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<ExternalOauthApplication, SDKError> {
+        let path_client_id = encodeParam(client_id)
+        let result: SDKResponse<ExternalOauthApplication, SDKError> = self.patch("/external_oauth_applications/\(path_client_id)", nil, try! self.encode(body), options)
         return result
     }
 

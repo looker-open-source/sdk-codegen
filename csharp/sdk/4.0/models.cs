@@ -994,6 +994,10 @@ public class CredentialsEmail : SdkModel
   public string? password_reset_url { get; set; } = null;
   /// <summary>Url with one-time use secret token that the user can use to setup account (read-only)</summary>
   public string? account_setup_url { get; set; } = null;
+  /// <summary>Is password_reset_url expired or not present? (read-only)</summary>
+  public bool? password_reset_url_expired { get; set; } = null;
+  /// <summary>Is account_setup_url expired or not present? (read-only)</summary>
+  public bool? account_setup_url_expired { get; set; } = null;
   /// <summary>Short name for the type of this kind of credential (read-only)</summary>
   public string? type { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
@@ -1022,6 +1026,10 @@ public class CredentialsEmailSearch : SdkModel
   public string? password_reset_url { get; set; } = null;
   /// <summary>Url with one-time use secret token that the user can use to setup account (read-only)</summary>
   public string? account_setup_url { get; set; } = null;
+  /// <summary>Is password_reset_url expired or not present? (read-only)</summary>
+  public bool? password_reset_url_expired { get; set; } = null;
+  /// <summary>Is account_setup_url expired or not present? (read-only)</summary>
+  public bool? account_setup_url_expired { get; set; } = null;
   /// <summary>Short name for the type of this kind of credential (read-only)</summary>
   public string? type { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
@@ -1616,6 +1624,8 @@ public class DBConnection : SdkModel
   public string? password { get; set; } = null;
   /// <summary>Whether the connection uses OAuth for authentication. (read-only)</summary>
   public bool? uses_oauth { get; set; } = null;
+  /// <summary>Whether the integration uses the oauth instance account. (read-only)</summary>
+  public bool? uses_instance_oauth { get; set; } = null;
   /// <summary>(Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).</summary>
   public string? certificate { get; set; } = null;
   /// <summary>(Write-Only) Certificate keyfile type - .json or .p12</summary>
@@ -1630,6 +1640,10 @@ public class DBConnection : SdkModel
   public string? schema { get; set; } = null;
   /// <summary>Maximum number of concurrent connection to use</summary>
   public long? max_connections { get; set; } = null;
+  /// <summary>Maximum number of concurrent queries to begin on this connection</summary>
+  public long? max_queries { get; set; } = null;
+  /// <summary>Maximum number of concurrent queries per user to begin on this connection</summary>
+  public long? max_queries_per_user { get; set; } = null;
   /// <summary>Maximum size of query in GBs (BigQuery only, can be a user_attribute name)</summary>
   public string? max_billing_gigabytes { get; set; } = null;
   /// <summary>Use SSL/TLS when connecting to server</summary>
@@ -1685,12 +1699,22 @@ public class DBConnection : SdkModel
   public string? oauth_application_id { get; set; } = null;
   /// <summary>When true, error PDTs will be retried every regenerator cycle</summary>
   public bool? always_retry_failed_builds { get; set; } = null;
+  /// <summary>Whether the connection should authenticate with the Application Default Credentials of the host environment (limited to GCP and certain dialects).</summary>
+  public bool? uses_application_default_credentials { get; set; } = null;
+  /// <summary>An alternative Service Account to use for querying datasets (used primarily with `uses_application_default_credentials`) (limited to GCP and certain dialects).</summary>
+  public string? impersonated_service_account { get; set; } = null;
   /// <summary>When true, query cost estimate will be displayed in explore.</summary>
   public bool? cost_estimate_enabled { get; set; } = null;
   /// <summary>PDT builds on this connection can be kicked off and cancelled via API.</summary>
   public bool? pdt_api_control_enabled { get; set; } = null;
   /// <summary>Enable database connection pooling.</summary>
   public bool? connection_pooling { get; set; } = null;
+  /// <summary>When true, represents that this connection is the default BQ connection. (read-only)</summary>
+  public bool? default_bq_connection { get; set; } = null;
+  /// <summary>The project id of the default BigQuery storage project.</summary>
+  public string? bq_storage_project_id { get; set; } = null;
+  /// <summary>When true, represents that all project roles have been verified. (read-only)</summary>
+  public bool? bq_roles_verified { get; set; } = null;
 }
 
 public class DBConnectionBase : SdkModel
@@ -4547,6 +4571,8 @@ public class RunningQueries : SdkModel
   public double? runtime { get; set; } = null;
   /// <summary>SQL text of the query as run (read-only)</summary>
   public string? sql { get; set; } = null;
+  /// <summary>SQL text of the SQL Interface query as run (read-only)</summary>
+  public string? sql_interface_sql { get; set; } = null;
 }
 
 public class SamlConfig : SdkModel
@@ -4962,6 +4988,10 @@ public class Setting : SdkModel
   public bool? login_notification_enabled { get; set; } = null;
   /// <summary>Login notification text (read-only)</summary>
   public string? login_notification_text { get; set; } = null;
+  /// <summary>Toggle Dashboard Auto Refresh restriction</summary>
+  public bool? dashboard_auto_refresh_restriction { get; set; } = null;
+  /// <summary>Minimum time interval for dashboard element automatic refresh. Examples: (30 seconds, 1 minute)</summary>
+  public string? dashboard_auto_refresh_minimum_interval { get; set; } = null;
 }
 
 public class SmtpNodeStatus : SdkModel
@@ -5443,7 +5473,7 @@ public class User : SdkModel
   public bool? models_dir_validated { get; set; } = null;
   /// <summary>ID of user's personal folder (read-only)</summary>
   public string? personal_folder_id { get; set; } = null;
-  /// <summary>User is identified as an employee of Looker (read-only)</summary>
+  /// <summary>(DEPRECATED) User is identified as an employee of Looker (read-only)</summary>
   public bool? presumed_looker_employee { get; set; } = null;
   /// <summary>Array of ids of the roles for this user (read-only)</summary>
   public string[]? role_ids { get; set; } = null;
@@ -5940,7 +5970,7 @@ public class WriteCreateQueryTask : SdkModel
 }
 
 /// Dynamic writeable type for CredentialsEmail removes:
-/// can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, type, url, user_url
+/// can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, password_reset_url_expired, account_setup_url_expired, type, url, user_url
 public class WriteCredentialsEmail : SdkModel
 {
   /// <summary>EMail address used for user login</summary>
@@ -6158,7 +6188,7 @@ public class WriteDatagroup : SdkModel
 }
 
 /// Dynamic writeable type for DBConnection removes:
-/// can, dialect, snippets, pdts_enabled, uses_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed
+/// can, dialect, snippets, pdts_enabled, uses_oauth, uses_instance_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, bq_roles_verified
 public class WriteDBConnection : SdkModel
 {
   /// <summary>Name of the connection. Also used as the unique identifier</summary>
@@ -6185,6 +6215,10 @@ public class WriteDBConnection : SdkModel
   public string? schema { get; set; } = null;
   /// <summary>Maximum number of concurrent connection to use</summary>
   public long? max_connections { get; set; } = null;
+  /// <summary>Maximum number of concurrent queries to begin on this connection</summary>
+  public long? max_queries { get; set; } = null;
+  /// <summary>Maximum number of concurrent queries per user to begin on this connection</summary>
+  public long? max_queries_per_user { get; set; } = null;
   /// <summary>Maximum size of query in GBs (BigQuery only, can be a user_attribute name)</summary>
   public string? max_billing_gigabytes { get; set; } = null;
   /// <summary>Use SSL/TLS when connecting to server</summary>
@@ -6230,12 +6264,18 @@ public class WriteDBConnection : SdkModel
   public string? oauth_application_id { get; set; } = null;
   /// <summary>When true, error PDTs will be retried every regenerator cycle</summary>
   public bool? always_retry_failed_builds { get; set; } = null;
+  /// <summary>Whether the connection should authenticate with the Application Default Credentials of the host environment (limited to GCP and certain dialects).</summary>
+  public bool? uses_application_default_credentials { get; set; } = null;
+  /// <summary>An alternative Service Account to use for querying datasets (used primarily with `uses_application_default_credentials`) (limited to GCP and certain dialects).</summary>
+  public string? impersonated_service_account { get; set; } = null;
   /// <summary>When true, query cost estimate will be displayed in explore.</summary>
   public bool? cost_estimate_enabled { get; set; } = null;
   /// <summary>PDT builds on this connection can be kicked off and cancelled via API.</summary>
   public bool? pdt_api_control_enabled { get; set; } = null;
   /// <summary>Enable database connection pooling.</summary>
   public bool? connection_pooling { get; set; } = null;
+  /// <summary>The project id of the default BigQuery storage project.</summary>
+  public string? bq_storage_project_id { get; set; } = null;
 }
 
 /// Dynamic writeable type for DBConnectionOverride removes:
@@ -6972,6 +7012,10 @@ public class WriteSetting : SdkModel
   /// <summary>(DEPRECATED) Use embed_config.embed_cookieless_v2 instead. If embed_config.embed_cookieless_v2 is specified, it overrides this value.</summary>
   public bool? embed_cookieless_v2 { get; set; } = null;
   public EmbedConfig? embed_config { get; set; }
+  /// <summary>Toggle Dashboard Auto Refresh restriction</summary>
+  public bool? dashboard_auto_refresh_restriction { get; set; } = null;
+  /// <summary>Minimum time interval for dashboard element automatic refresh. Examples: (30 seconds, 1 minute)</summary>
+  public string? dashboard_auto_refresh_minimum_interval { get; set; } = null;
 }
 
 /// Dynamic writeable type for SqlInterfaceQueryCreate removes:
@@ -7031,7 +7075,7 @@ public class WriteUser : SdkModel
 {
   /// <summary>
   /// Dynamic writeable type for CredentialsEmail removes:
-  /// can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, type, url, user_url
+  /// can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, password_reset_url_expired, account_setup_url_expired, type, url, user_url
   /// </summary>
   public WriteCredentialsEmail? credentials_email { get; set; }
   /// <summary>First name</summary>

@@ -1042,6 +1042,8 @@ data class CredentialsApi3(
  * @property logged_in_at Timestamp for most recent login using credential (read-only)
  * @property password_reset_url Url with one-time use secret token that the user can use to reset password (read-only)
  * @property account_setup_url Url with one-time use secret token that the user can use to setup account (read-only)
+ * @property password_reset_url_expired Is password_reset_url expired or not present? (read-only)
+ * @property account_setup_url_expired Is account_setup_url expired or not present? (read-only)
  * @property type Short name for the type of this kind of credential (read-only)
  * @property url Link to get this item (read-only)
  * @property user_url Link to get this user (read-only)
@@ -1056,6 +1058,8 @@ data class CredentialsEmail(
     var logged_in_at: String? = null,
     var password_reset_url: String? = null,
     var account_setup_url: String? = null,
+    var password_reset_url_expired: Boolean? = null,
+    var account_setup_url_expired: Boolean? = null,
     var type: String? = null,
     var url: String? = null,
     var user_url: String? = null,
@@ -1071,6 +1075,8 @@ data class CredentialsEmail(
  * @property logged_in_at Timestamp for most recent login using credential (read-only)
  * @property password_reset_url Url with one-time use secret token that the user can use to reset password (read-only)
  * @property account_setup_url Url with one-time use secret token that the user can use to setup account (read-only)
+ * @property password_reset_url_expired Is password_reset_url expired or not present? (read-only)
+ * @property account_setup_url_expired Is account_setup_url expired or not present? (read-only)
  * @property type Short name for the type of this kind of credential (read-only)
  * @property url Link to get this item (read-only)
  * @property user_url Link to get this user (read-only)
@@ -1085,6 +1091,8 @@ data class CredentialsEmailSearch(
     var logged_in_at: String? = null,
     var password_reset_url: String? = null,
     var account_setup_url: String? = null,
+    var password_reset_url_expired: Boolean? = null,
+    var account_setup_url_expired: Boolean? = null,
     var type: String? = null,
     var url: String? = null,
     var user_url: String? = null,
@@ -1701,6 +1709,7 @@ data class Datagroup(
  * @property username Username for server authentication
  * @property password (Write-Only) Password for server authentication
  * @property uses_oauth Whether the connection uses OAuth for authentication. (read-only)
+ * @property uses_instance_oauth Whether the integration uses the oauth instance account. (read-only)
  * @property certificate (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
  * @property file_type (Write-Only) Certificate keyfile type - .json or .p12
  * @property database Database name
@@ -1708,6 +1717,8 @@ data class Datagroup(
  * @property query_timezone Timezone to use in queries
  * @property schema Schema name
  * @property max_connections Maximum number of concurrent connection to use
+ * @property max_queries Maximum number of concurrent queries to begin on this connection
+ * @property max_queries_per_user Maximum number of concurrent queries per user to begin on this connection
  * @property max_billing_gigabytes Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
  * @property ssl Use SSL/TLS when connecting to server
  * @property verify_ssl Verify the SSL
@@ -1736,9 +1747,14 @@ data class Datagroup(
  * @property disable_context_comment When disable_context_comment is true comment will not be added to SQL
  * @property oauth_application_id An External OAuth Application to use for authenticating to the database
  * @property always_retry_failed_builds When true, error PDTs will be retried every regenerator cycle
+ * @property uses_application_default_credentials Whether the connection should authenticate with the Application Default Credentials of the host environment (limited to GCP and certain dialects).
+ * @property impersonated_service_account An alternative Service Account to use for querying datasets (used primarily with `uses_application_default_credentials`) (limited to GCP and certain dialects).
  * @property cost_estimate_enabled When true, query cost estimate will be displayed in explore.
  * @property pdt_api_control_enabled PDT builds on this connection can be kicked off and cancelled via API.
  * @property connection_pooling Enable database connection pooling.
+ * @property default_bq_connection When true, represents that this connection is the default BQ connection. (read-only)
+ * @property bq_storage_project_id The project id of the default BigQuery storage project.
+ * @property bq_roles_verified When true, represents that all project roles have been verified. (read-only)
  */
 data class DBConnection(
     var can: Map<String, Boolean>? = null,
@@ -1751,6 +1767,7 @@ data class DBConnection(
     var username: String? = null,
     var password: String? = null,
     var uses_oauth: Boolean? = null,
+    var uses_instance_oauth: Boolean? = null,
     var certificate: String? = null,
     var file_type: String? = null,
     var database: String? = null,
@@ -1758,6 +1775,8 @@ data class DBConnection(
     var query_timezone: String? = null,
     var schema: String? = null,
     var max_connections: Long? = null,
+    var max_queries: Long? = null,
+    var max_queries_per_user: Long? = null,
     var max_billing_gigabytes: String? = null,
     var ssl: Boolean? = null,
     var verify_ssl: Boolean? = null,
@@ -1786,9 +1805,14 @@ data class DBConnection(
     var disable_context_comment: Boolean? = null,
     var oauth_application_id: String? = null,
     var always_retry_failed_builds: Boolean? = null,
+    var uses_application_default_credentials: Boolean? = null,
+    var impersonated_service_account: String? = null,
     var cost_estimate_enabled: Boolean? = null,
     var pdt_api_control_enabled: Boolean? = null,
     var connection_pooling: Boolean? = null,
+    var default_bq_connection: Boolean? = null,
+    var bq_storage_project_id: String? = null,
+    var bq_roles_verified: Boolean? = null,
 ) : Serializable
 
 /**
@@ -4746,6 +4770,7 @@ data class RoleSearch(
  * @property status Status description (read-only)
  * @property runtime Number of seconds elapsed running the Query (read-only)
  * @property sql SQL text of the query as run (read-only)
+ * @property sql_interface_sql SQL text of the SQL Interface query as run (read-only)
  */
 data class RunningQueries(
     var can: Map<String, Boolean>? = null,
@@ -4769,6 +4794,7 @@ data class RunningQueries(
     var status: String? = null,
     var runtime: Double? = null,
     var sql: String? = null,
+    var sql_interface_sql: String? = null,
 ) : Serializable
 
 /**
@@ -5181,6 +5207,8 @@ data class SessionConfig(
  * @property embed_config
  * @property login_notification_enabled Login notification enabled (read-only)
  * @property login_notification_text Login notification text (read-only)
+ * @property dashboard_auto_refresh_restriction Toggle Dashboard Auto Refresh restriction
+ * @property dashboard_auto_refresh_minimum_interval Minimum time interval for dashboard element automatic refresh. Examples: (30 seconds, 1 minute)
  */
 data class Setting(
     var instance_config: InstanceConfig? = null,
@@ -5205,6 +5233,8 @@ data class Setting(
     var embed_config: EmbedConfig? = null,
     var login_notification_enabled: Boolean? = null,
     var login_notification_text: String? = null,
+    var dashboard_auto_refresh_restriction: Boolean? = null,
+    var dashboard_auto_refresh_minimum_interval: String? = null,
 ) : Serializable
 
 /**
@@ -5669,7 +5699,7 @@ data class UpdateFolder(
  * @property looker_versions Array of strings representing the Looker versions that this user has used (this only goes back as far as '3.54.0') (read-only)
  * @property models_dir_validated User's dev workspace has been checked for presence of applicable production projects
  * @property personal_folder_id ID of user's personal folder (read-only)
- * @property presumed_looker_employee User is identified as an employee of Looker (read-only)
+ * @property presumed_looker_employee (DEPRECATED) User is identified as an employee of Looker (read-only)
  * @property role_ids Array of ids of the roles for this user (read-only)
  * @property sessions Active sessions (read-only)
  * @property ui_state Per user dictionary of undocumented state information owned by the Looker UI.
@@ -6209,7 +6239,7 @@ data class WriteCreateQueryTask(
 
 /**
  * Dynamic writeable type for CredentialsEmail removes:
- * can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, type, url, user_url
+ * can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, password_reset_url_expired, account_setup_url_expired, type, url, user_url
  *
  * @property email EMail address used for user login
  * @property forced_password_reset_at_next_login Force the user to change their password upon their next login
@@ -6436,7 +6466,7 @@ data class WriteDatagroup(
 
 /**
  * Dynamic writeable type for DBConnection removes:
- * can, dialect, snippets, pdts_enabled, uses_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed
+ * can, dialect, snippets, pdts_enabled, uses_oauth, uses_instance_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, bq_roles_verified
  *
  * @property name Name of the connection. Also used as the unique identifier
  * @property host Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.
@@ -6450,6 +6480,8 @@ data class WriteDatagroup(
  * @property query_timezone Timezone to use in queries
  * @property schema Schema name
  * @property max_connections Maximum number of concurrent connection to use
+ * @property max_queries Maximum number of concurrent queries to begin on this connection
+ * @property max_queries_per_user Maximum number of concurrent queries per user to begin on this connection
  * @property max_billing_gigabytes Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
  * @property ssl Use SSL/TLS when connecting to server
  * @property verify_ssl Verify the SSL
@@ -6472,9 +6504,12 @@ data class WriteDatagroup(
  * @property disable_context_comment When disable_context_comment is true comment will not be added to SQL
  * @property oauth_application_id An External OAuth Application to use for authenticating to the database
  * @property always_retry_failed_builds When true, error PDTs will be retried every regenerator cycle
+ * @property uses_application_default_credentials Whether the connection should authenticate with the Application Default Credentials of the host environment (limited to GCP and certain dialects).
+ * @property impersonated_service_account An alternative Service Account to use for querying datasets (used primarily with `uses_application_default_credentials`) (limited to GCP and certain dialects).
  * @property cost_estimate_enabled When true, query cost estimate will be displayed in explore.
  * @property pdt_api_control_enabled PDT builds on this connection can be kicked off and cancelled via API.
  * @property connection_pooling Enable database connection pooling.
+ * @property bq_storage_project_id The project id of the default BigQuery storage project.
  */
 data class WriteDBConnection(
     var name: String? = null,
@@ -6489,6 +6524,8 @@ data class WriteDBConnection(
     var query_timezone: String? = null,
     var schema: String? = null,
     var max_connections: Long? = null,
+    var max_queries: Long? = null,
+    var max_queries_per_user: Long? = null,
     var max_billing_gigabytes: String? = null,
     var ssl: Boolean? = null,
     var verify_ssl: Boolean? = null,
@@ -6510,9 +6547,12 @@ data class WriteDBConnection(
     var disable_context_comment: Boolean? = null,
     var oauth_application_id: String? = null,
     var always_retry_failed_builds: Boolean? = null,
+    var uses_application_default_credentials: Boolean? = null,
+    var impersonated_service_account: String? = null,
     var cost_estimate_enabled: Boolean? = null,
     var pdt_api_control_enabled: Boolean? = null,
     var connection_pooling: Boolean? = null,
+    var bq_storage_project_id: String? = null,
 ) : Serializable
 
 /**
@@ -7284,6 +7324,8 @@ data class WriteSessionConfig(
  * @property email_domain_allowlist An array of Email Domain Allowlist of type string for Scheduled Content
  * @property embed_cookieless_v2 (DEPRECATED) Use embed_config.embed_cookieless_v2 instead. If embed_config.embed_cookieless_v2 is specified, it overrides this value.
  * @property embed_config
+ * @property dashboard_auto_refresh_restriction Toggle Dashboard Auto Refresh restriction
+ * @property dashboard_auto_refresh_minimum_interval Minimum time interval for dashboard element automatic refresh. Examples: (30 seconds, 1 minute)
  */
 data class WriteSetting(
     var extension_framework_enabled: Boolean? = null,
@@ -7303,6 +7345,8 @@ data class WriteSetting(
     var email_domain_allowlist: Array<String>? = null,
     var embed_cookieless_v2: Boolean? = null,
     var embed_config: EmbedConfig? = null,
+    var dashboard_auto_refresh_restriction: Boolean? = null,
+    var dashboard_auto_refresh_minimum_interval: String? = null,
 ) : Serializable
 
 /**
@@ -7370,7 +7414,7 @@ data class WriteTheme(
  * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, url
  *
  * @property credentials_email Dynamic writeable type for CredentialsEmail removes:
- * can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, type, url, user_url
+ * can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, password_reset_url_expired, account_setup_url_expired, type, url, user_url
  * @property first_name First name
  * @property home_folder_id ID string for user's home folder
  * @property is_disabled Account has been disabled
