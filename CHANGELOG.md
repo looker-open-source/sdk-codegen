@@ -1,5 +1,13 @@
 # Changelog
 
+## [24.14.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.12.1...sdk-codegen-all-v24.14.0) (2024-08-12)
+
+
+### Features
+
+* generate SDKs for Looker 24.14 ([#1490](https://github.com/looker-open-source/sdk-codegen/issues/1490)) ([1d72127](https://github.com/looker-open-source/sdk-codegen/commit/1d72127cebab0d1d9f03acc8281e3b14a16e8437))
+* update Go SDK to accept auth session interface ([#1488](https://github.com/looker-open-source/sdk-codegen/issues/1488)) ([aee5bf3](https://github.com/looker-open-source/sdk-codegen/commit/aee5bf3133fbca988b57a31ac9c7d82fa58d5d9b))
+
 ## [24.12.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.12.0...sdk-codegen-all-v24.12.1) (2024-07-29)
 
 
