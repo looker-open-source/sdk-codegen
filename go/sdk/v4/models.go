@@ -579,6 +579,8 @@ type CredentialsEmail struct {
 	LoggedInAt                     *string          `json:"logged_in_at,omitempty"`                        // Timestamp for most recent login using credential
 	PasswordResetUrl               *string          `json:"password_reset_url,omitempty"`                  // Url with one-time use secret token that the user can use to reset password
 	AccountSetupUrl                *string          `json:"account_setup_url,omitempty"`                   // Url with one-time use secret token that the user can use to setup account
+	PasswordResetUrlExpired        *bool            `json:"password_reset_url_expired,omitempty"`          // Is password_reset_url expired or not present?
+	AccountSetupUrlExpired         *bool            `json:"account_setup_url_expired,omitempty"`           // Is account_setup_url expired or not present?
 	Type                           *string          `json:"type,omitempty"`                                // Short name for the type of this kind of credential
 	Url                            *string          `json:"url,omitempty"`                                 // Link to get this item
 	UserUrl                        *string          `json:"user_url,omitempty"`                            // Link to get this user
@@ -594,6 +596,8 @@ type CredentialsEmailSearch struct {
 	LoggedInAt                     *string          `json:"logged_in_at,omitempty"`                        // Timestamp for most recent login using credential
 	PasswordResetUrl               *string          `json:"password_reset_url,omitempty"`                  // Url with one-time use secret token that the user can use to reset password
 	AccountSetupUrl                *string          `json:"account_setup_url,omitempty"`                   // Url with one-time use secret token that the user can use to setup account
+	PasswordResetUrlExpired        *bool            `json:"password_reset_url_expired,omitempty"`          // Is password_reset_url expired or not present?
+	AccountSetupUrlExpired         *bool            `json:"account_setup_url_expired,omitempty"`           // Is account_setup_url expired or not present?
 	Type                           *string          `json:"type,omitempty"`                                // Short name for the type of this kind of credential
 	Url                            *string          `json:"url,omitempty"`                                 // Link to get this item
 	UserUrl                        *string          `json:"user_url,omitempty"`                            // Link to get this user
@@ -912,54 +916,62 @@ type Datagroup struct {
 }
 
 type DBConnection struct {
-	Can                      *map[string]bool      `json:"can,omitempty"`  // Operations the current user is able to perform on this object
-	Name                     *string               `json:"name,omitempty"` // Name of the connection. Also used as the unique identifier
-	Dialect                  *Dialect              `json:"dialect,omitempty"`
-	Snippets                 *[]Snippet            `json:"snippets,omitempty"`                     // SQL Runner snippets for this connection
-	PdtsEnabled              *bool                 `json:"pdts_enabled,omitempty"`                 // True if PDTs are enabled on this connection
-	Host                     *string               `json:"host,omitempty"`                         // Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.
-	Port                     *string               `json:"port,omitempty"`                         // Port number on server. If the connection is over an SSH tunnel, then the local port associated with the SSH tunnel.
-	Username                 *string               `json:"username,omitempty"`                     // Username for server authentication
-	Password                 *string               `json:"password,omitempty"`                     // (Write-Only) Password for server authentication
-	UsesOauth                *bool                 `json:"uses_oauth,omitempty"`                   // Whether the connection uses OAuth for authentication.
-	Certificate              *string               `json:"certificate,omitempty"`                  // (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
-	FileType                 *string               `json:"file_type,omitempty"`                    // (Write-Only) Certificate keyfile type - .json or .p12
-	Database                 *string               `json:"database,omitempty"`                     // Database name
-	DbTimezone               *string               `json:"db_timezone,omitempty"`                  // Time zone of database
-	QueryTimezone            *string               `json:"query_timezone,omitempty"`               // Timezone to use in queries
-	Schema                   *string               `json:"schema,omitempty"`                       // Schema name
-	MaxConnections           *int64                `json:"max_connections,omitempty"`              // Maximum number of concurrent connection to use
-	MaxBillingGigabytes      *string               `json:"max_billing_gigabytes,omitempty"`        // Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
-	Ssl                      *bool                 `json:"ssl,omitempty"`                          // Use SSL/TLS when connecting to server
-	VerifySsl                *bool                 `json:"verify_ssl,omitempty"`                   // Verify the SSL
-	TmpDbName                *string               `json:"tmp_db_name,omitempty"`                  // Name of temporary database (if used)
-	JdbcAdditionalParams     *string               `json:"jdbc_additional_params,omitempty"`       // Additional params to add to JDBC connection string
-	PoolTimeout              *int64                `json:"pool_timeout,omitempty"`                 // Connection Pool Timeout, in seconds
-	DialectName              *string               `json:"dialect_name,omitempty"`                 // (Read/Write) SQL Dialect name
-	SupportsDataStudioLink   *bool                 `json:"supports_data_studio_link,omitempty"`    // Database connection has the ability to support open data studio from explore
-	CreatedAt                *string               `json:"created_at,omitempty"`                   // Creation date for this connection
-	UserId                   *string               `json:"user_id,omitempty"`                      // Id of user who last modified this connection configuration
-	Example                  *bool                 `json:"example,omitempty"`                      // Is this an example connection?
-	UserDbCredentials        *bool                 `json:"user_db_credentials,omitempty"`          // (Limited access feature) Are per user db credentials enabled. Enabling will remove previously set username and password
-	UserAttributeFields      *[]string             `json:"user_attribute_fields,omitempty"`        // Fields whose values map to user attribute names
-	MaintenanceCron          *string               `json:"maintenance_cron,omitempty"`             // Cron string specifying when maintenance such as PDT trigger checks and drops should be performed
-	LastRegenAt              *string               `json:"last_regen_at,omitempty"`                // Unix timestamp at start of last completed PDT trigger check process
-	LastReapAt               *string               `json:"last_reap_at,omitempty"`                 // Unix timestamp at start of last completed PDT reap process
-	SqlRunnerPrecacheTables  *bool                 `json:"sql_runner_precache_tables,omitempty"`   // Precache tables in the SQL Runner
-	SqlWritingWithInfoSchema *bool                 `json:"sql_writing_with_info_schema,omitempty"` // Fetch Information Schema For SQL Writing
-	AfterConnectStatements   *string               `json:"after_connect_statements,omitempty"`     // SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
-	PdtContextOverride       *DBConnectionOverride `json:"pdt_context_override,omitempty"`
-	Managed                  *bool                 `json:"managed,omitempty"`                    // Is this connection created and managed by Looker
-	CustomLocalPort          *int64                `json:"custom_local_port,omitempty"`          // This field is only applicable to connections over an SSH Tunnel. The value of this field would be the local port associated with the SSH tunnel if configured manually. Otherwise either enter NULL or exclude this field.
-	TunnelId                 *string               `json:"tunnel_id,omitempty"`                  // The Id of the ssh tunnel this connection uses
-	UsesTns                  *bool                 `json:"uses_tns,omitempty"`                   // Enable Transparent Network Substrate (TNS) connections
-	PdtConcurrency           *int64                `json:"pdt_concurrency,omitempty"`            // Maximum number of threads to use to build PDTs in parallel
-	DisableContextComment    *bool                 `json:"disable_context_comment,omitempty"`    // When disable_context_comment is true comment will not be added to SQL
-	OauthApplicationId       *string               `json:"oauth_application_id,omitempty"`       // An External OAuth Application to use for authenticating to the database
-	AlwaysRetryFailedBuilds  *bool                 `json:"always_retry_failed_builds,omitempty"` // When true, error PDTs will be retried every regenerator cycle
-	CostEstimateEnabled      *bool                 `json:"cost_estimate_enabled,omitempty"`      // When true, query cost estimate will be displayed in explore.
-	PdtApiControlEnabled     *bool                 `json:"pdt_api_control_enabled,omitempty"`    // PDT builds on this connection can be kicked off and cancelled via API.
-	ConnectionPooling        *bool                 `json:"connection_pooling,omitempty"`         // Enable database connection pooling.
+	Can                               *map[string]bool      `json:"can,omitempty"`  // Operations the current user is able to perform on this object
+	Name                              *string               `json:"name,omitempty"` // Name of the connection. Also used as the unique identifier
+	Dialect                           *Dialect              `json:"dialect,omitempty"`
+	Snippets                          *[]Snippet            `json:"snippets,omitempty"`                     // SQL Runner snippets for this connection
+	PdtsEnabled                       *bool                 `json:"pdts_enabled,omitempty"`                 // True if PDTs are enabled on this connection
+	Host                              *string               `json:"host,omitempty"`                         // Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.
+	Port                              *string               `json:"port,omitempty"`                         // Port number on server. If the connection is over an SSH tunnel, then the local port associated with the SSH tunnel.
+	Username                          *string               `json:"username,omitempty"`                     // Username for server authentication
+	Password                          *string               `json:"password,omitempty"`                     // (Write-Only) Password for server authentication
+	UsesOauth                         *bool                 `json:"uses_oauth,omitempty"`                   // Whether the connection uses OAuth for authentication.
+	UsesInstanceOauth                 *bool                 `json:"uses_instance_oauth,omitempty"`          // Whether the integration uses the oauth instance account.
+	Certificate                       *string               `json:"certificate,omitempty"`                  // (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
+	FileType                          *string               `json:"file_type,omitempty"`                    // (Write-Only) Certificate keyfile type - .json or .p12
+	Database                          *string               `json:"database,omitempty"`                     // Database name
+	DbTimezone                        *string               `json:"db_timezone,omitempty"`                  // Time zone of database
+	QueryTimezone                     *string               `json:"query_timezone,omitempty"`               // Timezone to use in queries
+	Schema                            *string               `json:"schema,omitempty"`                       // Schema name
+	MaxConnections                    *int64                `json:"max_connections,omitempty"`              // Maximum number of concurrent connection to use
+	MaxQueries                        *int64                `json:"max_queries,omitempty"`                  // Maximum number of concurrent queries to begin on this connection
+	MaxQueriesPerUser                 *int64                `json:"max_queries_per_user,omitempty"`         // Maximum number of concurrent queries per user to begin on this connection
+	MaxBillingGigabytes               *string               `json:"max_billing_gigabytes,omitempty"`        // Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
+	Ssl                               *bool                 `json:"ssl,omitempty"`                          // Use SSL/TLS when connecting to server
+	VerifySsl                         *bool                 `json:"verify_ssl,omitempty"`                   // Verify the SSL
+	TmpDbName                         *string               `json:"tmp_db_name,omitempty"`                  // Name of temporary database (if used)
+	JdbcAdditionalParams              *string               `json:"jdbc_additional_params,omitempty"`       // Additional params to add to JDBC connection string
+	PoolTimeout                       *int64                `json:"pool_timeout,omitempty"`                 // Connection Pool Timeout, in seconds
+	DialectName                       *string               `json:"dialect_name,omitempty"`                 // (Read/Write) SQL Dialect name
+	SupportsDataStudioLink            *bool                 `json:"supports_data_studio_link,omitempty"`    // Database connection has the ability to support open data studio from explore
+	CreatedAt                         *string               `json:"created_at,omitempty"`                   // Creation date for this connection
+	UserId                            *string               `json:"user_id,omitempty"`                      // Id of user who last modified this connection configuration
+	Example                           *bool                 `json:"example,omitempty"`                      // Is this an example connection?
+	UserDbCredentials                 *bool                 `json:"user_db_credentials,omitempty"`          // (Limited access feature) Are per user db credentials enabled. Enabling will remove previously set username and password
+	UserAttributeFields               *[]string             `json:"user_attribute_fields,omitempty"`        // Fields whose values map to user attribute names
+	MaintenanceCron                   *string               `json:"maintenance_cron,omitempty"`             // Cron string specifying when maintenance such as PDT trigger checks and drops should be performed
+	LastRegenAt                       *string               `json:"last_regen_at,omitempty"`                // Unix timestamp at start of last completed PDT trigger check process
+	LastReapAt                        *string               `json:"last_reap_at,omitempty"`                 // Unix timestamp at start of last completed PDT reap process
+	SqlRunnerPrecacheTables           *bool                 `json:"sql_runner_precache_tables,omitempty"`   // Precache tables in the SQL Runner
+	SqlWritingWithInfoSchema          *bool                 `json:"sql_writing_with_info_schema,omitempty"` // Fetch Information Schema For SQL Writing
+	AfterConnectStatements            *string               `json:"after_connect_statements,omitempty"`     // SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
+	PdtContextOverride                *DBConnectionOverride `json:"pdt_context_override,omitempty"`
+	Managed                           *bool                 `json:"managed,omitempty"`                              // Is this connection created and managed by Looker
+	CustomLocalPort                   *int64                `json:"custom_local_port,omitempty"`                    // This field is only applicable to connections over an SSH Tunnel. The value of this field would be the local port associated with the SSH tunnel if configured manually. Otherwise either enter NULL or exclude this field.
+	TunnelId                          *string               `json:"tunnel_id,omitempty"`                            // The Id of the ssh tunnel this connection uses
+	UsesTns                           *bool                 `json:"uses_tns,omitempty"`                             // Enable Transparent Network Substrate (TNS) connections
+	PdtConcurrency                    *int64                `json:"pdt_concurrency,omitempty"`                      // Maximum number of threads to use to build PDTs in parallel
+	DisableContextComment             *bool                 `json:"disable_context_comment,omitempty"`              // When disable_context_comment is true comment will not be added to SQL
+	OauthApplicationId                *string               `json:"oauth_application_id,omitempty"`                 // An External OAuth Application to use for authenticating to the database
+	AlwaysRetryFailedBuilds           *bool                 `json:"always_retry_failed_builds,omitempty"`           // When true, error PDTs will be retried every regenerator cycle
+	UsesApplicationDefaultCredentials *bool                 `json:"uses_application_default_credentials,omitempty"` // Whether the connection should authenticate with the Application Default Credentials of the host environment (limited to GCP and certain dialects).
+	ImpersonatedServiceAccount        *string               `json:"impersonated_service_account,omitempty"`         // An alternative Service Account to use for querying datasets (used primarily with `uses_application_default_credentials`) (limited to GCP and certain dialects).
+	CostEstimateEnabled               *bool                 `json:"cost_estimate_enabled,omitempty"`                // When true, query cost estimate will be displayed in explore.
+	PdtApiControlEnabled              *bool                 `json:"pdt_api_control_enabled,omitempty"`              // PDT builds on this connection can be kicked off and cancelled via API.
+	ConnectionPooling                 *bool                 `json:"connection_pooling,omitempty"`                   // Enable database connection pooling.
+	DefaultBqConnection               *bool                 `json:"default_bq_connection,omitempty"`                // When true, represents that this connection is the default BQ connection.
+	BqStorageProjectId                *string               `json:"bq_storage_project_id,omitempty"`                // The project id of the default BigQuery storage project.
+	BqRolesVerified                   *bool                 `json:"bq_roles_verified,omitempty"`                    // When true, represents that all project roles have been verified.
 }
 
 type DBConnectionBase struct {
@@ -3252,27 +3264,28 @@ type RoleSearch struct {
 }
 
 type RunningQueries struct {
-	Can            *map[string]bool `json:"can,omitempty"` // Operations the current user is able to perform on this object
-	Id             *string          `json:"id,omitempty"`  // Unique Id
-	User           *UserPublic      `json:"user,omitempty"`
-	Query          *Query           `json:"query,omitempty"`
-	SqlQuery       *SqlQuery        `json:"sql_query,omitempty"`
-	Look           *LookBasic       `json:"look,omitempty"`
-	CreatedAt      *string          `json:"created_at,omitempty"`      // Date/Time Query was initiated
-	CompletedAt    *string          `json:"completed_at,omitempty"`    // Date/Time Query was completed
-	QueryId        *string          `json:"query_id,omitempty"`        // Query Id
-	Source         *string          `json:"source,omitempty"`          // Source (look, dashboard, queryrunner, explore, etc.)
-	NodeId         *string          `json:"node_id,omitempty"`         // Node Id
-	Slug           *string          `json:"slug,omitempty"`            // Slug
-	QueryTaskId    *string          `json:"query_task_id,omitempty"`   // ID of a Query Task
-	CacheKey       *string          `json:"cache_key,omitempty"`       // Cache Key
-	ConnectionName *string          `json:"connection_name,omitempty"` // Connection
-	Dialect        *string          `json:"dialect,omitempty"`         // Dialect
-	ConnectionId   *string          `json:"connection_id,omitempty"`   // Connection ID
-	Message        *string          `json:"message,omitempty"`         // Additional Information(Error message or verbose status)
-	Status         *string          `json:"status,omitempty"`          // Status description
-	Runtime        *float64         `json:"runtime,omitempty"`         // Number of seconds elapsed running the Query
-	Sql            *string          `json:"sql,omitempty"`             // SQL text of the query as run
+	Can             *map[string]bool `json:"can,omitempty"` // Operations the current user is able to perform on this object
+	Id              *string          `json:"id,omitempty"`  // Unique Id
+	User            *UserPublic      `json:"user,omitempty"`
+	Query           *Query           `json:"query,omitempty"`
+	SqlQuery        *SqlQuery        `json:"sql_query,omitempty"`
+	Look            *LookBasic       `json:"look,omitempty"`
+	CreatedAt       *string          `json:"created_at,omitempty"`        // Date/Time Query was initiated
+	CompletedAt     *string          `json:"completed_at,omitempty"`      // Date/Time Query was completed
+	QueryId         *string          `json:"query_id,omitempty"`          // Query Id
+	Source          *string          `json:"source,omitempty"`            // Source (look, dashboard, queryrunner, explore, etc.)
+	NodeId          *string          `json:"node_id,omitempty"`           // Node Id
+	Slug            *string          `json:"slug,omitempty"`              // Slug
+	QueryTaskId     *string          `json:"query_task_id,omitempty"`     // ID of a Query Task
+	CacheKey        *string          `json:"cache_key,omitempty"`         // Cache Key
+	ConnectionName  *string          `json:"connection_name,omitempty"`   // Connection
+	Dialect         *string          `json:"dialect,omitempty"`           // Dialect
+	ConnectionId    *string          `json:"connection_id,omitempty"`     // Connection ID
+	Message         *string          `json:"message,omitempty"`           // Additional Information(Error message or verbose status)
+	Status          *string          `json:"status,omitempty"`            // Status description
+	Runtime         *float64         `json:"runtime,omitempty"`           // Number of seconds elapsed running the Query
+	Sql             *string          `json:"sql,omitempty"`               // SQL text of the query as run
+	SqlInterfaceSql *string          `json:"sql_interface_sql,omitempty"` // SQL text of the SQL Interface query as run
 }
 
 type SamlConfig struct {
@@ -3478,28 +3491,30 @@ type SessionConfig struct {
 }
 
 type Setting struct {
-	InstanceConfig                *InstanceConfig            `json:"instance_config,omitempty"`
-	ExtensionFrameworkEnabled     *bool                      `json:"extension_framework_enabled,omitempty"`      // Toggle extension framework on or off
-	ExtensionLoadUrlEnabled       *bool                      `json:"extension_load_url_enabled,omitempty"`       // (DEPRECATED) Toggle extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
-	MarketplaceAutoInstallEnabled *bool                      `json:"marketplace_auto_install_enabled,omitempty"` // (DEPRECATED) Toggle marketplace auto install on or off. Deprecated - do not use. Auto install can now be enabled via marketplace automation settings
-	MarketplaceAutomation         *MarketplaceAutomation     `json:"marketplace_automation,omitempty"`
-	MarketplaceEnabled            *bool                      `json:"marketplace_enabled,omitempty"`        // Toggle marketplace on or off
-	MarketplaceSite               *string                    `json:"marketplace_site,omitempty"`           // Location of Looker marketplace CDN
-	MarketplaceTermsAccepted      *bool                      `json:"marketplace_terms_accepted,omitempty"` // Accept marketplace terms by setting this value to true, or get the current status. Marketplace terms CANNOT be declined once accepted. Accepting marketplace terms automatically enables the marketplace. The marketplace can still be disabled after it has been enabled.
-	PrivatelabelConfiguration     *PrivatelabelConfiguration `json:"privatelabel_configuration,omitempty"`
-	CustomWelcomeEmail            *CustomWelcomeEmail        `json:"custom_welcome_email,omitempty"`
-	OnboardingEnabled             *bool                      `json:"onboarding_enabled,omitempty"`             // Toggle onboarding on or off
-	Timezone                      *string                    `json:"timezone,omitempty"`                       // Change instance-wide default timezone
-	AllowUserTimezones            *bool                      `json:"allow_user_timezones,omitempty"`           // Toggle user-specific timezones on or off
-	DataConnectorDefaultEnabled   *bool                      `json:"data_connector_default_enabled,omitempty"` // Toggle default future connectors on or off
-	HostUrl                       *string                    `json:"host_url,omitempty"`                       // Change the base portion of your Looker instance URL setting
-	OverrideWarnings              *bool                      `json:"override_warnings,omitempty"`              // (Write-Only) If warnings are preventing a host URL change, this parameter allows for overriding warnings to force update the setting. Does not directly change any Looker settings.
-	EmailDomainAllowlist          *[]string                  `json:"email_domain_allowlist,omitempty"`         // An array of Email Domain Allowlist of type string for Scheduled Content
-	EmbedCookielessV2             *bool                      `json:"embed_cookieless_v2,omitempty"`            // (DEPRECATED) Use embed_config.embed_cookieless_v2 instead. If embed_config.embed_cookieless_v2 is specified, it overrides this value.
-	EmbedEnabled                  *bool                      `json:"embed_enabled,omitempty"`                  // True if embedding is enabled https://cloud.google.com/looker/docs/r/looker-core-feature-embed, false otherwise
-	EmbedConfig                   *EmbedConfig               `json:"embed_config,omitempty"`
-	LoginNotificationEnabled      *bool                      `json:"login_notification_enabled,omitempty"` // Login notification enabled
-	LoginNotificationText         *string                    `json:"login_notification_text,omitempty"`    // Login notification text
+	InstanceConfig                      *InstanceConfig            `json:"instance_config,omitempty"`
+	ExtensionFrameworkEnabled           *bool                      `json:"extension_framework_enabled,omitempty"`      // Toggle extension framework on or off
+	ExtensionLoadUrlEnabled             *bool                      `json:"extension_load_url_enabled,omitempty"`       // (DEPRECATED) Toggle extension load url on or off. Do not use. This is temporary setting that will eventually become a noop and subsequently deleted.
+	MarketplaceAutoInstallEnabled       *bool                      `json:"marketplace_auto_install_enabled,omitempty"` // (DEPRECATED) Toggle marketplace auto install on or off. Deprecated - do not use. Auto install can now be enabled via marketplace automation settings
+	MarketplaceAutomation               *MarketplaceAutomation     `json:"marketplace_automation,omitempty"`
+	MarketplaceEnabled                  *bool                      `json:"marketplace_enabled,omitempty"`        // Toggle marketplace on or off
+	MarketplaceSite                     *string                    `json:"marketplace_site,omitempty"`           // Location of Looker marketplace CDN
+	MarketplaceTermsAccepted            *bool                      `json:"marketplace_terms_accepted,omitempty"` // Accept marketplace terms by setting this value to true, or get the current status. Marketplace terms CANNOT be declined once accepted. Accepting marketplace terms automatically enables the marketplace. The marketplace can still be disabled after it has been enabled.
+	PrivatelabelConfiguration           *PrivatelabelConfiguration `json:"privatelabel_configuration,omitempty"`
+	CustomWelcomeEmail                  *CustomWelcomeEmail        `json:"custom_welcome_email,omitempty"`
+	OnboardingEnabled                   *bool                      `json:"onboarding_enabled,omitempty"`             // Toggle onboarding on or off
+	Timezone                            *string                    `json:"timezone,omitempty"`                       // Change instance-wide default timezone
+	AllowUserTimezones                  *bool                      `json:"allow_user_timezones,omitempty"`           // Toggle user-specific timezones on or off
+	DataConnectorDefaultEnabled         *bool                      `json:"data_connector_default_enabled,omitempty"` // Toggle default future connectors on or off
+	HostUrl                             *string                    `json:"host_url,omitempty"`                       // Change the base portion of your Looker instance URL setting
+	OverrideWarnings                    *bool                      `json:"override_warnings,omitempty"`              // (Write-Only) If warnings are preventing a host URL change, this parameter allows for overriding warnings to force update the setting. Does not directly change any Looker settings.
+	EmailDomainAllowlist                *[]string                  `json:"email_domain_allowlist,omitempty"`         // An array of Email Domain Allowlist of type string for Scheduled Content
+	EmbedCookielessV2                   *bool                      `json:"embed_cookieless_v2,omitempty"`            // (DEPRECATED) Use embed_config.embed_cookieless_v2 instead. If embed_config.embed_cookieless_v2 is specified, it overrides this value.
+	EmbedEnabled                        *bool                      `json:"embed_enabled,omitempty"`                  // True if embedding is enabled https://cloud.google.com/looker/docs/r/looker-core-feature-embed, false otherwise
+	EmbedConfig                         *EmbedConfig               `json:"embed_config,omitempty"`
+	LoginNotificationEnabled            *bool                      `json:"login_notification_enabled,omitempty"`              // Login notification enabled
+	LoginNotificationText               *string                    `json:"login_notification_text,omitempty"`                 // Login notification text
+	DashboardAutoRefreshRestriction     *bool                      `json:"dashboard_auto_refresh_restriction,omitempty"`      // Toggle Dashboard Auto Refresh restriction
+	DashboardAutoRefreshMinimumInterval *string                    `json:"dashboard_auto_refresh_minimum_interval,omitempty"` // Minimum time interval for dashboard element automatic refresh. Examples: (30 seconds, 1 minute)
 }
 
 type SmtpNodeStatus struct {
@@ -3770,7 +3785,7 @@ type User struct {
 	LookerVersions             *[]string                `json:"looker_versions,omitempty"`                // Array of strings representing the Looker versions that this user has used (this only goes back as far as '3.54.0')
 	ModelsDirValidated         *bool                    `json:"models_dir_validated,omitempty"`           // User's dev workspace has been checked for presence of applicable production projects
 	PersonalFolderId           *string                  `json:"personal_folder_id,omitempty"`             // ID of user's personal folder
-	PresumedLookerEmployee     *bool                    `json:"presumed_looker_employee,omitempty"`       // User is identified as an employee of Looker
+	PresumedLookerEmployee     *bool                    `json:"presumed_looker_employee,omitempty"`       // (DEPRECATED) User is identified as an employee of Looker
 	RoleIds                    *[]string                `json:"role_ids,omitempty"`                       // Array of ids of the roles for this user
 	Sessions                   *[]Session               `json:"sessions,omitempty"`                       // Active sessions
 	UiState                    *map[string]interface{}  `json:"ui_state,omitempty"`                       // Per user dictionary of undocumented state information owned by the Looker UI.
@@ -4053,7 +4068,7 @@ type WriteCreateQueryTask struct {
 }
 
 // Dynamic writeable type for CredentialsEmail removes:
-// can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, type, url, user_url
+// can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, password_reset_url_expired, account_setup_url_expired, type, url, user_url
 type WriteCredentialsEmail struct {
 	Email                          *string `json:"email,omitempty"`                               // EMail address used for user login
 	ForcedPasswordResetAtNextLogin *bool   `json:"forced_password_reset_at_next_login,omitempty"` // Force the user to change their password upon their next login
@@ -4178,7 +4193,7 @@ type WriteDatagroup struct {
 }
 
 // Dynamic writeable type for DBConnection removes:
-// can, dialect, snippets, pdts_enabled, uses_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed
+// can, dialect, snippets, pdts_enabled, uses_oauth, uses_instance_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, bq_roles_verified
 type WriteDBConnection struct {
 	Name                     *string                    `json:"name,omitempty"`                         // Name of the connection. Also used as the unique identifier
 	Host                     *string                    `json:"host,omitempty"`                         // Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.
@@ -4192,6 +4207,8 @@ type WriteDBConnection struct {
 	QueryTimezone            *string                    `json:"query_timezone,omitempty"`               // Timezone to use in queries
 	Schema                   *string                    `json:"schema,omitempty"`                       // Schema name
 	MaxConnections           *int64                     `json:"max_connections,omitempty"`              // Maximum number of concurrent connection to use
+	MaxQueries               *int64                     `json:"max_queries,omitempty"`                  // Maximum number of concurrent queries to begin on this connection
+	MaxQueriesPerUser        *int64                     `json:"max_queries_per_user,omitempty"`         // Maximum number of concurrent queries per user to begin on this connection
 	MaxBillingGigabytes      *string                    `json:"max_billing_gigabytes,omitempty"`        // Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
 	Ssl                      *bool                      `json:"ssl,omitempty"`                          // Use SSL/TLS when connecting to server
 	VerifySsl                *bool                      `json:"verify_ssl,omitempty"`                   // Verify the SSL
@@ -4207,16 +4224,19 @@ type WriteDBConnection struct {
 	AfterConnectStatements   *string                    `json:"after_connect_statements,omitempty"`     // SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
 	PdtContextOverride       *WriteDBConnectionOverride `json:"pdt_context_override,omitempty"`         // Dynamic writeable type for DBConnectionOverride removes:
 	// has_password
-	CustomLocalPort         *int64  `json:"custom_local_port,omitempty"`          // This field is only applicable to connections over an SSH Tunnel. The value of this field would be the local port associated with the SSH tunnel if configured manually. Otherwise either enter NULL or exclude this field.
-	TunnelId                *string `json:"tunnel_id,omitempty"`                  // The Id of the ssh tunnel this connection uses
-	UsesTns                 *bool   `json:"uses_tns,omitempty"`                   // Enable Transparent Network Substrate (TNS) connections
-	PdtConcurrency          *int64  `json:"pdt_concurrency,omitempty"`            // Maximum number of threads to use to build PDTs in parallel
-	DisableContextComment   *bool   `json:"disable_context_comment,omitempty"`    // When disable_context_comment is true comment will not be added to SQL
-	OauthApplicationId      *string `json:"oauth_application_id,omitempty"`       // An External OAuth Application to use for authenticating to the database
-	AlwaysRetryFailedBuilds *bool   `json:"always_retry_failed_builds,omitempty"` // When true, error PDTs will be retried every regenerator cycle
-	CostEstimateEnabled     *bool   `json:"cost_estimate_enabled,omitempty"`      // When true, query cost estimate will be displayed in explore.
-	PdtApiControlEnabled    *bool   `json:"pdt_api_control_enabled,omitempty"`    // PDT builds on this connection can be kicked off and cancelled via API.
-	ConnectionPooling       *bool   `json:"connection_pooling,omitempty"`         // Enable database connection pooling.
+	CustomLocalPort                   *int64  `json:"custom_local_port,omitempty"`                    // This field is only applicable to connections over an SSH Tunnel. The value of this field would be the local port associated with the SSH tunnel if configured manually. Otherwise either enter NULL or exclude this field.
+	TunnelId                          *string `json:"tunnel_id,omitempty"`                            // The Id of the ssh tunnel this connection uses
+	UsesTns                           *bool   `json:"uses_tns,omitempty"`                             // Enable Transparent Network Substrate (TNS) connections
+	PdtConcurrency                    *int64  `json:"pdt_concurrency,omitempty"`                      // Maximum number of threads to use to build PDTs in parallel
+	DisableContextComment             *bool   `json:"disable_context_comment,omitempty"`              // When disable_context_comment is true comment will not be added to SQL
+	OauthApplicationId                *string `json:"oauth_application_id,omitempty"`                 // An External OAuth Application to use for authenticating to the database
+	AlwaysRetryFailedBuilds           *bool   `json:"always_retry_failed_builds,omitempty"`           // When true, error PDTs will be retried every regenerator cycle
+	UsesApplicationDefaultCredentials *bool   `json:"uses_application_default_credentials,omitempty"` // Whether the connection should authenticate with the Application Default Credentials of the host environment (limited to GCP and certain dialects).
+	ImpersonatedServiceAccount        *string `json:"impersonated_service_account,omitempty"`         // An alternative Service Account to use for querying datasets (used primarily with `uses_application_default_credentials`) (limited to GCP and certain dialects).
+	CostEstimateEnabled               *bool   `json:"cost_estimate_enabled,omitempty"`                // When true, query cost estimate will be displayed in explore.
+	PdtApiControlEnabled              *bool   `json:"pdt_api_control_enabled,omitempty"`              // PDT builds on this connection can be kicked off and cancelled via API.
+	ConnectionPooling                 *bool   `json:"connection_pooling,omitempty"`                   // Enable database connection pooling.
+	BqStorageProjectId                *string `json:"bq_storage_project_id,omitempty"`                // The project id of the default BigQuery storage project.
 }
 
 // Dynamic writeable type for DBConnectionOverride removes:
@@ -4637,16 +4657,18 @@ type WriteSetting struct {
 	MarketplaceTermsAccepted      *bool                           `json:"marketplace_terms_accepted,omitempty"` // Accept marketplace terms by setting this value to true, or get the current status. Marketplace terms CANNOT be declined once accepted. Accepting marketplace terms automatically enables the marketplace. The marketplace can still be disabled after it has been enabled.
 	PrivatelabelConfiguration     *WritePrivatelabelConfiguration `json:"privatelabel_configuration,omitempty"` // Dynamic writeable type for PrivatelabelConfiguration removes:
 	// logo_url, favicon_url
-	CustomWelcomeEmail          *CustomWelcomeEmail `json:"custom_welcome_email,omitempty"`
-	OnboardingEnabled           *bool               `json:"onboarding_enabled,omitempty"`             // Toggle onboarding on or off
-	Timezone                    *string             `json:"timezone,omitempty"`                       // Change instance-wide default timezone
-	AllowUserTimezones          *bool               `json:"allow_user_timezones,omitempty"`           // Toggle user-specific timezones on or off
-	DataConnectorDefaultEnabled *bool               `json:"data_connector_default_enabled,omitempty"` // Toggle default future connectors on or off
-	HostUrl                     *string             `json:"host_url,omitempty"`                       // Change the base portion of your Looker instance URL setting
-	OverrideWarnings            *bool               `json:"override_warnings,omitempty"`              // (Write-Only) If warnings are preventing a host URL change, this parameter allows for overriding warnings to force update the setting. Does not directly change any Looker settings.
-	EmailDomainAllowlist        *[]string           `json:"email_domain_allowlist,omitempty"`         // An array of Email Domain Allowlist of type string for Scheduled Content
-	EmbedCookielessV2           *bool               `json:"embed_cookieless_v2,omitempty"`            // (DEPRECATED) Use embed_config.embed_cookieless_v2 instead. If embed_config.embed_cookieless_v2 is specified, it overrides this value.
-	EmbedConfig                 *EmbedConfig        `json:"embed_config,omitempty"`
+	CustomWelcomeEmail                  *CustomWelcomeEmail `json:"custom_welcome_email,omitempty"`
+	OnboardingEnabled                   *bool               `json:"onboarding_enabled,omitempty"`             // Toggle onboarding on or off
+	Timezone                            *string             `json:"timezone,omitempty"`                       // Change instance-wide default timezone
+	AllowUserTimezones                  *bool               `json:"allow_user_timezones,omitempty"`           // Toggle user-specific timezones on or off
+	DataConnectorDefaultEnabled         *bool               `json:"data_connector_default_enabled,omitempty"` // Toggle default future connectors on or off
+	HostUrl                             *string             `json:"host_url,omitempty"`                       // Change the base portion of your Looker instance URL setting
+	OverrideWarnings                    *bool               `json:"override_warnings,omitempty"`              // (Write-Only) If warnings are preventing a host URL change, this parameter allows for overriding warnings to force update the setting. Does not directly change any Looker settings.
+	EmailDomainAllowlist                *[]string           `json:"email_domain_allowlist,omitempty"`         // An array of Email Domain Allowlist of type string for Scheduled Content
+	EmbedCookielessV2                   *bool               `json:"embed_cookieless_v2,omitempty"`            // (DEPRECATED) Use embed_config.embed_cookieless_v2 instead. If embed_config.embed_cookieless_v2 is specified, it overrides this value.
+	EmbedConfig                         *EmbedConfig        `json:"embed_config,omitempty"`
+	DashboardAutoRefreshRestriction     *bool               `json:"dashboard_auto_refresh_restriction,omitempty"`      // Toggle Dashboard Auto Refresh restriction
+	DashboardAutoRefreshMinimumInterval *string             `json:"dashboard_auto_refresh_minimum_interval,omitempty"` // Minimum time interval for dashboard element automatic refresh. Examples: (30 seconds, 1 minute)
 }
 
 // Dynamic writeable type for SqlInterfaceQueryCreate removes:
@@ -4687,7 +4709,7 @@ type WriteTheme struct {
 // can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, url
 type WriteUser struct {
 	CredentialsEmail *WriteCredentialsEmail `json:"credentials_email,omitempty"` // Dynamic writeable type for CredentialsEmail removes:
-	// can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, type, url, user_url
+	// can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, password_reset_url_expired, account_setup_url_expired, type, url, user_url
 	FirstName          *string                 `json:"first_name,omitempty"`           // First name
 	HomeFolderId       *string                 `json:"home_folder_id,omitempty"`       // ID string for user's home folder
 	IsDisabled         *bool                   `json:"is_disabled,omitempty"`          // Account has been disabled

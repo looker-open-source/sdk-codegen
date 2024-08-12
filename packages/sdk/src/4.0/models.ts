@@ -1597,6 +1597,14 @@ export interface ICredentialsEmail {
    */
   account_setup_url?: string | null;
   /**
+   * Is password_reset_url expired or not present? (read-only)
+   */
+  password_reset_url_expired?: boolean;
+  /**
+   * Is account_setup_url expired or not present? (read-only)
+   */
+  account_setup_url_expired?: boolean;
+  /**
    * Short name for the type of this kind of credential (read-only)
    */
   type?: string | null;
@@ -1647,6 +1655,14 @@ export interface ICredentialsEmailSearch {
    * Url with one-time use secret token that the user can use to setup account (read-only)
    */
   account_setup_url?: string | null;
+  /**
+   * Is password_reset_url expired or not present? (read-only)
+   */
+  password_reset_url_expired?: boolean;
+  /**
+   * Is account_setup_url expired or not present? (read-only)
+   */
+  account_setup_url_expired?: boolean;
   /**
    * Short name for the type of this kind of credential (read-only)
    */
@@ -2701,6 +2717,10 @@ export interface IDBConnection {
    */
   uses_oauth?: boolean;
   /**
+   * Whether the integration uses the oauth instance account. (read-only)
+   */
+  uses_instance_oauth?: boolean;
+  /**
    * (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
    */
   certificate?: string | null;
@@ -2728,6 +2748,14 @@ export interface IDBConnection {
    * Maximum number of concurrent connection to use
    */
   max_connections?: number | null;
+  /**
+   * Maximum number of concurrent queries to begin on this connection
+   */
+  max_queries?: number | null;
+  /**
+   * Maximum number of concurrent queries per user to begin on this connection
+   */
+  max_queries_per_user?: number | null;
   /**
    * Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
    */
@@ -2838,6 +2866,14 @@ export interface IDBConnection {
    */
   always_retry_failed_builds?: boolean | null;
   /**
+   * Whether the connection should authenticate with the Application Default Credentials of the host environment (limited to GCP and certain dialects).
+   */
+  uses_application_default_credentials?: boolean | null;
+  /**
+   * An alternative Service Account to use for querying datasets (used primarily with `uses_application_default_credentials`) (limited to GCP and certain dialects).
+   */
+  impersonated_service_account?: string | null;
+  /**
    * When true, query cost estimate will be displayed in explore.
    */
   cost_estimate_enabled?: boolean | null;
@@ -2849,6 +2885,18 @@ export interface IDBConnection {
    * Enable database connection pooling.
    */
   connection_pooling?: boolean;
+  /**
+   * When true, represents that this connection is the default BQ connection. (read-only)
+   */
+  default_bq_connection?: boolean;
+  /**
+   * The project id of the default BigQuery storage project.
+   */
+  bq_storage_project_id?: string | null;
+  /**
+   * When true, represents that all project roles have been verified. (read-only)
+   */
+  bq_roles_verified?: boolean | null;
 }
 
 export interface IDBConnectionBase {
@@ -9971,6 +10019,10 @@ export interface IRunningQueries {
    * SQL text of the query as run (read-only)
    */
   sql?: string | null;
+  /**
+   * SQL text of the SQL Interface query as run (read-only)
+   */
+  sql_interface_sql?: string | null;
 }
 
 export interface ISamlConfig {
@@ -10705,6 +10757,14 @@ export interface ISetting {
    * Login notification text (read-only)
    */
   login_notification_text?: string | null;
+  /**
+   * Toggle Dashboard Auto Refresh restriction
+   */
+  dashboard_auto_refresh_restriction?: boolean;
+  /**
+   * Minimum time interval for dashboard element automatic refresh. Examples: (30 seconds, 1 minute)
+   */
+  dashboard_auto_refresh_minimum_interval?: string | null;
 }
 
 export interface ISmtpNodeStatus {
@@ -11441,7 +11501,7 @@ export interface IUser {
    */
   personal_folder_id?: string | null;
   /**
-   * User is identified as an employee of Looker (read-only)
+   * (DEPRECATED) User is identified as an employee of Looker (read-only)
    */
   presumed_looker_employee?: boolean;
   /**
@@ -12249,7 +12309,7 @@ export interface IWriteCreateQueryTask {
 
 /**
  * Dynamic writeable type for CredentialsEmail removes:
- * can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, type, url, user_url
+ * can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, password_reset_url_expired, account_setup_url_expired, type, url, user_url
  */
 export interface IWriteCredentialsEmail {
   /**
@@ -12614,7 +12674,7 @@ export interface IWriteDatagroup {
 
 /**
  * Dynamic writeable type for DBConnection removes:
- * can, dialect, snippets, pdts_enabled, uses_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed
+ * can, dialect, snippets, pdts_enabled, uses_oauth, uses_instance_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, bq_roles_verified
  */
 export interface IWriteDBConnection {
   /**
@@ -12665,6 +12725,14 @@ export interface IWriteDBConnection {
    * Maximum number of concurrent connection to use
    */
   max_connections?: number | null;
+  /**
+   * Maximum number of concurrent queries to begin on this connection
+   */
+  max_queries?: number | null;
+  /**
+   * Maximum number of concurrent queries per user to begin on this connection
+   */
+  max_queries_per_user?: number | null;
   /**
    * Maximum size of query in GBs (BigQuery only, can be a user_attribute name)
    */
@@ -12751,6 +12819,14 @@ export interface IWriteDBConnection {
    */
   always_retry_failed_builds?: boolean | null;
   /**
+   * Whether the connection should authenticate with the Application Default Credentials of the host environment (limited to GCP and certain dialects).
+   */
+  uses_application_default_credentials?: boolean | null;
+  /**
+   * An alternative Service Account to use for querying datasets (used primarily with `uses_application_default_credentials`) (limited to GCP and certain dialects).
+   */
+  impersonated_service_account?: string | null;
+  /**
    * When true, query cost estimate will be displayed in explore.
    */
   cost_estimate_enabled?: boolean | null;
@@ -12762,6 +12838,10 @@ export interface IWriteDBConnection {
    * Enable database connection pooling.
    */
   connection_pooling?: boolean;
+  /**
+   * The project id of the default BigQuery storage project.
+   */
+  bq_storage_project_id?: string | null;
 }
 
 /**
@@ -14033,6 +14113,14 @@ export interface IWriteSetting {
    */
   embed_cookieless_v2?: boolean;
   embed_config?: IEmbedConfig | null;
+  /**
+   * Toggle Dashboard Auto Refresh restriction
+   */
+  dashboard_auto_refresh_restriction?: boolean;
+  /**
+   * Minimum time interval for dashboard element automatic refresh. Examples: (30 seconds, 1 minute)
+   */
+  dashboard_auto_refresh_minimum_interval?: string | null;
 }
 
 /**
@@ -14123,7 +14211,7 @@ export interface IWriteTheme {
 export interface IWriteUser {
   /**
    * Dynamic writeable type for CredentialsEmail removes:
-   * can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, type, url, user_url
+   * can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, password_reset_url_expired, account_setup_url_expired, type, url, user_url
    */
   credentials_email?: IWriteCredentialsEmail | null;
   /**
