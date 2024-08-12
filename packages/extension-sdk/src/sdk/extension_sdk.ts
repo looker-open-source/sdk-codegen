@@ -24,6 +24,8 @@
 
  */
 
+import { DefaultSettings } from '@looker/sdk-rtl';
+import type { ILooker40SDK } from '@looker/sdk';
 import {
   Looker40SDK,
   LookerExtensionSDK as _LookerExtensionSDK,
@@ -35,21 +37,25 @@ import { SdkConnection } from './sdk_connection';
 
 export class LookerExtensionSDK {
   /**
-   * Create an SDK client that uses SDK 4.0
+   * Create an SDK client that uses SDK 4.0.
    * @param hostConnection extension host API
+   * @deprecated Just use `createClient` instead
    */
-  static create40Client(hostConnection: ExtensionHostApi): Looker40SDK {
-    return _LookerExtensionSDK.createClient(
-      hostConnection,
-      new SdkConnection(hostConnection, ApiVersion.sdk40),
-      Looker40SDK
-    );
+  static create40Client(hostConnection: ExtensionHostApi): ILooker40SDK {
+    return LookerExtensionSDK.createClient(hostConnection);
   }
 
   /**
    * Creates a [[LookerSDK]] 4.0 object.
    */
-  static createClient(hostConnection: ExtensionHostApi): Looker40SDK {
-    return LookerExtensionSDK.create40Client(hostConnection);
+  static createClient(hostConnection: ExtensionHostApi): ILooker40SDK {
+    const sdk = new SdkConnection(hostConnection, ApiVersion.sdk40);
+    return _LookerExtensionSDK.createClient(
+      sdk,
+      Looker40SDK,
+      DefaultSettings()
+    );
   }
 }
+
+export type LookerExtensionSDK40 = LookerExtensionSDK;
