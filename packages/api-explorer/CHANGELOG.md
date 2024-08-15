@@ -219,6 +219,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     * @looker/sdk-codegen-scripts bumped from 21.5.19 to 21.5.20
     * @looker/sdk-node bumped from 24.12.0 to 24.12.1
 
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from 0.1.30 to 0.1.31
+    * @looker/extension-utils bumped from 0.1.40 to 0.1.41
+    * @looker/run-it bumped from 0.9.63 to 0.9.64
+    * @looker/sdk bumped from 24.12.1 to 24.14.0
+    * @looker/sdk-codegen bumped from 21.8.2 to 21.9.0
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from 21.5.20 to 21.5.21
+    * @looker/sdk-node bumped from 24.12.1 to 24.14.0
+
 ## [0.9.47](https://github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.46...api-explorer-v0.9.47) (2023-05-11)
 
 ### Features

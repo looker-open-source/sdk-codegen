@@ -158,6 +158,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * devDependencies
     * @looker/sdk-node bumped from 24.12.0 to 24.12.1
 
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from 24.12.1 to 24.14.0
+  * devDependencies
+    * @looker/sdk-node bumped from 24.12.1 to 24.14.0
+
 ## [0.1.2](https://github.com/looker-open-source/sdk-codegen/compare/wholly-artifact-v0.1.1...wholly-artifact-v0.1.2) (2023-03-09)
 
 ### Bug Fixes

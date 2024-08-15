@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 464 API methods
+/// 465 API methods
 
 #nullable enable
 using System;
@@ -2499,6 +2499,8 @@ namespace Looker.SDK.API40
   ///  - allow_user_timezones
   ///  - custom_welcome_email
   ///  - data_connector_default_enabled
+  ///  - dashboard_auto_refresh_restriction
+  ///  - dashboard_auto_refresh_minimum_interval
   ///  - extension_framework_enabled
   ///  - extension_load_url_enabled
   ///  - instance_config
@@ -2535,6 +2537,8 @@ namespace Looker.SDK.API40
   ///  - allow_user_timezones
   ///  - custom_welcome_email
   ///  - data_connector_default_enabled
+  ///  - dashboard_auto_refresh_restriction
+  ///  - dashboard_auto_refresh_minimum_interval
   ///  - extension_framework_enabled
   ///  - extension_load_url_enabled
   ///  - instance_config
@@ -2878,6 +2882,24 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
     return await AuthRequest<ExternalOauthApplication, Exception>(HttpMethod.Post, "/external_oauth_applications", null,body,options);
+  }
+
+  /// ### Update an OAuth Application's client secret.
+  ///
+  /// This is an OAuth Application which Looker uses to access external systems.
+  ///
+  /// PATCH /external_oauth_applications/{client_id} -> ExternalOauthApplication
+  ///
+  /// <returns><c>ExternalOauthApplication</c> External OAuth Application (application/json)</returns>
+  ///
+  /// <param name="client_id">The client ID of the OAuth App to update</param>
+  public async Task<SdkResponse<ExternalOauthApplication, Exception>> update_external_oauth_application(
+    string client_id,
+    WriteExternalOauthApplication body,
+    ITransportSettings? options = null)
+{  
+      client_id = SdkUtils.EncodeParam(client_id);
+    return await AuthRequest<ExternalOauthApplication, Exception>(HttpMethod.Patch, $"/external_oauth_applications/{client_id}", null,body,options);
   }
 
   /// ### Create OAuth User state.

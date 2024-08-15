@@ -3988,6 +3988,8 @@ public struct CredentialsEmail: SDKModel {
         case _logged_in_at = "logged_in_at"
         case _password_reset_url = "password_reset_url"
         case _account_setup_url = "account_setup_url"
+        case password_reset_url_expired
+        case account_setup_url_expired
         case _type = "type"
         case _url = "url"
         case _user_url = "user_url"
@@ -4061,6 +4063,16 @@ public struct CredentialsEmail: SDKModel {
         set { _account_setup_url = newValue.map(AnyString.init) }
     }
 
+    /**
+     * Is password_reset_url expired or not present? (read-only)
+     */
+    public var password_reset_url_expired: Bool?
+
+    /**
+     * Is account_setup_url expired or not present? (read-only)
+     */
+    public var account_setup_url_expired: Bool?
+
     private var _type: AnyString?
     /**
      * Short name for the type of this kind of credential (read-only)
@@ -4088,7 +4100,7 @@ public struct CredentialsEmail: SDKModel {
         set { _user_url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, created_at: String? = nil, email: String? = nil, forced_password_reset_at_next_login: Bool? = nil, user_id: String? = nil, is_disabled: Bool? = nil, logged_in_at: String? = nil, password_reset_url: String? = nil, account_setup_url: String? = nil, type: String? = nil, url: String? = nil, user_url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, created_at: String? = nil, email: String? = nil, forced_password_reset_at_next_login: Bool? = nil, user_id: String? = nil, is_disabled: Bool? = nil, logged_in_at: String? = nil, password_reset_url: String? = nil, account_setup_url: String? = nil, password_reset_url_expired: Bool? = nil, account_setup_url_expired: Bool? = nil, type: String? = nil, url: String? = nil, user_url: String? = nil) {
         self.can = can
         self._created_at = created_at.map(AnyString.init)
         self._email = email.map(AnyString.init)
@@ -4098,6 +4110,8 @@ public struct CredentialsEmail: SDKModel {
         self._logged_in_at = logged_in_at.map(AnyString.init)
         self._password_reset_url = password_reset_url.map(AnyString.init)
         self._account_setup_url = account_setup_url.map(AnyString.init)
+        self.password_reset_url_expired = password_reset_url_expired
+        self.account_setup_url_expired = account_setup_url_expired
         self._type = type.map(AnyString.init)
         self._url = url.map(AnyString.init)
         self._user_url = user_url.map(AnyString.init)
@@ -4117,6 +4131,8 @@ public struct CredentialsEmailSearch: SDKModel {
         case _logged_in_at = "logged_in_at"
         case _password_reset_url = "password_reset_url"
         case _account_setup_url = "account_setup_url"
+        case password_reset_url_expired
+        case account_setup_url_expired
         case _type = "type"
         case _url = "url"
         case _user_url = "user_url"
@@ -4190,6 +4206,16 @@ public struct CredentialsEmailSearch: SDKModel {
         set { _account_setup_url = newValue.map(AnyString.init) }
     }
 
+    /**
+     * Is password_reset_url expired or not present? (read-only)
+     */
+    public var password_reset_url_expired: Bool?
+
+    /**
+     * Is account_setup_url expired or not present? (read-only)
+     */
+    public var account_setup_url_expired: Bool?
+
     private var _type: AnyString?
     /**
      * Short name for the type of this kind of credential (read-only)
@@ -4217,7 +4243,7 @@ public struct CredentialsEmailSearch: SDKModel {
         set { _user_url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, created_at: String? = nil, email: String? = nil, forced_password_reset_at_next_login: Bool? = nil, user_id: String? = nil, is_disabled: Bool? = nil, logged_in_at: String? = nil, password_reset_url: String? = nil, account_setup_url: String? = nil, type: String? = nil, url: String? = nil, user_url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, created_at: String? = nil, email: String? = nil, forced_password_reset_at_next_login: Bool? = nil, user_id: String? = nil, is_disabled: Bool? = nil, logged_in_at: String? = nil, password_reset_url: String? = nil, account_setup_url: String? = nil, password_reset_url_expired: Bool? = nil, account_setup_url_expired: Bool? = nil, type: String? = nil, url: String? = nil, user_url: String? = nil) {
         self.can = can
         self._created_at = created_at.map(AnyString.init)
         self._email = email.map(AnyString.init)
@@ -4227,6 +4253,8 @@ public struct CredentialsEmailSearch: SDKModel {
         self._logged_in_at = logged_in_at.map(AnyString.init)
         self._password_reset_url = password_reset_url.map(AnyString.init)
         self._account_setup_url = account_setup_url.map(AnyString.init)
+        self.password_reset_url_expired = password_reset_url_expired
+        self.account_setup_url_expired = account_setup_url_expired
         self._type = type.map(AnyString.init)
         self._url = url.map(AnyString.init)
         self._user_url = user_url.map(AnyString.init)
@@ -6767,6 +6795,7 @@ public struct DBConnection: SDKModel {
         case _username = "username"
         case _password = "password"
         case uses_oauth
+        case uses_instance_oauth
         case _certificate = "certificate"
         case _file_type = "file_type"
         case _database = "database"
@@ -6774,6 +6803,8 @@ public struct DBConnection: SDKModel {
         case _query_timezone = "query_timezone"
         case _schema = "schema"
         case _max_connections = "max_connections"
+        case _max_queries = "max_queries"
+        case _max_queries_per_user = "max_queries_per_user"
         case _max_billing_gigabytes = "max_billing_gigabytes"
         case ssl
         case verify_ssl
@@ -6802,9 +6833,14 @@ public struct DBConnection: SDKModel {
         case disable_context_comment
         case _oauth_application_id = "oauth_application_id"
         case always_retry_failed_builds
+        case uses_application_default_credentials
+        case _impersonated_service_account = "impersonated_service_account"
         case cost_estimate_enabled
         case pdt_api_control_enabled
         case connection_pooling
+        case default_bq_connection
+        case _bq_storage_project_id = "bq_storage_project_id"
+        case bq_roles_verified
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -6873,6 +6909,11 @@ public struct DBConnection: SDKModel {
      */
     public var uses_oauth: Bool?
 
+    /**
+     * Whether the integration uses the oauth instance account. (read-only)
+     */
+    public var uses_instance_oauth: Bool?
+
     private var _certificate: AnyString?
     /**
      * (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
@@ -6934,6 +6975,24 @@ public struct DBConnection: SDKModel {
     public var max_connections: Int64? {
         get { _max_connections?.value }
         set { _max_connections = newValue.map(AnyInt.init) }
+    }
+
+    private var _max_queries: AnyInt?
+    /**
+     * Maximum number of concurrent queries to begin on this connection
+     */
+    public var max_queries: Int64? {
+        get { _max_queries?.value }
+        set { _max_queries = newValue.map(AnyInt.init) }
+    }
+
+    private var _max_queries_per_user: AnyInt?
+    /**
+     * Maximum number of concurrent queries per user to begin on this connection
+     */
+    public var max_queries_per_user: Int64? {
+        get { _max_queries_per_user?.value }
+        set { _max_queries_per_user = newValue.map(AnyInt.init) }
     }
 
     private var _max_billing_gigabytes: AnyString?
@@ -7138,6 +7197,20 @@ public struct DBConnection: SDKModel {
     public var always_retry_failed_builds: Bool?
 
     /**
+     * Whether the connection should authenticate with the Application Default Credentials of the host environment (limited to GCP and certain dialects).
+     */
+    public var uses_application_default_credentials: Bool?
+
+    private var _impersonated_service_account: AnyString?
+    /**
+     * An alternative Service Account to use for querying datasets (used primarily with `uses_application_default_credentials`) (limited to GCP and certain dialects).
+     */
+    public var impersonated_service_account: String? {
+        get { _impersonated_service_account?.value }
+        set { _impersonated_service_account = newValue.map(AnyString.init) }
+    }
+
+    /**
      * When true, query cost estimate will be displayed in explore.
      */
     public var cost_estimate_enabled: Bool?
@@ -7152,7 +7225,26 @@ public struct DBConnection: SDKModel {
      */
     public var connection_pooling: Bool?
 
-    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, uses_oauth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, supports_data_studio_link: Bool? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil) {
+    /**
+     * When true, represents that this connection is the default BQ connection. (read-only)
+     */
+    public var default_bq_connection: Bool?
+
+    private var _bq_storage_project_id: AnyString?
+    /**
+     * The project id of the default BigQuery storage project.
+     */
+    public var bq_storage_project_id: String? {
+        get { _bq_storage_project_id?.value }
+        set { _bq_storage_project_id = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * When true, represents that all project roles have been verified. (read-only)
+     */
+    public var bq_roles_verified: Bool?
+
+    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, uses_oauth: Bool? = nil, uses_instance_oauth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, supports_data_studio_link: Bool? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, default_bq_connection: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil) {
         self.can = can
         self._name = name.map(AnyString.init)
         self.dialect = dialect
@@ -7163,6 +7255,7 @@ public struct DBConnection: SDKModel {
         self._username = username.map(AnyString.init)
         self._password = password.map(AnyString.init)
         self.uses_oauth = uses_oauth
+        self.uses_instance_oauth = uses_instance_oauth
         self._certificate = certificate.map(AnyString.init)
         self._file_type = file_type.map(AnyString.init)
         self._database = database.map(AnyString.init)
@@ -7170,6 +7263,8 @@ public struct DBConnection: SDKModel {
         self._query_timezone = query_timezone.map(AnyString.init)
         self._schema = schema.map(AnyString.init)
         self._max_connections = max_connections.map(AnyInt.init)
+        self._max_queries = max_queries.map(AnyInt.init)
+        self._max_queries_per_user = max_queries_per_user.map(AnyInt.init)
         self._max_billing_gigabytes = max_billing_gigabytes.map(AnyString.init)
         self.ssl = ssl
         self.verify_ssl = verify_ssl
@@ -7198,9 +7293,14 @@ public struct DBConnection: SDKModel {
         self.disable_context_comment = disable_context_comment
         self._oauth_application_id = oauth_application_id.map(AnyString.init)
         self.always_retry_failed_builds = always_retry_failed_builds
+        self.uses_application_default_credentials = uses_application_default_credentials
+        self._impersonated_service_account = impersonated_service_account.map(AnyString.init)
         self.cost_estimate_enabled = cost_estimate_enabled
         self.pdt_api_control_enabled = pdt_api_control_enabled
         self.connection_pooling = connection_pooling
+        self.default_bq_connection = default_bq_connection
+        self._bq_storage_project_id = bq_storage_project_id.map(AnyString.init)
+        self.bq_roles_verified = bq_roles_verified
     }
 
 }
@@ -18732,6 +18832,7 @@ public struct RunningQueries: SDKModel {
         case _status = "status"
         case runtime
         case _sql = "sql"
+        case _sql_interface_sql = "sql_interface_sql"
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -18886,7 +18987,16 @@ public struct RunningQueries: SDKModel {
         set { _sql = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, user: UserPublic? = nil, query: Query? = nil, sql_query: SqlQuery? = nil, look: LookBasic? = nil, created_at: String? = nil, completed_at: String? = nil, query_id: String? = nil, source: String? = nil, node_id: String? = nil, slug: String? = nil, query_task_id: String? = nil, cache_key: String? = nil, connection_name: String? = nil, dialect: String? = nil, connection_id: String? = nil, message: String? = nil, status: String? = nil, runtime: Double? = nil, sql: String? = nil) {
+    private var _sql_interface_sql: AnyString?
+    /**
+     * SQL text of the SQL Interface query as run (read-only)
+     */
+    public var sql_interface_sql: String? {
+        get { _sql_interface_sql?.value }
+        set { _sql_interface_sql = newValue.map(AnyString.init) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, user: UserPublic? = nil, query: Query? = nil, sql_query: SqlQuery? = nil, look: LookBasic? = nil, created_at: String? = nil, completed_at: String? = nil, query_id: String? = nil, source: String? = nil, node_id: String? = nil, slug: String? = nil, query_task_id: String? = nil, cache_key: String? = nil, connection_name: String? = nil, dialect: String? = nil, connection_id: String? = nil, message: String? = nil, status: String? = nil, runtime: Double? = nil, sql: String? = nil, sql_interface_sql: String? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
         self.user = user
@@ -18908,6 +19018,7 @@ public struct RunningQueries: SDKModel {
         self._status = status.map(AnyString.init)
         self.runtime = runtime
         self._sql = sql.map(AnyString.init)
+        self._sql_interface_sql = sql_interface_sql.map(AnyString.init)
     }
 
 }
@@ -20529,6 +20640,8 @@ public struct Setting: SDKModel {
         case embed_config
         case login_notification_enabled
         case _login_notification_text = "login_notification_text"
+        case dashboard_auto_refresh_restriction
+        case _dashboard_auto_refresh_minimum_interval = "dashboard_auto_refresh_minimum_interval"
     }
     public var instance_config: InstanceConfig?
 
@@ -20645,7 +20758,21 @@ public struct Setting: SDKModel {
         set { _login_notification_text = newValue.map(AnyString.init) }
     }
 
-    public init(instance_config: InstanceConfig? = nil, extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_site: String? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_enabled: Bool? = nil, embed_config: EmbedConfig? = nil, login_notification_enabled: Bool? = nil, login_notification_text: String? = nil) {
+    /**
+     * Toggle Dashboard Auto Refresh restriction
+     */
+    public var dashboard_auto_refresh_restriction: Bool?
+
+    private var _dashboard_auto_refresh_minimum_interval: AnyString?
+    /**
+     * Minimum time interval for dashboard element automatic refresh. Examples: (30 seconds, 1 minute)
+     */
+    public var dashboard_auto_refresh_minimum_interval: String? {
+        get { _dashboard_auto_refresh_minimum_interval?.value }
+        set { _dashboard_auto_refresh_minimum_interval = newValue.map(AnyString.init) }
+    }
+
+    public init(instance_config: InstanceConfig? = nil, extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_site: String? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_enabled: Bool? = nil, embed_config: EmbedConfig? = nil, login_notification_enabled: Bool? = nil, login_notification_text: String? = nil, dashboard_auto_refresh_restriction: Bool? = nil, dashboard_auto_refresh_minimum_interval: String? = nil) {
         self.instance_config = instance_config
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
@@ -20668,6 +20795,8 @@ public struct Setting: SDKModel {
         self.embed_config = embed_config
         self.login_notification_enabled = login_notification_enabled
         self._login_notification_text = login_notification_text.map(AnyString.init)
+        self.dashboard_auto_refresh_restriction = dashboard_auto_refresh_restriction
+        self._dashboard_auto_refresh_minimum_interval = dashboard_auto_refresh_minimum_interval.map(AnyString.init)
     }
 
 }
@@ -22422,7 +22551,7 @@ public struct User: SDKModel {
     }
 
     /**
-     * User is identified as an employee of Looker (read-only)
+     * (DEPRECATED) User is identified as an employee of Looker (read-only)
      */
     public var presumed_looker_employee: Bool?
 
@@ -24319,7 +24448,7 @@ public struct WriteCreateQueryTask: SDKModel {
 
 /**
  * Dynamic writeable type for CredentialsEmail removes:
- * can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, type, url, user_url
+ * can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, password_reset_url_expired, account_setup_url_expired, type, url, user_url
  */
 public struct WriteCredentialsEmail: SDKModel {
 
@@ -25175,7 +25304,7 @@ public struct WriteDatagroup: SDKModel {
 
 /**
  * Dynamic writeable type for DBConnection removes:
- * can, dialect, snippets, pdts_enabled, uses_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed
+ * can, dialect, snippets, pdts_enabled, uses_oauth, uses_instance_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, bq_roles_verified
  */
 public struct WriteDBConnection: SDKModel {
 
@@ -25192,6 +25321,8 @@ public struct WriteDBConnection: SDKModel {
         case _query_timezone = "query_timezone"
         case _schema = "schema"
         case _max_connections = "max_connections"
+        case _max_queries = "max_queries"
+        case _max_queries_per_user = "max_queries_per_user"
         case _max_billing_gigabytes = "max_billing_gigabytes"
         case ssl
         case verify_ssl
@@ -25213,9 +25344,12 @@ public struct WriteDBConnection: SDKModel {
         case disable_context_comment
         case _oauth_application_id = "oauth_application_id"
         case always_retry_failed_builds
+        case uses_application_default_credentials
+        case _impersonated_service_account = "impersonated_service_account"
         case cost_estimate_enabled
         case pdt_api_control_enabled
         case connection_pooling
+        case _bq_storage_project_id = "bq_storage_project_id"
     }
     private var _name: AnyString?
     /**
@@ -25323,6 +25457,24 @@ public struct WriteDBConnection: SDKModel {
     public var max_connections: Int64? {
         get { _max_connections?.value }
         set { _max_connections = newValue.map(AnyInt.init) }
+    }
+
+    private var _max_queries: AnyInt?
+    /**
+     * Maximum number of concurrent queries to begin on this connection
+     */
+    public var max_queries: Int64? {
+        get { _max_queries?.value }
+        set { _max_queries = newValue.map(AnyInt.init) }
+    }
+
+    private var _max_queries_per_user: AnyInt?
+    /**
+     * Maximum number of concurrent queries per user to begin on this connection
+     */
+    public var max_queries_per_user: Int64? {
+        get { _max_queries_per_user?.value }
+        set { _max_queries_per_user = newValue.map(AnyInt.init) }
     }
 
     private var _max_billing_gigabytes: AnyString?
@@ -25480,6 +25632,20 @@ public struct WriteDBConnection: SDKModel {
     public var always_retry_failed_builds: Bool?
 
     /**
+     * Whether the connection should authenticate with the Application Default Credentials of the host environment (limited to GCP and certain dialects).
+     */
+    public var uses_application_default_credentials: Bool?
+
+    private var _impersonated_service_account: AnyString?
+    /**
+     * An alternative Service Account to use for querying datasets (used primarily with `uses_application_default_credentials`) (limited to GCP and certain dialects).
+     */
+    public var impersonated_service_account: String? {
+        get { _impersonated_service_account?.value }
+        set { _impersonated_service_account = newValue.map(AnyString.init) }
+    }
+
+    /**
      * When true, query cost estimate will be displayed in explore.
      */
     public var cost_estimate_enabled: Bool?
@@ -25494,7 +25660,16 @@ public struct WriteDBConnection: SDKModel {
      */
     public var connection_pooling: Bool?
 
-    public init(name: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: WriteDBConnectionOverride? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil) {
+    private var _bq_storage_project_id: AnyString?
+    /**
+     * The project id of the default BigQuery storage project.
+     */
+    public var bq_storage_project_id: String? {
+        get { _bq_storage_project_id?.value }
+        set { _bq_storage_project_id = newValue.map(AnyString.init) }
+    }
+
+    public init(name: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: WriteDBConnectionOverride? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, bq_storage_project_id: String? = nil) {
         self._name = name.map(AnyString.init)
         self._host = host.map(AnyString.init)
         self._port = port.map(AnyString.init)
@@ -25507,6 +25682,8 @@ public struct WriteDBConnection: SDKModel {
         self._query_timezone = query_timezone.map(AnyString.init)
         self._schema = schema.map(AnyString.init)
         self._max_connections = max_connections.map(AnyInt.init)
+        self._max_queries = max_queries.map(AnyInt.init)
+        self._max_queries_per_user = max_queries_per_user.map(AnyInt.init)
         self._max_billing_gigabytes = max_billing_gigabytes.map(AnyString.init)
         self.ssl = ssl
         self.verify_ssl = verify_ssl
@@ -25528,9 +25705,12 @@ public struct WriteDBConnection: SDKModel {
         self.disable_context_comment = disable_context_comment
         self._oauth_application_id = oauth_application_id.map(AnyString.init)
         self.always_retry_failed_builds = always_retry_failed_builds
+        self.uses_application_default_credentials = uses_application_default_credentials
+        self._impersonated_service_account = impersonated_service_account.map(AnyString.init)
         self.cost_estimate_enabled = cost_estimate_enabled
         self.pdt_api_control_enabled = pdt_api_control_enabled
         self.connection_pooling = connection_pooling
+        self._bq_storage_project_id = bq_storage_project_id.map(AnyString.init)
     }
 
 }
@@ -28306,6 +28486,8 @@ public struct WriteSetting: SDKModel {
         case _email_domain_allowlist = "email_domain_allowlist"
         case embed_cookieless_v2
         case embed_config
+        case dashboard_auto_refresh_restriction
+        case _dashboard_auto_refresh_minimum_interval = "dashboard_auto_refresh_minimum_interval"
     }
     /**
      * Toggle extension framework on or off
@@ -28396,7 +28578,21 @@ public struct WriteSetting: SDKModel {
 
     public var embed_config: EmbedConfig?
 
-    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_config: EmbedConfig? = nil) {
+    /**
+     * Toggle Dashboard Auto Refresh restriction
+     */
+    public var dashboard_auto_refresh_restriction: Bool?
+
+    private var _dashboard_auto_refresh_minimum_interval: AnyString?
+    /**
+     * Minimum time interval for dashboard element automatic refresh. Examples: (30 seconds, 1 minute)
+     */
+    public var dashboard_auto_refresh_minimum_interval: String? {
+        get { _dashboard_auto_refresh_minimum_interval?.value }
+        set { _dashboard_auto_refresh_minimum_interval = newValue.map(AnyString.init) }
+    }
+
+    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_config: EmbedConfig? = nil, dashboard_auto_refresh_restriction: Bool? = nil, dashboard_auto_refresh_minimum_interval: String? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
@@ -28414,6 +28610,8 @@ public struct WriteSetting: SDKModel {
         if let v = email_domain_allowlist { _email_domain_allowlist = v.map { AnyString.init($0) } } else { _email_domain_allowlist = nil }
         self.embed_cookieless_v2 = embed_cookieless_v2
         self.embed_config = embed_config
+        self.dashboard_auto_refresh_restriction = dashboard_auto_refresh_restriction
+        self._dashboard_auto_refresh_minimum_interval = dashboard_auto_refresh_minimum_interval.map(AnyString.init)
     }
 
 }
@@ -28627,7 +28825,7 @@ public struct WriteUser: SDKModel {
     }
     /**
      * Dynamic writeable type for CredentialsEmail removes:
-     * can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, type, url, user_url
+     * can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, password_reset_url_expired, account_setup_url_expired, type, url, user_url
      */
     public var credentials_email: WriteCredentialsEmail?
 
