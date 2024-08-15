@@ -25,9 +25,7 @@
  */
 
 import nodeCrypto from 'crypto';
-import fetch from 'node-fetch';
-import type { Readable } from 'readable-stream';
-import { PassThrough } from 'readable-stream';
+// import { Buffer } from 'node:buffer';
 
 import type {
   Authenticator,
@@ -46,7 +44,6 @@ import {
   defaultTimeout,
   responseMode,
   ResponseMode,
-  trace,
   LookerAppId,
   agentPrefix,
   safeBase64,
@@ -116,7 +113,7 @@ export class NodeTransport extends BaseTransport {
     while (attempt <= maxRetries) {
       const req = fetch(
         props.url,
-        props // Weird package issues with unresolved imports for RequestInit :(
+        props as RequestInit // Weird package issues with unresolved imports for RequestInit :(
       );
 
       const requestStarted = Date.now();
@@ -213,7 +210,7 @@ export class NodeTransport extends BaseTransport {
       if (res.contentType.match(/^application\/.*\bjson\b/g)) {
         try {
           if (result instanceof Buffer) {
-            result = Buffer.from(result).toString(utf8);
+            result = Buffer.from(result).toString(); // (utf8);
           }
           if (!(result instanceof Object)) {
             result = JSON.parse(result.toString());
@@ -271,7 +268,7 @@ export class NodeTransport extends BaseTransport {
   }
 
   async stream<TSuccess>(
-    callback: (readable: Readable) => Promise<TSuccess>,
+    callback: (response: Response) => Promise<TSuccess>,
     method: HttpMethod,
     path: string,
     queryParams?: Values,
@@ -279,30 +276,54 @@ export class NodeTransport extends BaseTransport {
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
   ): Promise<TSuccess> {
-    const stream = new PassThrough();
-    // TODO we're not using streaming internally but this should be fixed eventually
-    // @ts-ignore
-    const returnPromise = callback(stream);
-    const newOpts = { ...this.options, ...options };
+    const newOpts = { ...this.options, options };
     const requestPath = this.makeUrl(path, newOpts, queryParams);
+    // TODO add signal: AbortSignal support
     const init = await this.initRequest(
       method,
       requestPath,
       body,
       authenticator,
-      options
+      newOpts
     );
 
-    const streamPromise = new Promise<void>((resolve, reject) => {
-      trace(`[stream] beginning stream via download url`, init);
-      // see original streaming implementation in
-      // https://github.com/looker-open-source/sdk-codegen/blob/98a687e45b42512bc7fb45727d4eec2c86e8372d/packages/sdk-node/src/nodeTransport.ts#L298
-      return Promise.reject(new Error('Need to reimplement'));
-    });
-
-    const results = await Promise.all([returnPromise, streamPromise]);
-    return results[0];
+    const response = await fetch(requestPath, init as RequestInit);
+    return await callback(response);
   }
+
+  // async stream<TSuccess>(
+  //   callback: (readable: Readable) => Promise<TSuccess>,
+  //   method: HttpMethod,
+  //   path: string,
+  //   queryParams?: Values,
+  //   body?: any,
+  //   authenticator?: Authenticator,
+  //   options?: Partial<ITransportSettings>
+  // ): Promise<TSuccess> {
+  //   const stream = new PassThrough();
+  //   // TODO we're not using streaming internally but this should be fixed eventually
+  //   // @ts-ignore
+  //   const returnPromise = callback(stream);
+  //   const newOpts = { ...this.options, ...options };
+  //   const requestPath = this.makeUrl(path, newOpts, queryParams);
+  //   const init = await this.initRequest(
+  //     method,
+  //     requestPath,
+  //     body,
+  //     authenticator,
+  //     options
+  //   );
+  //
+  //   const streamPromise = new Promise<void>((resolve, reject) => {
+  //     trace(`[stream] beginning stream via download url`, init);
+  //     // see original streaming implementation in
+  //     // https://github.com/looker-open-source/sdk-codegen/blob/98a687e45b42512bc7fb45727d4eec2c86e8372d/packages/sdk-node/src/nodeTransport.ts#L298
+  //     return Promise.reject(new Error('Need to reimplement'));
+  //   });
+  //
+  //   const results = await Promise.all([returnPromise, streamPromise]);
+  //   return results[0];
+  // }
 
   /**
    * should the request verify SSL?

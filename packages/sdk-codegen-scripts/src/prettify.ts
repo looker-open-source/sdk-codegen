@@ -35,7 +35,7 @@ const prettierTs: prettier.Options = {
   semi: true,
   singleQuote: true,
   trailingComma: 'es5',
-  arrowParens: 'always',
+  arrowParens: 'avoid',
 };
 
 /**

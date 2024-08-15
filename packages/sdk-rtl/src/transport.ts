@@ -26,7 +26,6 @@
 
 import type { Agent } from 'https';
 import type { Headers } from 'request';
-import type { Readable } from 'readable-stream';
 import {
   matchCharsetUtf8,
   matchModeBinary,
@@ -43,7 +42,7 @@ export const LookerAppId = 'x-looker-appid';
 /** default maximum number of retries to attempt */
 export const MaxTries = 10;
 
-/** Set to `true` to follow streaming process */
+/** Set to `true` to turn on tracing wherever it may be referenced in the sdk */
 const tracing = false;
 
 /**
@@ -413,7 +412,7 @@ export interface ITransport {
    * @throws `ISDKErrorResponse` on failure
    */
   stream<T>(
-    callback: (readable: Readable) => Promise<T>,
+    callback: (response: Response) => Promise<T>,
     method: HttpMethod,
     path: string,
     queryParams?: Values,
@@ -498,7 +497,7 @@ export interface IAPIMethods {
    * @returns {Promise<T>}
    */
   authStream<T>(
-    callback: (readable: Readable) => Promise<T>,
+    callback: (response: Response) => Promise<T>,
     method: HttpMethod,
     path: string,
     queryParams?: Values,

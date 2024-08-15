@@ -25,7 +25,6 @@
  */
 
 import * as fs from 'fs';
-import type { Readable } from 'readable-stream';
 import type {
   ICreateQueryTask,
   IDashboard,

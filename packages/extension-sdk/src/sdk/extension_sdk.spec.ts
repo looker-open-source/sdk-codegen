@@ -29,7 +29,6 @@ import type { Looker40SDK } from '@looker/sdk';
 import { ExtensionNotificationType, MountPoint } from '../connect/types';
 import { ExtensionHostApiImpl } from '../connect/extension_host_api';
 import { LookerExtensionSDK } from './extension_sdk';
-import { LookerExtensionSDK40 } from './extension_sdk_40';
 
 describe('extension_sdk tests', () => {
   let chattyHost: ChattyHostConnection;
@@ -120,19 +119,7 @@ describe('extension_sdk tests', () => {
   });
 
   it('creates 40 client', (done) => {
-    const sdk = LookerExtensionSDK.create40Client(createHostApi());
-    expect(sdk).toBeDefined();
-    sdk.all_connections().then(() => {
-      expect(sendAndReceiveSpy).toHaveBeenCalledWith(
-        'EXTENSION_API_REQUEST',
-        getAllConnectionPayload('TS-SDK', '4.0')
-      );
-      done();
-    });
-  });
-
-  it('creates exclusive 40 client', (done) => {
-    const sdk = LookerExtensionSDK40.createClient(createHostApi());
+    const sdk = LookerExtensionSDK.createClient(createHostApi());
     expect(sdk).toBeDefined();
     sdk.all_connections().then(() => {
       expect(sendAndReceiveSpy).toHaveBeenCalledWith(

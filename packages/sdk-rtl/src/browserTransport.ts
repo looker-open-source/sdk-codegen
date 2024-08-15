@@ -24,7 +24,6 @@
 
  */
 
-import type { Readable } from 'readable-stream';
 import type {
   Authenticator,
   HttpMethod,
@@ -49,7 +48,6 @@ import {
   retryError,
   retryWait,
   safeBase64,
-  trace,
 } from './transport';
 import { BaseTransport } from './baseTransport';
 import type { ICryptoHash } from './cryptoHash';
@@ -185,7 +183,6 @@ export class BrowserTransport extends BaseTransport {
     const { method, path, queryParams, body, authenticator, options } = request;
     const newOpts = { ...this.options, options };
     const requestPath = this.makeUrl(path, newOpts, queryParams);
-    const waiter = newOpts.waitHandler || retryWait;
     const props = await this.initRequest(
       method,
       requestPath,
@@ -193,15 +190,13 @@ export class BrowserTransport extends BaseTransport {
       authenticator,
       newOpts
     );
+    const waiter = newOpts.waitHandler || retryWait;
     let response = initResponse(method, requestPath);
     // TODO assign to MaxTries when retry is opt-out instead of opt-in
     const maxRetries = newOpts.maxTries ?? 1; // MaxTries
     let attempt = 1;
     while (attempt <= maxRetries) {
-      const req = fetch(
-        props.url,
-        props // Weird package issues with unresolved imports for RequestInit :(
-      );
+      const req = fetch(props.url, props as RequestInit);
 
       const requestStarted = Date.now();
       const res = await req;
@@ -341,7 +336,7 @@ export class BrowserTransport extends BaseTransport {
   ): Promise<SDKResponse<TSuccess, TError>> {
     try {
       if (BrowserTransport.trackPerformance) {
-        options = { ...options, fromRequest: true };
+        options = { ...options, fromRequest: true } as any;
       }
       const res = await this.rawRequest(
         method,
@@ -375,6 +370,7 @@ export class BrowserTransport extends BaseTransport {
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
   ) {
+    // TODO push this down to BaseTransport unless it can't be shared b/n node and browser
     const agentTag = options?.agentTag || agentPrefix;
     options = options ? { ...this.options, ...options } : this.options;
     const headers: IRequestHeaders = { [LookerAppId]: agentTag };
@@ -409,88 +405,28 @@ export class BrowserTransport extends BaseTransport {
     return props;
   }
 
-  // TODO finish this method
   async stream<TSuccess>(
-    _callback: (readable: Readable) => Promise<TSuccess>,
+    callback: (response: Response) => Promise<TSuccess>,
     method: HttpMethod,
     path: string,
-    queryParams?: any,
+    queryParams?: Values,
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
   ): Promise<TSuccess> {
-    options = options ? { ...this.options, ...options } : this.options;
-    // const stream = new PassThrough()
-    // const returnPromise = callback(stream)
-    const requestPath = this.makeUrl(path, options, queryParams);
-    const props = await this.initRequest(
+    // TODO push this method down to base transport
+    const newOpts = { ...this.options, options };
+    const requestPath = this.makeUrl(path, newOpts, queryParams);
+    // TODO add signal: AbortSignal support
+    const init = await this.initRequest(
       method,
       requestPath,
       body,
       authenticator,
-      options
-    );
-    trace(`[stream] attempting to stream via download url`, props);
-
-    return Promise.reject<TSuccess>(
-      // Silly error message to prevent linter from complaining about unused variables
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      Error(
-        `Streaming for callback ${props.method} ${props.requestPath} is not implemented`
-      )
+      newOpts
     );
 
-    /*
-    TODO complete this for the browser implementation
-    const streamPromise = new Promise<void>((resolve, reject) => {
-      trace(`[stream] beginning stream via download url`, props)
-      reject(Error('Not implemented yet!'))
-      // let hasResolved = false
-      // const req = this.requestor(props)
-      //
-      // req
-      //   .on("error", (err) => {
-      //     if (hasResolved && (err as any).code === "ECONNRESET") {
-      //       trace('ignoring ECONNRESET that occurred after streaming finished', props)
-      //     } else {
-      //       trace('streaming error', err)
-      //       reject(err)
-      //     }
-      //   })
-      //   .on("finish", () => {
-      //     trace(`[stream] streaming via download url finished`, props)
-      //   })
-      //   .on("socket", (socket) => {
-      //     trace(`[stream] setting keepalive on socket`, props)
-      //     socket.setKeepAlive(true)
-      //   })
-      //   .on("abort", () => {
-      //     trace(`[stream] streaming via download url aborted`, props)
-      //   })
-      //   .on("response", () => {
-      //     trace(`[stream] got response from download url`, props)
-      //   })
-      //   .on("close", () => {
-      //     trace(`[stream] request stream closed`, props)
-      //   })
-      //   .pipe(stream)
-      //   .on("error", (err) => {
-      //     trace(`[stream] PassThrough stream error`, err)
-      //     reject(err)
-      //   })
-      //   .on("finish", () => {
-      //     trace(`[stream] PassThrough stream finished`, props)
-      //     resolve()
-      //     hasResolved = true
-      //   })
-      //   .on("close", () => {
-      //     trace(`[stream] PassThrough stream closed`, props)
-      //   })
-    })
-
-    const results = await Promise.all([returnPromise, streamPromise])
-    return results[0]
-    */
+    const response = await fetch(requestPath, init as RequestInit);
+    return await callback(response);
   }
 }

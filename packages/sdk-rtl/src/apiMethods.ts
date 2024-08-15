@@ -24,7 +24,6 @@
 
  */
 
-import type { Readable } from 'readable-stream';
 import type {
   Authenticator,
   HttpMethod,
@@ -208,7 +207,7 @@ export class APIMethods implements IAPIMethods {
    * @returns {Promise<T>}
    */
   async authStream<T>(
-    callback: (readable: Readable) => Promise<T>,
+    callback: (response: Response) => Promise<T>,
     method: HttpMethod,
     path: string,
     queryParams?: Values,

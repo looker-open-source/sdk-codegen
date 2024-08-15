@@ -24,7 +24,6 @@
 
  */
 
-import type { Readable } from 'readable-stream';
 import { StatusCode, addQueryParams } from './transport';
 import type {
   Authenticator,
@@ -97,8 +96,7 @@ export abstract class BaseTransport implements ITransport {
 
   /**
    * Request a streaming response
-   * @param {(readable: _Readable.Readable) => Promise<TSuccess>} callback A function will be called with a Node.js or
-   *  Browser `Readable` object. The readable object represents the streaming data.
+   * @param callback A function will be called with the created HTTP response object
    * @param method HTTP method
    * @param path Request path
    * @param queryParams parameters for the request
@@ -108,7 +106,7 @@ export abstract class BaseTransport implements ITransport {
    * @returns the streaming response
    */
   abstract stream<TSuccess>(
-    callback: (readable: Readable) => Promise<TSuccess>,
+    callback: (response: Response) => Promise<TSuccess>,
     method: HttpMethod,
     path: string,
     queryParams?: Values,

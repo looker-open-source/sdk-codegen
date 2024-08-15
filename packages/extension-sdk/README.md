@@ -31,14 +31,14 @@ The Extension SDK must establish a connection with its host before further funct
 ```ts
 import {
   connectExtensionHost,
-  LookerExtensionSDK40,
+  LookerExtensionSDK,
 } from '@looker/extension-sdk';
 (async () => {
   // This `extensionSDK` can perform extension-specific actions
   const extensionSdk = await connectExtensionHost();
   // This `coreSDK` is an automatically credentialed variant of the standard Looker Core SDK for performing API calls
-  const coreSDK = LookerExtensionSDK40.createClient(extensionSdk);
-  const result = await sdk40.me();
+  const sdk = LookerExtensionSDK.createClient(extensionSdk);
+  const result = await sdk.me();
   const name = result.ok ? result.value.display_name : 'Unknown';
 
   // DO OTHER THINGS

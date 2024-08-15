@@ -32,10 +32,6 @@ npm install @looker/sdk @looker/sdk-rtl
 
 Some other dependencies may be required for your project to build and run correctly.
 
-```bash
-yarn install @types/readable-stream @types/request @types/request-promise-native -D
-```
-
 ### TypeScript SDK packages
 
 The Looker TypeScript SDK has different packages to prevent node dependencies being linked into browser usage of the SDK (the node dependencies are not available in the browser and can cause compilation errors). There are three packages for the Typescript SDK available on npm:

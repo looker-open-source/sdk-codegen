@@ -43,9 +43,6 @@
     "@looker/sdk": "24.12.1",
     "@looker/sdk-rtl": "21.6.1",
     "deepmerge": "^4.2.2",
-    "readable-stream": "^3.4.0",
-    "request": "^2.88.0",
-    "request-promise-native": "^1.0.8",
     "semver": "^7.3.4"
   },
   "keywords": [

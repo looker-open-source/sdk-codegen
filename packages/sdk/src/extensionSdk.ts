@@ -24,11 +24,7 @@
 
  */
 
-import type {
-  IApiSettings,
-  IAuthSession,
-  IHostConnection,
-} from '@looker/sdk-rtl';
+import type { IAuthSession, IHostConnection } from '@looker/sdk-rtl';
 import {
   DefaultSettings,
   ExtensionSession,
@@ -45,10 +41,12 @@ export class LookerExtensionSDK {
    */
   static createClient(
     hostConnection: IHostConnection,
-    _type: new (authSession: IAuthSession) => Looker40SDK,
-    settings?: IApiSettings
+    /**
+     * @deprecated no longer required
+     */
+    _type?: new (authSession: IAuthSession) => Looker40SDK
   ): Looker40SDK {
-    settings = settings || DefaultSettings();
+    const settings = DefaultSettings();
     const transport = new ExtensionTransport(settings, hostConnection);
     const session = new ExtensionSession(settings, transport);
     return new Looker40SDK(session);

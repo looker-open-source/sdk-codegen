@@ -228,9 +228,8 @@ export interface I${this.packageName} extends IAPIMethods {
 
   streamsPrologue(_indent: string): string {
     return `
-import type { Readable } from 'readable-stream';
 import type { ${this.rtlImports()}IAuthSession, ITransportSettings } from '@looker/sdk-rtl';
-import { APIMethods, encodeParam } from '@looker/sdk-rtl';
+import { APIMethods, agentPrefix, encodeParam } from '@looker/sdk-rtl';
 
 /**
  * ${this.warnEditing()}
@@ -240,14 +239,15 @@ import { sdkVersion } from '../constants';
 import type { ${this.typeNames().join(', ')} } from './models';
 
 export class ${this.packageName}Stream extends APIMethods {
-  static readonly ApiVersion = '${this.apiVersion}'
+  static readonly ApiVersion = '${this.apiVersion}';
   constructor(authSession: IAuthSession) {
-    super(authSession, sdkVersion)
-    this.apiVersion = ${this.packageName}Stream.ApiVersion
+    super(authSession, sdkVersion);
+    this.apiVersion = ${this.packageName}Stream.ApiVersion;
     this.apiPath =
       authSession.settings.base_url === ''
         ? ''
-        : authSession.settings.base_url + '/api/' + this.apiVersion
+        : authSession.settings.base_url + '/api/' + this.apiVersion;
+    authSession.settings.agentTag = agentPrefix + ' Streaming ' + sdkVersion;
   }
 `;
   }
@@ -459,7 +459,7 @@ let response = await sdk.ok(sdk.${method.name}(`;
       fragment =
         params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : '';
     }
-    const callback = `callback: (readable: Readable) => Promise<${mapped.name}>,`;
+    const callback = `callback: (response: Response) => Promise<${mapped.name}>,`;
     const header =
       this.commentHeader(indent, headComment) +
       `${indent}async ${method.name}(` +

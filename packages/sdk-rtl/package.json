@@ -35,13 +35,10 @@
   "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/master/packages/sdk-rtl",
   "devDependencies": {
     "@manypkg/find-root": "2.2.1",
-    "@types/node": "14.14.21",
-    "@types/readable-stream": "2.3.14",
     "jest-fetch-mock": "3.0.3",
     "js-yaml": "4.1.0"
   },
   "dependencies": {
-    "readable-stream": "^3.4.0"
   },
   "keywords": [
     "Looker",
