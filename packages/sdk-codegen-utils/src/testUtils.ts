@@ -31,7 +31,8 @@ import isEmpty from 'lodash/isEmpty';
 import { findRootSync } from '@manypkg/find-root';
 import type { IApiConfig } from '@looker/sdk-node';
 import { ApiConfig, NodeSession, readEnvConfig } from '@looker/sdk-node';
-import { ApiModel, upgradeSpecObject } from '@looker/sdk-codegen';
+import { ApiModel } from '@looker/sdk-codegen/src/sdkModels';
+import { upgradeSpecObject } from '@looker/sdk-codegen/src/specConverter';
 import type {
   IAPIMethods,
   IApiSection,
@@ -176,7 +177,7 @@ export const getCypressSettings = (): Record<string, string> => {
  * @param localIni full name of default looker.ini. Needs to be passed in, but doesn't need to exist
  */
 export const loadApiSettings = (
-  rootPath: string,
+  _rootPath: string,
   localIni: string
 ): IApiSettings => {
   const cypressSettings = getCypressSettings();

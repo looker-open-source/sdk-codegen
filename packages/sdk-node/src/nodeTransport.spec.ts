@@ -25,7 +25,7 @@
  */
 
 import type { IRawResponse, ITransportSettings } from '@looker/sdk-rtl';
-import { sdkOk, StatusCode } from '@looker/sdk-rtl';
+import { StatusCode, sdkOk } from '@looker/sdk-rtl';
 import { NodeCryptoHash, NodeTransport } from './nodeTransport';
 
 describe('NodeTransport', () => {

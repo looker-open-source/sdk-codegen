@@ -197,9 +197,10 @@
       "@typescript-eslint/no-empty-interface": "off",
       "import/default": "off",
       "import/export": "warn",
-      "import/order": "warn",
-      "sort-imports": "warn",
-      "import/no-duplicates": "warn",
+      "import/order": "off",
+      "sort-imports": "off",
+      "import/no-duplicates": "off",
+      "jest/no-disabled-tests": "error",
       "import/no-extraneous-dependencies": [
         "warn",
         {
@@ -208,7 +209,7 @@
           "peerDependencies": false
         }
       ],
-      "no-duplicate-imports": "warn",
+      "no-duplicate-imports": "off",
       "sort-keys": "off",
       "no-nested-ternary": "off",
       "spaced-comment": [

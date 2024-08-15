@@ -2287,7 +2287,7 @@ export class EnumType extends Type implements IEnumType {
     return name;
   }
 
-  override mock(options: ITypeMock = {}): any | undefined {
+  override mock(_options: ITypeMock = {}): any | undefined {
     return this.values[0];
   }
 
