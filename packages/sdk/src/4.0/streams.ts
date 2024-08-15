@@ -4594,7 +4594,7 @@ export class Looker40SDKStream extends APIMethods {
    *
    */
   async update_external_oauth_application(
-    callback: (readable: Readable) => Promise<IExternalOauthApplication>,
+    callback: (response: Response) => Promise<IExternalOauthApplication>,
     client_id: string,
     body: Partial<IWriteExternalOauthApplication>,
     options?: Partial<ITransportSettings>
