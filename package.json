@@ -200,7 +200,6 @@
       "import/order": "off",
       "sort-imports": "off",
       "import/no-duplicates": "off",
-      "jest/no-disabled-tests": "error",
       "import/no-extraneous-dependencies": [
         "warn",
         {
