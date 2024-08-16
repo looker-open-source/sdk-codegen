@@ -364,11 +364,10 @@ export class NodeTransport extends BaseTransport {
     };
 
     if (!this.verifySsl(options)) {
-      props.strictSSL = false;
+      process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
       props.agent = new https.Agent({
         requestCert: false,
         rejectUnauthorized: false,
-        strictSSL: false,
       });
     }
 
