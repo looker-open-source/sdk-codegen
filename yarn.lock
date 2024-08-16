@@ -2623,16 +2623,6 @@
   resolved "https://registry.yarnpkg.com/@looker/redux/-/redux-0.0.1.tgz#4decc5a78e207c1c63e5c114be2ecca4b3d09d44"
   integrity sha512-+gMHsg321OD9Cp0sMNkgcOIp1HtKs8kxNQMQD4XGFb2S8yfXtLRe7vnwghKCHfCiYkXEHLMUcFmBCEvSk7HlrA==
 
-"@looker/sdk-codegen@21.8.2":
-  version "21.8.2"
-  resolved "https://registry.yarnpkg.com/@looker/sdk-codegen/-/sdk-codegen-21.8.2.tgz#a41f2a83816dfc348f7161ae9285ac9678b0c01a"
-  integrity sha512-TL78h+m5smCTWshcp853Y9h+jXRIWhaj/TEaIPEkndKr1X4B2Z1n5DmpK0/QM/hbyffCuJDmZeJL35VbkIgyeg==
-  dependencies:
-    "@looker/sdk-codegen-utils" "^21.0.11"
-    "@looker/sdk-rtl" "^21.6.1"
-    blueimp-md5 "^2.13.0"
-    openapi3-ts "^1.3.0"
-
 "@looker/sdk-node@24.12.1":
   version "24.12.1"
   resolved "https://registry.yarnpkg.com/@looker/sdk-node/-/sdk-node-24.12.1.tgz#46688dd4dc3cb6478f81911198d8e81fdb7a956e"
@@ -5307,11 +5297,6 @@ blueimp-md5@2.18.0:
   version "2.18.0"
   resolved "https://registry.yarnpkg.com/blueimp-md5/-/blueimp-md5-2.18.0.tgz#1152be1335f0c6b3911ed9e36db54f3e6ac52935"
   integrity sha512-vE52okJvzsVWhcgUHOv+69OG3Mdg151xyn41aVQN/5W5S+S43qZhxECtYLAEHMSFWX6Mv5IZrzj3T5+JqXfj5Q==
-
-blueimp-md5@^2.13.0:
-  version "2.19.0"
-  resolved "https://registry.yarnpkg.com/blueimp-md5/-/blueimp-md5-2.19.0.tgz#b53feea5498dcb53dc6ec4b823adb84b729c4af0"
-  integrity sha512-DRQrD6gJyy8FbiE4s+bDoXS9hiW3Vbx5uCdwvcCf3zLHL+Iv7LtGHLpr+GZV8rHG8tK766FGYBwRbu8pELTt+w==
 
 body-parser@1.20.1:
   version "1.20.1"
@@ -13210,11 +13195,6 @@ openapi3-ts@2.0.2:
   integrity sha512-TxhYBMoqx9frXyOgnRHufjQfPXomTIHYKhSKJ6jHfj13kS8OEIhvmE8CTuQyKtjjWttAjX5DPxM1vmalEpo8Qw==
   dependencies:
     yaml "^1.10.2"
-
-openapi3-ts@^1.3.0:
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/openapi3-ts/-/openapi3-ts-1.4.0.tgz#679d5a24be0efc36f5de4fc2c4b8513663e16f65"
-  integrity sha512-8DmE2oKayvSkIR3XSZ4+pRliBsx19bSNeIzkTPswY8r4wvjX86bMxsORdqwAwMxE8PefOcSAT2auvi/0TZe9yA==
 
 opener@^1.5.1, opener@^1.5.2:
   version "1.5.2"

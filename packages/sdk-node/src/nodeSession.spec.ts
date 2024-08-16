@@ -26,7 +26,7 @@
 
 import * as fs from 'fs';
 import { ApiConfigMap, boolDefault, defaultTimeout } from '@looker/sdk-rtl';
-import { TestConfig } from './testUtils';
+import { TestConfig } from '@looker/sdk-codegen-utils';
 import { NodeTransport } from './nodeTransport';
 import { NodeSession } from './nodeSession';
 import { ApiConfig, NodeSettings, NodeSettingsIniFile } from './nodeSettings';
@@ -36,7 +36,7 @@ const envPrefix = 'LOOKERSDK';
 const localIni = config.localIni;
 
 // TODO These tests are skipped for CI. Can we make them work for CI?
-describe.skip('NodeSession', () => {
+describe('NodeSession', () => {
   const settings = new NodeSettingsIniFile(envPrefix, localIni, 'Looker');
   const transport = new NodeTransport(settings);
 

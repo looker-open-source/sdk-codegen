@@ -27,6 +27,7 @@
 const { excludeNodeModulesExcept } = require('./babel.common');
 
 process.env.TZ = 'UTC';
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 module.exports = {
   automock: false,

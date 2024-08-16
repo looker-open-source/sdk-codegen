@@ -31,8 +31,8 @@ import isEmpty from 'lodash/isEmpty';
 import { findRootSync } from '@manypkg/find-root';
 import type { IApiConfig } from '@looker/sdk-node';
 import { ApiConfig, NodeSession, readEnvConfig } from '@looker/sdk-node';
-import { ApiModel } from '@looker/sdk-codegen/src/sdkModels';
-import { upgradeSpecObject } from '@looker/sdk-codegen/src/specConverter';
+import { ApiModel } from '../../sdk-codegen/src/sdkModels';
+import { upgradeSpecObject } from '../../sdk-codegen/src/specConverter';
 import type {
   IAPIMethods,
   IApiSection,
@@ -230,17 +230,18 @@ export const createFunSdk = (): IAPIMethods => {
  */
 export const TestConfig = (rootPath = getRootPath()): ITestConfig => {
   const testDataFile = 'data.yml';
-  const localIni = process.env.LOOKERSDK_INI || `${rootPath}looker.ini`;
+  const localIni =
+    process.env.LOOKERSDK_INI || path.join(rootPath, 'looker.ini');
   const settings = loadApiSettings(rootPath, localIni);
   const session = new NodeSession(settings);
   const sdk: IAPIMethods = new Looker40SDK(session);
-  const testPath = `${rootPath}/packages/sdk-codegen-utils/data/`;
+  const testPath = path.join(rootPath, '/packages/sdk-codegen-utils/data/');
   const dataFile = testFile(testDataFile);
   const testData: any = fs.existsSync(dataFile)
     ? yaml.load(fs.readFileSync(dataFile, utf8))
     : {};
   const apiTestModel = specFromFile(testFile('openApiRef.json'));
-  const testIni = `${rootPath}${testData.iniFile}`;
+  const testIni = path.join(rootPath, testData.iniFile);
   return {
     apiTestModel,
     dataFile,

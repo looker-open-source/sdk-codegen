@@ -101,10 +101,6 @@ const mimeType = (data: string) => {
 };
 
 describe('LookerNodeSDK', () => {
-  beforeAll(() => {
-    process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-  });
-
   const settings = new NodeSettingsIniFile(
     environmentPrefix,
     config.localIni,

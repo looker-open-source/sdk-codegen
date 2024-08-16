@@ -56,7 +56,6 @@ import {
   retryWait,
   safeBase64,
 } from '@looker/sdk-rtl';
-import * as https from 'https';
 
 const utf8 = 'utf8';
 
@@ -117,6 +116,7 @@ export class NodeTransport extends BaseTransport {
         props.url,
         props as RequestInit // Weird package issues with unresolved imports for RequestInit for node-fetch :(
       );
+      console.debug(JSON.stringify(props));
 
       const requestStarted = Date.now();
       try {
@@ -365,10 +365,13 @@ export class NodeTransport extends BaseTransport {
 
     if (!this.verifySsl(options)) {
       process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-      props.agent = new https.Agent({
-        requestCert: false,
-        rejectUnauthorized: false,
-      });
+      // This information appears to be stale. Commenting it out as a cruft
+      // signal to continue researching something better than the process
+      // toggle cannon
+      // props.agent = new https.Agent({
+      //   requestCert: false,
+      //   rejectUnauthorized: false,
+      // });
     }
 
     if (authenticator) {
