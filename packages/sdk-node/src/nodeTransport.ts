@@ -25,6 +25,8 @@
  */
 
 import nodeCrypto from 'crypto';
+import fetch from 'cross-fetch';
+
 // import { Buffer } from 'node:buffer';
 
 import type {
@@ -55,6 +57,7 @@ import {
   retryWait,
   safeBase64,
 } from '@looker/sdk-rtl';
+import * as https from 'https';
 
 const utf8 = 'utf8';
 
@@ -291,40 +294,6 @@ export class NodeTransport extends BaseTransport {
     return await callback(response);
   }
 
-  // async stream<TSuccess>(
-  //   callback: (readable: Readable) => Promise<TSuccess>,
-  //   method: HttpMethod,
-  //   path: string,
-  //   queryParams?: Values,
-  //   body?: any,
-  //   authenticator?: Authenticator,
-  //   options?: Partial<ITransportSettings>
-  // ): Promise<TSuccess> {
-  //   const stream = new PassThrough();
-  //   // TODO we're not using streaming internally but this should be fixed eventually
-  //   // @ts-ignore
-  //   const returnPromise = callback(stream);
-  //   const newOpts = { ...this.options, ...options };
-  //   const requestPath = this.makeUrl(path, newOpts, queryParams);
-  //   const init = await this.initRequest(
-  //     method,
-  //     requestPath,
-  //     body,
-  //     authenticator,
-  //     options
-  //   );
-  //
-  //   const streamPromise = new Promise<void>((resolve, reject) => {
-  //     trace(`[stream] beginning stream via download url`, init);
-  //     // see original streaming implementation in
-  //     // https://github.com/looker-open-source/sdk-codegen/blob/98a687e45b42512bc7fb45727d4eec2c86e8372d/packages/sdk-node/src/nodeTransport.ts#L298
-  //     return Promise.reject(new Error('Need to reimplement'));
-  //   });
-  //
-  //   const results = await Promise.all([returnPromise, streamPromise]);
-  //   return results[0];
-  // }
-
   /**
    * should the request verify SSL?
    * @param options Defaults to the instance options values
@@ -355,6 +324,7 @@ export class NodeTransport extends BaseTransport {
     const agentTag = options?.agentTag || agentPrefix;
     options = options ? { ...this.options, ...options } : this.options;
     const headers: IRequestHeaders = { [LookerAppId]: agentTag };
+
     if (options && options.headers) {
       Object.entries(options.headers).forEach(([key, val]) => {
         headers[key] = val;
@@ -370,6 +340,7 @@ export class NodeTransport extends BaseTransport {
         headers['Content-Type'] = 'application/json';
       }
     }
+
     // TODO need to add timeout back
     let props: IRequestProps = {
       body,
@@ -384,6 +355,12 @@ export class NodeTransport extends BaseTransport {
       props = await authenticator(props);
     }
 
+    if (!this.verifySsl(options)) {
+      props.agent = new https.Agent({ rejectUnauthorized: false });
+    }
+
+    // Transform to HTTP request headers at the last second
+    props.headers = new Headers(props.headers) as any;
     return props;
   }
 }

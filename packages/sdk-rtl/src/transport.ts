@@ -25,7 +25,6 @@
  */
 
 import type { Agent } from 'https';
-import type { Headers } from 'request';
 import {
   matchCharsetUtf8,
   matchModeBinary,
@@ -324,7 +323,7 @@ export interface ITransportSettings {
   /** base URL of API REST web service */
   base_url: string;
   /** standard headers to provide in all transport requests */
-  headers?: Headers;
+  headers?: IRequestHeaders;
   /** whether to verify ssl certs or not. Defaults to true */
   verify_ssl: boolean;
   /** request timeout in seconds. Default to 30 */

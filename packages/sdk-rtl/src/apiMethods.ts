@@ -198,13 +198,12 @@ export class APIMethods implements IAPIMethods {
 
   /**
    * A helper method to add authentication to an API request for streaming
-   * @param {(readable: Readable) => Promise<T>} callback
-   * @param {HttpMethod} method
-   * @param {string} path
+   * @param callback for streaming
+   * @param method of HTTP request
+   * @param path HTTP path
    * @param queryParams
    * @param body
-   * @param {Partial<ITransportSettings>} options
-   * @returns {Promise<T>}
+   * @param options to override
    */
   async authStream<T>(
     callback: (response: Response) => Promise<T>,

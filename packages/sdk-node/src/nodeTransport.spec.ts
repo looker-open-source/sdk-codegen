@@ -24,7 +24,11 @@
 
  */
 
-import type { IRawResponse, ITransportSettings } from '@looker/sdk-rtl';
+import type {
+  IRawResponse,
+  ISDKError,
+  ITransportSettings,
+} from '@looker/sdk-rtl';
 import { StatusCode, sdkOk } from '@looker/sdk-rtl';
 import { NodeCryptoHash, NodeTransport } from './nodeTransport';
 
@@ -52,16 +56,15 @@ describe('NodeTransport', () => {
   });
 
   describe('transport errors', () => {
-    test('gracefully handles Node-level transport errors', async () => {
+    test('gracefully handles transport errors', async () => {
       const response = await xp.rawRequest('GET', badPath);
-      const errorMessage = `GET ${badPath}`;
+      const errorMessage = 'Not Found';
       expect(response).toBeDefined();
       expect(response.ok).toEqual(false);
       expect(response.method).toEqual('GET');
       expect(response.statusCode).toEqual(404);
       expect(response.body).toBeDefined();
-      expect(response.statusMessage.indexOf('"type":"Buffer"')).toEqual(-1);
-      expect(response.statusMessage.indexOf(errorMessage)).toEqual(0);
+      expect(response.statusMessage).toEqual(errorMessage);
     });
   });
 
