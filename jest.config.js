@@ -65,5 +65,6 @@ module.exports = {
       isolatedModules: true,
       diagnostics: false,
     },
+    fetch: global.fetch,
   },
 };

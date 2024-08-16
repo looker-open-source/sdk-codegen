@@ -25,7 +25,6 @@
  */
 
 import nodeCrypto from 'crypto';
-import fetch from 'cross-fetch';
 
 // import { Buffer } from 'node:buffer';
 
@@ -116,58 +115,71 @@ export class NodeTransport extends BaseTransport {
     while (attempt <= maxRetries) {
       const req = fetch(
         props.url,
-        props as RequestInit // Weird package issues with unresolved imports for RequestInit :(
+        props as RequestInit // Weird package issues with unresolved imports for RequestInit for node-fetch :(
       );
 
       const requestStarted = Date.now();
-      const res = await req;
-      const responseCompleted = Date.now();
+      try {
+        const res = await req;
+        const responseCompleted = Date.now();
 
-      // Start tracking the time it takes to convert the response
-      const started = BrowserTransport.markStart(
-        BrowserTransport.markName(requestPath)
-      );
-      const contentType = String(res.headers.get('content-type'));
-      const mode = responseMode(contentType);
-      const responseBody =
-        mode === ResponseMode.binary ? await res.blob() : await res.text();
-      if (!('fromRequest' in newOpts)) {
-        // Request will markEnd, so don't mark the end here
-        BrowserTransport.markEnd(requestPath, started);
-      }
-      const headers: { [key: string]: any } = {};
-      res.headers.forEach((value, key) => (headers[key] = value));
-      response = {
-        method,
-        url: requestPath,
-        body: responseBody,
-        contentType,
-        statusCode: res.status,
-        statusMessage: res.statusText,
-        startMark: started,
-        headers,
-        requestStarted,
-        responseCompleted,
-        ok: true,
-      };
-      response.ok = this.ok(response);
-      if (canRetry(response.statusCode) && attempt < maxRetries) {
-        const result = await pauseForRetry(request, response, attempt, waiter);
-        if (result.response === 'cancel') {
-          if (result.reason) {
-            response.statusMessage = result.reason;
-          }
-          break;
-        } else if (result.response === 'error') {
-          if (result.reason) {
-            response.statusMessage = result.reason;
-          }
-          return retryError(response);
+        // Start tracking the time it takes to convert the response
+        const started = BrowserTransport.markStart(
+          BrowserTransport.markName(requestPath)
+        );
+        const contentType = String(res.headers.get('content-type'));
+        const mode = responseMode(contentType);
+        const responseBody =
+          mode === ResponseMode.binary ? await res.blob() : await res.text();
+        if (!('fromRequest' in newOpts)) {
+          // Request will markEnd, so don't mark the end here
+          BrowserTransport.markEnd(requestPath, started);
         }
-      } else {
-        break;
+        const headers: { [key: string]: any } = {};
+        res.headers.forEach((value, key) => (headers[key] = value));
+        response = {
+          method,
+          url: requestPath,
+          body: responseBody,
+          contentType,
+          statusCode: res.status,
+          statusMessage: res.statusText,
+          startMark: started,
+          headers,
+          requestStarted,
+          responseCompleted,
+          ok: true,
+        };
+        response.ok = this.ok(response);
+        if (canRetry(response.statusCode) && attempt < maxRetries) {
+          const result = await pauseForRetry(
+            request,
+            response,
+            attempt,
+            waiter
+          );
+          if (result.response === 'cancel') {
+            if (result.reason) {
+              response.statusMessage = result.reason;
+            }
+            break;
+          } else if (result.response === 'error') {
+            if (result.reason) {
+              response.statusMessage = result.reason;
+            }
+            return retryError(response);
+          }
+        } else {
+          break;
+        }
+        attempt++;
+      } catch (e: any) {
+        response.ok = false;
+        response.body = e;
+        response.statusCode = e.statusCode;
+        response.statusMessage = e.message;
+        return response;
       }
-      attempt++;
     }
     return response;
   }
@@ -290,7 +302,8 @@ export class NodeTransport extends BaseTransport {
       newOpts
     );
 
-    const response = await fetch(requestPath, init as RequestInit);
+    // node-fetch has some pretty bad incompatibilities for typing, and cross-fetch wouldn't authenticate correctly
+    const response: Response = await fetch(requestPath, init as RequestInit);
     return await callback(response);
   }
 
@@ -350,17 +363,23 @@ export class NodeTransport extends BaseTransport {
       url: path,
     };
 
+    if (!this.verifySsl(options)) {
+      props.strictSSL = false;
+      props.agent = new https.Agent({
+        requestCert: false,
+        rejectUnauthorized: false,
+        strictSSL: false,
+      });
+    }
+
     if (authenticator) {
       // Add authentication information to the request
       props = await authenticator(props);
     }
 
-    if (!this.verifySsl(options)) {
-      props.agent = new https.Agent({ rejectUnauthorized: false });
-    }
-
     // Transform to HTTP request headers at the last second
-    props.headers = new Headers(props.headers) as any;
+    // props.headers = new Headers(props.headers) as any;
+
     return props;
   }
 }
