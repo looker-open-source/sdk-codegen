@@ -55,6 +55,7 @@ import {
   retryError,
   retryWait,
   safeBase64,
+  mergeOptions,
 } from '@looker/sdk-rtl';
 
 const utf8 = 'utf8';
@@ -96,8 +97,8 @@ export class NodeTransport extends BaseTransport {
    * @param request options for HTTP request
    */
   async retry(request: IRawRequest): Promise<IRawResponse> {
-    const { method, path, queryParams, body, authenticator, options } = request;
-    const newOpts = { ...this.options, options };
+    const { method, path, queryParams, body, authenticator } = request;
+    const newOpts = mergeOptions(this.options, request.options ?? {});
     const requestPath = this.makeUrl(path, newOpts, queryParams);
     const waiter = newOpts.waitHandler || retryWait;
     const props = await this.initRequest(
@@ -116,7 +117,6 @@ export class NodeTransport extends BaseTransport {
         props.url,
         props as RequestInit // Weird package issues with unresolved imports for RequestInit for node-fetch :(
       );
-      console.debug(JSON.stringify(props));
 
       const requestStarted = Date.now();
       try {
@@ -130,12 +130,12 @@ export class NodeTransport extends BaseTransport {
         const contentType = String(res.headers.get('content-type'));
         const mode = responseMode(contentType);
         const responseBody =
-          mode === ResponseMode.binary ? await res.blob() : await res.text();
+          mode === ResponseMode.binary ? res.blob() : res.text();
         if (!('fromRequest' in newOpts)) {
           // Request will markEnd, so don't mark the end here
           BrowserTransport.markEnd(requestPath, started);
         }
-        const headers: { [key: string]: any } = {};
+        const headers: IRequestHeaders = {};
         res.headers.forEach((value, key) => (headers[key] = value));
         response = {
           method,
@@ -209,7 +209,7 @@ export class NodeTransport extends BaseTransport {
     let error;
     if (!res.ok) {
       // Raw request had an error. Make sure it's a string before parsing the result
-      error = res.body;
+      error = await res.body;
       if (typeof error === 'string') {
         try {
           error = JSON.parse(error);
@@ -239,7 +239,14 @@ export class NodeTransport extends BaseTransport {
       }
     } else {
       try {
-        result = Buffer.from(result ?? '').toString('binary');
+        const body = await result;
+        if (typeof body === 'string') {
+          result = body;
+        } else {
+          // must be a blob?
+          const bytes = await body.arrayBuffer();
+          result = Buffer.from(bytes ?? '').toString('binary');
+        }
       } catch (err: any) {
         error = err;
       }
@@ -334,15 +341,12 @@ export class NodeTransport extends BaseTransport {
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
   ) {
-    const agentTag = options?.agentTag || agentPrefix;
-    options = options ? { ...this.options, ...options } : this.options;
-    const headers: IRequestHeaders = { [LookerAppId]: agentTag };
-
-    if (options && options.headers) {
-      Object.entries(options.headers).forEach(([key, val]) => {
-        headers[key] = val;
-      });
-    }
+    const agentTag = options?.agentTag || this.options.agentTag || agentPrefix;
+    options = mergeOptions(
+      { ...this.options, ...{ headers: { [LookerAppId]: agentTag } } },
+      options
+    );
+    const headers = options.headers ?? {};
 
     // Make sure an empty body is undefined
     if (!body) {

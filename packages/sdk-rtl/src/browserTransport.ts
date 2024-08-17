@@ -48,6 +48,7 @@ import {
   retryError,
   retryWait,
   safeBase64,
+  mergeOptions,
 } from './transport';
 import { BaseTransport } from './baseTransport';
 import type { ICryptoHash } from './cryptoHash';
@@ -180,8 +181,8 @@ export class BrowserTransport extends BaseTransport {
    * @param request options for HTTP request
    */
   async retry(request: IRawRequest): Promise<IRawResponse> {
-    const { method, path, queryParams, body, authenticator, options } = request;
-    const newOpts = { ...this.options, options };
+    const { method, path, queryParams, body, authenticator } = request;
+    const newOpts = mergeOptions(this.options, request.options ?? {});
     const requestPath = this.makeUrl(path, newOpts, queryParams);
     const props = await this.initRequest(
       method,
@@ -193,7 +194,7 @@ export class BrowserTransport extends BaseTransport {
     const waiter = newOpts.waitHandler || retryWait;
     let response = initResponse(method, requestPath);
     // TODO assign to MaxTries when retry is opt-out instead of opt-in
-    const maxRetries = newOpts.maxTries ?? 1; // MaxTries
+    const maxRetries = newOpts?.maxTries ?? 1; // MaxTries
     let attempt = 1;
     while (attempt <= maxRetries) {
       const req = fetch(props.url, props as RequestInit);

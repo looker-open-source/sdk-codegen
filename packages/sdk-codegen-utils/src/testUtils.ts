@@ -31,6 +31,7 @@ import isEmpty from 'lodash/isEmpty';
 import { findRootSync } from '@manypkg/find-root';
 import type { IApiConfig } from '@looker/sdk-node';
 import { ApiConfig, NodeSession, readEnvConfig } from '@looker/sdk-node';
+// import { ApiModel, upgradeSpecObject } from '@looker/sdk-codegen';
 import { ApiModel } from '../../sdk-codegen/src/sdkModels';
 import { upgradeSpecObject } from '../../sdk-codegen/src/specConverter';
 import type {

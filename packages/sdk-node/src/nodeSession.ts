@@ -174,13 +174,16 @@ export class NodeSession extends AuthSession {
         client_id: clientId,
         client_secret: clientSecret,
       });
+      const headers = { 'content-type': 'application/x-www-form-urlencoded' };
       // authenticate client
       const token = await this.ok(
         this.transport.request<IAccessToken, IError>(
           strPost,
           `${this.apiPath}/login`,
           undefined,
-          body
+          body,
+          undefined,
+          { headers }
         )
       );
       this._authToken.setToken(token);

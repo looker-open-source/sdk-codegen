@@ -254,7 +254,7 @@ export type SDKResponse<TSuccess, TError> =
   | ISDKSuccessResponse<TSuccess>
   | ISDKErrorResponse<TError | ISDKError>;
 
-/** Generic collection */
+/** Keyed string hash */
 export interface IRequestHeaders {
   [key: string]: string;
 }
@@ -827,6 +827,20 @@ export async function pauseForRetry(
   });
   return response;
 }
+
+/**
+ * Merge base settings with custom settings, ensuring no header overrides are lost
+ * @param base settings
+ * @param custom settings
+ */
+export const mergeOptions = (
+  base: Partial<ITransportSettings>,
+  custom: Partial<ITransportSettings>
+): Partial<ITransportSettings> => {
+  const headers = { ...base.headers, ...custom.headers } ?? {};
+  const result = { ...base, ...custom, ...{ headers } };
+  return result;
+};
 
 /**
  * Create a default "no reply" response object for retry loops
