@@ -24,9 +24,10 @@
 
  */
 import type { IMethodResponse } from '@looker/sdk-codegen';
-import { TestConfig } from './testUtils';
+import { TestConfig } from '@looker/sdk-codegen-utils';
+import { specToModel } from '@looker/sdk-codegen';
 
-const config = TestConfig();
+const config = TestConfig(specToModel);
 const apiTestModel = config.apiTestModel;
 
 describe('sdk generator test', () => {

@@ -40,10 +40,11 @@ import {
   getSpecsFromVersions,
   loadSpecs,
   openApiStyle,
+  specToModel,
   swapXLookerTags,
   upgradeSpec,
 } from '@looker/sdk-codegen';
-import { TestConfig } from './testUtils';
+import { TestConfig, testFile } from '@looker/sdk-codegen-utils';
 
 const swaggerFrag = `
 {
@@ -404,9 +405,9 @@ const specFrag = `
 const swagger = JSON.parse(swaggerFrag);
 const api = JSON.parse(openApiFrag);
 
-const config = TestConfig();
-const swaggerFile = `${config.rootPath}spec/Looker.4.0.json`;
-const apiFile = `${config.rootPath}spec/Looker.4.0.oas.json`;
+const config = TestConfig(specToModel);
+const swaggerFile = testFile('Looker.4.0.json');
+const apiFile = testFile('Looker.4.0.oas.json');
 const swaggerSource = readFileSync(swaggerFile, 'utf-8');
 const fullSwagger = JSON.parse(swaggerSource);
 const apiSource = readFileSync(apiFile, 'utf-8');
@@ -416,6 +417,7 @@ const settings = new NodeSettingsIniFile(
   'Looker'
 );
 const sdk = LookerNodeSDK.init40(settings);
+const baseUrl = sdk.authSession.settings.base_url;
 
 describe('spec conversion', () => {
   it('swaps out x-looker-tags', () => {
@@ -446,17 +448,18 @@ describe('spec conversion', () => {
       return specs.filter((v) => v.status !== 'undocumented');
     };
 
-    it.skip('gets looker specs', async () => {
-      const actual = await getLookerSpecs(sdk, config.baseUrl);
+    it('gets looker specs', async () => {
+      expect(baseUrl).toBeDefined();
+      const actual = await getLookerSpecs(sdk, baseUrl);
       expect(actual).toBeDefined();
       expect(actual.looker_release_version).not.toEqual('');
       expect(actual.current_version.version).not.toEqual('');
       const supported = onlyPublic(actual.supported_versions);
-      expect(supported).toHaveLength(3);
+      expect(supported).toHaveLength(1);
     });
 
     it('gets spec links', async () => {
-      const versions = await getLookerSpecs(sdk, config.baseUrl);
+      const versions = await getLookerSpecs(sdk, baseUrl);
       expect(versions).toBeDefined();
       versions.supported_versions = onlyPublic(versions.supported_versions);
       const actual = getSpecLinks(versions);
@@ -478,7 +481,7 @@ describe('spec conversion', () => {
     });
 
     it('fetches and parses all specs', async () => {
-      const versions = await getLookerSpecs(sdk, config.baseUrl);
+      const versions = await getLookerSpecs(sdk, baseUrl);
       expect(versions).toBeDefined();
       versions.supported_versions = onlyPublic(versions.supported_versions);
       const links = getSpecLinks(versions);
@@ -486,7 +489,7 @@ describe('spec conversion', () => {
         (link) =>
           (link.url = link.url.replace(
             link.url.substring(0, link.url.indexOf('/api/')),
-            config.baseUrl
+            baseUrl
           ))
       );
       const actual = await loadSpecs(sdk, links);

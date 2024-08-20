@@ -27,8 +27,9 @@
 import { TestConfig } from '@looker/sdk-codegen-utils';
 import type { IEnumType } from './sdkModels';
 import { GoGen } from './go.gen';
+import { specToModel } from './sdkModels';
 
-const config = TestConfig();
+const config = TestConfig(specToModel);
 const apiTestModel = config.apiTestModel;
 const gen = new GoGen(apiTestModel);
 const indent = '';

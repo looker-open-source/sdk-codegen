@@ -39,9 +39,9 @@ import {
   startCount,
 } from './specDiff';
 import type { IApiModel, IMethod, PropertyList } from './sdkModels';
-import { ApiModel, Method, Parameter, Type } from './sdkModels';
+import { ApiModel, Method, Parameter, specToModel, Type } from './sdkModels';
 
-const config = TestConfig();
+const config = TestConfig(specToModel);
 const apiTestModel = config.apiTestModel;
 
 /**

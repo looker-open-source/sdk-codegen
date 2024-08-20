@@ -27,8 +27,9 @@
 import { TestConfig } from '@looker/sdk-codegen-utils';
 import type { IEnumType } from './sdkModels';
 import { SwiftGen } from './swift.gen';
+import { specToModel } from './sdkModels';
 
-const config = TestConfig();
+const config = TestConfig(specToModel);
 const apiTestModel = config.apiTestModel;
 const gen = new SwiftGen(apiTestModel);
 const indent = '';

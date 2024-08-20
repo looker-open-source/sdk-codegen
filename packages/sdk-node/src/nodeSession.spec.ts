@@ -30,8 +30,9 @@ import { TestConfig } from '@looker/sdk-codegen-utils';
 import { NodeTransport } from './nodeTransport';
 import { NodeSession } from './nodeSession';
 import { ApiConfig, NodeSettings, NodeSettingsIniFile } from './nodeSettings';
+import { specToModel } from '@looker/sdk-codegen';
 
-const config = TestConfig();
+const config = TestConfig(specToModel);
 const envPrefix = 'LOOKERSDK';
 const localIni = config.localIni;
 

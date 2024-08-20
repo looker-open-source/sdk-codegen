@@ -24,8 +24,9 @@
 
  */
 
-import { getSpecsFromVersions } from '@looker/sdk-codegen';
-import { TestConfig } from './testUtils';
+import fs from 'fs';
+import { getSpecsFromVersions, specToModel } from '@looker/sdk-codegen';
+import { TestConfig } from '@looker/sdk-codegen-utils';
 import {
   fetchLookerVersion,
   fetchLookerVersions,
@@ -35,9 +36,12 @@ import {
   supportedVersion,
 } from './fetchSpec';
 import type { ISDKConfigProps } from './sdkConfig';
+import { ApiConfigSection } from '@looker/sdk-node';
 
-const config = TestConfig();
-const props = config.section as unknown as ISDKConfigProps;
+const config = TestConfig(specToModel);
+const props = ApiConfigSection(
+  fs.readFileSync(config.localIni, 'utf8')
+) as ISDKConfigProps;
 // api_version is no longer part of the INI, now set by sdkGen iterator
 props.api_version = '4.0';
 

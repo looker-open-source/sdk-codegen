@@ -28,10 +28,10 @@ import { DelimArray } from '@looker/sdk-rtl';
 import { TestConfig } from '@looker/sdk-codegen-utils';
 import { TypescriptGen } from './typescript.gen';
 import type { IType } from './sdkModels';
-import { EnumType } from './sdkModels';
+import { EnumType, specToModel } from './sdkModels';
 import { trimInputs } from './codeGen';
 
-const config = TestConfig();
+const config = TestConfig(specToModel);
 const apiTestModel = config.apiTestModel;
 
 const gen = new TypescriptGen(apiTestModel);
@@ -1016,7 +1016,7 @@ async all_datagroups(options?: Partial<ITransportSettings>): Promise<SDKResponse
  *
  */
 async logout(
-  callback: (readable: Readable) => Promise<string>,options?: Partial<ITransportSettings>) {
+  callback: (response: Response) => Promise<string>,options?: Partial<ITransportSettings>) {
   return this.authStream<string>(callback, 'DELETE', '/logout', null, null, options)
 }`;
       const actual = gen.declareStreamer(indent, method);

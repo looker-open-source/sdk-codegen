@@ -34,6 +34,7 @@ import {
   StatusCode,
   responseMode,
 } from '@looker/sdk-rtl';
+import { upgradeSpecObject } from './specConverter';
 
 /**
  * Handy specification references
@@ -2452,6 +2453,19 @@ export class WriteType extends Type {
   };
 }
 
+/**
+ * load an API specification, ensure it's upgraded, and return the APIModel
+ * @param spec to optionally parse and upgrade
+ */
+export const specToModel = (spec: any): ApiModel => {
+  if (typeof spec === 'string') {
+    spec = JSON.parse(spec);
+  }
+  const json = upgradeSpecObject(spec);
+  const obj = new OAS.OpenApiBuilder(json).getSpec();
+  return new ApiModel(obj);
+};
+
 export interface IApiModel extends IModel {
   version: string;
   description: string;
@@ -2518,13 +2532,11 @@ export class ApiModel implements ISymbolTable, IApiModel {
   }
 
   static fromString(specContent: string): ApiModel {
-    const json = JSON.parse(specContent);
-    return ApiModel.fromJson(json);
+    return specToModel(specContent);
   }
 
   static fromJson(json: any): ApiModel {
-    const spec = new OAS.OpenApiBuilder(json).getSpec();
-    return new ApiModel(spec);
+    return specToModel(json);
   }
 
   private static isMethodSearch(criteria: SearchCriteria): boolean {

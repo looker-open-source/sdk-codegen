@@ -28,8 +28,9 @@ import { DelimArray } from '@looker/sdk-rtl';
 import { TestConfig } from '@looker/sdk-codegen-utils';
 import type { IEnumType } from './sdkModels';
 import { KotlinGen } from './kotlin.gen';
+import { specToModel } from './sdkModels';
 
-const config = TestConfig();
+const config = TestConfig(specToModel);
 const apiTestModel = config.apiTestModel;
 const gen = new KotlinGen(apiTestModel);
 const indent = '';

@@ -645,10 +645,9 @@ describe('LookerNodeSDK', () => {
     });
   });
 
-  // TODO remove skip when 21.12 is available
-  describe.skip('paging alpha', () => {
+  describe('paging alpha', () => {
     describe('pager', () => {
-      test(
+      it(
         'getRel can override limit and offset',
         async () => {
           const sdk = new LookerSDK(session);
@@ -662,7 +661,7 @@ describe('LookerNodeSDK', () => {
         },
         testTimeout
       );
-      test(
+      it(
         'observers can be chained',
         async () => {
           const sdk = new LookerSDK(session);
@@ -683,7 +682,7 @@ describe('LookerNodeSDK', () => {
       );
     });
     describe('pageAll', () => {
-      test(
+      it(
         'search_dashboard',
         async () => {
           const sdk = new LookerSDK(session);
@@ -712,7 +711,7 @@ describe('LookerNodeSDK', () => {
         },
         testTimeout
       );
-      test(
+      it(
         'all_dashboards pageAll returns non-paged results',
         async () => {
           const sdk = new LookerSDK(session);

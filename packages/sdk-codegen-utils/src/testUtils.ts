@@ -30,10 +30,7 @@ import * as yaml from 'js-yaml';
 import isEmpty from 'lodash/isEmpty';
 import { findRootSync } from '@manypkg/find-root';
 import type { IApiConfig } from '@looker/sdk-node';
-import { ApiConfig, NodeSession, readEnvConfig } from '@looker/sdk-node';
-// import { ApiModel, upgradeSpecObject } from '@looker/sdk-codegen';
-import { ApiModel } from '../../sdk-codegen/src/sdkModels';
-import { upgradeSpecObject } from '../../sdk-codegen/src/specConverter';
+import { ApiConfigSection, NodeSession, readEnvConfig } from '@looker/sdk-node';
 import type {
   IAPIMethods,
   IApiSection,
@@ -45,14 +42,16 @@ import { ApiSettings } from '@looker/sdk-rtl';
 import { Looker40SDK, functionalSdk40 } from '@looker/sdk';
 
 const utf8 = 'utf-8';
+export type SpecLoader = (content: any) => any;
 
 /**
  * Convert a spec file into an APIModel
  * @param specFile name of spec file
+ * @param loader callback to load spec as APIModel
  */
-export const specFromFile = (specFile: string): ApiModel => {
+export const specFromFile = (specFile: string, loader: SpecLoader): any => {
   const specContent = fs.readFileSync(specFile, { encoding: utf8 });
-  return ApiModel.fromString(specContent);
+  return loader(specContent);
 };
 
 /**
@@ -60,7 +59,7 @@ export const specFromFile = (specFile: string): ApiModel => {
  */
 export interface ITestConfig {
   /** the openApi.json snapshot in the test/ dir */
-  apiTestModel: ApiModel;
+  apiTestModel: any;
   /** root dir of this repository */
   rootPath: string;
   /** <rootPath>/test dir */
@@ -97,12 +96,13 @@ export const getRootPath = (): string => {
 export const rootFile = (fileName = ''): string =>
   path.join(getRootPath(), fileName);
 
-let _mockSpec: ApiModel;
+let _mockSpec: any;
 /**
  * Returns the entire "undocumented" API specification as the model to use for mocking
  * because it includes everything from our current API
+ * @param loader callback to load spec as APIModel
  */
-export const mockApiSpec = () => {
+export const mockApiSpec = (loader: SpecLoader) => {
   if (!_mockSpec) {
     const spec = rootFile('test/core/undoc_api_4.0.json');
     if (!fs.existsSync(spec)) {
@@ -111,8 +111,7 @@ export const mockApiSpec = () => {
       );
     }
     const obj = JSON.parse(fs.readFileSync(spec, utf8));
-    const oas = upgradeSpecObject(obj);
-    _mockSpec = ApiModel.fromJson(oas);
+    _mockSpec = loader(obj);
   }
   return _mockSpec;
 };
@@ -131,8 +130,8 @@ export class MeldSettings extends ApiSettings {
 
   readConfig(_section?: string): IApiSection {
     return {
-      client_id: this.settings.client_id,
-      client_secret: this.settings.client_secret,
+      client_id: (this.settings as any).client_id,
+      client_secret: (this.settings as any).client_secret,
     };
   }
 }
@@ -182,7 +181,9 @@ export const loadApiSettings = (
   localIni: string
 ): IApiSettings => {
   const cypressSettings = getCypressSettings();
-  const local: IApiConfig = fs.existsSync(localIni) ? ApiConfig(localIni) : {};
+  const local: IApiConfig = fs.existsSync(localIni)
+    ? ApiConfigSection(fs.readFileSync(localIni, utf8))
+    : {};
   const settings = {
     verify_ssl: false,
     base_url: 'https://localhost:19999',
@@ -225,11 +226,13 @@ export const createFunSdk = (): IAPIMethods => {
 
 /**
  * Reads configuration information, returning various test values
- * @param rootPath
- * @returns {{testConfig: {[p: string]: any}; localIni: string; baseUrl: any; testData: any; apiVersion: any; testIni: string; configContents: string; rootPath: string; testSection: any; timeout: number}}
- * @constructor
+ * @param loader callback to load spec as APIModel
+ * @param rootPath root file path location for relative path resolution
  */
-export const TestConfig = (rootPath = getRootPath()): ITestConfig => {
+export const TestConfig = (
+  loader: SpecLoader,
+  rootPath = getRootPath()
+): ITestConfig => {
   const testDataFile = 'data.yml';
   const localIni =
     process.env.LOOKERSDK_INI || path.join(rootPath, 'looker.ini');
@@ -241,7 +244,7 @@ export const TestConfig = (rootPath = getRootPath()): ITestConfig => {
   const testData: any = fs.existsSync(dataFile)
     ? yaml.load(fs.readFileSync(dataFile, utf8))
     : {};
-  const apiTestModel = specFromFile(testFile('openApiRef.json'));
+  const apiTestModel = specFromFile(testFile('openApiRef.json'), loader);
   const testIni = path.join(rootPath, testData.iniFile);
   return {
     apiTestModel,

@@ -26,7 +26,8 @@
 
 import { TestConfig } from '@looker/sdk-codegen-utils';
 import { findGenerator, getCodeGenerator } from './codeGenerators';
-const config = TestConfig();
+import { specToModel } from './sdkModels';
+const config = TestConfig(specToModel);
 
 describe('generator factory', () => {
   describe('findGenerator', () => {

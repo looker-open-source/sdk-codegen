@@ -26,8 +26,9 @@
 
 import { TestConfig } from '@looker/sdk-codegen-utils';
 import { CSharpGen } from './csharp.gen';
+import { specToModel } from './sdkModels';
 
-const config = TestConfig();
+const config = TestConfig(specToModel);
 const apiTestModel = config.apiTestModel;
 
 const gen = new CSharpGen(apiTestModel);

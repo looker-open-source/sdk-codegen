@@ -29,8 +29,9 @@ import { TestConfig } from '@looker/sdk-codegen-utils';
 import { PythonGen } from './python.gen';
 import type { IEnumType, IType } from './sdkModels';
 import type { IMappedType } from './codeGen';
+import { specToModel } from './sdkModels';
 
-const config = TestConfig();
+const config = TestConfig(specToModel);
 const apiTestModel = config.apiTestModel;
 const gen = new PythonGen(apiTestModel);
 const indent = '';

@@ -344,7 +344,7 @@ export class NodeTransport extends BaseTransport {
     const agentTag = options?.agentTag || this.options.agentTag || agentPrefix;
     options = mergeOptions(
       { ...this.options, ...{ headers: { [LookerAppId]: agentTag } } },
-      options
+      options ?? {}
     );
     const headers = options.headers ?? {};
 

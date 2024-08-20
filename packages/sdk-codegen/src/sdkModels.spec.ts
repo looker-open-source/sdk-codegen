@@ -51,6 +51,7 @@ import {
   setToCriteria,
   titleCase,
   typeRefs,
+  specToModel,
 } from './sdkModels';
 import type {
   IEnumType,
@@ -200,7 +201,7 @@ describe('sdkModels', () => {
     let config: any;
     let apiTestModel: ApiModel;
     beforeAll(() => {
-      config = TestConfig();
+      config = TestConfig(specToModel);
       apiTestModel = config.apiTestModel;
     });
     const checkSorted = (list: KeyedCollection<any>) => {

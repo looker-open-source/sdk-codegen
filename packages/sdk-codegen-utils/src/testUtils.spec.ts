@@ -55,9 +55,10 @@ describe('TestUtils', () => {
       expect(actual).toEqual(expected);
     });
 
-    it('finds package-lock.json in the root', () => {
-      const actual = lookUp('package-lock.json');
-      const expected = rootFile('package-lock.json');
+    it('finds lock file in the root', () => {
+      const lockFile = 'yarn.lock';
+      const actual = lookUp(lockFile);
+      const expected = rootFile(lockFile);
       expect(actual).toEqual(expected);
     });
 
