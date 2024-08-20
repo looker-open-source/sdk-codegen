@@ -309,7 +309,6 @@ export class NodeTransport extends BaseTransport {
       newOpts
     );
 
-    // node-fetch has some pretty bad incompatibilities for typing, and cross-fetch wouldn't authenticate correctly
     const response: Response = await fetch(requestPath, init as RequestInit);
     return await callback(response);
   }

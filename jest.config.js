@@ -62,10 +62,10 @@ module.exports = {
     url: 'http://localhost/',
   },
   globals: {
+    fetch: global.fetch,
     'ts-jest': {
       isolatedModules: true,
       diagnostics: false,
     },
-    fetch: global.fetch,
   },
 };
