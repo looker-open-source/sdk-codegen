@@ -37,7 +37,6 @@
   },
   "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/main/packages/sdk",
   "devDependencies": {
-    "prettier": "3.3.3"
   },
   "dependencies": {
     "@looker/sdk-rtl": "21.6.1"

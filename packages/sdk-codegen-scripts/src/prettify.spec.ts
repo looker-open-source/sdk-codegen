@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2023 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -24,26 +24,12 @@
 
  */
 
-import * as prettier from 'prettier';
+import { prettify } from './prettify';
 
-const prettierTs: prettier.Options = {
-  bracketSpacing: true,
-  endOfLine: 'auto',
-  parser: 'typescript',
-  proseWrap: 'preserve',
-  quoteProps: 'as-needed',
-  semi: true,
-  singleQuote: true,
-  trailingComma: 'es5',
-  arrowParens: 'avoid',
-};
-
-/**
- * Format code with Prettier
- * @param code to format
- * @param options prettier.Options to override the default processing. Typescript options are the default
- */
-export const prettify = (code: string, options: prettier.Options = {}) => {
-  const merged: prettier.Options = { ...prettierTs, ...{ options } };
-  return prettier.format(code, merged);
-};
+describe('prettify', () => {
+  it('formats something', () => {
+    const code = 'foo(   )';
+    const actual = prettify(code);
+    expect(actual).toEqual('foo();\n');
+  });
+});

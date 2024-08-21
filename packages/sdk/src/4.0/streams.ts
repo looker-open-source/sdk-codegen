@@ -30,8 +30,8 @@
 
 import type {
   DelimArray,
-  IAuthSession,
   IDictionary,
+  IAuthSession,
   ITransportSettings,
 } from '@looker/sdk-rtl';
 import { APIMethods, agentPrefix, encodeParam } from '@looker/sdk-rtl';
@@ -82,8 +82,6 @@ import type {
   ICredentialsSaml,
   ICredentialsTotp,
   ICustomWelcomeEmail,
-  IDBConnection,
-  IDBConnectionTestResult,
   IDashboard,
   IDashboardAggregateTableLookml,
   IDashboardBase,
@@ -96,10 +94,12 @@ import type {
   IDataActionRequest,
   IDataActionResponse,
   IDatagroup,
+  IDBConnection,
+  IDBConnectionTestResult,
   IDependencyGraph,
   IDialectInfo,
-  IDigestEmailSend,
   IDigestEmails,
+  IDigestEmailSend,
   IEgressIpAddresses,
   IEmbedCookielessSessionAcquire,
   IEmbedCookielessSessionAcquireResponse,
@@ -130,11 +130,11 @@ import type {
   ILegacyFeature,
   ILocale,
   ILook,
-  ILookWithQuery,
   ILookmlModel,
   ILookmlModelExplore,
   ILookmlTest,
   ILookmlTestResult,
+  ILookWithQuery,
   IManifest,
   IMaterializePDT,
   IMergeQuery,
@@ -143,8 +143,8 @@ import type {
   IModel,
   IModelFieldSuggestions,
   IModelSet,
-  IOIDCConfig,
   IOauthClientApp,
+  IOIDCConfig,
   IPasswordConfig,
   IPermission,
   IPermissionSet,
@@ -163,8 +163,8 @@ import type {
   IRequestAllBoardItems,
   IRequestAllBoardSections,
   IRequestAllExternalOauthApplications,
-  IRequestAllGroupUsers,
   IRequestAllGroups,
+  IRequestAllGroupUsers,
   IRequestAllIntegrations,
   IRequestAllLookmlModels,
   IRequestAllRoles,
@@ -276,7 +276,6 @@ import type {
   IWriteContentMeta,
   IWriteCreateDashboardFilter,
   IWriteCredentialsEmail,
-  IWriteDBConnection,
   IWriteDashboard,
   IWriteDashboardElement,
   IWriteDashboardFilter,
@@ -284,6 +283,7 @@ import type {
   IWriteDashboardLayoutComponent,
   IWriteDashboardLookml,
   IWriteDatagroup,
+  IWriteDBConnection,
   IWriteEmbedSecret,
   IWriteExternalOauthApplication,
   IWriteGitBranch,
@@ -294,13 +294,13 @@ import type {
   IWriteInternalHelpResourcesContent,
   IWriteLDAPConfig,
   IWriteLegacyFeature,
-  IWriteLookWithQuery,
   IWriteLookmlModel,
+  IWriteLookWithQuery,
   IWriteMergeQuery,
   IWriteMobileToken,
   IWriteModelSet,
-  IWriteOIDCConfig,
   IWriteOauthClientApp,
+  IWriteOIDCConfig,
   IWritePasswordConfig,
   IWritePermissionSet,
   IWriteProject,
@@ -330,7 +330,7 @@ export class Looker40SDKStream extends APIMethods {
       authSession.settings.base_url === ''
         ? ''
         : authSession.settings.base_url + '/api/' + this.apiVersion;
-    authSession.settings.agentTag = `${agentPrefix} Streaming ${sdkVersion}`;
+    authSession.settings.agentTag = agentPrefix + ' Streaming ' + sdkVersion;
   }
 
   //#region Alert: Alert
