@@ -53,3 +53,7 @@ globalThis.ResizeObserver = ResizeObserver;
 // beforeAll(() => {
 //   jest.resetAllMocks()
 // })
+
+beforeEach(() => {
+  globalThis.fetch = global.fetch;
+});

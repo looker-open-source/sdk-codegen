@@ -52,6 +52,7 @@ import {
   pager,
 } from '@looker/sdk-rtl';
 import {
+  createWritableStream,
   LookerNodeSDK,
   NodeSession,
   NodeSettings,
@@ -59,7 +60,11 @@ import {
   readIniConfig,
 } from '../src';
 import { TestConfig } from '../../sdk-rtl/src/testUtils';
-
+import {
+  // ReadableStream,
+  // TransformStream,
+  WritableStream,
+} from 'node:stream/web';
 const envKey = ApiConfigMap(environmentPrefix);
 const strLookerBaseUrl = envKey.base_url;
 const strLookerClientId = envKey.client_id;
@@ -300,7 +305,7 @@ describe('LookerNodeSDK', () => {
         const current = await sdk.ok(sdk.default_color_collection());
         expect(current).toBeDefined();
         const cols = await sdk.ok(sdk.all_color_collections());
-        const other = cols.find((c) => c.id !== current.id);
+        const other = cols.find(c => c.id !== current.id);
         expect(other).toBeDefined();
         // tests to stop lint from complaining
         if (other && other.id && current.id) {
@@ -358,7 +363,7 @@ describe('LookerNodeSDK', () => {
 
         // find users who are not the API user
         const others = all
-          .filter((u) => u.id !== apiUser.id && !u.is_disabled)
+          .filter(u => u.id !== apiUser.id && !u.is_disabled)
           .slice(0, 2);
         expect(others.length).toEqual(2);
         if (others.length > 1) {
@@ -558,7 +563,7 @@ describe('LookerNodeSDK', () => {
           })
         );
         expect(searched.length).toEqual(users.length);
-        const ids = new DelimArray<string>(searched.map((u) => u.id!));
+        const ids = new DelimArray<string>(searched.map(u => u.id!));
         const all = await sdk.ok(sdk.all_users({ ids }));
         expect(all.length).toEqual(users.length);
         await sdk.authSession.logout();
@@ -759,7 +764,7 @@ describe('LookerNodeSDK', () => {
             );
             expect(sql).toContain('SELECT');
             if (query.fields) {
-              query.fields.forEach((field) => {
+              query.fields.forEach(field => {
                 expect(sql).toContain(field);
               });
             }
@@ -775,7 +780,7 @@ describe('LookerNodeSDK', () => {
             expect(json.length).toBeLessThanOrEqual(limit);
             const row = json[0] as any;
             if (query.fields) {
-              query.fields.forEach((field) => {
+              query.fields.forEach(field => {
                 expect(field in row).toBeTruthy();
               });
             }
@@ -792,7 +797,7 @@ describe('LookerNodeSDK', () => {
     );
 
     // TODO need to get streaming working again. Right now this locks up after creating the test csv file
-    it.skip(
+    it(
       'run_inline_query',
       async () => {
         const sdk = new LookerSDK(session);
@@ -845,16 +850,12 @@ describe('LookerNodeSDK', () => {
             // Only test the first query for streaming support to avoid redundant long processes
             streamed = true;
             const csvFile = './query.csv';
-            const writer = fs.createWriteStream(csvFile);
+            const writer = createWritableStream(fs.createWriteStream(csvFile));
+
             const sdkStream = new Looker40SDKStream(sdk.authSession);
             await sdkStream.run_inline_query(async (response: Response) => {
-              // Readable.fromWeb(response.body.getReader()).pipe(writer);
-              // const readable = response.body.getReader();
-              return new Promise<any>((resolve, reject) => {
-                response.body.pipeTo(writer as WritableStream);
-                // .on('error', reject)
-                // .on('finish', resolve);
-              });
+              await response.body.pipeTo(writer);
+              return 'streamed';
             }, request);
             expect(fs.existsSync(csvFile)).toEqual(true);
             const contents = fs.readFileSync(csvFile, 'utf8');

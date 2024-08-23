@@ -25,6 +25,7 @@
  */
 
 import nodeCrypto from 'crypto';
+import type * as fs from 'fs';
 
 // import { Buffer } from 'node:buffer';
 
@@ -57,6 +58,7 @@ import {
   safeBase64,
   mergeOptions,
 } from '@looker/sdk-rtl';
+import { WritableStream } from 'node:stream/web';
 
 const utf8 = 'utf8';
 
@@ -388,3 +390,17 @@ export class NodeTransport extends BaseTransport {
     return props;
   }
 }
+
+/**
+ * Turn a NodeJS WriteStream into a WritableStream for compatibility with browser standards
+ * @param writer usually created by fs.createWriteStream()
+ */
+export const createWritableStream = (
+  writer: ReturnType<typeof fs.createWriteStream>
+) => {
+  return new WritableStream({
+    write: (chunk: any) => {
+      writer.write(chunk);
+    },
+  });
+};
