@@ -4,7 +4,7 @@ The Looker SDK for TypeScript/JavaScript works with Node and browser run-times. 
 
 This package supports using the Looker SDK in the browser. The [@looker/sdk-node](https://www.npmjs.com/package/@looker/sdk-node) package depends on this package (@looker/sdk) and [@looker/sdk-rtl](https://www.npmjs.com/package/@looker/sdk-rtl).
 
-The SDK uses a plug-in architecture (also known as dependency injection) for initializing and supports run-time specific transports (like `NodeTransport` and `BrowserTransport`) and different approaches for managing API authentication (like `NodeSession`, `BrowserSession`, `ProxySession`, and `CorsSession`).
+The SDK uses a plug-in architecture for initializing and supports run-time specific transports (like `NodeTransport` and `BrowserTransport`) and different approaches for managing API authentication (like `NodeSession`, `BrowserSession`, `ProxySession`, and `CorsSession`).
 
 Please [report any issues](https://github.com/looker-open-source/sdk-codegen/issues) encountered, and indicate the SDK language in the report.
 
@@ -62,9 +62,9 @@ The `looker.ini` configuration file and environment variables are _never_ used i
 
 ### Developing with multiple API versions
 
-Please use API 4.0. API 3.1 is deprecated and has been removed in Looker v23.18+.
+Only API 4.0 is currently available. API 3.1 is deprecated and has been removed in Looker v23.18+.
 
-`LookerBrowserSDK.init40()` and `Looker40SDK()` initialize the API 4.1 implementation of the SDK.
+`LookerBrowserSDK.init40()` and `Looker40SDK()` initialize the API 4.0 implementation of the SDK.
 
 ## Using a Proxy for authentication
 
@@ -82,10 +82,7 @@ By writing your own `getProxyToken()` visible to this class, any proxied authent
 
 ```typescript
 export class EmbedSession extends ProxySession {
-  constructor(
-    public settings: IApiSettings,
-    transport?: ITransport
-  ) {
+  constructor(public settings: IApiSettings, transport?: ITransport) {
     super(settings, transport);
   }
 
@@ -118,9 +115,9 @@ export class EmbedSession extends ProxySession {
 }
 ```
 
-### More examples
+## More examples
 
-Looker's open source repository of [SDK Examples](https://github.com/looker-open-source/sdk-examples/tree/master/typescript) has more example scripts and applications that show how to use the Looker SDK.
+Looker's open source repository of [SDK Examples](https://github.com/looker-open-source/sdk-codegen/tree/main/examples/typescript) has more example scripts and applications that show how to use the various Looker language SDKs.
 
 ## A note about security
 

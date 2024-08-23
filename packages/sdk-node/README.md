@@ -119,7 +119,7 @@ The `settings` provided to the `NodeSession` class include the base URL for the 
 
 ### Sudo behavior with NodeSession
 
-The `NodeSession` also directly supports logging in as another user, which is usually called `sudo as` another user in the Looker browser application.
+`NodeSession` also directly supports logging in as another user, which is usually called `sudo as` another user in the Looker browser application.
 
 An API user with appropriate permissions can `sudo` as another user by passing a different user ID to the `NodeSession.login()` method. Only one user can be impersonated at a time via `NodeSession`. When a `sudo` session is active, all SDK requests are processed as that user.
 
@@ -140,7 +140,7 @@ describe('sudo', () => {
 
       // find users who are not the API user
       const others = all
-        .filter((u) => u.id !== apiUser.id && !u.is_disabled)
+        .filter(u => u.id !== apiUser.id && !u.is_disabled)
         .slice(0, 2);
       expect(others.length).toEqual(2);
       if (others.length > 1) {
@@ -195,11 +195,19 @@ const sdk = LookerNodeSDK.init40(new NodeSettings());
 const me = await sdk.ok(sdk.me());
 ```
 
-### Streaming API responses
+## Streaming with the SDK
+
+The deprecated NodeJS `request` package dependency has been removed from all Looker TypeScript packages. This removal prompted a **BREAKING** interface change for the streaming SDK.
+The streaming method callback signature changed from `(readable: Readable) => Promise<x>` to `(response: Response) => Promise<x>`. Using `Response` as the parameter to the callback greatly
+increases the flexibility of streaming implementations and provides other valuable information like `Content-Type` and other headers to the streaming callback.
+
+For the Browser SDK (`@looker/sdk`), the standard `fetch` function is still used. For the Node SDK (`@looker/sdk-node`), the global [`fetch`](https://nodejs.org/api/globals.html#fetch) function from NodeJS v22 is used.
+
+This means the Looker Node SDK now uses NodeJS v22.
 
 The streaming version of the SDK methods should be initialized using the same `AuthSession` as the main SDK to reduce authentication thrashing.
 
-Construction of the streaming SDK can use code similar to the following, which is taken from the [downloadTile.ts example](/examples/typescript/downloadTile.ts#L124:L160):
+Construction of the streaming SDK can use code similar to the following, which is taken from the [downloadTile.ts example](/examples/typescript/downloadTile.ts#L129:L157):
 
 ```ts
 /**
@@ -214,10 +222,9 @@ const downloadTileAs = async (
   tile: IDashboardElement,
   format: string
 ) => {
-  let fileName;
-  fileName = `${tile.title}.${format}`;
+  const fileName = `${tile.title}.${format}`;
 
-  const writer = fs.createWriteStream(fileName);
+  const writer = createWritableStream(fs.createWriteStream(fileName));
   const request: IRequestRunQuery = {
     result_format: format,
     query_id: tile.query_id!,
@@ -225,16 +232,9 @@ const downloadTileAs = async (
     // apply_vis: true
   };
   const sdkStream = new Looker40SDKStream(sdk.authSession);
-  await sdkStream.run_query(async (readable: Readable) => {
-    return new Promise<any>((resolve, reject) => {
-      readable
-        .pipe(writer)
-        .on('error', () => {
-          fileName = undefined;
-          throw reject;
-        })
-        .on('finish', resolve);
-    });
+  await sdkStream.run_query(async (response: Response) => {
+    await response.body.pipeTo(writer);
+    return 'streamed';
   }, request);
 
   return fileName;
