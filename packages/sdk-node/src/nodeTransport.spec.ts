@@ -40,7 +40,7 @@ describe('NodeTransport', () => {
   const badPath = fullPath + '_bogus';
   // const queryParams = { a: 'b c', d: false, nil: null, skip: undefined }
 
-  test('raw request retrieves fully qualified url', async () => {
+  it('raw request retrieves fully qualified url', async () => {
     const response = await xp.rawRequest('GET', fullPath);
     expect(response).toBeDefined();
     expect(response.ok).toEqual(true);
@@ -49,14 +49,14 @@ describe('NodeTransport', () => {
     expect(response.statusMessage).toEqual('OK');
     expect(response.contentType).toContain('text/html');
     expect(response.body).toBeDefined();
-    const html = response.body.toString();
+    const html = await response.body;
     expect(html).toContain(
       'One SDK to rule them all, and in the codegen bind them'
     );
   });
 
   describe('transport errors', () => {
-    test('gracefully handles transport errors', async () => {
+    it('gracefully handles transport errors', async () => {
       const response = await xp.rawRequest('GET', badPath);
       const errorMessage = 'Not Found';
       expect(response).toBeDefined();
@@ -94,16 +94,16 @@ describe('NodeTransport', () => {
       responseCompleted: 2000,
     };
 
-    test('ok is ok', () => {
+    it('ok is ok', () => {
       expect(xp.ok(raw)).toEqual(true);
     });
 
-    test('All 2xx responses are ok', () => {
+    it('All 2xx responses are ok', () => {
       raw.statusCode = StatusCode.IMUsed;
       expect(xp.ok(raw)).toEqual(true);
     });
 
-    test('Non-2xx responses are not ok', () => {
+    it('Non-2xx responses are not ok', () => {
       raw.statusCode = 422;
       expect(xp.ok(raw)).toEqual(false);
     });

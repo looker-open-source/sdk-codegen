@@ -49,7 +49,6 @@ import {
   ResponseMode,
   agentPrefix,
   canRetry,
-  defaultTimeout,
   initResponse,
   pauseForRetry,
   responseMode,
@@ -57,6 +56,8 @@ import {
   retryWait,
   safeBase64,
   mergeOptions,
+  sdkTimeout,
+  verifySsl,
 } from '@looker/sdk-rtl';
 import { WritableStream } from 'node:stream/web';
 
@@ -302,7 +303,6 @@ export class NodeTransport extends BaseTransport {
   ): Promise<TSuccess> {
     const newOpts = { ...this.options, options };
     const requestPath = this.makeUrl(path, newOpts, queryParams);
-    // TODO add signal: AbortSignal support
     const init = await this.initRequest(
       method,
       requestPath,
@@ -313,26 +313,6 @@ export class NodeTransport extends BaseTransport {
 
     const response: Response = await fetch(requestPath, init as RequestInit);
     return await callback(response);
-  }
-
-  /**
-   * should the request verify SSL?
-   * @param options Defaults to the instance options values
-   * @returns true if the request should require full SSL verification
-   */
-  verifySsl(options?: Partial<ITransportSettings>) {
-    if (!options) options = this.options;
-    return 'verify_ssl' in options ? options.verify_ssl : true;
-  }
-
-  /**
-   * Request timeout in seconds
-   * @param options Defaults to the instance options values
-   */
-  timeout(options?: Partial<ITransportSettings>): number {
-    if (!options) options = this.options;
-    if ('timeout' in options && options.timeout) return options.timeout;
-    return defaultTimeout;
   }
 
   private async initRequest(
@@ -359,16 +339,26 @@ export class NodeTransport extends BaseTransport {
       }
     }
 
-    // TODO need to add timeout back
+    const ms = sdkTimeout(options) * 1000;
+    const timer = AbortSignal.timeout(ms);
+    // TODO evidently need to polyfill AbortSignal.any() for jest tests
+    // const signals = [timer];
+    // if ('signal' in options && options.signal) {
+    //   signals.push(options.signal);
+    // }
+    //
+    // const combinedSignal = AbortSignal.any(signals);
+
     let props: IRequestProps = {
       body,
       credentials: 'same-origin',
       headers,
       method,
       url: path,
+      signal: timer,
     };
 
-    if (!this.verifySsl(options)) {
+    if (!verifySsl(options)) {
       process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
       // This information appears to be stale. Commenting it out as a cruft
       // signal to continue researching something better than the process

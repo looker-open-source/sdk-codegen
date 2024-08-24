@@ -336,6 +336,8 @@ export interface ITransportSettings {
   maxTries?: number;
   /** override for awaiting retry requests */
   waitHandler?: Waitable;
+  /** abort controller signal customization */
+  signal?: AbortSignal;
 }
 
 /** Transport plug-in interface */
@@ -625,8 +627,8 @@ export function encodeParams(values?: Values) {
 
   const keys = Object.keys(values);
   return keys
-    .filter((k) => values[k] !== undefined) // `null` and `false` will both be passed
-    .map((k) => k + '=' + encodeParam(values[k]))
+    .filter(k => values[k] !== undefined) // `null` and `false` will both be passed
+    .map(k => k + '=' + encodeParam(values[k]))
     .join('&');
 }
 
@@ -877,4 +879,26 @@ export function retryError(response: IRawResponse): IRawResponse {
     response.statusMessage = 'Retry waiting exited with an error condition';
   }
   return response;
+}
+
+/**
+ * should the request verify SSL?
+ * @param options Defaults to the instance options values
+ * @returns true (the default) if the request should require full SSL verification
+ */
+export function verifySsl(options?: Partial<ITransportSettings>) {
+  return options && 'verify_ssl' in options ? options.verify_ssl : true;
+}
+
+/**
+ * Get the HTTP request timeout, in seconds
+ *
+ * The configured timeout value must be > 0 to be used
+ *
+ * @param options Defaults to `defaultTimeout`
+ */
+export function sdkTimeout(options?: Partial<ITransportSettings>): number {
+  if (options && 'timeout' in options && options.timeout && options.timeout > 0)
+    return options.timeout;
+  return defaultTimeout;
 }
