@@ -51,6 +51,12 @@ if (!AbortSignal.timeout) {
   };
 }
 
+// if (!AbortSignal.any) {
+//   AbortSignal.any = signals => {
+//     return Promise.any(signals);
+//   };
+// }
+
 globalThis.IntersectionObserver = observeMock;
 globalThis.ResizeObserver = ResizeObserver;
 

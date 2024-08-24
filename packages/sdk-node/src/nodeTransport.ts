@@ -346,7 +346,6 @@ export class NodeTransport extends BaseTransport {
     // if ('signal' in options && options.signal) {
     //   signals.push(options.signal);
     // }
-    //
     // const combinedSignal = AbortSignal.any(signals);
 
     let props: IRequestProps = {

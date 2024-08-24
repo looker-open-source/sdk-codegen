@@ -51,7 +51,7 @@ describe.skip('fetch operations', () => {
     const testProps = JSON.parse(JSON.stringify(props));
     testProps.base_url = 'https://bogus-server.looker.com:99';
     const actual = await fetchLookerVersion(testProps, undefined, {
-      timeout: 5,
+      timeout: 3,
     });
     expect(actual).toEqual('');
   }, 36000);
