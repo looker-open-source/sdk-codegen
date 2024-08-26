@@ -180,7 +180,7 @@ export const authGetUrl = async (
       throw err;
     }
     // Whoops!  Ok, try again with login
-    options = mergeOptions(props, options);
+    options = mergeOptions(props, options ?? {});
     options = mergeOptions(options, {
       headers: { Authorization: `Bearer ${token}` },
     });
