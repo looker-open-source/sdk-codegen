@@ -58,7 +58,7 @@ class AlignColumnWriter {
 
   toString(): string {
     let result = '';
-    this.rows.forEach((row) => {
+    this.rows.forEach(row => {
       const rowSize = row.length;
       row.forEach((col, colIndex) => {
         result +=
@@ -116,10 +116,7 @@ export class GoGen extends CodeGen {
     'var',
   ]);
 
-  constructor(
-    public api: ApiModel,
-    public versions?: IVersionInfo
-  ) {
+  constructor(public api: ApiModel, public versions?: IVersionInfo) {
     super(api, versions);
     this.packageName = `v${this.apiVersion.substring(
       0,
@@ -175,9 +172,7 @@ export class GoGen extends CodeGen {
       const params: string[] = [];
       const args = method.allParams; // get the params in signature order
       if (args && args.length > 0)
-        args.forEach((p) =>
-          params.push(this.declareParameter(bump, method, p))
-        );
+        args.forEach(p => params.push(this.declareParameter(bump, method, p)));
       fragment =
         params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : '';
     }
@@ -321,7 +316,7 @@ export class GoGen extends CodeGen {
     prefix = prefix || '';
     if (path.indexOf('{') >= 0) {
       const vars: string[] = [];
-      const str = path.replace(/({.*?})/g, (group) => {
+      const str = path.replace(/({.*?})/g, group => {
         vars.push(
           this.accessor(group.replace('{', '').replace('}', ''), prefix)
         );
@@ -498,7 +493,7 @@ ${goImport}
         const num = type as EnumType;
         const typeName = this.capitalize(type.name);
         props.push(`type ${typeName} string`); // todo: handle other types than string
-        num.values.forEach((value) => {
+        num.values.forEach(value => {
           // props.push(this.declareEnumValue(bump, value, typeName))
           this.declareEnumValue(bump, value, typeName, writer);
         });
@@ -507,7 +502,7 @@ ${goImport}
 
         return propertyValues;
       } else {
-        this.typeProperties(type).forEach((prop) =>
+        this.typeProperties(type).forEach(prop =>
           // props.push(this.declareProperty(bump, prop))
           this.declareProperty(bump, prop, writer)
         );
@@ -577,14 +572,14 @@ ${goImport}
 
   toCamelCaseCap(str: string): string {
     return this.capitalize(
-      str.replace(/([-_][a-z])/g, (group) =>
+      str.replace(/([-_][a-z])/g, group =>
         group.toUpperCase().replace('-', '').replace('_', '')
       )
     );
   }
 
   toCamelCase(str: string): string {
-    return str.replace(/([-_][a-z])/g, (group) =>
+    return str.replace(/([-_][a-z])/g, group =>
       group.toUpperCase().replace('-', '').replace('_', '')
     );
   }

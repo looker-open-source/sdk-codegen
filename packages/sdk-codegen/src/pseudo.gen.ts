@@ -46,7 +46,7 @@ export class PseudoGen extends CodeGen {
    */
   methodSignature(indent: string, method: IMethod): string {
     const params = method.allParams;
-    const args = params.map((p) => this.declareParameter(indent, method, p));
+    const args = params.map(p => this.declareParameter(indent, method, p));
     const bump = this.bumper(indent);
     const fragment =
       args.length === 0

@@ -64,10 +64,7 @@ export class APIMethods implements IAPIMethods {
    * @param authSession authentication management session
    * @param sdkVersion version of the SDK for agent tagging
    */
-  constructor(
-    public authSession: IAuthSession,
-    public sdkVersion: string
-  ) {
+  constructor(public authSession: IAuthSession, public sdkVersion: string) {
     if (
       !('agentTag' in authSession.settings && authSession.settings.agentTag)
     ) {

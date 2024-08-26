@@ -85,7 +85,7 @@ export const DefaultSettings = () =>
     base_url: '',
     timeout: defaultTimeout,
     verify_ssl: true,
-  }) as IApiSettings;
+  } as IApiSettings);
 
 /**
  * Return environment variable name value first, otherwise config name value

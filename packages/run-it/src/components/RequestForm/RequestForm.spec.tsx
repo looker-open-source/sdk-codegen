@@ -36,10 +36,10 @@ import { RequestForm } from './RequestForm';
 describe('RequestForm', () => {
   const run = 'Run';
   let requestContent = {};
-  const setRequestContent = jest.fn((content) => {
+  const setRequestContent = jest.fn(content => {
     requestContent = content;
   });
-  const handleSubmit = jest.fn((e) => e.preventDefault());
+  const handleSubmit = jest.fn(e => e.preventDefault());
 
   beforeEach(() => {
     jest.resetAllMocks();
@@ -277,7 +277,7 @@ describe('RequestForm', () => {
   });
 
   test('interacting with a complex item changes the request content', async () => {
-    const handleSubmit = jest.fn((e) => e.preventDefault());
+    const handleSubmit = jest.fn(e => e.preventDefault());
     const inputs: RunItInput[] = [
       {
         name: 'body',
@@ -315,7 +315,7 @@ describe('RequestForm', () => {
   });
 
   test('pressing enter submits the request form', async () => {
-    const handleSubmit = jest.fn((e) => e.preventDefault());
+    const handleSubmit = jest.fn(e => e.preventDefault());
     renderWithTheme(
       <RequestForm
         inputs={[

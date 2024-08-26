@@ -54,6 +54,6 @@ export const goToPage = async (url: string): Promise<void> => {
  */
 export const getSpecKey = async (): Promise<string> => {
   const specSelectorHandle = await page.$('input[aria-label="spec selector"]');
-  const specKey = await page.evaluate((e) => e.value, specSelectorHandle);
+  const specKey = await page.evaluate(e => e.value, specSelectorHandle);
   return specKey;
 };

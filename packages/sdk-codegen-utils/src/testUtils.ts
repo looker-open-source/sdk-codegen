@@ -163,7 +163,7 @@ export const getCypressSettings = (): Record<string, string> => {
     ? JSON.parse(fs.readFileSync(cypressFile, utf8))
     : {};
   const cypress: Record<string, string> = {};
-  Object.keys(config).forEach((k) => (cypress[k.toLowerCase()] = config[k]));
+  Object.keys(config).forEach(k => (cypress[k.toLowerCase()] = config[k]));
   const env = readEnvConfig('CYPRESS');
   return {
     ...cypress,

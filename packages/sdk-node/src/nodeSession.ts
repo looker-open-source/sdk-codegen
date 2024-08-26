@@ -48,10 +48,7 @@ export class NodeSession extends AuthSession {
   _authToken: AuthToken = new AuthToken();
   _sudoToken: AuthToken = new AuthToken();
 
-  constructor(
-    public settings: IApiSettings,
-    transport?: ITransport
-  ) {
+  constructor(public settings: IApiSettings, transport?: ITransport) {
     super(settings, transport || new NodeTransport(settings));
   }
 

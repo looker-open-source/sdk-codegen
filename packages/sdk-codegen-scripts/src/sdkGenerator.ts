@@ -88,11 +88,11 @@ export class MethodGenerator extends Generator<Models.IApiModel> {
     this.codeFormatter.reset();
     const items: string[] = [];
     // reset refcounts for ALL types so dynamic import statement will work
-    Object.values(this.model.types).forEach((type) => (type.refCount = 0));
+    Object.values(this.model.types).forEach(type => (type.refCount = 0));
     let tagCount = 0;
     Object.entries(this.model.tags).forEach(([tagName, methods]) => {
       const tag = this.model.spec.tags?.find(
-        (t) =>
+        t =>
           t.name.localeCompare(tagName, undefined, { sensitivity: 'base' }) ===
           0
       );
@@ -107,7 +107,7 @@ export class MethodGenerator extends Generator<Models.IApiModel> {
             `${tag.name}: ${tag.description}`
           )
         );
-        Object.values(methods).forEach((method) => {
+        Object.values(methods).forEach(method => {
           items.push(this.itemGenerator(indent, method));
         });
         items.push(
@@ -179,7 +179,7 @@ export class TypeGenerator extends Generator<Models.IApiModel> {
   render(indent: string, noStreams = false) {
     this.codeFormatter.reset();
     const items: string[] = [];
-    Object.values(this.model.types).forEach((type) => {
+    Object.values(this.model.types).forEach(type => {
       if (!(type instanceof Models.IntrinsicType)) {
         if (
           !this.codeFormatter.useNamedParameters ||
@@ -211,8 +211,8 @@ export class TypeGenerator extends Generator<Models.IApiModel> {
     let standard = 0;
     let enums = 0;
     Object.values(types)
-      .filter((type) => !(type instanceof Models.IntrinsicType))
-      .forEach((type) => {
+      .filter(type => !(type instanceof Models.IntrinsicType))
+      .forEach(type => {
         if (type instanceof Models.RequestType) {
           if (type.refCount > 0) request++;
         } else if (type instanceof Models.WriteType) {

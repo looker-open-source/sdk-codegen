@@ -794,7 +794,7 @@ describe('sdkModels', () => {
         it('type.property full name has method name prefix', () => {
           const type = apiTestModel.types.Dashboard;
           expect(type).toBeDefined();
-          Object.values(type.properties).forEach((item) => {
+          Object.values(type.properties).forEach(item => {
             expect(item.fullName).toEqual(`${type.name}.${item.name}`);
           });
         });
@@ -1028,7 +1028,7 @@ describe('sdkModels', () => {
 
       it('has deprecated parameters', () => {
         const method = apiTestModel.methods.old_login;
-        const param = method.params.find((p) => p.name === 'old_cred');
+        const param = method.params.find(p => p.name === 'old_cred');
         expect(param).toBeDefined();
         expect(param?.deprecated).toEqual(true);
       });
@@ -1172,7 +1172,7 @@ describe('sdkModels', () => {
 
       it('all enums have parents', () => {
         const orphans = Object.values(apiTestModel.types).filter(
-          (t) => t instanceof EnumType && t.parentTypes.size === 0
+          t => t instanceof EnumType && t.parentTypes.size === 0
         );
         expect(orphans).toHaveLength(0);
       });
@@ -1776,7 +1776,7 @@ describe('sdkModels', () => {
       it('should summarize a parameter', () => {
         const allParams = apiTestModel.methods.create_look.allParams;
         const actual = allParams
-          .find((param) => param.name === 'fields')
+          .find(param => param.name === 'fields')
           ?.signature();
         expect(actual).toEqual('[fields:string]');
       });

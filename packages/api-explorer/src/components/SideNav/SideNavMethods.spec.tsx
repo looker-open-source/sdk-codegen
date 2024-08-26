@@ -117,7 +117,7 @@ describe('SideNavMethods', () => {
     await userEvent.click(screen.getByText('Dash'));
     const matches = screen.getAllByText(/dash/i);
     expect(matches).toHaveLength(2);
-    matches.forEach((match) => {
+    matches.forEach(match => {
       expect(match).toContainHTML('<span class="hi">Dash</span>');
     });
   });

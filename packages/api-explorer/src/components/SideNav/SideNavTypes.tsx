@@ -80,7 +80,7 @@ export const SideNavTypes = styled(
         }
       >
         <ul>
-          {Object.values(types).map((type) => (
+          {Object.values(types).map(type => (
             <li key={type.name}>
               <Link
                 to={buildPathWithGlobalParams(

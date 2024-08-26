@@ -52,7 +52,7 @@ export const commentBlock = (
 ) => {
   if (!text || !text.trim()) return '';
   const indentation = indent + commentStr;
-  const lines = text.split('\n').map((x) => `${indentation}${x}`.trimRight());
+  const lines = text.split('\n').map(x => `${indentation}${x}`.trimRight());
   return lines.join('\n');
 };
 
@@ -818,10 +818,7 @@ export abstract class CodeGen implements ICodeGen {
   apiRef = '';
   apiPath = '';
 
-  constructor(
-    public api: ApiModel,
-    public versions?: IVersionInfo
-  ) {
+  constructor(public api: ApiModel, public versions?: IVersionInfo) {
     if (versions && versions.spec) {
       this.apiVersion = versions.spec.version;
       this.apiPath = `/${versions.spec.key}`;
@@ -1014,7 +1011,7 @@ export abstract class CodeGen implements ICodeGen {
         hasComplexArg = true;
       } else {
         const params = method.allParams;
-        params.forEach((p) => {
+        params.forEach(p => {
           const v = this.argValue(this.indentStr, p, inputs);
           if (v !== '') {
             const arg = this.useNamedArguments ? `${p.name}=${v}` : v;
@@ -1049,7 +1046,7 @@ export abstract class CodeGen implements ICodeGen {
     // child properties are indented one level
     const bump = this.bumper(indent);
     const props = Object.values(type.properties);
-    props.forEach((p) => {
+    props.forEach(p => {
       const v = this.argValue(bump, p, inputs);
       if (v) args.push(this.argSet(p.name, this.argSetSep, v));
     });
@@ -1129,7 +1126,7 @@ export abstract class CodeGen implements ICodeGen {
       case 'object': {
         if (Array.isArray(val)) {
           const vals: string[] = [];
-          Object.values(val).forEach((v) => {
+          Object.values(val).forEach(v => {
             vals.push(this.anyValue(this.bumper(indent), v));
           });
           return this.argIndent(indent, vals, this.arrayOpen, this.arrayClose);
@@ -1238,9 +1235,7 @@ export abstract class CodeGen implements ICodeGen {
     const params = method.allParams;
     const items: string[] = [];
     if (params)
-      params.forEach((p) =>
-        items.push(this.declareParameter(indent, method, p))
-      );
+      params.forEach(p => items.push(this.declareParameter(indent, method, p)));
     return items.join(this.paramDelimiter);
   }
 
@@ -1265,12 +1260,12 @@ export abstract class CodeGen implements ICodeGen {
     try {
       if (type instanceof EnumType) {
         const num = type as EnumType;
-        num.values.forEach((value) =>
+        num.values.forEach(value =>
           props.push(this.declareEnumValue(bump, value))
         );
         propertyValues = props.join(this.enumDelimiter);
       } else {
-        this.typeProperties(type).forEach((prop) =>
+        this.typeProperties(type).forEach(prop =>
           props.push(this.declareProperty(bump, prop))
         );
         propertyValues = props.join(this.propDelimiter);
@@ -1333,9 +1328,7 @@ export abstract class CodeGen implements ICodeGen {
   }
 
   errorResponses(_indent: string, method: IMethod) {
-    const results: string[] = method.errorResponses.map(
-      (r) => `${r.type.name}`
-    );
+    const results: string[] = method.errorResponses.map(r => `${r.type.name}`);
     return results.join(', ');
   }
 
@@ -1388,8 +1381,8 @@ export abstract class CodeGen implements ICodeGen {
     const items: string[] = [];
     if (!this.api) return items;
     Object.values(this.api.types)
-      .filter((type) => type.refCount > 0 && !type.intrinsic)
-      .forEach((type) => items.push(type.name));
+      .filter(type => type.refCount > 0 && !type.intrinsic)
+      .forEach(type => items.push(type.name));
     return items;
   }
 

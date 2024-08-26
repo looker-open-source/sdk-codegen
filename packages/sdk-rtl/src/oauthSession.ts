@@ -67,7 +67,7 @@ export class OAuthSession extends AuthSession {
     ];
     const config = { ...this.settings, ...this.settings.readConfig() };
 
-    keys.forEach((key) => {
+    keys.forEach(key => {
       const value = config[key];
       if (!value) {
         throw sdkError({

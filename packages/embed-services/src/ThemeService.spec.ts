@@ -134,7 +134,7 @@ describe('ThemeService', () => {
 
   describe('set', () => {
     it('sets and caches', async () => {
-      const theme = testThemes.find((t) => t.name === themes[0].name)!;
+      const theme = testThemes.find(t => t.name === themes[0].name)!;
       const updatedTheme = { ...theme, name: 'updated_theme' };
       await service.set(updatedTheme.id!, updatedTheme);
       expect(service.indexedItems[updatedTheme.id!].name).toEqual(
@@ -154,7 +154,7 @@ describe('ThemeService', () => {
       expect(themes).toHaveLength(themeCount);
 
       const targetTheme = themes.find(
-        (t) => t.name !== 'Looker' // Default Looker theme cannot be deleted
+        t => t.name !== 'Looker' // Default Looker theme cannot be deleted
       )!;
       await service.delete(targetTheme.id!);
 

@@ -131,7 +131,7 @@ export const parseFields = (fields: FieldsSpec) => {
     const parts = splitConsideringParentheses(segment);
     const result: ArgValues = {};
 
-    parts.forEach((part) => {
+    parts.forEach(part => {
       // split each part into a key and any nested string
       let [key, nestedStr] = part.split(/\((.+)/);
       key = key.trim();
@@ -158,7 +158,7 @@ export const parseFields = (fields: FieldsSpec) => {
     return parseSegment(fields);
   } else if (Array.isArray(fields)) {
     const result: ArgValues = {};
-    fields.forEach((f) => (result[f] = f));
+    fields.forEach(f => (result[f] = f));
     return result;
   }
   // Presume this is already a keyed collection and just return it
@@ -220,7 +220,7 @@ export const safeName = (value: string) => {
  */
 export const camelCase = (value: string) => {
   if (!value) return '';
-  return value.replace(/(([-_ ]+)[a-z])|([-_ ]+)/gi, ($1) => {
+  return value.replace(/(([-_ ]+)[a-z])|([-_ ]+)/gi, $1 => {
     return $1.toLocaleUpperCase().replace(/([-_ ]+)/gi, '');
   });
 };
@@ -369,7 +369,7 @@ export const mayQuote = (value: any, quoteChar = `'`): string => {
 export const methodRefs = (api: IApiModel, refs: KeyList): IMethod[] => {
   const keys = keyValues(refs);
   const result: IMethod[] = [];
-  keys.forEach((k) => {
+  keys.forEach(k => {
     if (k in api.methods) {
       result.push(api.methods[k]);
     }
@@ -386,7 +386,7 @@ export const methodRefs = (api: IApiModel, refs: KeyList): IMethod[] => {
 export const typeRefs = (api: IApiModel, refs: KeyList): IType[] => {
   const keys = keyValues(refs);
   const result: IType[] = [];
-  keys.forEach((k) => {
+  keys.forEach(k => {
     const ref = api.types[k];
     if (ref) {
       result.push(ref);
@@ -498,7 +498,7 @@ export const SearchAll: SearchCriteria = new Set([
 
 export const criteriaToSet = (criteria: string[]): SearchCriteria => {
   const result: SearchCriteria = new Set();
-  criteria.forEach((name) => {
+  criteria.forEach(name => {
     const val = SearchCriterion[name as SearchCriterionTerm];
     if (val !== undefined)
       result.add(SearchCriterion[name as SearchCriterionTerm]);
@@ -508,7 +508,7 @@ export const criteriaToSet = (criteria: string[]): SearchCriteria => {
 
 export const setToCriteria = (criteria: SearchCriteria): string[] => {
   const result: string[] = [];
-  criteria.forEach((value) => result.push(SearchCriterion[value]));
+  criteria.forEach(value => result.push(SearchCriterion[value]));
   return result;
 };
 
@@ -749,7 +749,7 @@ export const tagTypes = (api: ApiModel, types: TypeList) => {
         const first = firstMethodRef(api, type);
         if (first) methods = [first];
       }
-      methods.forEach((method) => {
+      methods.forEach(method => {
         // The type is tagged for each method's tags
         for (const tag of method.schema.tags) {
           let list: TypeList = typeTags[tag];
@@ -1134,8 +1134,7 @@ export class Property extends SchemadSymbol implements IProperty {
         case 'DelimArrayType':
           return empty ? new DelimArray([]) : new DelimArray([val]);
         case 'EnumType':
-          const et = type as unknown as EnumType;
-          return et.values[0];
+          return (type as unknown as EnumType).values[0];
       }
       throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`);
     }
@@ -1469,7 +1468,7 @@ export class Method extends SchemadSymbol implements IMethod {
       throw new Error('Missing operationId');
     }
 
-    const okays = responses.filter((response) => {
+    const okays = responses.filter(response => {
       return (
         response.statusCode === StatusCode.OK ||
         response.statusCode === StatusCode.NoContent
@@ -1480,17 +1479,17 @@ export class Method extends SchemadSymbol implements IMethod {
     }
 
     const primaryResponse =
-      okays.find((response) => {
+      okays.find(response => {
         // prefer json response over all other 200s
         return (
           response.statusCode === StatusCode.OK &&
           response.mediaType === 'application/json'
         );
       }) ||
-      okays.find((response) => {
+      okays.find(response => {
         return response.statusCode === StatusCode.OK; // accept any mediaType for 200 if none are json
       }) ||
-      okays.find((response) => {
+      okays.find(response => {
         return response.statusCode === StatusCode.NoContent;
       });
 
@@ -1514,8 +1513,8 @@ export class Method extends SchemadSymbol implements IMethod {
     this.primaryResponse = primaryResponse;
     this.responseModes = this.getResponseModes();
     this.params = [];
-    params.forEach((p) => this.addParam(api, p));
-    responses.forEach((r) => this.addType(api, r.type));
+    params.forEach(p => this.addParam(api, p));
+    responses.forEach(r => this.addType(api, r.type));
     if (body) {
       this.addParam(api, body);
     }
@@ -1723,7 +1722,7 @@ export class Method extends SchemadSymbol implements IMethod {
     // TODO use lodash?
     const result: IMethodResponse[] = [];
     const map = new Map();
-    for (const item of this.responses.filter((r) => r.statusCode >= 400)) {
+    for (const item of this.responses.filter(r => r.statusCode >= 400)) {
       if (!map.has(item.type.name)) {
         map.set(item.type.name, true);
         result.push(item);
@@ -1734,7 +1733,7 @@ export class Method extends SchemadSymbol implements IMethod {
 
   getParams(location?: MethodParameterLocation): IParameter[] {
     if (location) {
-      return this.params.filter((p) => p.location === location);
+      return this.params.filter(p => p.location === location);
     }
     return this.params;
   }
@@ -1783,18 +1782,18 @@ export class Method extends SchemadSymbol implements IMethod {
    * return the list of required parameters, optionally for a specific location
    */
   required(location?: MethodParameterLocation) {
-    let list = this.params.filter((i) => i.required);
+    let list = this.params.filter(i => i.required);
     if (location) {
-      list = list.filter((i) => i.location === location);
+      list = list.filter(i => i.location === location);
     }
     return list;
   }
 
   // return the list of optional parameters, optionally for a specific location
   optional(location?: MethodParameterLocation) {
-    let list = this.params.filter((i) => !i.required);
+    let list = this.params.filter(i => !i.required);
     if (location) {
-      list = list.filter((i) => i.location === location);
+      list = list.filter(i => i.location === location);
     }
     return list;
   }
@@ -1804,7 +1803,7 @@ export class Method extends SchemadSymbol implements IMethod {
   }
 
   private argumentNames(location?: MethodParameterLocation): string[] {
-    return this.getParams(location).map((p) => p.name);
+    return this.getParams(location).map(p => p.name);
   }
 
   isMethodSearch(criteria: SearchCriteria): boolean {
@@ -1837,7 +1836,7 @@ export class Method extends SchemadSymbol implements IMethod {
       result += searchIt(this.status) + searchIt(this.deprecation);
     }
     if (criteria.has(SearchCriterion.argument)) {
-      this.params.forEach((p) => {
+      this.params.forEach(p => {
         result += p.searchString(criteria);
       });
     }
@@ -1885,10 +1884,7 @@ export class Type implements IType {
   jsonName = '';
   refCount = 0;
 
-  constructor(
-    public schema: OAS.SchemaObject,
-    public name: string
-  ) {
+  constructor(public schema: OAS.SchemaObject, public name: string) {
     this.jsonName = name;
     const snake = safeName(name);
     if (snake !== name) {
@@ -1925,8 +1921,8 @@ export class Type implements IType {
   setWriteable(api: ApiModel) {
     const result: IProperty[] = [];
     Object.values(this.properties)
-      .filter((prop) => !(prop.readOnly || prop.type.readOnly))
-      .forEach((prop) => {
+      .filter(prop => !(prop.readOnly || prop.type.readOnly))
+      .forEach(prop => {
         const type = prop.type;
         const w = type.intrinsic ? undefined : api.mayGetWriteableType(type);
         if (w) {
@@ -2035,7 +2031,7 @@ export class Type implements IType {
     if (keys['*']) {
       // add all properties, but default their nested fields if they'd have any
       const merge: ArgValues = {};
-      Object.keys(props).forEach((k) => (merge[k] = k));
+      Object.keys(props).forEach(k => (merge[k] = k));
       keys = { ...merge, ...keys };
       delete keys['*'];
     } else if (isEmpty(fields)) {
@@ -2051,7 +2047,7 @@ export class Type implements IType {
       typeof override === 'string' || typeof override === 'function';
 
     let result: ArgValues = {};
-    Object.keys(keys).forEach((k) => {
+    Object.keys(keys).forEach(k => {
       const v = keys[k];
       const over = overKeys ? undefined : override[k];
       const p = props[k];
@@ -2204,10 +2200,7 @@ export class Type implements IType {
 }
 
 export class ArrayType extends Type {
-  constructor(
-    public elementType: IType,
-    schema: OAS.SchemaObject
-  ) {
+  constructor(public elementType: IType, schema: OAS.SchemaObject) {
     super(schema, `${elementType.name}[]`);
     this.customType = elementType.customType;
   }
@@ -2316,10 +2309,7 @@ export class EnumType extends Type implements IEnumType {
 }
 
 export class DelimArrayType extends Type {
-  constructor(
-    public elementType: IType,
-    schema: OAS.SchemaObject
-  ) {
+  constructor(public elementType: IType, schema: OAS.SchemaObject) {
     super(schema, `DelimArray<${elementType.name}>`);
     this.elementType = elementType;
     this.customType = elementType.customType;
@@ -2402,7 +2392,7 @@ export class RequestType extends Type {
     description = ''
   ) {
     super({ description }, name);
-    params.forEach((p) => {
+    params.forEach(p => {
       const writeProp = p.asProperty();
       const typeWriter = api.mayGetWriteableType(p.type);
       if (typeWriter) writeProp.type = typeWriter;
@@ -2418,7 +2408,7 @@ export class WriteType extends Type {
     const description =
       `Dynamic writeable type for ${type.name}` +
       (roProps.length > 0
-        ? ` removes:\n` + roProps.map((p) => p.name).join(', ')
+        ? ` removes:\n` + roProps.map(p => p.name).join(', ')
         : '');
     super({ description }, name);
     // Cross-reference the two types
@@ -2428,7 +2418,7 @@ export class WriteType extends Type {
     type.customTypes.add(this.name);
     const obj = type as Type;
     const writes = obj.maySetWriteable(api as ApiModel);
-    writes.forEach((p) => {
+    writes.forEach(p => {
       const writeProp = new Property(
         p.name,
         p.type,
@@ -2518,7 +2508,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
       'ipv4',
       'ipv6',
       'any',
-    ].forEach((name) => (this.types[name] = new IntrinsicType(name)));
+    ].forEach(name => (this.types[name] = new IntrinsicType(name)));
 
     this.load();
   }
@@ -2914,7 +2904,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
     this.tags = this.sortList(this.tags);
     this.typeTags = this.sortList(this.typeTags);
     const typeKeys = Object.keys(this.typeTags);
-    typeKeys.forEach((key) => {
+    typeKeys.forEach(key => {
       this.typeTags[key] = this.sortList(this.typeTags[key]);
     });
     // commented out to leave methods in natural order within the tag
@@ -2932,19 +2922,19 @@ export class ApiModel implements ISymbolTable, IApiModel {
         this.types[name] = t;
         this.refs[`#/components/schemas/${name}`] = t;
       });
-      Object.keys(this.spec.components.schemas).forEach((name) => {
+      Object.keys(this.spec.components.schemas).forEach(name => {
         const resolved = this.resolveType(name) as Type;
         resolved.load(this);
       });
       // Ensure all property's nested type references point to the correct full type
       const complex = Object.values(this.types)
-        .filter((t) => !t.intrinsic)
-        .map((t) => t);
-      complex.forEach((type) => {
+        .filter(t => !t.intrinsic)
+        .map(t => t);
+      complex.forEach(type => {
         const nested = Object.values(type.properties).filter(
-          (p) => !p.type.intrinsic
+          p => !p.type.intrinsic
         );
-        nested.forEach((p) => {
+        nested.forEach(p => {
           const ref = this.types[p.type.name];
           if (ref) {
             // Could be a collection of an intrinsic type, so only assign if
@@ -2960,7 +2950,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
     if (this.spec?.paths) {
       Object.entries(this.spec.paths).forEach(([path, schema]) => {
         const methods = this.loadMethods(path, schema);
-        methods.forEach((method) => {
+        methods.forEach(method => {
           this.methods[method.name] = method;
         });
       });
@@ -3093,7 +3083,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
       // determine type from content
       const content = obj.content;
       // TODO need to understand headers or links
-      Object.keys(content).forEach((key) => {
+      Object.keys(content).forEach(key => {
         const media = content[key];
         /* eslint-disable @typescript-eslint/no-non-null-assertion */
         const schema = media.schema!;

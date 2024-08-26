@@ -70,14 +70,14 @@ describe('Transport', () => {
 
   describe('Content Type mode', () => {
     it('binary', () => {
-      binaryTypes.forEach((x) => {
+      binaryTypes.forEach(x => {
         const actual = responseMode(x);
         expect(actual).toEqual(ResponseMode.binary);
       });
     });
 
     it('text or string', () => {
-      textTypes.forEach((x) => {
+      textTypes.forEach(x => {
         const actual = responseMode(x);
         expect(actual).toEqual(ResponseMode.string);
       });

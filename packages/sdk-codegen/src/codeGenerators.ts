@@ -119,7 +119,7 @@ export const Generators: IGeneratorSpec[] = [
   // },
 ];
 
-export const codeGenerators = Generators.filter((x) => x.factory !== undefined);
+export const codeGenerators = Generators.filter(x => x.factory !== undefined);
 
 /**
  * Matches the code generator based on the language name, alias, file extension, or legacy name
@@ -130,7 +130,7 @@ export const findGenerator = (target: string) => {
   target = target.toLocaleLowerCase();
   // Convenience alias
   return codeGenerators.find(
-    (item) =>
+    item =>
       item.language.toLocaleLowerCase() === target ||
       target.match(item.extension) ||
       ('.' + target).match(item.extension) ||
@@ -163,5 +163,5 @@ export const getCodeGenerator = (
 };
 
 export const legacyLanguages = (): IGeneratorSpec[] => {
-  return Generators.filter((x) => !!x.legacy);
+  return Generators.filter(x => !!x.legacy);
 };

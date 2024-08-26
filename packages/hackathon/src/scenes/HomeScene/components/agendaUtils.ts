@@ -242,7 +242,7 @@ export const agendaEras = (
     present: [],
     future: [],
   };
-  agenda.forEach((item) => {
+  agenda.forEach(item => {
     const start = item.start.getTime();
     const stop = item.stop!.getTime();
     if (time < start) {

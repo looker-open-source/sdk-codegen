@@ -311,7 +311,7 @@ export const validateEncodedValues = (body: string) => {
   let result = '';
   if (!body) return result;
   const args = body.split('&');
-  args.forEach((arg) => {
+  args.forEach(arg => {
     const formArg = /[\w-_.]+(\[])?=.*/i;
     if (!formArg.test(arg)) {
       result += ` ${arg}`;
@@ -356,7 +356,7 @@ export const validateBody = (
   if (parsed && requiredKeys && requiredKeys.length > 0) {
     const required = new Set<string>(requiredKeys);
     const keys = new Set<string>(Object.keys(parsed));
-    const missing = new Set<string>([...required].filter((k) => !keys.has(k)));
+    const missing = new Set<string>([...required].filter(k => !keys.has(k)));
     if (missing.size > 0) {
       result = `Error: Required properties "${Array.from(missing).join(
         ', '

@@ -51,10 +51,7 @@ export class ExtensionAdaptor
 {
   _themeOverrides: ThemeOverrides;
 
-  constructor(
-    public extensionSdk: ExtensionSDK,
-    sdk: IAPIMethods
-  ) {
+  constructor(public extensionSdk: ExtensionSDK, sdk: IAPIMethods) {
     super(sdk);
     this._themeOverrides = getThemeOverrides(
       (this.extensionSdk.lookerHostData || { hostType: 'standard' })

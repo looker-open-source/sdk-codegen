@@ -39,10 +39,7 @@ import { AuthSession } from './authSession';
  */
 export class CSRFSession extends AuthSession {
   _activeToken = '';
-  constructor(
-    public settings: IApiSettings,
-    transport?: ITransport
-  ) {
+  constructor(public settings: IApiSettings, transport?: ITransport) {
     super(settings, transport || new BrowserTransport(settings));
   }
 

@@ -151,7 +151,7 @@ export const linkHeaderParser = (linkHeader: string): PageLinks => {
   const obj: PageLinks = {};
   let arrRes;
 
-  links.forEach((link) => {
+  links.forEach(link => {
     link = link.trim();
     while ((arrRes = re.exec(link))) {
       const key = arrRes[2].split(' ')[0].trim().toLocaleLowerCase();

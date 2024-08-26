@@ -225,7 +225,7 @@ ${this.hooks.join('\n')}
     const params: string[] = [];
     const args = method.allParams;
     if (args && args.length > 0) {
-      method.allParams.forEach((p) =>
+      method.allParams.forEach(p =>
         params.push(this.declareParameter(bump, method, p))
       );
     }
@@ -325,7 +325,7 @@ ${this.hooks.join('\n')}
     const annotations: string[] = [];
     const args: string[] = [];
     const inits: string[] = [];
-    this.typeProperties(type).forEach((prop) => {
+    this.typeProperties(type).forEach(prop => {
       annotations.push(this.declareProperty(indent, prop, true));
       args.push(this.declareConstructorArg('', prop));
       inits.push(this.initArg(bump, prop));

@@ -112,12 +112,12 @@ function* getProjectSaga({
         // projects are lost on page reload so load them
         projects = yield currentProjectsSaga() as any;
       }
-      const project = projects.find((p) => p._id === projectId);
+      const project = projects.find(p => p._id === projectId);
       let isProjectMember;
       if (project) {
         const hacker = yield call([sheetsClient, sheetsClient.getHacker]);
         isProjectMember = !!project.$team.find(
-          (teamMember) => teamMember.user_id === String(hacker.id)
+          teamMember => teamMember.user_id === String(hacker.id)
         );
       }
       yield put(getProjectResponse(project, isProjectMember));

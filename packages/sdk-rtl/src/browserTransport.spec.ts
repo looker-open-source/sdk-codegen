@@ -48,7 +48,7 @@ describe('BrowserTransport', () => {
       .mockImplementation((time: number) => Promise.resolve(time));
 
     tried = 0;
-    fetchMock.mockIf(/^https?:\/\/retry\.foo.*$/, async (_req) => {
+    fetchMock.mockIf(/^https?:\/\/retry\.foo.*$/, async _req => {
       tried++;
       if (tried < 4) {
         return {

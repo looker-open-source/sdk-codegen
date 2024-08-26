@@ -106,8 +106,8 @@ export const compareEnumTypes = (
 ) => {
   const lNum = lType as EnumType;
   const rNum = rType as EnumType;
-  const lKeys = lNum.values.map((v) => v.toString());
-  const rKeys = rNum.values.map((v) => v.toString());
+  const lKeys = lNum.values.map(v => v.toString());
+  const rKeys = rNum.values.map(v => v.toString());
   countDiffs(count, lKeys, rKeys);
   const lVal = JSON.stringify(lKeys);
   const rVal = JSON.stringify(rKeys);
@@ -239,19 +239,19 @@ export const compareBodies = (
 ) => {
   const lParams: ArgValues = {};
   const rParams: ArgValues = {};
-  lMethod.bodyParams.forEach((p) => (lParams[p.name] = p));
-  rMethod.bodyParams.forEach((p) => (rParams[p.name] = p));
+  lMethod.bodyParams.forEach(p => (lParams[p.name] = p));
+  rMethod.bodyParams.forEach(p => (rParams[p.name] = p));
   // TODO typediff the matching body types?
   countDiffs(count, Object.keys(lParams), Object.keys(rParams));
 
-  const lSide = lMethod.bodyParams.map((p) => {
+  const lSide = lMethod.bodyParams.map(p => {
     return {
       name: p.name,
       type: p.type.fullName,
       required: p.required,
     };
   });
-  const rSide = rMethod.bodyParams.map((p) => {
+  const rSide = rMethod.bodyParams.map(p => {
     return {
       name: p.name,
       type: p.type.fullName,
@@ -280,14 +280,14 @@ export const compareResponses = (
   count: DiffCount
 ) => {
   // TODO deep type comparison? Probably diff all types instead
-  const lSide = lMethod.responses.map((r) => {
+  const lSide = lMethod.responses.map(r => {
     return {
       statusCode: r.statusCode,
       mediaType: r.mediaType,
       type: r.type.fullName,
     };
   });
-  const rSide = rMethod.responses.map((r) => {
+  const rSide = rMethod.responses.map(r => {
     return {
       statusCode: r.statusCode,
       mediaType: r.mediaType,

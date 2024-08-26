@@ -31,18 +31,18 @@
 // (which introduced the errorOptions argument)
 type AugmentErrorOptions<
   ErrorParameters extends unknown[],
-  AdditionalErrorOptions,
+  AdditionalErrorOptions
 > = ErrorParameters extends [(infer Message)?]
   ? [Message?, AdditionalErrorOptions?]
   : ErrorParameters extends [(infer Message)?, (infer ErrorOptions)?]
-    ? [Message?, (ErrorOptions & AdditionalErrorOptions)?]
-    : ErrorParameters extends [
-          (infer Message)?,
-          (infer ErrorOptions)?,
-          ...infer Rest,
-        ]
-      ? [Message?, (ErrorOptions & AdditionalErrorOptions)?, ...Rest]
-      : never;
+  ? [Message?, (ErrorOptions & AdditionalErrorOptions)?]
+  : ErrorParameters extends [
+      (infer Message)?,
+      (infer ErrorOptions)?,
+      ...infer Rest
+    ]
+  ? [Message?, (ErrorOptions & AdditionalErrorOptions)?, ...Rest]
+  : never;
 
 interface IErrorDetail {
   field?: string;

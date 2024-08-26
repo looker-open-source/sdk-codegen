@@ -56,7 +56,7 @@ import type { ICryptoHash } from './cryptoHash';
 export class BrowserCryptoHash implements ICryptoHash {
   arrayToHex(array: Uint8Array): string {
     return Array.from(array)
-      .map((b) => b.toString(16).padStart(2, '0'))
+      .map(b => b.toString(16).padStart(2, '0'))
       .join('');
   }
 
@@ -348,8 +348,9 @@ export class BrowserTransport extends BaseTransport {
         options
       );
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      const result: SDKResponse<TSuccess, TError> =
-        await this.parseResponse(res);
+      const result: SDKResponse<TSuccess, TError> = await this.parseResponse(
+        res
+      );
       return result;
     } catch (e: unknown) {
       if (!isErrorLike(e)) throw e;
