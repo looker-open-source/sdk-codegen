@@ -300,7 +300,7 @@ describe('sdkModels', () => {
 
       describe('type.mock', () => {
         it('mocks arrays results', () => {
-          const mockType = apiTestModel.methods.all_timezones.returnType?.type!;
+          const mockType = apiTestModel.methods.all_timezones.returnType?.type;
           const expected = [
             {
               group: 'group',
@@ -308,7 +308,7 @@ describe('sdkModels', () => {
               value: 'value',
             },
           ];
-          const actual = mockType.mock({ fields: '*' });
+          const actual = mockType?.mock({ fields: '*' });
           expect(actual).toStrictEqual(expected);
         });
 
