@@ -38,15 +38,14 @@ client_id=id
 client_secret=secret
 verify_ssl=false
 timeout=31
-[Looker2]
+[Looker31]
 base_url=https://self-signed.looker.com:19999
 verify_ssl=False
 timeout=30
 `;
 
-const testSection = ApiConfig(mockIni).Looker;
 const config = TestConfig(specToModel);
-const section2 = 'Looker2';
+const section2 = 'Looker31';
 const envPrefix = 'LOOKERSDK';
 
 describe('NodeSettings', () => {
@@ -99,7 +98,10 @@ describe('NodeSettings', () => {
   });
 
   describe('NodeSettingsEnv', () => {
-    const verifySsl = boolDefault(testSection.verify_ssl, false).toString();
+    const verifySsl = boolDefault(
+      config.testSection.verify_ssl,
+      false
+    ).toString();
 
     beforeAll(() => {
       const envKey = ApiConfigMap(envPrefix);
@@ -123,14 +125,14 @@ describe('NodeSettings', () => {
 
     it('settings are retrieved from environment variables', () => {
       const settings = new NodeSettings(envPrefix);
-      expect(settings.base_url).toEqual(config.base_url);
+      expect(settings.base_url).toEqual(config.baseUrl);
       expect(settings.timeout).toEqual(defaultTimeout);
       expect(settings.verify_ssl).toEqual(false);
     });
 
     it('empty file name uses environment variables', () => {
       const settings = new NodeSettingsIniFile(envPrefix);
-      expect(settings.base_url).toEqual(config.base_url);
+      expect(settings.base_url).toEqual(config.baseUrl);
       expect(settings.timeout).toEqual(defaultTimeout);
       expect(settings.verify_ssl).toEqual(false);
     });
@@ -152,7 +154,7 @@ describe('NodeSettings', () => {
       process.env[envKey.timeout] = '66';
       process.env[envKey.verify_ssl] = '1';
       const settings = new NodeSettingsIniFile(envPrefix, config.testIni);
-      expect(settings.base_url).toEqual(testSection.base_url);
+      expect(settings.base_url).toEqual(config.testSection.base_url);
       expect(settings.timeout).toEqual(66);
       expect(settings.verify_ssl).toEqual(true);
       // process.env[strLookerTimeout] = config.testSection['timeout'] || defaultTimeout.toString()

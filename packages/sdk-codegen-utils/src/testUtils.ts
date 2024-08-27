@@ -30,7 +30,12 @@ import * as yaml from 'js-yaml';
 import isEmpty from 'lodash/isEmpty';
 import { findRootSync } from '@manypkg/find-root';
 import type { IApiConfig } from '@looker/sdk-node';
-import { ApiConfigSection, NodeSession, readEnvConfig } from '@looker/sdk-node';
+import {
+  ApiConfigSection,
+  NodeSession,
+  readEnvConfig,
+  readIniConfig,
+} from '@looker/sdk-node';
 import type {
   IAPIMethods,
   IApiSection,
@@ -78,6 +83,14 @@ export interface ITestConfig {
   session: IAuthSession;
   /** initialized typescript SDK from melded configuration */
   sdk: IAPIMethods;
+  /** configured API base url */
+  baseUrl: string;
+  /** configured default INI section */
+  section: any;
+  /** configured timeout value */
+  timeout: number;
+  /** test INI section */
+  testSection: any;
 }
 
 let rootPath = '';
@@ -234,6 +247,8 @@ export const TestConfig = (
   rootPath = getRootPath()
 ): ITestConfig => {
   const testDataFile = 'data.yml';
+  const envPrefix = 'LOOKERSDK';
+  const sectionName = 'Looker';
   const localIni =
     process.env.LOOKERSDK_INI || path.join(rootPath, 'looker.ini');
   const settings = loadApiSettings(rootPath, localIni);
@@ -246,6 +261,10 @@ export const TestConfig = (
     : {};
   const apiTestModel = specFromFile(testFile('openApiRef.json'), loader);
   const testIni = path.join(rootPath, testData.iniFile);
+  const section = readIniConfig(localIni, envPrefix, sectionName);
+  const baseUrl = section.base_url;
+  const timeout = parseInt(section.timeout, 10);
+  const testSection = readIniConfig(localIni, envPrefix, sectionName);
   return {
     apiTestModel,
     dataFile,
@@ -257,5 +276,9 @@ export const TestConfig = (
     settings,
     session,
     sdk,
+    baseUrl,
+    section,
+    timeout,
+    testSection,
   };
 };
