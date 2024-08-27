@@ -23,12 +23,12 @@
  SOFTWARE.
 
  */
-import type { IMethodResponse } from '@looker/sdk-codegen';
+import type { IMethodResponse, ApiModel } from '@looker/sdk-codegen';
 import { TestConfig } from '@looker/sdk-codegen-utils';
 import { specToModel } from '@looker/sdk-codegen';
 
 const config = TestConfig(specToModel);
-const apiTestModel = config.apiTestModel;
+const apiTestModel = config.apiTestModel as ApiModel;
 
 describe('sdk generator test', () => {
   it('resolves OAS schemas into types', () => {
