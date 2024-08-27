@@ -41,7 +41,7 @@ import { ApiConfigSection } from '@looker/sdk-node';
 const config = TestConfig(specToModel);
 const props = ApiConfigSection(
   fs.readFileSync(config.localIni, 'utf8')
-) as ISDKConfigProps;
+) as unknown as ISDKConfigProps;
 // api_version is no longer part of the INI, now set by sdkGen iterator
 props.api_version = '4.0';
 
