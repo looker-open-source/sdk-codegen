@@ -340,13 +340,15 @@ export class NodeTransport extends BaseTransport {
     }
 
     const ms = sdkTimeout(options) * 1000;
-    const timer = AbortSignal.timeout(ms);
-    // TODO evidently need to polyfill AbortSignal.any() for jest tests
-    // const signals = [timer];
-    // if ('signal' in options && options.signal) {
-    //   signals.push(options.signal);
-    // }
-    // const combinedSignal = AbortSignal.any(signals);
+    let signaller = AbortSignal.timeout(ms);
+    if ('signal' in options && options.signal) {
+      // AbortSignal.any may not be available, tolerate its absence
+      if (AbortSignal.any) {
+        signaller = AbortSignal.any([signaller, options.signal]);
+      } else {
+        console.warn('AbortSignal.any is not available in this transport');
+      }
+    }
 
     let props: IRequestProps = {
       body,
@@ -354,23 +356,16 @@ export class NodeTransport extends BaseTransport {
       headers,
       method,
       url: path,
-      signal: timer,
+      signal: signaller,
     };
-
-    if (!verifySsl(options)) {
-      process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-      // This information appears to be stale. Commenting it out as a cruft
-      // signal to continue researching something better than the process
-      // toggle cannon
-      // props.agent = new https.Agent({
-      //   requestCert: false,
-      //   rejectUnauthorized: false,
-      // });
-    }
 
     if (authenticator) {
       // Add authentication information to the request
       props = await authenticator(props);
+    }
+
+    if (!verifySsl(options)) {
+      process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     }
 
     // Transform to HTTP request headers at the last second
