@@ -36,7 +36,7 @@ const apiTestModel = config.apiTestModel;
 
 const gen = new TypescriptGen(apiTestModel);
 const indent = '';
-/* eslint-disable jest/no-disabled-tests */
+/** eslint-disable jest/no-disabled-tests */
 
 describe('typescript generator', () => {
   describe('trimInputs tests here instead of CodeGen', () => {

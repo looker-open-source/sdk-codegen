@@ -63,7 +63,7 @@ import type {
   SearchCriterionTerm,
   TagList,
 } from './sdkModels';
-/* eslint-disable jest/no-disabled-tests */
+/** eslint-disable jest/no-disabled-tests */
 
 describe('sdkModels', () => {
   describe('parseFields', () => {

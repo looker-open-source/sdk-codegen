@@ -38,7 +38,7 @@ const payload = `{
   "api_server_url":"https://localhost:19999",
   "web_server_url":"https://localhost:9999"
 }`;
-/* eslint-disable jest/no-disabled-tests */
+/** eslint-disable jest/no-disabled-tests */
 
 describe('specConverter', () => {
   it('getSpecsFromVersions', async () => {

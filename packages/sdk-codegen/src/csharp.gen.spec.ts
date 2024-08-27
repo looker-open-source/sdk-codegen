@@ -181,7 +181,7 @@ public async Task<SdkResponse<AccessToken, Exception>> old_login(
   public string? dashboard_id { get; set; } = null;
 }`);
     });
-    /* eslint-disable jest/no-disabled-tests */
+    /** eslint-disable jest/no-disabled-tests */
     it.skip('enum declaration with reserved words', () => {
       const type =
         apiTestModel.types.LookmlModelExploreField.properties

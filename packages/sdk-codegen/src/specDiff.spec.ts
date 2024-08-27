@@ -99,7 +99,7 @@ const changeMethod = (method: Method) => {
   result.type = changeType(result.type as Type);
   return result;
 };
-/* eslint-disable jest/no-disabled-tests */
+/** eslint-disable jest/no-disabled-tests */
 
 describe('spec differ', () => {
   describe('compareTypes', () => {
@@ -215,7 +215,7 @@ describe('spec differ', () => {
     });
 
     // TODO fix these tests
-    /* eslint-disable jest/no-disabled-tests */
+    /** eslint-disable jest/no-disabled-tests */
     it.skip('should not overcount', () => {
       const spec31 = ApiModel.fromString(
         readFileSync(testFile('Looker.3.1.oas.json'), 'utf-8')
@@ -239,7 +239,7 @@ describe('spec differ', () => {
       });
     });
 
-    /* eslint-disable jest/no-disabled-tests */
+    /** eslint-disable jest/no-disabled-tests */
     it.skip('should count changes and additions', () => {
       const spec31 = ApiModel.fromString(
         readFileSync(testFile('Looker.3.1.oas.json'), 'utf-8')

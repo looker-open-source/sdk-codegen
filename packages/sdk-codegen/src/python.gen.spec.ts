@@ -35,7 +35,7 @@ const config = TestConfig(specToModel);
 const apiTestModel = config.apiTestModel;
 const gen = new PythonGen(apiTestModel);
 const indent = '';
-/* eslint-disable jest/no-disabled-tests */
+/** eslint-disable jest/no-disabled-tests */
 
 describe('python generator', () => {
   describe('comment header', () => {
