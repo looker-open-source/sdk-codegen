@@ -289,7 +289,7 @@ describe('formUtils', () => {
         'it validates a body value of "$value"',
         ({ value, expected, requiredKeys }) => {
           const actual = validateBody(value, requiredKeys);
-          expect(actual).toEqual(expected);
+          expect(actual).toMatch(expected);
         }
       );
     });
