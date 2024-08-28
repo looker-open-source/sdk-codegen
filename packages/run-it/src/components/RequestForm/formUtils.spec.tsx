@@ -266,7 +266,7 @@ describe('formUtils', () => {
     describe('validateBody', () => {
       const requiredKeys = ['model', 'view'];
       test.each`
-        value                                                      | expected                                                                | requiredKeys
+        value                                                      | expected                                                                           | requiredKeys
         ${{
   view: 'users',
   fields: ['users.id', 'users.first_name'],
@@ -276,15 +276,15 @@ describe('formUtils', () => {
   view: 'users',
   fields: ['users.id', 'users.first_name'],
 }} | ${''} | ${requiredKeys}
-        ${'na.-_me=Vapor&age=3&luckyNumbers[]=5&luckyNumbers[]=7'} | ${''}                                                                   | ${[]}
-        ${'name=Vapor&age=3&luckyNumbers[]=5&luckyNumbers[]7'}     | ${'Syntax error in the body: luckyNumbers[]7'}                          | ${[]}
-        ${'{'}                                                     | ${'Syntax error in the body: Unexpected end of JSON input'}             | ${[]}
-        ${'}'}                                                     | ${'Syntax error in the body: Unexpected token } in JSON at position 0'} | ${[]}
-        ${'['}                                                     | ${'Syntax error in the body: Unexpected end of JSON input'}             | ${[]}
-        ${'"'}                                                     | ${'Syntax error in the body: Unexpected end of JSON input'}             | ${[]}
-        ${'"foo"'}                                                 | ${''}                                                                   | ${[]}
-        ${''}                                                      | ${''}                                                                   | ${[]}
-        ${'{}'}                                                    | ${''}                                                                   | ${[]}
+        ${'na.-_me=Vapor&age=3&luckyNumbers[]=5&luckyNumbers[]=7'} | ${''}                                                                              | ${[]}
+        ${'name=Vapor&age=3&luckyNumbers[]=5&luckyNumbers[]7'}     | ${'Syntax error in the body: luckyNumbers[]7'}                                     | ${[]}
+        ${'{'}                                                     | ${"Syntax error in the body: Expected property name or '}' in JSON at position 1"} | ${[]}
+        ${'}'}                                                     | ${'Syntax error in the body: Unexpected token \'}\', "}" is not valid JSON'}       | ${[]}
+        ${'['}                                                     | ${'Syntax error in the body: Unexpected end of JSON input'}                        | ${[]}
+        ${'"'}                                                     | ${'Syntax error in the body: Unterminated string in JSON at position 1'}           | ${[]}
+        ${'"foo"'}                                                 | ${''}                                                                              | ${[]}
+        ${''}                                                      | ${''}                                                                              | ${[]}
+        ${'{}'}                                                    | ${''}                                                                              | ${[]}
       `(
         'it validates a body value of "$value"',
         ({ value, expected, requiredKeys }) => {
