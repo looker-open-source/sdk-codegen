@@ -110,7 +110,7 @@ jobs:
           path: results/tssdk
 
   setup:
-    uses: looker-open-source/reusable-actions/.github/workflows/supported-versions.yml@main
+    uses: looker-open-source/reusable-actions/.github/workflows/primary-version.yml@main
   integration:
     needs: [unit, setup]
     name: Integration - ${{ matrix.os }} / Node.${{ matrix.node-version }} / Looker.${{ matrix.looker }}
