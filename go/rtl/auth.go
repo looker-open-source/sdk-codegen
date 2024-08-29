@@ -128,24 +128,25 @@ func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars m
 		}
 	}
 
-	var ctx context.Context
-	if options != nil && options.Context != nil {
-		ctx = options.Context
-	} else if s.Config.Context != nil {
-		ctx = s.Config.Context
-	} else {
-		// create request context with timeout from options or else config or else 120 seconds
-		var timeoutInSeconds int32 = 120 //seconds
-		if s.Config.Timeout != 0 {
-			timeoutInSeconds = s.Config.Timeout
-		}
-		if options != nil && options.Timeout != 0 {
-			timeoutInSeconds = options.Timeout
-		}
-		var cncl context.CancelFunc
-		ctx, cncl = context.WithTimeout(context.Background(), time.Second*time.Duration(timeoutInSeconds))
-		defer cncl()
+	parent := context.Background()
+	if s.Config.Context != nil {
+		parent = s.Config.Context
 	}
+	if options != nil && options.Context != nil {
+		parent = options.Context
+	}
+
+	// create request context with timeout from options or else config or else 120 seconds
+	var timeoutInSeconds int32 = 120
+	if s.Config.Timeout != 0 {
+		timeoutInSeconds = s.Config.Timeout
+	}
+	if options != nil && options.Timeout != 0 {
+		timeoutInSeconds = options.Timeout
+	}
+
+	ctx, cncl := context.WithTimeout(parent, time.Second*time.Duration(timeoutInSeconds))
+	defer cncl()
 
 	// create new request
 	req, err := http.NewRequestWithContext(ctx, method, u, bytes.NewBufferString(bodyString))

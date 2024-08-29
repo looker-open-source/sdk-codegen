@@ -724,7 +724,7 @@ func TestAuthSession_Do_Timeout(t *testing.T) {
 		}
 	})
 
-	t.Run("Context set in AuthSession config overrides Timeouts", func(t *testing.T) {
+	t.Run("Parent context timeout propagates to timeout child context", func(t *testing.T) {
 		mux := http.NewServeMux()
 		setupApi40Login(mux, foreverValidTestToken, http.StatusOK)
 		server := httptest.NewServer(mux)
@@ -757,7 +757,7 @@ func TestAuthSession_Do_Timeout(t *testing.T) {
 		}
 	})
 
-	t.Run("Context set in options overrides config ctx and all Timeouts", func(t *testing.T) {
+	t.Run("Parent context set in options overrides config ctx and propagates to child timout", func(t *testing.T) {
 		mux := http.NewServeMux()
 		setupApi40Login(mux, foreverValidTestToken, http.StatusOK)
 		server := httptest.NewServer(mux)

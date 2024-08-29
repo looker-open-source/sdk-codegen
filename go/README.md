@@ -120,15 +120,15 @@ func main() {
 ```
 ### Custom Context
 
-If you want even greater control over the lifecycle of the HTTP requests consider providing a [context](https://pkg.go.dev/context). Contexts can be set for all requests or per request.
+If you want even greater control over the lifecycle of the HTTP requests consider providing a [context](https://pkg.go.dev/context). Contexts can be set for all requests or per request. They can be combined with the timeout options mentioned in the previous section to fine-tune the lifecycle of your requests.
 
 If you wish to include timeout functionality in your custom context then you should leverage [context.WithTimeout](https://pkg.go.dev/context#WithTimeout).
 
-> Note: Setting a context will override any "Timeout" settings that you have applied! 
+> Note: Custom contexts will be used as the parent context for any timeout you set as specified in the previous section. If the parent context gets cancelled it will propagate to the child context, but if the timeout context times out it does not propagate to the parent context. 
 
 #### Custom Context for all requests
 
-Follow the example code snippet below if you want all requests to use the same context:
+Follow the example code snippet below if you want all requests to use the same parent context:
 
 ```go
 import "context"
@@ -146,13 +146,13 @@ func main() {
 }
 ```
 
-> Note: A context set here will also apply to background requests to fetch/refresh oauth tokens, which are normally separated from contexts set via the Timeout property.
+> Note: A context set here will become the parent context for all API calls as well as all requests to fetch/refresh oauth tokens, which are normally completely isolated from contexts set via the Timeout property. In this case the token refresh requests and each individual API call will share a common parent context.
 
 #### Custom Context per request
 
 Follow the example here to set a context for a specific request.
 
-> Note: This will override any "Timeout" settings that you have applied, as well as any context set in the SDK config as outlined in the previus section!
+> Note: This will be used as the parent context for any timeout setting you've specified for API calls. If you've set contexts in both your API config and in the request options the request options context will be used instead. Background requests to fetch/refresh oauth tokens will NOT use a context set via request options - it will default to use a generic background context or, if you've also set a context in the API config it will still use that as specified in the previous section.
 
 ```go
 import "context"
