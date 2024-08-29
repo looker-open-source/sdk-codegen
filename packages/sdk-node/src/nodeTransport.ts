@@ -36,7 +36,6 @@ import type {
   IRawRequest,
   IRawResponse,
   IRequestHeaders,
-  IRequestProps,
   ISDKError,
   ITransportSettings,
   SDKResponse,
@@ -45,9 +44,7 @@ import type {
 import {
   BaseTransport,
   BrowserTransport,
-  LookerAppId,
   ResponseMode,
-  agentPrefix,
   canRetry,
   initResponse,
   pauseForRetry,
@@ -56,7 +53,6 @@ import {
   retryWait,
   safeBase64,
   mergeOptions,
-  sdkTimeout,
   verifySsl,
 } from '@looker/sdk-rtl';
 import { WritableStream } from 'node:stream/web';
@@ -315,61 +311,26 @@ export class NodeTransport extends BaseTransport {
     return await callback(response);
   }
 
-  private async initRequest(
+  protected override async initRequest(
     method: HttpMethod,
     path: string,
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
   ) {
-    const agentTag = options?.agentTag || this.options.agentTag || agentPrefix;
-    options = mergeOptions(
-      { ...this.options, ...{ headers: { [LookerAppId]: agentTag } } },
-      options ?? {}
-    );
-    const headers = options.headers ?? {};
-
-    // Make sure an empty body is undefined
-    if (!body) {
-      body = undefined;
-    } else {
-      if (typeof body !== 'string') {
-        body = JSON.stringify(body);
-        headers['Content-Type'] = 'application/json';
-      }
-    }
-
-    const ms = sdkTimeout(options) * 1000;
-    let signaller = AbortSignal.timeout(ms);
-    if ('signal' in options && options.signal) {
-      // AbortSignal.any may not be available, tolerate its absence
-      if (AbortSignal.any) {
-        signaller = AbortSignal.any([signaller, options.signal]);
-      } else {
-        console.warn('AbortSignal.any is not available in this transport');
-      }
-    }
-
-    let props: IRequestProps = {
-      body,
-      credentials: 'same-origin',
-      headers,
+    const props = await super.initRequest(
       method,
-      url: path,
-      signal: signaller,
-    };
-
-    if (authenticator) {
-      // Add authentication information to the request
-      props = await authenticator(props);
-    }
+      path,
+      body,
+      authenticator,
+      options
+    );
+    // don't default to same-origin for NodeJS
+    props.credentials = undefined;
 
     if (!verifySsl(options)) {
       process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
     }
-
-    // Transform to HTTP request headers at the last second
-    // props.headers = new Headers(props.headers) as any;
 
     return props;
   }

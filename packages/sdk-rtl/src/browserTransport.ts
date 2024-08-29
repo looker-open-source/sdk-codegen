@@ -29,17 +29,13 @@ import type {
   HttpMethod,
   IRawRequest,
   IRawResponse,
-  IRequestHeaders,
-  IRequestProps,
   ISDKError,
   ITransportSettings,
   SDKResponse,
   Values,
 } from './transport';
 import {
-  LookerAppId,
   ResponseMode,
-  agentPrefix,
   canRetry,
   initResponse,
   isErrorLike,
@@ -363,48 +359,6 @@ export class BrowserTransport extends BaseTransport {
       };
       return { error, ok: false };
     }
-  }
-
-  private async initRequest(
-    method: HttpMethod,
-    path: string,
-    body?: any,
-    authenticator?: Authenticator,
-    options?: Partial<ITransportSettings>
-  ) {
-    // TODO push this down to BaseTransport unless it can't be shared b/n node and browser
-    const agentTag = options?.agentTag || agentPrefix;
-    options = options ? { ...this.options, ...options } : this.options;
-    const headers: IRequestHeaders = { [LookerAppId]: agentTag };
-    if (options && options.headers) {
-      Object.entries(options.headers).forEach(([key, val]) => {
-        headers[key] = val;
-      });
-    }
-
-    // Make sure an empty body is undefined
-    if (!body) {
-      body = undefined;
-    } else {
-      if (typeof body !== 'string') {
-        body = JSON.stringify(body);
-        headers['Content-Type'] = 'application/json';
-      }
-    }
-    let props: IRequestProps = {
-      body,
-      credentials: 'same-origin',
-      headers,
-      method,
-      url: path,
-    };
-
-    if (authenticator) {
-      // Add authentication information to the request
-      props = await authenticator(props);
-    }
-
-    return props;
   }
 
   async stream<TSuccess>(
