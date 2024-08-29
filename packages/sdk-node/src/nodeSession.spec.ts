@@ -36,7 +36,6 @@ const config = TestConfig(specToModel);
 const envPrefix = 'LOOKERSDK';
 const localIni = config.localIni;
 
-// TODO These tests are skipped for CI. Can we make them work for CI?
 describe('NodeSession', () => {
   const settings = new NodeSettingsIniFile(envPrefix, localIni, 'Looker');
   const transport = new NodeTransport(settings);
@@ -47,6 +46,7 @@ describe('NodeSession', () => {
       expect(session.isAuthenticated()).toEqual(false);
       const actual = await session.logout();
       expect(actual).toEqual(false);
+      expect(session.isAuthenticated()).toEqual(false);
     });
   });
 

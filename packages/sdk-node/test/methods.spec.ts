@@ -326,7 +326,7 @@ describe('LookerNodeSDK', () => {
       expect(actual.credentials_api3).toBeDefined();
       expect(actual.credentials_api3!.length).toBeGreaterThan(0);
       await sdk.authSession.logout();
-      expect(sdk.authSession.isAuthenticated()).toBeFalsy();
+      expect(sdk.authSession.isAuthenticated()).toEqual(false);
     });
 
     it('me fields filter', async () => {
@@ -340,7 +340,7 @@ describe('LookerNodeSDK', () => {
       expect(actual.email).toBeUndefined();
       expect(actual.personal_folder_id).toBeUndefined();
       await sdk.authSession.logout();
-      expect(sdk.authSession.isAuthenticated()).toBeFalsy();
+      expect(sdk.authSession.isAuthenticated()).toEqual(false);
     });
   });
 
@@ -410,7 +410,7 @@ describe('LookerNodeSDK', () => {
       const look = actual[0];
       expect(look.title).toBeDefined();
       await sdk.authSession.logout();
-      expect(sdk.authSession.isAuthenticated()).toBeFalsy();
+      expect(sdk.authSession.isAuthenticated()).toEqual(false);
     });
 
     it('search_looks fields filter', async () => {
@@ -426,7 +426,7 @@ describe('LookerNodeSDK', () => {
       expect(look.description).toBeDefined();
       expect(look.created_at).not.toBeDefined();
       await sdk.authSession.logout();
-      expect(sdk.authSession.isAuthenticated()).toBeFalsy();
+      expect(sdk.authSession.isAuthenticated()).toEqual(false);
     });
 
     it(
@@ -450,7 +450,7 @@ describe('LookerNodeSDK', () => {
         expect(look.title).toEqual(expected.title);
         expect(look.description).not.toBeDefined();
         await sdk.authSession.logout();
-        expect(sdk.authSession.isAuthenticated()).toBeFalsy();
+        expect(sdk.authSession.isAuthenticated()).toEqual(false);
       },
       fifteen
     );
@@ -512,7 +512,7 @@ describe('LookerNodeSDK', () => {
           expect(result).toEqual('');
         }
         await sdk.authSession.logout();
-        expect(sdk.authSession.isAuthenticated()).toBeFalsy();
+        expect(sdk.authSession.isAuthenticated()).toEqual(false);
       },
       testTimeout
     );
@@ -786,7 +786,7 @@ describe('LookerNodeSDK', () => {
           }
         }
         await sdk.authSession.logout();
-        expect(sdk.authSession.isAuthenticated()).toBeFalsy();
+        expect(sdk.authSession.isAuthenticated()).toEqual(false);
       },
       testTimeout
     );
@@ -860,7 +860,7 @@ describe('LookerNodeSDK', () => {
           }
         }
         await sdk.authSession.logout();
-        expect(sdk.authSession.isAuthenticated()).toBeFalsy();
+        expect(sdk.authSession.isAuthenticated()).toEqual(false);
       },
       testTimeout
     );
@@ -1082,7 +1082,7 @@ describe('LookerNodeSDK', () => {
           }
         }
         await sdk.authSession.logout();
-        expect(sdk.authSession.isAuthenticated()).toBeFalsy();
+        expect(sdk.authSession.isAuthenticated()).toEqual(false);
       },
       testTimeout
     );
@@ -1159,9 +1159,9 @@ describe('LookerNodeSDK', () => {
       const me = await sdk.ok(sdk.me());
       expect(me).not.toBeUndefined();
       expect(me.id).not.toBeUndefined();
-      expect(sdk.authSession.isAuthenticated()).toBeTruthy();
+      expect(sdk.authSession.isAuthenticated()).toEqual(true);
       await sdk.authSession.logout();
-      expect(sdk.authSession.isAuthenticated()).toBeFalsy();
+      expect(sdk.authSession.isAuthenticated()).toEqual(false);
     });
   });
 });
