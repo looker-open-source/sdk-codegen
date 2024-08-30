@@ -28,6 +28,13 @@ const { excludeNodeModulesExcept } = require('./babel.common');
 
 process.env.TZ = 'UTC';
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+if (!global.AbortSignal.timeout) {
+  global.AbortSignal.timeout = ms => {
+    const controller = new AbortController();
+    setTimeout(() => controller.abort(new DOMException('TimeoutError')), ms);
+    return controller.signal;
+  };
+}
 
 module.exports = {
   automock: false,
@@ -63,6 +70,8 @@ module.exports = {
   },
   globals: {
     fetch: global.fetch,
+    AbortController: global.AbortController,
+    AbortSignal: global.AbortSignal,
     'ts-jest': {
       isolatedModules: true,
       diagnostics: false,

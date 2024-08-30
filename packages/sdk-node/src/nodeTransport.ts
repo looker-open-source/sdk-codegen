@@ -27,7 +27,8 @@
 import nodeCrypto from 'crypto';
 import type * as fs from 'fs';
 
-// import { Buffer } from 'node:buffer';
+import { Buffer } from 'buffer';
+import * as process from 'process';
 
 import type {
   Authenticator,

@@ -16,7 +16,7 @@
   "author": "Looker",
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "22.5.0",
+    "@types/node": "22.5.1",
     "typescript": "5.5.4"
   }
 }
