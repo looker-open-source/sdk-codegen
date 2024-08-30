@@ -48,7 +48,19 @@ describe('BrowserTransport', () => {
       .mockImplementation((time: number) => Promise.resolve(time));
 
     tried = 0;
-    fetchMock.mockIf(/^https?:\/\/retry\.foo.*$/, async _req => {
+    fetchMock.mockIf(/^https?:\/\/retry\.foo.*$/, async req => {
+      const url = new URL(req.url);
+      const delayed = url.searchParams.get('delay');
+      if (delayed) {
+        await new Promise(resolve => {
+          setTimeout(resolve, Number(delayed));
+        });
+        return {
+          body: '{ "status": "timed" }',
+          status: StatusCode.OK,
+        };
+      }
+
       tried++;
       if (tried < 4) {
         return {
@@ -75,6 +87,40 @@ describe('BrowserTransport', () => {
 
   afterEach(() => {
     jest.clearAllMocks();
+  });
+
+  describe('timeout and cancel', () => {
+    const timer = (ms = 1000) => {
+      return `${retryFoo}?delay=${ms}`;
+    };
+
+    it('does not timeout by default', async () => {
+      const xp = new BrowserTransport({ maxTries: 1 } as ITransportSettings);
+      const resp = await xp.rawRequest('GET', timer());
+      expect(resp.body).toEqual('{ "status": "timed" }');
+    });
+
+    it('completes before 1 second cancel', async () => {
+      const signal = AbortSignal.timeout(1000);
+      const xp = new BrowserTransport({ signal } as ITransportSettings);
+      const resp = await xp.rawRequest('GET', timer(250));
+      expect(resp.body).toEqual('{ "status": "timed" }');
+    });
+
+    it('times out in 1 second', async () => {
+      const xp = new BrowserTransport({ timeout: 1 } as ITransportSettings);
+      await expect(xp.rawRequest('GET', timer(1500))).rejects.toThrowError(
+        'The operation was aborted.'
+      );
+    });
+
+    it('cancels in 250 ms', async () => {
+      const signal = AbortSignal.timeout(250);
+      const xp = new BrowserTransport({ signal } as ITransportSettings);
+      await expect(xp.rawRequest('GET', timer())).rejects.toThrowError(
+        'The operation was aborted.'
+      );
+    });
   });
 
   it('cannot track performance if performance is not supported', () => {
