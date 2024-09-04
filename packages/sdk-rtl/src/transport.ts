@@ -39,7 +39,7 @@ export const agentPrefix = 'TS-SDK';
 export const LookerAppId = 'x-looker-appid';
 
 /** default maximum number of retries to attempt */
-export const MaxTries = 10;
+export const MaxTries = 3;
 
 /** Set to `true` to turn on tracing wherever it may be referenced in the sdk */
 const tracing = false;
@@ -294,7 +294,7 @@ export interface IRequestProps {
 /** General purpose authentication callback */
 export type Authenticator = (props: any) => any;
 
-/** Properties for an async Waitable retry handler */
+/** Alpha: Properties for an async Waitable retry handler */
 export interface IWait {
   /** HTTP request that responded with a retry code */
   request: IRawRequest;
@@ -306,7 +306,7 @@ export interface IWait {
   waitMS: number;
 }
 
-/** Response from a Waitable function */
+/** Alpha: Response from a Waitable function */
 export interface IWaitResponse {
   /** cancel, retry, or error are the allowed responses for the retryable waiter */
   response: 'cancel' | 'retry' | 'error';
@@ -314,7 +314,7 @@ export interface IWaitResponse {
   reason?: string;
 }
 
-/** Waitable function override for retrying an HTTP request */
+/** Alpha: Waitable function override for retrying an HTTP request */
 export type Waitable = (waiting: IWait) => Promise<IWaitResponse>;
 
 /** Interface for API transport values */

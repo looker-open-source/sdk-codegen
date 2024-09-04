@@ -175,10 +175,10 @@ export abstract class BaseTransport implements ITransport {
     if ('signal' in options && options.signal) {
       // AbortSignal.any may not be available, tolerate its absence
       if (AbortSignal.any) {
-        signaller = AbortSignal.any([signaller, options.signal]);
+        signaller = AbortSignal.any([options.signal, signaller]);
       } else {
-        console.warn(
-          'Cannot combine cancel signal and timeout options. AbortSignal.any is not available in this transport'
+        console.debug(
+          'Cannot combine cancel signal and timeout. AbortSignal.any is not available in this transport.'
         );
       }
     }

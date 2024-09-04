@@ -109,10 +109,10 @@ export class NodeTransport extends BaseTransport {
       newOpts
     );
     let response = initResponse(method, requestPath);
-    // TODO assign to MaxTries when retry is opt-out instead of opt-in
-    const maxRetries = newOpts.maxTries ?? 1; // MaxTries
+    // TODO assign to MaxTries constant when retry is opt-out instead of opt-in
+    const maxTries = newOpts.maxTries ?? 1; // MaxTries
     let attempt = 1;
-    while (attempt <= maxRetries) {
+    while (attempt <= maxTries) {
       const req = fetch(
         props.url,
         props as RequestInit // Weird package issues with unresolved imports for RequestInit for node-fetch :(
@@ -151,7 +151,7 @@ export class NodeTransport extends BaseTransport {
           ok: true,
         };
         response.ok = this.ok(response);
-        if (canRetry(response.statusCode) && attempt < maxRetries) {
+        if (canRetry(response.statusCode) && attempt < maxTries) {
           const result = await pauseForRetry(
             request,
             response,

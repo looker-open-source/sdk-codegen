@@ -39,15 +39,15 @@ if (!global.AbortSignal.timeout) {
 function anyAbortInAStorm(signals) {
   const controller = new AbortController();
 
-  function onAbort() {
-    controller.abort();
+  function onAbort(signal) {
+    controller.abort(signal.reason);
     // Remove the event listeners once aborted to avoid memory leaks
     signals.forEach(signal => signal.removeEventListener('abort', onAbort));
   }
 
   signals.forEach(signal => {
     if (signal.aborted) {
-      onAbort();
+      onAbort(signal);
     } else {
       signal.addEventListener('abort', onAbort);
     }
