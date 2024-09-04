@@ -36,6 +36,30 @@ if (!global.AbortSignal.timeout) {
   };
 }
 
+function anyAbortInAStorm(signals) {
+  const controller = new AbortController();
+
+  function onAbort() {
+    controller.abort();
+    // Remove the event listeners once aborted to avoid memory leaks
+    signals.forEach(signal => signal.removeEventListener('abort', onAbort));
+  }
+
+  signals.forEach(signal => {
+    if (signal.aborted) {
+      onAbort();
+    } else {
+      signal.addEventListener('abort', onAbort);
+    }
+  });
+
+  return controller.signal;
+}
+
+if (!global.AbortSignal.any) {
+  global.AbortSignal.any = signals => anyAbortInAStorm(signals);
+}
+
 module.exports = {
   automock: false,
   moduleDirectories: ['./node_modules', './packages'],
