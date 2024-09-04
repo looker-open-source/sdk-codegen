@@ -694,8 +694,8 @@ export function sdkError(response: any) {
     }
     if ('message' in error) {
       return new LookerSDKError(response.error.message.toString(), {
-        errors: error.errors,
-        documentation_url: error.documentation_url,
+        errors: error?.errors ?? [],
+        documentation_url: error?.documentation_url ?? '',
       });
     }
     if ('statusMessage' in error) {
