@@ -180,6 +180,7 @@ export abstract class BaseTransport implements ITransport {
         console.debug(
           'Cannot combine cancel signal and timeout. AbortSignal.any is not available in this transport.'
         );
+        console.debug({ AbortSignal });
       }
     }
 
