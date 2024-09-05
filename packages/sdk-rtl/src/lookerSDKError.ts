@@ -106,21 +106,24 @@ export const LookerSDKError: ILookerSDKErrorConstructor =
       // The `super()` call. At present, Error() and new Error() are
       // indistinguishable, but use whatever we were invoked with in case
       // that ever changes.
-      const error = this
-        ? new Error(
-            message,
-            // we have to suppress a type error here if TypeScript
-            // doesn't know es2022's two-argument Error constructor
-            // @ts-ignore-error
-            errorOptions,
-            ...rest
-          )
-        : Error(
-            message,
-            // @ts-ignore-error
-            errorOptions,
-            ...rest
-          );
+      // const error = this
+      //   ? new Error(
+      //       message,
+      //       // we have to suppress a type error here if TypeScript
+      //       // doesn't know es2022's two-argument Error constructor
+      //       // @ts-ignore-error
+      //       errorOptions,
+      //       ...rest
+      //     )
+      //   : Error(
+      // TODO resolve this parsing complaint
+      // @ts-ignore-error
+      const error = new Error(
+        message,
+        // @ts-ignore-error
+        errorOptions,
+        ...rest
+      );
 
       // Object.setPrototypeOf() is necessary when extending built-ins,
       // since Error.call(this, message, errorOptions, ...rest) doesn't
