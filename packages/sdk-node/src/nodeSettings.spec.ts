@@ -32,13 +32,8 @@ import { TestConfig } from '@looker/sdk-codegen-utils';
 import { ApiConfig, NodeSettings, NodeSettingsIniFile } from './nodeSettings';
 import { specToModel } from '@looker/sdk-codegen';
 
-const config = TestConfig(specToModel);
-const section2 = 'Looker31';
-const envPrefix = 'LOOKERSDK';
-
-describe('NodeSettings', () => {
-  const server = 'https://self-signed.looker.com:19999';
-  const fakeIni = `
+const server = 'https\x58//self-signed.looker.com:19999';
+const mockIni = `
 [Looker]
 base_url=${server}
 client_id=id
@@ -50,15 +45,20 @@ base_url=${server}
 verify_ssl=False
 timeout=30
 `;
+const config = TestConfig(specToModel);
+const section2 = 'Looker31';
+const envPrefix = 'LOOKERSDK';
+
+describe('NodeSettings', () => {
   beforeAll(() => {
     jest
       .spyOn(fs, 'readFileSync')
-      .mockImplementation((_path, _options) => fakeIni);
+      .mockImplementation((_path, _options) => mockIni);
   });
 
   describe('ApiConfig', () => {
     it('discovers multiple sections', () => {
-      const conf = ApiConfig(fakeIni);
+      const conf = ApiConfig(mockIni);
       expect(Object.keys(conf)).toEqual(['Looker', section2]);
     });
   });
@@ -75,25 +75,25 @@ timeout=30
     });
 
     it('settings default to the first section', () => {
-      const settings = new NodeSettings(envPrefix, fakeIni);
+      const settings = new NodeSettings(envPrefix, mockIni);
       expect(settings.timeout).toEqual(31);
       expect(settings.verify_ssl).toEqual(false);
     });
 
     it('retrieves the first section by name', () => {
-      const settings = new NodeSettings(envPrefix, fakeIni, 'Looker');
+      const settings = new NodeSettings(envPrefix, mockIni, 'Looker');
       expect(settings.timeout).toEqual(31);
     });
 
     it('retrieves the second section by name', () => {
-      const settings = new NodeSettings(envPrefix, fakeIni, section2);
+      const settings = new NodeSettings(envPrefix, mockIni, section2);
       expect(settings.timeout).toEqual(30);
       expect(settings.verify_ssl).toEqual(false);
     });
 
     it('fails with a bad section name', () => {
       expect(
-        () => new NodeSettings(envPrefix, fakeIni, 'NotAGoodLookForYou')
+        () => new NodeSettings(envPrefix, mockIni, 'NotAGoodLookForYou')
       ).toThrow(/No section named "NotAGoodLookForYou"/);
     });
   });
