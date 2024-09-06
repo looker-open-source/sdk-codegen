@@ -799,7 +799,9 @@ export function jittery(
  * @param wait parameters for request/response/attempt and wait time
  */
 export async function retryWait(wait: IWait): Promise<IWaitResponse> {
+  console.info('*** in retryWait', { wait });
   await sleep(wait.waitMS);
+  console.info('awake from sleep');
   return { response: 'retry', reason: `waited ${wait.waitMS} ms` };
 }
 

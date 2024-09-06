@@ -32,6 +32,7 @@ const ResizeObserver = require('resize-observer-polyfill');
 require('@testing-library/jest-dom');
 require('jest-canvas-mock');
 require('jest-styled-components');
+// require('jest-environment-node');
 require('jest-environment-jsdom');
 
 configure({ adapter: new Adapter() });

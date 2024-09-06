@@ -25,6 +25,7 @@
  */
 
 import fs from 'fs';
+// import 'whatwg-fetch';
 import type { IApiSettings } from '@looker/sdk-rtl';
 import { ApiConfigMap, boolDefault, defaultTimeout } from '@looker/sdk-rtl';
 import { TestConfig } from '@looker/sdk-codegen-utils';
