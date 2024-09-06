@@ -897,7 +897,7 @@ describe('LookerNodeSDK', () => {
             expect(cached).not.toEqual('{}');
           } catch (e: any) {
             failed = e.message;
-            console.log({ e });
+            console.info({ e });
           }
           expect(failed).toEqual('');
         }
