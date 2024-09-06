@@ -686,7 +686,7 @@ ${indent}})`;
   declareInterface(indent: string, method: IMethod): string {
     let sig = this.methodSignature(indent, method).trimRight();
     sig = sig.replace(/^\s*async /gm, '');
-    sig = sig.substr(0, sig.length - 2);
+    sig = sig.substring(0, sig.length - 2);
     return `${sig}\n`;
   }
 

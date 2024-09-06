@@ -2660,7 +2660,7 @@ export class ApiModel implements ISymbolTable, IApiModel {
 
     if (typeof schema === 'string') {
       if (schema.indexOf('/requestBodies/') < 0)
-        return this.types[schema.substr(schema.lastIndexOf('/') + 1)];
+        return this.types[schema.substring(schema.lastIndexOf('/') + 1)];
       // dereference the request strBody schema reference
       const deref = this.jsonPath(schema);
       if (deref) {

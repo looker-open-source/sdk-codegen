@@ -189,7 +189,7 @@ export const getRemoteHttpOrigin = () => {
 /** Permalink paths should not have the `.git` ending for a repo */
 export const getPermalinkRoot = () => {
   let root = getRemoteHttpOrigin();
-  if (root.endsWith('.git')) root = root.substr(0, root.length - 4);
+  if (root.endsWith('.git')) root = root.substring(0, root.length - 4);
   return root;
 };
 
@@ -270,7 +270,7 @@ export class MarkdownMiner implements IDocMine {
    */
   sourcerer(sourceFileName: string, linkFile: string) {
     linkFile = this.stripSearch(linkFile);
-    if (linkFile.startsWith('/')) return linkFile.substr(1);
+    if (linkFile.startsWith('/')) return linkFile.substring(1);
     const base = path.dirname(sourceFileName);
     return path.join(base, '/', linkFile);
   }

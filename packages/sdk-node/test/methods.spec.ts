@@ -897,6 +897,7 @@ describe('LookerNodeSDK', () => {
             expect(cached).not.toEqual('{}');
           } catch (e: any) {
             failed = e.message;
+            console.debug({ e });
           }
           expect(failed).toEqual('');
         }
@@ -909,7 +910,7 @@ describe('LookerNodeSDK', () => {
   describe('Dashboard endpoints', () => {
     const getQueryId = (qhash: { [id: string]: IQuery }, id: any) => {
       if (!id) return id;
-      if (id.startsWith('#')) id = id.substr(1);
+      if (id.startsWith('#')) id = id.substring(1);
       else return id;
       const result = qhash[id];
       if (result) return result.id;

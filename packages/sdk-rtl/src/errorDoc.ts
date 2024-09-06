@@ -167,7 +167,7 @@ export class ErrorDoc implements IErrorDoc {
   }
 
   specPath(path: string): string {
-    const result = path.replace(/:\w+/g, found => `{${found.substr(1)}}`);
+    const result = path.replace(/:\w+/g, found => `{${found.substring(1)}}`);
     return result;
   }
 
