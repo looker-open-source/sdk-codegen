@@ -118,7 +118,7 @@ export const LookerSDKError: ILookerSDKErrorConstructor =
       //   : Error(
       // TODO resolve this parsing complaint
       // @ts-ignore-error
-      const error = new Error(
+      const error = Error(
         message,
         // @ts-ignore-error
         errorOptions,
