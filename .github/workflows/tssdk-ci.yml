@@ -169,7 +169,7 @@ jobs:
           ${{ github.workspace }}/.github/scripts/wait_for_looker.sh
 
       - name: Run Integration Tests
-        run: yarn jest packages/sdk-node --config=${{ github.workspace }}//packages/sdk-node/config.js --reporters=default --reporters=jest-junit
+        run: yarn jest packages/sdk-node --config=./packages/sdk-node/config.js --reporters=default --reporters=jest-junit
 
       - name: Upload integration test results
         if: ${{ always() }}
