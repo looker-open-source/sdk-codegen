@@ -70,6 +70,7 @@
     "test:gen": "yarn jest packages/sdk-codegen",
     "test:redux": "yarn jest packages/redux",
     "test:sdk": "yarn jest packages/sdk",
+    "test:node": "SUPPRESS_NO_CONFIG_WARNING=1 ts-node -O '{ \"module\": \"commonjs\", \"target\": \"es2019\" }' packages/sdk-node/test/tests.ts",
     "test:jest": "DOT_ENV_FILE=.env.test jest",
     "test:ext": "yarn jest packages/extension-sdk packages/extension-sdk-react",
     "test:hack": "yarn jest packages/wholly-artifact/src packages/hackathon",
