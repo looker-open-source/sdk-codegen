@@ -78,18 +78,15 @@ const emailDomain = '@foo.com';
 
 let sdk: ILooker40SDK;
 
-beforeEach(() => {
-  sdk = LookerNodeSDK.init40();
-});
-
-afterEach(async () => {
-  if (sdk.authSession.isAuthenticated()) {
-    // desperate hack that probably won't work
-    await sdk.authSession.logout();
-  }
-});
-
 describe('LookerNodeSDK integration tests', () => {
+  beforeEach(() => {
+    sdk = LookerNodeSDK.init40();
+  });
+
+  afterEach(async () => {
+    await sdk.authSession.logout();
+  });
+
   const mimeType = (data: string) => {
     //        var sig = [UInt8](repeating: 0, count: 20)
     //        data.copyBytes(to: &sig, count: 20)
@@ -432,7 +429,6 @@ describe('LookerNodeSDK integration tests', () => {
 
     afterAll(async () => {
       await removeTestUsers();
-      // await removeTestQueries()
     });
 
     it('create, update, and delete user', async () => {
