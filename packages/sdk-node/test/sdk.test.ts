@@ -78,41 +78,44 @@ const emailDomain = '@foo.com';
 
 let sdk: ILooker40SDK;
 
-const mimeType = (data: string) => {
-  //        var sig = [UInt8](repeating: 0, count: 20)
-  //        data.copyBytes(to: &sig, count: 20)
-  //        print(sig)
-  const b = data.charCodeAt(0);
-  switch (b) {
-    case 0xff:
-      return 'image/jpg';
-    case 0x89:
-      return 'image/png';
-    case 0x47:
-      return 'image/gif';
-    case 0x4d:
-    case 0x49:
-      return 'image/tiff';
-    case 0x25:
-      return 'application/pdf';
-    case 0xd0:
-      return 'application/vnd';
-    case 0x46:
-      return 'text/plain';
-    default:
-      return 'application/octet-stream';
-  }
-};
-
 beforeEach(() => {
   sdk = LookerNodeSDK.init40();
 });
 
 afterEach(async () => {
-  await sdk.authSession.logout();
+  if (sdk.authSession.isAuthenticated()) {
+    // desparate hack that probably won't work
+    await sdk.authSession.logout();
+  }
 });
 
 describe('LookerNodeSDK integration tests', () => {
+  const mimeType = (data: string) => {
+    //        var sig = [UInt8](repeating: 0, count: 20)
+    //        data.copyBytes(to: &sig, count: 20)
+    //        print(sig)
+    const b = data.charCodeAt(0);
+    switch (b) {
+      case 0xff:
+        return 'image/jpg';
+      case 0x89:
+        return 'image/png';
+      case 0x47:
+        return 'image/gif';
+      case 0x4d:
+      case 0x49:
+        return 'image/tiff';
+      case 0x25:
+        return 'application/pdf';
+      case 0xd0:
+        return 'application/vnd';
+      case 0x46:
+        return 'text/plain';
+      default:
+        return 'application/octet-stream';
+    }
+  };
+
   const createQueryRequest = (q: any, limit: number) => {
     const result: Partial<IWriteQuery> = {
       client_id: q.client_id || null,
