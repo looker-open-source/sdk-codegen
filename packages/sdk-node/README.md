@@ -197,7 +197,7 @@ const me = await sdk.ok(sdk.me());
 
 ## Streaming with the SDK
 
-The deprecated NodeJS `request` package dependency has been removed from all Looker TypeScript packages. This removal prompted a **BREAKING** interface change for the streaming SDK.
+The [deprecated NodeJS `request` package](https://www.npmjs.com/package/request) dependency has been removed from all Looker TypeScript packages. This removal prompted a **BREAKING** interface change for the streaming SDK.
 The streaming method callback signature changed from `(readable: Readable) => Promise<x>` to `(response: Response) => Promise<x>`. Using `Response` as the parameter to the callback greatly
 increases the flexibility of streaming implementations and provides other valuable information like `Content-Type` and other headers to the streaming callback.
 

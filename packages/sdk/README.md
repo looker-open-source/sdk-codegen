@@ -29,7 +29,6 @@ Using `npm`:
 ```bash
 npm install @looker/sdk @looker/sdk-rtl
 ```
-
 Some other dependencies may be required for your project to build and run correctly.
 
 ### TypeScript SDK packages
@@ -37,8 +36,8 @@ Some other dependencies may be required for your project to build and run correc
 The Looker TypeScript SDK has different packages to prevent node dependencies being linked into browser usage of the SDK (the node dependencies are not available in the browser and can cause compilation errors). There are three packages for the Typescript SDK available on npm:
 
 1. `@looker/sdk-rtl` - contains a run time library needed to invoke the Looker API methods. Referencing the `@looker/sdk` as a dependency should automatically pull this package in.
-2. `@looker/sdk` - contains the Looker API methods.
-3. `@looker/sdk-node` - contains the dependencies needed to run the Looker SDK in a node environment. Do NOT include this package if you are using the Looker SDK in a browser. You MUST include this package if you are using `node` or `ts-node`.
+1. `@looker/sdk` - contains the Looker API methods.
+1. `@looker/sdk-node` - contains the dependencies needed to run the Looker SDK in a node environment. Do NOT include this package if you are using the Looker SDK in a browser. This SDK is for use with `node` or `ts-node`.
 
 ### Authenticate your API calls
 
@@ -62,9 +61,66 @@ The `looker.ini` configuration file and environment variables are _never_ used i
 
 ### Developing with multiple API versions
 
-Only API 4.0 is currently available. API 3.1 is deprecated and has been removed in Looker v23.18+.
+Only API 4.0 is currently available. API 3.1 has been removed in Looker v23.18+.
 
 `LookerBrowserSDK.init40()` and `Looker40SDK()` initialize the API 4.0 implementation of the SDK.
+
+## Customizing HTTP request handling
+
+With the complete removal of the [deprecated request package](https://www.npmjs.com/package/request) the HTTP transport layer has been refactored to have feature parity between Node and the Browser SDK.
+
+The following properties can be specified as part of the `options` parameter, which is the last parameter of every SDK method:
+- `timeout` to set a per-request timeout (in seconds)
+- `signal` to cancel cancelling requests by passing an `AbortSignal` or `AbortController` signal to an SDK request
+- automatically retryable HTTP requests
+  - enable with `maxTries` > 1
+  - optionally define a `Waitable` callback for custom retry wait period handling
+
+## Streaming with the SDK
+
+The [deprecated NodeJS `request` package](https://www.npmjs.com/package/request) dependency has been removed from all Looker TypeScript packages. This removal prompted a **BREAKING** interface change for the streaming SDK.
+The streaming method callback signature changed from `(readable: Readable) => Promise<x>` to `(response: Response) => Promise<x>`. Using `Response` as the parameter to the callback greatly
+increases the flexibility of streaming implementations and provides other valuable information like `Content-Type` and other headers to the streaming callback.
+
+For the Browser SDK (`@looker/sdk`), the standard `fetch` function is still used. For the Node SDK (`@looker/sdk-node`), the global [`fetch`](https://nodejs.org/api/globals.html#fetch) function from NodeJS v22 is used.
+
+This means the Looker Node SDK now uses NodeJS v22.
+
+The streaming version of the SDK methods should be initialized using the same `AuthSession` as the main SDK to reduce authentication thrashing.
+
+Construction of the streaming SDK can use code similar to the following, which is taken from the [downloadTile.ts example](/examples/typescript/downloadTile.ts#L129:L157):
+
+```ts
+/**
+ * Use the streaming SDK to download a tile's query
+ * @param sdk to use
+ * @param tile to download
+ * @param format to download
+ * @returns name of downloaded file (undefined on failure)
+ */
+const downloadTileAs = async (
+  sdk: LookerSDK,
+  tile: IDashboardElement,
+  format: string
+) => {
+  const fileName = `${tile.title}.${format}`;
+
+  const writer = createWritableStream(fs.createWriteStream(fileName));
+  const request: IRequestRunQuery = {
+    result_format: format,
+    query_id: tile.query_id!,
+    // apply_formatting: true,
+    // apply_vis: true
+  };
+  const sdkStream = new Looker40SDKStream(sdk.authSession);
+  await sdkStream.run_query(async (response: Response) => {
+    await response.body.pipeTo(writer);
+    return 'streamed';
+  }, request);
+
+  return fileName;
+};
+```
 
 ## Using a Proxy for authentication
 
