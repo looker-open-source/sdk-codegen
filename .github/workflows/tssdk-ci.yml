@@ -169,7 +169,7 @@ jobs:
           ${{ github.workspace }}/.github/scripts/wait_for_looker.sh
 
       - name: Run Integration Tests
-        run: yarn test:node
+        run: yarn test:nodej
 
       - name: Upload integration test results
         if: ${{ always() }}
