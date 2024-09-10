@@ -1,5 +1,5 @@
 {
-  "commitHash": "a6f1d5aaf7fcf73d6faae55e21d63458dc577dca",
+  "commitHash": "670377c46a546bbd8dcc6679b8aeb041da1b4670",
   "remoteOrigin": "https://github.com/looker-open-source/sdk-codegen",
   "summaries": {
     "packages/sdk-codegen/src/codeGenerators.ts": {
@@ -23,7 +23,7 @@
       "sourceFile": "packages/sdk-rtl/src/apiSettings.ts"
     },
     "packages/sdk-rtl/src/transport.ts": {
-      "summary": "transport.ts",
+      "summary": "`Waitable`",
       "sourceFile": "packages/sdk-rtl/src/transport.ts"
     },
     "packages/sdk-rtl/src/nodeSession.ts": {
@@ -354,6 +354,10 @@
       "summary": "NodeSettingsIniFile() and NodeSettings()",
       "sourceFile": "packages/sdk-rtl/src/nodeSettings.ts"
     },
+    "packages/sdk-rtl/src/browserTransport.spec.ts": {
+      "summary": "browserTransport.spec.ts",
+      "sourceFile": "packages/sdk-rtl/src/browserTransport.spec.ts"
+    },
     "packages/wholly-sheet/src/WhollySheet.ts": {
       "summary": "`WhollySheet.ts`",
       "sourceFile": "packages/wholly-sheet/src/WhollySheet.ts"
@@ -450,12 +454,22 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 18,
-            "line": 733
+            "line": 701
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 35,
-            "line": 739
+            "line": 707
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 16,
+            "line": 640
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 33,
+            "line": 646
           }
         ],
         ".kt": [
@@ -617,52 +631,102 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 34,
-            "line": 329
+            "line": 325
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 34,
-            "line": 339
+            "line": 334
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 37,
-            "line": 362
+            "line": 356
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 34,
-            "line": 377
+            "line": 371
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 30,
-            "line": 382
+            "line": 376
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 34,
+            "line": 381
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
+            "column": 30,
             "line": 387
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 30,
-            "line": 393
-          },
-          {
-            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
-            "column": 30,
-            "line": 398
+            "line": 392
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 32,
-            "line": 943
+            "line": 901
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 30,
-            "line": 1164
+            "line": 1117
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 34,
+            "line": 309
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 34,
+            "line": 318
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 35,
+            "line": 338
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 32,
+            "line": 353
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 28,
+            "line": 358
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 32,
+            "line": 363
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 28,
+            "line": 369
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 28,
+            "line": 374
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 30,
+            "line": 824
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 30,
+            "line": 1036
           }
         ],
         ".kt": [
@@ -1035,27 +1099,52 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 8,
-            "line": 148
-          },
-          {
-            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
-            "column": 10,
             "line": 153
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
+            "column": 10,
+            "line": 158
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 8,
-            "line": 193
+            "line": 196
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 197
+            "line": 200
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 8,
-            "line": 535
+            "line": 516
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 8,
+            "line": 147
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 10,
+            "line": 152
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 8,
+            "line": 190
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 10,
+            "line": 194
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 8,
+            "line": 487
           }
         ],
         ".kt": [
@@ -1164,17 +1253,32 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 37,
-            "line": 757
+            "line": 724
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 878
+            "line": 838
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 952
+            "line": 910
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 35,
+            "line": 659
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 8,
+            "line": 765
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 10,
+            "line": 833
           }
         ],
         ".swift": [
@@ -1242,27 +1346,52 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 14,
-            "line": 763
+            "line": 730
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 14,
-            "line": 773
+            "line": 740
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 14,
-            "line": 776
+            "line": 743
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 14,
-            "line": 892
+            "line": 852
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 14,
-            "line": 895
+            "line": 855
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 12,
+            "line": 665
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 12,
+            "line": 675
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 12,
+            "line": 678
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 12,
+            "line": 779
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 12,
+            "line": 782
           }
         ],
         ".swift": [
@@ -1362,12 +1491,22 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 1017
+            "line": 975
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 1025
+            "line": 983
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 10,
+            "line": 898
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 10,
+            "line": 906
           }
         ]
       }
@@ -1432,7 +1571,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 23,
-            "line": 220
+            "line": 221
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 23,
+            "line": 215
           }
         ]
       }
@@ -1521,12 +1665,22 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 167
+            "line": 172
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 480
+            "line": 464
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 10,
+            "line": 166
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 10,
+            "line": 437
           }
         ],
         ".swift": [
@@ -1562,12 +1716,22 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 21,
-            "line": 181
+            "line": 186
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 513
+            "line": 497
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 21,
+            "line": 180
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 10,
+            "line": 470
           }
         ]
       }
@@ -1733,17 +1897,32 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 23,
-            "line": 161
+            "line": 166
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 493
+            "line": 477
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 504
+            "line": 488
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 23,
+            "line": 160
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 10,
+            "line": 450
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 10,
+            "line": 461
           }
         ],
         ".swift": [
@@ -1794,22 +1973,32 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 36,
-            "line": 217
+            "line": 218
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 42,
-            "line": 276
+            "line": 274
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 35,
-            "line": 660
+            "line": 631
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 662
+            "line": 633
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
+            "column": 12,
+            "line": 651
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
+            "column": 18,
+            "line": 674
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
@@ -1818,23 +2007,58 @@
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
-            "column": 18,
-            "line": 705
-          },
-          {
-            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
-            "column": 12,
-            "line": 712
-          },
-          {
-            "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 32,
-            "line": 933
+            "line": 892
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 37,
-            "line": 958
+            "line": 916
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 36,
+            "line": 212
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 40,
+            "line": 266
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 33,
+            "line": 584
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 10,
+            "line": 586
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 31,
+            "line": 599
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 16,
+            "line": 617
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 10,
+            "line": 624
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 32,
+            "line": 817
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 35,
+            "line": 839
           }
         ],
         ".kt": [
@@ -2044,22 +2268,42 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 35,
-            "line": 268
+            "line": 266
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 34,
-            "line": 412
+            "line": 405
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 8,
-            "line": 424
+            "line": 414
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 445
+            "line": 432
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 33,
+            "line": 258
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 34,
+            "line": 385
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 8,
+            "line": 394
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 8,
+            "line": 410
           }
         ],
         ".swift": [
@@ -2104,7 +2348,7 @@
           {
             "sourceFile": "examples/typescript/downloadTile.ts",
             "column": 4,
-            "line": 112
+            "line": 108
           }
         ],
         ".kt": [
@@ -2256,12 +2500,22 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 358
+            "line": 352
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 33,
-            "line": 567
+            "line": 544
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 8,
+            "line": 334
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 31,
+            "line": 509
           }
         ],
         ".kt": [
@@ -2367,7 +2621,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 35,
-            "line": 441
+            "line": 428
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 33,
+            "line": 406
           }
         ],
         ".swift": [
@@ -2781,12 +3040,22 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 36,
-            "line": 832
+            "line": 795
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 35,
-            "line": 843
+            "line": 806
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 34,
+            "line": 726
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 33,
+            "line": 737
           }
         ]
       }
@@ -3011,7 +3280,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 28,
-            "line": 182
+            "line": 187
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 28,
+            "line": 181
           }
         ],
         ".py": [
@@ -4835,17 +5109,17 @@
           {
             "sourceFile": "packages/sdk-rtl/src/apiMethods.ts",
             "column": 28,
-            "line": 137
+            "line": 134
           },
           {
             "sourceFile": "packages/sdk-rtl/src/transport.ts",
             "column": 28,
-            "line": 445
+            "line": 447
           },
           {
             "sourceFile": "packages/sdk-rtl/src/transport.ts",
             "column": 25,
-            "line": 727
+            "line": 729
           }
         ],
         ".py": [
@@ -4871,7 +5145,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 961
+            "line": 919
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 10,
+            "line": 842
           }
         ],
         ".py": [
@@ -4974,7 +5253,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 34,
-            "line": 307
+            "line": 304
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 32,
+            "line": 292
           }
         ],
         ".py": [
@@ -5024,7 +5308,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 40,
-            "line": 622
+            "line": 594
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 38,
+            "line": 551
           }
         ],
         ".swift": [
@@ -5530,7 +5819,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 239
+            "line": 238
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 10,
+            "line": 232
           }
         ]
       }
@@ -5549,7 +5843,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 21,
-            "line": 251
+            "line": 250
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 21,
+            "line": 244
           }
         ]
       }
@@ -5599,12 +5898,22 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 8,
-            "line": 1100
+            "line": 1055
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 1118
+            "line": 1072
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 8,
+            "line": 974
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 10,
+            "line": 991
           }
         ],
         ".py": [
@@ -5635,12 +5944,22 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 286
+            "line": 284
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 291
+            "line": 289
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 8,
+            "line": 276
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 8,
+            "line": 281
           }
         ],
         ".py": [
@@ -5678,12 +5997,22 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 23,
-            "line": 206
+            "line": 209
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 38,
-            "line": 516
+            "line": 500
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 23,
+            "line": 203
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 36,
+            "line": 473
           }
         ],
         ".py": [
@@ -5731,12 +6060,22 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 37,
-            "line": 305
+            "line": 302
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 39,
-            "line": 317
+            "line": 314
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 35,
+            "line": 290
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 37,
+            "line": 300
           }
         ],
         ".py": [
@@ -5779,12 +6118,22 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 12,
-            "line": 313
+            "line": 310
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 23,
-            "line": 319
+            "line": 316
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 36,
+            "line": 297
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 21,
+            "line": 302
           }
         ],
         ".py": [
@@ -6202,7 +6551,7 @@
           {
             "sourceFile": "packages/extension-utils/src/extensionAdaptor.ts",
             "column": 9,
-            "line": 96
+            "line": 93
           }
         ]
       }
@@ -6214,7 +6563,7 @@
           {
             "sourceFile": "packages/extension-utils/src/extensionAdaptor.ts",
             "column": 17,
-            "line": 71
+            "line": 68
           }
         ]
       }
@@ -6226,7 +6575,7 @@
           {
             "sourceFile": "packages/extension-utils/src/extensionAdaptor.ts",
             "column": 22,
-            "line": 80
+            "line": 77
           }
         ]
       }
@@ -6238,7 +6587,7 @@
           {
             "sourceFile": "packages/extension-utils/src/extensionAdaptor.ts",
             "column": 15,
-            "line": 84
+            "line": 81
           }
         ]
       }
@@ -6250,7 +6599,7 @@
           {
             "sourceFile": "packages/extension-utils/src/extensionAdaptor.ts",
             "column": 15,
-            "line": 88
+            "line": 85
           }
         ]
       }
@@ -6262,7 +6611,7 @@
           {
             "sourceFile": "packages/extension-utils/src/extensionAdaptor.ts",
             "column": 9,
-            "line": 100
+            "line": 97
           }
         ]
       }
@@ -7618,22 +7967,42 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 546
+            "line": 525
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 561
+            "line": 538
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 589
+            "line": 564
           },
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 10,
-            "line": 600
+            "line": 575
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 8,
+            "line": 494
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 8,
+            "line": 503
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 8,
+            "line": 525
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 8,
+            "line": 536
           }
         ],
         ".py": [
@@ -7672,7 +8041,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 14,
-            "line": 1032
+            "line": 990
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 12,
+            "line": 913
           }
         ],
         ".py": [
@@ -7691,7 +8065,12 @@
           {
             "sourceFile": "packages/sdk-node/test/methods.spec.ts",
             "column": 38,
-            "line": 1082
+            "line": 1040
+          },
+          {
+            "sourceFile": "packages/sdk-node/test/sdk.test.ts",
+            "column": 36,
+            "line": 961
           }
         ],
         ".py": [
@@ -7710,12 +8089,12 @@
           {
             "sourceFile": "packages/wholly-sheet/src/SheetSDK.ts",
             "column": 17,
-            "line": 397
+            "line": 394
           },
           {
             "sourceFile": "packages/wholly-sheet/src/SheetSDK.ts",
             "column": 17,
-            "line": 428
+            "line": 425
           }
         ]
       }
