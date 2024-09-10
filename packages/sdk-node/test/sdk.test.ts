@@ -760,38 +760,44 @@ describe('LookerNodeSDK integration tests', () => {
       }
     });
 
-    it('parses a query with no results', async () => {
-      const query = await sdk.ok(
-        sdk.create_query({
-          model: 'system__activity',
-          view: 'dashboard',
-          limit: '2',
-          fields: ['dashboard.id', 'dashboard.title'],
-          filters: { 'dashboard.id': '-1' },
-        })
-      );
-      expect(query).toBeDefined();
-      expect(query.id).toBeDefined();
+    describe('parses a query with no results', () => {
+      let query;
+      beforeAll(async () => {
+        query = await sdk.ok(
+          sdk.create_query({
+            model: 'system__activity',
+            view: 'dashboard',
+            limit: '2',
+            fields: ['dashboard.id', 'dashboard.title'],
+            filters: { 'dashboard.id': '-1' },
+          })
+        );
+        expect(query).toBeDefined();
+        expect(query.id).toBeDefined();
+      });
+
       for (const format of ['csv', 'json', 'json_detail', 'txt', 'md']) {
-        let failed = '';
-        try {
-          const live = await sdk.ok(
-            sdk.run_query({ query_id: query.id!, result_format: format })
-          );
-          const cached = await sdk.ok(
-            sdk.run_query({
-              query_id: query.id!,
-              result_format: format,
-              cache: true,
-            })
-          );
-          expect(live).not.toEqual('{}');
-          expect(cached).not.toEqual('{}');
-        } catch (e: any) {
-          failed = e.message;
-          console.info(JSON.stringify(e));
-        }
-        expect(failed).toEqual('');
+        it(`parses empty ${format} query`, async () => {
+          let failed = '';
+          try {
+            const live = await sdk.ok(
+              sdk.run_query({ query_id: query.id!, result_format: format })
+            );
+            const cached = await sdk.ok(
+              sdk.run_query({
+                query_id: query.id!,
+                result_format: format,
+                cache: true,
+              })
+            );
+            expect(live).not.toEqual('{}');
+            expect(cached).not.toEqual('{}');
+          } catch (e: any) {
+            failed = e.message;
+            console.info(JSON.stringify(e));
+          }
+          expect(failed).toEqual('');
+        });
       }
     });
   });
