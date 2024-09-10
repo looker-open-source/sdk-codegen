@@ -84,7 +84,7 @@ beforeEach(() => {
 
 afterEach(async () => {
   if (sdk.authSession.isAuthenticated()) {
-    // desparate hack that probably won't work
+    // desperate hack that probably won't work
     await sdk.authSession.logout();
   }
 });
