@@ -149,7 +149,7 @@ export const ExplorePropertyReadOnly: FC<ExplorePropertyProps> = ({
  * @param property to describe
  * @constructor
  */
-const DescriptionParagraph: FC = (props) => (
+const DescriptionParagraph: FC = props => (
   <Paragraph fontSize="small" m="none" {...props} />
 );
 
@@ -270,7 +270,7 @@ export const ExplorePropertyType: FC<ExplorePropertyTypeProps> = ({
       density={-3}
       detail={<ExplorePropertyDetail api={api} property={property} />}
     >
-      {Object.values(props).map((property) => (
+      {Object.values(props).map(property => (
         <ExploreProperty
           api={api}
           key={property.fullName}

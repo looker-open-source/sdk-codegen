@@ -111,13 +111,13 @@ function checkSpecs() {
   switch (opt.format) {
     case 'csv':
       result = csvHeaderRow;
-      diff.forEach((diffRow) => {
+      diff.forEach(diffRow => {
         result += csvDiffRow(diffRow);
       });
       break;
     case 'md':
       result = mdHeaderRow;
-      diff.forEach((diffRow) => {
+      diff.forEach(diffRow => {
         result += mdDiffRow(diffRow);
       });
       break;

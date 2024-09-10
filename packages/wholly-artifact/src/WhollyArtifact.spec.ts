@@ -105,7 +105,7 @@ const mockSheet = () => new TestSheet(testSDK, testTable);
 const keySheet = () => {
   const meta = new TestRow();
   const data = cloneDeep(testTable);
-  data.rows.forEach((r) => (r._id = meta.makey()));
+  data.rows.forEach(r => (r._id = meta.makey()));
   return new TestSheet(testSDK, testTable);
 };
 
@@ -175,7 +175,7 @@ describe('WhollyArtifact', () => {
     test('finds by id', () => {
       const rows = sheet.rows;
       expect(rows).toBeDefined();
-      rows.forEach((target) => {
+      rows.forEach(target => {
         const found = sheet.find(target._id);
         expect(found).toBeDefined();
         expect(found).toEqual(target);
@@ -364,7 +364,7 @@ describe('WhollyArtifact', () => {
         header: testRow.header(),
         rows: data.rows as IRowModel[],
       });
-      sheet.rows.forEach((r) => {
+      sheet.rows.forEach(r => {
         r.$artifact.version = 0;
         r.setCreate();
       });
@@ -378,7 +378,7 @@ describe('WhollyArtifact', () => {
       const meta = new TestRow();
       const ns = meta.namespace();
       const spaces = await sdk.ok(artifact_namespaces(sdk, {}));
-      const cruft = spaces.find((s) => s.namespace === ns && s.count > 0);
+      const cruft = spaces.find(s => s.namespace === ns && s.count > 0);
       if (cruft) {
         await sdk.ok(purge_artifacts(sdk, ns));
       }
@@ -431,7 +431,7 @@ describe('WhollyArtifact', () => {
           const data = mockSheet();
           await createData(data);
           expect(sheet.rows.length).toBeGreaterThan(0);
-          sheet.rows.forEach((r) => r.setDelete());
+          sheet.rows.forEach(r => r.setDelete());
           const delta = sheet.getDelta();
           expect(delta.deletes).toHaveLength(sheet.rows.length);
           const response = await sheet.batchUpdate();
@@ -445,7 +445,7 @@ describe('WhollyArtifact', () => {
         'refreshes all rows',
         async () => {
           const data = keySheet();
-          data.rows.forEach((r) => (r.key = r.makey()));
+          data.rows.forEach(r => (r.key = r.makey()));
           await createData(data);
           expect(sheet.rows).toHaveLength(data.rows.length);
           sheet.rows.forEach((r, index) => {

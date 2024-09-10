@@ -4,5 +4,5 @@ with nixpkgs;
 with lib;
 mkShell {
   name = "sdk-codegen";
-  buildInputs =[nodejs yarn];
+  buildInputs =[nodejs_22 yarn];
 }

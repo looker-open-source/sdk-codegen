@@ -32,7 +32,7 @@ import type { TypeList } from '@looker/sdk-codegen';
  */
 export const getMetaTypes = (types: TypeList) => {
   const typeSet = new Set<string>();
-  Object.values(types).forEach((type) => {
+  Object.values(types).forEach(type => {
     typeSet.add(type.metaType.toString().toUpperCase());
   });
   return Array.from(typeSet.values());

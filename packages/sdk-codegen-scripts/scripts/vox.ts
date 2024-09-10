@@ -51,7 +51,7 @@ let group: IGroup;
 
 /** gets all user records from the json snapshot */
 const getUsers = () => {
-  return artifacts.filter((x) => x.key.startsWith('User:')).map((x) => x);
+  return artifacts.filter(x => x.key.startsWith('User:')).map(x => x);
 };
 
 /**
@@ -79,7 +79,7 @@ const swapUserId = (user: IArtifact, userId: string) => {
   const _user_id = '_user_id';
   const user_id = 'user_id';
 
-  artifacts.forEach((a) => {
+  artifacts.forEach(a => {
     const val = JSON.parse(a.value);
     const uid = user_id in val ? user_id : _user_id;
     if (uid in val && val[uid] === oldKey) {
@@ -146,11 +146,11 @@ const populi = async () => {
 
 /** set artifact versions to 0 so creating the artifact will work */
 const prepArtifacts = () => {
-  const keys = artifacts.map((o) => o.key);
+  const keys = artifacts.map(o => o.key);
   const prepped = artifacts.filter(
     ({ key }, index) => !keys.includes(key, index + 1)
   );
-  prepped.forEach((a) => {
+  prepped.forEach(a => {
     a.version = 0;
     const vals = JSON.parse(a.value);
     const keys = Object.keys(vals);

@@ -41,7 +41,7 @@ describe('ExtensionSession', () => {
     expect(session.isAuthenticated()).toEqual(true);
   });
 
-  it('authenticate not supported', (done) => {
+  it('authenticate not supported', done => {
     session
       .authenticate({
         headers: {},
@@ -66,7 +66,7 @@ describe('ExtensionSession', () => {
     }
   });
 
-  it('logout not supported', (done) => {
+  it('logout not supported', done => {
     session
       .logout()
       .then(() => {

@@ -31,18 +31,18 @@
 // (which introduced the errorOptions argument)
 type AugmentErrorOptions<
   ErrorParameters extends unknown[],
-  AdditionalErrorOptions,
+  AdditionalErrorOptions
 > = ErrorParameters extends [(infer Message)?]
   ? [Message?, AdditionalErrorOptions?]
   : ErrorParameters extends [(infer Message)?, (infer ErrorOptions)?]
-    ? [Message?, (ErrorOptions & AdditionalErrorOptions)?]
-    : ErrorParameters extends [
-          (infer Message)?,
-          (infer ErrorOptions)?,
-          ...infer Rest,
-        ]
-      ? [Message?, (ErrorOptions & AdditionalErrorOptions)?, ...Rest]
-      : never;
+  ? [Message?, (ErrorOptions & AdditionalErrorOptions)?]
+  : ErrorParameters extends [
+      (infer Message)?,
+      (infer ErrorOptions)?,
+      ...infer Rest
+    ]
+  ? [Message?, (ErrorOptions & AdditionalErrorOptions)?, ...Rest]
+  : never;
 
 interface IErrorDetail {
   field?: string;
@@ -80,11 +80,13 @@ export interface LookerSDKError extends Error {
 }
 
 export const LookerSDKError: ILookerSDKErrorConstructor =
-  /* #__PURE__*/ (() => {
+  /* #__PURE__ */ (() => {
     'use strict';
     const LookerSDKErrorConstructor = function LookerSDKError(
       this: LookerSDKError | undefined,
-      ...[
+      ...errorArguments
+    ) {
+      const [
         message,
         {
           errors,
@@ -99,30 +101,29 @@ export const LookerSDKError: ILookerSDKErrorConstructor =
         AugmentErrorOptions<
           Parameters<ErrorConstructor>,
           ILookerSDKErrorOptions
-        >
-    ) {
-      // handle null in addition to undefined
-      errors ??= [];
-      documentation_url ??= '';
+        > = errorArguments;
 
       // The `super()` call. At present, Error() and new Error() are
       // indistinguishable, but use whatever we were invoked with in case
       // that ever changes.
-      const error = this
-        ? new Error(
-            message,
-            // we have to suppress a type error here if TypeScript
-            // doesn't know es2022's two-argument Error constructor
-            // @ts-ignore-error
-            errorOptions,
-            ...rest
-          )
-        : Error(
-            message,
-            // @ts-ignore-error
-            errorOptions,
-            ...rest
-          );
+      // const error = this
+      //   ? new Error(
+      //       message,
+      //       // we have to suppress a type error here if TypeScript
+      //       // doesn't know es2022's two-argument Error constructor
+      //       // @ts-ignore-error
+      //       errorOptions,
+      //       ...rest
+      //     )
+      //   : Error(
+      // TODO resolve this parsing complaint
+      // @ts-ignore-error
+      const error = new Error(
+        message,
+        // @ts-ignore-error
+        errorOptions,
+        ...rest
+      );
 
       // Object.setPrototypeOf() is necessary when extending built-ins,
       // since Error.call(this, message, errorOptions, ...rest) doesn't
@@ -138,8 +139,10 @@ export const LookerSDKError: ILookerSDKErrorConstructor =
       // which are implemented as plain JavaScript objects where all
       // properties are enumerable.
       Object.defineProperty(error, 'message', { enumerable: true });
-      (error as LookerSDKError).errors = errors;
-      (error as LookerSDKError).documentation_url = documentation_url;
+
+      // handle null in addition to undefined
+      (error as LookerSDKError).errors = errors ?? [];
+      (error as LookerSDKError).documentation_url = documentation_url ?? '';
 
       return error;
     } as ILookerSDKErrorConstructor;

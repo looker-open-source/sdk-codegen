@@ -25,18 +25,19 @@
  */
 
 import * as fs from 'fs';
+// import 'whatwg-fetch';
 import { ApiConfigMap, boolDefault, defaultTimeout } from '@looker/sdk-rtl';
-import { TestConfig } from './testUtils';
+import { TestConfig } from '@looker/sdk-codegen-utils';
 import { NodeTransport } from './nodeTransport';
 import { NodeSession } from './nodeSession';
 import { ApiConfig, NodeSettings, NodeSettingsIniFile } from './nodeSettings';
+import { specToModel } from '@looker/sdk-codegen';
 
-const config = TestConfig();
+const config = TestConfig(specToModel);
 const envPrefix = 'LOOKERSDK';
 const localIni = config.localIni;
 
-// TODO These tests are skipped for CI. Can we make them work for CI?
-describe.skip('NodeSession', () => {
+describe('NodeSession', () => {
   const settings = new NodeSettingsIniFile(envPrefix, localIni, 'Looker');
   const transport = new NodeTransport(settings);
 
@@ -46,6 +47,7 @@ describe.skip('NodeSession', () => {
       expect(session.isAuthenticated()).toEqual(false);
       const actual = await session.logout();
       expect(actual).toEqual(false);
+      expect(session.isAuthenticated()).toEqual(false);
     });
   });
 

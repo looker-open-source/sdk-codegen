@@ -24,17 +24,13 @@
 
  */
 
-import type {
-  APIMethods,
-  IApiSettings,
-  IAuthSession,
-  IHostConnection,
-} from '@looker/sdk-rtl';
+import type { IAuthSession, IHostConnection } from '@looker/sdk-rtl';
 import {
   DefaultSettings,
   ExtensionSession,
   ExtensionTransport,
 } from '@looker/sdk-rtl';
+import { Looker40SDK } from './4.0/methods';
 
 export class LookerExtensionSDK {
   /**
@@ -43,15 +39,16 @@ export class LookerExtensionSDK {
    * Example:
    * LookerExtensionSDK.createClient(host, Looker40SDK) => constructs a Looker40SDK
    */
-  static createClient<T extends APIMethods>(
+  static createClient(
     hostConnection: IHostConnection,
-    type: new (authSession: IAuthSession) => T,
-    settings?: IApiSettings
-  ): T {
-    settings = settings || DefaultSettings();
+    /**
+     * @deprecated no longer required
+     */
+    _type?: new (authSession: IAuthSession) => Looker40SDK
+  ): Looker40SDK {
+    const settings = DefaultSettings();
     const transport = new ExtensionTransport(settings, hostConnection);
     const session = new ExtensionSession(settings, transport);
-    // eslint-disable-next-line new-cap
-    return new type(session);
+    return new Looker40SDK(session);
   }
 }

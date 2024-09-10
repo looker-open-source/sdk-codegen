@@ -83,7 +83,7 @@ describe('connect_extension_host tests', () => {
     console.error = originalConsoleError;
   });
 
-  it('handles basic connection', (done) => {
+  it('handles basic connection', done => {
     connectExtensionHost({}).then((extensionHost: any) => {
       expect(extensionHost).toBeDefined();
       expect(extensionHost.chattyHost).toBeDefined();
@@ -108,7 +108,7 @@ describe('connect_extension_host tests', () => {
     });
   });
 
-  it('handles connection with callback and initial route', (done) => {
+  it('handles connection with callback and initial route', done => {
     const initializedCallback = jest.fn();
     const setInitialRoute = jest.fn();
     connectExtensionHost({
@@ -142,7 +142,7 @@ describe('connect_extension_host tests', () => {
     });
   });
 
-  it('rejects when looker version is not supported', (done) => {
+  it('rejects when looker version is not supported', done => {
     const initializedCallback = jest.fn();
     const setInitialRoute = jest.fn();
     connectExtensionHost({

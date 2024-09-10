@@ -36,7 +36,7 @@ import React from 'react';
 export const asTitle = (value: string) => {
   if (!value) return '';
   value = value.replace('$', '');
-  value = value.replace(/(([-_ ]+)[a-z])|([-_ ]+)/gi, ($1) => {
+  value = value.replace(/(([-_ ]+)[a-z])|([-_ ]+)/gi, $1 => {
     return $1.toLocaleUpperCase().replace(/([-_ ]+)/gi, ' ');
   });
 
@@ -75,7 +75,7 @@ export const sheetHeader = (header: string[], row: any) => {
   const result: SheetValues = [];
   // const colCount = header.length
   // const boolCount = header.filter((h) => typeof row[h] === 'boolean').length
-  header.forEach((key) => {
+  header.forEach(key => {
     result.push(sheetHeaderColumn(key, row[key])); // , colCount, boolCount))
   });
   return result as DataTableColumns;

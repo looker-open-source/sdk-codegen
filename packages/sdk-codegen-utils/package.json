@@ -29,5 +29,15 @@
   ],
   "scripts": {
     "watch:cjs": "yarn lerna exec --scope @looker/sdk-codegen-utils --stream 'BABEL_ENV=build_cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
+  },
+  "devDependencies": {
+    "@looker/sdk-rtl": "21.6.1",
+    "@looker/sdk": "24.12.1",
+    "@looker/sdk-node": "24.12.1",
+    "@manypkg/find-root": "2.2.1",
+    "@types/js-yaml": "4.0.9",
+    "lodash": "4.17.21",
+    "js-yaml": "4.1.0"
   }
+
 }

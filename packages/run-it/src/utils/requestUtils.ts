@@ -204,7 +204,7 @@ export const runRequest = async (
     url,
     queryParams,
     body,
-    (props) => sdk.authSession.authenticate(props)
+    props => sdk.authSession.authenticate(props)
   );
   const responseCompleted = Date.now();
   // populate timing info if it's not already provided by the transport
@@ -301,7 +301,7 @@ const editType = (spec: IApiModel, type: IType) => {
  * @param method A method object
  */
 export const createInputs = (spec: IApiModel, method: IMethod): RunItInput[] =>
-  method.allParams.map((param) => ({
+  method.allParams.map(param => ({
     name: param.name,
     location: param.location,
     type: editType(spec, param.type),

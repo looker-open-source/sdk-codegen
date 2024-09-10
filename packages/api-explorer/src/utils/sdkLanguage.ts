@@ -35,7 +35,7 @@ export const allAlias = 'all';
  */
 export const allSdkLanguages = (): Record<string, string> => {
   const languages: ArgValues = {};
-  codeGenerators.forEach((gen) => {
+  codeGenerators.forEach(gen => {
     const alias = gen.extension.toString().match(/\.(\w+)\b/)![1];
     languages[alias] = gen.language;
   });

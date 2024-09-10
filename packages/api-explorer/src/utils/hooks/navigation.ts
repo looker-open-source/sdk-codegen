@@ -59,7 +59,7 @@ export const useNavigation = () => {
       history.push({ pathname: path });
     } else {
       // push each key as new param to URL, excluding entries with value null
-      Object.keys(queryParams).forEach((key) => {
+      Object.keys(queryParams).forEach(key => {
         if (
           queryParams[key as keyof QueryParamProps] === null ||
           queryParams[key as keyof QueryParamProps] === ''

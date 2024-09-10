@@ -26,7 +26,7 @@
 
 export class DelimArray<T> extends Array<T> {
   constructor(
-    items?: Array<T>,
+    items?: T[],
     public separator: string = ',',
     public prefix: string = '',
     public suffix: string = ''

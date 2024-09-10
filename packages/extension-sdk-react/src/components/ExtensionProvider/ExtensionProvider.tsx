@@ -57,7 +57,7 @@ export const ExtensionProvider: React.FC<ExtensionProviderProps> = ({
   );
   const connectedCallback = (extensionHost: ExtensionHostApi) => {
     const core40SDK: Looker40SDK =
-      LookerExtensionSDK.create40Client(extensionHost);
+      LookerExtensionSDK.createClient(extensionHost);
     // Provide global access for use by redux if needed
     registerCore40SDK(core40SDK);
     const { visualizationSDK, tileSDK, lookerHostData } = extensionHost;

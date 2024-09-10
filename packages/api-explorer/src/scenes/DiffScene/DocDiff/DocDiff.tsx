@@ -76,7 +76,7 @@ export const DocDiff: FC<DocDiffProps> = ({
             <Heading as="h2">{`${delta.length} differences between ${leftKey} and ${rightKey}`}</Heading>
           </Space>
           <SpaceVertical mt="large" gap="xxsmall">
-            {pageItemData.map((item) => (
+            {pageItemData.map(item => (
               <DiffItem
                 key={item.name}
                 item={item}
@@ -90,7 +90,7 @@ export const DocDiff: FC<DocDiffProps> = ({
           <Pagination
             current={page}
             pages={pageCount}
-            onChange={(nextPage) => {
+            onChange={nextPage => {
               setPage(nextPage);
             }}
           />

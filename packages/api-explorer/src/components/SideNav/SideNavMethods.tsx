@@ -81,7 +81,7 @@ export const SideNavMethods = styled(
         }
       >
         <ul>
-          {Object.values(methods).map((method) => (
+          {Object.values(methods).map(method => (
             <li key={method.name}>
               <Link
                 to={buildPathWithGlobalParams(

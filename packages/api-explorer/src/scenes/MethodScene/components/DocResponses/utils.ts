@@ -35,7 +35,7 @@ export const buildResponseTree = (
   responses: IMethodResponse[]
 ): KeyedCollection<KeyedCollection<IMethodResponse>> => {
   const tree: KeyedCollection<KeyedCollection<IMethodResponse>> = {};
-  Object.values(responses).forEach((response) => {
+  Object.values(responses).forEach(response => {
     const node = `${response.statusCode}: ${response.description}`;
     if (!(node in tree)) tree[node] = {};
     tree[node][response.mediaType] = response;

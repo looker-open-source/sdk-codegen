@@ -25,15 +25,17 @@
  */
 
 import { DelimArray } from '@looker/sdk-rtl';
-import { TestConfig } from './testUtils';
+import { TestConfig } from '@looker/sdk-codegen-utils';
 import { PythonGen } from './python.gen';
 import type { IEnumType, IType } from './sdkModels';
 import type { IMappedType } from './codeGen';
+import { specToModel } from './sdkModels';
 
-const config = TestConfig();
+const config = TestConfig(specToModel);
 const apiTestModel = config.apiTestModel;
 const gen = new PythonGen(apiTestModel);
 const indent = '';
+/** eslint-disable jest/no-disabled-tests */
 
 describe('python generator', () => {
   describe('comment header', () => {
@@ -113,7 +115,7 @@ sr.converter.register_structure_hook(
       const method = apiTestModel.methods.run_query;
       const param = method.params[0];
       const actual = gen.declareParameter(indent, method, param);
-      expect(actual).toEqual('# Id of query\nquery_id: int');
+      expect(actual).toEqual('# Id of query\nquery_id: str');
     });
     it('optional parameter', () => {
       const method = apiTestModel.methods.run_query;
@@ -150,6 +152,7 @@ sr.converter.register_structure_hook(
         'path_prefix',
         'rebuild_pdts',
         'server_table_calcs',
+        'source',
       ]);
       expect(method.headerArgs).toEqual([]);
       expect(method.cookieArgs).toEqual([]);
@@ -159,7 +162,7 @@ sr.converter.register_structure_hook(
       const method = apiTestModel.methods.create_query;
       expect(method.pathArgs).toEqual([]);
       const body = method.getParams('body');
-      expect(body.length).toEqual(1);
+      expect(body).toHaveLength(1);
       expect(body[0].type.name).toEqual('Query');
       expect(method.bodyArg).toEqual('body');
       expect(method.queryArgs).toEqual(['fields']);
@@ -171,7 +174,7 @@ sr.converter.register_structure_hook(
       const method = apiTestModel.methods.create_dashboard;
       expect(method.pathArgs).toEqual([]);
       const body = method.getParams('body');
-      expect(body.length).toEqual(1);
+      expect(body).toHaveLength(1);
       expect(body[0].type.name).toEqual('Dashboard');
       expect(method.bodyArg).toEqual('body');
       expect(method.queryArgs).toEqual([]);
@@ -324,11 +327,11 @@ def render_task_results(
 # \`\`\`ruby
 # query_params =
 # {
-#   :fields => "category.name,inventory_items.days_in_inventory_tier,products.count",
+#   fields: "category.name,inventory_items.days_in_inventory_tier,products.count",
 #   :"f[category.name]" => "socks",
-#   :sorts => "products.count desc 0",
-#   :limit => "500",
-#   :query_timezone => "America/Los_Angeles"
+#   sorts: "products.count desc 0",
+#   limit: "500",
+#   query_timezone: "America/Los_Angeles"
 # }
 # response = ruby_sdk.run_url_encoded_query('thelook','inventory_items','json', query_params)
 #
@@ -410,9 +413,9 @@ result_format = self.encode_path_param(result_format)
 
     it('encodes only string path params', () => {
       const method = apiTestModel.methods.run_look;
-      // should NOT escape look_id (int)
-      const expected =
-        'result_format = self.encode_path_param(result_format)\n';
+      const expected = `look_id = self.encode_path_param(look_id)
+result_format = self.encode_path_param(result_format)
+`;
       const actual = gen.encodePathParams('', method);
       expect(actual).toEqual(expected);
     });
@@ -574,7 +577,7 @@ class CreateDashboardFilter(model.Model):
         field: Field information
         row: Display order of this filter relative to other filters
         listens_to_filters: Array of listeners for faceted filters
-        allow_multiple_values: Whether the filter allows multiple filter values
+        allow_multiple_values: Whether the filter allows multiple filter values (deprecated in the latest version of dashboards)
         required: Whether the filter requires a value to run the dashboard
         ui_config: The visual configuration for this filter. Used to set up how the UI for this filter should appear.
     """
@@ -705,18 +708,26 @@ class ApiVersion(model.Model):
         looker_release_version: Current Looker release version number
         current_version:
         supported_versions: Array of versions supported by this Looker instance
+        api_server_url: API server base url
+        web_server_url: Web server base url
     """
     looker_release_version: Optional[str] = None
     current_version: Optional["ApiVersionElement"] = None
     supported_versions: Optional[Sequence["ApiVersionElement"]] = None
+    api_server_url: Optional[str] = None
+    web_server_url: Optional[str] = None
 
     def __init__(self, *,
             looker_release_version: Optional[str] = None,
             current_version: Optional["ApiVersionElement"] = None,
-            supported_versions: Optional[Sequence["ApiVersionElement"]] = None):
+            supported_versions: Optional[Sequence["ApiVersionElement"]] = None,
+            api_server_url: Optional[str] = None,
+            web_server_url: Optional[str] = None):
         self.looker_release_version = looker_release_version
         self.current_version = current_version
-        self.supported_versions = supported_versions`);
+        self.supported_versions = supported_versions
+        self.api_server_url = api_server_url
+        self.web_server_url = web_server_url`);
     });
 
     function checkMappedType(
@@ -766,13 +777,13 @@ class RequiredResponseWithEnums(model.Model):
         roles: Roles assigned to group
     """
     query_id: int
-    result_format: "ResultFormat"
+    result_format: "RequiredResponseWithEnumsResultFormat"
     user: "UserPublic"
     an_array_of_enums: Optional[Sequence["AnArrayOfEnums"]] = None
     roles: Optional[Sequence["Role"]] = None
     __annotations__ = {
         "query_id": int,
-        "result_format": ForwardRef("ResultFormat"),
+        "result_format": ForwardRef("RequiredResponseWithEnumsResultFormat"),
         "user": ForwardRef("UserPublic"),
         "an_array_of_enums": Optional[Sequence["AnArrayOfEnums"]],
         "roles": Optional[Sequence["Role"]]
@@ -780,7 +791,7 @@ class RequiredResponseWithEnums(model.Model):
 
     def __init__(self, *,
             query_id: int,
-            result_format: "ResultFormat",
+            result_format: "RequiredResponseWithEnumsResultFormat",
             user: "UserPublic",
             an_array_of_enums: Optional[Sequence["AnArrayOfEnums"]] = None,
             roles: Optional[Sequence["Role"]] = None):
@@ -805,12 +816,12 @@ class RequiredResponseWithEnums(model.Model):
       checkMappedType(inputType.properties.column_limit.type, 'string', {
         default: gen.nullStr,
         name: 'str',
-        asVal: asVal,
+        asVal,
       });
       checkMappedType(inputType.properties.dynamic_fields.type, 'string', {
         default: gen.nullStr,
         name: 'str',
-        asVal: asVal,
+        asVal,
       });
       checkMappedType(inputType.properties.pivots.type, 'string[]', {
         default: gen.nullStr,
@@ -870,12 +881,12 @@ class MergeQuerySourceQuery(model.Model):
     """
     merge_fields: Optional[Sequence["MergeFields"]] = None
     name: Optional[str] = None
-    query_id: Optional[int] = None
+    query_id: Optional[str] = None
 
     def __init__(self, *,
             merge_fields: Optional[Sequence["MergeFields"]] = None,
             name: Optional[str] = None,
-            query_id: Optional[int] = None):
+            query_id: Optional[str] = None):
         self.merge_fields = merge_fields
         self.name = name
         self.query_id = query_id`);
@@ -915,7 +926,7 @@ class MergeFields(model.Model):
       const inputs = { look_id: 17 };
       const method = apiTestModel.methods.look;
       const actual = gen.makeTheCall(method, inputs);
-      const expected = `response = sdk.look(look_id=17)`;
+      const expected = `response = sdk.look(look_id="17")`;
       expect(actual).toEqual(expected);
     });
 
@@ -924,7 +935,7 @@ class MergeFields(model.Model):
       const method = apiTestModel.methods.look;
       const actual = gen.makeTheCall(method, inputs);
       const expected = `response = sdk.look(
-    look_id=17,
+    look_id="17",
     fields="${fields}")`;
       expect(actual).toEqual(expected);
     });
@@ -943,7 +954,7 @@ class MergeFields(model.Model):
       const method = apiTestModel.methods.update_look;
       const actual = gen.makeTheCall(method, inputs);
       const expected = `from looker_sdk import models as mdls\n\nresponse = sdk.update_look(
-    look_id=17,
+    look_id="17",
     body=mdls.WriteLookWithQuery(
         title="test title",
         description="gen test",
@@ -968,7 +979,7 @@ class MergeFields(model.Model):
       const actual = gen.makeTheCall(method, inputs);
       const expected = `from looker_sdk import models as mdls\n\nresponse = sdk.create_query_task(
     body=mdls.WriteCreateQueryTask(
-        query_id=1,
+        query_id="1",
         result_format=mdls.ResultFormat.csv
     ))`;
       expect(actual).toEqual(expected);
@@ -1034,7 +1045,7 @@ class MergeFields(model.Model):
                     )
                 ],
                 name="first query",
-                query_id=1
+                query_id="1"
             ),
             mdls.MergeQuerySourceQuery(
                 merge_fields=[
@@ -1044,7 +1055,7 @@ class MergeFields(model.Model):
                     )
                 ],
                 name="second query",
-                query_id=2
+                query_id="2"
             )
         ]
     ),
@@ -1111,7 +1122,9 @@ class MergeFields(model.Model):
         },
       };
       const method = apiTestModel.methods.update_dashboard;
-      const expected = `from looker_sdk import models as mdls\n\nresponse = sdk.update_dashboard(
+      const expected = `from looker_sdk import models as mdls
+
+response = sdk.update_dashboard(
     dashboard_id="10",
     body=mdls.WriteDashboard(
         description="",
@@ -1120,14 +1133,17 @@ class MergeFields(model.Model):
         refresh_interval="",
         folder=mdls.WriteFolderBase(),
         title="",
+        slug="",
+        preferred_viewer="",
+        alert_sync_with_dashboard_filter_enabled=false,
         background_color="",
         crossfilter_enabled=false,
         deleted=false,
+        filters_bar_collapsed=false,
         load_configuration="",
         lookml_link_id="",
         show_filters_bar=false,
         show_title=false,
-        slug="",
         folder_id="",
         text_tile_text_color="",
         tile_background_color="",
@@ -1141,8 +1157,7 @@ class MergeFields(model.Model):
             tile_background_color="",
             tile_shadow=false,
             key_color=""
-        ),
-        preferred_viewer=""
+        )
     ))`;
       const actual = gen.makeTheCall(method, inputs);
       expect(actual).toEqual(expected);
@@ -1221,7 +1236,7 @@ class MergeFields(model.Model):
             )
         ],
         name="first query",
-        query_id=1
+        query_id="1"
     )`;
         const actual = gen.assignType(gen.indentStr, type, inputs);
         expect(actual).toEqual(expected);

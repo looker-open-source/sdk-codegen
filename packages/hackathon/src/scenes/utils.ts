@@ -32,8 +32,8 @@ export const techDescriptions = (
 ) => {
   try {
     return technologies
-      ?.filter((t) => ids.includes(t._id))
-      .map((t) => t.description)
+      ?.filter(t => ids.includes(t._id))
+      .map(t => t.description)
       .join(', ');
   } catch {
     // avoid sheet data errors
