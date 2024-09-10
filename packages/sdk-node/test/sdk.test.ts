@@ -24,7 +24,7 @@
 
  */
 
-import { beforeEach, afterEach, describe, it } from 'node:test';
+import { before, beforeEach, after, afterEach, describe, it } from 'node:test';
 import { createWritableStream, LookerNodeSDK, readIniConfig } from '../src';
 import { expect } from 'expect';
 import type {
@@ -57,9 +57,9 @@ import { TestConfig } from '@looker/sdk-codegen-utils';
 import { specToModel } from '@looker/sdk-codegen';
 import fs from 'fs';
 
-// TODO Temporary equivalents to ease porting and leave intention documented
-const beforeAll = beforeEach;
-const afterAll = afterEach;
+// TODO Temporary equivalents to ease porting
+const beforeAll = before;
+const afterAll = after;
 
 /** Note, these tests are for the Node test runner because jest has trouble with
  * real calls to node's native fetch functionality
