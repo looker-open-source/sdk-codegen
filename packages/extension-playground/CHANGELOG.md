@@ -168,6 +168,22 @@
     * @looker/extension-sdk-react bumped from 24.12.1 to 24.14.0
     * @looker/sdk bumped from 24.12.1 to 24.14.0
 
+## [1.0.22](https://github.com/looker-open-source/sdk-codegen/compare/extension-playground-v1.0.21...extension-playground-v1.0.22) (2024-09-11)
+
+
+### Bug Fixes
+
+* Remove the requests package from the TypeScript SDK ([#1491](https://github.com/looker-open-source/sdk-codegen/issues/1491)) ([670377c](https://github.com/looker-open-source/sdk-codegen/commit/670377c46a546bbd8dcc6679b8aeb041da1b4670)), closes [#1439](https://github.com/looker-open-source/sdk-codegen/issues/1439)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-sdk bumped from 24.14.0 to 24.16.0
+    * @looker/extension-sdk-react bumped from 24.14.0 to 24.16.0
+    * @looker/sdk bumped from 24.14.0 to 24.16.0
+
 ## 1.0.0 (2023-02-22)
 
 ### Features

@@ -1,6 +1,6 @@
 {
   "name": "@looker/sdk",
-  "version": "24.14.0",
+  "version": "24.16.0",
   "description": "Looker SDK",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
@@ -36,10 +36,9 @@
     "npm": ">=5.5.1"
   },
   "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/main/packages/sdk",
-  "devDependencies": {
-  },
+  "devDependencies": {},
   "dependencies": {
-    "@looker/sdk-rtl": "21.6.1"
+    "@looker/sdk-rtl": "21.6.2"
   },
   "keywords": [
     "Looker",
