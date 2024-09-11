@@ -25,13 +25,15 @@
  */
 
 import * as fs from 'fs';
-// import 'whatwg-fetch';
+import * as process from 'node:process';
+import { describe, it } from 'node:test';
+import { expect } from 'expect';
+import { specToModel } from '@looker/sdk-codegen';
 import { ApiConfigMap, boolDefault, defaultTimeout } from '@looker/sdk-rtl';
 import { TestConfig } from '@looker/sdk-codegen-utils';
 import { NodeTransport } from './nodeTransport';
 import { NodeSession } from './nodeSession';
 import { ApiConfig, NodeSettings, NodeSettingsIniFile } from './nodeSettings';
-import { specToModel } from '@looker/sdk-codegen';
 
 const config = TestConfig(specToModel);
 const envPrefix = 'LOOKERSDK';

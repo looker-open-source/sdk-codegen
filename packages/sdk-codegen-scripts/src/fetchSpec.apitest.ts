@@ -25,6 +25,8 @@
  */
 
 import fs from 'fs';
+import { describe, it } from 'node:test';
+import { expect } from 'expect';
 import { getSpecsFromVersions, specToModel } from '@looker/sdk-codegen';
 import { TestConfig } from '@looker/sdk-codegen-utils';
 import {
@@ -45,8 +47,7 @@ const props = ApiConfigSection(
 // api_version is no longer part of the INI, now set by sdkGen iterator
 props.api_version = '4.0';
 
-// TODO get real fetch working for command-line Jest like it does in IntelliJ and VS Code
-describe.skip('fetch operations', () => {
+describe('fetch operations', () => {
   it('defaults lookerVersion when server is not responding', async () => {
     const testProps = JSON.parse(JSON.stringify(props));
     testProps.base_url = 'https://bogus-server.looker.com:99';
@@ -54,7 +55,7 @@ describe.skip('fetch operations', () => {
       timeout: 3,
     });
     expect(actual).toEqual('');
-  }, 36000);
+  });
 
   it('gets lookerVersion with good server', async () => {
     const actual = await fetchLookerVersion(props);

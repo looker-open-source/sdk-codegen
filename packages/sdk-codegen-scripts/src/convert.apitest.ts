@@ -25,6 +25,8 @@
  */
 
 import { readFileSync } from 'fs';
+import { describe, it } from 'node:test';
+import { expect } from 'expect';
 import cloneDeep from 'lodash/cloneDeep';
 import isEmpty from 'lodash/isEmpty';
 import { LookerNodeSDK, NodeSettingsIniFile } from '@looker/sdk-node';
@@ -419,8 +421,7 @@ const settings = new NodeSettingsIniFile(
 const sdk = LookerNodeSDK.init40(settings);
 const baseUrl = sdk.authSession.settings.base_url;
 
-// TODO get real fetch working for command-line Jest like it does in IntelliJ and VS Code
-describe.skip('spec conversion', () => {
+describe('spec conversion', () => {
   it('swaps out x-looker-tags', () => {
     const actual = swapXLookerTags(specFrag);
     expect(actual).toContain('"nullable": true');
@@ -584,12 +585,12 @@ describe.skip('spec conversion', () => {
       api_server_url: 'http://localhost:19999',
     };
 
-    test('only gets supported specifications', async () => {
+    it('only gets supported specifications', async () => {
       const actual = await getSpecsFromVersions(versions);
       expect(Object.keys(actual)).toEqual(['3.1', '4.0']);
     });
 
-    test('current is the default spec', async () => {
+    it('current is the default spec', async () => {
       const specs = await getSpecsFromVersions(versions);
       const actual = Object.entries(specs).find(
         ([_, a]) => a.status === 'current'
@@ -603,7 +604,7 @@ describe.skip('spec conversion', () => {
       }
     });
 
-    test('specs have unique keys', async () => {
+    it('specs have unique keys', async () => {
       const moar = cloneDeep(versions);
       moar.supported_versions.push(
         {

@@ -24,6 +24,8 @@
 
  */
 
+import { describe, it } from 'node:test';
+import { expect } from 'expect';
 import type {
   IRawResponse,
   ISDKError,
@@ -68,7 +70,7 @@ describe('NodeTransport', () => {
     });
   });
 
-  test('retrieves fully qualified url', async () => {
+  it('retrieves fully qualified url', async () => {
     const response = await xp.request<string, Error>('GET', fullPath);
     expect(response).toBeDefined();
     expect(response.ok).toEqual(true);
@@ -168,7 +170,7 @@ describe('NodeTransport', () => {
     expect((typed as any).num4).toBe(4);
   });
   describe('NodeCryptoHash', () => {
-    test('secureRandom', () => {
+    it('secureRandom', () => {
       const hasher = new NodeCryptoHash();
       const rand1 = hasher.secureRandom(5);
       expect(rand1.length).toEqual(10);
@@ -176,7 +178,7 @@ describe('NodeTransport', () => {
       expect(rand2.length).toEqual(64);
     });
 
-    test('sha256hash', async () => {
+    it('sha256hash', async () => {
       const hasher = new NodeCryptoHash();
       const message = 'The quick brown fox jumped over the lazy dog.';
       const hash = await hasher.sha256Hash(message);
