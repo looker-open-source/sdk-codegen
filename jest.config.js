@@ -89,7 +89,6 @@ module.exports = {
   transformIgnorePatterns: [excludeNodeModulesExcept.string],
   testPathIgnorePatterns: ['packages/.*?/lib'],
   testEnvironment: require.resolve('jest-environment-jsdom'),
-  // testEnvironment: 'node',
   testEnvironmentOptions: {
     url: 'http://localhost/',
   },

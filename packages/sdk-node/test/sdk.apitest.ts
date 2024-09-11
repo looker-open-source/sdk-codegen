@@ -24,6 +24,7 @@
 
  */
 
+import * as process from 'node:process';
 import { before, beforeEach, after, afterEach, describe, it } from 'node:test';
 import { createWritableStream, LookerNodeSDK, readIniConfig } from '../src';
 import { expect } from 'expect';
@@ -56,10 +57,6 @@ import {
 import { TestConfig } from '@looker/sdk-codegen-utils';
 import { specToModel } from '@looker/sdk-codegen';
 import fs from 'fs';
-
-// TODO Temporary equivalents to ease porting
-const beforeAll = before;
-const afterAll = after;
 
 /** Note, these tests are for the Node test runner because jest has trouble with
  * real calls to node's native fetch functionality
@@ -423,11 +420,11 @@ describe('LookerNodeSDK integration tests', () => {
   });
 
   describe('User CRUD-it checks', () => {
-    beforeAll(async () => {
+    before(async () => {
       await removeTestUsers();
     });
 
-    afterAll(async () => {
+    after(async () => {
       await removeTestUsers();
     });
 
@@ -477,7 +474,7 @@ describe('LookerNodeSDK integration tests', () => {
   });
 
   describe('User searches', () => {
-    beforeAll(async () => {
+    before(async () => {
       await removeTestUsers();
       await createTestUsers();
     });
@@ -608,7 +605,8 @@ describe('LookerNodeSDK integration tests', () => {
         let count = 0;
         let actual: IDashboard[] = [];
         const aggregate = (page: IDashboard[]) => {
-          console.log(`Page ${++count} has ${page.length} items`);
+          count++;
+          // console.log(`Page ${count} has ${page.length} items`);
           actual = actual.concat(page);
           return page;
         };
@@ -631,7 +629,8 @@ describe('LookerNodeSDK integration tests', () => {
         let count = 0;
         let actual: IDashboard[] = [];
         const aggregate = (page: IDashboard[]) => {
-          console.log(`Page ${++count} has ${page.length} items`);
+          count++;
+          // console.log(`Page ${count} has ${page.length} items`);
           actual = actual.concat(page);
           return page;
         };
@@ -762,7 +761,7 @@ describe('LookerNodeSDK integration tests', () => {
 
     describe('parses a query with no results', () => {
       let query;
-      beforeAll(async () => {
+      before(async () => {
         query = await sdk.ok(
           sdk.create_query({
             model: 'system__activity',
@@ -813,7 +812,7 @@ describe('LookerNodeSDK integration tests', () => {
       return qhash[Object.keys(qhash)[0]].id;
     };
 
-    beforeAll(async () => {
+    before(async () => {
       // test dashboards are removed here, but not in top-level tear-down because
       // we may want to view them after the test
       await removeTestDashboards();
@@ -1013,7 +1012,7 @@ describe('LookerNodeSDK integration tests', () => {
   });
 
   describe('Node environment', () => {
-    beforeAll(() => {
+    before(() => {
       const section = readIniConfig(
         config.localIni,
         environmentPrefix,
@@ -1029,7 +1028,7 @@ describe('LookerNodeSDK integration tests', () => {
       process.env[strLookerVerifySsl] = verify_ssl.toString();
     });
 
-    afterAll(() => {
+    after(() => {
       // reset environment variables
       delete process.env[strLookerTimeout];
       delete process.env[strLookerClientId];
