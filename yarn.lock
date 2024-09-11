@@ -3860,6 +3860,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/ini@4.1.1":
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/@types/ini/-/ini-4.1.1.tgz#6984664a8cc74c3348f4049d0bf2b1ab2d061ca3"
+  integrity sha512-MIyNUZipBTbyUNnhvuXJTY7B6qNI78meck9Jbv3wk0OgNwRyOOVEKDutAkOs1snB/tx0FafyR6/SN4Ps0hZPeg==
+
 "@types/ini@^1.3.30":
   version "1.3.31"
   resolved "https://registry.yarnpkg.com/@types/ini/-/ini-1.3.31.tgz#c78541a187bd88d5c73e990711c9d85214800d1b"
@@ -3974,10 +3979,10 @@
   resolved "https://registry.yarnpkg.com/@types/ms/-/ms-0.7.34.tgz#10964ba0dee6ac4cd462e2795b6bebd407303433"
   integrity sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==
 
-"@types/node@*", "@types/node@22.5.1", "@types/node@>= 8":
-  version "22.5.1"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.5.1.tgz#de01dce265f6b99ed32b295962045d10b5b99560"
-  integrity sha512-KkHsxej0j9IW1KKOOAA/XBA0z08UFSrRQHErzEfA3Vgq57eXIMYboIlHJuYIfd+lwCQjtKqUu3UnmKbtUc9yRw==
+"@types/node@*", "@types/node@22.5.4", "@types/node@>= 8":
+  version "22.5.4"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-22.5.4.tgz#83f7d1f65bc2ed223bdbf57c7884f1d5a4fa84e8"
+  integrity sha512-FDuKUJQm/ju9fT/SeX/6+gBzoPzlVCzfzmGkwKvRHQVxi4BntVbyIwf6a4Xn62mrvndLiml6z/UBXIdEVjQLXg==
   dependencies:
     undici-types "~6.19.2"
 
@@ -9866,6 +9871,11 @@ inherits@2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.3.tgz#633c2c83e3da42a502f52466022480f4208261de"
   integrity sha512-x00IRNXNy63jwGkJmzPigoySHbaqpNuzKbBOmzK+g2OdZpQ9w+sxCN+VSB3ja7IAge2OP2qpfxTjeNcyjmW1uw==
+
+ini@5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/ini/-/ini-5.0.0.tgz#a7a4615339843d9a8ccc2d85c9d81cf93ffbc638"
+  integrity sha512-+N0ngpO3e7cRUWOJAS7qw0IZIVc6XPrW4MlFBdD066F2L4k1L6ker3hLqSq7iXxU5tgS4WGkIUElWn5vogAEnw==
 
 ini@^1.3.2, ini@^1.3.4, ini@^1.3.8:
   version "1.3.8"
