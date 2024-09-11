@@ -25,7 +25,7 @@
  */
 
 /**
- * 465 API methods
+ * 466 API methods
  */
 
 import type {
@@ -63,6 +63,7 @@ import type {
   IContentMeta,
   IContentMetaGroupUser,
   IContentSearch,
+  IContentSummary,
   IContentValidation,
   IContentView,
   ICostEstimate,
@@ -179,6 +180,7 @@ import type {
   IRequestConnectionSchemas,
   IRequestConnectionSearchColumns,
   IRequestConnectionTables,
+  IRequestContentSummary,
   IRequestContentThumbnail,
   IRequestCreateDashboardElement,
   IRequestCreateDashboardRenderTask,
@@ -4670,6 +4672,38 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   }
 
   /**
+   * ### Get Content Summary
+   *
+   * Retrieves a collection of content items related to user activity and engagement, such as recently viewed content,
+   * favorites and scheduled items.
+   *
+   * GET /content_summary -> IContentSummary[]
+   *
+   * @param request composed interface "IRequestContentSummary" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  async content_summary(
+    request: IRequestContentSummary,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IContentSummary[], IError | IValidationError>> {
+    return this.get<IContentSummary[], IError | IValidationError>(
+      '/content_summary',
+      {
+        fields: request.fields,
+        limit: request.limit,
+        offset: request.offset,
+        target_group_id: request.target_group_id,
+        target_user_id: request.target_user_id,
+        target_content_type: request.target_content_type,
+        sorts: request.sorts,
+      },
+      null,
+      options
+    );
+  }
+
+  /**
    * ### Get an image representing the contents of a dashboard or look.
    *
    * The returned thumbnail is an abstract representation of the contents of a dashboard or look and does not
@@ -6099,9 +6133,9 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   async delete_folder(
     folder_id: string,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<string, IError>> {
+  ): Promise<SDKResponse<string, IError | IValidationError>> {
     folder_id = encodeParam(folder_id);
-    return this.delete<string, IError>(
+    return this.delete<string, IError | IValidationError>(
       `/folders/${folder_id}`,
       null,
       null,
