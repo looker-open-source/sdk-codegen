@@ -4,7 +4,6 @@ This package contains utility routines for the SDK code generator projects
 
 The code in this package is really trivial and should not be used directly in your own projects.
 
-This package has no node dependencies.
 
 **DEPRECATED AND NOT SUPPORTED**: Looker does not support direct use of this package, other than via indirect use in the
 [SDK Codegen project](https://github.com/looker-open-source/sdk-codegen) repository.

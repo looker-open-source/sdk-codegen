@@ -29,7 +29,7 @@ describe('DocMarkdown utils', () => {
   describe('hashbang url remapping', () => {
     test.each(['#!/methodTag', '#!/4.0/methodTag'])(
       'it correctly maps %s tag urls',
-      (url) => {
+      url => {
         const result = remapHashURL('4.0', url);
         expect(result).toEqual('/4.0/methods/methodTag');
       }
@@ -37,7 +37,7 @@ describe('DocMarkdown utils', () => {
 
     test.each(['#!/4.0/methodTag/methodName', '#!/methodTag/methodName'])(
       'it correctly maps %s method urls ',
-      (hashbangUrl) => {
+      hashbangUrl => {
         const result = remapHashURL('4.0', hashbangUrl);
         expect(result).toEqual('/4.0/methods/methodTag/methodName');
       }

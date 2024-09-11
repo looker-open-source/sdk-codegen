@@ -125,11 +125,11 @@ export const ConfigForm: FC<ConfigFormProps> = ({
     value = ''
   ) => {
     if (typeof nameOrValues === 'string') {
-      setFields((previousFields) => {
+      setFields(previousFields => {
         return { ...previousFields, ...{ [nameOrValues]: value } };
       });
     } else {
-      setFields((previousFields) => {
+      setFields(previousFields => {
         return { ...previousFields, ...nameOrValues };
       });
     }

@@ -123,7 +123,7 @@ export const JudgingList: FC<JudgingListProps> = () => {
         actions={actions(judging)}
         onClick={handleView.bind(null, judging)}
       >
-        {columns.map((column) => (
+        {columns.map(column => (
           <DataTableCell key={`${idx}.${column.id}`}>
             {sheetCell(judging[column.id])}
           </DataTableCell>

@@ -38,7 +38,7 @@ import { registerJudgingsSagas } from './judgings/sagas';
 const sagaMiddleware: SagaMiddleware = createSagaMiddleware();
 
 const registerSagas = (callbacks: any[]) => {
-  callbacks.forEach((callback) => sagaMiddleware.run(callback));
+  callbacks.forEach(callback => sagaMiddleware.run(callback));
 };
 
 const store = createStore(rootReducer, applyMiddleware(sagaMiddleware));

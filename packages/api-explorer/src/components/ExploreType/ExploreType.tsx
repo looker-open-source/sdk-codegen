@@ -114,7 +114,7 @@ export const ExploreType: FC<ExploreTypeProps> = ({
       }
     >
       {nest &&
-        Object.values(props).map((property) => (
+        Object.values(props).map(property => (
           <ExploreProperty
             api={api}
             key={property.fullName}

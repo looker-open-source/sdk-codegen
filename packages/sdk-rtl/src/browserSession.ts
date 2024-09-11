@@ -47,10 +47,7 @@ import type { IApiSettings } from './apiSettings';
  *
  */
 export class BrowserSession extends OAuthSession {
-  constructor(
-    public settings: IApiSettings,
-    transport?: ITransport
-  ) {
+  constructor(public settings: IApiSettings, transport?: ITransport) {
     super(
       new BrowserServices({
         settings,

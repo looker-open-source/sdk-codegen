@@ -142,7 +142,7 @@ describe('APIErrorDialog', () => {
     expect(links).toBeInTheDocument();
     const table = screen.getByRole('table');
     expect(table).toBeInTheDocument();
-    detailed.errors?.forEach((e) => {
+    detailed.errors?.forEach(e => {
       expect(table).toHaveTextContent(e.field ?? '');
       expect(table).toHaveTextContent(e.message ?? '');
       expect(table).toHaveTextContent(e.code ?? '');

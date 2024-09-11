@@ -175,6 +175,85 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     * @looker/sdk-codegen-scripts bumped from 21.5.15 to 21.5.16
     * @looker/sdk-node bumped from 24.2.1 to 24.4.0
 
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-utils bumped from 0.1.36 to 0.1.37
+    * @looker/run-it bumped from 0.9.59 to 0.9.60
+    * @looker/sdk bumped from 24.4.0 to 24.8.0
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from 21.5.16 to 21.5.17
+    * @looker/sdk-node bumped from 24.4.0 to 24.8.0
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-utils bumped from 0.1.37 to 0.1.38
+    * @looker/run-it bumped from 0.9.60 to 0.9.61
+    * @looker/sdk bumped from 24.8.0 to 24.10.0
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from 21.5.17 to 21.5.18
+    * @looker/sdk-node bumped from 24.8.0 to 24.10.0
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-utils bumped from 0.1.38 to 0.1.39
+    * @looker/run-it bumped from 0.9.61 to 0.9.62
+    * @looker/sdk bumped from 24.10.0 to 24.12.0
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from 21.5.18 to 21.5.19
+    * @looker/sdk-node bumped from 24.10.0 to 24.12.0
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-utils bumped from 0.1.39 to 0.1.40
+    * @looker/run-it bumped from 0.9.62 to 0.9.63
+    * @looker/sdk bumped from 24.12.0 to 24.12.1
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from 21.5.19 to 21.5.20
+    * @looker/sdk-node bumped from 24.12.0 to 24.12.1
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from 0.1.30 to 0.1.31
+    * @looker/extension-utils bumped from 0.1.40 to 0.1.41
+    * @looker/run-it bumped from 0.9.63 to 0.9.64
+    * @looker/sdk bumped from 24.12.1 to 24.14.0
+    * @looker/sdk-codegen bumped from 21.8.2 to 21.9.0
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from 21.5.20 to 21.5.21
+    * @looker/sdk-node bumped from 24.12.1 to 24.14.0
+
+## [0.9.65](https://github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.64...api-explorer-v0.9.65) (2024-09-11)
+
+
+### Bug Fixes
+
+* Remove the requests package from the TypeScript SDK ([#1491](https://github.com/looker-open-source/sdk-codegen/issues/1491)) ([670377c](https://github.com/looker-open-source/sdk-codegen/commit/670377c46a546bbd8dcc6679b8aeb041da1b4670)), closes [#1439](https://github.com/looker-open-source/sdk-codegen/issues/1439)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from 0.1.31 to 0.1.32
+    * @looker/extension-utils bumped from 0.1.41 to 0.1.42
+    * @looker/run-it bumped from 0.9.64 to 0.9.65
+    * @looker/sdk bumped from 24.14.0 to 24.16.0
+    * @looker/sdk-codegen bumped from 21.9.0 to 21.9.1
+    * @looker/sdk-rtl bumped from 21.6.1 to 21.6.2
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from 21.5.21 to 21.5.22
+    * @looker/sdk-node bumped from 24.14.0 to 24.16.0
+
 ## [0.9.47](https://github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.46...api-explorer-v0.9.47) (2023-05-11)
 
 ### Features

@@ -36,7 +36,7 @@ let _core40SDK: Looker40SDK | undefined;
  */
 export const registerCore40SDK = (coreSDK: Looker40SDK) => {
   if (_core40SDK) {
-    throw new Error('coreSDK can only be registered onces');
+    throw new Error('coreSDK can only be registered once');
   }
   _core40SDK = coreSDK;
 };

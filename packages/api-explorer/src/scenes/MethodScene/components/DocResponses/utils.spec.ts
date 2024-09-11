@@ -47,7 +47,7 @@ describe('DocResponses utils', () => {
       ];
       expect(Object.keys(actual)).toEqual(responseStatuses);
 
-      responseStatuses.forEach((status) => {
+      responseStatuses.forEach(status => {
         expect(Object.keys(actual[status])).toEqual(mediaTypes);
       });
 

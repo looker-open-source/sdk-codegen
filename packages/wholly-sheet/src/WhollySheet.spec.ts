@@ -140,7 +140,7 @@ describe('WhollySheet', () => {
     test('finds by id', () => {
       const rows = sheet.rows;
       expect(rows).toBeDefined();
-      rows.forEach((target) => {
+      rows.forEach(target => {
         const found = sheet.find(target._id);
         expect(found).toBeDefined();
         expect(found).toEqual(target);
@@ -372,7 +372,7 @@ describe('WhollySheet', () => {
       const doc = await sheets.index();
       sheet = new TestSheet(sheets, 'test', doc.tabs.test);
       sheet.rows = data.rows;
-      sheet.rows.forEach((r) => {
+      sheet.rows.forEach(r => {
         r._row = 0;
         r.setCreate();
       });
@@ -423,7 +423,7 @@ describe('WhollySheet', () => {
         const data = mockSheet();
         if (sheet.rows.length === 0) await createSheet(data);
         expect(sheet.rows.length).toBeGreaterThan(0);
-        sheet.rows.forEach((r) => r.setDelete());
+        sheet.rows.forEach(r => r.setDelete());
         const delta = sheet.getDelta();
         expect(delta.deletes).toHaveLength(sheet.rows.length);
         const response = await sheet.batchUpdate();

@@ -11,6 +11,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - dependencies
     - @looker/sdk-rtl bumped from ^21.6.0 to ^21.6.1
 
+## [21.9.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.9.0...sdk-codegen-v21.9.1) (2024-09-11)
+
+
+### Bug Fixes
+
+* Remove the requests package from the TypeScript SDK ([#1491](https://github.com/looker-open-source/sdk-codegen/issues/1491)) ([670377c](https://github.com/looker-open-source/sdk-codegen/commit/670377c46a546bbd8dcc6679b8aeb041da1b4670)), closes [#1439](https://github.com/looker-open-source/sdk-codegen/issues/1439)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from 21.6.1 to 21.6.2
+  * devDependencies
+    * @looker/sdk-codegen-utils bumped from 21.0.11 to 21.0.12
+
+## [21.9.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.8.2...sdk-codegen-v21.9.0) (2024-08-12)
+
+
+### Features
+
+* update Go SDK to accept auth session interface ([#1488](https://github.com/looker-open-source/sdk-codegen/issues/1488)) ([aee5bf3](https://github.com/looker-open-source/sdk-codegen/commit/aee5bf3133fbca988b57a31ac9c7d82fa58d5d9b))
+
 ## [21.8.2](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.8.1...sdk-codegen-v21.8.2) (2023-09-21)
 
 ### Bug Fixes

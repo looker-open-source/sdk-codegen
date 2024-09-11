@@ -122,7 +122,7 @@ class ThemeService extends ItemList<ITheme> implements IThemeService {
   async delete(id: string) {
     this.clearIfExpired();
     await this.sdk.ok(delete_theme(this.sdk, id));
-    this.items = this.items.filter((item) => item.id !== id);
+    this.items = this.items.filter(item => item.id !== id);
     this.index();
   }
 

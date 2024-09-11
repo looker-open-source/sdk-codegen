@@ -37,7 +37,7 @@ describe('DocPseudo', () => {
     renderWithTheme(<DocPseudo method={method} />);
     expect(screen.getByText(method.name, { exact: false })).toBeInTheDocument();
 
-    method.params.forEach((param) => {
+    method.params.forEach(param => {
       expect(
         screen.getByText(param.name, { exact: false })
       ).toBeInTheDocument();

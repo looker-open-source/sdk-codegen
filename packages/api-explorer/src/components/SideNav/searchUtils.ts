@@ -44,7 +44,7 @@ export const useDebounce = <T>(value: T, delay: number): T => {
 
 export const countMethods = (tags: TagList) => {
   let result = 0;
-  Object.values(tags).forEach((methods) => {
+  Object.values(tags).forEach(methods => {
     result += Object.entries(methods).length;
   });
   return result;

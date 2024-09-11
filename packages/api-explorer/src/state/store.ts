@@ -73,7 +73,7 @@ const stateSanitizer = <S extends Partial<RootState>>(
 };
 
 const sanitizeSpecs = (specList: SpecList) =>
-  map(specList, (spec) => ({
+  map(specList, spec => ({
     ...spec,
     api: spec.api ? '<api>' : undefined,
     specContent: spec.specContent ? '<specContent>' : undefined,

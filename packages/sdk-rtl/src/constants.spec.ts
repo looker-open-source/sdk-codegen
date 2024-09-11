@@ -100,14 +100,14 @@ describe('Constants functions', () => {
   });
 
   it('string types match', () => {
-    stringTypes.forEach((t) => {
+    stringTypes.forEach(t => {
       const mode = responseMode(t);
       expect(mode).toEqual(ResponseMode.string);
     });
   });
 
   it('binary types match', () => {
-    binaryTypes.forEach((t) => {
+    binaryTypes.forEach(t => {
       const mode = responseMode(t);
       expect(mode).toEqual(ResponseMode.binary);
     });

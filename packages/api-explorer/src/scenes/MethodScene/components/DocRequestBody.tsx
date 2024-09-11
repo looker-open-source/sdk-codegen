@@ -46,7 +46,7 @@ export const DocRequestBody: FC<DocRequestBodyProps> = ({ method, api }) => {
   return (
     <CollapserCard id="bodies" heading={header}>
       <>
-        {bodies.map((body) => (
+        {bodies.map(body => (
           <ExploreType
             api={api}
             type={body.type}

@@ -115,6 +115,60 @@
     * @looker/sdk bumped from 24.2.1 to 24.4.0
     * @looker/sdk-node bumped from 24.2.1 to 24.4.0
 
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from 24.4.0 to 24.8.0
+    * @looker/sdk-node bumped from 24.4.0 to 24.8.0
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from 24.8.0 to 24.10.0
+    * @looker/sdk-node bumped from 24.8.0 to 24.10.0
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from 24.10.0 to 24.12.0
+    * @looker/sdk-node bumped from 24.10.0 to 24.12.0
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from 24.12.0 to 24.12.1
+    * @looker/sdk-node bumped from 24.12.0 to 24.12.1
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from 24.12.1 to 24.14.0
+    * @looker/sdk-codegen bumped from 21.8.2 to 21.9.0
+    * @looker/sdk-node bumped from 24.12.1 to 24.14.0
+
+## [21.5.22](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.5.21...sdk-codegen-scripts-v21.5.22) (2024-09-11)
+
+
+### Bug Fixes
+
+* Remove the requests package from the TypeScript SDK ([#1491](https://github.com/looker-open-source/sdk-codegen/issues/1491)) ([670377c](https://github.com/looker-open-source/sdk-codegen/commit/670377c46a546bbd8dcc6679b8aeb041da1b4670)), closes [#1439](https://github.com/looker-open-source/sdk-codegen/issues/1439)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from 24.14.0 to 24.16.0
+    * @looker/sdk-codegen bumped from 21.9.0 to 21.9.1
+    * @looker/sdk-codegen-utils bumped from 21.0.11 to 21.0.12
+    * @looker/sdk-node bumped from 24.14.0 to 24.16.0
+    * @looker/sdk-rtl bumped from 21.6.1 to 21.6.2
+
 ## [21.5.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.4.8...sdk-codegen-scripts-v21.5.0) (2023-02-22)
 
 ### Features
