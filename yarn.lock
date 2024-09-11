@@ -2743,13 +2743,11 @@
   resolved "https://registry.yarnpkg.com/@looker/redux/-/redux-0.0.1.tgz#4decc5a78e207c1c63e5c114be2ecca4b3d09d44"
   integrity sha512-+gMHsg321OD9Cp0sMNkgcOIp1HtKs8kxNQMQD4XGFb2S8yfXtLRe7vnwghKCHfCiYkXEHLMUcFmBCEvSk7HlrA==
 
-"@looker/sdk-node@24.12.1":
-  version "24.12.1"
-  resolved "https://registry.yarnpkg.com/@looker/sdk-node/-/sdk-node-24.12.1.tgz#46688dd4dc3cb6478f81911198d8e81fdb7a956e"
-  integrity sha512-ZbW7QL2nt49KE00yfNsAVjKmB7VIEA7rMU+1v5wgyGeM9/FvDjTryZp92KPSely7I2RFNZkfSuSZ2rRmG8Vaeg==
+"@looker/sdk-rtl@21.6.1":
+  version "21.6.1"
+  resolved "https://registry.yarnpkg.com/@looker/sdk-rtl/-/sdk-rtl-21.6.1.tgz#ad3bd08c30a0ca894f4a954d8d15e18ceba420dd"
+  integrity sha512-AiU2Q3LC/7fa0eGk8mt+lU0vqnijUrD9w7PcNE2z+sB9t+iGtfeKSvuSz9LSBf0VZEuGJzoM+WACKpWCDFNJ4w==
   dependencies:
-    "@looker/sdk" "24.12.1"
-    "@looker/sdk-rtl" "21.6.1"
     ini "^1.3.8"
     readable-stream "^3.4.0"
     request "^2.88.0"
@@ -2761,17 +2759,6 @@
   integrity sha512-hdgUnqrbSwPsM4kJABoFhCCuc4K3D6uCb9L4fYq/9P6X2/2byLGNwFtpR93J4Cpw19tVVuL6CwYRAPL2OWTDdw==
   dependencies:
     "@looker/sdk-rtl" "^21.6.1"
-    ini "^1.3.8"
-    readable-stream "^3.4.0"
-    request "^2.88.0"
-    request-promise-native "^1.0.8"
-
-"@looker/sdk@24.12.1":
-  version "24.12.1"
-  resolved "https://registry.yarnpkg.com/@looker/sdk/-/sdk-24.12.1.tgz#36cb94d6777406700079ca7be7da6de8e79b3613"
-  integrity sha512-Xls0eZ1s/nXXlVFKAOqfHIk1/2cI3PpeB7gAi+wzsAcO0ipHS6eTquJAAikBS8s/lhED5LLDTEMz2MikTgEzvw==
-  dependencies:
-    "@looker/sdk-rtl" "21.6.1"
     ini "^1.3.8"
     readable-stream "^3.4.0"
     request "^2.88.0"
