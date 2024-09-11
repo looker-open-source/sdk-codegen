@@ -1,5 +1,17 @@
 # Changelog
 
+## [24.16.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.14.0...sdk-codegen-all-v24.16.0) (2024-09-11)
+
+
+### Features
+
+* generate SDKs for Looker 24.16 ([#1499](https://github.com/looker-open-source/sdk-codegen/issues/1499)) ([109839d](https://github.com/looker-open-source/sdk-codegen/commit/109839d2d4fae10e7aeab088378bba5e2b368019))
+
+
+### Bug Fixes
+
+* Remove the requests package from the TypeScript SDK ([#1491](https://github.com/looker-open-source/sdk-codegen/issues/1491)) ([670377c](https://github.com/looker-open-source/sdk-codegen/commit/670377c46a546bbd8dcc6679b8aeb041da1b4670)), closes [#1439](https://github.com/looker-open-source/sdk-codegen/issues/1439)
+
 ## [24.14.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.12.1...sdk-codegen-all-v24.14.0) (2024-08-12)
 
 

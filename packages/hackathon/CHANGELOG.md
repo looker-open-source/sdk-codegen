@@ -237,6 +237,26 @@
     * @looker/sdk bumped from 24.12.1 to 24.14.0
     * @looker/wholly-artifact bumped from 0.1.21 to 0.1.22
 
+## [22.21.24](https://github.com/looker-open-source/sdk-codegen/compare/hackathon-v22.21.23...hackathon-v22.21.24) (2024-09-11)
+
+
+### Bug Fixes
+
+* Remove the requests package from the TypeScript SDK ([#1491](https://github.com/looker-open-source/sdk-codegen/issues/1491)) ([670377c](https://github.com/looker-open-source/sdk-codegen/commit/670377c46a546bbd8dcc6679b8aeb041da1b4670)), closes [#1439](https://github.com/looker-open-source/sdk-codegen/issues/1439)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from 0.1.31 to 0.1.32
+    * @looker/extension-sdk bumped from 24.14.0 to 24.16.0
+    * @looker/extension-sdk-react bumped from 24.14.0 to 24.16.0
+    * @looker/extension-utils bumped from 0.1.41 to 0.1.42
+    * @looker/sdk bumped from 24.14.0 to 24.16.0
+    * @looker/sdk-rtl bumped from 21.6.1 to 21.6.2
+    * @looker/wholly-artifact bumped from 0.1.22 to 0.1.23
+
 ## [22.21.0](https://github.com/looker-open-source/sdk-codegen/compare/hackathon-v22.20.1...hackathon-v22.21.0) (2023-02-22)
 
 ### Features

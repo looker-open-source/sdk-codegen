@@ -1,5 +1,22 @@
 # Changelog
 
+## [24.16.0](https://github.com/looker-open-source/sdk-codegen/compare/embed-services-v24.14.0...embed-services-v24.16.0) (2024-09-11)
+
+
+### Bug Fixes
+
+* Remove the requests package from the TypeScript SDK ([#1491](https://github.com/looker-open-source/sdk-codegen/issues/1491)) ([670377c](https://github.com/looker-open-source/sdk-codegen/commit/670377c46a546bbd8dcc6679b8aeb041da1b4670)), closes [#1439](https://github.com/looker-open-source/sdk-codegen/issues/1439)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from 21.6.1 to 21.6.2
+    * @looker/sdk bumped from 24.14.0 to 24.16.0
+  * devDependencies
+    * @looker/sdk-node bumped from 24.14.0 to 24.16.0
+
 ## [24.14.0](https://github.com/looker-open-source/sdk-codegen/compare/embed-services-v24.12.1...embed-services-v24.14.0) (2024-08-12)
 
 
