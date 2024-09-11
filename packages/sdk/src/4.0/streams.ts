@@ -25,7 +25,7 @@
  */
 
 /**
- * 465 API methods
+ * 466 API methods
  */
 
 import type {
@@ -62,6 +62,7 @@ import type {
   IContentMeta,
   IContentMetaGroupUser,
   IContentSearch,
+  IContentSummary,
   IContentValidation,
   IContentView,
   ICostEstimate,
@@ -177,6 +178,7 @@ import type {
   IRequestConnectionSchemas,
   IRequestConnectionSearchColumns,
   IRequestConnectionTables,
+  IRequestContentSummary,
   IRequestContentThumbnail,
   IRequestCreateDashboardElement,
   IRequestCreateDashboardRenderTask,
@@ -5341,6 +5343,42 @@ export class Looker40SDKStream extends APIMethods {
         offset: request.offset,
         page: request.page,
         per_page: request.per_page,
+      },
+      null,
+      options
+    );
+  }
+
+  /**
+   * ### Get Content Summary
+   *
+   * Retrieves a collection of content items related to user activity and engagement, such as recently viewed content,
+   * favorites and scheduled items.
+   *
+   * GET /content_summary -> IContentSummary[]
+   *
+   * @param callback streaming output function
+   * @param request composed interface "IRequestContentSummary" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  async content_summary(
+    callback: (response: Response) => Promise<IContentSummary[]>,
+    request: IRequestContentSummary,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<IContentSummary[]>(
+      callback,
+      'GET',
+      '/content_summary',
+      {
+        fields: request.fields,
+        limit: request.limit,
+        offset: request.offset,
+        target_group_id: request.target_group_id,
+        target_user_id: request.target_user_id,
+        target_content_type: request.target_content_type,
+        sorts: request.sorts,
       },
       null,
       options

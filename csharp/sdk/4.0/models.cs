@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 342 API models: 259 Spec, 0 Request, 61 Write, 22 Enum
+/// 343 API models: 260 Spec, 0 Request, 61 Write, 22 Enum
 
 #nullable enable
 using System;
@@ -594,6 +594,46 @@ public class ContentSearch : SdkModel
   /// <summary>Number of times the content has been viewed (read-only)</summary>
   public long? view_count { get; set; } = null;
   /// <summary>Preferred way of viewing the content (only applies to dashboards) (read-only)</summary>
+  public string? preferred_viewer { get; set; } = null;
+}
+
+public class ContentSummary : SdkModel
+{
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
+  public StringDictionary<bool>? can { get; set; } = null;
+  /// <summary>Unique id (read-only)</summary>
+  public string? id { get; set; } = null;
+  /// <summary>Content type (read-only)</summary>
+  public string? content_type { get; set; } = null;
+  /// <summary>Content id (read-only)</summary>
+  public string? content_id { get; set; } = null;
+  /// <summary>Content slug (read-only)</summary>
+  public string? content_slug { get; set; } = null;
+  /// <summary>Content title (read-only)</summary>
+  public string? title { get; set; } = null;
+  /// <summary>Content Description (read-only)</summary>
+  public string? description { get; set; } = null;
+  /// <summary>Last time viewed by current user (read-only)</summary>
+  public DateTime? last_viewed_at { get; set; } = null;
+  /// <summary>ID of user who created the content (read-only)</summary>
+  public string? user_id { get; set; } = null;
+  /// <summary>Full name of user who created the content (read-only)</summary>
+  public string? user_full_name { get; set; } = null;
+  /// <summary>If the content is scheduled by the current user (read-only)</summary>
+  public bool? is_scheduled { get; set; } = null;
+  /// <summary>Number of favorites (read-only)</summary>
+  public long? favorite_count { get; set; } = null;
+  /// <summary>Number of views (read-only)</summary>
+  public long? view_count { get; set; } = null;
+  /// <summary>Corresponding favorite id if item is favorited by current user (read-only)</summary>
+  public string? favorite_id { get; set; } = null;
+  /// <summary> (read-only)</summary>
+  public float? weighted_score { get; set; } = null;
+  /// <summary> (read-only)</summary>
+  public float? group_weighted_score { get; set; } = null;
+  /// <summary> (read-only)</summary>
+  public float? suggestion_score { get; set; } = null;
+  /// <summary>The preferred route for viewing this content (ie: dashboards or dashboards-next) (read-only)</summary>
   public string? preferred_viewer { get; set; } = null;
 }
 
@@ -4747,8 +4787,6 @@ public class ScheduledPlan : SdkModel
   public string? datagroup { get; set; } = null;
   /// <summary>Timezone for interpreting the specified crontab (default is Looker instance timezone)</summary>
   public string? timezone { get; set; } = null;
-  /// <summary>Query id</summary>
-  public string? query_id { get; set; } = null;
   /// <summary>Scheduled plan destinations</summary>
   public ScheduledPlanDestination[]? scheduled_plan_destination { get; set; } = null;
   /// <summary>Whether the plan in question should only be run once (usually for testing)</summary>
@@ -4775,6 +4813,8 @@ public class ScheduledPlan : SdkModel
   public bool? long_tables { get; set; } = null;
   /// <summary>The pixel width at which we render the inline table visualizations</summary>
   public long? inline_table_width { get; set; } = null;
+  /// <summary>Query id</summary>
+  public string? query_id { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
   public string? id { get; set; } = null;
   /// <summary>Date and time when ScheduledPlan was created (read-only)</summary>
@@ -6928,8 +6968,6 @@ public class WriteScheduledPlan : SdkModel
   public string? datagroup { get; set; } = null;
   /// <summary>Timezone for interpreting the specified crontab (default is Looker instance timezone)</summary>
   public string? timezone { get; set; } = null;
-  /// <summary>Query id</summary>
-  public string? query_id { get; set; } = null;
   /// <summary>Scheduled plan destinations</summary>
   public ScheduledPlanDestination[]? scheduled_plan_destination { get; set; } = null;
   /// <summary>Whether the plan in question should only be run once (usually for testing)</summary>
@@ -6956,6 +6994,8 @@ public class WriteScheduledPlan : SdkModel
   public bool? long_tables { get; set; } = null;
   /// <summary>The pixel width at which we render the inline table visualizations</summary>
   public long? inline_table_width { get; set; } = null;
+  /// <summary>Query id</summary>
+  public string? query_id { get; set; } = null;
 }
 
 /// Dynamic writeable type for SessionConfig removes:

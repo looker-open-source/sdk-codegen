@@ -25,7 +25,7 @@
  */
 
 /**
- * 465 API methods
+ * 466 API methods
  */
 
 
@@ -3883,6 +3883,50 @@ open class LookerSDK: APIMethods {
         let path_terms = encodeParam(terms)
         let result: SDKResponse<[ContentSearch], SDKError> = self.get("/content/\(path_terms)", 
             ["fields": fields, "types": types, "limit": limit, "offset": offset, "page": page, "per_page": per_page], nil, options)
+        return result
+    }
+
+    /**
+     * ### Get Content Summary
+     *
+     * Retrieves a collection of content items related to user activity and engagement, such as recently viewed content,
+     * favorites and scheduled items.
+     *
+     * GET /content_summary -> [ContentSummary]
+     */
+    public func content_summary(
+        /**
+         * @param {String} fields Comma-delimited names of fields to return in responses. Omit for all fields
+         */
+        fields: String? = nil,
+        /**
+         * @param {Int64} limit Number of results to return. (used with offset)
+         */
+        limit: Int64? = nil,
+        /**
+         * @param {Int64} offset Number of results to skip before returning any. (used with limit)
+         */
+        offset: Int64? = nil,
+        /**
+         * @param {String} target_group_id Match group id
+         */
+        target_group_id: String? = nil,
+        /**
+         * @param {String} target_user_id Match user id
+         */
+        target_user_id: String? = nil,
+        /**
+         * @param {String} target_content_type Content type to match, options are: look, dashboard. Can be provided as a comma delimited list.
+         */
+        target_content_type: String? = nil,
+        /**
+         * @param {String} sorts Fields to sort by
+         */
+        sorts: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<[ContentSummary], SDKError> {
+        let result: SDKResponse<[ContentSummary], SDKError> = self.get("/content_summary", 
+            ["fields": fields, "limit": limit, "offset": offset, "target_group_id": target_group_id, "target_user_id": target_user_id, "target_content_type": target_content_type, "sorts": sorts], nil, options)
         return result
     }
 

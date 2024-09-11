@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 465 API methods
+/// 466 API methods
 
 #nullable enable
 using System;
@@ -3379,6 +3379,42 @@ namespace Looker.SDK.API40
       { "offset", offset },
       { "page", page },
       { "per_page", per_page }},null,options);
+  }
+
+  /// ### Get Content Summary
+  ///
+  /// Retrieves a collection of content items related to user activity and engagement, such as recently viewed content,
+  /// favorites and scheduled items.
+  ///
+  /// GET /content_summary -> ContentSummary[]
+  ///
+  /// <returns><c>ContentSummary[]</c> Content Summary (application/json)</returns>
+  ///
+  /// <param name="fields">Comma-delimited names of fields to return in responses. Omit for all fields</param>
+  /// <param name="limit">Number of results to return. (used with offset)</param>
+  /// <param name="offset">Number of results to skip before returning any. (used with limit)</param>
+  /// <param name="target_group_id">Match group id</param>
+  /// <param name="target_user_id">Match user id</param>
+  /// <param name="target_content_type">Content type to match, options are: look, dashboard. Can be provided as a comma delimited list.</param>
+  /// <param name="sorts">Fields to sort by</param>
+  public async Task<SdkResponse<ContentSummary[], Exception>> content_summary(
+    string? fields = null,
+    long? limit = null,
+    long? offset = null,
+    string? target_group_id = null,
+    string? target_user_id = null,
+    string? target_content_type = null,
+    string? sorts = null,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<ContentSummary[], Exception>(HttpMethod.Get, "/content_summary", new Values {
+      { "fields", fields },
+      { "limit", limit },
+      { "offset", offset },
+      { "target_group_id", target_group_id },
+      { "target_user_id", target_user_id },
+      { "target_content_type", target_content_type },
+      { "sorts", sorts }},null,options);
   }
 
   /// ### Get an image representing the contents of a dashboard or look.
