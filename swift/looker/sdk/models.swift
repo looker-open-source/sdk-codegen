@@ -25,7 +25,7 @@
  */
 
 /**
- * 342 API models: 259 Spec, 0 Request, 61 Write, 22 Enum
+ * 343 API models: 260 Spec, 0 Request, 61 Write, 22 Enum
  */
 
 
@@ -2288,6 +2288,189 @@ public struct ContentSearch: SDKModel {
         self._folder_id = folder_id.map(AnyString.init)
         self._folder_name = folder_name.map(AnyString.init)
         self._view_count = view_count.map(AnyInt.init)
+        self._preferred_viewer = preferred_viewer.map(AnyString.init)
+    }
+
+}
+
+public struct ContentSummary: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _id = "id"
+        case _content_type = "content_type"
+        case _content_id = "content_id"
+        case _content_slug = "content_slug"
+        case _title = "title"
+        case _description = "description"
+        case last_viewed_at
+        case _user_id = "user_id"
+        case _user_full_name = "user_full_name"
+        case is_scheduled
+        case _favorite_count = "favorite_count"
+        case _view_count = "view_count"
+        case _favorite_id = "favorite_id"
+        case weighted_score
+        case group_weighted_score
+        case suggestion_score
+        case _preferred_viewer = "preferred_viewer"
+    }
+    /**
+     * Operations the current user is able to perform on this object (read-only)
+     */
+    public var can: StringDictionary<Bool>?
+
+    private var _id: AnyString?
+    /**
+     * Unique id (read-only)
+     */
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
+    private var _content_type: AnyString?
+    /**
+     * Content type (read-only)
+     */
+    public var content_type: String? {
+        get { _content_type?.value }
+        set { _content_type = newValue.map(AnyString.init) }
+    }
+
+    private var _content_id: AnyString?
+    /**
+     * Content id (read-only)
+     */
+    public var content_id: String? {
+        get { _content_id?.value }
+        set { _content_id = newValue.map(AnyString.init) }
+    }
+
+    private var _content_slug: AnyString?
+    /**
+     * Content slug (read-only)
+     */
+    public var content_slug: String? {
+        get { _content_slug?.value }
+        set { _content_slug = newValue.map(AnyString.init) }
+    }
+
+    private var _title: AnyString?
+    /**
+     * Content title (read-only)
+     */
+    public var title: String? {
+        get { _title?.value }
+        set { _title = newValue.map(AnyString.init) }
+    }
+
+    private var _description: AnyString?
+    /**
+     * Content Description (read-only)
+     */
+    public var description: String? {
+        get { _description?.value }
+        set { _description = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Last time viewed by current user (read-only)
+     */
+    public var last_viewed_at: Date?
+
+    private var _user_id: AnyString?
+    /**
+     * ID of user who created the content (read-only)
+     */
+    public var user_id: String? {
+        get { _user_id?.value }
+        set { _user_id = newValue.map(AnyString.init) }
+    }
+
+    private var _user_full_name: AnyString?
+    /**
+     * Full name of user who created the content (read-only)
+     */
+    public var user_full_name: String? {
+        get { _user_full_name?.value }
+        set { _user_full_name = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * If the content is scheduled by the current user (read-only)
+     */
+    public var is_scheduled: Bool?
+
+    private var _favorite_count: AnyInt?
+    /**
+     * Number of favorites (read-only)
+     */
+    public var favorite_count: Int64? {
+        get { _favorite_count?.value }
+        set { _favorite_count = newValue.map(AnyInt.init) }
+    }
+
+    private var _view_count: AnyInt?
+    /**
+     * Number of views (read-only)
+     */
+    public var view_count: Int64? {
+        get { _view_count?.value }
+        set { _view_count = newValue.map(AnyInt.init) }
+    }
+
+    private var _favorite_id: AnyString?
+    /**
+     * Corresponding favorite id if item is favorited by current user (read-only)
+     */
+    public var favorite_id: String? {
+        get { _favorite_id?.value }
+        set { _favorite_id = newValue.map(AnyString.init) }
+    }
+
+    /**
+     *  (read-only)
+     */
+    public var weighted_score: Float?
+
+    /**
+     *  (read-only)
+     */
+    public var group_weighted_score: Float?
+
+    /**
+     *  (read-only)
+     */
+    public var suggestion_score: Float?
+
+    private var _preferred_viewer: AnyString?
+    /**
+     * The preferred route for viewing this content (ie: dashboards or dashboards-next) (read-only)
+     */
+    public var preferred_viewer: String? {
+        get { _preferred_viewer?.value }
+        set { _preferred_viewer = newValue.map(AnyString.init) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, content_type: String? = nil, content_id: String? = nil, content_slug: String? = nil, title: String? = nil, description: String? = nil, last_viewed_at: Date? = nil, user_id: String? = nil, user_full_name: String? = nil, is_scheduled: Bool? = nil, favorite_count: Int64? = nil, view_count: Int64? = nil, favorite_id: String? = nil, weighted_score: Float? = nil, group_weighted_score: Float? = nil, suggestion_score: Float? = nil, preferred_viewer: String? = nil) {
+        self.can = can
+        self._id = id.map(AnyString.init)
+        self._content_type = content_type.map(AnyString.init)
+        self._content_id = content_id.map(AnyString.init)
+        self._content_slug = content_slug.map(AnyString.init)
+        self._title = title.map(AnyString.init)
+        self._description = description.map(AnyString.init)
+        self.last_viewed_at = last_viewed_at
+        self._user_id = user_id.map(AnyString.init)
+        self._user_full_name = user_full_name.map(AnyString.init)
+        self.is_scheduled = is_scheduled
+        self._favorite_count = favorite_count.map(AnyInt.init)
+        self._view_count = view_count.map(AnyInt.init)
+        self._favorite_id = favorite_id.map(AnyString.init)
+        self.weighted_score = weighted_score
+        self.group_weighted_score = group_weighted_score
+        self.suggestion_score = suggestion_score
         self._preferred_viewer = preferred_viewer.map(AnyString.init)
     }
 
@@ -19643,7 +19826,6 @@ public struct ScheduledPlan: SDKModel {
         case _crontab = "crontab"
         case _datagroup = "datagroup"
         case _timezone = "timezone"
-        case _query_id = "query_id"
         case scheduled_plan_destination
         case run_once
         case include_links
@@ -19657,6 +19839,7 @@ public struct ScheduledPlan: SDKModel {
         case _color_theme = "color_theme"
         case long_tables
         case _inline_table_width = "inline_table_width"
+        case _query_id = "query_id"
         case _id = "id"
         case created_at
         case updated_at
@@ -19786,15 +19969,6 @@ public struct ScheduledPlan: SDKModel {
         set { _timezone = newValue.map(AnyString.init) }
     }
 
-    private var _query_id: AnyString?
-    /**
-     * Query id
-     */
-    public var query_id: String? {
-        get { _query_id?.value }
-        set { _query_id = newValue.map(AnyString.init) }
-    }
-
     /**
      * Scheduled plan destinations
      */
@@ -19884,6 +20058,15 @@ public struct ScheduledPlan: SDKModel {
         set { _inline_table_width = newValue.map(AnyInt.init) }
     }
 
+    private var _query_id: AnyString?
+    /**
+     * Query id
+     */
+    public var query_id: String? {
+        get { _query_id?.value }
+        set { _query_id = newValue.map(AnyString.init) }
+    }
+
     private var _id: AnyString?
     /**
      * Unique Id (read-only)
@@ -19929,7 +20112,7 @@ public struct ScheduledPlan: SDKModel {
      */
     public var can: StringDictionary<Bool>?
 
-    public init(name: String? = nil, user_id: String? = nil, run_as_recipient: Bool? = nil, enabled: Bool? = nil, look_id: String? = nil, dashboard_id: String? = nil, lookml_dashboard_id: String? = nil, filters_string: String? = nil, dashboard_filters: String? = nil, require_results: Bool? = nil, require_no_results: Bool? = nil, require_change: Bool? = nil, send_all_results: Bool? = nil, crontab: String? = nil, datagroup: String? = nil, timezone: String? = nil, query_id: String? = nil, scheduled_plan_destination: [ScheduledPlanDestination]? = nil, run_once: Bool? = nil, include_links: Bool? = nil, custom_url_base: String? = nil, custom_url_params: String? = nil, custom_url_label: String? = nil, show_custom_url: Bool? = nil, pdf_paper_size: String? = nil, pdf_landscape: Bool? = nil, embed: Bool? = nil, color_theme: String? = nil, long_tables: Bool? = nil, inline_table_width: Int64? = nil, id: String? = nil, created_at: Date? = nil, updated_at: Date? = nil, title: String? = nil, user: UserPublic? = nil, next_run_at: Date? = nil, last_run_at: Date? = nil, can: StringDictionary<Bool>? = nil) {
+    public init(name: String? = nil, user_id: String? = nil, run_as_recipient: Bool? = nil, enabled: Bool? = nil, look_id: String? = nil, dashboard_id: String? = nil, lookml_dashboard_id: String? = nil, filters_string: String? = nil, dashboard_filters: String? = nil, require_results: Bool? = nil, require_no_results: Bool? = nil, require_change: Bool? = nil, send_all_results: Bool? = nil, crontab: String? = nil, datagroup: String? = nil, timezone: String? = nil, scheduled_plan_destination: [ScheduledPlanDestination]? = nil, run_once: Bool? = nil, include_links: Bool? = nil, custom_url_base: String? = nil, custom_url_params: String? = nil, custom_url_label: String? = nil, show_custom_url: Bool? = nil, pdf_paper_size: String? = nil, pdf_landscape: Bool? = nil, embed: Bool? = nil, color_theme: String? = nil, long_tables: Bool? = nil, inline_table_width: Int64? = nil, query_id: String? = nil, id: String? = nil, created_at: Date? = nil, updated_at: Date? = nil, title: String? = nil, user: UserPublic? = nil, next_run_at: Date? = nil, last_run_at: Date? = nil, can: StringDictionary<Bool>? = nil) {
         self._name = name.map(AnyString.init)
         self._user_id = user_id.map(AnyString.init)
         self.run_as_recipient = run_as_recipient
@@ -19946,7 +20129,6 @@ public struct ScheduledPlan: SDKModel {
         self._crontab = crontab.map(AnyString.init)
         self._datagroup = datagroup.map(AnyString.init)
         self._timezone = timezone.map(AnyString.init)
-        self._query_id = query_id.map(AnyString.init)
         self.scheduled_plan_destination = scheduled_plan_destination
         self.run_once = run_once
         self.include_links = include_links
@@ -19960,6 +20142,7 @@ public struct ScheduledPlan: SDKModel {
         self._color_theme = color_theme.map(AnyString.init)
         self.long_tables = long_tables
         self._inline_table_width = inline_table_width.map(AnyInt.init)
+        self._query_id = query_id.map(AnyString.init)
         self._id = id.map(AnyString.init)
         self.created_at = created_at
         self.updated_at = updated_at
@@ -28142,7 +28325,6 @@ public struct WriteScheduledPlan: SDKModel {
         case _crontab = "crontab"
         case _datagroup = "datagroup"
         case _timezone = "timezone"
-        case _query_id = "query_id"
         case scheduled_plan_destination
         case run_once
         case include_links
@@ -28156,6 +28338,7 @@ public struct WriteScheduledPlan: SDKModel {
         case _color_theme = "color_theme"
         case long_tables
         case _inline_table_width = "inline_table_width"
+        case _query_id = "query_id"
     }
     private var _name: AnyString?
     /**
@@ -28277,15 +28460,6 @@ public struct WriteScheduledPlan: SDKModel {
         set { _timezone = newValue.map(AnyString.init) }
     }
 
-    private var _query_id: AnyString?
-    /**
-     * Query id
-     */
-    public var query_id: String? {
-        get { _query_id?.value }
-        set { _query_id = newValue.map(AnyString.init) }
-    }
-
     /**
      * Scheduled plan destinations
      */
@@ -28375,7 +28549,16 @@ public struct WriteScheduledPlan: SDKModel {
         set { _inline_table_width = newValue.map(AnyInt.init) }
     }
 
-    public init(name: String? = nil, user_id: String? = nil, run_as_recipient: Bool? = nil, enabled: Bool? = nil, look_id: String? = nil, dashboard_id: String? = nil, lookml_dashboard_id: String? = nil, filters_string: String? = nil, dashboard_filters: String? = nil, require_results: Bool? = nil, require_no_results: Bool? = nil, require_change: Bool? = nil, send_all_results: Bool? = nil, crontab: String? = nil, datagroup: String? = nil, timezone: String? = nil, query_id: String? = nil, scheduled_plan_destination: [ScheduledPlanDestination]? = nil, run_once: Bool? = nil, include_links: Bool? = nil, custom_url_base: String? = nil, custom_url_params: String? = nil, custom_url_label: String? = nil, show_custom_url: Bool? = nil, pdf_paper_size: String? = nil, pdf_landscape: Bool? = nil, embed: Bool? = nil, color_theme: String? = nil, long_tables: Bool? = nil, inline_table_width: Int64? = nil) {
+    private var _query_id: AnyString?
+    /**
+     * Query id
+     */
+    public var query_id: String? {
+        get { _query_id?.value }
+        set { _query_id = newValue.map(AnyString.init) }
+    }
+
+    public init(name: String? = nil, user_id: String? = nil, run_as_recipient: Bool? = nil, enabled: Bool? = nil, look_id: String? = nil, dashboard_id: String? = nil, lookml_dashboard_id: String? = nil, filters_string: String? = nil, dashboard_filters: String? = nil, require_results: Bool? = nil, require_no_results: Bool? = nil, require_change: Bool? = nil, send_all_results: Bool? = nil, crontab: String? = nil, datagroup: String? = nil, timezone: String? = nil, scheduled_plan_destination: [ScheduledPlanDestination]? = nil, run_once: Bool? = nil, include_links: Bool? = nil, custom_url_base: String? = nil, custom_url_params: String? = nil, custom_url_label: String? = nil, show_custom_url: Bool? = nil, pdf_paper_size: String? = nil, pdf_landscape: Bool? = nil, embed: Bool? = nil, color_theme: String? = nil, long_tables: Bool? = nil, inline_table_width: Int64? = nil, query_id: String? = nil) {
         self._name = name.map(AnyString.init)
         self._user_id = user_id.map(AnyString.init)
         self.run_as_recipient = run_as_recipient
@@ -28392,7 +28575,6 @@ public struct WriteScheduledPlan: SDKModel {
         self._crontab = crontab.map(AnyString.init)
         self._datagroup = datagroup.map(AnyString.init)
         self._timezone = timezone.map(AnyString.init)
-        self._query_id = query_id.map(AnyString.init)
         self.scheduled_plan_destination = scheduled_plan_destination
         self.run_once = run_once
         self.include_links = include_links
@@ -28406,6 +28588,7 @@ public struct WriteScheduledPlan: SDKModel {
         self._color_theme = color_theme.map(AnyString.init)
         self.long_tables = long_tables
         self._inline_table_width = inline_table_width.map(AnyInt.init)
+        self._query_id = query_id.map(AnyString.init)
     }
 
 }

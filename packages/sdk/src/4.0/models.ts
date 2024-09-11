@@ -25,7 +25,7 @@
  */
 
 /**
- * 409 API models: 259 Spec, 67 Request, 61 Write, 22 Enum
+ * 411 API models: 260 Spec, 68 Request, 61 Write, 22 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl';
@@ -944,6 +944,81 @@ export interface IContentSearch {
   view_count?: number | null;
   /**
    * Preferred way of viewing the content (only applies to dashboards) (read-only)
+   */
+  preferred_viewer?: string | null;
+}
+
+export interface IContentSummary {
+  /**
+   * Operations the current user is able to perform on this object (read-only)
+   */
+  can?: IDictionary<boolean>;
+  /**
+   * Unique id (read-only)
+   */
+  id?: string;
+  /**
+   * Content type (read-only)
+   */
+  content_type?: string | null;
+  /**
+   * Content id (read-only)
+   */
+  content_id?: string | null;
+  /**
+   * Content slug (read-only)
+   */
+  content_slug?: string | null;
+  /**
+   * Content title (read-only)
+   */
+  title?: string | null;
+  /**
+   * Content Description (read-only)
+   */
+  description?: string | null;
+  /**
+   * Last time viewed by current user (read-only)
+   */
+  last_viewed_at?: Date | null;
+  /**
+   * ID of user who created the content (read-only)
+   */
+  user_id?: string | null;
+  /**
+   * Full name of user who created the content (read-only)
+   */
+  user_full_name?: string | null;
+  /**
+   * If the content is scheduled by the current user (read-only)
+   */
+  is_scheduled?: boolean;
+  /**
+   * Number of favorites (read-only)
+   */
+  favorite_count?: number | null;
+  /**
+   * Number of views (read-only)
+   */
+  view_count?: number | null;
+  /**
+   * Corresponding favorite id if item is favorited by current user (read-only)
+   */
+  favorite_id?: string | null;
+  /**
+   *  (read-only)
+   */
+  weighted_score?: number | null;
+  /**
+   *  (read-only)
+   */
+  group_weighted_score?: number | null;
+  /**
+   *  (read-only)
+   */
+  suggestion_score?: number | null;
+  /**
+   * The preferred route for viewing this content (ie: dashboards or dashboards-next) (read-only)
    */
   preferred_viewer?: string | null;
 }
@@ -7929,6 +8004,40 @@ export interface IRequestConnectionTables {
 }
 
 /**
+ * Dynamically generated request type for content_summary
+ */
+export interface IRequestContentSummary {
+  /**
+   * Comma-delimited names of fields to return in responses. Omit for all fields
+   */
+  fields?: string | null;
+  /**
+   * Number of results to return. (used with offset)
+   */
+  limit?: number | null;
+  /**
+   * Number of results to skip before returning any. (used with limit)
+   */
+  offset?: number | null;
+  /**
+   * Match group id
+   */
+  target_group_id?: string | null;
+  /**
+   * Match user id
+   */
+  target_user_id?: string | null;
+  /**
+   * Content type to match, options are: look, dashboard. Can be provided as a comma delimited list.
+   */
+  target_content_type?: string | null;
+  /**
+   * Fields to sort by
+   */
+  sorts?: string | null;
+}
+
+/**
  * Dynamically generated request type for content_thumbnail
  */
 export interface IRequestContentThumbnail {
@@ -10337,10 +10446,6 @@ export interface IScheduledPlan {
    */
   timezone?: string | null;
   /**
-   * Query id
-   */
-  query_id?: string | null;
-  /**
    * Scheduled plan destinations
    */
   scheduled_plan_destination?: IScheduledPlanDestination[] | null;
@@ -10392,6 +10497,10 @@ export interface IScheduledPlan {
    * The pixel width at which we render the inline table visualizations
    */
   inline_table_width?: number | null;
+  /**
+   * Query id
+   */
+  query_id?: string | null;
   /**
    * Unique Id (read-only)
    */
@@ -13964,10 +14073,6 @@ export interface IWriteScheduledPlan {
    */
   timezone?: string | null;
   /**
-   * Query id
-   */
-  query_id?: string | null;
-  /**
    * Scheduled plan destinations
    */
   scheduled_plan_destination?: IScheduledPlanDestination[] | null;
@@ -14019,6 +14124,10 @@ export interface IWriteScheduledPlan {
    * The pixel width at which we render the inline table visualizations
    */
   inline_table_width?: number | null;
+  /**
+   * Query id
+   */
+  query_id?: string | null;
 }
 
 /**

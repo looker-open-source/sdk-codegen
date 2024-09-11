@@ -232,6 +232,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     * @looker/sdk-codegen-scripts bumped from 21.5.20 to 21.5.21
     * @looker/sdk-node bumped from 24.12.1 to 24.14.0
 
+## [0.9.65](https://github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.64...api-explorer-v0.9.65) (2024-09-11)
+
+
+### Bug Fixes
+
+* Remove the requests package from the TypeScript SDK ([#1491](https://github.com/looker-open-source/sdk-codegen/issues/1491)) ([670377c](https://github.com/looker-open-source/sdk-codegen/commit/670377c46a546bbd8dcc6679b8aeb041da1b4670)), closes [#1439](https://github.com/looker-open-source/sdk-codegen/issues/1439)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from 0.1.31 to 0.1.32
+    * @looker/extension-utils bumped from 0.1.41 to 0.1.42
+    * @looker/run-it bumped from 0.9.64 to 0.9.65
+    * @looker/sdk bumped from 24.14.0 to 24.16.0
+    * @looker/sdk-codegen bumped from 21.9.0 to 21.9.1
+    * @looker/sdk-rtl bumped from 21.6.1 to 21.6.2
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from 21.5.21 to 21.5.22
+    * @looker/sdk-node bumped from 24.14.0 to 24.16.0
+
 ## [0.9.47](https://github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.46...api-explorer-v0.9.47) (2023-05-11)
 
 ### Features

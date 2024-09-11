@@ -25,7 +25,7 @@
  */
 
 /**
- * 465 API methods
+ * 466 API methods
  */
 
 import type {
@@ -60,6 +60,7 @@ import type {
   IContentMeta,
   IContentMetaGroupUser,
   IContentSearch,
+  IContentSummary,
   IContentValidation,
   IContentView,
   ICostEstimate,
@@ -176,6 +177,7 @@ import type {
   IRequestConnectionSchemas,
   IRequestConnectionSearchColumns,
   IRequestConnectionTables,
+  IRequestContentSummary,
   IRequestContentThumbnail,
   IRequestCreateDashboardElement,
   IRequestCreateDashboardRenderTask,
@@ -3410,6 +3412,23 @@ export interface ILooker40SDK extends IAPIMethods {
   ): Promise<SDKResponse<IContentSearch[], IError>>;
 
   /**
+   * ### Get Content Summary
+   *
+   * Retrieves a collection of content items related to user activity and engagement, such as recently viewed content,
+   * favorites and scheduled items.
+   *
+   * GET /content_summary -> IContentSummary[]
+   *
+   * @param request composed interface "IRequestContentSummary" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  content_summary(
+    request: IRequestContentSummary,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IContentSummary[], IError | IValidationError>>;
+
+  /**
    * ### Get an image representing the contents of a dashboard or look.
    *
    * The returned thumbnail is an abstract representation of the contents of a dashboard or look and does not
@@ -4385,7 +4404,7 @@ export interface ILooker40SDK extends IAPIMethods {
   delete_folder(
     folder_id: string,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<string, IError>>;
+  ): Promise<SDKResponse<string, IError | IValidationError>>;
 
   /**
    * ### Get information about all folders.
