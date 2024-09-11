@@ -1,5 +1,12 @@
 # Changelog
 
+## [24.16.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.16.0...sdk-codegen-all-v24.16.1) (2024-09-11)
+
+
+### Miscellaneous Chores
+
+* fix lockfile ([#1500](https://github.com/looker-open-source/sdk-codegen/issues/1500)) ([7db8cd8](https://github.com/looker-open-source/sdk-codegen/commit/7db8cd8e7260d380978a148aa45288e2e58b98e0))
+
 ## [24.16.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.14.0...sdk-codegen-all-v24.16.0) (2024-09-11)
 
 
