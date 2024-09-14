@@ -1,5 +1,12 @@
 # Changelog
 
+## [24.16.2](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.16.1...sdk-codegen-all-v24.16.2) (2024-09-14)
+
+
+### Bug Fixes
+
+* fix release 24.16.2 ([#1505](https://github.com/looker-open-source/sdk-codegen/issues/1505)) ([1cd1806](https://github.com/looker-open-source/sdk-codegen/commit/1cd180615901d2daf1fb112b41f2a72d2caacf61))
+
 ## [24.16.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.16.0...sdk-codegen-all-v24.16.1) (2024-09-11)
 
 
