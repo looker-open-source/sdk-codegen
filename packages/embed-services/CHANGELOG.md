@@ -1,5 +1,22 @@
 # Changelog
 
+## [24.16.1](https://github.com/looker-open-source/sdk-codegen/compare/embed-services-v24.16.0...embed-services-v24.16.1) (2024-09-14)
+
+
+### Bug Fixes
+
+* fix release 24.16.2 ([#1505](https://github.com/looker-open-source/sdk-codegen/issues/1505)) ([1cd1806](https://github.com/looker-open-source/sdk-codegen/commit/1cd180615901d2daf1fb112b41f2a72d2caacf61))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from 21.6.2 to 21.6.3
+    * @looker/sdk bumped from 24.16.0 to 24.16.1
+  * devDependencies
+    * @looker/sdk-node bumped from 24.16.0 to 24.16.1
+
 ## [24.16.0](https://github.com/looker-open-source/sdk-codegen/compare/embed-services-v24.14.0...embed-services-v24.16.0) (2024-09-11)
 
 
