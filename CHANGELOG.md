@@ -1,5 +1,12 @@
 # Changelog
 
+## [24.17.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.16.2...sdk-codegen-all-v24.17.0) (2024-09-16)
+
+
+### Features
+
+* allow node 20 for the TS SDK ([#1506](https://github.com/looker-open-source/sdk-codegen/issues/1506)) ([d4deac4](https://github.com/looker-open-source/sdk-codegen/commit/d4deac485ff3bf748924ab747a6aee0d47581e10))
+
 ## [24.16.2](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.16.1...sdk-codegen-all-v24.16.2) (2024-09-14)
 
 

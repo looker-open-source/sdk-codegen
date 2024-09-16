@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [24.16.2](https://github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v24.16.1...looker_sdk-v24.16.2) (2024-09-16)
+
+
+### Miscellaneous Chores
+
+* **looker_sdk:** Synchronize undefined versions
+
 ## [24.16.1](https://github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v24.16.0...looker_sdk-v24.16.1) (2024-09-14)
 
 

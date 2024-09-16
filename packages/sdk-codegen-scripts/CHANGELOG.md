@@ -151,6 +151,15 @@
     * @looker/sdk-codegen bumped from 21.8.2 to 21.9.0
     * @looker/sdk-node bumped from 24.12.1 to 24.14.0
 
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from 24.16.1 to 24.16.2
+    * @looker/sdk-codegen bumped from 21.9.2 to 21.9.3
+    * @looker/sdk-codegen-utils bumped from 21.0.13 to 21.0.14
+    * @looker/sdk-node bumped from 24.16.1 to 24.16.2
+
 ## [21.5.23](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.5.22...sdk-codegen-scripts-v21.5.23) (2024-09-14)
 
 

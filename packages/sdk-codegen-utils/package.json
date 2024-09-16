@@ -1,6 +1,6 @@
 {
   "name": "@looker/sdk-codegen-utils",
-  "version": "21.0.13",
+  "version": "21.0.14",
   "description": "Looker SDK Codegen utils",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -32,8 +32,8 @@
   },
   "devDependencies": {
     "@looker/sdk-rtl": "21.6.3",
-    "@looker/sdk": "24.16.1",
-    "@looker/sdk-node": "24.16.1",
+    "@looker/sdk": "24.16.2",
+    "@looker/sdk-node": "24.16.2",
     "@manypkg/find-root": "2.2.1",
     "@types/js-yaml": "4.0.9",
     "lodash": "4.17.21",
