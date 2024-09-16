@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [24.16.2](https://github.com/looker-open-source/sdk-codegen/compare/sdk-node-v24.16.1...sdk-node-v24.16.2) (2024-09-16)
+
+
+### Features
+
+* allow node 20 for the TS SDK ([#1506](https://github.com/looker-open-source/sdk-codegen/issues/1506)) ([d4deac4](https://github.com/looker-open-source/sdk-codegen/commit/d4deac485ff3bf748924ab747a6aee0d47581e10))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from 24.16.1 to 24.16.2
+
 ## [24.16.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-node-v24.16.0...sdk-node-v24.16.1) (2024-09-14)
 
 

@@ -64,6 +64,14 @@
     * @looker/extension-sdk-react bumped from 24.12.1 to 24.14.0
     * @looker/sdk bumped from 24.12.1 to 24.14.0
 
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-sdk bumped from 24.16.1 to 24.16.2
+    * @looker/extension-sdk-react bumped from 24.16.1 to 24.16.2
+    * @looker/sdk bumped from 24.16.1 to 24.16.2
+
 ## [1.1.10](https://github.com/looker-open-source/sdk-codegen/compare/extension-tile-playground-v1.1.9...extension-tile-playground-v1.1.10) (2024-09-14)
 
 
