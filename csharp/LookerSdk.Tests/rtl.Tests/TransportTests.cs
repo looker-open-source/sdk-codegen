@@ -1,10 +1,9 @@
 using System;
 using System.Net;
 using System.Net.Http;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Looker.RTL;
-using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.ObjectModel;
+using Newtonsoft.Json;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -62,7 +61,7 @@ namespace sdkrtl.Tests
             var content = actual.Body.ToString();
             Assert.NotNull(content);
             Assert.Contains("looker_release_version", content);
-            var json = JsonSerializer.Deserialize<Values>(content);
+            var json = JsonConvert.DeserializeObject<Values>(content);
             Assert.Equal(json.Keys, _versionKeys);
         }
 
