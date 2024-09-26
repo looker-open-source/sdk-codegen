@@ -1,13 +1,13 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Looker.RTL
 {
@@ -19,16 +19,18 @@ namespace Looker.RTL
     public interface ITransportSettings
     {
         /// base URL of API REST web service
-        string BaseUrl { get; set; }
+        string BaseUrl { get; }
 
         /// whether to verify ssl certs or not. Defaults to true
-        bool VerifySsl { get; set; }
+        bool VerifySsl { get; }
 
         /// request timeout in seconds. Default to 30
-        int Timeout { get; set; }
+        int Timeout { get; }
 
         /// agent tag to use for the SDK requests
         string AgentTag { get; set; }
+
+        IDictionary<string, string> Headers { get; }
     }
 
     /// <summary>
@@ -154,7 +156,7 @@ namespace Looker.RTL
     /// <summary>
     /// HTPP request processor
     /// </summary>
-    public class Transport : ITransport, ITransportSettings
+    public class Transport : ITransport
     {
         private readonly HttpClient _client;
         private readonly ITransportSettings _settings;
@@ -188,7 +190,7 @@ namespace Looker.RTL
                 || path.StartsWith("https:", StringComparison.InvariantCultureIgnoreCase))
                 return SdkUtils.AddQueryParams(path, queryParams);
             // TODO I don't think authenticator is needed here any more?
-            return SdkUtils.AddQueryParams($"{BaseUrl}{path}", queryParams);
+            return SdkUtils.AddQueryParams($"{_settings.BaseUrl}{path}", queryParams);
         }
 
         private static RawResponse InitRawResponse(HttpResponseMessage response)
@@ -225,6 +227,26 @@ namespace Looker.RTL
             var request = new HttpRequestMessage(method,
                 url);
             request.Headers.Add(Constants.LookerAppiId, _settings.AgentTag);
+            foreach(var h in _settings.Headers)
+            {
+                if (request.Headers.Contains(h.Key))
+                {
+                    request.Headers.Remove(h.Key);
+                }
+                request.Headers.Add(h.Key, h.Value);
+            }
+            if (options != null)
+            {
+                foreach (var h in options.Headers)
+                {
+                    if (request.Headers.Contains(h.Key))
+                    {
+                        request.Headers.Remove(h.Key);
+                    }
+                    request.Headers.Add(h.Key, h.Value);
+                }
+            }
+
             if (body != null)
             {
                 if (body is string)
@@ -238,7 +260,7 @@ namespace Looker.RTL
                 {
                     request.Content =
                         new StringContent(
-                            JsonSerializer.Serialize(body, new JsonSerializerOptions { IgnoreNullValues = true }),
+                            JsonConvert.SerializeObject(body, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }),
                             Encoding.UTF8,
                             "application/json");
                 }
@@ -250,27 +272,30 @@ namespace Looker.RTL
             try
             {
                 response = await _client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
                 result = InitRawResponse(response);
                 // if (response.IsSuccessStatusCode)
-                await using var stream = await response.Content.ReadAsStreamAsync();
-                // Simple content conversion here to make body easily readable in consumers
-                switch (SdkUtils.ResponseMode(result.ContentType))
+                using (var stream = await response.Content.ReadAsStreamAsync())
                 {
-                    case ResponseMode.Binary:
-                        result.Body = SdkUtils.StreamToByteArray(stream);
-                        break;
-                    case ResponseMode.String:
-                        using (var sr = new StreamReader(stream))
-                        {
-                            result.Body = await sr.ReadToEndAsync();
-                        }
+                    // Simple content conversion here to make body easily readable in consumers
+                    switch (SdkUtils.ResponseMode(result.ContentType))
+                    {
+                        case ResponseMode.Binary:
+                            result.Body = SdkUtils.StreamToByteArray(stream);
+                            break;
+                        case ResponseMode.String:
+                            using (var sr = new StreamReader(stream))
+                            {
+                                result.Body = await sr.ReadToEndAsync();
+                            }
 
-                        break;
-                    case ResponseMode.Unknown:
-                        result.Body = SdkUtils.StreamToByteArray(stream);
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException($"Unrecognized Content Type {result.ContentType}");
+                            break;
+                        case ResponseMode.Unknown:
+                            result.Body = SdkUtils.StreamToByteArray(stream);
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException($"Unrecognized Content Type {result.ContentType}");
+                    }
                 }
             }
             catch (Exception e)
@@ -327,30 +352,6 @@ namespace Looker.RTL
         {
             var raw = await RawRequest(method, path, queryParams, body, authenticator, options);
             return ParseResponse<TSuccess, TError>(raw);
-        }
-
-        public string BaseUrl
-        {
-            get => _settings.BaseUrl;
-            set => _settings.BaseUrl = value;
-        }
-
-        public bool VerifySsl
-        {
-            get => _settings.VerifySsl;
-            set => _settings.VerifySsl = value;
-        }
-
-        public int Timeout
-        {
-            get => _settings.Timeout;
-            set => _settings.Timeout = value;
-        }
-
-        public string AgentTag
-        {
-            get => _settings.AgentTag;
-            set => _settings.AgentTag = value;
         }
     }
 }
