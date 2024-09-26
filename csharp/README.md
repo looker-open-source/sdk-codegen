@@ -7,7 +7,8 @@ Look# was developed using the principles in [Build Your Own SDK](/docs/byosdk.md
 Look# has:
 
 - C# Runtime library with strong typing for HTTP responses
-- Uses .NET Core 6.x, an Open Source, cross-platform run-time for macOS, Windows, and Linux
+- Targets .NET Standard 2.0, which allows usage in .NET Framework and .NET Core/.NET 6 projects alike.
+- Requires .NET 6 to build and test. .NET 6 is an Open Source, cross-platform run-time for macOS, Windows, and Linux
 - SDK Codegen generates the SDK bindings from the Looker API spec
 - API 4.0 methods (SDK calls) and models (SDK types)
 - Includes many unit and some functional tests!
