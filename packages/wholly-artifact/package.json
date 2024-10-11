@@ -1,6 +1,6 @@
 {
   "name": "@looker/wholly-artifact",
-  "version": "0.1.25",
+  "version": "0.1.26",
   "description": "Looker Artifact API as a Table SDK",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
@@ -37,12 +37,12 @@
   },
   "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/main/packages/wholly-artifact",
   "devDependencies": {
-    "@looker/sdk-node": "24.16.2",
+    "@looker/sdk-node": "24.18.0",
     "@types/uuid": "^8.3.4"
   },
   "dependencies": {
     "@looker/sdk-rtl": "21.6.3",
-    "@looker/sdk": "24.16.2",
+    "@looker/sdk": "24.18.0",
     "lodash": "4.17.21",
     "uuid": "9.0.1"
   },
