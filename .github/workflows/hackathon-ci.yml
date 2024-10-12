@@ -1,21 +1,5 @@
 name: Hackathon CI
 on:
-  pull_request:
-    paths:
-      - package.json
-      - packages/wholly-artifact/**
-      - packages/hackathon/**
-      - .github/workflows/hackathon-ci.yml
-
-  push:
-    branches:
-      - main
-    paths:
-      - package.json
-      - packages/wholly-artifact/**
-      - packages/hackathon/**
-      - .github/workflows/hackathon-ci.yml
-
   workflow_dispatch:
 
 env:
