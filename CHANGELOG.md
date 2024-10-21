@@ -1,5 +1,12 @@
 # Changelog
 
+## [24.18.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.18.0...sdk-codegen-all-v24.18.1) (2024-10-21)
+
+
+### Bug Fixes
+
+* Fix bad python package exclude ([#1521](https://github.com/looker-open-source/sdk-codegen/issues/1521)) ([5afd34b](https://github.com/looker-open-source/sdk-codegen/commit/5afd34b8708404ef919a35275370a98ec4797cfd))
+
 ## [24.18.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.17.0...sdk-codegen-all-v24.18.0) (2024-10-11)
 
 
