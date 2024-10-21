@@ -25,7 +25,7 @@
  */
 
 /**
- * 466 API methods
+ * 467 API methods
  */
 
 import type {
@@ -114,6 +114,7 @@ import type {
   IError,
   IExternalOauthApplication,
   IFolder,
+  IFolderBase,
   IGitBranch,
   IGitConnectionTest,
   IGitConnectionTestResult,
@@ -128,6 +129,7 @@ import type {
   IIntegrationTestResult,
   IInternalHelpResources,
   IInternalHelpResourcesContent,
+  IJsonBi,
   ILDAPConfig,
   ILDAPConfigTestResult,
   ILegacyFeature,
@@ -157,7 +159,6 @@ import type {
   IProjectValidationCache,
   IProjectWorkspace,
   IQuery,
-  IQueryFormats,
   IQueryTask,
   IRenderTask,
   IRepositoryCredential,
@@ -221,6 +222,7 @@ import type {
   IRequestSearchPermissionSets,
   IRequestSearchRoles,
   IRequestSearchRolesWithUserCount,
+  IRequestSearchScheduledPlans,
   IRequestSearchThemes,
   IRequestSearchUserLoginLockouts,
   IRequestSearchUsers,
@@ -6148,7 +6150,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * All personal folders will be returned.
    *
-   * GET /folders -> IFolder[]
+   * GET /folders -> IFolderBase[]
    *
    * @param fields Requested fields.
    * @param options one-time API call overrides
@@ -6157,8 +6159,13 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   async all_folders(
     fields?: string,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IFolder[], IError>> {
-    return this.get<IFolder[], IError>('/folders', { fields }, null, options);
+  ): Promise<SDKResponse<IFolderBase[], IError>> {
+    return this.get<IFolderBase[], IError>(
+      '/folders',
+      { fields },
+      null,
+      options
+    );
   }
 
   /**
@@ -8876,7 +8883,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    * will be in the message of the 400 error response, but not as detailed as expressed in `json_detail.errors`.
    * These data formats can only carry row data, and error info is not row data.
    *
-   * GET /query_tasks/{query_task_id}/results -> IQueryTask
+   * GET /query_tasks/{query_task_id}/results -> string
    *
    * @param query_task_id ID of the Query Task
    * @param options one-time API call overrides
@@ -8885,9 +8892,9 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   async query_task_results(
     query_task_id: string,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IQueryTask, IError>> {
+  ): Promise<SDKResponse<string, IError>> {
     query_task_id = encodeParam(query_task_id);
-    return this.get<IQueryTask, IError>(
+    return this.get<string, IError>(
       `/query_tasks/${query_task_id}/results`,
       null,
       null,
@@ -10065,6 +10072,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
         name: request.name,
         built_in: request.built_in,
         filter_or: request.filter_or,
+        is_support_role: request.is_support_role,
       },
       null,
       options
@@ -10605,6 +10613,54 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   }
 
   /**
+   * ### Search Scheduled Plans
+   *
+   * Returns all scheduled plans which matches the given search criteria.
+   *
+   * If no user_id is provided, this function returns the scheduled plans owned by the caller.
+   *
+   *
+   * To list all schedules for all users, pass `all_users=true`.
+   *
+   *
+   * The caller must have `see_schedules` permission to see other users' scheduled plans.
+   *
+   * GET /scheduled_plans/search -> IScheduledPlan[]
+   *
+   * @param request composed interface "IRequestSearchScheduledPlans" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  async search_scheduled_plans(
+    request: IRequestSearchScheduledPlans,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IScheduledPlan[], IError | IValidationError>> {
+    return this.get<IScheduledPlan[], IError | IValidationError>(
+      '/scheduled_plans/search',
+      {
+        user_id: request.user_id,
+        fields: request.fields,
+        all_users: request.all_users,
+        limit: request.limit,
+        offset: request.offset,
+        sorts: request.sorts,
+        name: request.name,
+        user_first_name: request.user_first_name,
+        user_last_name: request.user_last_name,
+        dashboard_id: request.dashboard_id,
+        look_id: request.look_id,
+        lookml_dashboard_id: request.lookml_dashboard_id,
+        recipient: request.recipient,
+        destination_type: request.destination_type,
+        delivery_format: request.delivery_format,
+        filter_or: request.filter_or,
+      },
+      null,
+      options
+    );
+  }
+
+  /**
    * ### Get Scheduled Plans for a Look
    *
    * Returns all scheduled plans for a look which belong to the caller or given user.
@@ -10878,17 +10934,9 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * | result_format | Description
    * | :-----------: | :--- |
-   * | json | Plain json
-   * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
-   * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
-   * | csv | Comma separated values with a header
-   * | txt | Tab separated values with a header
-   * | html | Simple html
-   * | md | Simple markdown
-   * | xlsx | MS Excel spreadsheet
-   * | sql | Returns the generated SQL rather than running the query
+   * | json_bi | Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
    *
-   * GET /sql_interface_queries/{query_id}/run/{result_format} -> IQueryFormats
+   * GET /sql_interface_queries/{query_id}/run/{result_format} -> IJsonBi
    *
    * @param query_id Integer id of query
    * @param result_format Format of result, options are: ["json_bi"]
@@ -10899,9 +10947,9 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
     query_id: number,
     result_format: string,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IQueryFormats, IError | IValidationError>> {
+  ): Promise<SDKResponse<IJsonBi, IError | IValidationError>> {
     result_format = encodeParam(result_format);
-    return this.get<IQueryFormats, IError | IValidationError>(
+    return this.get<IJsonBi, IError | IValidationError>(
       `/sql_interface_queries/${query_id}/run/${result_format}`,
       null,
       null,
