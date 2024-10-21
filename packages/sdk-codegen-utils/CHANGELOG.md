@@ -14,6 +14,13 @@
     * @looker/sdk bumped from 24.16.2 to 24.18.0
     * @looker/sdk-node bumped from 24.16.2 to 24.18.0
 
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk bumped from 24.18.0 to 24.18.1
+    * @looker/sdk-node bumped from 24.18.0 to 24.18.1
+
 ## [21.0.13](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-utils-v21.0.12...sdk-codegen-utils-v21.0.13) (2024-09-14)
 
 
