@@ -25,7 +25,7 @@
  */
 
 /**
- * 343 API models: 260 Spec, 0 Request, 61 Write, 22 Enum
+ * 342 API models: 259 Spec, 0 Request, 61 Write, 22 Enum
  */
 
 
@@ -2201,6 +2201,7 @@ public struct ContentSearch: SDKModel {
         case _folder_name = "folder_name"
         case _view_count = "view_count"
         case _preferred_viewer = "preferred_viewer"
+        case _model = "model"
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -2279,7 +2280,16 @@ public struct ContentSearch: SDKModel {
         set { _preferred_viewer = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, content_id: String? = nil, type: String? = nil, title: String? = nil, description: String? = nil, folder_id: String? = nil, folder_name: String? = nil, view_count: Int64? = nil, preferred_viewer: String? = nil) {
+    private var _model: AnyString?
+    /**
+     * Name of the model the explore belongs to (read-only)
+     */
+    public var model: String? {
+        get { _model?.value }
+        set { _model = newValue.map(AnyString.init) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, content_id: String? = nil, type: String? = nil, title: String? = nil, description: String? = nil, folder_id: String? = nil, folder_name: String? = nil, view_count: Int64? = nil, preferred_viewer: String? = nil, model: String? = nil) {
         self.can = can
         self._content_id = content_id.map(AnyString.init)
         self._type = type.map(AnyString.init)
@@ -2289,6 +2299,7 @@ public struct ContentSearch: SDKModel {
         self._folder_name = folder_name.map(AnyString.init)
         self._view_count = view_count.map(AnyInt.init)
         self._preferred_viewer = preferred_viewer.map(AnyString.init)
+        self._model = model.map(AnyString.init)
     }
 
 }
@@ -2301,6 +2312,7 @@ public struct ContentSummary: SDKModel {
         case _content_type = "content_type"
         case _content_id = "content_id"
         case _content_slug = "content_slug"
+        case _content_url = "content_url"
         case _title = "title"
         case _description = "description"
         case last_viewed_at
@@ -2354,6 +2366,15 @@ public struct ContentSummary: SDKModel {
     public var content_slug: String? {
         get { _content_slug?.value }
         set { _content_slug = newValue.map(AnyString.init) }
+    }
+
+    private var _content_url: AnyString?
+    /**
+     * Content url (read-only)
+     */
+    public var content_url: String? {
+        get { _content_url?.value }
+        set { _content_url = newValue.map(AnyString.init) }
     }
 
     private var _title: AnyString?
@@ -2453,12 +2474,13 @@ public struct ContentSummary: SDKModel {
         set { _preferred_viewer = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, content_type: String? = nil, content_id: String? = nil, content_slug: String? = nil, title: String? = nil, description: String? = nil, last_viewed_at: Date? = nil, user_id: String? = nil, user_full_name: String? = nil, is_scheduled: Bool? = nil, favorite_count: Int64? = nil, view_count: Int64? = nil, favorite_id: String? = nil, weighted_score: Float? = nil, group_weighted_score: Float? = nil, suggestion_score: Float? = nil, preferred_viewer: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, content_type: String? = nil, content_id: String? = nil, content_slug: String? = nil, content_url: String? = nil, title: String? = nil, description: String? = nil, last_viewed_at: Date? = nil, user_id: String? = nil, user_full_name: String? = nil, is_scheduled: Bool? = nil, favorite_count: Int64? = nil, view_count: Int64? = nil, favorite_id: String? = nil, weighted_score: Float? = nil, group_weighted_score: Float? = nil, suggestion_score: Float? = nil, preferred_viewer: String? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
         self._content_type = content_type.map(AnyString.init)
         self._content_id = content_id.map(AnyString.init)
         self._content_slug = content_slug.map(AnyString.init)
+        self._content_url = content_url.map(AnyString.init)
         self._title = title.map(AnyString.init)
         self._description = description.map(AnyString.init)
         self.last_viewed_at = last_viewed_at
@@ -7024,6 +7046,7 @@ public struct DBConnection: SDKModel {
         case default_bq_connection
         case _bq_storage_project_id = "bq_storage_project_id"
         case bq_roles_verified
+        case _p4sa_name = "p4sa_name"
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -7423,11 +7446,20 @@ public struct DBConnection: SDKModel {
     }
 
     /**
-     * When true, represents that all project roles have been verified. (read-only)
+     * When true, represents that all project roles have been verified.
      */
     public var bq_roles_verified: Bool?
 
-    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, uses_oauth: Bool? = nil, uses_instance_oauth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, supports_data_studio_link: Bool? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, default_bq_connection: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil) {
+    private var _p4sa_name: AnyString?
+    /**
+     * The name of P4SA service account that is associated with the Looker instance (read-only)
+     */
+    public var p4sa_name: String? {
+        get { _p4sa_name?.value }
+        set { _p4sa_name = newValue.map(AnyString.init) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, uses_oauth: Bool? = nil, uses_instance_oauth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, supports_data_studio_link: Bool? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, default_bq_connection: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil, p4sa_name: String? = nil) {
         self.can = can
         self._name = name.map(AnyString.init)
         self.dialect = dialect
@@ -7484,6 +7516,7 @@ public struct DBConnection: SDKModel {
         self.default_bq_connection = default_bq_connection
         self._bq_storage_project_id = bq_storage_project_id.map(AnyString.init)
         self.bq_roles_verified = bq_roles_verified
+        self._p4sa_name = p4sa_name.map(AnyString.init)
     }
 
 }
@@ -12697,6 +12730,7 @@ public struct Look: SDKModel {
         case folder
         case _folder_id = "folder_id"
         case updated_at
+        case _user_name = "user_name"
         case _view_count = "view_count"
     }
     /**
@@ -12910,6 +12944,15 @@ public struct Look: SDKModel {
      */
     public var updated_at: Date?
 
+    private var _user_name: AnyString?
+    /**
+     * Name of User that created the look. (read-only)
+     */
+    public var user_name: String? {
+        get { _user_name?.value }
+        set { _user_name = newValue.map(AnyString.init) }
+    }
+
     private var _view_count: AnyInt?
     /**
      * Number of times viewed in the Looker web UI (read-only)
@@ -12919,7 +12962,7 @@ public struct Look: SDKModel {
         set { _view_count = newValue.map(AnyInt.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, content_metadata_id: String? = nil, id: String? = nil, title: String? = nil, user_id: String? = nil, content_favorite_id: String? = nil, created_at: Date? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, description: String? = nil, embed_url: String? = nil, excel_file_url: String? = nil, favorite_count: Int64? = nil, google_spreadsheet_formula: String? = nil, image_embed_url: String? = nil, is_run_on_load: Bool? = nil, last_accessed_at: Date? = nil, last_updater_id: String? = nil, last_viewed_at: Date? = nil, model: LookModel? = nil, `public`: Bool? = nil, public_slug: String? = nil, public_url: String? = nil, query_id: String? = nil, short_url: String? = nil, folder: FolderBase? = nil, folder_id: String? = nil, updated_at: Date? = nil, view_count: Int64? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, content_metadata_id: String? = nil, id: String? = nil, title: String? = nil, user_id: String? = nil, content_favorite_id: String? = nil, created_at: Date? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, description: String? = nil, embed_url: String? = nil, excel_file_url: String? = nil, favorite_count: Int64? = nil, google_spreadsheet_formula: String? = nil, image_embed_url: String? = nil, is_run_on_load: Bool? = nil, last_accessed_at: Date? = nil, last_updater_id: String? = nil, last_viewed_at: Date? = nil, model: LookModel? = nil, `public`: Bool? = nil, public_slug: String? = nil, public_url: String? = nil, query_id: String? = nil, short_url: String? = nil, folder: FolderBase? = nil, folder_id: String? = nil, updated_at: Date? = nil, user_name: String? = nil, view_count: Int64? = nil) {
         self.can = can
         self._content_metadata_id = content_metadata_id.map(AnyString.init)
         self._id = id.map(AnyString.init)
@@ -12949,6 +12992,7 @@ public struct Look: SDKModel {
         self.folder = folder
         self._folder_id = folder_id.map(AnyString.init)
         self.updated_at = updated_at
+        self._user_name = user_name.map(AnyString.init)
         self._view_count = view_count.map(AnyInt.init)
     }
 
@@ -14936,6 +14980,7 @@ public struct LookWithDashboards: SDKModel {
         case folder
         case _folder_id = "folder_id"
         case updated_at
+        case _user_name = "user_name"
         case _view_count = "view_count"
         case dashboards
     }
@@ -15150,6 +15195,15 @@ public struct LookWithDashboards: SDKModel {
      */
     public var updated_at: Date?
 
+    private var _user_name: AnyString?
+    /**
+     * Name of User that created the look. (read-only)
+     */
+    public var user_name: String? {
+        get { _user_name?.value }
+        set { _user_name = newValue.map(AnyString.init) }
+    }
+
     private var _view_count: AnyInt?
     /**
      * Number of times viewed in the Looker web UI (read-only)
@@ -15164,7 +15218,7 @@ public struct LookWithDashboards: SDKModel {
      */
     public var dashboards: [DashboardBase]?
 
-    public init(can: StringDictionary<Bool>? = nil, content_metadata_id: String? = nil, id: String? = nil, title: String? = nil, user_id: String? = nil, content_favorite_id: String? = nil, created_at: Date? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, description: String? = nil, embed_url: String? = nil, excel_file_url: String? = nil, favorite_count: Int64? = nil, google_spreadsheet_formula: String? = nil, image_embed_url: String? = nil, is_run_on_load: Bool? = nil, last_accessed_at: Date? = nil, last_updater_id: String? = nil, last_viewed_at: Date? = nil, model: LookModel? = nil, `public`: Bool? = nil, public_slug: String? = nil, public_url: String? = nil, query_id: String? = nil, short_url: String? = nil, folder: FolderBase? = nil, folder_id: String? = nil, updated_at: Date? = nil, view_count: Int64? = nil, dashboards: [DashboardBase]? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, content_metadata_id: String? = nil, id: String? = nil, title: String? = nil, user_id: String? = nil, content_favorite_id: String? = nil, created_at: Date? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, description: String? = nil, embed_url: String? = nil, excel_file_url: String? = nil, favorite_count: Int64? = nil, google_spreadsheet_formula: String? = nil, image_embed_url: String? = nil, is_run_on_load: Bool? = nil, last_accessed_at: Date? = nil, last_updater_id: String? = nil, last_viewed_at: Date? = nil, model: LookModel? = nil, `public`: Bool? = nil, public_slug: String? = nil, public_url: String? = nil, query_id: String? = nil, short_url: String? = nil, folder: FolderBase? = nil, folder_id: String? = nil, updated_at: Date? = nil, user_name: String? = nil, view_count: Int64? = nil, dashboards: [DashboardBase]? = nil) {
         self.can = can
         self._content_metadata_id = content_metadata_id.map(AnyString.init)
         self._id = id.map(AnyString.init)
@@ -15194,6 +15248,7 @@ public struct LookWithDashboards: SDKModel {
         self.folder = folder
         self._folder_id = folder_id.map(AnyString.init)
         self.updated_at = updated_at
+        self._user_name = user_name.map(AnyString.init)
         self._view_count = view_count.map(AnyInt.init)
         self.dashboards = dashboards
     }
@@ -15232,6 +15287,7 @@ public struct LookWithQuery: SDKModel {
         case folder
         case _folder_id = "folder_id"
         case updated_at
+        case _user_name = "user_name"
         case _view_count = "view_count"
         case query
         case _url = "url"
@@ -15447,6 +15503,15 @@ public struct LookWithQuery: SDKModel {
      */
     public var updated_at: Date?
 
+    private var _user_name: AnyString?
+    /**
+     * Name of User that created the look. (read-only)
+     */
+    public var user_name: String? {
+        get { _user_name?.value }
+        set { _user_name = newValue.map(AnyString.init) }
+    }
+
     private var _view_count: AnyInt?
     /**
      * Number of times viewed in the Looker web UI (read-only)
@@ -15467,7 +15532,7 @@ public struct LookWithQuery: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, content_metadata_id: String? = nil, id: String? = nil, title: String? = nil, user_id: String? = nil, content_favorite_id: String? = nil, created_at: Date? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, description: String? = nil, embed_url: String? = nil, excel_file_url: String? = nil, favorite_count: Int64? = nil, google_spreadsheet_formula: String? = nil, image_embed_url: String? = nil, is_run_on_load: Bool? = nil, last_accessed_at: Date? = nil, last_updater_id: String? = nil, last_viewed_at: Date? = nil, model: LookModel? = nil, `public`: Bool? = nil, public_slug: String? = nil, public_url: String? = nil, query_id: String? = nil, short_url: String? = nil, folder: FolderBase? = nil, folder_id: String? = nil, updated_at: Date? = nil, view_count: Int64? = nil, query: Query? = nil, url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, content_metadata_id: String? = nil, id: String? = nil, title: String? = nil, user_id: String? = nil, content_favorite_id: String? = nil, created_at: Date? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, description: String? = nil, embed_url: String? = nil, excel_file_url: String? = nil, favorite_count: Int64? = nil, google_spreadsheet_formula: String? = nil, image_embed_url: String? = nil, is_run_on_load: Bool? = nil, last_accessed_at: Date? = nil, last_updater_id: String? = nil, last_viewed_at: Date? = nil, model: LookModel? = nil, `public`: Bool? = nil, public_slug: String? = nil, public_url: String? = nil, query_id: String? = nil, short_url: String? = nil, folder: FolderBase? = nil, folder_id: String? = nil, updated_at: Date? = nil, user_name: String? = nil, view_count: Int64? = nil, query: Query? = nil, url: String? = nil) {
         self.can = can
         self._content_metadata_id = content_metadata_id.map(AnyString.init)
         self._id = id.map(AnyString.init)
@@ -15497,6 +15562,7 @@ public struct LookWithQuery: SDKModel {
         self.folder = folder
         self._folder_id = folder_id.map(AnyString.init)
         self.updated_at = updated_at
+        self._user_name = user_name.map(AnyString.init)
         self._view_count = view_count.map(AnyInt.init)
         self.query = query
         self._url = url.map(AnyString.init)
@@ -18016,107 +18082,6 @@ public struct Query: SDKModel {
 
     public init(can: StringDictionary<Bool>? = nil, id: String? = nil, _ model: String, _ view: String, fields: [String]? = nil, pivots: [String]? = nil, fill_fields: [String]? = nil, filters: StringDictionary<AnyCodable>? = nil, filter_expression: String? = nil, sorts: [String]? = nil, limit: String? = nil, column_limit: String? = nil, total: Bool? = nil, row_total: String? = nil, subtotals: [String]? = nil, vis_config: StringDictionary<AnyCodable>? = nil, filter_config: StringDictionary<AnyCodable>? = nil, visible_ui_sections: String? = nil, slug: String? = nil, dynamic_fields: String? = nil, client_id: String? = nil, share_url: String? = nil, expanded_share_url: String? = nil, url: String? = nil, query_timezone: String? = nil, has_table_calculations: Bool? = nil) {
         self.init(can: can, id: id, model: model, view: view, fields: fields, pivots: pivots, fill_fields: fill_fields, filters: filters, filter_expression: filter_expression, sorts: sorts, limit: limit, column_limit: column_limit, total: total, row_total: row_total, subtotals: subtotals, vis_config: vis_config, filter_config: filter_config, visible_ui_sections: visible_ui_sections, slug: slug, dynamic_fields: dynamic_fields, client_id: client_id, share_url: share_url, expanded_share_url: expanded_share_url, url: url, query_timezone: query_timezone, has_table_calculations: has_table_calculations)
-    }
-
-}
-
-public struct QueryFormats: SDKModel {
-
-    private enum CodingKeys : String, CodingKey {
-        case json_bi
-        case _json = "json"
-        case _json_detail = "json_detail"
-        case _csv = "csv"
-        case _txt = "txt"
-        case _html = "html"
-        case _md = "md"
-        case _xlsx = "xlsx"
-        case _sql = "sql"
-    }
-    public var json_bi: JsonBi?
-
-    private var _json: AnyString?
-    /**
-     *  (read-only)
-     */
-    public var json: String? {
-        get { _json?.value }
-        set { _json = newValue.map(AnyString.init) }
-    }
-
-    private var _json_detail: AnyString?
-    /**
-     *  (read-only)
-     */
-    public var json_detail: String? {
-        get { _json_detail?.value }
-        set { _json_detail = newValue.map(AnyString.init) }
-    }
-
-    private var _csv: AnyString?
-    /**
-     *  (read-only)
-     */
-    public var csv: String? {
-        get { _csv?.value }
-        set { _csv = newValue.map(AnyString.init) }
-    }
-
-    private var _txt: AnyString?
-    /**
-     *  (read-only)
-     */
-    public var txt: String? {
-        get { _txt?.value }
-        set { _txt = newValue.map(AnyString.init) }
-    }
-
-    private var _html: AnyString?
-    /**
-     *  (read-only)
-     */
-    public var html: String? {
-        get { _html?.value }
-        set { _html = newValue.map(AnyString.init) }
-    }
-
-    private var _md: AnyString?
-    /**
-     *  (read-only)
-     */
-    public var md: String? {
-        get { _md?.value }
-        set { _md = newValue.map(AnyString.init) }
-    }
-
-    private var _xlsx: AnyString?
-    /**
-     *  (read-only)
-     */
-    public var xlsx: String? {
-        get { _xlsx?.value }
-        set { _xlsx = newValue.map(AnyString.init) }
-    }
-
-    private var _sql: AnyString?
-    /**
-     *  (read-only)
-     */
-    public var sql: String? {
-        get { _sql?.value }
-        set { _sql = newValue.map(AnyString.init) }
-    }
-
-    public init(json_bi: JsonBi? = nil, json: String? = nil, json_detail: String? = nil, csv: String? = nil, txt: String? = nil, html: String? = nil, md: String? = nil, xlsx: String? = nil, sql: String? = nil) {
-        self.json_bi = json_bi
-        self._json = json.map(AnyString.init)
-        self._json_detail = json_detail.map(AnyString.init)
-        self._csv = csv.map(AnyString.init)
-        self._txt = txt.map(AnyString.init)
-        self._html = html.map(AnyString.init)
-        self._md = md.map(AnyString.init)
-        self._xlsx = xlsx.map(AnyString.init)
-        self._sql = sql.map(AnyString.init)
     }
 
 }
@@ -22574,7 +22539,6 @@ public struct User: SDKModel {
         case allow_normal_group_membership
         case allow_roles_from_normal_groups
         case _embed_group_folder_id = "embed_group_folder_id"
-        case is_iam_admin
         case _url = "url"
     }
     /**
@@ -22791,11 +22755,6 @@ public struct User: SDKModel {
         set { _embed_group_folder_id = newValue.map(AnyString.init) }
     }
 
-    /**
-     * User is an IAM Admin - only available in Looker (Google Cloud core) (read-only)
-     */
-    public var is_iam_admin: Bool?
-
     private var _url: AnyString?
     /**
      * Link to get this item (read-only)
@@ -22805,7 +22764,7 @@ public struct User: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, avatar_url: String? = nil, avatar_url_without_sizing: String? = nil, credentials_api3: [CredentialsApi3]? = nil, credentials_email: CredentialsEmail? = nil, credentials_embed: [CredentialsEmbed]? = nil, credentials_google: CredentialsGoogle? = nil, credentials_ldap: CredentialsLDAP? = nil, credentials_looker_openid: CredentialsLookerOpenid? = nil, credentials_oidc: CredentialsOIDC? = nil, credentials_saml: CredentialsSaml? = nil, credentials_totp: CredentialsTotp? = nil, display_name: String? = nil, email: String? = nil, embed_group_space_id: String? = nil, first_name: String? = nil, group_ids: [String]? = nil, home_folder_id: String? = nil, id: String? = nil, is_disabled: Bool? = nil, last_name: String? = nil, locale: String? = nil, looker_versions: [String]? = nil, models_dir_validated: Bool? = nil, personal_folder_id: String? = nil, presumed_looker_employee: Bool? = nil, role_ids: [String]? = nil, sessions: [Session]? = nil, ui_state: StringDictionary<AnyCodable>? = nil, verified_looker_employee: Bool? = nil, roles_externally_managed: Bool? = nil, allow_direct_roles: Bool? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, embed_group_folder_id: String? = nil, is_iam_admin: Bool? = nil, url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, avatar_url: String? = nil, avatar_url_without_sizing: String? = nil, credentials_api3: [CredentialsApi3]? = nil, credentials_email: CredentialsEmail? = nil, credentials_embed: [CredentialsEmbed]? = nil, credentials_google: CredentialsGoogle? = nil, credentials_ldap: CredentialsLDAP? = nil, credentials_looker_openid: CredentialsLookerOpenid? = nil, credentials_oidc: CredentialsOIDC? = nil, credentials_saml: CredentialsSaml? = nil, credentials_totp: CredentialsTotp? = nil, display_name: String? = nil, email: String? = nil, embed_group_space_id: String? = nil, first_name: String? = nil, group_ids: [String]? = nil, home_folder_id: String? = nil, id: String? = nil, is_disabled: Bool? = nil, last_name: String? = nil, locale: String? = nil, looker_versions: [String]? = nil, models_dir_validated: Bool? = nil, personal_folder_id: String? = nil, presumed_looker_employee: Bool? = nil, role_ids: [String]? = nil, sessions: [Session]? = nil, ui_state: StringDictionary<AnyCodable>? = nil, verified_looker_employee: Bool? = nil, roles_externally_managed: Bool? = nil, allow_direct_roles: Bool? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, embed_group_folder_id: String? = nil, url: String? = nil) {
         self.can = can
         self._avatar_url = avatar_url.map(AnyString.init)
         self._avatar_url_without_sizing = avatar_url_without_sizing.map(AnyString.init)
@@ -22841,7 +22800,6 @@ public struct User: SDKModel {
         self.allow_normal_group_membership = allow_normal_group_membership
         self.allow_roles_from_normal_groups = allow_roles_from_normal_groups
         self._embed_group_folder_id = embed_group_folder_id.map(AnyString.init)
-        self.is_iam_admin = is_iam_admin
         self._url = url.map(AnyString.init)
     }
 
@@ -24967,7 +24925,7 @@ public struct WriteDashboardElement: SDKModel {
 
     /**
      * Dynamic writeable type for LookWithQuery removes:
-     * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, url
+     * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, user_name, view_count, url
      */
     public var look: WriteLookWithQuery?
 
@@ -25487,7 +25445,7 @@ public struct WriteDatagroup: SDKModel {
 
 /**
  * Dynamic writeable type for DBConnection removes:
- * can, dialect, snippets, pdts_enabled, uses_oauth, uses_instance_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, bq_roles_verified
+ * can, dialect, snippets, pdts_enabled, uses_oauth, uses_instance_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, p4sa_name
  */
 public struct WriteDBConnection: SDKModel {
 
@@ -25533,6 +25491,7 @@ public struct WriteDBConnection: SDKModel {
         case pdt_api_control_enabled
         case connection_pooling
         case _bq_storage_project_id = "bq_storage_project_id"
+        case bq_roles_verified
     }
     private var _name: AnyString?
     /**
@@ -25852,7 +25811,12 @@ public struct WriteDBConnection: SDKModel {
         set { _bq_storage_project_id = newValue.map(AnyString.init) }
     }
 
-    public init(name: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: WriteDBConnectionOverride? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, bq_storage_project_id: String? = nil) {
+    /**
+     * When true, represents that all project roles have been verified.
+     */
+    public var bq_roles_verified: Bool?
+
+    public init(name: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: WriteDBConnectionOverride? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil) {
         self._name = name.map(AnyString.init)
         self._host = host.map(AnyString.init)
         self._port = port.map(AnyString.init)
@@ -25894,6 +25858,7 @@ public struct WriteDBConnection: SDKModel {
         self.pdt_api_control_enabled = pdt_api_control_enabled
         self.connection_pooling = connection_pooling
         self._bq_storage_project_id = bq_storage_project_id.map(AnyString.init)
+        self.bq_roles_verified = bq_roles_verified
     }
 
 }
@@ -26797,7 +26762,7 @@ public struct WriteLookmlModel: SDKModel {
 
 /**
  * Dynamic writeable type for LookWithQuery removes:
- * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, url
+ * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, user_name, view_count, url
  */
 public struct WriteLookWithQuery: SDKModel {
 
@@ -28992,7 +28957,7 @@ public struct WriteTheme: SDKModel {
 
 /**
  * Dynamic writeable type for User removes:
- * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, url
+ * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, url
  */
 public struct WriteUser: SDKModel {
 

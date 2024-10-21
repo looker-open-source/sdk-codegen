@@ -166,6 +166,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * devDependencies
     * @looker/sdk-node bumped from 24.12.1 to 24.14.0
 
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from 24.16.1 to 24.16.2
+  * devDependencies
+    * @looker/sdk-node bumped from 24.16.1 to 24.16.2
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from 24.16.2 to 24.18.0
+  * devDependencies
+    * @looker/sdk-node bumped from 24.16.2 to 24.18.0
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from 24.18.0 to 24.18.1
+  * devDependencies
+    * @looker/sdk-node bumped from 24.18.0 to 24.18.1
+
+## [0.1.24](https://github.com/looker-open-source/sdk-codegen/compare/wholly-artifact-v0.1.23...wholly-artifact-v0.1.24) (2024-09-14)
+
+
+### Bug Fixes
+
+* fix release 24.16.2 ([#1505](https://github.com/looker-open-source/sdk-codegen/issues/1505)) ([1cd1806](https://github.com/looker-open-source/sdk-codegen/commit/1cd180615901d2daf1fb112b41f2a72d2caacf61))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from 21.6.2 to 21.6.3
+    * @looker/sdk bumped from 24.16.0 to 24.16.1
+  * devDependencies
+    * @looker/sdk-node bumped from 24.16.0 to 24.16.1
+
 ## [0.1.23](https://github.com/looker-open-source/sdk-codegen/compare/wholly-artifact-v0.1.22...wholly-artifact-v0.1.23) (2024-09-11)
 
 

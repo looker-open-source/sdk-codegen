@@ -25,7 +25,7 @@
  */
 
 /**
- * 466 API methods
+ * 467 API methods
  */
 
 import type {
@@ -112,6 +112,7 @@ import type {
   IEmbedUrlResponse,
   IExternalOauthApplication,
   IFolder,
+  IFolderBase,
   IGitBranch,
   IGitConnectionTest,
   IGitConnectionTestResult,
@@ -126,6 +127,7 @@ import type {
   IIntegrationTestResult,
   IInternalHelpResources,
   IInternalHelpResourcesContent,
+  IJsonBi,
   ILDAPConfig,
   ILDAPConfigTestResult,
   ILegacyFeature,
@@ -155,7 +157,6 @@ import type {
   IProjectValidationCache,
   IProjectWorkspace,
   IQuery,
-  IQueryFormats,
   IQueryTask,
   IRenderTask,
   IRepositoryCredential,
@@ -219,6 +220,7 @@ import type {
   IRequestSearchPermissionSets,
   IRequestSearchRoles,
   IRequestSearchRolesWithUserCount,
+  IRequestSearchScheduledPlans,
   IRequestSearchThemes,
   IRequestSearchUserLoginLockouts,
   IRequestSearchUsers,
@@ -7037,7 +7039,7 @@ export class Looker40SDKStream extends APIMethods {
    *
    * All personal folders will be returned.
    *
-   * GET /folders -> IFolder[]
+   * GET /folders -> IFolderBase[]
    *
    * @param callback streaming output function
    * @param fields Requested fields.
@@ -7045,11 +7047,11 @@ export class Looker40SDKStream extends APIMethods {
    *
    */
   async all_folders(
-    callback: (response: Response) => Promise<IFolder[]>,
+    callback: (response: Response) => Promise<IFolderBase[]>,
     fields?: string,
     options?: Partial<ITransportSettings>
   ) {
-    return this.authStream<IFolder[]>(
+    return this.authStream<IFolderBase[]>(
       callback,
       'GET',
       '/folders',
@@ -10156,7 +10158,7 @@ export class Looker40SDKStream extends APIMethods {
    * will be in the message of the 400 error response, but not as detailed as expressed in `json_detail.errors`.
    * These data formats can only carry row data, and error info is not row data.
    *
-   * GET /query_tasks/{query_task_id}/results -> IQueryTask
+   * GET /query_tasks/{query_task_id}/results -> string
    *
    * @param callback streaming output function
    * @param query_task_id ID of the Query Task
@@ -10164,12 +10166,12 @@ export class Looker40SDKStream extends APIMethods {
    *
    */
   async query_task_results(
-    callback: (response: Response) => Promise<IQueryTask>,
+    callback: (response: Response) => Promise<string>,
     query_task_id: string,
     options?: Partial<ITransportSettings>
   ) {
     query_task_id = encodeParam(query_task_id);
-    return this.authStream<IQueryTask>(
+    return this.authStream<string>(
       callback,
       'GET',
       `/query_tasks/${query_task_id}/results`,
@@ -11494,6 +11496,7 @@ export class Looker40SDKStream extends APIMethods {
         name: request.name,
         built_in: request.built_in,
         filter_or: request.filter_or,
+        is_support_role: request.is_support_role,
       },
       null,
       options
@@ -12099,6 +12102,58 @@ export class Looker40SDKStream extends APIMethods {
   }
 
   /**
+   * ### Search Scheduled Plans
+   *
+   * Returns all scheduled plans which matches the given search criteria.
+   *
+   * If no user_id is provided, this function returns the scheduled plans owned by the caller.
+   *
+   *
+   * To list all schedules for all users, pass `all_users=true`.
+   *
+   *
+   * The caller must have `see_schedules` permission to see other users' scheduled plans.
+   *
+   * GET /scheduled_plans/search -> IScheduledPlan[]
+   *
+   * @param callback streaming output function
+   * @param request composed interface "IRequestSearchScheduledPlans" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  async search_scheduled_plans(
+    callback: (response: Response) => Promise<IScheduledPlan[]>,
+    request: IRequestSearchScheduledPlans,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<IScheduledPlan[]>(
+      callback,
+      'GET',
+      '/scheduled_plans/search',
+      {
+        user_id: request.user_id,
+        fields: request.fields,
+        all_users: request.all_users,
+        limit: request.limit,
+        offset: request.offset,
+        sorts: request.sorts,
+        name: request.name,
+        user_first_name: request.user_first_name,
+        user_last_name: request.user_last_name,
+        dashboard_id: request.dashboard_id,
+        look_id: request.look_id,
+        lookml_dashboard_id: request.lookml_dashboard_id,
+        recipient: request.recipient,
+        destination_type: request.destination_type,
+        delivery_format: request.delivery_format,
+        filter_or: request.filter_or,
+      },
+      null,
+      options
+    );
+  }
+
+  /**
    * ### Get Scheduled Plans for a Look
    *
    * Returns all scheduled plans for a look which belong to the caller or given user.
@@ -12405,17 +12460,9 @@ export class Looker40SDKStream extends APIMethods {
    *
    * | result_format | Description
    * | :-----------: | :--- |
-   * | json | Plain json
-   * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
-   * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
-   * | csv | Comma separated values with a header
-   * | txt | Tab separated values with a header
-   * | html | Simple html
-   * | md | Simple markdown
-   * | xlsx | MS Excel spreadsheet
-   * | sql | Returns the generated SQL rather than running the query
+   * | json_bi | Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
    *
-   * GET /sql_interface_queries/{query_id}/run/{result_format} -> IQueryFormats
+   * GET /sql_interface_queries/{query_id}/run/{result_format} -> IJsonBi
    *
    * @param callback streaming output function
    * @param query_id Integer id of query
@@ -12424,13 +12471,13 @@ export class Looker40SDKStream extends APIMethods {
    *
    */
   async run_sql_interface_query(
-    callback: (response: Response) => Promise<IQueryFormats>,
+    callback: (response: Response) => Promise<IJsonBi>,
     query_id: number,
     result_format: string,
     options?: Partial<ITransportSettings>
   ) {
     result_format = encodeParam(result_format);
-    return this.authStream<IQueryFormats>(
+    return this.authStream<IJsonBi>(
       callback,
       'GET',
       `/sql_interface_queries/${query_id}/run/${result_format}`,

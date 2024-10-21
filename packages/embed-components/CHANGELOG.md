@@ -1,5 +1,74 @@
 # Changelog
 
+## [24.18.1](https://github.com/looker-open-source/sdk-codegen/compare/embed-components-v24.18.0...embed-components-v24.18.1) (2024-10-21)
+
+
+### Miscellaneous Chores
+
+* **embed-components:** Synchronize undefined versions
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/embed-services bumped from 24.18.0 to 24.18.1
+    * @looker/sdk bumped from 24.18.0 to 24.18.1
+  * devDependencies
+    * @looker/sdk-node bumped from 24.18.0 to 24.18.1
+
+## [24.18.0](https://github.com/looker-open-source/sdk-codegen/compare/embed-components-v24.16.2...embed-components-v24.18.0) (2024-10-11)
+
+
+### Miscellaneous Chores
+
+* **embed-components:** Synchronize undefined versions
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/embed-services bumped from 24.16.2 to 24.18.0
+    * @looker/sdk bumped from 24.16.2 to 24.18.0
+  * devDependencies
+    * @looker/sdk-node bumped from 24.16.2 to 24.18.0
+
+## [24.16.2](https://github.com/looker-open-source/sdk-codegen/compare/embed-components-v24.16.1...embed-components-v24.16.2) (2024-09-16)
+
+
+### Miscellaneous Chores
+
+* **embed-components:** Synchronize undefined versions
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/embed-services bumped from 24.16.1 to 24.16.2
+    * @looker/sdk bumped from 24.16.1 to 24.16.2
+  * devDependencies
+    * @looker/sdk-node bumped from 24.16.1 to 24.16.2
+
+## [24.16.1](https://github.com/looker-open-source/sdk-codegen/compare/embed-components-v24.16.0...embed-components-v24.16.1) (2024-09-14)
+
+
+### Bug Fixes
+
+* fix release 24.16.2 ([#1505](https://github.com/looker-open-source/sdk-codegen/issues/1505)) ([1cd1806](https://github.com/looker-open-source/sdk-codegen/commit/1cd180615901d2daf1fb112b41f2a72d2caacf61))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/embed-services bumped from 24.16.0 to 24.16.1
+    * @looker/sdk bumped from 24.16.0 to 24.16.1
+    * @looker/sdk-rtl bumped from 21.6.2 to 21.6.3
+  * devDependencies
+    * @looker/sdk-node bumped from 24.16.0 to 24.16.1
+
 ## [24.16.0](https://github.com/looker-open-source/sdk-codegen/compare/embed-components-v24.14.0...embed-components-v24.16.0) (2024-09-11)
 
 

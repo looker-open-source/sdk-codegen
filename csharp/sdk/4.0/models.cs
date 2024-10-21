@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 343 API models: 260 Spec, 0 Request, 61 Write, 22 Enum
+/// 342 API models: 259 Spec, 0 Request, 61 Write, 22 Enum
 
 #nullable enable
 using System;
@@ -595,6 +595,8 @@ public class ContentSearch : SdkModel
   public long? view_count { get; set; } = null;
   /// <summary>Preferred way of viewing the content (only applies to dashboards) (read-only)</summary>
   public string? preferred_viewer { get; set; } = null;
+  /// <summary>Name of the model the explore belongs to (read-only)</summary>
+  public string? model { get; set; } = null;
 }
 
 public class ContentSummary : SdkModel
@@ -609,6 +611,8 @@ public class ContentSummary : SdkModel
   public string? content_id { get; set; } = null;
   /// <summary>Content slug (read-only)</summary>
   public string? content_slug { get; set; } = null;
+  /// <summary>Content url (read-only)</summary>
+  public string? content_url { get; set; } = null;
   /// <summary>Content title (read-only)</summary>
   public string? title { get; set; } = null;
   /// <summary>Content Description (read-only)</summary>
@@ -1753,8 +1757,10 @@ public class DBConnection : SdkModel
   public bool? default_bq_connection { get; set; } = null;
   /// <summary>The project id of the default BigQuery storage project.</summary>
   public string? bq_storage_project_id { get; set; } = null;
-  /// <summary>When true, represents that all project roles have been verified. (read-only)</summary>
+  /// <summary>When true, represents that all project roles have been verified.</summary>
   public bool? bq_roles_verified { get; set; } = null;
+  /// <summary>The name of P4SA service account that is associated with the Looker instance (read-only)</summary>
+  public string? p4sa_name { get; set; } = null;
 }
 
 public class DBConnectionBase : SdkModel
@@ -3090,6 +3096,8 @@ public class Look : SdkModel
   public string? folder_id { get; set; } = null;
   /// <summary>Time that the Look was updated. (read-only)</summary>
   public DateTime? updated_at { get; set; } = null;
+  /// <summary>Name of User that created the look. (read-only)</summary>
+  public string? user_name { get; set; } = null;
   /// <summary>Number of times viewed in the Looker web UI (read-only)</summary>
   public long? view_count { get; set; } = null;
 }
@@ -3617,6 +3625,8 @@ public class LookWithDashboards : SdkModel
   public string? folder_id { get; set; } = null;
   /// <summary>Time that the Look was updated. (read-only)</summary>
   public DateTime? updated_at { get; set; } = null;
+  /// <summary>Name of User that created the look. (read-only)</summary>
+  public string? user_name { get; set; } = null;
   /// <summary>Number of times viewed in the Looker web UI (read-only)</summary>
   public long? view_count { get; set; } = null;
   /// <summary>Dashboards (read-only)</summary>
@@ -3681,6 +3691,8 @@ public class LookWithQuery : SdkModel
   public string? folder_id { get; set; } = null;
   /// <summary>Time that the Look was updated. (read-only)</summary>
   public DateTime? updated_at { get; set; } = null;
+  /// <summary>Name of User that created the look. (read-only)</summary>
+  public string? user_name { get; set; } = null;
   /// <summary>Number of times viewed in the Looker web UI (read-only)</summary>
   public long? view_count { get; set; } = null;
   public Query? query { get; set; }
@@ -4329,27 +4341,6 @@ public class Query : SdkModel
   public string? query_timezone { get; set; } = null;
   /// <summary>Has Table Calculations (read-only)</summary>
   public bool? has_table_calculations { get; set; } = null;
-}
-
-public class QueryFormats : SdkModel
-{
-  public JsonBi? json_bi { get; set; }
-  /// <summary> (read-only)</summary>
-  public string? json { get; set; } = null;
-  /// <summary> (read-only)</summary>
-  public string? json_detail { get; set; } = null;
-  /// <summary> (read-only)</summary>
-  public string? csv { get; set; } = null;
-  /// <summary> (read-only)</summary>
-  public string? txt { get; set; } = null;
-  /// <summary> (read-only)</summary>
-  public string? html { get; set; } = null;
-  /// <summary> (read-only)</summary>
-  public string? md { get; set; } = null;
-  /// <summary> (read-only)</summary>
-  public string? xlsx { get; set; } = null;
-  /// <summary> (read-only)</summary>
-  public string? sql { get; set; } = null;
 }
 
 public class QueryTask : SdkModel
@@ -5533,8 +5524,6 @@ public class User : SdkModel
   public bool? allow_roles_from_normal_groups { get; set; } = null;
   /// <summary>(Embed only) ID of user's group folder based on the external_group_id optionally specified during embed user login (read-only)</summary>
   public string? embed_group_folder_id { get; set; } = null;
-  /// <summary>User is an IAM Admin - only available in Looker (Google Cloud core) (read-only)</summary>
-  public bool? is_iam_admin { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
   public string? url { get; set; } = null;
 }
@@ -6098,7 +6087,7 @@ public class WriteDashboardElement : SdkModel
   public string? dashboard_id { get; set; } = null;
   /// <summary>
   /// Dynamic writeable type for LookWithQuery removes:
-  /// can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, url
+  /// can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, user_name, view_count, url
   /// </summary>
   public WriteLookWithQuery? look { get; set; }
   /// <summary>Id Of Look</summary>
@@ -6228,7 +6217,7 @@ public class WriteDatagroup : SdkModel
 }
 
 /// Dynamic writeable type for DBConnection removes:
-/// can, dialect, snippets, pdts_enabled, uses_oauth, uses_instance_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, bq_roles_verified
+/// can, dialect, snippets, pdts_enabled, uses_oauth, uses_instance_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, p4sa_name
 public class WriteDBConnection : SdkModel
 {
   /// <summary>Name of the connection. Also used as the unique identifier</summary>
@@ -6316,6 +6305,8 @@ public class WriteDBConnection : SdkModel
   public bool? connection_pooling { get; set; } = null;
   /// <summary>The project id of the default BigQuery storage project.</summary>
   public string? bq_storage_project_id { get; set; } = null;
+  /// <summary>When true, represents that all project roles have been verified.</summary>
+  public bool? bq_roles_verified { get; set; } = null;
 }
 
 /// Dynamic writeable type for DBConnectionOverride removes:
@@ -6550,7 +6541,7 @@ public class WriteLookmlModel : SdkModel
 }
 
 /// Dynamic writeable type for LookWithQuery removes:
-/// can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, url
+/// can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, user_name, view_count, url
 public class WriteLookWithQuery : SdkModel
 {
   /// <summary>Look Title</summary>
@@ -7110,7 +7101,7 @@ public class WriteTheme : SdkModel
 }
 
 /// Dynamic writeable type for User removes:
-/// can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, url
+/// can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, url
 public class WriteUser : SdkModel
 {
   /// <summary>

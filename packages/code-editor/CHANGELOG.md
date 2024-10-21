@@ -18,6 +18,38 @@
   * devDependencies
     * @looker/sdk-codegen bumped from 21.8.2 to 21.9.0
 
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen bumped from 21.9.2 to 21.9.3
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen bumped from 21.9.3 to 21.9.4
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen bumped from 21.9.4 to 21.9.5
+
+## [0.1.33](https://github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.32...code-editor-v0.1.33) (2024-09-14)
+
+
+### Bug Fixes
+
+* fix release 24.16.2 ([#1505](https://github.com/looker-open-source/sdk-codegen/issues/1505)) ([1cd1806](https://github.com/looker-open-source/sdk-codegen/commit/1cd180615901d2daf1fb112b41f2a72d2caacf61))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen bumped from 21.9.1 to 21.9.2
+
 ## [0.1.32](https://github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.31...code-editor-v0.1.32) (2024-09-11)
 
 

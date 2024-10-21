@@ -147,6 +147,51 @@
     * @looker/extension-sdk-react bumped from 24.12.1 to 24.14.0
     * @looker/sdk bumped from 24.12.1 to 24.14.0
 
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from 0.1.33 to 0.1.34
+    * @looker/extension-sdk bumped from 24.16.1 to 24.16.2
+    * @looker/extension-sdk-react bumped from 24.16.1 to 24.16.2
+    * @looker/sdk bumped from 24.16.1 to 24.16.2
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from 0.1.34 to 0.1.35
+    * @looker/extension-sdk bumped from 24.16.2 to 24.18.0
+    * @looker/extension-sdk-react bumped from 24.16.2 to 24.18.0
+    * @looker/sdk bumped from 24.16.2 to 24.18.0
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from 0.1.35 to 0.1.36
+    * @looker/extension-sdk bumped from 24.18.0 to 24.18.1
+    * @looker/extension-sdk-react bumped from 24.18.0 to 24.18.1
+    * @looker/sdk bumped from 24.18.0 to 24.18.1
+
+## [0.1.43](https://github.com/looker-open-source/sdk-codegen/compare/extension-utils-v0.1.42...extension-utils-v0.1.43) (2024-09-14)
+
+
+### Bug Fixes
+
+* fix release 24.16.2 ([#1505](https://github.com/looker-open-source/sdk-codegen/issues/1505)) ([1cd1806](https://github.com/looker-open-source/sdk-codegen/commit/1cd180615901d2daf1fb112b41f2a72d2caacf61))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from 0.1.32 to 0.1.33
+    * @looker/extension-sdk bumped from 24.16.0 to 24.16.1
+    * @looker/extension-sdk-react bumped from 24.16.0 to 24.16.1
+    * @looker/sdk bumped from 24.16.0 to 24.16.1
+    * @looker/sdk-rtl bumped from 21.6.2 to 21.6.3
+
 ## [0.1.42](https://github.com/looker-open-source/sdk-codegen/compare/extension-utils-v0.1.41...extension-utils-v0.1.42) (2024-09-11)
 
 

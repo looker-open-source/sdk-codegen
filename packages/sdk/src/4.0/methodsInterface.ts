@@ -25,7 +25,7 @@
  */
 
 /**
- * 466 API methods
+ * 467 API methods
  */
 
 import type {
@@ -111,6 +111,7 @@ import type {
   IError,
   IExternalOauthApplication,
   IFolder,
+  IFolderBase,
   IGitBranch,
   IGitConnectionTest,
   IGitConnectionTestResult,
@@ -125,6 +126,7 @@ import type {
   IIntegrationTestResult,
   IInternalHelpResources,
   IInternalHelpResourcesContent,
+  IJsonBi,
   ILDAPConfig,
   ILDAPConfigTestResult,
   ILegacyFeature,
@@ -154,7 +156,6 @@ import type {
   IProjectValidationCache,
   IProjectWorkspace,
   IQuery,
-  IQueryFormats,
   IQueryTask,
   IRenderTask,
   IRepositoryCredential,
@@ -218,6 +219,7 @@ import type {
   IRequestSearchPermissionSets,
   IRequestSearchRoles,
   IRequestSearchRolesWithUserCount,
+  IRequestSearchScheduledPlans,
   IRequestSearchThemes,
   IRequestSearchUserLoginLockouts,
   IRequestSearchUsers,
@@ -4411,7 +4413,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * All personal folders will be returned.
    *
-   * GET /folders -> IFolder[]
+   * GET /folders -> IFolderBase[]
    *
    * @param fields Requested fields.
    * @param options one-time API call overrides
@@ -4420,7 +4422,7 @@ export interface ILooker40SDK extends IAPIMethods {
   all_folders(
     fields?: string,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IFolder[], IError>>;
+  ): Promise<SDKResponse<IFolderBase[], IError>>;
 
   /**
    * ### Create a folder with specified information.
@@ -6277,7 +6279,7 @@ export interface ILooker40SDK extends IAPIMethods {
    * will be in the message of the 400 error response, but not as detailed as expressed in `json_detail.errors`.
    * These data formats can only carry row data, and error info is not row data.
    *
-   * GET /query_tasks/{query_task_id}/results -> IQueryTask
+   * GET /query_tasks/{query_task_id}/results -> string
    *
    * @param query_task_id ID of the Query Task
    * @param options one-time API call overrides
@@ -6286,7 +6288,7 @@ export interface ILooker40SDK extends IAPIMethods {
   query_task_results(
     query_task_id: string,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IQueryTask, IError>>;
+  ): Promise<SDKResponse<string, IError>>;
 
   /**
    * ### Get a previously created query by id.
@@ -7538,6 +7540,30 @@ export interface ILooker40SDK extends IAPIMethods {
   ): Promise<SDKResponse<IScheduledPlan, IError | IValidationError>>;
 
   /**
+   * ### Search Scheduled Plans
+   *
+   * Returns all scheduled plans which matches the given search criteria.
+   *
+   * If no user_id is provided, this function returns the scheduled plans owned by the caller.
+   *
+   *
+   * To list all schedules for all users, pass `all_users=true`.
+   *
+   *
+   * The caller must have `see_schedules` permission to see other users' scheduled plans.
+   *
+   * GET /scheduled_plans/search -> IScheduledPlan[]
+   *
+   * @param request composed interface "IRequestSearchScheduledPlans" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  search_scheduled_plans(
+    request: IRequestSearchScheduledPlans,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IScheduledPlan[], IError | IValidationError>>;
+
+  /**
    * ### Get Scheduled Plans for a Look
    *
    * Returns all scheduled plans for a look which belong to the caller or given user.
@@ -7751,17 +7777,9 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * | result_format | Description
    * | :-----------: | :--- |
-   * | json | Plain json
-   * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
-   * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
-   * | csv | Comma separated values with a header
-   * | txt | Tab separated values with a header
-   * | html | Simple html
-   * | md | Simple markdown
-   * | xlsx | MS Excel spreadsheet
-   * | sql | Returns the generated SQL rather than running the query
+   * | json_bi | Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
    *
-   * GET /sql_interface_queries/{query_id}/run/{result_format} -> IQueryFormats
+   * GET /sql_interface_queries/{query_id}/run/{result_format} -> IJsonBi
    *
    * @param query_id Integer id of query
    * @param result_format Format of result, options are: ["json_bi"]
@@ -7772,7 +7790,7 @@ export interface ILooker40SDK extends IAPIMethods {
     query_id: number,
     result_format: string,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IQueryFormats, IError | IValidationError>>;
+  ): Promise<SDKResponse<IJsonBi, IError | IValidationError>>;
 
   /**
    * ### Create a SQL interface query.

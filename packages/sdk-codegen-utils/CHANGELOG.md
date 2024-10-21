@@ -1,5 +1,42 @@
 # Changelog
 
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk bumped from 24.16.1 to 24.16.2
+    * @looker/sdk-node bumped from 24.16.1 to 24.16.2
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk bumped from 24.16.2 to 24.18.0
+    * @looker/sdk-node bumped from 24.16.2 to 24.18.0
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk bumped from 24.18.0 to 24.18.1
+    * @looker/sdk-node bumped from 24.18.0 to 24.18.1
+
+## [21.0.13](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-utils-v21.0.12...sdk-codegen-utils-v21.0.13) (2024-09-14)
+
+
+### Bug Fixes
+
+* fix release 24.16.2 ([#1505](https://github.com/looker-open-source/sdk-codegen/issues/1505)) ([1cd1806](https://github.com/looker-open-source/sdk-codegen/commit/1cd180615901d2daf1fb112b41f2a72d2caacf61))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-rtl bumped from 21.6.2 to 21.6.3
+    * @looker/sdk bumped from 24.16.0 to 24.16.1
+    * @looker/sdk-node bumped from 24.16.0 to 24.16.1
+
 ## [21.0.12](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-utils-v21.0.11...sdk-codegen-utils-v21.0.12) (2024-09-11)
 
 

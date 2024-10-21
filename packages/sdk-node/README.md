@@ -201,9 +201,9 @@ The [deprecated NodeJS `request` package](https://www.npmjs.com/package/request)
 The streaming method callback signature changed from `(readable: Readable) => Promise<x>` to `(response: Response) => Promise<x>`. Using `Response` as the parameter to the callback greatly
 increases the flexibility of streaming implementations and provides other valuable information like `Content-Type` and other headers to the streaming callback.
 
-For the Browser SDK (`@looker/sdk`), the standard `fetch` function is still used. For the Node SDK (`@looker/sdk-node`), the global [`fetch`](https://nodejs.org/api/globals.html#fetch) function from NodeJS v22 is used.
+For the Browser SDK (`@looker/sdk`), the standard `fetch` function is still used. For the Node SDK (`@looker/sdk-node`), the global [`fetch`](https://nodejs.org/api/globals.html#fetch) function from NodeJS is used, which was marked **stable** in version 22.
 
-This means the Looker Node SDK now uses NodeJS v22.
+This means the Looker Node SDK now requires Node 20 or above.
 
 The streaming version of the SDK methods should be initialized using the same `AuthSession` as the main SDK to reduce authentication thrashing.
 
