@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using IniParser;
 
@@ -35,6 +36,7 @@ namespace Looker.RTL
         public string AgentTag { get; set; }
         private string FileName { get; }
         private string SectionName { get; }
+        public IDictionary<string, string> Headers { get; } = new Dictionary<string, string>();
 
         public ApiSettings()
         {
