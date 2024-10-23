@@ -1,5 +1,12 @@
 # Changelog
 
+## [24.19.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.18.1...sdk-codegen-all-v24.19.0) (2024-10-23)
+
+
+### Features
+
+* Kotlin: make Transport class open for extension to allow custom… ([#1520](https://github.com/looker-open-source/sdk-codegen/issues/1520)) ([9fd622f](https://github.com/looker-open-source/sdk-codegen/commit/9fd622f323ed9540dab6fb47b9eaef3c1c79678b))
+
 ## [24.18.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.18.0...sdk-codegen-all-v24.18.1) (2024-10-21)
 
 
