@@ -6,6 +6,7 @@ on:
       - packages/wholly-artifact/**
       - packages/hackathon/**
       - .github/workflows/hackathon-ci.yml
+      - yarn.lock
 
   push:
     branches:
@@ -15,6 +16,7 @@ on:
       - packages/wholly-artifact/**
       - packages/hackathon/**
       - .github/workflows/hackathon-ci.yml
+      - yarn.lock
 
   workflow_dispatch:
 
