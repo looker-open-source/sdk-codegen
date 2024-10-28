@@ -24,7 +24,7 @@
 
  */
 
-const base = require('../../jest.config')
+const base = require('../../jest.config');
 module.exports = {
   ...base,
   rootDir: '../..',
@@ -51,4 +51,4 @@ module.exports = {
     port: 8080,
     launchTimeout: 50000,
   },
-}
+};

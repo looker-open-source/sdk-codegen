@@ -23,26 +23,26 @@
  SOFTWARE.
 
  */
-import { useEffect, useState } from 'react'
-import { useDebounce } from './use_debounce'
+import { useEffect, useState } from 'react';
+import { useDebounce } from './use_debounce';
 // originally from: https://usehooks.com/useWindowSize/
 // modified to add debounce
 export function useWindowSize() {
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
-  })
-  const debouncedWindowSize = useDebounce(windowSize, 1000)
+  });
+  const debouncedWindowSize = useDebounce(windowSize, 1000);
   useEffect(() => {
     function handleResize() {
       setWindowSize({
         width: window.innerWidth,
         height: window.innerHeight,
-      })
+      });
     }
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
-  return debouncedWindowSize
+  return debouncedWindowSize;
 }

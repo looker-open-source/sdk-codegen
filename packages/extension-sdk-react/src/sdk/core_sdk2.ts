@@ -24,8 +24,8 @@
 
  */
 
-let registered = false
-let _coreSdk: any
+let registered = false;
+let _coreSdk: any;
 
 /**
  * Register the SDK. The ExtensionProvider will automatically
@@ -34,10 +34,10 @@ let _coreSdk: any
  */
 export function registerCoreSDK2(coreSdk: any) {
   if (_coreSdk) {
-    throw new Error('coreSDK can only be registered once')
+    throw new Error('coreSDK can only be registered once');
   }
-  _coreSdk = coreSdk
-  registered = true
+  _coreSdk = coreSdk;
+  registered = true;
 }
 
 /**
@@ -46,8 +46,8 @@ export function registerCoreSDK2(coreSdk: any) {
  * the ExtensionProvider should  never call this.
  */
 export function unregisterCoreSDK2() {
-  registered = false
-  _coreSdk = undefined
+  registered = false;
+  _coreSdk = undefined;
 }
 
 /**
@@ -57,7 +57,7 @@ export function unregisterCoreSDK2() {
  */
 export function getCoreSDK2<T>(): T {
   if (!registered) {
-    throw new Error('Looker host connection not established')
+    throw new Error('Looker host connection not established');
   }
-  return _coreSdk
+  return _coreSdk;
 }

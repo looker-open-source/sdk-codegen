@@ -23,8 +23,8 @@
  SOFTWARE.
 
  */
-const base = require('../../jest.config')
-const packageName = require('./package.json').name.split('/')[1]
+const base = require('../../jest.config');
+const packageName = require('./package.json').name.split('/')[1];
 
 module.exports = {
   ...base,
@@ -32,4 +32,4 @@ module.exports = {
   name: packageName,
   rootDir: '../..',
   testMatch: [`<rootDir>/packages/${packageName}/**/*.(spec|test).(ts|js)?(x)`],
-}
+};

@@ -23,13 +23,13 @@
  SOFTWARE.
 
  */
-import type { IMethodResponse } from '@looker/sdk-codegen'
-import type { FC } from 'react'
-import React from 'react'
-import { Tooltip } from '@looker/components'
+import type { IMethodResponse } from '@looker/sdk-codegen';
+import type { FC } from 'react';
+import React from 'react';
+import { Tooltip } from '@looker/components';
 
 export interface DocPrimaryResponseProps {
-  response: IMethodResponse
+  response: IMethodResponse;
 }
 
 export const DocPrimaryResponse: FC<DocPrimaryResponseProps> = ({
@@ -38,4 +38,4 @@ export const DocPrimaryResponse: FC<DocPrimaryResponseProps> = ({
   <Tooltip content={`${response.description} ${response.mediaType}`}>
     <span>{response.type.name}</span>
   </Tooltip>
-)
+);

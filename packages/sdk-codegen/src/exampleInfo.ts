@@ -24,51 +24,51 @@
 
  */
 
-import type { KeyedCollection } from './sdkModels'
+import type { ArgValues, KeyedCollection } from './sdkModels';
 
 export interface ISDKCall {
   /** SDK variable name for the call found */
-  sdk: string
+  sdk: string;
 
   /** Name of the method/operationId */
-  operationId: string
+  operationId: string;
 
   /** Source code line number */
-  line: number
+  line: number;
 
   /** Source code column number where method name was found */
-  column: number
+  column: number;
 }
 
 export interface IExampleLink {
   /** Either summary from .md documentation or the name of the source file */
-  description: string
+  description: string;
   /** permalink to file and line number */
-  permalink: string
+  permalink: string;
   /** text to show on hover */
-  tooltip: string
+  tooltip: string;
   /** line number text */
-  lineNumber: string
+  lineNumber: string;
 }
 
-export type SDKCalls = ISDKCall[]
+export type SDKCalls = ISDKCall[];
 
 export interface ISummary {
   /** relative file name */
-  sourceFile: string
+  sourceFile: string;
   /** summary extracted from md, rst, or other doc file */
-  summary: string
+  summary: string;
 }
 
-export type Summaries = KeyedCollection<ISummary>
+export type Summaries = KeyedCollection<ISummary>;
 
 export interface IFileCall {
   /** relative file name */
-  sourceFile: string
+  sourceFile: string;
   /** line number for source code call */
-  line: number
+  line: number;
   /** Optional column number for source code call. Maybe we don't need this datum */
-  column?: number
+  column?: number;
 }
 
 /**
@@ -87,26 +87,26 @@ export interface IFileCall {
 }
  */
 
-export type FileCalls = IFileCall[]
+export type FileCalls = IFileCall[];
 
-export type LanguageCalls = KeyedCollection<FileCalls>
+export type LanguageCalls = KeyedCollection<FileCalls>;
 
 export interface INugget {
-  operationId: string
-  calls: LanguageCalls
+  operationId: string;
+  calls: LanguageCalls;
 }
 
-export type Nuggets = KeyedCollection<INugget>
+export type Nuggets = KeyedCollection<INugget>;
 
 export interface IMine {
-  commitHash: string
-  remoteOrigin: string
+  commitHash: string;
+  remoteOrigin: string;
 }
 
 /** All mined example data */
 export interface IExampleMine extends IMine {
-  summaries: Summaries
-  nuggets: Nuggets
+  summaries: Summaries;
+  nuggets: Nuggets;
 }
 
 /** function type for formatting source code links */
@@ -115,7 +115,7 @@ export type SourceLink = (
   hash: string,
   fileName: string,
   line: number
-) => string
+) => string;
 
 /**
  * Create a permalink for a github file with line number
@@ -130,7 +130,7 @@ export const permaLink: SourceLink = (
   hash: string,
   fileName: string,
   line: number
-) => `${remote}/blob/${hash}/${fileName}#L${line}`
+) => `${remote}/blob/${hash}/${fileName}#L${line}`;
 
 /**
  * Create a permalink for a code search with commit hash and line number
@@ -144,7 +144,7 @@ export const codeSearchLink: SourceLink = (
   hash: string,
   fileName: string,
   line: number
-) => `${remote}/${fileName}?l=${line}&rcl=${hash}`
+) => `${remote}/${fileName}?l=${line}&rcl=${hash}`;
 
 /**
  * Create an IDE file link with line number
@@ -161,10 +161,10 @@ export const ideLink = (
   line: number
 ) => {
   // const idea = 'http//localhost:8091'
-  const vscode = 'vscode://'
+  const vscode = 'vscode://';
 
-  return `${vscode}${parentPath}/${fileName}:L:${line}`
-}
+  return `${vscode}${parentPath}/${fileName}:L:${line}`;
+};
 
 /**
  * Gets the summary for an example file, or defaults to the file and line number
@@ -173,11 +173,11 @@ export const ideLink = (
  */
 export const summarize = (lode: IExampleMine, call: IFileCall): string => {
   if (call.sourceFile in lode.summaries) {
-    return lode.summaries[call.sourceFile].summary
+    return lode.summaries[call.sourceFile].summary;
   }
   // Default to file name if no summary is found
-  return call.sourceFile
-}
+  return call.sourceFile;
+};
 
 /**
  * Provides permalink and description for an example file call
@@ -193,19 +193,19 @@ export const exampleLink = (
     lode.commitHash,
     call.sourceFile,
     call.line
-  )
+  );
 
   return {
     permalink: link,
     description: summarize(lode, call),
     tooltip: `${call.sourceFile} line ${call.line}`,
     lineNumber: call.line.toString(),
-  }
-}
+  };
+};
 
 // TODO create one data set for extensionToLanguage and getLanguageExtensions
 /** map file extension to language name */
-export const extensionToLanguage = {
+export const extensionToLanguage: ArgValues = {
   '.py': 'Python',
   '.ts': 'TypeScript',
   '.tsx': 'TypeScript',
@@ -217,7 +217,7 @@ export const extensionToLanguage = {
   '.go': 'Go',
   '.md': 'Markdown',
   '.java': 'Java',
-}
+};
 
 /**
  * Return the recognized file extensions for the requested language
@@ -227,42 +227,42 @@ export const getLanguageExtensions = (language: string): string[] => {
   switch (language.toLowerCase()) {
     case 'ts':
     case 'typescript':
-      return ['.ts', 'tsx']
+      return ['.ts', 'tsx'];
     case 'csharp':
     case 'c#':
-      return ['.cs']
+      return ['.cs'];
     case 'ruby':
-      return ['.rb']
+      return ['.rb'];
     case 'python':
-      return ['.py']
+      return ['.py'];
     case 'swift':
-      return ['.swift']
+      return ['.swift'];
     case 'kotlin':
-      return ['.kt']
+      return ['.kt'];
     case 'dart':
-      return ['.dart']
+      return ['.dart'];
     case 'go':
-      return ['.go']
+      return ['.go'];
     case 'java':
-      return ['.java']
+      return ['.java'];
     default:
-      return []
+      return [];
   }
-}
+};
 
 export const findExampleLanguages = (
   lode: IExampleMine,
   methodName: string
 ) => {
-  const all = lode.nuggets[methodName]
-  if (!all) return []
-  const result = new Set<string>()
-  const keys = Object.keys(extensionToLanguage)
-  keys.forEach((key) => {
-    if (all.calls[key]) result.add(extensionToLanguage[key])
-  })
-  return Array.from(result)
-}
+  const all = lode.nuggets[methodName];
+  if (!all) return [];
+  const result = new Set<string>();
+  const keys = Object.keys(extensionToLanguage);
+  keys.forEach(key => {
+    if (all.calls[key]) result.add(extensionToLanguage[key]);
+  });
+  return Array.from(result);
+};
 
 /**
  * Searches for examples containing operationId usages in the given language
@@ -275,22 +275,22 @@ export const findExamples = (
   language: string,
   operationId: string
 ): IExampleLink[] => {
-  const all = lode.nuggets[operationId]
-  const exts = getLanguageExtensions(language)
-  const links: IExampleLink[] = []
+  const all = lode.nuggets[operationId];
+  const exts = getLanguageExtensions(language);
+  const links: IExampleLink[] = [];
 
   if (all && exts.length > 0) {
-    exts.forEach((ext) => {
-      const calls = all.calls[ext]
+    exts.forEach(ext => {
+      const calls = all.calls[ext];
       if (calls) {
         calls.forEach((call: IFileCall) => {
-          const link = exampleLink(lode, call)
+          const link = exampleLink(lode, call);
           if (link) {
-            links.push(exampleLink(lode, call))
+            links.push(exampleLink(lode, call));
           }
-        })
+        });
       }
-    })
+    });
   }
-  return links.sort((a, b) => a.permalink.localeCompare(b.permalink))
-}
+  return links.sort((a, b) => a.permalink.localeCompare(b.permalink));
+};

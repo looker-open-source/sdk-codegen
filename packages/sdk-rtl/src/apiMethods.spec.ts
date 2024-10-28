@@ -24,45 +24,45 @@
 
  */
 
-import type { Authenticator } from './transport'
-import { APIMethods } from './apiMethods'
-import type { IAuthSession } from './authSession'
-import type { IApiSettings } from './apiSettings'
-import { DefaultSettings } from './apiSettings'
+import type { Authenticator } from './transport';
+import { APIMethods } from './apiMethods';
+import type { IAuthSession } from './authSession';
+import type { IApiSettings } from './apiSettings';
+import { DefaultSettings } from './apiSettings';
 
 describe('ApiMethods', () => {
-  const hostname = 'https://looker.sdk'
-  const apiVersion = '4.0'
-  const settings = { base_url: hostname } as IApiSettings
-  const session = { settings: settings } as IAuthSession
-  const fullPath = 'https://github.com/looker-open-source/sdk-codegen'
-  const mockAuth: Authenticator = (props: any) => props
-  const api = new APIMethods(session, 'mock')
-  api.apiVersion = apiVersion
-  api.apiPath = `${settings.base_url}/api/${apiVersion}`
+  const hostname = 'https://looker.sdk';
+  const apiVersion = '4.0';
+  const settings = { base_url: hostname } as IApiSettings;
+  const session = { settings } as IAuthSession;
+  const fullPath = 'https://github.com/looker-open-source/sdk-codegen';
+  const mockAuth: Authenticator = (props: any) => props;
+  const api = new APIMethods(session, 'mock');
+  api.apiVersion = apiVersion;
+  api.apiPath = `${settings.base_url}/api/${apiVersion}`;
 
   it('relative path without auth is just base', () => {
-    const actual = api.makePath('/login', settings)
-    expect(actual).toEqual(`${hostname}/login`)
-  })
+    const actual = api.makePath('/login', settings);
+    expect(actual).toEqual(`${hostname}/login`);
+  });
 
   it('relative path with auth is api path', () => {
-    const actual = api.makePath('/login', settings, mockAuth)
-    expect(actual).toEqual(`${hostname}/api/${apiVersion}/login`)
-  })
+    const actual = api.makePath('/login', settings, mockAuth);
+    expect(actual).toEqual(`${hostname}/api/${apiVersion}/login`);
+  });
 
   it('full path without auth is just full path', () => {
-    const actual = api.makePath(fullPath, settings)
-    expect(actual).toEqual(fullPath)
-  })
+    const actual = api.makePath(fullPath, settings);
+    expect(actual).toEqual(fullPath);
+  });
 
   it('full path with auth is just full path', () => {
-    const actual = api.makePath(fullPath, settings, mockAuth)
-    expect(actual).toEqual(fullPath)
-  })
+    const actual = api.makePath(fullPath, settings, mockAuth);
+    expect(actual).toEqual(fullPath);
+  });
 
   it('path not prefixed if base url not set', () => {
-    const actual = api.makePath('/all_connections', DefaultSettings())
-    expect(actual).toEqual(`/all_connections`)
-  })
-})
+    const actual = api.makePath('/all_connections', DefaultSettings());
+    expect(actual).toEqual(`/all_connections`);
+  });
+});

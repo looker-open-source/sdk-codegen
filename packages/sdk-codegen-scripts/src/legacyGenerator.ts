@@ -24,12 +24,12 @@
 
  */
 
-import { log } from '@looker/sdk-codegen-utils'
-import type { IGeneratorSpec, IApiVersion } from '@looker/sdk-codegen'
-import { getSpecsFromVersions, legacyLanguages } from '@looker/sdk-codegen'
-import type { ISDKConfigProps } from './sdkConfig'
-import { run } from './nodeUtils'
-import { fetchLookerVersions, logConvertSpec } from './fetchSpec'
+import { log } from '@looker/sdk-codegen-utils';
+import type { IApiVersion, IGeneratorSpec } from '@looker/sdk-codegen';
+import { getSpecsFromVersions, legacyLanguages } from '@looker/sdk-codegen';
+import type { ISDKConfigProps } from './sdkConfig';
+import { run } from './nodeUtils';
+import { fetchLookerVersions, logConvertSpec } from './fetchSpec';
 
 /**
  * Returns the last version in the .ini api_versions comma-delimited list
@@ -37,9 +37,9 @@ import { fetchLookerVersions, logConvertSpec } from './fetchSpec'
  * @returns {string}
  */
 const defaultApiVersion = (props: ISDKConfigProps) => {
-  const versions = (props.api_versions || '4.0').split(',')
-  return versions[versions.length - 1]
-}
+  const versions = (props.api_versions || '4.0').split(',');
+  return versions[versions.length - 1];
+};
 
 /**
  * Generate API bindings with the OpenAPI legacy code generator
@@ -56,11 +56,11 @@ const generate = async (
   spec: IGeneratorSpec,
   props: ISDKConfigProps
 ) => {
-  const path = spec.path ? spec.path : spec.language
-  const language = spec.legacy ? spec.legacy : spec.language
-  const apiVersion = defaultApiVersion(props)
-  const apiPath = `./api/${apiVersion}/${path}`
-  const options = spec.options || ''
+  const path = spec.path ? spec.path : spec.language;
+  const language = spec.legacy ? spec.legacy : spec.language;
+  const apiVersion = defaultApiVersion(props);
+  const apiPath = `./api/${apiVersion}/${path}`;
+  const options = spec.options || '';
   return run('openapi-generator-cli', [
     'generate',
     '-i',
@@ -71,8 +71,8 @@ const generate = async (
     apiPath,
     '--enable-post-process-file',
     options,
-  ])
-}
+  ]);
+};
 
 /**
  * Generate all languages for the specified configuration
@@ -86,25 +86,25 @@ export const runConfig = async (
   props: ISDKConfigProps,
   targets: string[] = []
 ) => {
-  log(`processing ${name} configuration ...`)
-  const apiVersion = defaultApiVersion(props)
-  props.api_version = apiVersion
-  const lookerVersions = await fetchLookerVersions(props)
-  const specs = await getSpecsFromVersions(lookerVersions as IApiVersion)
-  const openApiFile = await logConvertSpec(name, specs[apiVersion], props)
-  const languages = legacyLanguages()
+  log(`processing ${name} configuration ...`);
+  const apiVersion = defaultApiVersion(props);
+  props.api_version = apiVersion;
+  const lookerVersions = await fetchLookerVersions(props);
+  const specs = await getSpecsFromVersions(lookerVersions as IApiVersion);
+  const openApiFile = await logConvertSpec(name, specs[apiVersion], props);
+  const languages = legacyLanguages();
 
-  const results: any[] = []
+  const results: any[] = [];
   for (const language of languages) {
     if (
       targets.length === 0 ||
-      targets.find((t) => t.localeCompare(language.language) === 0)
+      targets.find(t => t.localeCompare(language.language) === 0)
     ) {
-      const tag = `${name} API ${language.language} version ${apiVersion}`
-      log(`generating ${tag} ...`)
-      results.push(await generate(openApiFile, language, props))
+      const tag = `${name} API ${language.language} version ${apiVersion}`;
+      log(`generating ${tag} ...`);
+      results.push(await generate(openApiFile, language, props));
     }
   }
 
-  return results
-}
+  return results;
+};

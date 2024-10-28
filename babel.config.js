@@ -25,8 +25,8 @@
  */
 
 module.exports = (api) => {
-  const isTest = api.env('test')
-  api.cache(true)
+  const isTest = api.env('test');
+  api.cache(true);
 
   const testIgnore = [
     '**/*.test.js',
@@ -37,9 +37,9 @@ module.exports = (api) => {
     '**/*.spec.jsx',
     '**/*.spec.ts',
     '**/*.spec.tsx',
-  ]
+  ];
 
-  const ignore = isTest ? [] : ['node_modules', ...testIgnore]
+  const ignore = isTest ? [] : ['node_modules', ...testIgnore];
 
   return {
     sourceType: 'unambiguous',
@@ -72,7 +72,8 @@ module.exports = (api) => {
             esmodules: true,
           },
           useBuiltIns: false,
-          // modules: process.env.BABEL_ENV === 'build_cjs' ? 'auto' : false,
+          modules:
+            isTest || process.env.BABEL_ENV === 'build_cjs' ? 'auto' : false,
         },
       ],
       [
@@ -86,5 +87,5 @@ module.exports = (api) => {
       ],
       '@babel/preset-typescript',
     ],
-  }
-}
+  };
+};

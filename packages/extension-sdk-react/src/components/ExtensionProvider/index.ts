@@ -24,5 +24,5 @@
 
  */
 
-export * from './ExtensionProvider'
-export * from './types'
+export * from './ExtensionProvider';
+export * from './types';

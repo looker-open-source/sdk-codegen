@@ -24,10 +24,10 @@
 
  */
 
-import type { ICryptoHash, IApiSection, IApiSettings } from '@looker/sdk-rtl'
-import { OAuthSession, ApiSettings, DefaultSettings } from '@looker/sdk-rtl'
-import { NodeServices } from './nodeServices'
-import { NodeCryptoHash } from './nodeTransport'
+import type { IApiSection, IApiSettings, ICryptoHash } from '@looker/sdk-rtl';
+import { ApiSettings, DefaultSettings, OAuthSession } from '@looker/sdk-rtl';
+import { NodeServices } from './nodeServices';
+import { NodeCryptoHash } from './nodeTransport';
 
 const allSettings = {
   ...DefaultSettings(),
@@ -35,15 +35,15 @@ const allSettings = {
   client_id: '123456',
   looker_url: 'https://myinstance.looker.com:9999',
   redirect_uri: 'https://myapp.com/redirect',
-} as IApiSettings
+} as IApiSettings;
 
 export class MockOauthSettings extends ApiSettings {
   constructor(private mocked: IApiSettings = allSettings) {
-    super(mocked)
+    super(mocked);
   }
 
   readConfig(_section?: string): IApiSection {
-    return this.mocked
+    return this.mocked;
   }
 }
 
@@ -51,13 +51,13 @@ export class MockCrypto implements ICryptoHash {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   secureRandom(byteCount: number): string {
-    return 'feedface'
+    return 'feedface';
   }
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   sha256Hash(message: string): Promise<string> {
-    return Promise.resolve('baadf00d')
+    return Promise.resolve('baadf00d');
   }
 }
 
@@ -67,20 +67,20 @@ describe.skip('nodeServices', () => {
     const services = new NodeServices({
       crypto: new NodeCryptoHash(),
       settings: new MockOauthSettings(),
-    })
-    const session = new OAuthSession(services)
-    const urlstr = await session.createAuthCodeRequestUrl('api', 'mystate')
-    expect(session.code_verifier).toBeDefined()
-    expect((session.code_verifier || '').length).toEqual(66)
+    });
+    const session = new OAuthSession(services);
+    const urlstr = await session.createAuthCodeRequestUrl('api', 'mystate');
+    expect(session.code_verifier).toBeDefined();
+    expect((session.code_verifier || '').length).toEqual(66);
 
-    const url = new URL(urlstr)
-    expect(url.origin).toEqual(allSettings.looker_url)
-    const params = url.searchParams
-    const props: any = {}
+    const url = new URL(urlstr);
+    expect(url.origin).toEqual(allSettings.looker_url);
+    const params = url.searchParams;
+    const props: any = {};
     params.forEach((value, key) => {
-      props[key] = value
-    })
-    delete props.code_challenge
+      props[key] = value;
+    });
+    delete props.code_challenge;
     expect(props).toEqual({
       client_id: '123456',
       code_challenge_method: 'S256',
@@ -88,6 +88,6 @@ describe.skip('nodeServices', () => {
       response_type: 'code',
       scope: 'api',
       state: 'mystate',
-    })
-  })
-})
+    });
+  });
+});

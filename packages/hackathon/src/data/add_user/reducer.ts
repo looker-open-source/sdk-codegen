@@ -24,8 +24,8 @@
 
  */
 
-import type { AddUserAction, UserToAdd } from './actions'
-import { Actions } from './actions'
+import type { AddUserAction, UserToAdd } from './actions';
+import { Actions } from './actions';
 
 export enum ADD_STAGES {
   INIT,
@@ -34,16 +34,16 @@ export enum ADD_STAGES {
 }
 
 export interface AddUserState {
-  usersToAdd: Array<UserToAdd>
-  usersAdded: number
-  stage: ADD_STAGES
+  usersToAdd: Array<UserToAdd>;
+  usersAdded: number;
+  stage: ADD_STAGES;
 }
 
 const defaultState: Readonly<AddUserState> = Object.freeze({
   usersToAdd: [],
   usersAdded: 0,
   stage: ADD_STAGES.INIT,
-})
+});
 
 export const addUserReducer = (
   state: AddUserState = defaultState,
@@ -53,14 +53,14 @@ export const addUserReducer = (
     case Actions.PARSE_CSV:
       return {
         ...defaultState,
-      }
+      };
     case Actions.ADD_USERS:
       return {
         ...defaultState,
         stage: ADD_STAGES.USERS_ADDING,
         usersToAdd: action.payload,
         usersAdded: 0,
-      }
+      };
     case Actions.INCREMENT_USERS_ADDED:
       return {
         ...state,
@@ -69,12 +69,12 @@ export const addUserReducer = (
           state.usersAdded + 1 < state.usersToAdd.length
             ? ADD_STAGES.USERS_ADDING
             : ADD_STAGES.INIT,
-      }
+      };
     case Actions.RESET_ADD_USERS:
       return {
         ...defaultState,
-      }
+      };
     default:
-      return state
+      return state;
   }
-}
+};

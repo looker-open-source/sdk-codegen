@@ -24,75 +24,75 @@
 
  */
 
-import type { BaseSyntheticEvent, FC } from 'react'
-import React, { useEffect, useState } from 'react'
+import type { BaseSyntheticEvent, FC } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  Heading,
-  FlexItem,
-  IconButton,
-  SpaceVertical,
   FieldToggleSwitch,
   Flex,
-} from '@looker/components'
-import { Delete } from '@styled-icons/material/Delete'
+  FlexItem,
+  Heading,
+  IconButton,
+  SpaceVertical,
+} from '@looker/components';
+import { Delete } from '@styled-icons/material/Delete';
 
-import { RunItConfigKey } from '../ConfigForm'
-import { Loading } from '../Loading'
-import type { LoadTimes } from './perfUtils'
-import { PerfTimings } from './perfUtils'
-import { PerfChart } from './PerfChart'
-import { PerfTable } from './PerfTable'
+import { RunItConfigKey } from '../ConfigForm';
+import { Loading } from '../Loading';
+import type { LoadTimes } from './perfUtils';
+import { PerfTimings } from './perfUtils';
+import { PerfChart } from './PerfChart';
+import { PerfTable } from './PerfTable';
 
 interface PerfTrackerProps {
-  perf?: PerfTimings
-  showAllColumns?: boolean
+  perf?: PerfTimings;
+  showAllColumns?: boolean;
 }
 
 const perfFilter = (all = false) => {
-  if (all) return '.*'
+  if (all) return '.*';
   // TODO: temporary solution until redux is introduced in RunIt. Using the env
   // adaptor makes the below async, which in turn makes it hard to use this to
   // set the initial state. PerfTracker is only used in the standalone version
   // so this achieves parity.
-  const value = localStorage.getItem(RunItConfigKey)
-  if (!value) return '.*'
-  const config = JSON.parse(value)
-  const url = new URL(config.base_url)
-  return `${url.protocol}//${url.hostname}.*`
-}
+  const value = localStorage.getItem(RunItConfigKey);
+  if (!value) return '.*';
+  const config = JSON.parse(value);
+  const url = new URL(config.base_url);
+  return `${url.protocol}//${url.hostname}.*`;
+};
 
 export const PerfTracker: FC<PerfTrackerProps> = ({
   perf = new PerfTimings(),
   showAllColumns = false,
 }) => {
   // TODO UI option to filter by url pattern
-  const [loading, setLoading] = useState(false)
-  const [showAll, setShowAll] = useState(false)
-  const [filter, setFilter] = useState(perfFilter())
-  const [data, setData] = useState<LoadTimes[]>(perf.entries(filter))
-  const [timings, setTimings] = useState(data.length > 0 ? data[0] : undefined)
+  const [loading, setLoading] = useState(false);
+  const [showAll, setShowAll] = useState(false);
+  const [filter, setFilter] = useState(perfFilter());
+  const [data, setData] = useState<LoadTimes[]>(perf.entries(filter));
+  const [timings, setTimings] = useState(data.length > 0 ? data[0] : undefined);
 
   const handleClear = (_: BaseSyntheticEvent) => {
-    setLoading(true)
-    perf.clear()
-    setData([])
-    setTimings(undefined)
-  }
+    setLoading(true);
+    perf.clear();
+    setData([]);
+    setTimings(undefined);
+  };
 
   const handleFilterChange = (e: BaseSyntheticEvent) => {
-    setLoading(true)
-    const all = e.target.checked
-    setShowAll(all)
-    const pf = perfFilter(all)
-    setFilter(pf)
-    setData(perf.entries(pf))
-  }
+    setLoading(true);
+    const all = e.target.checked;
+    setShowAll(all);
+    const pf = perfFilter(all);
+    setFilter(pf);
+    setData(perf.entries(pf));
+  };
 
   useEffect(() => {
-    setLoading(false)
-  }, [data])
+    setLoading(false);
+  }, [data]);
 
-  const handleSelect = (item: LoadTimes) => setTimings(item)
+  const handleSelect = (item: LoadTimes) => setTimings(item);
 
   return (
     <>
@@ -135,5 +135,5 @@ export const PerfTracker: FC<PerfTrackerProps> = ({
           'No performance data is loaded'}
       </>
     </>
-  )
-}
+  );
+};

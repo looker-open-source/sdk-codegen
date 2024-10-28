@@ -24,4 +24,4 @@
 
  */
 
-export { useTagStoreSync } from './tagStoreSync'
+export { useTagStoreSync } from './tagStoreSync';

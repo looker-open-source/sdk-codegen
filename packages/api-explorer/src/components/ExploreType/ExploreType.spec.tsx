@@ -24,81 +24,71 @@
 
  */
 
-import React from 'react'
-import { screen } from '@testing-library/react'
+import React from 'react';
+import { screen } from '@testing-library/react';
 
-import { api } from '../../test-data'
-import { renderWithRouter } from '../../test-utils'
-import { ExploreType, ExploreTypeLink } from '.'
+import { api } from '../../test-data';
+import { renderWithRouter } from '../../test-utils';
+import { ExploreType, ExploreTypeLink } from '.';
 
 describe('ExploreType', () => {
-  const targetType = api.types.ColorCollection
-  const colors = 'colors'
-  const colorsExpected = 1
-  const stops = 'stops'
-  const stopsExpected = 2
-  const offset = 'offset'
-  const offsetExpected = 2
+  const targetType = api.types.ColorCollection;
+  const colors = 'colors';
+  const colorsExpected = 1;
+  const stops = 'stops';
+  const stopsExpected = 2;
+  const offset = 'offset';
+  const offsetExpected = 2;
 
   test('expands all when openAll is true and expand defaults', () => {
-    renderWithRouter(<ExploreType api={api} type={targetType} openAll={true} />)
+    renderWithRouter(
+      <ExploreType api={api} type={targetType} openAll={true} />
+    );
 
-    expect(screen.getByText(targetType.jsonName)).toBeInTheDocument()
-    expect(screen.queryAllByText(colors)).toHaveLength(colorsExpected)
-    expect(screen.queryAllByText(stops)).toHaveLength(stopsExpected)
-    expect(screen.queryAllByText(offset)).toHaveLength(offsetExpected)
-  })
+    expect(screen.getByText(targetType.jsonName)).toBeInTheDocument();
+    expect(screen.queryAllByText(colors)).toHaveLength(colorsExpected);
+    expect(screen.queryAllByText(stops)).toHaveLength(stopsExpected);
+    expect(screen.queryAllByText(offset)).toHaveLength(offsetExpected);
+  });
 
   test('expands nothing if maxDepth is 0', () => {
     renderWithRouter(
       <ExploreType api={api} type={targetType} openAll={true} maxDepth={0} />
-    )
+    );
 
-    expect(screen.getByText(targetType.jsonName)).toBeInTheDocument()
+    expect(screen.getByText(targetType.jsonName)).toBeInTheDocument();
     // eslint-disable-next-line jest-dom/prefer-in-document
-    expect(screen.queryAllByText(colors)).toHaveLength(0)
+    expect(screen.queryAllByText(colors)).toHaveLength(0);
     // eslint-disable-next-line jest-dom/prefer-in-document
-    expect(screen.queryAllByText(stops)).toHaveLength(0)
+    expect(screen.queryAllByText(stops)).toHaveLength(0);
     // eslint-disable-next-line jest-dom/prefer-in-document
-    expect(screen.queryAllByText(offset)).toHaveLength(0)
-  })
+    expect(screen.queryAllByText(offset)).toHaveLength(0);
+  });
 
   test('expands 2 levels only', () => {
     renderWithRouter(
       <ExploreType api={api} type={targetType} maxDepth={2} openAll={true} />
-    )
+    );
 
-    expect(screen.getByText(targetType.jsonName)).toBeInTheDocument()
-    expect(screen.queryAllByText(colors)).toHaveLength(colorsExpected)
-    expect(screen.queryAllByText(stops)).toHaveLength(stopsExpected)
+    expect(screen.getByText(targetType.jsonName)).toBeInTheDocument();
+    expect(screen.queryAllByText(colors)).toHaveLength(colorsExpected);
+    expect(screen.queryAllByText(stops)).toHaveLength(stopsExpected);
     // eslint-disable-next-line jest-dom/prefer-in-document
-    expect(screen.queryAllByText(offset)).toHaveLength(0)
-  })
+    expect(screen.queryAllByText(offset)).toHaveLength(0);
+  });
 
   describe('ExploreTypeLink', () => {
-    test('recognizes 3.1', () => {
-      const specKey = '3.1'
-      const path = `/${specKey}/methods/foo`
-      renderWithRouter(<ExploreTypeLink api={api} type={targetType} />, [path])
-
-      const actual = screen.getByText(targetType.jsonName)
-      expect(actual).toBeInTheDocument()
-      expect(actual).toHaveProperty(
-        'href',
-        `http://localhost/${specKey}/types/ColorCollection/${targetType.jsonName}`
-      )
-    })
     test('recognizes 4.0', () => {
-      const specKey = '4.0'
-      const path = `/${specKey}/methods/foo`
-      renderWithRouter(<ExploreTypeLink api={api} type={targetType} />, [path])
+      const specKey = '4.0';
+      const path = `/${specKey}/methods/foo`;
+      renderWithRouter(<ExploreTypeLink api={api} type={targetType} />, [path]);
 
-      const actual = screen.getByText(targetType.jsonName)
-      expect(actual).toBeInTheDocument()
+      const actual = screen.getByText(targetType.jsonName);
+      expect(actual).toBeInTheDocument();
       expect(actual).toHaveProperty(
         'href',
         `http://localhost/${specKey}/types/ColorCollection/${targetType.jsonName}`
-      )
-    })
-  })
-})
+      );
+    });
+  });
+});

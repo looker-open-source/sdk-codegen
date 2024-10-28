@@ -24,37 +24,37 @@
 
  */
 
-import type { FC } from 'react'
-import React, { useState } from 'react'
+import type { FC } from 'react';
+import React, { useState } from 'react';
 import {
+  IconButton,
+  Span,
   Table,
   TableBody,
-  TableRow,
   TableDataCell,
-  Span,
   TableHead,
   TableHeaderCell,
-  IconButton,
-} from '@looker/components'
-import styled from 'styled-components'
-import type { IRawResponse, LookerSDKError } from '@looker/sdk-rtl'
-import { Warning } from '@styled-icons/material/Warning'
-import { APIErrorDialog, APIErrorDisplay } from '@looker/extension-utils'
-import { ShowResponse } from '../ShowResponse'
-import { CollapserCard } from '../Collapser'
-import { DarkSpan, RunItHeading } from '../common'
+  TableRow,
+} from '@looker/components';
+import styled from 'styled-components';
+import type { IRawResponse, LookerSDKError } from '@looker/sdk-rtl';
+import { Warning } from '@styled-icons/material/Warning';
+import { APIErrorDialog, APIErrorDisplay } from '@looker/extension-utils';
+import { ShowResponse } from '../ShowResponse';
+import { CollapserCard } from '../Collapser';
+import { DarkSpan, RunItHeading } from '../common';
 
-type HeaderTable = string[][]
-export type ResponseContent = IRawResponse | undefined
+type HeaderTable = string[][];
+export type ResponseContent = IRawResponse | undefined;
 
 const getHeaders = (response: ResponseContent): HeaderTable => {
-  if (!response?.headers) return []
-  const result: HeaderTable = []
+  if (!response?.headers) return [];
+  const result: HeaderTable = [];
   Object.entries(response.headers).forEach(([key, val]) =>
     result.push([key, val])
-  )
-  return result
-}
+  );
+  return result;
+};
 
 const getBodySize = (response: ResponseContent): string => {
   const size =
@@ -62,20 +62,20 @@ const getBodySize = (response: ResponseContent): string => {
       ? 0
       : response?.body instanceof Blob
       ? response?.body.size
-      : response?.body.toString().length
+      : response?.body.toString().length;
 
-  return `${size} bytes`
-}
+  return `${size} bytes`;
+};
 
 const NoWrap = styled(Span)`
   display: inline-block;
   direction: rtl;
   white-space: nowrap;
   overflow: hidden;
-`
+`;
 
 interface ShowHeadersProps {
-  response: ResponseContent
+  response: ResponseContent;
 }
 
 /**
@@ -84,8 +84,8 @@ interface ShowHeadersProps {
  * @constructor
  */
 export const ResponseHeaders: FC<ShowHeadersProps> = ({ response }) => {
-  const rows = getHeaders(response)
-  if (rows.length === 0) return <></>
+  const rows = getHeaders(response);
+  if (rows.length === 0) return <></>;
   return (
     <CollapserCard
       key="headers"
@@ -119,13 +119,13 @@ export const ResponseHeaders: FC<ShowHeadersProps> = ({ response }) => {
         </Table>
       </>
     </CollapserCard>
-  )
-}
+  );
+};
 
 interface ResponseExplorerProps {
-  response: ResponseContent
-  verb: string
-  path: string
+  response: ResponseContent;
+  verb: string;
+  path: string;
 }
 
 /**
@@ -140,19 +140,19 @@ export const ResponseExplorer: FC<ResponseExplorerProps> = ({
   verb,
   path,
 }) => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
   const error: LookerSDKError =
     response &&
     response.statusCode >= 400 &&
     response.contentType === 'application/json'
       ? JSON.parse(response.body)
-      : undefined
+      : undefined;
 
   const timed = (response: IRawResponse) => {
-    if (!(response.responseCompleted || response.requestStarted)) return ''
-    const diff = (response.responseCompleted - response.requestStarted) / 1000
-    return `Seconds: ${diff.toFixed(3)}`
-  }
+    if (!(response.responseCompleted || response.requestStarted)) return '';
+    const diff = (response.responseCompleted - response.requestStarted) / 1000;
+    return `Seconds: ${diff.toFixed(3)}`;
+  };
 
   return (
     <>
@@ -196,5 +196,5 @@ export const ResponseExplorer: FC<ResponseExplorerProps> = ({
         </>
       )}
     </>
-  )
-}
+  );
+};

@@ -24,34 +24,34 @@
 
  */
 
-import type { FC } from 'react'
-import React from 'react'
-import { Markdown } from '@looker/code-editor'
-import { useSelector } from 'react-redux'
-import { getEnvAdaptor } from '@looker/extension-utils'
-import { selectSearchPattern } from '../../state'
-import { useNavigation } from '../../utils'
-import { transformURL } from './utils'
+import type { FC } from 'react';
+import React from 'react';
+import { Markdown } from '@looker/code-editor';
+import { useSelector } from 'react-redux';
+import { getEnvAdaptor } from '@looker/extension-utils';
+import { selectSearchPattern } from '../../state';
+import { useNavigation } from '../../utils';
+import { transformURL } from './utils';
 
 interface DocMarkdownProps {
-  source: string
-  specKey: string
+  source: string;
+  specKey: string;
 }
 
 export const DocMarkdown: FC<DocMarkdownProps> = ({ source, specKey }) => {
-  const searchPattern = useSelector(selectSearchPattern)
-  const { navigate } = useNavigation()
+  const searchPattern = useSelector(selectSearchPattern);
+  const { navigate } = useNavigation();
 
   const linkClickHandler = (pathname: string, url: string) => {
     if (pathname.startsWith(`/${specKey}`)) {
-      navigate(pathname)
+      navigate(pathname);
     } else if (url.startsWith(`/${specKey}`)) {
-      navigate(url)
+      navigate(url);
     } else if (url.startsWith('https://')) {
-      const adaptor = getEnvAdaptor()
-      adaptor.openBrowserWindow(url)
+      const adaptor = getEnvAdaptor();
+      adaptor.openBrowserWindow(url);
     }
-  }
+  };
   return (
     <Markdown
       source={source}
@@ -59,5 +59,5 @@ export const DocMarkdown: FC<DocMarkdownProps> = ({ source, specKey }) => {
       linkClickHandler={linkClickHandler}
       transformLinkUri={transformURL.bind(null, specKey)}
     />
-  )
-}
+  );
+};

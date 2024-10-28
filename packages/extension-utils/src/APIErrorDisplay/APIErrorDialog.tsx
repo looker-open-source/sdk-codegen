@@ -24,17 +24,17 @@
 
  */
 
-import React from 'react'
-import { Button, Dialog, DialogLayout } from '@looker/components'
-import type { APIErrorDisplayProps } from './APIErrorDisplay'
-import { APIErrorContent } from './APIErrorContent'
-import { errorHeading } from './utils'
+import React from 'react';
+import { Button, Dialog, DialogLayout } from '@looker/components';
+import type { APIErrorDisplayProps } from './APIErrorDisplay';
+import { APIErrorContent } from './APIErrorContent';
+import { errorHeading } from './utils';
 
 interface APIErrorDialogProps extends APIErrorDisplayProps {
   /** toggle for dialog being open */
-  isOpen: boolean
+  isOpen: boolean;
   /** callback for toggling the dialog display */
-  setOpen: (open: boolean) => void
+  setOpen: (open: boolean) => void;
 }
 
 export const APIErrorDialog = ({
@@ -58,4 +58,4 @@ export const APIErrorDialog = ({
       </DialogLayout>
     }
   />
-)
+);

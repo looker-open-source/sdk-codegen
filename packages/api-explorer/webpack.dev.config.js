@@ -24,10 +24,10 @@
 
  */
 
-const path = require('path')
-const { merge } = require('webpack-merge')
-const base = require('../../webpack.base.config')(__dirname)
-const browser = require('../../webpack.browser.config')()
+const path = require('path');
+const { merge } = require('webpack-merge');
+const base = require('../../webpack.base.config')(__dirname);
+const browser = require('../../webpack.browser.config')();
 
 module.exports = merge(base, browser, {
   entry: {
@@ -50,4 +50,4 @@ module.exports = merge(base, browser, {
       'Access-Control-Allow-Headers': '*',
     },
   },
-})
+});

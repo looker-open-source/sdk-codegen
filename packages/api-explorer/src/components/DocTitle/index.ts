@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { DocTitle } from './DocTitle'
+export { DocTitle } from './DocTitle';

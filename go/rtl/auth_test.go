@@ -414,7 +414,7 @@ func TestAuthSession_Do_Headers(t *testing.T) {
 		s := NewAuthSession(ApiSettings{
 			BaseUrl:    server.URL,
 			ApiVersion: apiVersion,
-			Headers: map[string]string{"Key1":"Value1","Key2":"Value2"},
+			Headers:    map[string]string{"Key1": "Value1", "Key2": "Value2"},
 		})
 
 		var r string
@@ -445,11 +445,11 @@ func TestAuthSession_Do_Headers(t *testing.T) {
 		s := NewAuthSession(ApiSettings{
 			BaseUrl:    server.URL,
 			ApiVersion: apiVersion,
-			Headers: map[string]string{"Key1":"Value1","Key2":"Value2"},
+			Headers:    map[string]string{"Key1": "Value1", "Key2": "Value2"},
 		})
 
 		options := ApiSettings{
-			Headers: map[string]string{"Key1":"Value1","Key2":"OverwriteValue2"},
+			Headers: map[string]string{"Key1": "Value1", "Key2": "OverwriteValue2"},
 		}
 		var r string
 		err := s.Do(&r, "GET", apiVersion, path, nil, nil, &options)
@@ -480,9 +480,9 @@ func TestAuthSession_Do_Headers(t *testing.T) {
 
 		var r string
 		body := struct {
-			key    string
+			key string
 		}{
-			key:    "value",
+			key: "value",
 		}
 
 		err := session.Do(&r, "GET", apiVersion, path, nil, body, nil)
@@ -569,7 +569,7 @@ func TestAuthSession_Do_Headers(t *testing.T) {
 
 		var r string
 		options := ApiSettings{
-			AgentTag:   "new-agent-tag",
+			AgentTag: "new-agent-tag",
 		}
 		err := session.Do(&r, "GET", apiVersion, path, nil, nil, &options)
 
@@ -596,7 +596,7 @@ func TestAuthSession_Do_Timeout(t *testing.T) {
 		session := NewAuthSession(ApiSettings{
 			BaseUrl:    server.URL,
 			ApiVersion: apiVersion,
-			Timeout: 1, // seconds
+			Timeout:    1, // seconds
 		})
 
 		err := session.Do(nil, "GET", apiVersion, path, nil, nil, nil)
@@ -604,8 +604,8 @@ func TestAuthSession_Do_Timeout(t *testing.T) {
 		if err == nil {
 			t.Errorf("Do() call did not error/timeout")
 		} else if !errors.Is(err, context.DeadlineExceeded) {
-            t.Errorf("Do() call did not error with context.DeadlineExceeded, got=%v", err)
-        }
+			t.Errorf("Do() call did not error with context.DeadlineExceeded, got=%v", err)
+		}
 	})
 
 	t.Run("Do() follows Timeout set in Do()'s options", func(t *testing.T) {
@@ -632,8 +632,8 @@ func TestAuthSession_Do_Timeout(t *testing.T) {
 		if err == nil {
 			t.Errorf("Do() call did not error/timeout")
 		} else if !errors.Is(err, context.DeadlineExceeded) {
-            t.Errorf("Do() call did not error with context.DeadlineExceeded, got=%v", err)
-        }
+			t.Errorf("Do() call did not error with context.DeadlineExceeded, got=%v", err)
+		}
 	})
 }
 

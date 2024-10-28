@@ -24,4 +24,4 @@
 
  */
 
-export { DiffScene } from './DiffScene'
+export { DiffScene } from './DiffScene';

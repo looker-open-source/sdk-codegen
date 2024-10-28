@@ -24,4 +24,4 @@
 
  */
 
-export * from './ExtensionProviderBase'
+export * from './ExtensionProviderBase';

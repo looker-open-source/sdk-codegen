@@ -9,9 +9,9 @@ import base64
 # https://github.com/looker-open-source/sdk-codegen/tree/main/python
 
 # Rename the looker.ini.sample file in the project root to looker.ini and fill it out
-sdk = looker_sdk.init31("app/looker.ini")
+sdk = looker_sdk.init40("app/looker.ini")
 # Or uncomment below to use environment variables instead, if you have set them.
-# sdk = looker_sdk.init31('lookersdk-flask/looker.ini')
+# sdk = looker_sdk.init40('lookersdk-flask/looker.ini')
 
 
 def get_my_user():

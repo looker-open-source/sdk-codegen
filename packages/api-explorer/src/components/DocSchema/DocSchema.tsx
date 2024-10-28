@@ -24,22 +24,22 @@
 
  */
 
-import type { FC } from 'react'
-import React from 'react'
+import type { FC } from 'react';
+import React from 'react';
 
-import { CodeDisplay } from '@looker/code-editor'
-import { CollapserCard } from '@looker/run-it'
+import { CodeDisplay } from '@looker/code-editor';
+import { CollapserCard } from '@looker/run-it';
 
 interface DocSchemaProps {
-  object: any
+  object: any;
 }
 
 /**
  * It renders links to the given types and/or methods references
  */
 export const DocSchema: FC<DocSchemaProps> = ({ object }) => {
-  if (!object) return <></>
-  const json = JSON.stringify(object, null, 2)
+  if (!object) return <></>;
+  const json = JSON.stringify(object, null, 2);
 
   return (
     <CollapserCard
@@ -51,5 +51,5 @@ export const DocSchema: FC<DocSchemaProps> = ({ object }) => {
         <CodeDisplay language="json" code={json} />
       </>
     </CollapserCard>
-  )
-}
+  );
+};

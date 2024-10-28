@@ -23,23 +23,23 @@
  SOFTWARE.
 
  */
-import type { SelectOptionProps } from '@looker/components'
-import { allSdkLanguages, allAlias } from '../../utils'
+import type { SelectOptionProps } from '@looker/components';
+import { allAlias, allSdkLanguages } from '../../utils';
 
 /**
  * @returns sdk language options for render
  */
 export const allSdkLanguageOptions = (): SelectOptionProps[] => {
-  const options = [] as SelectOptionProps[]
-  const languages = allSdkLanguages()
+  const options = [] as SelectOptionProps[];
+  const languages = allSdkLanguages();
   Object.entries(languages).forEach(([alias, language]) => {
-    const option = { value: alias, label: language }
+    const option = { value: alias, label: language };
     if (alias === allAlias) {
-      options.push({ options: [option] })
+      options.push({ options: [option] });
     } else {
-      options.push(option)
+      options.push(option);
     }
-  })
+  });
 
-  return options
-}
+  return options;
+};

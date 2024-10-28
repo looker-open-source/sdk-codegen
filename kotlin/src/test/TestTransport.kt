@@ -35,7 +35,7 @@ import kotlin.test.assertTrue
 class TestTransport {
     val fullPath = "https://github.com/looker-open-source/sdk-codegen/"
     val base = "https://my.looker.com:19999"
-    val apiVersion = "3.1"
+    val apiVersion = "4.0"
     val userPath = "/user"
     val headers = mapOf(LOOKER_APPID to AGENT_TAG, "User-Agent" to AGENT_TAG)
 

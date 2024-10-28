@@ -1,8 +1,8 @@
 # Python Examples for the Looker API
 
-You can find Python language examples in this folder. 
+You can find Python language examples in this folder.
 
-The full details of all Looker API endpoints are listed in Looker Docs: [Version 3.1](https://docs.looker.com/reference/api-and-integration/api-reference/v3.1), [Version 4.0](https://docs.looker.com/reference/api-and-integration/api-reference/v4.0)
+The full details of all Looker API 4.0 endpoints are listed in [Looker Docs](https://cloud.google.com/looker/docs/reference/looker-api/latest).
 
 ## Full Applications
 
@@ -25,6 +25,7 @@ The full details of all Looker API endpoints are listed in Looker Docs: [Version
 - [Soft delete dashboard](soft_delete_dashboard.py)
 
 ## Query : Run and Manage Queries
+
 - [Kill all running queries](kill_queries.py)
 
 ## QueryTask : Manage Query Tasks
@@ -48,5 +49,6 @@ The full details of all Looker API endpoints are listed in Looker Docs: [Version
 - [Add a list of users to a group from a CSV](add_users_to_group_from_csv.py)
 
 ## Project : Manage Projects
+
 - [Update projects to use Main asthe production branch](update_prod_branches_to_main.py)
 - [Google Cloud Function: User Creation](cloud-function-user-provision)

@@ -24,32 +24,34 @@
 
  */
 
-import { renderWithTheme } from '@looker/components-test-utils'
-import React from 'react'
-import { screen } from '@testing-library/react'
+import { renderWithTheme } from '@looker/components-test-utils';
+import React from 'react';
+import { screen } from '@testing-library/react';
 
-import type { IHacker } from '../../../models'
-import { Agenda } from './Agenda'
-import { eraSchedule } from './agendaUtils.spec'
+import type { IHacker } from '../../../models';
+import { Agenda } from './Agenda';
+import { eraSchedule } from './agendaUtils.spec';
 
 const hacker = {
   timezone: 'America/Los_Angeles',
   locale: 'en',
-} as IHacker
+} as IHacker;
 
 describe('<Agenda />', () => {
   test('displays all eras with only Present expanded', async () => {
-    renderWithTheme(<Agenda schedule={eraSchedule} hacker={hacker} />)
-    const past = screen.getByRole('button', { name: 'Past' })
-    expect(past).toBeInTheDocument()
-    const present = screen.getByRole('button', { name: 'Present' })
-    expect(present).toBeInTheDocument()
-    const future = screen.getByRole('button', { name: 'Future' })
-    expect(future).toBeInTheDocument()
-    expect(screen.getByRole('cell', { name: 'present' })).toBeInTheDocument()
-    expect(screen.queryByRole('cell', { name: 'past' })).not.toBeInTheDocument()
+    renderWithTheme(<Agenda schedule={eraSchedule} hacker={hacker} />);
+    const past = screen.getByRole('button', { name: 'Past' });
+    expect(past).toBeInTheDocument();
+    const present = screen.getByRole('button', { name: 'Present' });
+    expect(present).toBeInTheDocument();
+    const future = screen.getByRole('button', { name: 'Future' });
+    expect(future).toBeInTheDocument();
+    expect(screen.getByRole('cell', { name: 'present' })).toBeInTheDocument();
+    expect(
+      screen.queryByRole('cell', { name: 'past' })
+    ).not.toBeInTheDocument();
     expect(
       screen.queryByRole('cell', { name: 'future' })
-    ).not.toBeInTheDocument()
-  })
-})
+    ).not.toBeInTheDocument();
+  });
+});

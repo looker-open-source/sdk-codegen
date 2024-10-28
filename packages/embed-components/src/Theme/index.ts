@@ -23,5 +23,5 @@
  SOFTWARE.
 
  */
-export { SelectTheme } from './SelectTheme'
-export * from './state'
+export { SelectTheme } from './SelectTheme';
+export * from './state';

@@ -23,5 +23,5 @@
  SOFTWARE.
 
  */
-export * from './RunItSDK'
-export * from './requestUtils'
+export * from './RunItSDK';
+export * from './requestUtils';

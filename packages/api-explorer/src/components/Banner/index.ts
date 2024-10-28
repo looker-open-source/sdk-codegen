@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { Banner } from './Banner'
+export { Banner } from './Banner';

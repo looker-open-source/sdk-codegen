@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { DocTypeSummary } from './DocTypeSummary'
+export { DocTypeSummary } from './DocTypeSummary';

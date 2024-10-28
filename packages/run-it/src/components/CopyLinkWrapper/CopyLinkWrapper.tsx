@@ -23,19 +23,19 @@
  SOFTWARE.
 
  */
-import type { ReactNode, ReactNodeArray } from 'react'
-import React, { useState } from 'react'
-import { IconButton, Space } from '@looker/components'
-import { Link } from '@styled-icons/material-outlined/Link'
-import { getEnvAdaptor } from '@looker/extension-utils'
-import { useLocation } from 'react-router-dom'
+import type { ReactNode, ReactNodeArray } from 'react';
+import React, { useState } from 'react';
+import { IconButton, Space } from '@looker/components';
+import { Link } from '@styled-icons/material-outlined/Link';
+import { getEnvAdaptor } from '@looker/extension-utils';
+import { useLocation } from 'react-router-dom';
 
 interface CopyLinkWrapperProps {
-  children: ReactNode | ReactNodeArray
-  visible?: boolean
+  children: ReactNode | ReactNodeArray;
+  visible?: boolean;
 }
 
-const COPY_TO_CLIPBOARD = 'Copy to clipboard'
+const COPY_TO_CLIPBOARD = 'Copy to clipboard';
 
 /**
  * Displays a copy link button on hover
@@ -47,16 +47,16 @@ export const CopyLinkWrapper = ({
   children,
   visible = true,
 }: CopyLinkWrapperProps) => {
-  const [tooltipContent, setTooltipContent] = useState(COPY_TO_CLIPBOARD)
-  const [showCopyLinkButton, setShowCopyLinkButton] = useState(false)
-  const location = useLocation()
+  const [tooltipContent, setTooltipContent] = useState(COPY_TO_CLIPBOARD);
+  const [showCopyLinkButton, setShowCopyLinkButton] = useState(false);
+  const location = useLocation();
   const handleCopyLink = async () => {
-    await getEnvAdaptor().copyToClipboard(location)
-    setTooltipContent('Copied to clipboard')
-  }
+    await getEnvAdaptor().copyToClipboard(location);
+    setTooltipContent('Copied to clipboard');
+  };
   const handleMouseLeave = () => {
-    setTooltipContent(COPY_TO_CLIPBOARD)
-  }
+    setTooltipContent(COPY_TO_CLIPBOARD);
+  };
   return (
     <Space
       width={'100%'}
@@ -75,5 +75,5 @@ export const CopyLinkWrapper = ({
         />
       )}
     </Space>
-  )
-}
+  );
+};

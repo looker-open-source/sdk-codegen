@@ -24,11 +24,11 @@
 
  */
 
-import { initRunItSdk } from '@looker/run-it'
+import { initRunItSdk } from '@looker/run-it';
 
 describe('RunItSDK', () => {
   it('should keep agentTag', () => {
-    const actual = initRunItSdk()
-    expect(actual.authSession.settings.agentTag).toContain('RunIt')
-  })
-})
+    const actual = initRunItSdk();
+    expect(actual.authSession.settings.agentTag).toContain('RunIt');
+  });
+});

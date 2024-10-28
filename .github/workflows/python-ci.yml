@@ -33,11 +33,11 @@ jobs:
 
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.11.0
+        uses: styfle/cancel-workflow-action@0.12.1
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4.5.0
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.10'
       - run: pip install -e .
@@ -75,10 +75,10 @@ jobs:
 
     steps:
       - name: Repo Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v4.5.0
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
 
@@ -92,13 +92,13 @@ jobs:
 
       - name: Upload pytest test results
         if: ${{ always() }}
-        uses: actions/upload-artifact@v3.1.2
+        uses: actions/upload-artifact@v4
         with:
-          name: python-test-results
+          name: python-test-results-${{ matrix.os }}-${{ matrix.python-version }}
           path: python/results/
 
   integration:
-    needs: [unit,setup]
+    needs: [unit, setup]
     name: Integration - ${{ matrix.os }} / Looker.${{ matrix.looker }}
     env:
       TOX_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.Looker-${{ matrix.looker }}.py3.x
@@ -117,10 +117,11 @@ jobs:
       matrix:
         os:
           - large-ubuntu
-        looker: ${{ fromJson(needs.setup.outputs.matrix_json) }}
+        looker:
+          ${{ fromJson(needs.setup.outputs.matrix_json) }}
 
           # TODO uncomment `include:` when either macos or windows works to satisfaction.
-         #include:
+          #include:
           # TODO: macos matrix leg is functional but it takes ~20 minutes (compared
           # to ~4 minutes for ubuntu) because docker install takes ~5 minutes
           # and docker pull takes ~10 minutes. We can probably figure out how to
@@ -141,15 +142,15 @@ jobs:
           #  looker: '7_20'
     steps:
       - name: Repo Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python 3.10
-        uses: actions/setup-python@v4.5.0
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
       - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v1.0.0
+        uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.GCP_AR_READER_SA_KEY }}
           project_id: ${{ secrets.GCP_PROJECT_ID }}
@@ -157,7 +158,7 @@ jobs:
           export_environment_variables: true
 
       - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1.1.0
+        uses: google-github-actions/setup-gcloud@v2
 
       - name: Authenticate Artifact Repository
         run: gcloud auth configure-docker us-west1-docker.pkg.dev --quiet
@@ -209,9 +210,9 @@ jobs:
 
       - name: Upload pytest test results
         if: ${{ always() }}
-        uses: actions/upload-artifact@v3.1.2
+        uses: actions/upload-artifact@v4
         with:
-          name: python-test-results
+          name: python-test-results-${{ matrix.os }}-${{ matrix.looker }}
           path: python/results/
 
   twine:
@@ -223,8 +224,8 @@ jobs:
         working-directory: python/
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4.5.0
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.10'
       - name: Twine upload check
@@ -240,7 +241,7 @@ jobs:
 
     steps:
       - name: Download Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           path: artifacts
 
@@ -250,7 +251,7 @@ jobs:
       - name: Check Results Files Exist
         id: check-results-exist
         run: |
-          if [[ $(ls -l artifacts/python-test-results/*.xml 2> /dev/null | wc -l) -ge "1" ]]; then
+          if [[ $(ls -l artifacts/python-test-results*/*.xml 2> /dev/null | wc -l) -ge "1" ]]; then
             exit 0
           else
             curl --request POST \
@@ -271,13 +272,12 @@ jobs:
 
       - name: Publish Unit Test Results
         if: steps.check-results-exist.outcome == 'success'
-        uses: EnricoMi/publish-unit-test-result-action@v1.12
+        uses: EnricoMi/publish-unit-test-result-action@v2
         with:
           # Cosmetic issue with `check_name` being associated to the wrong
           # workflow: https://github.com/EnricoMi/publish-unit-test-result-action/issues/12
           check_name: Python Tests
           github_token: ${{ secrets.GITHUB_TOKEN }}
           report_individual_runs: true
-          hide_comments: orphaned commits
           check_run_annotations_branch: '*'
-          files: 'artifacts/python-test-results/*.xml'
+          files: 'artifacts/python-test-results*/*.xml'

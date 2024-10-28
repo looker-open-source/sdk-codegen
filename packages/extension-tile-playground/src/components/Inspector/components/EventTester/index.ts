@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export * from './EventTester'
+export * from './EventTester';

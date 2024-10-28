@@ -24,38 +24,234 @@
 
  */
 
-import { BrowserTransport } from './browserTransport'
-import type { IRawResponse, ISDKError, ITransportSettings } from './transport'
-import { sdkOk } from './transport'
+import fetchMock, { enableFetchMocks } from 'jest-fetch-mock';
+import { StatusCode, sdkOk } from './transport';
+import * as sleepUtils from './sleep';
+import { BrowserTransport } from './browserTransport';
+import type {
+  IRawResponse,
+  ISDKError,
+  ITransportSettings,
+  IWait,
+  IWaitResponse,
+} from './transport';
+
+enableFetchMocks();
+
+const retryFoo = 'https://retry.foo';
 
 describe('BrowserTransport', () => {
+  let tried = 0;
+  beforeEach(() => {
+    jest
+      .spyOn(sleepUtils, 'sleep')
+      .mockImplementation((time: number) => Promise.resolve(time));
+
+    tried = 0;
+    fetchMock.mockIf(/^https?:\/\/retry\.foo.*$/, async req => {
+      const url = new URL(req.url);
+      const delayed = url.searchParams.get('delay');
+      if (delayed) {
+        await new Promise(resolve => {
+          setTimeout(resolve, Number(delayed));
+        });
+        return {
+          body: '{ "status": "timed" }',
+          status: StatusCode.OK,
+        };
+      }
+
+      tried++;
+      if (tried < 4) {
+        return {
+          body: '{ "status": "working" }',
+          headers: {
+            'Retry-After': String(tried),
+            'Content-Type': 'application/json',
+          },
+          status: [
+            StatusCode.Accepted,
+            StatusCode.TooManyRequests,
+            StatusCode.ServiceUnavailable,
+          ][tried - 1],
+        };
+      } else {
+        return {
+          body: '{ "status": "done" }',
+          // headers: { 'Content-Type': 'application/json' },
+          status: StatusCode.OK,
+        };
+      }
+    });
+  });
+
   afterEach(() => {
-    jest.clearAllMocks()
-  })
+    jest.clearAllMocks();
+  });
+
+  describe('timeout and cancel', () => {
+    const timer = (ms = 1000) => {
+      return `${retryFoo}?delay=${ms}`;
+    };
+    const xp = new BrowserTransport({ maxTries: 1 } as ITransportSettings);
+
+    it('does not timeout by default', async () => {
+      const resp = await xp.rawRequest('GET', timer());
+      expect(resp.body).toEqual('{ "status": "timed" }');
+      expect(resp.statusCode).toEqual(200);
+    });
+
+    it('completes before 1 second cancel', async () => {
+      const signal = AbortSignal.timeout(1000);
+      const resp = await xp.rawRequest(
+        'GET',
+        timer(250), // responds to request in 250 ms
+        undefined,
+        undefined,
+        undefined,
+        { signal }
+      );
+      expect(resp.body).toEqual('{ "status": "timed" }');
+      expect(resp.statusCode).toEqual(200);
+    });
+
+    it('times out in 1 second', async () => {
+      await expect(
+        xp.request(
+          'GET',
+          timer(1500), // responds to requests in 1.5 seconds,
+          undefined,
+          undefined,
+          undefined,
+          {
+            timeout: 1,
+          }
+        )
+      ).rejects.toThrowError('The operation was aborted.');
+    });
+
+    // TODO need to successfully implement AbortSignal.any for jest for this to work in CodeGen CI
+    it.skip('cancels in 250 ms', async () => {
+      const signal = AbortSignal.timeout(250);
+      await expect(
+        xp.request('GET', timer(), undefined, undefined, undefined, {
+          signal,
+        })
+      ).rejects.toThrowError('The operation was aborted.');
+    });
+  });
 
   it('cannot track performance if performance is not supported', () => {
-    jest.spyOn(BrowserTransport, 'supportsPerformance').mockReturnValue(false)
-    BrowserTransport.trackPerformance = true
-    expect(BrowserTransport.trackPerformance).toEqual(false)
-  })
+    jest.spyOn(BrowserTransport, 'supportsPerformance').mockReturnValue(false);
+    BrowserTransport.trackPerformance = true;
+    expect(BrowserTransport.trackPerformance).toEqual(false);
+  });
 
   it('can track performance if performance is supported', () => {
-    jest.spyOn(BrowserTransport, 'supportsPerformance').mockReturnValue(true)
-    BrowserTransport.trackPerformance = true
-    expect(BrowserTransport.trackPerformance).toEqual(true)
-    BrowserTransport.trackPerformance = false
-    expect(BrowserTransport.trackPerformance).toEqual(false)
-  })
+    jest.spyOn(BrowserTransport, 'supportsPerformance').mockReturnValue(true);
+    BrowserTransport.trackPerformance = true;
+    expect(BrowserTransport.trackPerformance).toEqual(true);
+    BrowserTransport.trackPerformance = false;
+    expect(BrowserTransport.trackPerformance).toEqual(false);
+  });
+
+  it('accepted response is ok if retries are exceeded', async () => {
+    const xp = new BrowserTransport({ maxTries: 1 } as ITransportSettings);
+    const resp = await xp.rawRequest('GET', retryFoo);
+    expect(resp.ok).toEqual(true);
+    expect(resp.statusCode).toEqual(StatusCode.Accepted);
+    expect(resp.body).toEqual('{ "status": "working" }');
+    expect(tried).toEqual(1);
+    expect(sleepUtils.sleep).toHaveBeenCalledTimes(0);
+  });
+
+  it('retries responses with retry status codes', async () => {
+    const xp = new BrowserTransport({ maxTries: 4 } as ITransportSettings);
+    const resp = await xp.rawRequest('GET', retryFoo);
+    expect(resp.ok).toEqual(true);
+    expect(resp.statusCode).toEqual(StatusCode.OK);
+    expect(resp.body).toEqual('{ "status": "done" }');
+    expect(tried).toEqual(4);
+    expect(sleepUtils.sleep).toHaveBeenCalledTimes(3);
+  });
+
+  it('does not exceed retries', async () => {
+    const xp = new BrowserTransport({ maxTries: 3 } as ITransportSettings);
+    const resp = await xp.rawRequest('GET', retryFoo);
+    expect(resp.ok).toEqual(false);
+    expect(resp.statusCode).toEqual(StatusCode.ServiceUnavailable);
+    expect(resp.body).toEqual('{ "status": "working" }');
+    expect(tried).toEqual(3);
+    expect(sleepUtils.sleep).toHaveBeenCalledTimes(2);
+  });
+
+  it('retries can have a custom override', async () => {
+    let slept = 0;
+    const overWait = (wait: IWait): Promise<IWaitResponse> => {
+      slept = wait.attempt;
+      return Promise.resolve({ response: 'retry', reason: 'just a test' });
+    };
+    const xp = new BrowserTransport({
+      maxTries: 3,
+      waitHandler: overWait,
+    } as ITransportSettings);
+    const resp = await xp.rawRequest('GET', retryFoo);
+    expect(resp.ok).toEqual(false);
+    expect(resp.statusCode).toEqual(StatusCode.ServiceUnavailable);
+    expect(resp.body).toEqual('{ "status": "working" }');
+    expect(tried).toEqual(3);
+    expect(slept).toEqual(2);
+  });
+
+  it('retries can cancelled', async () => {
+    let slept = 0;
+    const reason = "I'm outta here!";
+    const overWait = (wait: IWait): Promise<IWaitResponse> => {
+      slept = wait.attempt;
+      return Promise.resolve({ response: 'cancel', reason });
+    };
+    const xp = new BrowserTransport({
+      maxTries: 3,
+      waitHandler: overWait,
+    } as ITransportSettings);
+    const resp = await xp.rawRequest('GET', retryFoo);
+    expect(resp.statusCode).toEqual(StatusCode.Accepted);
+    expect(resp.ok).toEqual(true);
+    expect(resp.statusMessage).toEqual(reason);
+    expect(resp.body).toEqual('{ "status": "working" }');
+    expect(tried).toEqual(1);
+    expect(slept).toEqual(1);
+  });
+
+  it('retries can error out', async () => {
+    let slept = 0;
+    const reason = 'This is an error';
+    const overWait = (wait: IWait): Promise<IWaitResponse> => {
+      slept = wait.attempt;
+      return Promise.resolve({ response: 'error', reason });
+    };
+    const xp = new BrowserTransport({
+      maxTries: 3,
+      waitHandler: overWait,
+    } as ITransportSettings);
+    const resp = await xp.rawRequest('GET', retryFoo);
+    expect(resp.statusCode).toEqual(StatusCode.RequestTimeout);
+    expect(resp.ok).toEqual(false);
+    expect(resp.statusMessage).toEqual(reason);
+    expect(resp.body).toEqual('{ "status": "working" }');
+    expect(tried).toEqual(1);
+    expect(slept).toEqual(1);
+  });
 
   it('just deserializes JSON into an object', async () => {
-    const xp = new BrowserTransport({} as ITransportSettings)
+    const xp = new BrowserTransport({} as ITransportSettings);
     interface ITestModel {
-      string1: string
-      num1: number
-      string2: string
-      num2: number
-      string3: string
-      num3: number
+      string1: string;
+      num1: number;
+      string2: string;
+      num2: number;
+      string3: string;
+      num3: number;
     }
     const resp: IRawResponse = {
       headers: {},
@@ -79,24 +275,24 @@ describe('BrowserTransport', () => {
 `,
       requestStarted: 1000,
       responseCompleted: 2000,
-    }
-    const untyped: any = await sdkOk(xp.parseResponse(resp))
-    expect(untyped.string1).toBe(1)
-    expect(untyped.num1).toBe(1)
-    expect(untyped.string2).toBe('2')
-    expect(untyped.num2).toBe('2')
-    expect(untyped.string3).toBe('3')
-    expect(untyped.num3).toBe(3)
-    expect(untyped.string4).toBe('4')
-    expect(untyped.num4).toBe(4)
-    const typed = await sdkOk(xp.parseResponse<ITestModel, ISDKError>(resp))
-    expect(typed.string1).toBe(1)
-    expect(typed.num1).toBe(1)
-    expect(typed.string2).toBe('2')
-    expect(typed.num2).toBe('2')
-    expect(typed.string3).toBe('3')
-    expect(typed.num3).toBe(3)
-    expect((typed as any).string4).toBe('4')
-    expect((typed as any).num4).toBe(4)
-  })
-})
+    };
+    const untyped: any = await sdkOk(xp.parseResponse(resp));
+    expect(untyped.string1).toBe(1);
+    expect(untyped.num1).toBe(1);
+    expect(untyped.string2).toBe('2');
+    expect(untyped.num2).toBe('2');
+    expect(untyped.string3).toBe('3');
+    expect(untyped.num3).toBe(3);
+    expect(untyped.string4).toBe('4');
+    expect(untyped.num4).toBe(4);
+    const typed = await sdkOk(xp.parseResponse<ITestModel, ISDKError>(resp));
+    expect(typed.string1).toBe(1);
+    expect(typed.num1).toBe(1);
+    expect(typed.string2).toBe('2');
+    expect(typed.num2).toBe('2');
+    expect(typed.string3).toBe('3');
+    expect(typed.num3).toBe(3);
+    expect((typed as any).string4).toBe('4');
+    expect((typed as any).num4).toBe(4);
+  });
+});

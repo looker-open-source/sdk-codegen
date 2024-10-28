@@ -24,16 +24,16 @@
 
  */
 
-import type { ReactNode } from 'react'
+import type { ReactNode } from 'react';
 import type {
   ExtensionHostApi,
   ExtensionSDK,
+  LookerHostData,
   RawVisualizationData,
   TileHostData,
   TileSDK,
   VisualizationSDK,
-  LookerHostData,
-} from '@looker/extension-sdk'
+} from '@looker/extension-sdk';
 
 /**
  * Base extension context
@@ -42,47 +42,47 @@ export interface BaseExtensionContextData {
   /**
    * Extension SDK.
    */
-  extensionSDK: ExtensionSDK
+  extensionSDK: ExtensionSDK;
   /**
    * Looker host data
    */
-  lookerHostData?: Readonly<LookerHostData>
+  lookerHostData?: Readonly<LookerHostData>;
   /**
    * Error message will be set in an initialization error occurs.
    * @deprecated if an initialization error occurs the extension
    * component is no longer rendered. initializeError will ALWAYS
    * be undefined
    */
-  initializeError?: string
+  initializeError?: string;
   /**
    * Current route
    */
-  route: string
+  route: string;
   /**
    * Current route state
    */
-  routeState?: any
+  routeState?: any;
   /**
    * Visualization data.
    */
-  visualizationData?: Readonly<RawVisualizationData>
+  visualizationData?: Readonly<RawVisualizationData>;
   /**
    * Visualization api.
    */
-  visualizationSDK: VisualizationSDK
+  visualizationSDK: VisualizationSDK;
   /**
    * Tile host data
    */
-  tileHostData: Readonly<TileHostData>
+  tileHostData: Readonly<TileHostData>;
   /**
    * Tile api.
    */
-  tileSDK: TileSDK
+  tileSDK: TileSDK;
 }
 
 export interface RouteData {
-  route: string
-  routeState?: any
+  route: string;
+  routeState?: any;
 }
 
 export interface ExtensionProviderProps {
@@ -95,42 +95,42 @@ export interface ExtensionProviderProps {
    * looker composite component (dashboard for example), hostTracksRoute will be
    * ignored.
    */
-  hostTracksRoute?: boolean
+  hostTracksRoute?: boolean;
   /**
    * Pathname change callback. Use when extension components need to modify their
    * state based upon the current route.
    */
-  onPathnameChange?: (pathname: string) => void
+  onPathnameChange?: (pathname: string) => void;
   /**
    * Route change callback. Use when extension components need to modify their
    * state based upon the current route. Alternate to onPathname change and
    * provides more details
    */
-  onRouteChange?: (route: string, routeState?: any) => void
+  onRouteChange?: (route: string, routeState?: any) => void;
   /**
    * Loading component to display while the provider is
    * establishing communication with the Looker host
    */
-  loadingComponent?: JSX.Element
+  loadingComponent?: JSX.Element;
   /**
    * Required looker version. An error will be thrown if the host
    * Looker is not at the version specified.
    */
-  requiredLookerVersion?: string
+  requiredLookerVersion?: string;
   /**
    * Timeout for messages sent via chatty. Defaults to 30000 milliseconds.
    * Set to -1 for no timeout.
    */
-  chattyTimeout?: number
+  chattyTimeout?: number;
   /**
    * Children
    */
-  children?: ReactNode
+  children?: ReactNode;
 }
 
 export interface ExtensionConnectorProps extends ExtensionProviderProps {
-  contextData: BaseExtensionContextData
-  connectedCallback: (extensionSDK: ExtensionHostApi) => void
-  updateContextData: (contextData: Partial<BaseExtensionContextData>) => void
-  unloadedCallback: () => void
+  contextData: BaseExtensionContextData;
+  connectedCallback: (extensionSDK: ExtensionHostApi) => void;
+  updateContextData: (contextData: Partial<BaseExtensionContextData>) => void;
+  unloadedCallback: () => void;
 }

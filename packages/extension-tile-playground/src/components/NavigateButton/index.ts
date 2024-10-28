@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export * from './NavigateButton'
+export * from './NavigateButton';

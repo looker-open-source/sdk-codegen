@@ -24,14 +24,14 @@
 
  */
 
-import type { LookerSDKError, IAPIMethods } from '@looker/sdk-rtl'
+import type { IAPIMethods, LookerSDKError } from '@looker/sdk-rtl';
 
 /**
  * Default the heading to 'Unknown error' if error.message is blank for any reason
  * @param error for heading
  */
 export const errorHeading = (error: LookerSDKError) =>
-  error.message || 'Unknown error'
+  error.message || 'Unknown error';
 
 /**
  * this callback function used by the ErrorDoc constructor gets and truncates
@@ -40,11 +40,11 @@ export const errorHeading = (error: LookerSDKError) =>
  * @param url of document (either index.json or md) to fetch
  */
 export const apiErrorDisplayFetch = async (_sdk: IAPIMethods, url: string) => {
-  const fetched = await fetch(url, { mode: 'cors' })
-  let result = await fetched.text()
-  const stop = result.indexOf('## API Response Type')
+  const fetched = await fetch(url, { mode: 'cors' });
+  let result = await fetched.text();
+  const stop = result.indexOf('## API Response Type');
   if (stop > 0) {
-    result = result.substring(0, stop - 1).trim()
+    result = result.substring(0, stop - 1).trim();
   }
-  return result
-}
+  return result;
+};

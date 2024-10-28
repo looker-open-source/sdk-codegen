@@ -42,19 +42,19 @@ type AugmentErrorOptions<
       ...infer Rest
     ]
   ? [Message?, (ErrorOptions & AdditionalErrorOptions)?, ...Rest]
-  : never
+  : never;
 
 interface IErrorDetail {
-  field?: string
-  code?: string
-  message?: string
-  documentation_url: string
+  field?: string;
+  code?: string;
+  message?: string;
+  documentation_url: string;
 }
 
 // This specifies SDK custom error options
 interface ILookerSDKErrorOptions {
-  errors?: IErrorDetail[]
-  documentation_url?: string | null
+  errors?: IErrorDetail[];
+  documentation_url?: string | null;
 }
 
 interface ILookerSDKErrorConstructor {
@@ -63,28 +63,30 @@ interface ILookerSDKErrorConstructor {
       ConstructorParameters<ErrorConstructor>,
       ILookerSDKErrorOptions
     >
-  ): LookerSDKError
+  ): LookerSDKError;
   (
     ...args: AugmentErrorOptions<
       Parameters<ErrorConstructor>,
       ILookerSDKErrorOptions
     >
-  ): LookerSDKError
+  ): LookerSDKError;
 }
 
 // The subclass and function expression's name should match, so that stack traces look clean.
 // We bind it to a local identifier for clarity, and to perform a type assertion.
 export interface LookerSDKError extends Error {
-  errors?: IErrorDetail[]
-  documentation_url?: string | null
+  errors?: IErrorDetail[];
+  documentation_url?: string | null;
 }
 
 export const LookerSDKError: ILookerSDKErrorConstructor =
-  /* #__PURE__*/ (() => {
-    'use strict'
+  /* #__PURE__ */ (() => {
+    'use strict';
     const LookerSDKErrorConstructor = function LookerSDKError(
       this: LookerSDKError | undefined,
-      ...[
+      ...errorArguments
+    ) {
+      const [
         message,
         {
           errors,
@@ -99,30 +101,29 @@ export const LookerSDKError: ILookerSDKErrorConstructor =
         AugmentErrorOptions<
           Parameters<ErrorConstructor>,
           ILookerSDKErrorOptions
-        >
-    ) {
-      // handle null in addition to undefined
-      errors ??= []
-      documentation_url ??= ''
+        > = errorArguments;
 
       // The `super()` call. At present, Error() and new Error() are
       // indistinguishable, but use whatever we were invoked with in case
       // that ever changes.
-      const error = this
-        ? new Error(
-            message,
-            // we have to suppress a type error here if TypeScript
-            // doesn't know es2022's two-argument Error constructor
-            // @ts-ignore-error
-            errorOptions,
-            ...rest
-          )
-        : Error(
-            message,
-            // @ts-ignore-error
-            errorOptions,
-            ...rest
-          )
+      // const error = this
+      //   ? new Error(
+      //       message,
+      //       // we have to suppress a type error here if TypeScript
+      //       // doesn't know es2022's two-argument Error constructor
+      //       // @ts-ignore-error
+      //       errorOptions,
+      //       ...rest
+      //     )
+      //   : Error(
+      // TODO resolve this parsing complaint
+      // @ts-ignore-error
+      const error = new Error(
+        message,
+        // @ts-ignore-error
+        errorOptions,
+        ...rest
+      );
 
       // Object.setPrototypeOf() is necessary when extending built-ins,
       // since Error.call(this, message, errorOptions, ...rest) doesn't
@@ -131,18 +132,20 @@ export const LookerSDKError: ILookerSDKErrorConstructor =
       Object.setPrototypeOf(
         error,
         this ? Object.getPrototypeOf(this) : LookerSDKError.prototype
-      )
+      );
 
       // Normally the 'message' property of JavaScript Error objects is non-enumerable
       // set it to be enumerable for consistency with our non-error responses,
       // which are implemented as plain JavaScript objects where all
       // properties are enumerable.
-      Object.defineProperty(error, 'message', { enumerable: true })
-      ;(error as LookerSDKError).errors = errors
-      ;(error as LookerSDKError).documentation_url = documentation_url
+      Object.defineProperty(error, 'message', { enumerable: true });
 
-      return error
-    } as ILookerSDKErrorConstructor
+      // handle null in addition to undefined
+      (error as LookerSDKError).errors = errors ?? [];
+      (error as LookerSDKError).documentation_url = documentation_url ?? '';
+
+      return error;
+    } as ILookerSDKErrorConstructor;
 
     // LookerSDKError.prototype, LookerSDKError.prototype.constructor, and
     // LookerSDKError.prototoype.name all have to be non-enumerable to match
@@ -179,7 +182,7 @@ export const LookerSDKError: ILookerSDKErrorConstructor =
         // Error constructors.
         writable: false,
       }
-    )
+    );
 
-    return LookerSDKErrorConstructor
-  })()
+    return LookerSDKErrorConstructor;
+  })();

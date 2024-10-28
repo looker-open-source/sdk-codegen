@@ -23,32 +23,32 @@
  SOFTWARE.
 
  */
-import type { FC } from 'react'
-import React, { useEffect, useState } from 'react'
-import { Select } from '@looker/components'
-import { useSelector } from 'react-redux'
-import { useLocation } from 'react-router-dom'
-import { selectSdkLanguage } from '../../state'
-import { allAlias, useNavigation } from '../../utils'
-import { allSdkLanguageOptions } from './utils'
+import type { FC } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Select } from '@looker/components';
+import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
+import { selectSdkLanguage } from '../../state';
+import { allAlias, useNavigation } from '../../utils';
+import { allSdkLanguageOptions } from './utils';
 
 /**
  * Allows the user to select their preferred SDK language
  */
 export const SdkLanguageSelector: FC = () => {
-  const location = useLocation()
-  const { navigate } = useNavigation()
-  const selectedSdkLanguage = useSelector(selectSdkLanguage)
-  const [language, setLanguage] = useState(selectedSdkLanguage)
-  const options = allSdkLanguageOptions()
+  const location = useLocation();
+  const { navigate } = useNavigation();
+  const selectedSdkLanguage = useSelector(selectSdkLanguage);
+  const [language, setLanguage] = useState(selectedSdkLanguage);
+  const options = allSdkLanguageOptions();
 
   const handleChange = (alias: string) => {
-    navigate(location.pathname, { sdk: alias === allAlias ? null : alias })
-  }
+    navigate(location.pathname, { sdk: alias === allAlias ? null : alias });
+  };
 
   useEffect(() => {
-    setLanguage(selectedSdkLanguage)
-  }, [selectedSdkLanguage])
+    setLanguage(selectedSdkLanguage);
+  }, [selectedSdkLanguage]);
 
   return (
     <Select
@@ -57,5 +57,5 @@ export const SdkLanguageSelector: FC = () => {
       onChange={handleChange}
       options={options}
     />
-  )
-}
+  );
+};

@@ -24,9 +24,9 @@
 
  */
 
-import { CodeGen } from './codeGen'
-import type { IMethod, IParameter, IProperty, IType } from './sdkModels'
-import { ArrayType } from './sdkModels'
+import { CodeGen } from './codeGen';
+import type { IMethod, IParameter, IProperty, IType } from './sdkModels';
+import { ArrayType } from './sdkModels';
 
 // eslint-disable @typescript-eslint/no-unused-vars
 
@@ -34,8 +34,8 @@ import { ArrayType } from './sdkModels'
  * Pseudocde generator
  */
 export class PseudoGen extends CodeGen {
-  commentStr = '"'
-  endTypeStr = '}'
+  commentStr = '"';
+  endTypeStr = '}';
   /**
    * Generic prototype-style method signature generator
    *
@@ -45,17 +45,17 @@ export class PseudoGen extends CodeGen {
    * @param method for signature
    */
   methodSignature(indent: string, method: IMethod): string {
-    const params = method.allParams
-    const args = params.map((p) => this.declareParameter(indent, method, p))
-    const bump = this.bumper(indent)
+    const params = method.allParams;
+    const args = params.map(p => this.declareParameter(indent, method, p));
+    const bump = this.bumper(indent);
     const fragment =
       args.length === 0
         ? ''
-        : `\n${bump}${args.join(',\n' + bump).trim()}${indent}\n`
+        : `\n${bump}${args.join(',\n' + bump).trim()}${indent}\n`;
     return (
       this.commentHeader(indent, method.description.trimRight()) +
       `${indent}${method.operationId}(${fragment}): ${method.primaryResponse.type.name}`
-    )
+    );
   }
 
   commentHeader(
@@ -63,18 +63,18 @@ export class PseudoGen extends CodeGen {
     text: string | undefined,
     _commentStr?: string
   ): string | string {
-    if (this.noComment) return ''
-    const comment = super.commentHeader(indent, text, _commentStr).trimRight()
-    if (!comment) return ''
-    return `${comment}${this.commentStr}\n`
+    if (this.noComment) return '';
+    const comment = super.commentHeader(indent, text, _commentStr).trimRight();
+    if (!comment) return '';
+    return `${comment}${this.commentStr}\n`;
   }
 
   construct(_indent: string, _type: IType): string {
-    return ''
+    return '';
   }
 
   declareMethod(_indent: string, _method: IMethod): string {
-    return ''
+    return '';
   }
 
   declareParameter(
@@ -82,57 +82,57 @@ export class PseudoGen extends CodeGen {
     _method: IMethod,
     param: IParameter
   ): string {
-    let result = `${indent}${param.name}: ${param.type.name}`
-    if (!param.required) result = `[${result}]`
-    return this.commentHeader(indent, param.description) + result
+    let result = `${indent}${param.name}: ${param.type.name}`;
+    if (!param.required) result = `[${result}]`;
+    return this.commentHeader(indent, param.description) + result;
   }
 
   declareProperty(indent: string, property: IProperty): string {
-    const lb = property.required ? '' : '['
-    const rb = property.required ? '' : ']'
+    const lb = property.required ? '' : '[';
+    const rb = property.required ? '' : ']';
     return (
       this.commentHeader(indent, property.description) +
       `${indent}${lb}${property.name}: ${property.type.name}${rb}`
-    )
+    );
   }
 
   encodePathParams(_indent: string, _method: IMethod): string {
-    return ''
+    return '';
   }
 
   methodsEpilogue(_indent: string): string {
-    return ''
+    return '';
   }
 
   methodsPrologue(_indent: string): string {
-    return ''
+    return '';
   }
 
   modelsEpilogue(_indent: string): string {
-    return ''
+    return '';
   }
 
   modelsPrologue(_indent: string): string {
-    return ''
+    return '';
   }
 
   summary(_indent: string, _text: string | undefined): string {
-    return ''
+    return '';
   }
 
   typeSignature(indent: string, type: IType): string {
     return (
       this.commentHeader(indent, type.description) +
       `${indent}${type.name} ${this.typeOpen}\n`
-    )
+    );
   }
 
   declareType(indent: string, type: IType): string {
     if (!(type instanceof ArrayType)) {
-      return super.declareType(indent, type)
+      return super.declareType(indent, type);
     }
     return `${indent}list of ${super
       .declareType(indent, type.elementType)
-      .trimStart()}`
+      .trimStart()}`;
   }
 }

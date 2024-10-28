@@ -23,16 +23,16 @@
  SOFTWARE.
 
  */
-import type { IHackerProps } from '../../models'
-import type { HackerAction } from './actions'
-import { Actions } from './actions'
+import type { IHackerProps } from '../../models';
+import type { HackerAction } from './actions';
+import { Actions } from './actions';
 
 export interface HackersState {
-  currentPageNum: number
-  hackers: IHackerProps[]
-  judges: IHackerProps[]
-  staff: IHackerProps[]
-  admins: IHackerProps[]
+  currentPageNum: number;
+  hackers: IHackerProps[];
+  judges: IHackerProps[];
+  staff: IHackerProps[];
+  admins: IHackerProps[];
 }
 
 const defaultState: Readonly<HackersState> = Object.freeze({
@@ -41,7 +41,7 @@ const defaultState: Readonly<HackersState> = Object.freeze({
   judges: [],
   staff: [],
   admins: [],
-})
+});
 
 export const hackersReducer = (
   state: HackersState = defaultState,
@@ -49,21 +49,21 @@ export const hackersReducer = (
 ): HackersState => {
   switch (action.type) {
     case Actions.ALL_HACKERS_RESPONSE: {
-      const { hackers, staff, admins, judges } = action.payload
+      const { hackers, staff, admins, judges } = action.payload;
       return {
         ...state,
         hackers,
         judges,
         staff,
         admins,
-      }
+      };
     }
     case Actions.UPDATE_HACKERS_PAGE_NUM:
       return {
         ...state,
         currentPageNum: action.payload,
-      }
+      };
     default:
-      return state
+      return state;
   }
-}
+};

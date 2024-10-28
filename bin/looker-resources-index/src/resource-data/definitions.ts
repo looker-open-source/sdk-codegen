@@ -23,8 +23,8 @@
  SOFTWARE.
 
  */
-import type { LocaleString } from '../types'
-import { ContentType } from '../types'
+import type { LocaleString } from '../types';
+import { ContentType } from '../types';
 
 export const contentType: Record<string, LocaleString> = {
   [ContentType.demo]:
@@ -39,4 +39,4 @@ export const contentType: Record<string, LocaleString> = {
     'Code that can be consumed as a dependency of other code, usually via a package/module manager',
   [ContentType.installableCode]:
     'Installable code is template or sample code that can also be directly deployed and then modified, often through existing automation such as the Looker Marketplace, without the need to first adapt it.',
-}
+};

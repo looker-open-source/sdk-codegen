@@ -24,34 +24,42 @@
 
  */
 
-import type { Readable } from 'readable-stream'
-import { addQueryParams, StatusCode } from './transport'
+import {
+  StatusCode,
+  addQueryParams,
+  agentPrefix,
+  mergeOptions,
+  LookerAppId,
+  sdkTimeout,
+} from './transport';
 import type {
   Authenticator,
   HttpMethod,
+  IRawRequest,
   IRawResponse,
   ITransport,
   ITransportSettings,
+  RawObserver,
   SDKResponse,
   Values,
-  RawObserver,
-} from './transport'
+  IRequestProps,
+} from './transport';
 
 export abstract class BaseTransport implements ITransport {
   protected constructor(protected readonly options: ITransportSettings) {
-    this.options = options
+    this.options = options;
   }
 
-  observer: RawObserver | undefined = undefined
+  observer: RawObserver | undefined = undefined;
 
   abstract parseResponse<TSuccess, TError>(
     raw: IRawResponse
-  ): Promise<SDKResponse<TSuccess, TError>>
+  ): Promise<SDKResponse<TSuccess, TError>>;
 
   ok(res: IRawResponse): boolean {
     return (
       res.statusCode >= StatusCode.OK && res.statusCode <= StatusCode.IMUsed
-    )
+    );
   }
 
   /**
@@ -74,17 +82,16 @@ export abstract class BaseTransport implements ITransport {
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
-  ): Promise<IRawResponse>
+  ): Promise<IRawResponse>;
 
   /**
    * Request a streaming response
-   * @param {HttpMethod} method
-   * @param {string} path Request path
+   * @param method HTTP method
+   * @param path Request path
    * @param queryParams query parameters for the request
    * @param body http body to include with request
-   * @param {Authenticator} authenticator callback to add authentication information to the request
-   * @param {Partial<ITransportSettings>} options transport option overrides
-   * @returns {Promise<TSuccess>} the streaming response
+   * @param authenticator callback to add authentication information to the request
+   * @param options transport settings overrides
    */
   abstract request<TSuccess, TError>(
     method: HttpMethod,
@@ -93,29 +100,28 @@ export abstract class BaseTransport implements ITransport {
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<TSuccess, TError>>
+  ): Promise<SDKResponse<TSuccess, TError>>;
 
   /**
    * Request a streaming response
-   * @param {(readable: _Readable.Readable) => Promise<TSuccess>} callback A function will be called with a Node.js or
-   *  Browser `Readable` object. The readable object represents the streaming data.
-   * @param {HttpMethod} method
-   * @param {string} path Request path
-   * @param queryParams query parameters for the request
+   * @param callback A function will be called with the created HTTP response object
+   * @param method HTTP method
+   * @param path Request path
+   * @param queryParams parameters for the request
    * @param body http body to include with request
-   * @param {Authenticator} authenticator callback to add authentication information to the request
-   * @param {Partial<ITransportSettings>} options transport option overrides
-   * @returns {Promise<TSuccess>} the streaming response
+   * @param authenticator callback to add authentication information to the request
+   * @param options transport settings overrides
+   * @returns the streaming response
    */
   abstract stream<TSuccess>(
-    callback: (readable: Readable) => Promise<TSuccess>,
+    callback: (response: Response) => Promise<TSuccess>,
     method: HttpMethod,
     path: string,
     queryParams?: Values,
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
-  ): Promise<TSuccess>
+  ): Promise<TSuccess>;
 
   /**
    * Determine whether the url should be an API path, relative from base_url, or is already fully specified override
@@ -130,11 +136,71 @@ export abstract class BaseTransport implements ITransport {
     queryParams?: Values
   ) {
     // is this an API-versioned call?
-    const base = options.base_url
+    const base = options.base_url;
     if (!path.match(/^(http:\/\/|https:\/\/)/gi)) {
-      path = `${base}${path}` // path was relative
+      path = `${base}${path}`; // path was relative
     }
-    path = addQueryParams(path, queryParams)
-    return path
+    path = addQueryParams(path, queryParams);
+    return path;
+  }
+
+  abstract retry(wait: IRawRequest): Promise<IRawResponse>;
+
+  protected async initRequest(
+    method: HttpMethod,
+    path: string,
+    body?: any,
+    authenticator?: Authenticator,
+    options?: Partial<ITransportSettings>
+  ) {
+    const agentTag = options?.agentTag || this.options.agentTag || agentPrefix;
+    options = mergeOptions(
+      { ...this.options, ...{ headers: { [LookerAppId]: agentTag } } },
+      options ?? {}
+    );
+    const headers = options.headers ?? {};
+
+    // Make sure an empty body is undefined
+    if (!body) {
+      body = undefined;
+    } else {
+      if (typeof body !== 'string') {
+        body = JSON.stringify(body);
+        headers['Content-Type'] = 'application/json';
+      }
+    }
+
+    const ms = sdkTimeout(options) * 1000;
+    let signaller = AbortSignal.timeout(ms);
+    if ('signal' in options && options.signal) {
+      // AbortSignal.any may not be available, tolerate its absence
+      if (AbortSignal.any) {
+        signaller = AbortSignal.any([options.signal, signaller]);
+      } else {
+        console.debug(
+          'Cannot combine cancel signal and timeout. AbortSignal.any is not available in this transport.'
+        );
+        console.debug({ AbortSignal });
+      }
+    }
+
+    let props: IRequestProps = {
+      body,
+      credentials: 'same-origin',
+      headers,
+      method,
+      url: path,
+      signal: signaller,
+    };
+
+    if (authenticator) {
+      // Add authentication information to the request
+      props = await authenticator(props);
+    }
+
+    // Transform to HTTP request headers at the last second
+    // props.headers = new Headers(props.headers) as any;
+
+    return props;
   }
 }

@@ -32,7 +32,7 @@ The following steps assume deployment using Google Cloud UI Console. Check out [
   <img src="https://storage.googleapis.com/tutorials-img/Cloud%20Function_env%20-%20SD%20480p.gif" alt="Setting environmental variables in Cloud Function UI">
 </p>
 
-5. Copy and paste the contents of `main.py` in this repository into the `main.py` file once inside Cloud Function's inline editor. Change the "Entry point" in the top right to the main function.  `main.py` is executed once the function is triggered
+5. Copy and paste the contents of `main.py` in this repository into the `main.py` file once inside Cloud Function's inline editor. Change the "Entry point" in the top right to the main function. `main.py` is executed once the function is triggered
 
 6. Copy and paste the contents of `requirements.txt` in this repository to the `requirements.txt` file once inside Cloud Function's inline editor. This file is used to install necessary libraries to execute the function
 

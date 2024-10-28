@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export * from './EmbedPlayground'
+export * from './EmbedPlayground';

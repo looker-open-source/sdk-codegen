@@ -24,9 +24,9 @@
 
  */
 
-import type { FC } from 'react'
-import React, { useState, useEffect, useCallback } from 'react'
-import styled, { createGlobalStyle } from 'styled-components'
+import type { FC } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import styled, { createGlobalStyle } from 'styled-components';
 import {
   Aside,
   ComponentsProvider,
@@ -36,48 +36,48 @@ import {
   Layout,
   Page,
   Space,
-} from '@looker/components'
-import { FirstPage } from '@styled-icons/material/FirstPage'
-import { LastPage } from '@styled-icons/material/LastPage'
+} from '@looker/components';
+import { FirstPage } from '@styled-icons/material/FirstPage';
+import { LastPage } from '@styled-icons/material/LastPage';
 import {
   registerEnvAdaptor,
   unregisterEnvAdaptor,
-} from '@looker/extension-utils'
-import { useSelector } from 'react-redux'
-import { useLocation } from 'react-router-dom'
+} from '@looker/extension-utils';
+import { useSelector } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 
-import type { IApixAdaptor } from './utils'
+import type { IApixAdaptor } from './utils';
 import {
-  Header,
-  SideNav,
-  ErrorBoundary,
-  SelectorContainer,
-  HEADER_TOGGLE_LABEL,
-  Loader,
   Banner,
-} from './components'
-import { AppRouter } from './routes'
-import { apixFilesHost } from './utils/lodeUtils'
+  ErrorBoundary,
+  HEADER_TOGGLE_LABEL,
+  Header,
+  Loader,
+  SelectorContainer,
+  SideNav,
+} from './components';
+import { AppRouter } from './routes';
+import { apixFilesHost } from './utils/lodeUtils';
 import {
-  useSettingActions,
+  selectCurrentSpec,
+  selectSpecs,
   useLodeActions,
   useLodesStoreState,
+  useSettingActions,
+  useSettingStoreState,
   useSpecActions,
   useSpecStoreState,
-  selectSpecs,
-  selectCurrentSpec,
-  useSettingStoreState,
-} from './state'
-import { getSpecKey, findSdk, useGlobalStoreSync } from './utils'
+} from './state';
+import { findSdk, getSpecKey, useGlobalStoreSync } from './utils';
 
 export interface ApiExplorerProps {
-  adaptor: IApixAdaptor
-  examplesLodeUrl?: string
-  declarationsLodeUrl?: string
-  headless?: boolean
+  adaptor: IApixAdaptor;
+  examplesLodeUrl?: string;
+  declarationsLodeUrl?: string;
+  headless?: boolean;
 }
 
-const BodyOverride = createGlobalStyle` html { height: 100%; overflow: hidden; } `
+const BodyOverride = createGlobalStyle` html { height: 100%; overflow: hidden; } `;
 
 export const ApiExplorer: FC<ApiExplorerProps> = ({
   adaptor,
@@ -85,72 +85,72 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
   declarationsLodeUrl = `${apixFilesHost}/declarationsIndex.json`,
   headless = false,
 }) => {
-  useLodesStoreState()
-  const { working, description } = useSpecStoreState()
-  const specs = useSelector(selectSpecs)
-  const spec = useSelector(selectCurrentSpec)
-  const { initLodesAction } = useLodeActions()
-  const { initialized } = useSettingStoreState()
+  useLodesStoreState();
+  const { working, description } = useSpecStoreState();
+  const specs = useSelector(selectSpecs);
+  const spec = useSelector(selectCurrentSpec);
+  const { initLodesAction } = useLodeActions();
+  const { initialized } = useSettingStoreState();
   const { initSettingsAction, setSearchPatternAction, setSdkLanguageAction } =
-    useSettingActions()
-  const { initSpecsAction, setCurrentSpecAction } = useSpecActions()
+    useSettingActions();
+  const { initSpecsAction, setCurrentSpecAction } = useSpecActions();
 
-  const location = useLocation()
-  useGlobalStoreSync()
-  const [hasNavigation, setHasNavigation] = useState(true)
+  const location = useLocation();
+  useGlobalStoreSync();
+  const [hasNavigation, setHasNavigation] = useState(true);
   const toggleNavigation = (target?: boolean) =>
-    setHasNavigation(target || !hasNavigation)
+    setHasNavigation(target || !hasNavigation);
 
   const hasNavigationToggle = useCallback((e: MessageEvent<any>) => {
     if (e.origin === window.origin && e.data.action === 'toggle_sidebar') {
-      setHasNavigation((currentHasNavigation) => !currentHasNavigation)
+      setHasNavigation(currentHasNavigation => !currentHasNavigation);
     }
-  }, [])
+  }, []);
 
-  registerEnvAdaptor(adaptor)
-
-  useEffect(() => {
-    initSettingsAction()
-    initLodesAction({ examplesLodeUrl, declarationsLodeUrl })
-
-    const specKey = getSpecKey(location)
-    initSpecsAction({ specKey })
-    return () => unregisterEnvAdaptor()
-  }, [])
+  registerEnvAdaptor(adaptor);
 
   useEffect(() => {
-    const maybeSpec = location.pathname?.split('/')[1]
+    initSettingsAction();
+    initLodesAction({ examplesLodeUrl, declarationsLodeUrl });
+
+    const specKey = getSpecKey(location);
+    initSpecsAction({ specKey });
+    return () => unregisterEnvAdaptor();
+  }, []);
+
+  useEffect(() => {
+    const maybeSpec = location.pathname?.split('/')[1];
     if (spec && maybeSpec && maybeSpec !== spec.key) {
-      setCurrentSpecAction({ currentSpecKey: maybeSpec })
+      setCurrentSpecAction({ currentSpecKey: maybeSpec });
     }
-  }, [location.pathname, spec])
+  }, [location.pathname, spec]);
 
   useEffect(() => {
-    if (!initialized) return
-    const searchParams = new URLSearchParams(location.search)
-    const searchPattern = searchParams.get('s') || ''
-    const sdkParam = searchParams.get('sdk') || 'all'
-    const { language: sdkLanguage } = findSdk(sdkParam)
-    setSearchPatternAction({ searchPattern })
-    setSdkLanguageAction({ sdkLanguage })
-  }, [location.search])
+    if (!initialized) return;
+    const searchParams = new URLSearchParams(location.search);
+    const searchPattern = searchParams.get('s') || '';
+    const sdkParam = searchParams.get('sdk') || 'all';
+    const { language: sdkLanguage } = findSdk(sdkParam);
+    setSearchPatternAction({ searchPattern });
+    setSdkLanguageAction({ sdkLanguage });
+  }, [location.search]);
 
   useEffect(() => {
     if (headless) {
-      window.addEventListener('message', hasNavigationToggle)
+      window.addEventListener('message', hasNavigationToggle);
     }
     return () => {
       if (headless) {
-        window.removeEventListener('message', hasNavigationToggle)
+        window.removeEventListener('message', hasNavigationToggle);
       }
-    }
-  }, [headless, hasNavigationToggle])
+    };
+  }, [headless, hasNavigationToggle]);
 
-  const themeOverrides = adaptor.themeOverrides()
+  const themeOverrides = adaptor.themeOverrides();
 
-  let neededSpec = location.pathname?.split('/')[1]
+  let neededSpec = location.pathname?.split('/')[1];
   if (!neededSpec) {
-    neededSpec = spec?.key
+    neededSpec = spec?.key;
   }
 
   return (
@@ -228,13 +228,13 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
       </ComponentsProvider>
       {!headless && <BodyOverride />}
     </>
-  )
-}
+  );
+};
 
 const AsideBorder = styled(Aside)<{
-  isOpen: boolean
-  headless: boolean
+  isOpen: boolean;
+  headless: boolean;
 }>`
   width: ${({ isOpen, headless }) =>
     isOpen ? '20rem' : headless ? '2.75rem' : '0rem'};
-`
+`;

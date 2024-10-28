@@ -24,15 +24,15 @@
 
  */
 
-import type { FC } from 'react'
-import React from 'react'
-import styled from 'styled-components'
+import type { FC } from 'react';
+import React from 'react';
+import styled from 'styled-components';
 
 interface CodeWrapperProps {
-  className: string
-  style: any
-  inline: boolean
-  children: any
+  className: string;
+  style: any;
+  inline: boolean;
+  children: any;
 }
 
 const Pre = styled.pre`
@@ -49,13 +49,13 @@ const Pre = styled.pre`
     border-radius: 10px;
     padding: 0.15px 4px;
   }
-`
+`;
 const Code = styled.code`
   // selector for search matches
   .match {
     background-color: yellow;
   }
-`
+`;
 
 /**
  * A wrapper for CodeDisplay which applies search highlighting styles on proper container component
@@ -66,10 +66,10 @@ export const CodeWrapper: FC<CodeWrapperProps> = ({
   inline,
   children,
 }) => {
-  const Wrapper = inline ? Code : Pre
+  const Wrapper = inline ? Code : Pre;
   return (
     <Wrapper className={className} style={style}>
       {children}
     </Wrapper>
-  )
-}
+  );
+};

@@ -23,43 +23,43 @@
  SOFTWARE.
 
  */
-import React, { useState, useEffect } from 'react'
-import { Select, SpaceVertical, ValidationMessage } from '@looker/components'
-import type { SelectOptionObject } from '@looker/components'
-import { useThemeActions, useThemesStoreState } from './state'
+import React, { useEffect, useState } from 'react';
+import { Select, SpaceVertical, ValidationMessage } from '@looker/components';
+import type { SelectOptionObject } from '@looker/components';
+import { useThemeActions, useThemesStoreState } from './state';
 
 export const SelectTheme = () => {
   const { initialized, themes, selectedTheme, error, working } =
-    useThemesStoreState()
+    useThemesStoreState();
   const { initAction, loadThemeDataAction, selectThemeAction } =
-    useThemeActions()
-  const [options, setOptions] = useState<SelectOptionObject[]>([])
+    useThemeActions();
+  const [options, setOptions] = useState<SelectOptionObject[]>([]);
 
   useEffect(() => {
     /** initialize theme service */
-    initAction()
-  }, [])
+    initAction();
+  }, []);
 
   useEffect(() => {
     if (initialized) {
       /** If theme service is initialized, load all theme data */
-      loadThemeDataAction()
+      loadThemeDataAction();
     }
-  }, [initialized])
+  }, [initialized]);
 
   useEffect(() => {
     const themeOptions: SelectOptionObject[] = themes
-      .map((theme) => ({
+      .map(theme => ({
         value: theme.id!,
         label: theme.name,
       }))
-      .sort((x, y) => x.label!.localeCompare(y.label!))
-    setOptions(themeOptions)
-  }, [themes])
+      .sort((x, y) => x.label!.localeCompare(y.label!));
+    setOptions(themeOptions);
+  }, [themes]);
 
   const handleChange = (key: string) => {
-    selectThemeAction({ key })
-  }
+    selectThemeAction({ key });
+  };
 
   return (
     <SpaceVertical gap="xxxsmall">
@@ -73,5 +73,5 @@ export const SelectTheme = () => {
       />
       {error && <ValidationMessage type="error" message={error} />}
     </SpaceVertical>
-  )
-}
+  );
+};

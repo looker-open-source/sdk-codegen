@@ -24,22 +24,20 @@
 
  */
 
-import type { ChattyHostConnection } from '@looker/chatty'
-import type { Looker31SDK } from '@looker/sdk'
-import { MountPoint, ExtensionNotificationType } from '../connect/types'
-import { ExtensionHostApiImpl } from '../connect/extension_host_api'
-import { LookerExtensionSDK } from './extension_sdk'
-import { LookerExtensionSDK31 } from './extension_sdk_31'
-import { LookerExtensionSDK40 } from './extension_sdk_40'
+import type { ChattyHostConnection } from '@looker/chatty';
+import type { Looker40SDK } from '@looker/sdk';
+import { ExtensionNotificationType, MountPoint } from '../connect/types';
+import { ExtensionHostApiImpl } from '../connect/extension_host_api';
+import { LookerExtensionSDK } from './extension_sdk';
 
 describe('extension_sdk tests', () => {
-  let chattyHost: ChattyHostConnection
-  let sendAndReceiveSpy: jest.SpyInstance
-  let sendSpy: jest.SpyInstance
+  let chattyHost: ChattyHostConnection;
+  let sendAndReceiveSpy: jest.SpyInstance;
+  let sendSpy: jest.SpyInstance;
 
   const getAllConnectionPayload = (
     agentTag = 'TS-SDK',
-    apiVersion = '3.1'
+    apiVersion = '4.0'
   ) => ({
     payload: {
       body: null,
@@ -58,7 +56,7 @@ describe('extension_sdk tests', () => {
       apiVersion,
     },
     type: 'INVOKE_CORE_SDK',
-  })
+  });
 
   beforeEach(() => {
     chattyHost = {
@@ -66,27 +64,27 @@ describe('extension_sdk tests', () => {
         // noop
       },
       sendAndReceive: async (_eventName: string, ..._payload: any[]) =>
-        new Promise((resolve) => {
+        new Promise(resolve => {
           setTimeout(() => {
-            resolve(['ss'])
-          })
+            resolve(['ss']);
+          });
         }),
-    } as ChattyHostConnection
-    sendAndReceiveSpy = jest.spyOn(chattyHost, 'sendAndReceive')
-    sendSpy = jest.spyOn(chattyHost, 'send')
-  })
+    } as ChattyHostConnection;
+    sendAndReceiveSpy = jest.spyOn(chattyHost, 'sendAndReceive');
+    sendSpy = jest.spyOn(chattyHost, 'send');
+  });
 
   afterEach(() => {
-    sendAndReceiveSpy.mockReset()
-    sendSpy.mockReset()
-  })
+    sendAndReceiveSpy.mockReset();
+    sendSpy.mockReset();
+  });
 
   const createHostApi = () => {
-    const initializedCallback = jest.fn()
+    const initializedCallback = jest.fn();
     const hostApi = new ExtensionHostApiImpl({
       chattyHost,
       initializedCallback,
-    })
+    });
 
     hostApi.handleNotification({
       type: ExtensionNotificationType.INITIALIZE,
@@ -97,74 +95,38 @@ describe('extension_sdk tests', () => {
         lookerVersion: '6.25.0',
         mountPoint: MountPoint.standalone,
       },
-    })
+    });
 
-    return hostApi
-  }
+    return hostApi;
+  };
 
-  it('creates client', (done) => {
-    const sdk: Looker31SDK = LookerExtensionSDK.createClient(createHostApi())
-    expect(sdk).toBeDefined()
+  it('creates client', done => {
+    const sdk: Looker40SDK = LookerExtensionSDK.createClient(createHostApi());
+    expect(sdk).toBeDefined();
     sdk
       .all_connections()
       .then(() => {
         expect(sendAndReceiveSpy).toHaveBeenCalledWith(
           'EXTENSION_API_REQUEST',
           getAllConnectionPayload()
-        )
-        done()
+        );
+        done();
       })
       .catch((error: any) => {
-        console.error(error)
-        done.fail()
-      })
-  })
+        console.error(error);
+        done.fail();
+      });
+  });
 
-  it('creates 31 client', (done) => {
-    const sdk = LookerExtensionSDK.create31Client(createHostApi())
-    expect(sdk).toBeDefined()
-    sdk.all_connections().then(() => {
-      expect(sendAndReceiveSpy).toHaveBeenCalledWith(
-        'EXTENSION_API_REQUEST',
-        getAllConnectionPayload()
-      )
-      done()
-    })
-  })
-
-  it('creates 40 client', (done) => {
-    const sdk = LookerExtensionSDK.create40Client(createHostApi())
-    expect(sdk).toBeDefined()
+  it('creates 40 client', done => {
+    const sdk = LookerExtensionSDK.createClient(createHostApi());
+    expect(sdk).toBeDefined();
     sdk.all_connections().then(() => {
       expect(sendAndReceiveSpy).toHaveBeenCalledWith(
         'EXTENSION_API_REQUEST',
         getAllConnectionPayload('TS-SDK', '4.0')
-      )
-      done()
-    })
-  })
-
-  it('creates exclusive 31 client', (done) => {
-    const sdk = LookerExtensionSDK31.createClient(createHostApi())
-    expect(sdk).toBeDefined()
-    sdk.all_connections().then(() => {
-      expect(sendAndReceiveSpy).toHaveBeenCalledWith(
-        'EXTENSION_API_REQUEST',
-        getAllConnectionPayload()
-      )
-      done()
-    })
-  })
-
-  it('creates exclusive 40 client', (done) => {
-    const sdk = LookerExtensionSDK40.createClient(createHostApi())
-    expect(sdk).toBeDefined()
-    sdk.all_connections().then(() => {
-      expect(sendAndReceiveSpy).toHaveBeenCalledWith(
-        'EXTENSION_API_REQUEST',
-        getAllConnectionPayload('TS-SDK', '4.0')
-      )
-      done()
-    })
-  })
-})
+      );
+      done();
+    });
+  });
+});
