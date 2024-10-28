@@ -53,8 +53,8 @@ describe('DocParams', () => {
 
   test('it works when method has both required and optional params', () => {
     const params = api.methods.user.allParams;
-    const requiredParams = params.filter((param) => param.required);
-    const optionalParams = params.filter((param) => !param.required);
+    const requiredParams = params.filter(param => param.required);
+    const optionalParams = params.filter(param => !param.required);
     expect(requiredParams).toHaveLength(1);
     expect(optionalParams).toHaveLength(1);
 

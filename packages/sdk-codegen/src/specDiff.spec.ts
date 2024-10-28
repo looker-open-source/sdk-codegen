@@ -29,7 +29,8 @@ import cloneDeep from 'lodash/cloneDeep';
 import pick from 'lodash/pick';
 import type { OperationObject } from 'openapi3-ts';
 
-import type { DiffRow } from './specDiff';
+import { TestConfig, testFile } from '@looker/sdk-codegen-utils';
+import type { DiffRow, TypeDelta } from './specDiff';
 import {
   compareParams,
   compareSpecs,
@@ -37,11 +38,10 @@ import {
   includeDiffs,
   startCount,
 } from './specDiff';
-import { TestConfig, rootFile } from './testUtils';
 import type { IApiModel, IMethod, PropertyList } from './sdkModels';
-import { ApiModel, Method, Parameter, Type } from './sdkModels';
+import { ApiModel, Method, Parameter, specToModel, Type } from './sdkModels';
 
-const config = TestConfig();
+const config = TestConfig(specToModel);
 const apiTestModel = config.apiTestModel;
 
 /**
@@ -73,7 +73,7 @@ const changeType = (type: Type) => {
 const changeParams = (method: Method) => {
   const params = cloneDeep(method.params);
   const changedParams = [];
-  params.forEach((param) => {
+  params.forEach(param => {
     changedParams.push(new Parameter(param, param.type));
   });
   params[0].required = !params[0].required;
@@ -85,7 +85,7 @@ const changeParams = (method: Method) => {
  * type property
  * @param method
  */
-export const changeMethod = (method: Method) => {
+const changeMethod = (method: Method) => {
   const params = changeParams(method);
 
   const result = new Method(
@@ -99,6 +99,7 @@ export const changeMethod = (method: Method) => {
   result.type = changeType(result.type as Type);
   return result;
 };
+/** eslint-disable jest/no-disabled-tests */
 
 describe('spec differ', () => {
   describe('compareTypes', () => {
@@ -115,20 +116,17 @@ describe('spec differ', () => {
       const [key, lProp] = firstProperty(lType.properties);
       const rType = changeType(lType as Type);
       const count = startCount();
-      const actual: any = compareTypes(lType, rType, count);
+      const actual = compareTypes(lType, rType, count);
       expect(actual).toBeDefined();
-      if (actual) {
-        expect(actual[key]).toBeDefined();
-        expect(actual[key].lhs).toEqual(lProp.summary());
-        expect(actual[key].rhs).toEqual(
-          firstProperty(rType.properties)[1].summary()
-        );
-        expect(count).toEqual({
-          added: 0,
-          changed: 1,
-          removed: 0,
-        });
-      }
+      const k = (actual as TypeDelta)[key];
+      expect(k).toBeDefined();
+      expect(k.lhs).toEqual(lProp.summary());
+      expect(k.rhs).toEqual(firstProperty(rType.properties)[1].summary());
+      expect(count).toEqual({
+        added: 0,
+        changed: 1,
+        removed: 0,
+      });
     });
   });
 
@@ -147,15 +145,13 @@ describe('spec differ', () => {
       const rMethod = changeMethod(lMethod as Method);
       const actual = compareParams(lMethod, rMethod, count);
       expect(actual).toBeDefined();
-      if (actual) {
-        expect(actual.lhs).toEqual(lMethod.signature());
-        expect(actual.rhs).toEqual(rMethod.signature());
-        expect(count).toEqual({
-          added: 0,
-          changed: 1,
-          removed: 0,
-        });
-      }
+      expect(actual?.lhs).toEqual(lMethod.signature());
+      expect(actual?.rhs).toEqual(rMethod.signature());
+      expect(count).toEqual({
+        added: 0,
+        changed: 1,
+        removed: 0,
+      });
     });
   });
 
@@ -192,7 +188,7 @@ describe('spec differ', () => {
               removed: 1,
             },
             id: 'POST /looks',
-            lStatus: 'beta',
+            lStatus: 'stable',
             name: 'create_look',
             paramsDiff: '',
             rStatus: '',
@@ -218,12 +214,14 @@ describe('spec differ', () => {
       );
     });
 
+    // TODO fix these tests
+    /** eslint-disable jest/no-disabled-tests */
     it.skip('should not overcount', () => {
       const spec31 = ApiModel.fromString(
-        readFileSync(rootFile('spec/Looker.3.1.oas.json'), 'utf-8')
+        readFileSync(testFile('Looker.3.1.oas.json'), 'utf-8')
       );
       const spec40 = ApiModel.fromString(
-        readFileSync(rootFile('spec/Looker.4.0.oas.json'), 'utf-8')
+        readFileSync(testFile('Looker.4.0.oas.json'), 'utf-8')
       );
       const lMethod = spec31.methods.create_look;
       expect(lMethod.status).toEqual('stable');
@@ -241,12 +239,13 @@ describe('spec differ', () => {
       });
     });
 
+    /** eslint-disable jest/no-disabled-tests */
     it.skip('should count changes and additions', () => {
       const spec31 = ApiModel.fromString(
-        readFileSync(rootFile('spec/Looker.3.1.oas.json'), 'utf-8')
+        readFileSync(testFile('Looker.3.1.oas.json'), 'utf-8')
       );
       const spec40 = ApiModel.fromString(
-        readFileSync(rootFile('spec/Looker.4.0.oas.json'), 'utf-8')
+        readFileSync(testFile('Looker.4.0.oas.json'), 'utf-8')
       );
       const lMethod = spec31.methods.search_dashboards;
       expect(lMethod.status).toEqual('stable');
@@ -352,9 +351,9 @@ describe('spec differ', () => {
     });
 
     it('should compare with filter', () => {
-      const leftFile = rootFile('/spec/Looker.3.1.oas.json');
+      const leftFile = testFile('Looker.3.1.oas.json');
       const lSpec = ApiModel.fromString(readFileSync(leftFile, 'utf-8'));
-      const rightFile = rootFile('/spec/Looker.4.0.oas.json');
+      const rightFile = testFile('/Looker.4.0.oas.json');
       const rSpec = ApiModel.fromString(readFileSync(rightFile, 'utf-8'));
 
       const betaCompare = (
@@ -366,9 +365,8 @@ describe('spec differ', () => {
       const actual = compareSpecs(lSpec, rSpec, betaCompare);
       expect(actual).toBeDefined();
       expect(actual.length).toBeGreaterThanOrEqual(
-        Object.values(lSpec.methods).filter(
-          (method) => method.status === 'beta'
-        ).length
+        Object.values(lSpec.methods).filter(method => method.status === 'beta')
+          .length
       );
     });
   });

@@ -24,7 +24,7 @@
 
  */
 
-import type { IAPIMethods } from './apiMethods';
+import type { IAPIMethods } from './transport';
 import { sdkOk } from './transport';
 
 export interface IErrorDocItem {
@@ -161,13 +161,13 @@ export class ErrorDoc implements IErrorDoc {
 
   public get index() {
     if (!this._index) {
-      this.load().catch((reason) => console.error(reason));
+      this.load().catch(reason => console.error(reason));
     }
     return this._index;
   }
 
   specPath(path: string): string {
-    const result = path.replace(/:\w+/g, (found) => `{${found.substr(1)}}`);
+    const result = path.replace(/:\w+/g, found => `{${found.substring(1)}}`);
     return result;
   }
 

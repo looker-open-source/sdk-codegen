@@ -37,10 +37,7 @@ const mockToken = 'mocked';
 
 const proxyUrl = 'https://my.proxy';
 class ProxyMock extends ProxySession {
-  constructor(
-    public settings: IApiSettings,
-    transport?: ITransport
-  ) {
+  constructor(public settings: IApiSettings, transport?: ITransport) {
     super(settings, proxyUrl, transport);
   }
 

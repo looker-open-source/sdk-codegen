@@ -111,7 +111,7 @@ export class Project extends SheetRow<Project> {
 
   get $members(): string[] {
     const names: string[] = [];
-    this.$team.forEach((m) => {
+    this.$team.forEach(m => {
       const user = this.data().users.find(m.user_id);
       if (user) names.push(`${user.first_name} ${user.last_name}`);
     });
@@ -120,7 +120,7 @@ export class Project extends SheetRow<Project> {
 
   get $judges(): string[] {
     const names: string[] = [];
-    this.$judgings.forEach((j) => {
+    this.$judgings.forEach(j => {
       const user = this.data().users.find(j.user_id);
       if (user) names.push(`${user.first_name} ${user.last_name}`);
     });
@@ -165,7 +165,7 @@ export class Project extends SheetRow<Project> {
     if (errors)
       throw new Error(
         Object.values(errors)
-          .map((v) => v.message)
+          .map(v => v.message)
           .join()
       );
     if (this.date_created === noDate) this.date_created = new Date();
@@ -197,12 +197,12 @@ export class Project extends SheetRow<Project> {
   }
 
   findMember(hacker: Hacker) {
-    const found = this.$team.find((m) => m.user_id === hacker.id);
+    const found = this.$team.find(m => m.user_id === hacker.id);
     return found ? new TeamMember(found) : found;
   }
 
   findJudging(hacker: Hacker) {
-    const found = this.$judgings.find((j) => j.user_id === hacker.id);
+    const found = this.$judgings.find(j => j.user_id === hacker.id);
     return found ? new Judging(found) : undefined;
   }
 
@@ -218,17 +218,15 @@ export class Project extends SheetRow<Project> {
 
   getMembers(): Project {
     this.$team = this.data().teamMembers?.rows.filter(
-      (m) => m.project_id === this._id
+      m => m.project_id === this._id
     );
     return this;
   }
 
   getJudgings(): Project {
     const data = this.data();
-    this.$judgings = data.judgings?.rows.filter(
-      (m) => m.project_id === this._id
-    );
-    this.$judgings.forEach((j) => {
+    this.$judgings = data.judgings?.rows.filter(m => m.project_id === this._id);
+    this.$judgings.forEach(j => {
       // Assign relations back for judging row in case it's not established
       j.load(data);
     });
@@ -237,7 +235,7 @@ export class Project extends SheetRow<Project> {
 
   getTechs(): Project {
     const techs: string[] = [];
-    this.technologies.forEach((key) => {
+    this.technologies.forEach(key => {
       const tech = this.data().technologies.find(key);
       if (!tech) {
         throw new Error(
@@ -325,11 +323,11 @@ export class Projects extends WhollyArtifact<Project, IProjectProps> {
   filterBy(hackathon?: Hackathon, user?: Hacker) {
     if (hackathon && user)
       return this.rows.filter(
-        (p) => p._user_id === user.id && p._hackathon_id === hackathon._id
+        p => p._user_id === user.id && p._hackathon_id === hackathon._id
       );
     if (hackathon)
-      return this.rows.filter((p) => p._hackathon_id === hackathon._id);
-    if (user) return this.rows.filter((p) => p._user_id === user.id);
+      return this.rows.filter(p => p._hackathon_id === hackathon._id);
+    if (user) return this.rows.filter(p => p._user_id === user.id);
     return this.rows;
   }
 

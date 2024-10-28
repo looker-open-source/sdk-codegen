@@ -65,7 +65,7 @@ function* getJudgingSaga({
       // judgings are lost on page reload so load them
       judgings = yield getJudgingsSaga() as any;
     }
-    const judging = judgings.find((j) => j._id === judgingId);
+    const judging = judgings.find(j => j._id === judgingId);
     yield put(getJudgingResponse(judging));
   } catch (err) {
     console.error(err);

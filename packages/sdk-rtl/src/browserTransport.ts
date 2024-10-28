@@ -24,26 +24,27 @@
 
  */
 
-import type { Readable } from 'readable-stream';
 import type {
   Authenticator,
   HttpMethod,
+  IRawRequest,
   IRawResponse,
-  IRequestHeaders,
-  IRequestProps,
   ISDKError,
   ITransportSettings,
   SDKResponse,
   Values,
 } from './transport';
 import {
-  LookerAppId,
   ResponseMode,
-  agentPrefix,
+  canRetry,
+  initResponse,
   isErrorLike,
+  pauseForRetry,
   responseMode,
+  retryError,
+  retryWait,
   safeBase64,
-  trace,
+  mergeOptions,
 } from './transport';
 import { BaseTransport } from './baseTransport';
 import type { ICryptoHash } from './cryptoHash';
@@ -51,7 +52,7 @@ import type { ICryptoHash } from './cryptoHash';
 export class BrowserCryptoHash implements ICryptoHash {
   arrayToHex(array: Uint8Array): string {
     return Array.from(array)
-      .map((b) => b.toString(16).padStart(2, '0'))
+      .map(b => b.toString(16).padStart(2, '0'))
       .join('');
   }
 
@@ -166,6 +167,87 @@ export class BrowserTransport extends BaseTransport {
     return '';
   }
 
+  /**
+   * Standard retry where requests will be retried based on configured
+   * transport settings. If retry is not enabled, no requests will be retried
+   *
+   * This default retry pattern implements the "full" jitter algorithm
+   * documented in https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/
+   *
+   * @param request options for HTTP request
+   */
+  async retry(request: IRawRequest): Promise<IRawResponse> {
+    const { method, path, queryParams, body, authenticator } = request;
+    const newOpts = mergeOptions(this.options, request.options ?? {});
+    const requestPath = this.makeUrl(path, newOpts, queryParams);
+    const props = await this.initRequest(
+      method,
+      requestPath,
+      body,
+      authenticator,
+      newOpts
+    );
+    const waiter = newOpts.waitHandler || retryWait;
+    let response = initResponse(method, requestPath);
+    // TODO assign to MaxTries when retry is opt-out instead of opt-in
+    const maxRetries = newOpts?.maxTries ?? 1; // MaxTries
+    let attempt = 1;
+    while (attempt <= maxRetries) {
+      const req = fetch(props.url, props as RequestInit);
+
+      const requestStarted = Date.now();
+      const res = await req;
+      const responseCompleted = Date.now();
+
+      // Start tracking the time it takes to convert the response
+      const started = BrowserTransport.markStart(
+        BrowserTransport.markName(requestPath)
+      );
+      const contentType = String(res.headers.get('content-type'));
+      const mode = responseMode(contentType);
+      const responseBody =
+        mode === ResponseMode.binary ? await res.blob() : await res.text();
+      if (!('fromRequest' in newOpts)) {
+        // Request will markEnd, so don't mark the end here
+        BrowserTransport.markEnd(requestPath, started);
+      }
+      const headers: { [key: string]: any } = {};
+      res.headers.forEach((value, key) => (headers[key] = value));
+      response = {
+        method,
+        url: requestPath,
+        body: responseBody,
+        contentType,
+        statusCode: res.status,
+        statusMessage: res.statusText,
+        startMark: started,
+        headers,
+        requestStarted,
+        responseCompleted,
+        ok: true,
+      };
+      response.ok = this.ok(response);
+      if (canRetry(response.statusCode) && attempt < maxRetries) {
+        const result = await pauseForRetry(request, response, attempt, waiter);
+        if (result.response === 'cancel') {
+          if (result.reason) {
+            response.statusMessage = result.reason;
+          }
+          break;
+        } else if (result.response === 'error') {
+          if (result.reason) {
+            response.statusMessage = result.reason;
+          }
+          return retryError(response);
+        }
+      } else {
+        break;
+      }
+      attempt++;
+    }
+    return response;
+  }
+
   async rawRequest(
     method: HttpMethod,
     path: string,
@@ -174,53 +256,14 @@ export class BrowserTransport extends BaseTransport {
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
   ): Promise<IRawResponse> {
-    options = { ...this.options, ...options };
-    const requestPath = this.makeUrl(path, options, queryParams);
-    const props = await this.initRequest(
+    const response = await this.retry({
       method,
-      requestPath,
+      path,
+      queryParams,
       body,
       authenticator,
-      options
-    );
-    const req = fetch(
-      props.url,
-      props // Weird package issues with unresolved imports for RequestInit :(
-    );
-
-    const requestStarted = Date.now();
-    const res = await req;
-    const responseCompleted = Date.now();
-
-    // Start tracking the time it takes to convert the response
-    const started = BrowserTransport.markStart(
-      BrowserTransport.markName(requestPath)
-    );
-    const contentType = String(res.headers.get('content-type'));
-    const mode = responseMode(contentType);
-    const responseBody =
-      mode === ResponseMode.binary ? await res.blob() : await res.text();
-    if (!('fromRequest' in options)) {
-      // Request will markEnd, so don't mark the end here
-      BrowserTransport.markEnd(requestPath, started);
-    }
-    const headers: { [key: string]: any } = {};
-    res.headers.forEach((value, key) => (headers[key] = value));
-    const response: IRawResponse = {
-      method,
-      url: requestPath,
-      body: responseBody,
-      contentType,
-      ok: true,
-      statusCode: res.status,
-      statusMessage: res.statusText,
-      startMark: started,
-      headers,
-      requestStarted,
-      responseCompleted,
-    };
-    // Update OK with response statusCode check
-    response.ok = this.ok(response);
+      options,
+    });
     return this.observer ? this.observer(response) : response;
   }
 
@@ -290,7 +333,7 @@ export class BrowserTransport extends BaseTransport {
   ): Promise<SDKResponse<TSuccess, TError>> {
     try {
       if (BrowserTransport.trackPerformance) {
-        options = { ...options, ...{ fromRequest: true } };
+        options = { ...options, fromRequest: true } as any;
       }
       const res = await this.rawRequest(
         method,
@@ -301,8 +344,9 @@ export class BrowserTransport extends BaseTransport {
         options
       );
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
-      const result: SDKResponse<TSuccess, TError> =
-        await this.parseResponse(res);
+      const result: SDKResponse<TSuccess, TError> = await this.parseResponse(
+        res
+      );
       return result;
     } catch (e: unknown) {
       if (!isErrorLike(e)) throw e;
@@ -317,129 +361,28 @@ export class BrowserTransport extends BaseTransport {
     }
   }
 
-  private async initRequest(
-    method: HttpMethod,
-    path: string,
-    body?: any,
-    authenticator?: Authenticator,
-    options?: Partial<ITransportSettings>
-  ) {
-    const agentTag = options?.agentTag || agentPrefix;
-    options = options ? { ...this.options, ...options } : this.options;
-    const headers: IRequestHeaders = { [LookerAppId]: agentTag };
-    if (options && options.headers) {
-      Object.entries(options.headers).forEach(([key, val]) => {
-        headers[key] = val;
-      });
-    }
-
-    // Make sure an empty body is undefined
-    if (!body) {
-      body = undefined;
-    } else {
-      if (typeof body !== 'string') {
-        body = JSON.stringify(body);
-        headers['Content-Type'] = 'application/json';
-      }
-    }
-    let props: IRequestProps = {
-      body,
-      credentials: 'same-origin',
-      headers,
-      method,
-      url: path,
-    };
-
-    if (authenticator) {
-      // Add authentication information to the request
-      props = await authenticator(props);
-    }
-
-    return props;
-  }
-
-  // TODO finish this method
   async stream<TSuccess>(
-    _callback: (readable: Readable) => Promise<TSuccess>,
+    callback: (response: Response) => Promise<TSuccess>,
     method: HttpMethod,
     path: string,
-    queryParams?: any,
+    queryParams?: Values,
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
   ): Promise<TSuccess> {
-    options = options ? { ...this.options, ...options } : this.options;
-    // const stream = new PassThrough()
-    // const returnPromise = callback(stream)
-    const requestPath = this.makeUrl(path, options, queryParams);
-    const props = await this.initRequest(
+    // TODO push this method down to base transport
+    const newOpts = { ...this.options, options };
+    const requestPath = this.makeUrl(path, newOpts, queryParams);
+    // TODO add signal: AbortSignal support
+    const init = await this.initRequest(
       method,
       requestPath,
       body,
       authenticator,
-      options
-    );
-    trace(`[stream] attempting to stream via download url`, props);
-
-    return Promise.reject<TSuccess>(
-      // Silly error message to prevent linter from complaining about unused variables
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      Error(
-        `Streaming for callback ${props.method} ${props.requestPath} is not implemented`
-      )
+      newOpts
     );
 
-    /*
-    TODO complete this for the browser implementation
-    const streamPromise = new Promise<void>((resolve, reject) => {
-      trace(`[stream] beginning stream via download url`, props)
-      reject(Error('Not implemented yet!'))
-      // let hasResolved = false
-      // const req = this.requestor(props)
-      //
-      // req
-      //   .on("error", (err) => {
-      //     if (hasResolved && (err as any).code === "ECONNRESET") {
-      //       trace('ignoring ECONNRESET that occurred after streaming finished', props)
-      //     } else {
-      //       trace('streaming error', err)
-      //       reject(err)
-      //     }
-      //   })
-      //   .on("finish", () => {
-      //     trace(`[stream] streaming via download url finished`, props)
-      //   })
-      //   .on("socket", (socket) => {
-      //     trace(`[stream] setting keepalive on socket`, props)
-      //     socket.setKeepAlive(true)
-      //   })
-      //   .on("abort", () => {
-      //     trace(`[stream] streaming via download url aborted`, props)
-      //   })
-      //   .on("response", () => {
-      //     trace(`[stream] got response from download url`, props)
-      //   })
-      //   .on("close", () => {
-      //     trace(`[stream] request stream closed`, props)
-      //   })
-      //   .pipe(stream)
-      //   .on("error", (err) => {
-      //     trace(`[stream] PassThrough stream error`, err)
-      //     reject(err)
-      //   })
-      //   .on("finish", () => {
-      //     trace(`[stream] PassThrough stream finished`, props)
-      //     resolve()
-      //     hasResolved = true
-      //   })
-      //   .on("close", () => {
-      //     trace(`[stream] PassThrough stream closed`, props)
-      //   })
-    })
-
-    const results = await Promise.all([returnPromise, streamPromise])
-    return results[0]
-    */
+    const response = await fetch(requestPath, init as RequestInit);
+    return await callback(response);
   }
 }

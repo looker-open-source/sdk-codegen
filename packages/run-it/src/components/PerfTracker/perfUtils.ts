@@ -161,7 +161,7 @@ export class PerfTimings {
 
   constructor() {
     if (PerfTimings.supported) {
-      performance.onresourcetimingbufferfull = (_ev) => (this._full = true);
+      performance.onresourcetimingbufferfull = _ev => (this._full = true);
       // https://developer.mozilla.org/en-US/docs/Web/API/Performance/setResourceTimingBufferSize
       // says the buffer size should be at least 150, but I don't know if we need to set it
       // this.bufferSize = 50 // TODO what's the default bufferSize? Does it vary by browser?
@@ -184,8 +184,8 @@ export class PerfTimings {
       const ex = new RegExp(pattern, 'i');
       return performance
         .getEntriesByType(type)
-        .filter((p) => ex.test(p.name))
-        .map((p) => new LoadTimes(p));
+        .filter(p => ex.test(p.name))
+        .map(p => new LoadTimes(p));
     }
     return [];
   }

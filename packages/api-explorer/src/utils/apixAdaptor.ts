@@ -41,10 +41,7 @@ export interface IApixAdaptor extends IEnvironmentAdaptor {
 export const getApixAdaptor = () => getEnvAdaptor() as IApixAdaptor;
 
 export class ApixAdaptor extends BrowserAdaptor implements IApixAdaptor {
-  constructor(
-    sdk: IAPIMethods,
-    private readonly fallbackVersionsUrl: string
-  ) {
+  constructor(sdk: IAPIMethods, private readonly fallbackVersionsUrl: string) {
     super(sdk);
   }
 

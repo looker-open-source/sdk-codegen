@@ -210,8 +210,8 @@ namespace Looker.SDK.API${this.apiRef}
     const defaulting = param.required
       ? ''
       : mapped.optional
-        ? ` = ${mapped.optional}`
-        : '';
+      ? ` = ${mapped.optional}`
+      : '';
     return `${indent}${mapped.name}${pOpt} ${arg}${defaulting}`;
   }
 
@@ -259,7 +259,7 @@ namespace Looker.SDK.API${this.apiRef}
     }
 
     headComment += this.returnComment(method);
-    method.params.forEach((param) => (headComment += this.paramComment(param)));
+    method.params.forEach(param => (headComment += this.paramComment(param)));
     const dep = method.deprecated ? `${indent}[Obsolete("Deprecated")]\n` : '';
     return this.commentHeader(indent, headComment) + dep;
   }
@@ -285,7 +285,7 @@ namespace Looker.SDK.API${this.apiRef}
     const params: string[] = [];
     const args = method.allParams; // get the params in signature order
     if (args && args.length > 0)
-      args.forEach((p) => params.push(this.declareParameter(bump, method, p)));
+      args.forEach(p => params.push(this.declareParameter(bump, method, p)));
     const fragment =
       params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : '';
     const callback = `callback: (readable: Readable) => Promise<${type.name}>,`;
@@ -332,7 +332,7 @@ namespace Looker.SDK.API${this.apiRef}
 
   argGroup(_indent: string, args: Arg[], prefix?: string) {
     prefix = prefix || '';
-    const values = args.map((arg) => `{ "${arg}", ${this.reserve(arg)} }`);
+    const values = args.map(arg => `{ "${arg}", ${this.reserve(arg)} }`);
     const bump = this.bumper(this.indentStr) + this.indentStr;
     return args && args.length !== 0
       ? `new Values {\n${bump}${values.join(
@@ -402,7 +402,7 @@ namespace Looker.SDK.API${this.apiRef}
       return `\n\n<returns><c>${mapped.name}</c> ${type.description} (${type.mediaType})</returns>\n`;
     }
     const desc: string[] = [];
-    method.okResponses.forEach((r) => {
+    method.okResponses.forEach(r => {
       const mapped = this.typeMap(r.type);
       desc.push(`<c>${mapped.name}</c> ${r.description} (${r.mediaType})`);
     });

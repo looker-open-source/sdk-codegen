@@ -25,31 +25,60 @@
  */
 
 import { TestConfig } from './testUtils';
-import { ResponseMode, encodeParam, responseMode } from './transport';
+import type { ITransportSettings } from './transport';
+import {
+  ResponseMode,
+  encodeParam,
+  responseMode,
+  mergeOptions,
+} from './transport';
 import { DelimArray } from './delimArray';
+import { DefaultSettings } from './apiSettings';
 
 const config = TestConfig();
 const binaryTypes = config.testData.content_types.binary as [string];
 const textTypes = config.testData.content_types.string as [string];
 
 describe('Transport', () => {
+  it('mergeOptions', () => {
+    const base: ITransportSettings = DefaultSettings();
+    // TODO header key values are case-sensitive. Should they be case-insensitive?
+    base.headers = {
+      'content-type': 'application/json',
+      'x-looker-appid': 'TS-SDK',
+    };
+    const options = {
+      verify_ssl: false,
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded',
+        'x-header': 'foo',
+      },
+    };
+    const actual = mergeOptions(base, options);
+    expect(actual).toEqual({
+      agentTag: 'TS-SDK',
+      base_url: '',
+      headers: {
+        'content-type': 'application/x-www-form-urlencoded',
+        'x-header': 'foo',
+        'x-looker-appid': 'TS-SDK',
+      },
+      timeout: 120,
+      verify_ssl: false,
+    });
+  });
+
   describe('Content Type mode', () => {
     it('binary', () => {
-      binaryTypes.forEach((x) => {
+      binaryTypes.forEach(x => {
         const actual = responseMode(x);
-        if (actual !== ResponseMode.binary) {
-          console.log(`${x} is not binary`);
-        }
         expect(actual).toEqual(ResponseMode.binary);
       });
     });
 
     it('text or string', () => {
-      textTypes.forEach((x) => {
+      textTypes.forEach(x => {
         const actual = responseMode(x);
-        if (actual !== ResponseMode.string) {
-          console.log(`${x} is not text/string`);
-        }
         expect(actual).toEqual(ResponseMode.string);
       });
     });

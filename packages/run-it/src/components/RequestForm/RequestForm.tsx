@@ -100,7 +100,7 @@ export const RequestForm: FC<RequestFormProps> = ({
   toggleKeepBody,
   isExtension = false,
 }) => {
-  const hasBody = inputs.some((i) => i.location === 'body');
+  const hasBody = inputs.some(i => i.location === 'body');
 
   const handleBoolChange = (e: BaseSyntheticEvent) => {
     setRequestContent({ ...requestContent, [e.target.name]: e.target.checked });
@@ -151,7 +151,7 @@ export const RequestForm: FC<RequestFormProps> = ({
         </MessageBar>
       )}
       <Fieldset>
-        {inputs.map((input) =>
+        {inputs.map(input =>
           typeof input.type === 'string'
             ? createSimpleItem(
                 input,

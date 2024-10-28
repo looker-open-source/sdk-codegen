@@ -233,10 +233,7 @@ export interface ISheetRowResponse {
 }
 
 export class SheetSDK extends APIMethods {
-  constructor(
-    authSession: IAuthSession,
-    public sheetId: string
-  ) {
+  constructor(authSession: IAuthSession, public sheetId: string) {
     super(authSession, sheetSDKVersion);
     authSession.settings.agentTag = `SheetSDK ${this.apiVersion}`;
     this.sheetId = encodeURIComponent(sheetId);
@@ -272,7 +269,7 @@ export class SheetSDK extends APIMethods {
       doc.tabs = {};
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      doc.sheets.forEach((tab) => (doc.tabs[tabName(tab)] = loadTabTable(tab)));
+      doc.sheets.forEach(tab => (doc.tabs[tabName(tab)] = loadTabTable(tab)));
     }
     return doc;
   }

@@ -59,7 +59,7 @@ export const DocResponses = ({ api, method, errorCode }: DocResponsesProps) => {
 
   if (errorCode) {
     const pattern = new RegExp(`${errorCode}: \\w+`);
-    tabNames.forEach((el) => {
+    tabNames.forEach(el => {
       if (pattern.test(el)) {
         defaultTabId = el;
       }

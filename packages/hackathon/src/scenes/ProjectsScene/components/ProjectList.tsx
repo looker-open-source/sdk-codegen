@@ -84,7 +84,7 @@ export const ProjectList: FC<ProjectListProps> = () => {
 
   const isProjectMember = (hacker: IHackerProps, project: IProjectProps) => {
     return !!project.$team.find(
-      (teamMember) => teamMember.user_id === String(hacker.id)
+      teamMember => teamMember.user_id === String(hacker.id)
     );
   };
 
@@ -212,7 +212,7 @@ export const ProjectList: FC<ProjectListProps> = () => {
         actions={actions(project)}
         onClick={handleView.bind(null, project)}
       >
-        {columns.map((column) => (
+        {columns.map(column => (
           <DataTableCell key={`${idx}.${column.id}`}>
             {projectCell(project, column.id)}
           </DataTableCell>
@@ -228,7 +228,7 @@ export const ProjectList: FC<ProjectListProps> = () => {
       <Pagination
         current={currentPage}
         pages={totalPages}
-        onChange={(pageNumber) => dispatch(updateProjectsPageNum(pageNumber))}
+        onChange={pageNumber => dispatch(updateProjectsPageNum(pageNumber))}
       />
       <ProjectViewDialog project={currentProject} onClose={closeView} />
     </>

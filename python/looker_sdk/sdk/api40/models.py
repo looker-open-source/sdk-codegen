@@ -1247,6 +1247,7 @@ class ContentSearch(model.Model):
         folder_name: Name of the folder where the content is saved
         view_count: Number of times the content has been viewed
         preferred_viewer: Preferred way of viewing the content (only applies to dashboards)
+        model: Name of the model the explore belongs to
     """
 
     can: Optional[MutableMapping[str, bool]] = None
@@ -1258,6 +1259,7 @@ class ContentSearch(model.Model):
     folder_name: Optional[str] = None
     view_count: Optional[int] = None
     preferred_viewer: Optional[str] = None
+    model: Optional[str] = None
 
     def __init__(
         self,
@@ -1270,7 +1272,8 @@ class ContentSearch(model.Model):
         folder_id: Optional[str] = None,
         folder_name: Optional[str] = None,
         view_count: Optional[int] = None,
-        preferred_viewer: Optional[str] = None
+        preferred_viewer: Optional[str] = None,
+        model: Optional[str] = None
     ):
         self.can = can
         self.content_id = content_id
@@ -1280,6 +1283,96 @@ class ContentSearch(model.Model):
         self.folder_id = folder_id
         self.folder_name = folder_name
         self.view_count = view_count
+        self.preferred_viewer = preferred_viewer
+        self.model = model
+
+
+@attr.s(auto_attribs=True, init=False)
+class ContentSummary(model.Model):
+    """
+    Attributes:
+        can: Operations the current user is able to perform on this object
+        id: Unique id
+        content_type: Content type
+        content_id: Content id
+        content_slug: Content slug
+        content_url: Content url
+        title: Content title
+        description: Content Description
+        last_viewed_at: Last time viewed by current user
+        user_id: ID of user who created the content
+        user_full_name: Full name of user who created the content
+        is_scheduled: If the content is scheduled by the current user
+        favorite_count: Number of favorites
+        view_count: Number of views
+        favorite_id: Corresponding favorite id if item is favorited by current user
+        weighted_score:
+        group_weighted_score:
+        suggestion_score:
+        preferred_viewer: The preferred route for viewing this content (ie: dashboards or dashboards-next)
+    """
+
+    can: Optional[MutableMapping[str, bool]] = None
+    id: Optional[str] = None
+    content_type: Optional[str] = None
+    content_id: Optional[str] = None
+    content_slug: Optional[str] = None
+    content_url: Optional[str] = None
+    title: Optional[str] = None
+    description: Optional[str] = None
+    last_viewed_at: Optional[datetime.datetime] = None
+    user_id: Optional[str] = None
+    user_full_name: Optional[str] = None
+    is_scheduled: Optional[bool] = None
+    favorite_count: Optional[int] = None
+    view_count: Optional[int] = None
+    favorite_id: Optional[str] = None
+    weighted_score: Optional[float] = None
+    group_weighted_score: Optional[float] = None
+    suggestion_score: Optional[float] = None
+    preferred_viewer: Optional[str] = None
+
+    def __init__(
+        self,
+        *,
+        can: Optional[MutableMapping[str, bool]] = None,
+        id: Optional[str] = None,
+        content_type: Optional[str] = None,
+        content_id: Optional[str] = None,
+        content_slug: Optional[str] = None,
+        content_url: Optional[str] = None,
+        title: Optional[str] = None,
+        description: Optional[str] = None,
+        last_viewed_at: Optional[datetime.datetime] = None,
+        user_id: Optional[str] = None,
+        user_full_name: Optional[str] = None,
+        is_scheduled: Optional[bool] = None,
+        favorite_count: Optional[int] = None,
+        view_count: Optional[int] = None,
+        favorite_id: Optional[str] = None,
+        weighted_score: Optional[float] = None,
+        group_weighted_score: Optional[float] = None,
+        suggestion_score: Optional[float] = None,
+        preferred_viewer: Optional[str] = None
+    ):
+        self.can = can
+        self.id = id
+        self.content_type = content_type
+        self.content_id = content_id
+        self.content_slug = content_slug
+        self.content_url = content_url
+        self.title = title
+        self.description = description
+        self.last_viewed_at = last_viewed_at
+        self.user_id = user_id
+        self.user_full_name = user_full_name
+        self.is_scheduled = is_scheduled
+        self.favorite_count = favorite_count
+        self.view_count = view_count
+        self.favorite_id = favorite_id
+        self.weighted_score = weighted_score
+        self.group_weighted_score = group_weighted_score
+        self.suggestion_score = suggestion_score
         self.preferred_viewer = preferred_viewer
 
 
@@ -3643,6 +3736,7 @@ class DBConnection(model.Model):
         default_bq_connection: When true, represents that this connection is the default BQ connection.
         bq_storage_project_id: The project id of the default BigQuery storage project.
         bq_roles_verified: When true, represents that all project roles have been verified.
+        p4sa_name: The name of P4SA service account that is associated with the Looker instance
     """
 
     can: Optional[MutableMapping[str, bool]] = None
@@ -3701,6 +3795,7 @@ class DBConnection(model.Model):
     default_bq_connection: Optional[bool] = None
     bq_storage_project_id: Optional[str] = None
     bq_roles_verified: Optional[bool] = None
+    p4sa_name: Optional[str] = None
 
     def __init__(
         self,
@@ -3760,7 +3855,8 @@ class DBConnection(model.Model):
         connection_pooling: Optional[bool] = None,
         default_bq_connection: Optional[bool] = None,
         bq_storage_project_id: Optional[str] = None,
-        bq_roles_verified: Optional[bool] = None
+        bq_roles_verified: Optional[bool] = None,
+        p4sa_name: Optional[str] = None
     ):
         self.can = can
         self.name = name
@@ -3818,6 +3914,7 @@ class DBConnection(model.Model):
         self.default_bq_connection = default_bq_connection
         self.bq_storage_project_id = bq_storage_project_id
         self.bq_roles_verified = bq_roles_verified
+        self.p4sa_name = p4sa_name
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -6681,6 +6778,7 @@ class Look(model.Model):
         folder:
         folder_id: Folder Id
         updated_at: Time that the Look was updated.
+        user_name: Name of User that created the look.
         view_count: Number of times viewed in the Looker web UI
     """
 
@@ -6713,6 +6811,7 @@ class Look(model.Model):
     folder: Optional["FolderBase"] = None
     folder_id: Optional[str] = None
     updated_at: Optional[datetime.datetime] = None
+    user_name: Optional[str] = None
     view_count: Optional[int] = None
 
     def __init__(
@@ -6747,6 +6846,7 @@ class Look(model.Model):
         folder: Optional["FolderBase"] = None,
         folder_id: Optional[str] = None,
         updated_at: Optional[datetime.datetime] = None,
+        user_name: Optional[str] = None,
         view_count: Optional[int] = None
     ):
         self.can = can
@@ -6778,6 +6878,7 @@ class Look(model.Model):
         self.folder = folder
         self.folder_id = folder_id
         self.updated_at = updated_at
+        self.user_name = user_name
         self.view_count = view_count
 
 
@@ -7817,6 +7918,7 @@ class LookWithDashboards(model.Model):
         folder:
         folder_id: Folder Id
         updated_at: Time that the Look was updated.
+        user_name: Name of User that created the look.
         view_count: Number of times viewed in the Looker web UI
         dashboards: Dashboards
     """
@@ -7850,6 +7952,7 @@ class LookWithDashboards(model.Model):
     folder: Optional["FolderBase"] = None
     folder_id: Optional[str] = None
     updated_at: Optional[datetime.datetime] = None
+    user_name: Optional[str] = None
     view_count: Optional[int] = None
     dashboards: Optional[Sequence["DashboardBase"]] = None
 
@@ -7885,6 +7988,7 @@ class LookWithDashboards(model.Model):
         folder: Optional["FolderBase"] = None,
         folder_id: Optional[str] = None,
         updated_at: Optional[datetime.datetime] = None,
+        user_name: Optional[str] = None,
         view_count: Optional[int] = None,
         dashboards: Optional[Sequence["DashboardBase"]] = None
     ):
@@ -7917,6 +8021,7 @@ class LookWithDashboards(model.Model):
         self.folder = folder
         self.folder_id = folder_id
         self.updated_at = updated_at
+        self.user_name = user_name
         self.view_count = view_count
         self.dashboards = dashboards
 
@@ -7954,6 +8059,7 @@ class LookWithQuery(model.Model):
         folder:
         folder_id: Folder Id
         updated_at: Time that the Look was updated.
+        user_name: Name of User that created the look.
         view_count: Number of times viewed in the Looker web UI
         query:
         url: Url
@@ -7988,6 +8094,7 @@ class LookWithQuery(model.Model):
     folder: Optional["FolderBase"] = None
     folder_id: Optional[str] = None
     updated_at: Optional[datetime.datetime] = None
+    user_name: Optional[str] = None
     view_count: Optional[int] = None
     query: Optional["Query"] = None
     url: Optional[str] = None
@@ -8024,6 +8131,7 @@ class LookWithQuery(model.Model):
         folder: Optional["FolderBase"] = None,
         folder_id: Optional[str] = None,
         updated_at: Optional[datetime.datetime] = None,
+        user_name: Optional[str] = None,
         view_count: Optional[int] = None,
         query: Optional["Query"] = None,
         url: Optional[str] = None
@@ -8057,6 +8165,7 @@ class LookWithQuery(model.Model):
         self.folder = folder
         self.folder_id = folder_id
         self.updated_at = updated_at
+        self.user_name = user_name
         self.view_count = view_count
         self.query = query
         self.url = url
@@ -9472,55 +9581,6 @@ class Query(model.Model):
 
 
 @attr.s(auto_attribs=True, init=False)
-class QueryFormats(model.Model):
-    """
-    Attributes:
-        json_bi:
-        json:
-        json_detail:
-        csv:
-        txt:
-        html:
-        md:
-        xlsx:
-        sql:
-    """
-
-    json_bi: Optional["JsonBi"] = None
-    json: Optional[str] = None
-    json_detail: Optional[str] = None
-    csv: Optional[str] = None
-    txt: Optional[str] = None
-    html: Optional[str] = None
-    md: Optional[str] = None
-    xlsx: Optional[str] = None
-    sql: Optional[str] = None
-
-    def __init__(
-        self,
-        *,
-        json_bi: Optional["JsonBi"] = None,
-        json: Optional[str] = None,
-        json_detail: Optional[str] = None,
-        csv: Optional[str] = None,
-        txt: Optional[str] = None,
-        html: Optional[str] = None,
-        md: Optional[str] = None,
-        xlsx: Optional[str] = None,
-        sql: Optional[str] = None
-    ):
-        self.json_bi = json_bi
-        self.json = json
-        self.json_detail = json_detail
-        self.csv = csv
-        self.txt = txt
-        self.html = html
-        self.md = md
-        self.xlsx = xlsx
-        self.sql = sql
-
-
-@attr.s(auto_attribs=True, init=False)
 class QueryTask(model.Model):
     """
     Attributes:
@@ -10404,7 +10464,6 @@ class ScheduledPlan(model.Model):
         crontab: Vixie-Style crontab specification when to run
         datagroup: Name of a datagroup; if specified will run when datagroup triggered (can't be used with cron string)
         timezone: Timezone for interpreting the specified crontab (default is Looker instance timezone)
-        query_id: Query id
         scheduled_plan_destination: Scheduled plan destinations
         run_once: Whether the plan in question should only be run once (usually for testing)
         include_links: Whether links back to Looker should be included in this ScheduledPlan
@@ -10418,6 +10477,7 @@ class ScheduledPlan(model.Model):
         color_theme: Color scheme of the dashboard if applicable
         long_tables: Whether or not to expand table vis to full length
         inline_table_width: The pixel width at which we render the inline table visualizations
+        query_id: Query id
         id: Unique Id
         created_at: Date and time when ScheduledPlan was created
         updated_at: Date and time when ScheduledPlan was last updated
@@ -10444,7 +10504,6 @@ class ScheduledPlan(model.Model):
     crontab: Optional[str] = None
     datagroup: Optional[str] = None
     timezone: Optional[str] = None
-    query_id: Optional[str] = None
     scheduled_plan_destination: Optional[Sequence["ScheduledPlanDestination"]] = None
     run_once: Optional[bool] = None
     include_links: Optional[bool] = None
@@ -10458,6 +10517,7 @@ class ScheduledPlan(model.Model):
     color_theme: Optional[str] = None
     long_tables: Optional[bool] = None
     inline_table_width: Optional[int] = None
+    query_id: Optional[str] = None
     id: Optional[str] = None
     created_at: Optional[datetime.datetime] = None
     updated_at: Optional[datetime.datetime] = None
@@ -10486,7 +10546,6 @@ class ScheduledPlan(model.Model):
         crontab: Optional[str] = None,
         datagroup: Optional[str] = None,
         timezone: Optional[str] = None,
-        query_id: Optional[str] = None,
         scheduled_plan_destination: Optional[
             Sequence["ScheduledPlanDestination"]
         ] = None,
@@ -10502,6 +10561,7 @@ class ScheduledPlan(model.Model):
         color_theme: Optional[str] = None,
         long_tables: Optional[bool] = None,
         inline_table_width: Optional[int] = None,
+        query_id: Optional[str] = None,
         id: Optional[str] = None,
         created_at: Optional[datetime.datetime] = None,
         updated_at: Optional[datetime.datetime] = None,
@@ -10527,7 +10587,6 @@ class ScheduledPlan(model.Model):
         self.crontab = crontab
         self.datagroup = datagroup
         self.timezone = timezone
-        self.query_id = query_id
         self.scheduled_plan_destination = scheduled_plan_destination
         self.run_once = run_once
         self.include_links = include_links
@@ -10541,6 +10600,7 @@ class ScheduledPlan(model.Model):
         self.color_theme = color_theme
         self.long_tables = long_tables
         self.inline_table_width = inline_table_width
+        self.query_id = query_id
         self.id = id
         self.created_at = created_at
         self.updated_at = updated_at
@@ -11939,7 +11999,6 @@ class User(model.Model):
         allow_normal_group_membership: User can be a direct member of a normal Looker group.
         allow_roles_from_normal_groups: User can inherit roles from a normal Looker group.
         embed_group_folder_id: (Embed only) ID of user's group folder based on the external_group_id optionally specified during embed user login
-        is_iam_admin: User is an IAM Admin - only available in Looker (Google Cloud core)
         url: Link to get this item
     """
 
@@ -11978,7 +12037,6 @@ class User(model.Model):
     allow_normal_group_membership: Optional[bool] = None
     allow_roles_from_normal_groups: Optional[bool] = None
     embed_group_folder_id: Optional[str] = None
-    is_iam_admin: Optional[bool] = None
     url: Optional[str] = None
 
     def __init__(
@@ -12019,7 +12077,6 @@ class User(model.Model):
         allow_normal_group_membership: Optional[bool] = None,
         allow_roles_from_normal_groups: Optional[bool] = None,
         embed_group_folder_id: Optional[str] = None,
-        is_iam_admin: Optional[bool] = None,
         url: Optional[str] = None
     ):
         self.can = can
@@ -12057,7 +12114,6 @@ class User(model.Model):
         self.allow_normal_group_membership = allow_normal_group_membership
         self.allow_roles_from_normal_groups = allow_roles_from_normal_groups
         self.embed_group_folder_id = embed_group_folder_id
-        self.is_iam_admin = is_iam_admin
         self.url = url
 
 
@@ -13238,7 +13294,7 @@ class WriteDashboardElement(model.Model):
             body_text: Text tile body text
             dashboard_id: Id of Dashboard
             look: Dynamic writeable type for LookWithQuery removes:
-    can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, url
+    can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, user_name, view_count, url
             look_id: Id Of Look
             merge_result_id: ID of merge result
             note_display: Note Display
@@ -13515,7 +13571,7 @@ class WriteDatagroup(model.Model):
 class WriteDBConnection(model.Model):
     """
         Dynamic writeable type for DBConnection removes:
-    can, dialect, snippets, pdts_enabled, uses_oauth, uses_instance_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, bq_roles_verified
+    can, dialect, snippets, pdts_enabled, uses_oauth, uses_instance_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, p4sa_name
 
         Attributes:
             name: Name of the connection. Also used as the unique identifier
@@ -13560,6 +13616,7 @@ class WriteDBConnection(model.Model):
             pdt_api_control_enabled: PDT builds on this connection can be kicked off and cancelled via API.
             connection_pooling: Enable database connection pooling.
             bq_storage_project_id: The project id of the default BigQuery storage project.
+            bq_roles_verified: When true, represents that all project roles have been verified.
     """
 
     name: Optional[str] = None
@@ -13603,6 +13660,7 @@ class WriteDBConnection(model.Model):
     pdt_api_control_enabled: Optional[bool] = None
     connection_pooling: Optional[bool] = None
     bq_storage_project_id: Optional[str] = None
+    bq_roles_verified: Optional[bool] = None
 
     def __init__(
         self,
@@ -13647,7 +13705,8 @@ class WriteDBConnection(model.Model):
         cost_estimate_enabled: Optional[bool] = None,
         pdt_api_control_enabled: Optional[bool] = None,
         connection_pooling: Optional[bool] = None,
-        bq_storage_project_id: Optional[str] = None
+        bq_storage_project_id: Optional[str] = None,
+        bq_roles_verified: Optional[bool] = None
     ):
         self.name = name
         self.host = host
@@ -13690,6 +13749,7 @@ class WriteDBConnection(model.Model):
         self.pdt_api_control_enabled = pdt_api_control_enabled
         self.connection_pooling = connection_pooling
         self.bq_storage_project_id = bq_storage_project_id
+        self.bq_roles_verified = bq_roles_verified
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -14187,7 +14247,7 @@ class WriteLookmlModel(model.Model):
 class WriteLookWithQuery(model.Model):
     """
         Dynamic writeable type for LookWithQuery removes:
-    can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, url
+    can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, user_name, view_count, url
 
         Attributes:
             title: Look Title
@@ -14993,7 +15053,6 @@ class WriteScheduledPlan(model.Model):
             crontab: Vixie-Style crontab specification when to run
             datagroup: Name of a datagroup; if specified will run when datagroup triggered (can't be used with cron string)
             timezone: Timezone for interpreting the specified crontab (default is Looker instance timezone)
-            query_id: Query id
             scheduled_plan_destination: Scheduled plan destinations
             run_once: Whether the plan in question should only be run once (usually for testing)
             include_links: Whether links back to Looker should be included in this ScheduledPlan
@@ -15007,6 +15066,7 @@ class WriteScheduledPlan(model.Model):
             color_theme: Color scheme of the dashboard if applicable
             long_tables: Whether or not to expand table vis to full length
             inline_table_width: The pixel width at which we render the inline table visualizations
+            query_id: Query id
     """
 
     name: Optional[str] = None
@@ -15025,7 +15085,6 @@ class WriteScheduledPlan(model.Model):
     crontab: Optional[str] = None
     datagroup: Optional[str] = None
     timezone: Optional[str] = None
-    query_id: Optional[str] = None
     scheduled_plan_destination: Optional[Sequence["ScheduledPlanDestination"]] = None
     run_once: Optional[bool] = None
     include_links: Optional[bool] = None
@@ -15039,6 +15098,7 @@ class WriteScheduledPlan(model.Model):
     color_theme: Optional[str] = None
     long_tables: Optional[bool] = None
     inline_table_width: Optional[int] = None
+    query_id: Optional[str] = None
 
     def __init__(
         self,
@@ -15059,7 +15119,6 @@ class WriteScheduledPlan(model.Model):
         crontab: Optional[str] = None,
         datagroup: Optional[str] = None,
         timezone: Optional[str] = None,
-        query_id: Optional[str] = None,
         scheduled_plan_destination: Optional[
             Sequence["ScheduledPlanDestination"]
         ] = None,
@@ -15074,7 +15133,8 @@ class WriteScheduledPlan(model.Model):
         embed: Optional[bool] = None,
         color_theme: Optional[str] = None,
         long_tables: Optional[bool] = None,
-        inline_table_width: Optional[int] = None
+        inline_table_width: Optional[int] = None,
+        query_id: Optional[str] = None
     ):
         self.name = name
         self.user_id = user_id
@@ -15092,7 +15152,6 @@ class WriteScheduledPlan(model.Model):
         self.crontab = crontab
         self.datagroup = datagroup
         self.timezone = timezone
-        self.query_id = query_id
         self.scheduled_plan_destination = scheduled_plan_destination
         self.run_once = run_once
         self.include_links = include_links
@@ -15106,6 +15165,7 @@ class WriteScheduledPlan(model.Model):
         self.color_theme = color_theme
         self.long_tables = long_tables
         self.inline_table_width = inline_table_width
+        self.query_id = query_id
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -15358,7 +15418,7 @@ class WriteTheme(model.Model):
 class WriteUser(model.Model):
     """
         Dynamic writeable type for User removes:
-    can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, url
+    can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, url
 
         Attributes:
             credentials_email: Dynamic writeable type for CredentialsEmail removes:

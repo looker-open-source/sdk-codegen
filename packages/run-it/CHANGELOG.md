@@ -147,6 +147,74 @@
     * @looker/sdk bumped from 24.12.1 to 24.14.0
     * @looker/sdk-codegen bumped from 21.8.2 to 21.9.0
 
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from 0.1.33 to 0.1.34
+    * @looker/extension-utils bumped from 0.1.43 to 0.1.44
+    * @looker/sdk bumped from 24.16.1 to 24.16.2
+    * @looker/sdk-codegen bumped from 21.9.2 to 21.9.3
+    * @looker/sdk-codegen-utils bumped from 21.0.13 to 21.0.14
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from 0.1.34 to 0.1.35
+    * @looker/extension-utils bumped from 0.1.44 to 0.1.45
+    * @looker/sdk bumped from 24.16.2 to 24.18.0
+    * @looker/sdk-codegen bumped from 21.9.3 to 21.9.4
+    * @looker/sdk-codegen-utils bumped from 21.0.14 to 21.0.15
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from 0.1.35 to 0.1.36
+    * @looker/extension-utils bumped from 0.1.45 to 0.1.46
+    * @looker/sdk bumped from 24.18.0 to 24.18.1
+    * @looker/sdk-codegen bumped from 21.9.4 to 21.9.5
+    * @looker/sdk-codegen-utils bumped from 21.0.15 to 21.0.16
+
+## [0.9.66](https://github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.65...run-it-v0.9.66) (2024-09-14)
+
+
+### Bug Fixes
+
+* fix release 24.16.2 ([#1505](https://github.com/looker-open-source/sdk-codegen/issues/1505)) ([1cd1806](https://github.com/looker-open-source/sdk-codegen/commit/1cd180615901d2daf1fb112b41f2a72d2caacf61))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from 0.1.32 to 0.1.33
+    * @looker/extension-utils bumped from 0.1.42 to 0.1.43
+    * @looker/sdk bumped from 24.16.0 to 24.16.1
+    * @looker/sdk-codegen bumped from 21.9.1 to 21.9.2
+    * @looker/sdk-codegen-utils bumped from 21.0.12 to 21.0.13
+    * @looker/sdk-rtl bumped from 21.6.2 to 21.6.3
+
+## [0.9.65](https://github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.64...run-it-v0.9.65) (2024-09-11)
+
+
+### Bug Fixes
+
+* Remove the requests package from the TypeScript SDK ([#1491](https://github.com/looker-open-source/sdk-codegen/issues/1491)) ([670377c](https://github.com/looker-open-source/sdk-codegen/commit/670377c46a546bbd8dcc6679b8aeb041da1b4670)), closes [#1439](https://github.com/looker-open-source/sdk-codegen/issues/1439)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from 0.1.31 to 0.1.32
+    * @looker/extension-utils bumped from 0.1.41 to 0.1.42
+    * @looker/sdk bumped from 24.14.0 to 24.16.0
+    * @looker/sdk-codegen bumped from 21.9.0 to 21.9.1
+    * @looker/sdk-codegen-utils bumped from 21.0.11 to 21.0.12
+    * @looker/sdk-rtl bumped from 21.6.1 to 21.6.2
+
 ## [0.9.45](https://github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.44...run-it-v0.9.45) (2023-03-31)
 
 ### Features

@@ -46,7 +46,7 @@ export const RunItDemo: FC = () => {
   const api = ApiModel.fromJson(specs[specKey].specContent);
   const [method, setMethod] = useState(api.methods.me);
   const [inputs, setInputs] = useState(createInputs(api, method));
-  const options = Object.values(api.methods).map((m) => {
+  const options = Object.values(api.methods).map(m => {
     const result: any = {
       value: m.name,
       label: `${m.name}: ${m.summary}`,

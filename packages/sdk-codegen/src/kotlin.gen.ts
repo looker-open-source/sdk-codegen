@@ -222,7 +222,7 @@ import java.util.*
     let hasComplexArg = false;
     if (Object.keys(inputs).length > 0) {
       const params = method.allParams;
-      params.forEach((p) => {
+      params.forEach(p => {
         const v = this.argValue(this.indentStr, p, inputs);
         if (v !== '') {
           // const arg = this.useNamedArguments ? `${p.name}${this.argSetSep}${v}` : v
@@ -258,7 +258,7 @@ import java.util.*
 
     if (method.allParams.length) {
       lines.push('');
-      method.allParams.forEach((p) =>
+      method.allParams.forEach(p =>
         lines.push(this.paramComment(p, this.paramMappedType(p, method)))
       );
     }
@@ -284,7 +284,7 @@ import java.util.*
     const params: string[] = [];
     const args = method.allParams; // get the params in signature order
     if (args && args.length > 0)
-      args.forEach((p) => params.push(this.declareParameter(bump, method, p)));
+      args.forEach(p => params.push(this.declareParameter(bump, method, p)));
 
     return `
 ${this.commentHeader(
@@ -362,7 +362,7 @@ ${this.commentHeader(indent, type.description).trim()}
 ${indent}enum class ${type.name} : Serializable {
 `.trim();
     } else {
-      const props = Object.values(type.properties).map((prop) =>
+      const props = Object.values(type.properties).map(prop =>
         this.describeProperty(prop)
       );
 
@@ -383,9 +383,7 @@ ${indent}data class ${type.name} (
     const bump = this.bumper(indent);
     if (type instanceof EnumType) {
       const num = type as EnumType;
-      const props = num.values.map((value) =>
-        this.declareEnumValue(bump, value)
-      );
+      const props = num.values.map(value => this.declareEnumValue(bump, value));
 
       return `
 ${this.typeSignature(indent, type)}
@@ -393,7 +391,7 @@ ${props.join(this.enumDelimiter)}
 }
 `.trim();
     } else {
-      const props = Object.values(type.properties).map((prop) =>
+      const props = Object.values(type.properties).map(prop =>
         this.declareProperty(bump, prop)
       );
 
@@ -517,8 +515,8 @@ ${props.join(this.propDelimiter)}
     }
     const types = this.api.types;
     Object.values(types)
-      .filter((type) => type.refCount > 0 && !type.intrinsic)
-      .forEach((type) => names.push(`I${type.name}`));
+      .filter(type => type.refCount > 0 && !type.intrinsic)
+      .forEach(type => names.push(`I${type.name}`));
     // TODO import default constants if necessary
     // Object.values(types)
     //   .filter(type => type instanceof RequestType)

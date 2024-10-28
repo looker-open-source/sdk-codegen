@@ -11,6 +11,56 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - dependencies
     - @looker/sdk-rtl bumped from ^21.6.0 to ^21.6.1
 
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen-utils bumped from 21.0.13 to 21.0.14
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen-utils bumped from 21.0.14 to 21.0.15
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen-utils bumped from 21.0.15 to 21.0.16
+
+## [21.9.2](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.9.1...sdk-codegen-v21.9.2) (2024-09-14)
+
+
+### Bug Fixes
+
+* fix release 24.16.2 ([#1505](https://github.com/looker-open-source/sdk-codegen/issues/1505)) ([1cd1806](https://github.com/looker-open-source/sdk-codegen/commit/1cd180615901d2daf1fb112b41f2a72d2caacf61))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from 21.6.2 to 21.6.3
+  * devDependencies
+    * @looker/sdk-codegen-utils bumped from 21.0.12 to 21.0.13
+
+## [21.9.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.9.0...sdk-codegen-v21.9.1) (2024-09-11)
+
+
+### Bug Fixes
+
+* Remove the requests package from the TypeScript SDK ([#1491](https://github.com/looker-open-source/sdk-codegen/issues/1491)) ([670377c](https://github.com/looker-open-source/sdk-codegen/commit/670377c46a546bbd8dcc6679b8aeb041da1b4670)), closes [#1439](https://github.com/looker-open-source/sdk-codegen/issues/1439)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from 21.6.1 to 21.6.2
+  * devDependencies
+    * @looker/sdk-codegen-utils bumped from 21.0.11 to 21.0.12
+
 ## [21.9.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.8.2...sdk-codegen-v21.9.0) (2024-08-12)
 
 

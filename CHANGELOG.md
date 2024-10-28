@@ -1,5 +1,52 @@
 # Changelog
 
+## [24.18.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.18.0...sdk-codegen-all-v24.18.1) (2024-10-21)
+
+
+### Bug Fixes
+
+* Fix bad python package exclude ([#1521](https://github.com/looker-open-source/sdk-codegen/issues/1521)) ([5afd34b](https://github.com/looker-open-source/sdk-codegen/commit/5afd34b8708404ef919a35275370a98ec4797cfd))
+
+## [24.18.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.17.0...sdk-codegen-all-v24.18.0) (2024-10-11)
+
+
+### Features
+
+* generate SDKs for Looker 24.18 ([#1515](https://github.com/looker-open-source/sdk-codegen/issues/1515)) ([745a3a0](https://github.com/looker-open-source/sdk-codegen/commit/745a3a038869a93dc508fca2224440b3026b81ce))
+
+## [24.17.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.16.2...sdk-codegen-all-v24.17.0) (2024-09-16)
+
+
+### Features
+
+* allow node 20 for the TS SDK ([#1506](https://github.com/looker-open-source/sdk-codegen/issues/1506)) ([d4deac4](https://github.com/looker-open-source/sdk-codegen/commit/d4deac485ff3bf748924ab747a6aee0d47581e10))
+
+## [24.16.2](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.16.1...sdk-codegen-all-v24.16.2) (2024-09-14)
+
+
+### Bug Fixes
+
+* fix release 24.16.2 ([#1505](https://github.com/looker-open-source/sdk-codegen/issues/1505)) ([1cd1806](https://github.com/looker-open-source/sdk-codegen/commit/1cd180615901d2daf1fb112b41f2a72d2caacf61))
+
+## [24.16.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.16.0...sdk-codegen-all-v24.16.1) (2024-09-11)
+
+
+### Miscellaneous Chores
+
+* fix lockfile ([#1500](https://github.com/looker-open-source/sdk-codegen/issues/1500)) ([7db8cd8](https://github.com/looker-open-source/sdk-codegen/commit/7db8cd8e7260d380978a148aa45288e2e58b98e0))
+
+## [24.16.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.14.0...sdk-codegen-all-v24.16.0) (2024-09-11)
+
+
+### Features
+
+* generate SDKs for Looker 24.16 ([#1499](https://github.com/looker-open-source/sdk-codegen/issues/1499)) ([109839d](https://github.com/looker-open-source/sdk-codegen/commit/109839d2d4fae10e7aeab088378bba5e2b368019))
+
+
+### Bug Fixes
+
+* Remove the requests package from the TypeScript SDK ([#1491](https://github.com/looker-open-source/sdk-codegen/issues/1491)) ([670377c](https://github.com/looker-open-source/sdk-codegen/commit/670377c46a546bbd8dcc6679b8aeb041da1b4670)), closes [#1439](https://github.com/looker-open-source/sdk-codegen/issues/1439)
+
 ## [24.14.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.12.1...sdk-codegen-all-v24.14.0) (2024-08-12)
 
 

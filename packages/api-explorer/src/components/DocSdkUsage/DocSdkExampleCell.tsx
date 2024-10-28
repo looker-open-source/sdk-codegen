@@ -29,7 +29,7 @@ import { DataTableCell, Span } from '@looker/components';
 
 import { getTableItemBottomBorder } from './utils';
 
-export const DocSdkExampleCell: FC<PropsWithChildren<any>> = (props) => (
+export const DocSdkExampleCell: FC<PropsWithChildren<any>> = props => (
   <DataTableCell
     style={{ borderBottom: getTableItemBottomBorder(props.hideBorderBottom) }}
   >

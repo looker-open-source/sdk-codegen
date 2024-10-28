@@ -44,4 +44,5 @@ export * from './oauthSession';
 export * from './paging';
 export * from './platformServices';
 export * from './proxySession';
+export * from './sleep';
 export * from './transport';

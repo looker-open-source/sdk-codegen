@@ -55,7 +55,7 @@ export const ErrorDetailScene = ({ api }: ErrorDetailSceneProps) => {
   const statusCode = match?.params.statusCode;
 
   const method = Object.values(api.methods).find(
-    (method) => method.id.toLocaleLowerCase() === methodId
+    method => method.id.toLocaleLowerCase() === methodId
   );
 
   const methodTag = method?.schema.tags[0];

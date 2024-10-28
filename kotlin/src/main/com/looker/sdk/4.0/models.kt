@@ -600,6 +600,7 @@ data class ContentMetaGroupUser(
  * @property folder_name Name of the folder where the content is saved (read-only)
  * @property view_count Number of times the content has been viewed (read-only)
  * @property preferred_viewer Preferred way of viewing the content (only applies to dashboards) (read-only)
+ * @property model Name of the model the explore belongs to (read-only)
  */
 data class ContentSearch(
     var can: Map<String, Boolean>? = null,
@@ -610,6 +611,50 @@ data class ContentSearch(
     var folder_id: String? = null,
     var folder_name: String? = null,
     var view_count: Long? = null,
+    var preferred_viewer: String? = null,
+    var model: String? = null,
+) : Serializable
+
+/**
+ * @property can Operations the current user is able to perform on this object (read-only)
+ * @property id Unique id (read-only)
+ * @property content_type Content type (read-only)
+ * @property content_id Content id (read-only)
+ * @property content_slug Content slug (read-only)
+ * @property content_url Content url (read-only)
+ * @property title Content title (read-only)
+ * @property description Content Description (read-only)
+ * @property last_viewed_at Last time viewed by current user (read-only)
+ * @property user_id ID of user who created the content (read-only)
+ * @property user_full_name Full name of user who created the content (read-only)
+ * @property is_scheduled If the content is scheduled by the current user (read-only)
+ * @property favorite_count Number of favorites (read-only)
+ * @property view_count Number of views (read-only)
+ * @property favorite_id Corresponding favorite id if item is favorited by current user (read-only)
+ * @property weighted_score  (read-only)
+ * @property group_weighted_score  (read-only)
+ * @property suggestion_score  (read-only)
+ * @property preferred_viewer The preferred route for viewing this content (ie: dashboards or dashboards-next) (read-only)
+ */
+data class ContentSummary(
+    var can: Map<String, Boolean>? = null,
+    var id: String? = null,
+    var content_type: String? = null,
+    var content_id: String? = null,
+    var content_slug: String? = null,
+    var content_url: String? = null,
+    var title: String? = null,
+    var description: String? = null,
+    var last_viewed_at: Date? = null,
+    var user_id: String? = null,
+    var user_full_name: String? = null,
+    var is_scheduled: Boolean? = null,
+    var favorite_count: Long? = null,
+    var view_count: Long? = null,
+    var favorite_id: String? = null,
+    var weighted_score: Float? = null,
+    var group_weighted_score: Float? = null,
+    var suggestion_score: Float? = null,
     var preferred_viewer: String? = null,
 ) : Serializable
 
@@ -1754,7 +1799,8 @@ data class Datagroup(
  * @property connection_pooling Enable database connection pooling.
  * @property default_bq_connection When true, represents that this connection is the default BQ connection. (read-only)
  * @property bq_storage_project_id The project id of the default BigQuery storage project.
- * @property bq_roles_verified When true, represents that all project roles have been verified. (read-only)
+ * @property bq_roles_verified When true, represents that all project roles have been verified.
+ * @property p4sa_name The name of P4SA service account that is associated with the Looker instance (read-only)
  */
 data class DBConnection(
     var can: Map<String, Boolean>? = null,
@@ -1813,6 +1859,7 @@ data class DBConnection(
     var default_bq_connection: Boolean? = null,
     var bq_storage_project_id: String? = null,
     var bq_roles_verified: Boolean? = null,
+    var p4sa_name: String? = null,
 ) : Serializable
 
 /**
@@ -3183,6 +3230,7 @@ data class LocalizationSettings(
  * @property folder
  * @property folder_id Folder Id
  * @property updated_at Time that the Look was updated. (read-only)
+ * @property user_name Name of User that created the look. (read-only)
  * @property view_count Number of times viewed in the Looker web UI (read-only)
  */
 data class Look(
@@ -3215,6 +3263,7 @@ data class Look(
     var folder: FolderBase? = null,
     var folder_id: String? = null,
     var updated_at: Date? = null,
+    var user_name: String? = null,
     var view_count: Long? = null,
 ) : Serializable
 
@@ -3733,6 +3782,7 @@ data class LookModel(
  * @property folder
  * @property folder_id Folder Id
  * @property updated_at Time that the Look was updated. (read-only)
+ * @property user_name Name of User that created the look. (read-only)
  * @property view_count Number of times viewed in the Looker web UI (read-only)
  * @property dashboards Dashboards (read-only)
  */
@@ -3766,6 +3816,7 @@ data class LookWithDashboards(
     var folder: FolderBase? = null,
     var folder_id: String? = null,
     var updated_at: Date? = null,
+    var user_name: String? = null,
     var view_count: Long? = null,
     var dashboards: Array<DashboardBase>? = null,
 ) : Serializable
@@ -3800,6 +3851,7 @@ data class LookWithDashboards(
  * @property folder
  * @property folder_id Folder Id
  * @property updated_at Time that the Look was updated. (read-only)
+ * @property user_name Name of User that created the look. (read-only)
  * @property view_count Number of times viewed in the Looker web UI (read-only)
  * @property query
  * @property url Url (read-only)
@@ -3834,6 +3886,7 @@ data class LookWithQuery(
     var folder: FolderBase? = null,
     var folder_id: String? = null,
     var updated_at: Date? = null,
+    var user_name: String? = null,
     var view_count: Long? = null,
     var query: Query? = null,
     var url: String? = null,
@@ -4504,29 +4557,6 @@ data class Query(
 ) : Serializable
 
 /**
- * @property json_bi
- * @property json  (read-only)
- * @property json_detail  (read-only)
- * @property csv  (read-only)
- * @property txt  (read-only)
- * @property html  (read-only)
- * @property md  (read-only)
- * @property xlsx  (read-only)
- * @property sql  (read-only)
- */
-data class QueryFormats(
-    var json_bi: JsonBi? = null,
-    var json: String? = null,
-    var json_detail: String? = null,
-    var csv: String? = null,
-    var txt: String? = null,
-    var html: String? = null,
-    var md: String? = null,
-    var xlsx: String? = null,
-    var sql: String? = null,
-) : Serializable
-
-/**
  * @property can Operations the current user is able to perform on this object (read-only)
  * @property id Unique Id (read-only)
  * @property query_id Id of query
@@ -4958,7 +4988,6 @@ data class SamlUserAttributeWrite(
  * @property crontab Vixie-Style crontab specification when to run
  * @property datagroup Name of a datagroup; if specified will run when datagroup triggered (can't be used with cron string)
  * @property timezone Timezone for interpreting the specified crontab (default is Looker instance timezone)
- * @property query_id Query id
  * @property scheduled_plan_destination Scheduled plan destinations
  * @property run_once Whether the plan in question should only be run once (usually for testing)
  * @property include_links Whether links back to Looker should be included in this ScheduledPlan
@@ -4972,6 +5001,7 @@ data class SamlUserAttributeWrite(
  * @property color_theme Color scheme of the dashboard if applicable
  * @property long_tables Whether or not to expand table vis to full length
  * @property inline_table_width The pixel width at which we render the inline table visualizations
+ * @property query_id Query id
  * @property id Unique Id (read-only)
  * @property created_at Date and time when ScheduledPlan was created (read-only)
  * @property updated_at Date and time when ScheduledPlan was last updated (read-only)
@@ -4998,7 +5028,6 @@ data class ScheduledPlan(
     var crontab: String? = null,
     var datagroup: String? = null,
     var timezone: String? = null,
-    var query_id: String? = null,
     var scheduled_plan_destination: Array<ScheduledPlanDestination>? = null,
     var run_once: Boolean? = null,
     var include_links: Boolean? = null,
@@ -5012,6 +5041,7 @@ data class ScheduledPlan(
     var color_theme: String? = null,
     var long_tables: Boolean? = null,
     var inline_table_width: Long? = null,
+    var query_id: String? = null,
     var id: String? = null,
     var created_at: Date? = null,
     var updated_at: Date? = null,
@@ -5709,7 +5739,6 @@ data class UpdateFolder(
  * @property allow_normal_group_membership User can be a direct member of a normal Looker group. (read-only)
  * @property allow_roles_from_normal_groups User can inherit roles from a normal Looker group. (read-only)
  * @property embed_group_folder_id (Embed only) ID of user's group folder based on the external_group_id optionally specified during embed user login (read-only)
- * @property is_iam_admin User is an IAM Admin - only available in Looker (Google Cloud core) (read-only)
  * @property url Link to get this item (read-only)
  */
 data class User(
@@ -5748,7 +5777,6 @@ data class User(
     var allow_normal_group_membership: Boolean? = null,
     var allow_roles_from_normal_groups: Boolean? = null,
     var embed_group_folder_id: String? = null,
-    var is_iam_admin: Boolean? = null,
     var url: String? = null,
 ) : Serializable
 
@@ -6326,7 +6354,7 @@ data class WriteDashboardBase(
  * @property body_text Text tile body text
  * @property dashboard_id Id of Dashboard
  * @property look Dynamic writeable type for LookWithQuery removes:
- * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, url
+ * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, user_name, view_count, url
  * @property look_id Id Of Look
  * @property merge_result_id ID of merge result
  * @property note_display Note Display
@@ -6466,7 +6494,7 @@ data class WriteDatagroup(
 
 /**
  * Dynamic writeable type for DBConnection removes:
- * can, dialect, snippets, pdts_enabled, uses_oauth, uses_instance_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, bq_roles_verified
+ * can, dialect, snippets, pdts_enabled, uses_oauth, uses_instance_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, p4sa_name
  *
  * @property name Name of the connection. Also used as the unique identifier
  * @property host Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.
@@ -6510,6 +6538,7 @@ data class WriteDatagroup(
  * @property pdt_api_control_enabled PDT builds on this connection can be kicked off and cancelled via API.
  * @property connection_pooling Enable database connection pooling.
  * @property bq_storage_project_id The project id of the default BigQuery storage project.
+ * @property bq_roles_verified When true, represents that all project roles have been verified.
  */
 data class WriteDBConnection(
     var name: String? = null,
@@ -6553,6 +6582,7 @@ data class WriteDBConnection(
     var pdt_api_control_enabled: Boolean? = null,
     var connection_pooling: Boolean? = null,
     var bq_storage_project_id: String? = null,
+    var bq_roles_verified: Boolean? = null,
 ) : Serializable
 
 /**
@@ -6815,7 +6845,7 @@ data class WriteLookmlModel(
 
 /**
  * Dynamic writeable type for LookWithQuery removes:
- * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, view_count, url
+ * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, user_name, view_count, url
  *
  * @property title Look Title
  * @property user_id User Id
@@ -7236,7 +7266,6 @@ data class WriteSamlConfig(
  * @property crontab Vixie-Style crontab specification when to run
  * @property datagroup Name of a datagroup; if specified will run when datagroup triggered (can't be used with cron string)
  * @property timezone Timezone for interpreting the specified crontab (default is Looker instance timezone)
- * @property query_id Query id
  * @property scheduled_plan_destination Scheduled plan destinations
  * @property run_once Whether the plan in question should only be run once (usually for testing)
  * @property include_links Whether links back to Looker should be included in this ScheduledPlan
@@ -7250,6 +7279,7 @@ data class WriteSamlConfig(
  * @property color_theme Color scheme of the dashboard if applicable
  * @property long_tables Whether or not to expand table vis to full length
  * @property inline_table_width The pixel width at which we render the inline table visualizations
+ * @property query_id Query id
  */
 data class WriteScheduledPlan(
     var name: String? = null,
@@ -7268,7 +7298,6 @@ data class WriteScheduledPlan(
     var crontab: String? = null,
     var datagroup: String? = null,
     var timezone: String? = null,
-    var query_id: String? = null,
     var scheduled_plan_destination: Array<ScheduledPlanDestination>? = null,
     var run_once: Boolean? = null,
     var include_links: Boolean? = null,
@@ -7282,6 +7311,7 @@ data class WriteScheduledPlan(
     var color_theme: String? = null,
     var long_tables: Boolean? = null,
     var inline_table_width: Long? = null,
+    var query_id: String? = null,
 ) : Serializable
 
 /**
@@ -7411,7 +7441,7 @@ data class WriteTheme(
 
 /**
  * Dynamic writeable type for User removes:
- * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, url
+ * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, url
  *
  * @property credentials_email Dynamic writeable type for CredentialsEmail removes:
  * can, created_at, user_id, is_disabled, logged_in_at, password_reset_url, account_setup_url, password_reset_url_expired, account_setup_url_expired, type, url, user_url

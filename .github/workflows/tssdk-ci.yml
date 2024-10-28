@@ -43,7 +43,7 @@ jobs:
       matrix:
         os:
           - ubuntu
-        node-version: [18.x, 20.x]
+        node-version: [20.x, 22.x]
 
     steps:
       - name: Cancel Previous Runs
@@ -110,7 +110,7 @@ jobs:
           path: results/tssdk
 
   setup:
-    uses: looker-open-source/reusable-actions/.github/workflows/supported-versions.yml@main
+    uses: looker-open-source/reusable-actions/.github/workflows/primary-version.yml@main
   integration:
     needs: [unit, setup]
     name: Integration - ${{ matrix.os }} / Node.${{ matrix.node-version }} / Looker.${{ matrix.looker }}
@@ -122,7 +122,7 @@ jobs:
     runs-on: ${{ matrix.os }}-latest
     strategy:
       matrix:
-        node-version: [18.x, 20.x]
+        node-version: [20.x, 22.x]
         os:
           - ubuntu
         looker: ${{ fromJson(needs.setup.outputs.matrix_json) }}
@@ -169,7 +169,7 @@ jobs:
           ${{ github.workspace }}/.github/scripts/wait_for_looker.sh
 
       - name: Run Integration Tests
-        run: yarn jest packages/sdk-node/test --reporters=default --reporters=jest-junit
+        run: yarn test:nodeci
 
       - name: Upload integration test results
         if: ${{ always() }}
