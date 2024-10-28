@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2020 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -23,25 +23,14 @@
  SOFTWARE.
 
  */
+const base = require('../../jest.config');
+const packageName = require('./package.json').name.split('/')[1];
 
-import {
-  Looker40SDK,
-  LookerExtensionSDK as _LookerExtensionSDK,
-} from '@looker/sdk';
-import type { ExtensionHostApi } from '../connect';
-import { ApiVersion } from '../connect';
-
-import { SdkConnection } from './sdk_connection';
-
-export class LookerExtensionSDK40 {
-  /**
-   * Create an SDK client that uses SDK 4.0
-   * @param hostConnection extension host API
-   */
-  static createClient(hostConnection: ExtensionHostApi): Looker40SDK {
-    return _LookerExtensionSDK.createClient(
-      new SdkConnection(hostConnection, ApiVersion.sdk40),
-      Looker40SDK
-    );
-  }
-}
+module.exports = {
+  ...base,
+  displayName: packageName,
+  name: packageName,
+  rootDir: '../..',
+  testMatch: [`<rootDir>/packages/${packageName}/**/*.(spec|test).(ts|js)?(x)`],
+  testEnvironment: 'node',
+};

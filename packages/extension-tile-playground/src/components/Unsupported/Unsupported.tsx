@@ -46,26 +46,26 @@ export const Unsupported: React.FC<{ mountPoint?: MountPoint }> = ({
 
 const OuterFlex = styled(Flex)`
   width: 100%;
-  margin-top: ${(props) => props.theme.space.xxxxlarge};
+  margin-top: ${props => props.theme.space.xxxxlarge};
   justify-content: center;
   flex-direction: column;
   align-items: center;
 `;
 
 const HeaderText = styled.h1`
-  margin-top: ${(props) => props.theme.space.large};
+  margin-top: ${props => props.theme.space.large};
   text-align: center;
-  font-family: ${(props) => props.theme.fonts.brand};
-  font-weight: ${(props) => props.theme.fontWeights.normal};
-  font-size: ${(props) => props.theme.fontSizes.xxxxlarge};
-  color: ${(props) => props.theme.colors.text5};
+  font-family: ${props => props.theme.fonts.brand};
+  font-weight: ${props => props.theme.fontWeights.normal};
+  font-size: ${props => props.theme.fontSizes.xxxxlarge};
+  color: ${props => props.theme.colors.text5};
 `;
 
 const ActionMessage = styled.h3`
-  margin-top: ${(props) => props.theme.space.small};
+  margin-top: ${props => props.theme.space.small};
   text-align: center;
-  font-family: ${(props) => props.theme.fonts.brand};
-  font-weight: ${(props) => props.theme.fontWeights.normal};
-  font-size: ${(props) => props.theme.fontSizes.large};
-  color: ${(props) => props.theme.colors.text3};
+  font-family: ${props => props.theme.fonts.brand};
+  font-weight: ${props => props.theme.fontWeights.normal};
+  font-size: ${props => props.theme.fontSizes.large};
+  color: ${props => props.theme.colors.text3};
 `;

@@ -43,6 +43,7 @@ const allSettings = {
   redirect_uri: 'https://myapp.com/redirect',
 } as IApiSettings;
 
+// eslint-disable-next-line
 export class MockOauthSettings extends ApiSettings {
   constructor(private mocked: IApiSettings = allSettings) {
     super(mocked);
@@ -53,6 +54,7 @@ export class MockOauthSettings extends ApiSettings {
   }
 }
 
+// eslint-disable-next-line
 export class MockCrypto implements ICryptoHash {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -145,9 +147,9 @@ describe('oauthSession', () => {
     expect(session.crypto).toEqual(crypto);
 
     const session2 = new OAuthSession({
-      crypto: crypto,
+      crypto,
       settings,
-      transport: transport,
+      transport,
     });
     expect(session2.transport).toEqual(transport);
     expect(session2.crypto).toEqual(crypto);

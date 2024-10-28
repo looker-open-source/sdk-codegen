@@ -33,7 +33,7 @@ describe('SDK Language Utils', () => {
     const actual = allSdkLanguages();
     const aliases = Object.keys(actual);
     expect(Object.keys(actual)).toHaveLength(codeGenerators.length + 1);
-    aliases.forEach((alias) =>
+    aliases.forEach(alias =>
       expect(actual[alias]).toEqual((sdkLanguageMapping as any)[alias])
     );
   });

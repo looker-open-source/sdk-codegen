@@ -61,7 +61,7 @@ describe.skip('Diff Scene', () => {
       const baseInputElement = await page.$(baseInputSelector);
       expect(baseInputElement).not.toBeNull();
       const baseInputValue = await page.evaluate(
-        (e) => e.value,
+        e => e.value,
         baseInputElement
       );
       expect(baseInputValue).toMatch('3.1');
@@ -84,7 +84,7 @@ describe.skip('Diff Scene', () => {
       const compInputElement = await page.$(compInputSelector);
       expect(compInputElement).not.toBeNull();
       const compInputValue = await page.evaluate(
-        (e) => e.value,
+        e => e.value,
         compInputElement
       );
       expect(compInputValue).toEqual('');
@@ -106,7 +106,7 @@ describe.skip('Diff Scene', () => {
       const switchButtonElement = await page.$(switchButtonSelector);
       expect(switchButtonElement).not.toBeNull();
       const switchButtonDisabled = await page.evaluate(
-        (e) => e.disabled,
+        e => e.disabled,
         switchButtonElement
       );
       expect(switchButtonDisabled).toEqual(true);
@@ -120,7 +120,7 @@ describe.skip('Diff Scene', () => {
       const baseInputElement = await page.$(baseInputSelector);
       expect(baseInputElement).not.toBeNull();
       const baseInputValue = await page.evaluate(
-        (e) => e.value,
+        e => e.value,
         baseInputElement
       );
       expect(baseInputValue).toMatch('3.1');
@@ -131,7 +131,7 @@ describe.skip('Diff Scene', () => {
       const compInputElement = await page.$(compInputSelector);
       expect(compInputElement).not.toBeNull();
       const compInputValue = await page.evaluate(
-        (e) => e.value,
+        e => e.value,
         compInputElement
       );
       expect(compInputValue).toMatch('4.0');
@@ -142,7 +142,7 @@ describe.skip('Diff Scene', () => {
       const switchButtonElement = await page.$(switchButtonSelector);
       expect(switchButtonElement).not.toBeNull();
       const switchButtonDisabled = await page.evaluate(
-        (e) => e.disabled,
+        e => e.disabled,
         switchButtonElement
       );
       expect(switchButtonDisabled).toEqual(false);
@@ -153,8 +153,8 @@ describe.skip('Diff Scene', () => {
       const diffResultCards = await page.$$(resultCardsSelector);
       expect(diffResultCards).not.toHaveLength(0);
       const page1Methods = await Promise.all(
-        diffResultCards.map((resultCard) =>
-          page.evaluate((el) => el.innerText.match(/^[a-z_]*/)[0], resultCard)
+        diffResultCards.map(resultCard =>
+          page.evaluate(el => el.innerText.match(/^[a-z_]*/)[0], resultCard)
         )
       );
       expect(page1Methods).toHaveLength(15);
@@ -181,7 +181,7 @@ describe.skip('Diff Scene', () => {
       // Find and validate method link
       const methodLink = await page.$(`${resultCardsSelector} a[role=link]`);
       expect(methodLink).not.toBeNull();
-      const methodText = await page.evaluate((e) => e.innerText, methodLink);
+      const methodText = await page.evaluate(e => e.innerText, methodLink);
       expect(methodText).toMatch(`delete_alert for 4.0`);
 
       // Click and validate destination
@@ -212,8 +212,8 @@ describe.skip('Diff Scene', () => {
     expect(compOptionsOnClick).not.toHaveLength(1);
 
     // Find an option containing the text 4.0
-    const option40Index = await page.$$eval(globalOptionsSelector, (els) =>
-      els.findIndex((el) => el?.textContent?.match(/4\.0/))
+    const option40Index = await page.$$eval(globalOptionsSelector, els =>
+      els.findIndex(el => el?.textContent?.match(/4\.0/))
     );
     const option40 = compOptionsOnClick[option40Index];
     expect(option40).not.toBeUndefined();
@@ -231,8 +231,8 @@ describe.skip('Diff Scene', () => {
     const diffResultCards = await page.$$(resultCardsSelector);
     expect(diffResultCards).not.toHaveLength(0);
     const diff31to40Page1Methods = await Promise.all(
-      diffResultCards.map((resultCard) =>
-        page.evaluate((el) => el.innerText.match(/^[a-z_]*/)[0], resultCard)
+      diffResultCards.map(resultCard =>
+        page.evaluate(el => el.innerText.match(/^[a-z_]*/)[0], resultCard)
       )
     );
 
@@ -243,7 +243,7 @@ describe.skip('Diff Scene', () => {
     const switchButtonElement = await page.$(switchButtonSelector);
     expect(switchButtonElement).not.toBeNull();
     const switchButtonDisabled = await page.evaluate(
-      (e) => e.disabled,
+      e => e.disabled,
       switchButtonElement
     );
     expect(switchButtonDisabled).toEqual(false);
@@ -257,8 +257,8 @@ describe.skip('Diff Scene', () => {
 
     // Check the results again, even though they should be the same
     const diff40to31Page1Methods = await Promise.all(
-      diffResultCards.map((resultCard) =>
-        page.evaluate((el) => el.innerText.match(/^[a-z_]*/)[0], resultCard)
+      diffResultCards.map(resultCard =>
+        page.evaluate(el => el.innerText.match(/^[a-z_]*/)[0], resultCard)
       )
     );
 

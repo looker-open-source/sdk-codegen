@@ -24,11 +24,11 @@
 
  */
 import * as fs from 'fs';
-import path from 'path';
+import { testFile } from '@looker/sdk-codegen-utils';
 import type { IExampleMine } from './exampleInfo';
 import { findExampleLanguages, findExamples } from './exampleInfo';
 
-const fileName = path.join(__dirname, '../../../examplesIndex.json');
+const fileName = testFile('examplesIndex.json');
 const file = fs.readFileSync(fileName, { encoding: 'utf-8' });
 const lode: IExampleMine = JSON.parse(file);
 const op = 'render_task';
@@ -38,7 +38,7 @@ describe('exampleInfo', () => {
     const actual = findExampleLanguages(lode, op);
     expect(actual).toBeDefined();
     expect(actual).toEqual(['Python', 'TypeScript', 'Kotlin', 'Ruby']);
-    actual.forEach((language) => {
+    actual.forEach(language => {
       const ex = findExamples(lode, language, op);
       expect(ex).toBeDefined();
       expect(ex.length).toBeGreaterThan(0);

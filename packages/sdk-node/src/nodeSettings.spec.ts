@@ -25,25 +25,27 @@
  */
 
 import fs from 'fs';
+// import 'whatwg-fetch';
 import type { IApiSettings } from '@looker/sdk-rtl';
 import { ApiConfigMap, boolDefault, defaultTimeout } from '@looker/sdk-rtl';
-import { TestConfig } from './testUtils';
+import { TestConfig } from '@looker/sdk-codegen-utils';
 import { ApiConfig, NodeSettings, NodeSettingsIniFile } from './nodeSettings';
+import { specToModel } from '@looker/sdk-codegen';
 
+const server = 'https\x58//self-signed.looker.com:19999';
 const mockIni = `
 [Looker]
-base_url=https://self-signed.looker.com:19999
+base_url=${server}
 client_id=id
 client_secret=secret
 verify_ssl=false
 timeout=31
 [Looker31]
-base_url=https://self-signed.looker.com:19999
+base_url=${server}
 verify_ssl=False
 timeout=30
 `;
-
-const config = TestConfig();
+const config = TestConfig(specToModel);
 const section2 = 'Looker31';
 const envPrefix = 'LOOKERSDK';
 
@@ -56,8 +58,8 @@ describe('NodeSettings', () => {
 
   describe('ApiConfig', () => {
     it('discovers multiple sections', () => {
-      const config = ApiConfig(mockIni);
-      expect(Object.keys(config)).toEqual(['Looker', section2]);
+      const conf = ApiConfig(mockIni);
+      expect(Object.keys(conf)).toEqual(['Looker', section2]);
     });
   });
 

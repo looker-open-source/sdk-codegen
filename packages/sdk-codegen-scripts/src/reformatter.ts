@@ -59,10 +59,7 @@ const noFormatter = (language: string, files: string[]) => {
 const fullPath = (weirdPath: string) => path.resolve(weirdPath);
 
 abstract class BaseFormatter implements IReformat {
-  constructor(
-    public language: string,
-    public fileSep = `  \n`
-  ) {}
+  constructor(public language: string, public fileSep = `  \n`) {}
 
   reformat(files: string[]): string {
     return noFormatter(this.language, files);
@@ -139,17 +136,21 @@ class TypescriptFormatter extends BaseFormatter {
   }
 
   reformat(files: string[]) {
-    files.forEach((f) => {
+    files.forEach(f => {
       this.reformatFile(f);
     });
     return success(files);
   }
 
   reformatFile(fileName: string) {
-    let source = '';
-    prettify(readFileSync(fileName)).then((r) => (source = r));
+    const content = readFileSync(fileName);
+    const source = prettify(content);
     if (source) {
       fs.writeFileSync(fileName, source, utf8);
+    } else {
+      warn(
+        `Couldn't reformat ${fileName}: ${content.length} vs. ${source.length}`
+      );
     }
     return fileName;
   }
@@ -351,7 +352,7 @@ export class FilesFormatter {
   }
 
   reformat(files?: string[]) {
-    if (files) files.forEach((f) => this.addFile(f));
+    if (files) files.forEach(f => this.addFile(f));
     Object.entries(this.files).forEach(([key, list]) => {
       if (key in fileFormatters) {
         fileFormatters[key].reformat(list);

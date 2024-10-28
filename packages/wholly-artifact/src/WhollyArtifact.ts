@@ -64,7 +64,7 @@ export class TypedRows<T> {
 
   constructor(rows: T[], Maker?: IMaker<T>) {
     if (Maker) {
-      this.rows = rows.map((v) => new Maker(v));
+      this.rows = rows.map(v => new Maker(v));
     } else {
       this.rows = rows;
     }
@@ -355,7 +355,7 @@ export abstract class WhollyArtifact<T extends IRowModel, P>
     const result: T[] = [];
     let pos = 1;
 
-    rows.forEach((r) => {
+    rows.forEach(r => {
       const row: T = this.typeRow(r);
       pos++;
       // fixup row position?
@@ -407,14 +407,14 @@ export abstract class WhollyArtifact<T extends IRowModel, P>
 
   private createIndex() {
     this.index = {};
-    this.rows.forEach((r) => {
+    this.rows.forEach(r => {
       this.index[r[this.keyColumn]] = r;
     });
   }
 
   values<T extends IRowModel>(model: T) {
     const result: SheetValues = [];
-    this.header.forEach((h) => {
+    this.header.forEach(h => {
       result.push(stringer(model[h]));
     });
     return result;
@@ -422,7 +422,7 @@ export abstract class WhollyArtifact<T extends IRowModel, P>
 
   allValues(): SheetValues {
     const values: SheetValues = [this.header];
-    values.push(...this.rows.map((r) => this.values(r)));
+    values.push(...this.rows.map(r => this.values(r)));
     return values;
   }
 
@@ -487,13 +487,13 @@ export abstract class WhollyArtifact<T extends IRowModel, P>
       // Find by index
       return WhollyArtifact.toAT(this.index[value.toString()]);
     }
-    return WhollyArtifact.toAT(this.rows.find((r) => r[key] === value));
+    return WhollyArtifact.toAT(this.rows.find(r => r[key] === value));
   }
 
   private _displayHeader: ColumnHeaders = [];
   get displayHeader(): ColumnHeaders {
     if (this._displayHeader.length === 0) {
-      this._displayHeader = this.header.filter((colName) =>
+      this._displayHeader = this.header.filter(colName =>
         this.displayable(colName)
       );
     }
@@ -547,15 +547,15 @@ export abstract class WhollyArtifact<T extends IRowModel, P>
   }
 
   toObject(): P[] {
-    return this.rows.map((r) => r.toObject() as unknown as P);
+    return this.rows.map(r => r.toObject() as unknown as P);
   }
 
   async batchUpdate<T extends IRowModel>(_force = false): Promise<T[]> {
     // Updates and creates are processed in the same call
     const updates = this.rows.filter(
-      (r) => r.$action === RowAction.Update || r.$action === RowAction.Create
+      r => r.$action === RowAction.Update || r.$action === RowAction.Create
     );
-    const deletes = this.rows.filter((r) => r.$action === RowAction.Delete);
+    const deletes = this.rows.filter(r => r.$action === RowAction.Delete);
 
     await this.createUpdateBatch(updates);
     await this.deleteBatch(deletes);
@@ -563,12 +563,12 @@ export abstract class WhollyArtifact<T extends IRowModel, P>
   }
 
   getDelta<T extends IRowModel>(): IRowDelta<T> {
-    const updates = this.rows.filter((r) => r.$action === RowAction.Update);
+    const updates = this.rows.filter(r => r.$action === RowAction.Update);
     // Sort deletions in descending row order
     const deletes = this.rows
-      .filter((r) => r.$action === RowAction.Delete)
+      .filter(r => r.$action === RowAction.Delete)
       .sort((a, b) => b._row - a._row);
-    const creates = this.rows.filter((r) => r.$action === RowAction.Create);
+    const creates = this.rows.filter(r => r.$action === RowAction.Create);
 
     return {
       updates: updates as unknown as T[],
@@ -581,9 +581,9 @@ export abstract class WhollyArtifact<T extends IRowModel, P>
     values: SheetValues,
     delta: IRowDelta<T>
   ): SheetValues {
-    delta.updates.forEach((u) => (values[u._row - 1] = this.values(u)));
-    delta.deletes.forEach((d) => values.splice(d._row - 1, 1));
-    delta.creates.forEach((c) => values.push(this.values(c)));
+    delta.updates.forEach(u => (values[u._row - 1] = this.values(u)));
+    delta.deletes.forEach(d => values.splice(d._row - 1, 1));
+    delta.creates.forEach(c => values.push(this.values(c)));
     return values;
   }
 
@@ -595,10 +595,10 @@ export abstract class WhollyArtifact<T extends IRowModel, P>
     if (!force) {
       const errors = [];
       try {
-        delta.updates.forEach((u) =>
+        delta.updates.forEach(u =>
           this.checkOutdated(u, this.typeRow(values[u._row - 1]))
         );
-        delta.deletes.forEach((d) =>
+        delta.deletes.forEach(d =>
           this.checkOutdated(d, this.typeRow(values[d._row - 1]))
         );
       } catch (e: any) {
@@ -606,20 +606,20 @@ export abstract class WhollyArtifact<T extends IRowModel, P>
       }
       if (errors.length > 0) throw new LookerSDKError(errors.join('\n'));
     }
-    delta.updates.forEach((u) => u.prepare());
-    delta.creates.forEach((c) => c.prepare());
+    delta.updates.forEach(u => u.prepare());
+    delta.creates.forEach(c => c.prepare());
     return true;
   }
 
   async createUpdateBatch<T extends IRowModel>(items: T[]): Promise<T[]> {
     if (items.length < 1) return Promise.resolve(this.rows as unknown as T[]);
     const namespace = items[0].namespace();
-    const arts: Partial<IArtifact>[] = items.map((i) => i.toArtifact());
+    const arts: Partial<IArtifact>[] = items.map(i => i.toArtifact());
     /** This will throw an error if the request fails */
     const result = await this.sdk.ok(
       update_artifacts(this.sdk, namespace, arts as IUpdateArtifact[])
     );
-    result.forEach((r) => {
+    result.forEach(r => {
       const row: T = this.typeRow(r);
       const key = row[this.keyColumn];
       this.index[key] = row as any; // TODO why is this the only thing that works?
@@ -645,10 +645,10 @@ export abstract class WhollyArtifact<T extends IRowModel, P>
   async deleteBatch<T extends IRowModel>(items: T[]): Promise<T[]> {
     if (items.length < 1) return Promise.resolve(this.rows as unknown as T[]);
     const namespace = items[0].namespace();
-    const keys = items.map((r) => r[this.keyColumn]);
+    const keys = items.map(r => r[this.keyColumn]);
     await this.sdk.ok(delete_artifact(this.sdk, namespace, keys.join()));
     // Remove deleted items from the collections
-    keys.forEach((k) => delete this.index[k]);
+    keys.forEach(k => delete this.index[k]);
     this.updateRowsFromIndex();
     return Promise.resolve(this.rows as unknown as T[]);
   }

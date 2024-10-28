@@ -48,7 +48,7 @@ export const getGenerator = (
 ): ICodeGen | undefined => {
   const gen: any = getCodeGenerator(language, api, versions);
   if (!gen) {
-    const langs = codeGenerators.map((item) => item.language);
+    const langs = codeGenerators.map(item => item.language);
     quit(
       `"${language}" is not a recognized language. Supported languages are: all, ${langs.join(
         ', '
@@ -62,7 +62,7 @@ export const getGenerator = (
     const overrides: any = config.get<ICodeGen>(language);
     // Spread operator loses class functions
     // gen = { ...gen, ...overrides }
-    Object.keys(overrides).forEach((key) => {
+    Object.keys(overrides).forEach(key => {
       if (key in gen) {
         gen[key] = overrides[key];
       }

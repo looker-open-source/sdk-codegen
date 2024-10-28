@@ -25,7 +25,7 @@
  */
 
 import isEmpty from 'lodash/isEmpty';
-import type { APIMethods } from '@looker/sdk-rtl';
+import type { IAPIMethods } from '@looker/sdk-rtl';
 import type { ArgValues, IApiModel, KeyedCollection } from './sdkModels';
 import { ApiModel } from './sdkModels';
 
@@ -158,7 +158,7 @@ export const getSpecsFromVersions = async (
   fetcher: SpecFetcher | undefined = undefined,
   include: IncludeVersion = include31
 ): Promise<SpecList> => {
-  const items: any = {};
+  const items: ArgValues = {};
 
   /**
    * Create a unique spec key for this version
@@ -171,7 +171,7 @@ export const getSpecsFromVersions = async (
     while (items[specKey]) {
       if (frag <= max) {
         // More than one spec for this version
-        specKey = `${v.version}${v.status?.substr(0, frag)}`;
+        specKey = `${v.version}${v.status?.substring(0, frag)}`;
       } else {
         specKey = `${v.version}${v.status}${frag}`;
       }
@@ -271,7 +271,7 @@ export const swapXLookerTags = (spec: string) => {
     { pattern: /x-looker-values/gi, replacement: 'enum' },
     { pattern: /x-looker-deprecated/gi, replacement: 'deprecated' },
   ];
-  swaps.forEach((swap) => {
+  swaps.forEach(swap => {
     spec = spec.replace(swap.pattern, swap.replacement);
   });
   return spec;
@@ -486,9 +486,9 @@ export const convertResponses = (
       description: response.description,
     };
     if (response.schema) {
-      const content: any = {};
+      const content: ArgValues = {};
       formats.produces.forEach(
-        (format) => (content[format] = { schema: response.schema })
+        format => (content[format] = { schema: response.schema })
       );
       responses[code].content = content;
     }
@@ -577,7 +577,7 @@ export const convertPathsAndBodies = (
   paths: ArgValues,
   formats = defaultMimeFormats
 ) => {
-  const result: any = { paths: {}, requestBodies: {} };
+  const result: ArgValues = { paths: {}, requestBodies: {} };
   Object.entries(paths).forEach(([path, entry]) => {
     result.paths[path] = {};
     // Hack to accommodate linting limitations
@@ -638,7 +638,7 @@ export const upgradeSpecObject = (spec: any) => {
     servers: [{ url: `${spec.schemes[0]}://${spec.host}${spec.basePath}` }],
     components: {
       requestBodies,
-      schemas: schemas,
+      schemas,
     },
   };
   // const result = fixConversionObjects(api, spec)
@@ -659,7 +659,7 @@ export const upgradeSpec = (spec: string | Record<string, unknown>) => {
  * @param sdk APIMethods implementation that supports authenticating a request
  * @param serverUrl base url of the /versions server. Typically something like https://my.looker.com:19999 or https://my.looker.com
  */
-export const getLookerSpecs = async (sdk: APIMethods, serverUrl: string) => {
+export const getLookerSpecs = async (sdk: IAPIMethods, serverUrl: string) => {
   const versionUrl = `${serverUrl}/versions`;
   const versions = await sdk.ok(sdk.get<ILookerVersions, Error>(versionUrl));
   return versions;
@@ -690,8 +690,8 @@ export const getSpecLinks = (
     };
   };
   const specs = versions.supported_versions
-    .filter((v) => include(v))
-    .map((v) => deriveSpec(v));
+    .filter(v => include(v))
+    .map(v => deriveSpec(v));
   return specs;
 };
 
@@ -700,7 +700,7 @@ export const getSpecLinks = (
  * @param sdk APIMethods implementation that supports authenticating a request
  * @param links list of specifications to load
  */
-export const loadSpecs = async (sdk: APIMethods, links: SpecLinks) => {
+export const loadSpecs = async (sdk: IAPIMethods, links: SpecLinks) => {
   for (const spec of links) {
     if (isEmpty(spec.api)) {
       // Not parsed yet

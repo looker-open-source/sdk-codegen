@@ -25,12 +25,12 @@
  */
 
 import type {
+  IAPIMethods,
   IRawResponse,
   ITransportSettings,
   SDKResponse,
 } from './transport';
 import { sdkOk } from './transport';
-import type { IAPIMethods } from './apiMethods';
 import type { BaseTransport } from './baseTransport';
 
 export const LinkHeader = 'Link';
@@ -151,7 +151,7 @@ export const linkHeaderParser = (linkHeader: string): PageLinks => {
   const obj: PageLinks = {};
   let arrRes;
 
-  links.forEach((link) => {
+  links.forEach(link => {
     link = link.trim();
     while ((arrRes = re.exec(link))) {
       const key = arrRes[2].split(' ')[0].trim().toLocaleLowerCase();

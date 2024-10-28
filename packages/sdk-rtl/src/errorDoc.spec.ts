@@ -68,8 +68,8 @@ describe('ErrorDoc', () => {
   const settings = { base_url: hostname } as IApiSettings;
   const transport = new BrowserTransport(settings);
   const session = {
-    settings: settings,
-    transport: transport,
+    settings,
+    transport,
   } as unknown as IAuthSession;
   const api = new APIMethods(session, 'mock');
   const errDoc = new ErrorDoc(api);

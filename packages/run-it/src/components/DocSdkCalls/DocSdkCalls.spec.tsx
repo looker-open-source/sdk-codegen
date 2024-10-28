@@ -32,7 +32,7 @@ import { api } from '../../test-data';
 import { DocSdkCalls } from './DocSdkCalls';
 
 describe('DocSdkCalls', () => {
-  const supportedLanguages = codeGenerators.map((g) => g.language);
+  const supportedLanguages = codeGenerators.map(g => g.language);
   const pattern = new RegExp(`${supportedLanguages.join('|')}`);
 
   test('it can render SDK call syntax for all supported languages', () => {
@@ -56,7 +56,7 @@ describe('DocSdkCalls', () => {
 
   test.each(supportedLanguages)(
     'it can render a %s method declaration',
-    (sdkLanguage) => {
+    sdkLanguage => {
       renderWithTheme(
         <DocSdkCalls
           api={api}

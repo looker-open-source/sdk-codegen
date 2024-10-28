@@ -27,7 +27,7 @@
 import { danger, log, warn } from '@looker/sdk-codegen-utils';
 import type { IVersionInfo, SpecItem } from '@looker/sdk-codegen';
 import type { ITransportSettings } from '@looker/sdk-rtl';
-import { defaultTimeout, sdkOk } from '@looker/sdk-rtl';
+import { defaultTimeout, mergeOptions, sdkOk } from '@looker/sdk-rtl';
 import { NodeTransport } from '@looker/sdk-node';
 import {
   createJsonFile,
@@ -119,7 +119,7 @@ export const login = async (props: ISDKConfigProps) => {
   const url = loginUrl(props);
 
   const response = await sdkOk<any, Error>(
-    xp.request<any, Error>('POST', url, creds, undefined, undefined, undefined)
+    xp.request<any, Error>('POST', url, creds, undefined, undefined, props)
   );
   const accessToken = await response.access_token;
 
@@ -180,8 +180,11 @@ export const authGetUrl = async (
       throw err;
     }
     // Whoops!  Ok, try again with login
-    token = await login(props);
-    options = { options, ...{ headers: { Authorization: `Bearer ${token}` } } };
+    options = mergeOptions(props, options ?? {});
+    options = mergeOptions(options, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    token = await login(options as ISDKConfigProps);
     content = await getUrl(props, url, options);
     if (token) {
       await logout(props, token);

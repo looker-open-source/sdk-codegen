@@ -556,7 +556,7 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
       : [messagePayload];
     return this.chattyHost
       .sendAndReceive(ExtensionEvent.EXTENSION_API_REQUEST, ...chattyPayload)
-      .then((values) => values[0]);
+      .then(values => values[0]);
   }
 
   send(type: string, payload?: any) {

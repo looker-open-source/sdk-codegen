@@ -317,7 +317,7 @@ describe('requestUtils', () => {
 
     test('it contains default-empty body params', () => {
       const inputs = createInputs(api, api.methods.fetch_integration_form);
-      const bodyInput = inputs.find((i) => i.location === 'body')!;
+      const bodyInput = inputs.find(i => i.location === 'body')!;
       expect(bodyInput.name).toEqual('body');
       expect(bodyInput.type).toEqual({});
       const actual = initRequestContent(inputs);

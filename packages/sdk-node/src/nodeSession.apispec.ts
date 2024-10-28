@@ -25,8 +25,11 @@
  */
 
 import * as fs from 'fs';
+import * as process from 'node:process';
+import { describe, it } from 'node:test';
+import { expect } from 'expect';
 import { ApiConfigMap, boolDefault, defaultTimeout } from '@looker/sdk-rtl';
-import { TestConfig } from './testUtils';
+import { TestConfig } from '@looker/sdk-rtl/src/testUtils';
 import { NodeTransport } from './nodeTransport';
 import { NodeSession } from './nodeSession';
 import { ApiConfig, NodeSettings, NodeSettingsIniFile } from './nodeSettings';
@@ -35,8 +38,7 @@ const config = TestConfig();
 const envPrefix = 'LOOKERSDK';
 const localIni = config.localIni;
 
-// TODO These tests are skipped for CI. Can we make them work for CI?
-describe.skip('NodeSession', () => {
+describe('NodeSession', () => {
   const settings = new NodeSettingsIniFile(envPrefix, localIni, 'Looker');
   const transport = new NodeTransport(settings);
 
@@ -46,6 +48,7 @@ describe.skip('NodeSession', () => {
       expect(session.isAuthenticated()).toEqual(false);
       const actual = await session.logout();
       expect(actual).toEqual(false);
+      expect(session.isAuthenticated()).toEqual(false);
     });
   });
 

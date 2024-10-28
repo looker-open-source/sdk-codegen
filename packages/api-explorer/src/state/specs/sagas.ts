@@ -42,7 +42,7 @@ function* initSaga(action: PayloadAction<InitSpecsAction>) {
     if (!currentSpecKey || !specs[currentSpecKey]) {
       // if current spec key is invalid or not assigned, default to the first "current" spec
       currentSpecKey = Object.values(specs).find(
-        (spec) => spec.status === 'current'
+        spec => spec.status === 'current'
       )!.key;
     }
     const spec = yield* call([adaptor, 'fetchSpec'], specs[currentSpecKey]);

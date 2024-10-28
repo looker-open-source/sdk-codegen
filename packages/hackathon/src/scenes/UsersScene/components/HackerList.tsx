@@ -99,7 +99,7 @@ export const HackerList: FC<HackerListProps> = ({
           </DataTableAction>
         }
       >
-        {columns.map((column) => takeAction(idx, column.id, hacker))}
+        {columns.map(column => takeAction(idx, column.id, hacker))}
       </DataTableItem>
     ));
 

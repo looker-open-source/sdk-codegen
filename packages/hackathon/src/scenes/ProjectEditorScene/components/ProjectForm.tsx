@@ -238,7 +238,7 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
                 name="technologies"
                 label="Technologies"
                 required
-                options={availableTechnologies?.map((technology) => ({
+                options={availableTechnologies?.map(technology => ({
                   label: technology.description,
                   value: technology._id,
                 }))}
@@ -265,7 +265,7 @@ export const ProjectForm: FC<ProjectFormProps> = () => {
                 disabled={!hacker.canAdmin}
                 id="judges"
                 label="Judges"
-                options={availableJudges.map((judge) => ({
+                options={availableJudges.map(judge => ({
                   value: judge.name,
                 }))}
                 isFilterable
