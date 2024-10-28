@@ -51,18 +51,23 @@ jobs:
               - 'packages/extension-api-explorer/**/*'
               - 'packages/extension-utils/**/*'
               - '.github/workflows/apix-ci.yml'
+              - 'yarn.lock'
             codegen:
               - 'package.json'
               - 'packages/sdk-codegen/**/*'
               - 'packages/sdk-codegen-utils/**/*'
               - 'packages/sdk-codegen-scripts/**/*'
               - '.github/workflows/codegen-ci.yml'
+              - 'yarn.lock'
             hackathon:
               - 'package.json'
               - 'packages/wholly-sheet/**/*'
               - 'packages/hackathon/**/*'
               - '.github/workflows/hackathon-ci.yml'
+              - 'yarn.lock'
             python:
+              - 'Pipfile'
+              - 'Pipfile.lock'
               - 'python/**/*'
               - '.github/workflows/python-ci.yml'
             resources:
@@ -78,6 +83,7 @@ jobs:
               - 'packages/extension-sdk-react/**/*'
               - 'packages/extension-utils/**/*'
               - '.github/workflows/tssdk-ci.yml'
+              - 'yarn.lock'
             gosdk:
               - 'packages/go/**/*'
               - '.github/workflows/go-ci.yml'
