@@ -67,7 +67,7 @@ export const Agenda: FC<AgendaProps> = ({ schedule, hacker }) => {
 
   return (
     <>
-      {Object.keys(eras).map((era) => (
+      {Object.keys(eras).map(era => (
         <AgendaEra
           era={era}
           key={era}

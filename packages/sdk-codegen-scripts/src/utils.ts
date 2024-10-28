@@ -123,9 +123,9 @@ export const doArgs = (args: string[]) => {
           break;
         default:
           {
-            const values = arg.split(',').filter((v) => v.trim());
+            const values = arg.split(',').filter(v => v.trim());
             if (values[0] !== 'all') {
-              values.forEach((v) => {
+              values.forEach(v => {
                 const gen = findGenerator(v.trim());
                 if (gen) {
                   // Valid language match
@@ -146,9 +146,7 @@ export const doArgs = (args: string[]) => {
   const languages = (
     langs.length > 0
       ? langs
-      : codeGenerators
-          .filter((l) => l.factory !== undefined)
-          .map((l) => l.language)
+      : codeGenerators.filter(l => l.factory !== undefined).map(l => l.language)
   ).filter((value, index, all) => all.indexOf(value) === index);
 
   return { languages, versions, noStreams };

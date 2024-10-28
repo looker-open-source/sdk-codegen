@@ -103,7 +103,7 @@ export const ApiExplorer: FC<ApiExplorerProps> = ({
 
   const hasNavigationToggle = useCallback((e: MessageEvent<any>) => {
     if (e.origin === window.origin && e.data.action === 'toggle_sidebar') {
-      setHasNavigation((currentHasNavigation) => !currentHasNavigation);
+      setHasNavigation(currentHasNavigation => !currentHasNavigation);
     }
   }, []);
 

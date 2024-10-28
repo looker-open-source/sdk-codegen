@@ -43,6 +43,12 @@ const observeMock = function (cb, config) {
   this.observe = jest.fn();
 };
 
+// if (!AbortSignal.any) {
+//   AbortSignal.any = signals => {
+//     return Promise.any(signals);
+//   };
+// }
+
 globalThis.IntersectionObserver = observeMock;
 globalThis.ResizeObserver = ResizeObserver;
 
@@ -53,3 +59,16 @@ globalThis.ResizeObserver = ResizeObserver;
 // beforeAll(() => {
 //   jest.resetAllMocks()
 // })
+
+beforeEach(() => {
+  if (!AbortSignal.timeout) {
+    AbortSignal.timeout = ms => {
+      const controller = new AbortController();
+      setTimeout(() => controller.abort(new DOMException('TimeoutError')), ms);
+      return controller.signal;
+    };
+  }
+  globalThis.fetch = global.fetch;
+  globalThis.AbortController = global.AbortController;
+  globalThis.AbortSignal = global.AbortSignal;
+});

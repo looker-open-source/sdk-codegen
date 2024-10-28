@@ -65,7 +65,7 @@ export const DocResponseTypes = ({ api, responses }: DocResponseTypesProps) => {
         mt="large"
         mb="large"
       >
-        {mediaTypes.map((mediaType) => (
+        {mediaTypes.map(mediaType => (
           <ButtonItem key={mediaType}>{mediaType}</ButtonItem>
         ))}
       </ButtonToggle>

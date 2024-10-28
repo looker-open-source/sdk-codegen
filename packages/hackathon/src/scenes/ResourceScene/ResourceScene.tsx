@@ -57,13 +57,13 @@ export const ResourceScene: FC<ResourceSceneProps> = () => {
     ? urlParams
         .get(DOMAIN_PARAM)!
         .split(',')
-        .filter((v) => v !== '')
+        .filter(v => v !== '')
     : [];
   const typeFilterValues: string[] = urlParams.get(TYPE_PARAM)
     ? urlParams
         .get(TYPE_PARAM)!
         .split(',')
-        .filter((v) => v !== '')
+        .filter(v => v !== '')
     : [];
 
   let selectedResources = resources;
@@ -114,7 +114,7 @@ export const ResourceScene: FC<ResourceSceneProps> = () => {
           width="40vh"
         >
           <SelectMulti
-            options={Object.keys(ResourceType).map((k) => ({
+            options={Object.keys(ResourceType).map(k => ({
               value: (ResourceType as any)[k],
               label: (ResourceType as any)[k],
             }))}
@@ -128,7 +128,7 @@ export const ResourceScene: FC<ResourceSceneProps> = () => {
           width="40vh"
         >
           <SelectMulti
-            options={Object.keys(ResourceTag).map((k) => ({
+            options={Object.keys(ResourceTag).map(k => ({
               value: (ResourceTag as any)[k],
               label: (ResourceTag as any)[k],
             }))}

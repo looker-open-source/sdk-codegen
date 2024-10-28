@@ -25,7 +25,7 @@
  */
 
 /**
- * 464 API methods
+ * 467 API methods
  */
 
 
@@ -763,8 +763,11 @@ open class LookerSDK: APIMethods {
      *
      * This function does not strictly require all group_ids, user attribute names, or model names to exist at the moment the
      * embed url is created. Unknown group_id, user attribute names or model names will be passed through to the output URL.
+     * Because of this, **these parameters are not validated** when the API call is made.
      *
-     * To diagnose potential problems with an SSO embed URL, you can copy the signed URL into the Embed URI Validator text box in `<your looker instance>/admin/embed`.
+     * The [Get Embed Url](https://cloud.google.com/looker/docs/r/get-signed-url) dialog can be used to determine and validate the correct permissions for signing an embed url.
+     * This dialog also provides the SDK syntax for the API call to make. Alternatively, you can copy the signed URL into the Embed URI Validator text box
+     * in `<your looker instance>/admin/embed` to diagnose potential problems.
      *
      * The `secret_id` parameter is optional. If specified, its value must be the id of an active secret defined in the Looker instance.
      * if not specified, the URL will be signed using the most recent active signing secret. If there is no active secret for signing embed urls,
@@ -2845,8 +2848,11 @@ open class LookerSDK: APIMethods {
      *  - allow_user_timezones
      *  - custom_welcome_email
      *  - data_connector_default_enabled
+     *  - dashboard_auto_refresh_restriction
+     *  - dashboard_auto_refresh_minimum_interval
      *  - extension_framework_enabled
      *  - extension_load_url_enabled
+     *  - instance_config
      *  - marketplace_auto_install_enabled
      *  - marketplace_automation
      *  - marketplace_terms_accepted
@@ -2882,8 +2888,11 @@ open class LookerSDK: APIMethods {
      *  - allow_user_timezones
      *  - custom_welcome_email
      *  - data_connector_default_enabled
+     *  - dashboard_auto_refresh_restriction
+     *  - dashboard_auto_refresh_minimum_interval
      *  - extension_framework_enabled
      *  - extension_load_url_enabled
+     *  - instance_config
      *  - marketplace_auto_install_enabled
      *  - marketplace_automation
      *  - marketplace_terms_accepted
@@ -3280,6 +3289,29 @@ open class LookerSDK: APIMethods {
         options: ITransportSettings? = nil
     ) -> SDKResponse<ExternalOauthApplication, SDKError> {
         let result: SDKResponse<ExternalOauthApplication, SDKError> = self.post("/external_oauth_applications", nil, try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Update an OAuth Application's client secret.
+     *
+     * This is an OAuth Application which Looker uses to access external systems.
+     *
+     * PATCH /external_oauth_applications/{client_id} -> ExternalOauthApplication
+     */
+    public func update_external_oauth_application(
+        /**
+         * @param {String} client_id The client ID of the OAuth App to update
+         */
+        _ client_id: String,
+        /**
+         * @param {WriteExternalOauthApplication} body
+         */
+        _ body: WriteExternalOauthApplication,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<ExternalOauthApplication, SDKError> {
+        let path_client_id = encodeParam(client_id)
+        let result: SDKResponse<ExternalOauthApplication, SDKError> = self.patch("/external_oauth_applications/\(path_client_id)", nil, try! self.encode(body), options)
         return result
     }
 
@@ -3851,6 +3883,50 @@ open class LookerSDK: APIMethods {
         let path_terms = encodeParam(terms)
         let result: SDKResponse<[ContentSearch], SDKError> = self.get("/content/\(path_terms)", 
             ["fields": fields, "types": types, "limit": limit, "offset": offset, "page": page, "per_page": per_page], nil, options)
+        return result
+    }
+
+    /**
+     * ### Get Content Summary
+     *
+     * Retrieves a collection of content items related to user activity and engagement, such as recently viewed content,
+     * favorites and scheduled items.
+     *
+     * GET /content_summary -> [ContentSummary]
+     */
+    public func content_summary(
+        /**
+         * @param {String} fields Comma-delimited names of fields to return in responses. Omit for all fields
+         */
+        fields: String? = nil,
+        /**
+         * @param {Int64} limit Number of results to return. (used with offset)
+         */
+        limit: Int64? = nil,
+        /**
+         * @param {Int64} offset Number of results to skip before returning any. (used with limit)
+         */
+        offset: Int64? = nil,
+        /**
+         * @param {String} target_group_id Match group id
+         */
+        target_group_id: String? = nil,
+        /**
+         * @param {String} target_user_id Match user id
+         */
+        target_user_id: String? = nil,
+        /**
+         * @param {String} target_content_type Content type to match, options are: look, dashboard. Can be provided as a comma delimited list.
+         */
+        target_content_type: String? = nil,
+        /**
+         * @param {String} sorts Fields to sort by
+         */
+        sorts: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<[ContentSummary], SDKError> {
+        let result: SDKResponse<[ContentSummary], SDKError> = self.get("/content_summary", 
+            ["fields": fields, "limit": limit, "offset": offset, "target_group_id": target_group_id, "target_user_id": target_user_id, "target_content_type": target_content_type, "sorts": sorts], nil, options)
         return result
     }
 
@@ -5338,7 +5414,7 @@ open class LookerSDK: APIMethods {
      *
      * All personal folders will be returned.
      *
-     * GET /folders -> [Folder]
+     * GET /folders -> [FolderBase]
      */
     public func all_folders(
         /**
@@ -5346,8 +5422,8 @@ open class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<[Folder], SDKError> {
-        let result: SDKResponse<[Folder], SDKError> = self.get("/folders", 
+    ) -> SDKResponse<[FolderBase], SDKError> {
+        let result: SDKResponse<[FolderBase], SDKError> = self.get("/folders", 
             ["fields": fields], nil, options)
         return result
     }
@@ -8168,7 +8244,7 @@ open class LookerSDK: APIMethods {
      * will be in the message of the 400 error response, but not as detailed as expressed in `json_detail.errors`.
      * These data formats can only carry row data, and error info is not row data.
      *
-     * GET /query_tasks/{query_task_id}/results -> QueryTask
+     * GET /query_tasks/{query_task_id}/results -> String
      */
     public func query_task_results(
         /**
@@ -8176,9 +8252,9 @@ open class LookerSDK: APIMethods {
          */
         _ query_task_id: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<QueryTask, SDKError> {
+    ) -> SDKResponse<String, SDKError> {
         let path_query_task_id = encodeParam(query_task_id)
-        let result: SDKResponse<QueryTask, SDKError> = self.get("/query_tasks/\(path_query_task_id)/results", nil, nil, options)
+        let result: SDKResponse<String, SDKError> = self.get("/query_tasks/\(path_query_task_id)/results", nil, nil, options)
         return result
     }
 
@@ -9423,10 +9499,14 @@ open class LookerSDK: APIMethods {
          * @param {Bool} filter_or Combine given search criteria in a boolean OR expression.
          */
         filter_or: Bool? = nil,
+        /**
+         * @param {Bool} is_support_role Search for Looker support roles.
+         */
+        is_support_role: Bool? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<[Role], SDKError> {
         let result: SDKResponse<[Role], SDKError> = self.get("/roles/search", 
-            ["fields": fields, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "name": name, "built_in": built_in as Any?, "filter_or": filter_or as Any?], nil, options)
+            ["fields": fields, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "name": name, "built_in": built_in as Any?, "filter_or": filter_or as Any?, "is_support_role": is_support_role as Any?], nil, options)
         return result
     }
 
@@ -9942,6 +10022,93 @@ open class LookerSDK: APIMethods {
     }
 
     /**
+     * ### Search Scheduled Plans
+     *
+     * Returns all scheduled plans which matches the given search criteria.
+     *
+     * If no user_id is provided, this function returns the scheduled plans owned by the caller.
+     *
+     *
+     * To list all schedules for all users, pass `all_users=true`.
+     *
+     *
+     * The caller must have `see_schedules` permission to see other users' scheduled plans.
+     *
+     * GET /scheduled_plans/search -> [ScheduledPlan]
+     */
+    public func search_scheduled_plans(
+        /**
+         * @param {String} user_id Return scheduled plans belonging to this user_id. If not provided, returns scheduled plans owned by the caller.
+         */
+        user_id: String? = nil,
+        /**
+         * @param {String} fields Comma delimited list of field names. If provided, only the fields specified will be included in the response
+         */
+        fields: String? = nil,
+        /**
+         * @param {Bool} all_users Return scheduled plans belonging to all users (caller needs see_schedules permission)
+         */
+        all_users: Bool? = nil,
+        /**
+         * @param {Int64} limit Number of results to return. (used with offset and takes priority over page and per_page)
+         */
+        limit: Int64? = nil,
+        /**
+         * @param {Int64} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
+         */
+        offset: Int64? = nil,
+        /**
+         * @param {String} sorts Fields to sort by.
+         */
+        sorts: String? = nil,
+        /**
+         * @param {String} name Match Scheduled plan's name.
+         */
+        name: String? = nil,
+        /**
+         * @param {String} user_first_name Returns scheduled plans belonging to user with this first name.
+         */
+        user_first_name: String? = nil,
+        /**
+         * @param {String} user_last_name Returns scheduled plans belonging to user with this last name.
+         */
+        user_last_name: String? = nil,
+        /**
+         * @param {String} dashboard_id Returns scheduled plans created on this Dashboard.
+         */
+        dashboard_id: String? = nil,
+        /**
+         * @param {String} look_id Returns scheduled plans created on this Look.
+         */
+        look_id: String? = nil,
+        /**
+         * @param {String} lookml_dashboard_id Returns scheduled plans created on this LookML Dashboard.
+         */
+        lookml_dashboard_id: String? = nil,
+        /**
+         * @param {String} recipient Match recipient address.
+         */
+        recipient: String? = nil,
+        /**
+         * @param {String} destination_type Match scheduled plan's destination type.
+         */
+        destination_type: String? = nil,
+        /**
+         * @param {String} delivery_format Match scheduled plan's delivery format.
+         */
+        delivery_format: String? = nil,
+        /**
+         * @param {Bool} filter_or Combine given search criteria in a boolean OR expression
+         */
+        filter_or: Bool? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<[ScheduledPlan], SDKError> {
+        let result: SDKResponse<[ScheduledPlan], SDKError> = self.get("/scheduled_plans/search", 
+            ["user_id": user_id, "fields": fields, "all_users": all_users as Any?, "limit": limit, "offset": offset, "sorts": sorts, "name": name, "user_first_name": user_first_name, "user_last_name": user_last_name, "dashboard_id": dashboard_id, "look_id": look_id, "lookml_dashboard_id": lookml_dashboard_id, "recipient": recipient, "destination_type": destination_type, "delivery_format": delivery_format, "filter_or": filter_or as Any?], nil, options)
+        return result
+    }
+
+    /**
      * ### Get Scheduled Plans for a Look
      *
      * Returns all scheduled plans for a look which belong to the caller or given user.
@@ -10213,17 +10380,9 @@ open class LookerSDK: APIMethods {
      *
      * | result_format | Description
      * | :-----------: | :--- |
-     * | json | Plain json
-     * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
-     * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
-     * | csv | Comma separated values with a header
-     * | txt | Tab separated values with a header
-     * | html | Simple html
-     * | md | Simple markdown
-     * | xlsx | MS Excel spreadsheet
-     * | sql | Returns the generated SQL rather than running the query
+     * | json_bi | Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
      *
-     * GET /sql_interface_queries/{query_id}/run/{result_format} -> QueryFormats
+     * GET /sql_interface_queries/{query_id}/run/{result_format} -> JsonBi
      */
     public func run_sql_interface_query(
         /**
@@ -10235,10 +10394,10 @@ open class LookerSDK: APIMethods {
          */
         _ result_format: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<QueryFormats, SDKError> {
+    ) -> SDKResponse<JsonBi, SDKError> {
         let path_query_id = encodeParam(query_id)
         let path_result_format = encodeParam(result_format)
-        let result: SDKResponse<QueryFormats, SDKError> = self.get("/sql_interface_queries/\(path_query_id)/run/\(path_result_format)", nil, nil, options)
+        let result: SDKResponse<JsonBi, SDKError> = self.get("/sql_interface_queries/\(path_query_id)/run/\(path_result_format)", nil, nil, options)
         return result
     }
 

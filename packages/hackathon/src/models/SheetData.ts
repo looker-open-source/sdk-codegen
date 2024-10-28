@@ -49,7 +49,7 @@ export class SheetData {
   }
 
   private extract(artifacts: IArtifact[], name: string) {
-    return artifacts.filter((a) => a.key.startsWith(`${name}:`));
+    return artifacts.filter(a => a.key.startsWith(`${name}:`));
   }
 
   async init() {
@@ -148,8 +148,8 @@ export class SheetData {
     await this.projects.refresh(
       this.extract(artifacts, this.projects.tableName)
     );
-    this.projects.rows.forEach((p) => p.load(this));
-    this.judgings.rows.forEach((j) => j.load(this));
+    this.projects.rows.forEach(p => p.load(this));
+    this.judgings.rows.forEach(j => j.load(this));
     return this;
   }
 }

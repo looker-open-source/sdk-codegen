@@ -69,7 +69,7 @@ describe('SdkLanguageSelector', () => {
       expect(screen.getAllByRole('option')).toHaveLength(
         codeGenerators.length + 1
       );
-      languages.forEach((language) => {
+      languages.forEach(language => {
         expect(
           screen.getByRole('option', { name: language })
         ).toBeInTheDocument();
@@ -77,9 +77,9 @@ describe('SdkLanguageSelector', () => {
     });
   });
 
-  test.each(languages.filter((l) => l !== 'All'))(
+  test.each(languages.filter(l => l !== 'All'))(
     'choosing `%s` pushes its alias to url',
-    async (language) => {
+    async language => {
       renderWithRouterAndReduxProvider(
         <SdkLanguageSelector />,
         undefined,

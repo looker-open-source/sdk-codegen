@@ -35,7 +35,7 @@ import { DocSDKs } from './DocSDKs';
 
 describe('DocSDKs', () => {
   let store: Store<RootState>;
-  const supportedLanguages = codeGenerators.map((g) => g.language);
+  const supportedLanguages = codeGenerators.map(g => g.language);
   const pattern = new RegExp(`${supportedLanguages.join('|')}`);
 
   beforeAll(() => {
@@ -64,7 +64,7 @@ describe('DocSDKs', () => {
 
   test.each(supportedLanguages)(
     'it can render a %s method declaration',
-    (sdkLanguage) => {
+    sdkLanguage => {
       store = createTestStore({
         settings: {
           initialized: false,

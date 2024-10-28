@@ -162,8 +162,8 @@ export const mockHackathons = () => {
 
 export const mockProjects = (hackathons: Hackathon[], users: User[]) => {
   const rows: Project[] = [];
-  hackathons.forEach((h) => {
-    users.forEach((u) => {
+  hackathons.forEach(h => {
+    users.forEach(u => {
       rows.push(
         mockFullProject(u._id, h._id, `${h._id} project for user ${u._id}`)
       );

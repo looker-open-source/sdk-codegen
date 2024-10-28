@@ -85,7 +85,7 @@ describe('API Explorer', () => {
       const docLinks = await page.$$('.doc-link');
       expect(docLinks.length).toBeGreaterThan(0);
       await docLinks[0].click();
-      const typeName = await page.evaluate((e) => e.innerText, docLinks[0]);
+      const typeName = await page.evaluate(e => e.innerText, docLinks[0]);
       await expect(page).toMatchElement('h2', { text: typeName });
       await page.goBack();
 
@@ -152,7 +152,7 @@ describe('API Explorer', () => {
       const selector = 'input[aria-label="sdk language selector"]';
       let languageHandle = await page.$(`${selector}[value="Python"]`);
       expect(languageHandle).not.toBeNull();
-      expect(await page.evaluate((x) => x.value, languageHandle)).toEqual(
+      expect(await page.evaluate(x => x.value, languageHandle)).toEqual(
         'Python'
       );
       await expect(page).toClick('h4', { text: 'Dashboard' });
@@ -164,7 +164,7 @@ describe('API Explorer', () => {
       await pageReload();
       languageHandle = await page.$(`${selector}[value="Kotlin"]`);
       expect(languageHandle).not.toBeNull();
-      expect(await page.evaluate((x) => x.value, languageHandle)).toEqual(
+      expect(await page.evaluate(x => x.value, languageHandle)).toEqual(
         'Kotlin'
       );
       await expect(page).toMatchElement('h3', { text: 'Kotlin Declaration' });
@@ -261,7 +261,7 @@ describe('API Explorer', () => {
 
       const body = await page.$('body');
       const codeMatch = await page.evaluate(
-        (e) => e.innerText.match('all_dashboards\\('),
+        e => e.innerText.match('all_dashboards\\('),
         body
       );
       expect(codeMatch).not.toBeNull();

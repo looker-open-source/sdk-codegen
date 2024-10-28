@@ -134,12 +134,12 @@ export const DiffScene: FC<DiffSceneProps> = ({ toggleNavigation }) => {
   };
 
   useEffect(() => {
-    adaptor.fetchSpec(specs[leftKey]).then((spec) => setLeftApi(spec.api!));
+    adaptor.fetchSpec(specs[leftKey]).then(spec => setLeftApi(spec.api!));
   }, [leftKey]);
 
   useEffect(() => {
     if (rightKey in specs) {
-      adaptor.fetchSpec(specs[rightKey]).then((spec) => setRightApi(spec.api!));
+      adaptor.fetchSpec(specs[rightKey]).then(spec => setRightApi(spec.api!));
     }
   }, [rightKey]);
 

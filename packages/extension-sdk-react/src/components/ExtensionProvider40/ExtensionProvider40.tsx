@@ -63,7 +63,7 @@ export function ExtensionProvider40(props: ExtensionProvider40Props) {
 
   const connectedCallback = (extensionHost: ExtensionHostApi) => {
     const coreSDK: ILooker40SDK =
-      LookerExtensionSDK.create40Client(extensionHost);
+      LookerExtensionSDK.createClient(extensionHost);
     registerCore40SDK(coreSDK as Looker40SDK);
     const { visualizationSDK, tileSDK, lookerHostData } = extensionHost;
     const { visualizationData } = visualizationSDK;

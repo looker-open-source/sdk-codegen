@@ -76,7 +76,7 @@ export const ExtensionProviderBase: React.FC<ExtensionProviderProps> = ({
   const updateContextData = (
     contextData: Partial<BaseExtensionContextData>
   ) => {
-    setExtensionData((previousContextData) => ({
+    setExtensionData(previousContextData => ({
       ...previousContextData,
       ...contextData,
     }));

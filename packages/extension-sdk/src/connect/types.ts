@@ -818,6 +818,7 @@ export interface ExtensionSDK {
    *         code_challenge_method optional - set to 'S256' to use code challenge
    *         rather than secret key.
    * @param httpMethod used for submission. Defaults to 'POST'.
+   * @deprecated
    */
   oauth2Authenticate(
     authEndpoint: string,
@@ -846,6 +847,7 @@ export interface ExtensionSDK {
    *                       method.
    *                       If code challenge is being used the code_verifier is added
    *                       to the message.
+   * @deprecated
    */
   oauth2ExchangeCodeForToken(
     authEndpoint: string,

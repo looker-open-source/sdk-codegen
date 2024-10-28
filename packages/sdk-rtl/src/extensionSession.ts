@@ -32,10 +32,7 @@ export class ExtensionSession implements IAuthSession {
   sudoId = '';
   transport: ITransport;
 
-  constructor(
-    public settings: IApiSettings,
-    transport: ITransport
-  ) {
+  constructor(public settings: IApiSettings, transport: ITransport) {
     this.settings = settings;
     this.transport = transport;
   }

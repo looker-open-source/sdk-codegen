@@ -225,7 +225,7 @@ ${this.hooks.join('\n')}
     const params: string[] = [];
     const args = method.allParams;
     if (args && args.length > 0) {
-      method.allParams.forEach((p) =>
+      method.allParams.forEach(p =>
         params.push(this.declareParameter(bump, method, p))
       );
     }
@@ -325,7 +325,7 @@ ${this.hooks.join('\n')}
     const annotations: string[] = [];
     const args: string[] = [];
     const inits: string[] = [];
-    this.typeProperties(type).forEach((prop) => {
+    this.typeProperties(type).forEach(prop => {
       annotations.push(this.declareProperty(indent, prop, true));
       args.push(this.declareConstructorArg('', prop));
       inits.push(this.initArg(bump, prop));
@@ -567,7 +567,7 @@ ${this.hooks.join('\n')}
         default:
           throw new Error(`Don't know how to handle: ${JSON.stringify(type)}`);
       }
-      const mt: IMappedType = { default: defaultValue, name: name };
+      const mt: IMappedType = { default: defaultValue, name };
       if (asVal) {
         mt.asVal = asVal;
       }
@@ -582,7 +582,7 @@ ${this.hooks.join('\n')}
       !!type.customType
     );
     const result = pythonTypes[type.name];
-    return result || { default: this.nullStr, name: name };
+    return result || { default: this.nullStr, name };
   }
 
   typeMapMethods(type: IType) {

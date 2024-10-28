@@ -34,7 +34,7 @@ describe('ApiMethods', () => {
   const hostname = 'https://looker.sdk';
   const apiVersion = '4.0';
   const settings = { base_url: hostname } as IApiSettings;
-  const session = { settings: settings } as IAuthSession;
+  const session = { settings } as IAuthSession;
   const fullPath = 'https://github.com/looker-open-source/sdk-codegen';
   const mockAuth: Authenticator = (props: any) => props;
   const api = new APIMethods(session, 'mock');

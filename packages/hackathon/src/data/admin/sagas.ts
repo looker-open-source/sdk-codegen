@@ -42,7 +42,7 @@ const findUserAttributeValue = (
   userAttributes: IUserAttribute[]
 ): string => {
   const userAttribute = userAttributes.find(
-    (userAttribute) => userAttribute.name === name
+    userAttribute => userAttribute.name === name
   );
   return userAttribute ? userAttribute.default_value || '' : '';
 };

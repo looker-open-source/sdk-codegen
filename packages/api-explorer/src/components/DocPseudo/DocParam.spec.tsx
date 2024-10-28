@@ -33,8 +33,8 @@ import { DocParam } from './DocParam';
 
 describe('DocParam', () => {
   const allParams = api.methods.run_look.allParams;
-  const optionalParam = allParams.filter((val) => !val.required)[0];
-  const requiredParam = allParams.filter((val) => val.required)[0];
+  const optionalParam = allParams.filter(val => !val.required)[0];
+  const requiredParam = allParams.filter(val => val.required)[0];
 
   test('it renders', () => {
     renderWithTheme(<DocParam parameter={requiredParam} />);

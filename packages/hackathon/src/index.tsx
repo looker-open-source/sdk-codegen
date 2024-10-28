@@ -30,7 +30,7 @@ import { Provider } from 'react-redux';
 import { Hackathon } from './Hackathon';
 import store from './data/store';
 
-window.addEventListener('DOMContentLoaded', (_) => {
+window.addEventListener('DOMContentLoaded', _ => {
   const root = document.createElement('div');
   document.body.appendChild(root);
   ReactDOM.render(

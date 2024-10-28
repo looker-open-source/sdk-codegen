@@ -127,7 +127,7 @@ function* clearConfigSaga(action: PayloadAction<ClearConfigActionPayload>) {
  * verify button clicked, verifies apiServerUrl and populates OAuth server URL if valid
  */
 function* verifyConfigSaga() {
-  const apiServerUrl = yield* select((storeState) => {
+  const apiServerUrl = yield* select(storeState => {
     const formState: OAuthFormState = storeState[OAuthFormSlice.name];
     return formState.apiServerUrl;
   });
@@ -155,7 +155,7 @@ function* verifyConfigSaga() {
  * @param action containing configKey, callback function, client_id and redirect_uri
  */
 function* saveConfigSaga(action: PayloadAction<SaveConfigPayload>) {
-  const apiServerUrl = yield* select((storeState) => {
+  const apiServerUrl = yield* select(storeState => {
     const formState: OAuthFormState = storeState[OAuthFormSlice.name];
     return formState.apiServerUrl;
   });

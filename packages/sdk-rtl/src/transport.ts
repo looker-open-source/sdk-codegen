@@ -25,8 +25,6 @@
  */
 
 import type { Agent } from 'https';
-import type { Headers } from 'request';
-import type { Readable } from 'readable-stream';
 import {
   matchCharsetUtf8,
   matchModeBinary,
@@ -34,11 +32,16 @@ import {
 } from './constants';
 import { DelimArray } from './delimArray';
 import { LookerSDKError } from './lookerSDKError';
+import type { IAuthSession } from './authSession';
+import { sleep } from './sleep';
 
 export const agentPrefix = 'TS-SDK';
 export const LookerAppId = 'x-looker-appid';
 
-/** Set to `true` to follow streaming process */
+/** default maximum number of retries to attempt */
+export const MaxTries = 3;
+
+/** Set to `true` to turn on tracing wherever it may be referenced in the sdk */
 const tracing = false;
 
 /**
@@ -55,6 +58,21 @@ export function trace(message: string, info?: any) {
       console.debug({ info });
     }
   }
+}
+
+/**
+ * is this status code retryable?
+ *
+ * @returns true if statusCode is 202, 429, or 503
+ * @param statusCode HTTP status code
+ *
+ */
+export function canRetry(statusCode: number) {
+  return (
+    statusCode === StatusCode.Accepted ||
+    statusCode === StatusCode.TooManyRequests ||
+    statusCode === StatusCode.ServiceUnavailable
+  );
 }
 
 /** ResponseMode for an HTTP request */
@@ -165,6 +183,22 @@ export enum StatusCode {
   NetworkAuthRequired,
 }
 
+/** Property bag for submitting an HTTP request */
+export interface IRawRequest {
+  /** HTTP request method */
+  method: HttpMethod;
+  /** HTTP Request path */
+  path: string;
+  /** optional query parameters collection */
+  queryParams?: Values;
+  /** optional request body */
+  body?: any;
+  /** optional API authenticator callback */
+  authenticator?: Authenticator;
+  /** optional transport settings overrides */
+  options?: Partial<ITransportSettings>;
+}
+
 /** Untyped basic HTTP response type for "raw" HTTP requests */
 export interface IRawResponse {
   /** Http method of the request */
@@ -194,10 +228,128 @@ export interface IRawResponse {
 /** IRawResponse observer function type */
 export type RawObserver = (raw: IRawResponse) => IRawResponse;
 
+/** A successful SDK call. */
+export interface ISDKSuccessResponse<T> {
+  /** Whether the SDK call was successful. */
+  ok: true;
+  /** The object returned by the SDK call. */
+  value: T;
+}
+
+/** An errant SDK call. */
+export interface ISDKErrorResponse<T> {
+  /** Whether the SDK call was successful. */
+  ok: false;
+  /** The error object returned by the SDK call. */
+  error: T;
+}
+
+/** An error representing an issue in the SDK, like a network or parsing error. */
+export interface ISDKError {
+  type: 'sdk_error';
+  message: string;
+}
+
+export type SDKResponse<TSuccess, TError> =
+  | ISDKSuccessResponse<TSuccess>
+  | ISDKErrorResponse<TError | ISDKError>;
+
+/** Keyed string hash */
+export interface IRequestHeaders {
+  [key: string]: string;
+}
+
+/**
+ * Generic http request property collection
+ * TODO: Trim this down to what is required
+ */
+export interface IRequestProps {
+  [key: string]: any;
+  /** full url for request, including any query params */
+  url: string;
+
+  /** body of request. optional */
+  body?: any;
+  /** headers for request. optional */
+  headers: IRequestHeaders;
+  /** Http method for request. required. */
+  method: HttpMethod;
+  /** Redirect processing for request. optional */
+  redirect?: any;
+  /** Credentials to use */
+  credentials?: 'include' | 'omit' | 'same-origin' | undefined;
+
+  /** http.Agent instance, allows custom proxy, certificate etc. */
+  agent?: Agent;
+  /** support gzip/deflate content encoding. false to disable */
+  compress?: boolean;
+  /** maximum redirect count. 0 to not follow redirect */
+  follow?: number;
+  /** maximum response body size in bytes */
+  size?: number;
+  /** req/res timeout in ms, it resets on redirect. 0 to disable (OS limit applies) */
+  timeout?: number;
+}
+
+/** General purpose authentication callback */
+export type Authenticator = (props: any) => any;
+
+/** Alpha: Properties for an async Waitable retry handler */
+export interface IWait {
+  /** HTTP request that responded with a retry code */
+  request: IRawRequest;
+  /** HTTP response that is a retry */
+  response: IRawResponse;
+  /** Attempt number for the retry */
+  attempt: number;
+  /** Time in milliseconds to wait before retrying */
+  waitMS: number;
+}
+
+/** Alpha: Response from a Waitable function */
+export interface IWaitResponse {
+  /** cancel, retry, or error are the allowed responses for the retryable waiter */
+  response: 'cancel' | 'retry' | 'error';
+  /** Optional reason for the response */
+  reason?: string;
+}
+
+/** Alpha: Waitable function override for retrying an HTTP request */
+export type Waitable = (waiting: IWait) => Promise<IWaitResponse>;
+
+/** Interface for API transport values */
+export interface ITransportSettings {
+  [key: string]: any;
+  /** base URL of API REST web service */
+  base_url: string;
+  /** standard headers to provide in all transport requests */
+  headers?: IRequestHeaders;
+  /** whether to verify ssl certs or not. Defaults to true */
+  verify_ssl: boolean;
+  /** request timeout in seconds. Default to 30 */
+  timeout: number;
+  /** encoding override */
+  encoding?: string | null;
+  /** agent tag to use for the SDK requests */
+  agentTag: string;
+  /** maximum number of times for a retry response */
+  maxTries?: number;
+  /** override for awaiting retry requests */
+  waitHandler?: Waitable;
+  /** abort controller signal customization */
+  signal?: AbortSignal;
+}
+
 /** Transport plug-in interface */
 export interface ITransport {
   /** Observer lambda to process raw responses */
   observer: RawObserver | undefined;
+
+  /**
+   * default retryable HTTP request. If maxTries > 1 in the `options`
+   * properties for the SDK, this is where HTTP requests will be retried.
+   */
+  retry(request: IRawRequest): Promise<IRawResponse>;
 
   /**
    * HTTP request function for atomic, fully downloaded raw HTTP responses
@@ -261,7 +413,7 @@ export interface ITransport {
    * @throws `ISDKErrorResponse` on failure
    */
   stream<T>(
-    callback: (readable: Readable) => Promise<T>,
+    callback: (response: Response) => Promise<T>,
     method: HttpMethod,
     path: string,
     queryParams?: Values,
@@ -271,92 +423,141 @@ export interface ITransport {
   ): Promise<T>;
 }
 
-/** A successful SDK call. */
-export interface ISDKSuccessResponse<T> {
-  /** Whether the SDK call was successful. */
-  ok: true;
-  /** The object returned by the SDK call. */
-  value: T;
-}
+export interface IAPIMethods {
+  authSession: IAuthSession;
+  sdkVersion: string;
+  apiPath: string;
+  apiVersion: string;
 
-/** An errant SDK call. */
-export interface ISDKErrorResponse<T> {
-  /** Whether the SDK call was successful. */
-  ok: false;
-  /** The error object returned by the SDK call. */
-  error: T;
-}
+  /** A helper method for simplifying error handling of SDK responses.
+   *
+   * Pass in a promise returned by any SDK method, and it will return a promise
+   * that rejects if the `SDKResponse` is not `ok`. This will swallow the type
+   * information in the error case, but allows you to route all the error cases
+   * into a single promise rejection.
+   *
+   * The promise will have an `Error` rejection reason with a string `message`.
+   * If the server error contains a `message` field, it will be provided, otherwise a
+   * generic message will occur.
+   *
+   * ```ts
+   * const sdk = LookerSDK({...})
+   * let look
+   * try {
+   *    look = await sdk.ok(sdk.create_look({...}))
+   *    // do something with look
+   * }
+   * catch(e) {
+   *    // handle error case
+   * }
+   * ```
+   */
+  ok<TSuccess, TError>(
+    promise: Promise<SDKResponse<TSuccess, TError>>
+  ): Promise<TSuccess>;
 
-/** An error representing an issue in the SDK, like a network or parsing error. */
-export interface ISDKError {
-  type: 'sdk_error';
-  message: string;
-}
+  /**
+   * Determine whether the url should be an API path, relative from base_url, or is already fully specified override
+   * @param path Request path
+   * @param options Transport settings
+   * @param authenticator optional callback
+   * @returns the fully specified request path including any query string parameters
+   */
+  makePath(
+    path: string,
+    options: Partial<ITransportSettings>,
+    authenticator?: Authenticator
+  ): string;
 
-export type SDKResponse<TSuccess, TError> =
-  | ISDKSuccessResponse<TSuccess>
-  | ISDKErrorResponse<TError | ISDKError>;
+  /**
+   *
+   * A helper method to add authentication to an API request for deserialization
+   *
+   * @param method type of HTTP method
+   * @param path API endpoint path
+   * @param queryParams Optional query params collection for request
+   * @param body Optional body for request
+   * @param options Optional overrides like timeout and verify_ssl
+   */
+  authRequest<TSuccess, TError>(
+    method: HttpMethod,
+    path: string,
+    queryParams?: Values,
+    body?: any,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<TSuccess, TError>>;
 
-/** Generic collection */
-export interface IRequestHeaders {
-  [key: string]: string;
-}
+  /**
+   * A helper method to add authentication to an API request for streaming
+   * @param callback
+   * @param method HTTP method
+   * @param path HTTP request path
+   * @param queryParams query string parameters
+   * @param body of the request
+   * @param options Optional overrides like timeout and verify_ssl
+   * @returns {Promise<T>}
+   */
+  authStream<T>(
+    callback: (response: Response) => Promise<T>,
+    method: HttpMethod,
+    path: string,
+    queryParams?: Values,
+    body?: any,
+    options?: Partial<ITransportSettings>
+  ): Promise<T>;
 
-/**
- * Generic http request property collection
- * TODO: Trim this down to what is required
- */
-export interface IRequestProps {
-  [key: string]: any;
-  /** full url for request, including any query params */
-  url: string;
+  /** Make a GET request */
+  get<TSuccess, TError>(
+    path: string,
+    queryParams?: Values,
+    body?: any,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<TSuccess, TError>>;
 
-  /** body of request. optional */
-  body?: any;
-  /** headers for request. optional */
-  headers: IRequestHeaders;
-  /** Http method for request. required. */
-  method: HttpMethod;
-  /** Redirect processing for request. optional */
-  redirect?: any;
-  /** Credentials to use */
-  credentials?: 'include' | 'omit' | 'same-origin' | undefined;
+  /** Make a HEAD request */
+  head<TSuccess, TError>(
+    path: string,
+    queryParams?: Values,
+    body?: any,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<TSuccess, TError>>;
 
-  /** http.Agent instance, allows custom proxy, certificate etc. */
-  agent?: Agent;
-  /** support gzip/deflate content encoding. false to disable */
-  compress?: boolean;
-  /** maximum redirect count. 0 to not follow redirect */
-  follow?: number;
-  /** maximum response body size in bytes */
-  size?: number;
-  /** req/res timeout in ms, it resets on redirect. 0 to disable (OS limit applies) */
-  timeout?: number;
-}
+  /** Make a DELETE request */
+  delete<TSuccess, TError>(
+    path: string,
+    queryParams?: Values,
+    body?: any,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<TSuccess, TError>>;
 
-/** General purpose authentication callback */
-export type Authenticator = (props: any) => any;
+  /** Make a POST request */
+  post<TSuccess, TError>(
+    path: string,
+    queryParams?: Values,
+    body?: any,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<TSuccess, TError>>;
 
-/** Interface for API transport values */
-export interface ITransportSettings {
-  [key: string]: any;
-  /** base URL of API REST web service */
-  base_url: string;
-  /** standard headers to provide in all transport requests */
-  headers?: Headers;
-  /** whether to verify ssl certs or not. Defaults to true */
-  verify_ssl: boolean;
-  /** request timeout in seconds. Default to 30 */
-  timeout: number;
-  /** encoding override */
-  encoding?: string | null;
-  /** agent tag to use for the SDK requests */
-  agentTag: string;
+  /** Make a PUT request */
+  put<TSuccess, TError>(
+    path: string,
+    queryParams?: Values,
+    body?: any,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<TSuccess, TError>>;
+
+  /** Make a PATCH request */
+  patch<TSuccess, TError>(
+    path: string,
+    queryParams?: Values,
+    body?: any,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<TSuccess, TError>>;
 }
 
 /**
  * Is the content type binary or "string"?
- * @param {string} contentType
+ * @param contentType MIME content type description
  * @returns {ResponseMode.binary | ResponseMode.string}
  */
 export function responseMode(contentType: string) {
@@ -426,8 +627,8 @@ export function encodeParams(values?: Values) {
 
   const keys = Object.keys(values);
   return keys
-    .filter((k) => values[k] !== undefined) // `null` and `false` will both be passed
-    .map((k) => k + '=' + encodeParam(values[k]))
+    .filter(k => values[k] !== undefined) // `null` and `false` will both be passed
+    .map(k => k + '=' + encodeParam(values[k]))
     .join('&');
 }
 
@@ -493,8 +694,8 @@ export function sdkError(response: any) {
     }
     if ('message' in error) {
       return new LookerSDKError(response.error.message.toString(), {
-        errors: error.errors,
-        documentation_url: error.documentation_url,
+        errors: error?.errors ?? [],
+        documentation_url: error?.documentation_url ?? '',
       });
     }
     if ('statusMessage' in error) {
@@ -565,4 +766,139 @@ export function isErrorLike<T>(error: T): error is T & { message: string } {
   if (typeof (error as unknown as { message: unknown }).message !== 'string')
     return false;
   return true;
+}
+
+/**
+ * Calculate complete delay for exponential backoff/retry with jitter
+ * @param attempt count of attempts
+ * @param baseDelayMs minimum delay, based on `Retry-After` header
+ * @param maxDelayMs maximum delay to allow
+ * @param jitterFactor multiplication factor for jitter value
+ */
+export function jittery(
+  attempt: number,
+  baseDelayMs = 1000,
+  maxDelayMs = 10000,
+  jitterFactor = 0.5
+): number {
+  // Exponential Backoff: Double the delay with each retry
+  let exponentialDelay = baseDelayMs * Math.pow(2, attempt);
+
+  // Cap the delay to prevent excessive wait times
+  exponentialDelay = Math.min(exponentialDelay, maxDelayMs);
+
+  // Apply Jitter: Introduce randomness to avoid retry collisions
+  const jitter = Math.random() * jitterFactor * exponentialDelay;
+  const delayWithJitter = exponentialDelay + jitter;
+
+  return delayWithJitter;
+}
+
+/**
+ * Default retry waiting function. Called after jitter period is calculated
+ * @param wait parameters for request/response/attempt and wait time
+ */
+export async function retryWait(wait: IWait): Promise<IWaitResponse> {
+  await sleep(wait.waitMS);
+  return { response: 'retry', reason: `waited ${wait.waitMS} ms` };
+}
+
+/**
+ * Calculate the jitter time and call the waiter
+ * @param rawRequest request that had a retry. `options.maxTries` is available here.
+ * @param rawResponse retry response
+ * @param attempt count of attempts made.
+ * @param waiter function to perform waiting process
+ */
+export async function pauseForRetry(
+  rawRequest: IRawRequest,
+  rawResponse: IRawResponse,
+  attempt: number,
+  waiter: Waitable = retryWait
+) {
+  // calculate minimum delay in MS
+  const retryAfter = rawResponse.headers['Retry-After'];
+  const after = (retryAfter ? Number(retryAfter) : 1.0) * 1000;
+  // randomize the retry
+  const jitter = jittery(attempt, after);
+  const response = await waiter({
+    request: rawRequest,
+    response: rawResponse,
+    attempt,
+    waitMS: jitter,
+  });
+  return response;
+}
+
+/**
+ * Merge base settings with custom settings, ensuring no header overrides are lost
+ * @param base settings
+ * @param custom settings
+ */
+export const mergeOptions = (
+  base: Partial<ITransportSettings>,
+  custom: Partial<ITransportSettings>
+): Partial<ITransportSettings> => {
+  const headers = { ...base.headers, ...custom.headers } ?? {};
+  const result = { ...base, ...custom, ...{ headers } };
+  return result;
+};
+
+/**
+ * Create a default "no reply" response object for retry loops
+ * @param method Http method for initialization
+ * @param requestPath Http path for request to initialize
+ */
+export function initResponse(
+  method: HttpMethod,
+  requestPath: string
+): IRawResponse {
+  return {
+    method,
+    url: requestPath,
+    body: 'no reply at all',
+    contentType: 'text/plain',
+    ok: false,
+    statusCode: 404,
+    statusMessage: 'Not found',
+    headers: {},
+    requestStarted: 0,
+    responseCompleted: 0,
+  };
+}
+
+/**
+ * Modify and return response object indicating retry waiting had an error
+ * @param response to modify
+ */
+export function retryError(response: IRawResponse): IRawResponse {
+  // retry wait function decided on 'error' so throw an error equivalent
+  response.statusCode = StatusCode.RequestTimeout;
+  response.ok = false;
+  if (!response.statusMessage) {
+    response.statusMessage = 'Retry waiting exited with an error condition';
+  }
+  return response;
+}
+
+/**
+ * should the request verify SSL?
+ * @param options Defaults to the instance options values
+ * @returns true (the default) if the request should require full SSL verification
+ */
+export function verifySsl(options?: Partial<ITransportSettings>) {
+  return options && 'verify_ssl' in options ? options.verify_ssl : true;
+}
+
+/**
+ * Get the HTTP request timeout, in seconds
+ *
+ * The configured timeout value must be > 0 to be used
+ *
+ * @param options Defaults to `defaultTimeout`
+ */
+export function sdkTimeout(options?: Partial<ITransportSettings>): number {
+  if (options && 'timeout' in options && options.timeout && options.timeout > 0)
+    return options.timeout;
+  return defaultTimeout;
 }

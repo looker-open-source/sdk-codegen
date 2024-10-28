@@ -89,7 +89,7 @@ export abstract class ItemList<T extends Record<string, any>>
   index(key: keyof T = this.keyField) {
     this.keyField = key as string;
     this.indexedItems = {};
-    this.items.forEach((el) => {
+    this.items.forEach(el => {
       if (el && el?.[this.keyField]) {
         this.indexedItems[el[this.keyField]] = el;
       }
