@@ -24,7 +24,6 @@
 
  */
 
-import type { MouseEvent } from 'react';
 import { NOT_DASHBOARD_MOUNT_NOT_SUPPORTED_ERROR } from '../../util/errors';
 import { ExtensionRequestType } from '../types';
 import type { ExtensionHostApiImpl } from '../extension_host_api';
