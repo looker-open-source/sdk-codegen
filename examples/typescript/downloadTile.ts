@@ -25,14 +25,13 @@
  */
 
 import * as fs from 'fs';
-import { Readable } from 'stream';
+import { Looker40SDK as LookerSDK, Looker40SDKStream } from '@looker/sdk';
+import type { IDashboardElement, IRequestRunQuery } from '@looker/sdk';
 import {
-  Looker40SDK as LookerSDK,
-  IDashboardElement,
-  IRequestRunQuery,
-  Looker40SDKStream,
-} from '@looker/sdk';
-import { NodeSettingsIniFile, NodeSession } from '@looker/sdk-node';
+  NodeSettingsIniFile,
+  NodeSession,
+  createWritableStream,
+} from '@looker/sdk-node';
 import {
   getDashboard,
   getDashboardTile,
@@ -77,8 +76,8 @@ const getParams = () => {
 
 /**
  * Is this format renderable?
- * @param {string} format to render
- * @returns {boolean} true if render_task can be used for this format
+ * @param format to render
+ * @returns true if render_task can be used for this format
  */
 const isRenderable = (format: string) => {
   format = format.toLowerCase();
@@ -87,12 +86,12 @@ const isRenderable = (format: string) => {
 
 /**
  * Renders a dashboard tile's query as PNG or JPG
- * @param {LookerSDK} sdk object to use
- * @param {IDashboardElement} tile to render (using query_id)
- * @param {string} format either png or jpg
- * @param {number} width defaults to 640
- * @param {number} height defaults to 480
- * @returns {Promise<string>} name of downloaded file (undefined on failure)
+ * @param sdk object to use
+ * @param tile to render (using query_id)
+ * @param format either png or jpg
+ * @param width defaults to 640
+ * @param height defaults to 480
+ * @returns name of downloaded file (undefined on failure)
  *
  * **Note:** run_query can also be used for PNG and JPG output, but this function will show an elapsed time ticker via
  * the `waitForRender()` callback as the render is progressing
@@ -113,10 +112,11 @@ const renderTile = async (
     throw new Error(`Could not create a render task for ${tile.title}`);
   }
 
+  // eslint-disable-next-line testing-library/render-result-naming-convention
   const result = await waitForRender(sdk, task.id!);
   if (result) {
     fileName = `${tile.title}.${format}`;
-    fs.writeFile(fileName, result, 'binary', (err) => {
+    fs.writeFile(fileName, result, 'binary', err => {
       if (err) {
         fileName = undefined; // no file was created
         throw err;
@@ -128,20 +128,19 @@ const renderTile = async (
 
 /**
  * Use the streaming SDK to download a tile's query
- * @param {LookerSDK} sdk to use
- * @param {IDashboardElement} tile to download
- * @param {string} format to download
- * @returns {Promise<string>} name of downloaded file (undefined on failure)
+ * @param sdk to use
+ * @param tile to download
+ * @param format to download
+ * @returns name of downloaded file (undefined on failure)
  */
 const downloadTileAs = async (
   sdk: LookerSDK,
   tile: IDashboardElement,
   format: string
 ) => {
-  let fileName;
-  fileName = `${tile.title}.${format}`;
+  const fileName = `${tile.title}.${format}`;
 
-  const writer = fs.createWriteStream(fileName);
+  const writer = createWritableStream(fs.createWriteStream(fileName));
   const request: IRequestRunQuery = {
     result_format: format,
     query_id: tile.query_id!,
@@ -149,16 +148,9 @@ const downloadTileAs = async (
     // apply_vis: true
   };
   const sdkStream = new Looker40SDKStream(sdk.authSession);
-  await sdkStream.run_query(async (readable: Readable) => {
-    return new Promise<any>((resolve, reject) => {
-      readable
-        .pipe(writer)
-        .on('error', () => {
-          fileName = undefined;
-          throw reject;
-        })
-        .on('finish', resolve);
-    });
+  await sdkStream.run_query(async (response: Response) => {
+    await response.body.pipeTo(writer);
+    return 'streamed';
   }, request);
 
   return fileName;
@@ -166,10 +158,10 @@ const downloadTileAs = async (
 
 /**
  * Download a dashboard tile in any of its supported formats
- * @param {LookerSDK} sdk initialized Looker SDK
- * @param {IDashboardElement} tile Dashboard tile to render
- * @param {string} format format of rendering
- * @returns {Promise<undefined | string>} Name of file downloaded
+ * @param sdk initialized Looker SDK
+ * @param tile Dashboard tile to render
+ * @param format format of rendering
+ * @returns Name of file downloaded
  */
 const downloadTile = async (
   sdk: LookerSDK,

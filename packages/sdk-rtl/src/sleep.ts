@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2023 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -24,5 +24,12 @@
 
  */
 
-export * from './mocks';
-export * from './testUtils';
+/**
+ * Simple async sleep function using setTimeout
+ * @param timeMs milliseconds to sleep
+ */
+export async function sleep(timeMs: number) {
+  return new Promise(resolve => {
+    setTimeout(resolve, timeMs);
+  });
+}

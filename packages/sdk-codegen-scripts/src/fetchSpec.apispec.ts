@@ -24,8 +24,11 @@
 
  */
 
-import { getSpecsFromVersions } from '@looker/sdk-codegen';
-import { TestConfig } from './testUtils';
+import fs from 'fs';
+import { describe, it } from 'node:test';
+import { expect } from 'expect';
+import { getSpecsFromVersions, specToModel } from '@looker/sdk-codegen';
+import { TestConfig } from '@looker/sdk-codegen-utils';
 import {
   fetchLookerVersion,
   fetchLookerVersions,
@@ -35,9 +38,12 @@ import {
   supportedVersion,
 } from './fetchSpec';
 import type { ISDKConfigProps } from './sdkConfig';
+import { ApiConfigSection } from '@looker/sdk-node';
 
-const config = TestConfig();
-const props = config.section as unknown as ISDKConfigProps;
+const config = TestConfig(specToModel);
+const props = ApiConfigSection(
+  fs.readFileSync(config.localIni, 'utf8')
+) as unknown as ISDKConfigProps;
 // api_version is no longer part of the INI, now set by sdkGen iterator
 props.api_version = '4.0';
 
@@ -46,10 +52,10 @@ describe('fetch operations', () => {
     const testProps = JSON.parse(JSON.stringify(props));
     testProps.base_url = 'https://bogus-server.looker.com:99';
     const actual = await fetchLookerVersion(testProps, undefined, {
-      timeout: 5,
+      timeout: 3,
     });
     expect(actual).toEqual('');
-  }, 36000);
+  });
 
   it('gets lookerVersion with good server', async () => {
     const actual = await fetchLookerVersion(props);

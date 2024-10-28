@@ -1,6 +1,6 @@
 {
   "name": "@looker/extension-sdk-react",
-  "version": "24.4.0",
+  "version": "24.18.1",
   "description": "Looker Extension SDK for React",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
@@ -44,9 +44,9 @@
     "react-router-dom": "^5.3.4"
   },
   "dependencies": {
-    "@looker/extension-sdk": "24.4.0",
-    "@looker/sdk": "24.4.0",
-    "@looker/sdk-rtl": "21.6.1",
+    "@looker/extension-sdk": "24.18.1",
+    "@looker/sdk": "24.18.1",
+    "@looker/sdk-rtl": "21.6.3",
     "history": "^4.10.1",
     "lodash": "4.17.21"
   },

@@ -24,7 +24,6 @@
 
  */
 
-import type { Readable } from 'readable-stream';
 import type {
   Authenticator,
   HttpMethod,
@@ -78,7 +77,7 @@ export class SdkConnection implements IHostConnection {
   }
 
   async stream<T>(
-    _callback: (readable: Readable) => Promise<T>,
+    _callback: (response: Response) => Promise<T>,
     _method: HttpMethod,
     _path: string,
     _queryParams?: Values,

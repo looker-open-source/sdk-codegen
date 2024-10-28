@@ -12,6 +12,58 @@
   - devDependencies
     - @looker/sdk-codegen bumped from ^21.8.1 to ^21.8.2
 
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen bumped from 21.8.2 to 21.9.0
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen bumped from 21.9.2 to 21.9.3
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen bumped from 21.9.3 to 21.9.4
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen bumped from 21.9.4 to 21.9.5
+
+## [0.1.33](https://github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.32...code-editor-v0.1.33) (2024-09-14)
+
+
+### Bug Fixes
+
+* fix release 24.16.2 ([#1505](https://github.com/looker-open-source/sdk-codegen/issues/1505)) ([1cd1806](https://github.com/looker-open-source/sdk-codegen/commit/1cd180615901d2daf1fb112b41f2a72d2caacf61))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen bumped from 21.9.1 to 21.9.2
+
+## [0.1.32](https://github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.31...code-editor-v0.1.32) (2024-09-11)
+
+
+### Bug Fixes
+
+* Remove the requests package from the TypeScript SDK ([#1491](https://github.com/looker-open-source/sdk-codegen/issues/1491)) ([670377c](https://github.com/looker-open-source/sdk-codegen/commit/670377c46a546bbd8dcc6679b8aeb041da1b4670)), closes [#1439](https://github.com/looker-open-source/sdk-codegen/issues/1439)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen bumped from 21.9.0 to 21.9.1
+
 ## [0.1.28](https://github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.27...code-editor-v0.1.28) (2023-02-22)
 
 ### Features

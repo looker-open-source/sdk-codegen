@@ -106,7 +106,7 @@ export const diffToSpec = (
   result.tags = {};
   result.methods = {};
 
-  delta.forEach((row) => {
+  delta.forEach(row => {
     const name = row.name;
     let method = lSpec.methods[name];
     if (!method) method = rSpec.methods[name];

@@ -49,7 +49,7 @@ export interface IGeneratorSpec {
 }
 
 // To disable generation of any language specification, just comment it out
-export const Generators: Array<IGeneratorSpec> = [
+export const Generators: IGeneratorSpec[] = [
   {
     factory: (api: ApiModel, versions?: IVersionInfo) =>
       new PythonGen(api, versions),
@@ -119,7 +119,7 @@ export const Generators: Array<IGeneratorSpec> = [
   // },
 ];
 
-export const codeGenerators = Generators.filter((x) => x.factory !== undefined);
+export const codeGenerators = Generators.filter(x => x.factory !== undefined);
 
 /**
  * Matches the code generator based on the language name, alias, file extension, or legacy name
@@ -130,7 +130,7 @@ export const findGenerator = (target: string) => {
   target = target.toLocaleLowerCase();
   // Convenience alias
   return codeGenerators.find(
-    (item) =>
+    item =>
       item.language.toLocaleLowerCase() === target ||
       target.match(item.extension) ||
       ('.' + target).match(item.extension) ||
@@ -162,6 +162,6 @@ export const getCodeGenerator = (
   return undefined;
 };
 
-export const legacyLanguages = (): Array<IGeneratorSpec> => {
-  return Generators.filter((x) => !!x.legacy);
+export const legacyLanguages = (): IGeneratorSpec[] => {
+  return Generators.filter(x => !!x.legacy);
 };

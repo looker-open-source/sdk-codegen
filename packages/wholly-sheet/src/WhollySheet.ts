@@ -58,7 +58,7 @@ export class TypedRows<T> {
 
   constructor(rows: T[], Maker?: IMaker<T>) {
     if (Maker) {
-      this.rows = rows.map((v) => new Maker(v));
+      this.rows = rows.map(v => new Maker(v));
     } else {
       this.rows = rows;
     }
@@ -300,7 +300,7 @@ export abstract class WhollySheet<T extends IRowModel, P>
     const result: T[] = [];
     let pos = 1;
 
-    rows.forEach((r) => {
+    rows.forEach(r => {
       const row: T = this.typeRow(r);
       pos++;
       // fixup row position?
@@ -352,14 +352,14 @@ export abstract class WhollySheet<T extends IRowModel, P>
 
   private createIndex() {
     this.index = {};
-    this.rows.forEach((r) => {
+    this.rows.forEach(r => {
       this.index[r[this.keyColumn]] = r;
     });
   }
 
   values<T extends IRowModel>(model: T) {
     const result: SheetValues = [];
-    this.header.forEach((h) => {
+    this.header.forEach(h => {
       result.push(stringer(model[h]));
     });
     return result;
@@ -367,7 +367,7 @@ export abstract class WhollySheet<T extends IRowModel, P>
 
   allValues(): SheetValues {
     const values: SheetValues = [this.header];
-    values.push(...this.rows.map((r) => this.values(r)));
+    values.push(...this.rows.map(r => this.values(r)));
     return values;
   }
 
@@ -429,7 +429,7 @@ export abstract class WhollySheet<T extends IRowModel, P>
     if (result.values) {
       // This returns an array of values with 1 entry per row value array
       const updateValues = result.values[0];
-      rowPos = this.rows.findIndex((row) => (row._row = model._row));
+      rowPos = this.rows.findIndex(row => (row._row = model._row));
       this.rows[rowPos].assign(updateValues);
     }
     // ID may have changed?
@@ -448,13 +448,13 @@ export abstract class WhollySheet<T extends IRowModel, P>
       // Find by index
       return WhollySheet.toAT(this.index[value.toString()]);
     }
-    return WhollySheet.toAT(this.rows.find((r) => r[key] === value));
+    return WhollySheet.toAT(this.rows.find(r => r[key] === value));
   }
 
   private _displayHeader: ColumnHeaders = [];
   get displayHeader(): ColumnHeaders {
     if (this._displayHeader.length === 0) {
-      this._displayHeader = this.header.filter((colName) =>
+      this._displayHeader = this.header.filter(colName =>
         this.displayable(colName)
       );
     }
@@ -527,7 +527,7 @@ export abstract class WhollySheet<T extends IRowModel, P>
   }
 
   toObject(): P[] {
-    return this.rows.map((r) => r.toObject() as unknown as P);
+    return this.rows.map(r => r.toObject() as unknown as P);
   }
 
   async batchUpdate<T extends IRowModel>(force = false): Promise<T[]> {
@@ -541,12 +541,12 @@ export abstract class WhollySheet<T extends IRowModel, P>
   }
 
   getDelta<T extends IRowModel>(): IRowDelta<T> {
-    const updates = this.rows.filter((r) => r.$action === RowAction.Update);
+    const updates = this.rows.filter(r => r.$action === RowAction.Update);
     // Sort deletions in descending row order
     const deletes = this.rows
-      .filter((r) => r.$action === RowAction.Delete)
+      .filter(r => r.$action === RowAction.Delete)
       .sort((a, b) => b._row - a._row);
-    const creates = this.rows.filter((r) => r.$action === RowAction.Create);
+    const creates = this.rows.filter(r => r.$action === RowAction.Create);
 
     return {
       updates: updates as unknown as T[],
@@ -559,9 +559,9 @@ export abstract class WhollySheet<T extends IRowModel, P>
     values: SheetValues,
     delta: IRowDelta<T>
   ): SheetValues {
-    delta.updates.forEach((u) => (values[u._row - 1] = this.values(u)));
-    delta.deletes.forEach((d) => values.splice(d._row - 1, 1));
-    delta.creates.forEach((c) => values.push(this.values(c)));
+    delta.updates.forEach(u => (values[u._row - 1] = this.values(u)));
+    delta.deletes.forEach(d => values.splice(d._row - 1, 1));
+    delta.creates.forEach(c => values.push(this.values(c)));
     return values;
   }
 
@@ -573,10 +573,10 @@ export abstract class WhollySheet<T extends IRowModel, P>
     if (!force) {
       const errors = [];
       try {
-        delta.updates.forEach((u) =>
+        delta.updates.forEach(u =>
           this.checkOutdated(u, this.typeRow(values[u._row - 1]))
         );
-        delta.deletes.forEach((d) =>
+        delta.deletes.forEach(d =>
           this.checkOutdated(d, this.typeRow(values[d._row - 1]))
         );
       } catch (e: any) {
@@ -584,8 +584,8 @@ export abstract class WhollySheet<T extends IRowModel, P>
       }
       if (errors.length > 0) throw new SheetError(errors.join('\n'));
     }
-    delta.updates.forEach((u) => u.prepare());
-    delta.creates.forEach((c) => c.prepare());
+    delta.updates.forEach(u => u.prepare());
+    delta.creates.forEach(c => c.prepare());
     return true;
   }
 }

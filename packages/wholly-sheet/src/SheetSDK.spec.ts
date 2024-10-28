@@ -69,13 +69,13 @@ describe('SheetSDK', () => {
       expect(actual).toBeDefined();
       expect(actual.sheets.length).toBeGreaterThan(0);
       expect(Object.entries(actual.tabs).length).toEqual(actual.sheets.length);
-      actual.sheets.forEach((t) => {
+      actual.sheets.forEach(t => {
         const tab = actual.tabs[tabName(t)];
         expect(tab).toBeDefined();
         expect(tab.header).toBeDefined();
         expect(tab.header.length).toBeGreaterThan(0);
         // No empty data rows
-        tab.rows.forEach((row) => {
+        tab.rows.forEach(row => {
           expect(Object.keys(row).length).toBeGreaterThan(0);
           expect(row._row).toBeGreaterThan(0);
         });

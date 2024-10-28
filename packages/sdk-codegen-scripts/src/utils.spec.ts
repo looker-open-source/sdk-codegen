@@ -86,7 +86,7 @@ describe.skip('utils', () => {
       if (path.match(/\.env/)) return '';
       return JSON.stringify(mockVersions);
     });
-    jest.spyOn(fs, 'existsSync').mockImplementation((_path) => {
+    jest.spyOn(fs, 'existsSync').mockImplementation(_path => {
       return true;
     });
   });
@@ -94,8 +94,8 @@ describe.skip('utils', () => {
   describe('doArgs', () => {
     test('no args', () => {
       const expLangs = codeGenerators
-        .filter((l) => l.factory !== undefined)
-        .map((l) => l.language);
+        .filter(l => l.factory !== undefined)
+        .map(l => l.language);
 
       const actual = doArgs([]);
       expect(actual).toBeDefined();
@@ -129,8 +129,8 @@ describe.skip('utils', () => {
   describe('prepGen', () => {
     test('default prepGen', async () => {
       const expLangs = codeGenerators
-        .filter((l) => l.factory !== undefined)
-        .map((l) => l.language);
+        .filter(l => l.factory !== undefined)
+        .map(l => l.language);
       const release = mockVersions.looker_release_version
         .split('.', 2)
         .join('.');
@@ -148,8 +148,8 @@ describe.skip('utils', () => {
     });
     test('prepGen ts', async () => {
       const expLangs = codeGenerators
-        .filter((l) => l.factory !== undefined)
-        .map((l) => l.language);
+        .filter(l => l.factory !== undefined)
+        .map(l => l.language);
       const release = mockVersions.looker_release_version
         .split('.', 2)
         .join('.');

@@ -111,7 +111,7 @@ export class DeclarationMiner {
       ['node_modules', 'dist']
     );
 
-    files.forEach((f) => {
+    files.forEach(f => {
       const relFile = this.processFile(f);
       const fileName = path.basename(relFile);
       if (mProbe.fileNamePattern.test(fileName)) {

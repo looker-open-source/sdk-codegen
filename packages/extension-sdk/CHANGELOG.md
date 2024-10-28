@@ -5,6 +5,148 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [24.18.1](https://github.com/looker-open-source/sdk-codegen/compare/extension-sdk-v24.18.0...extension-sdk-v24.18.1) (2024-10-21)
+
+
+### Miscellaneous Chores
+
+* **extension-sdk:** Synchronize undefined versions
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from 24.18.0 to 24.18.1
+
+## [24.18.0](https://github.com/looker-open-source/sdk-codegen/compare/extension-sdk-v24.16.2...extension-sdk-v24.18.0) (2024-10-11)
+
+
+### Miscellaneous Chores
+
+* **extension-sdk:** Synchronize undefined versions
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from 24.16.2 to 24.18.0
+
+## [24.16.2](https://github.com/looker-open-source/sdk-codegen/compare/extension-sdk-v24.16.1...extension-sdk-v24.16.2) (2024-09-16)
+
+
+### Miscellaneous Chores
+
+* **extension-sdk:** Synchronize undefined versions
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from 24.16.1 to 24.16.2
+
+## [24.16.1](https://github.com/looker-open-source/sdk-codegen/compare/extension-sdk-v24.16.0...extension-sdk-v24.16.1) (2024-09-14)
+
+
+### Bug Fixes
+
+* fix release 24.16.2 ([#1505](https://github.com/looker-open-source/sdk-codegen/issues/1505)) ([1cd1806](https://github.com/looker-open-source/sdk-codegen/commit/1cd180615901d2daf1fb112b41f2a72d2caacf61))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from 24.16.0 to 24.16.1
+    * @looker/sdk-rtl bumped from 21.6.2 to 21.6.3
+
+## [24.16.0](https://github.com/looker-open-source/sdk-codegen/compare/extension-sdk-v24.14.0...extension-sdk-v24.16.0) (2024-09-11)
+
+
+### Bug Fixes
+
+* Remove the requests package from the TypeScript SDK ([#1491](https://github.com/looker-open-source/sdk-codegen/issues/1491)) ([670377c](https://github.com/looker-open-source/sdk-codegen/commit/670377c46a546bbd8dcc6679b8aeb041da1b4670)), closes [#1439](https://github.com/looker-open-source/sdk-codegen/issues/1439)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from 24.14.0 to 24.16.0
+    * @looker/sdk-rtl bumped from 21.6.1 to 21.6.2
+
+## [24.14.0](https://github.com/looker-open-source/sdk-codegen/compare/extension-sdk-v24.12.1...extension-sdk-v24.14.0) (2024-08-12)
+
+
+### Miscellaneous Chores
+
+* **extension-sdk:** Synchronize undefined versions
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from 24.12.1 to 24.14.0
+
+## [24.12.1](https://github.com/looker-open-source/sdk-codegen/compare/extension-sdk-v24.12.0...extension-sdk-v24.12.1) (2024-07-29)
+
+
+### Miscellaneous Chores
+
+* **extension-sdk:** Synchronize undefined versions
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from 24.12.0 to 24.12.1
+
+## [24.12.0](https://github.com/looker-open-source/sdk-codegen/compare/extension-sdk-v24.10.0...extension-sdk-v24.12.0) (2024-07-15)
+
+
+### Miscellaneous Chores
+
+* **extension-sdk:** Synchronize undefined versions
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from 24.10.0 to 24.12.0
+
+## [24.10.0](https://github.com/looker-open-source/sdk-codegen/compare/extension-sdk-v24.8.0...extension-sdk-v24.10.0) (2024-06-12)
+
+
+### Miscellaneous Chores
+
+* **extension-sdk:** Synchronize undefined versions
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from 24.8.0 to 24.10.0
+
+## [24.8.0](https://github.com/looker-open-source/sdk-codegen/compare/extension-sdk-v24.4.0...extension-sdk-v24.8.0) (2024-05-07)
+
+
+### Miscellaneous Chores
+
+* **extension-sdk:** Synchronize undefined versions
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from 24.4.0 to 24.8.0
+
 ## [24.4.0](https://github.com/looker-open-source/sdk-codegen/compare/extension-sdk-v24.2.1...extension-sdk-v24.4.0) (2024-04-05)
 
 

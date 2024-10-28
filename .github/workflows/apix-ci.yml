@@ -39,19 +39,19 @@ jobs:
       matrix:
         os:
           - ubuntu
-        node-version: [18.x]
+        node-version: [22.x]
 
     steps:
       - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.11.0
+        uses: styfle/cancel-workflow-action@0.12.1
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Repo Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Node ${{ matrix.node-version }}
-        uses: actions/setup-node@v3.6.0
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -85,10 +85,10 @@ jobs:
 
       - name: Upload ts unit test results
         if: ${{ always() }}
-        uses: actions/upload-artifact@v3.1.2
+        uses: actions/upload-artifact@v4
         with:
           name: apix-test-results
-          path: results/apix
+          path: results/apix-${{ matrix.os }}-${{ matrix.node-version }}
 
   publish-test-results:
     needs: [unit]
@@ -97,12 +97,12 @@ jobs:
 
     steps:
       - name: Download Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           path: artifacts
 
       - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1.12
+        uses: EnricoMi/publish-unit-test-result-action@v2
         with:
           # Cosmetic issue with `check_name` being associated to the wrong
           # workflow: https://github.com/EnricoMi/publish-unit-test-result-action/issues/12
@@ -111,4 +111,4 @@ jobs:
           report_individual_runs: true
           hide_comments: orphaned commits
           check_run_annotations_branch: '*'
-          files: 'artifacts/apix-test-results/*.xml'
+          files: 'artifacts/apix-test-results*/*.xml'

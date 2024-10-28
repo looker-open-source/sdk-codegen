@@ -5,6 +5,86 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [24.18.1](https://github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v24.18.0...looker_sdk-v24.18.1) (2024-10-21)
+
+
+### Bug Fixes
+
+* Fix bad python package exclude ([#1521](https://github.com/looker-open-source/sdk-codegen/issues/1521)) ([5afd34b](https://github.com/looker-open-source/sdk-codegen/commit/5afd34b8708404ef919a35275370a98ec4797cfd))
+
+## [24.18.0](https://github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v24.16.2...looker_sdk-v24.18.0) (2024-10-11)
+
+
+### Features
+
+* generate SDKs for Looker 24.18 ([#1515](https://github.com/looker-open-source/sdk-codegen/issues/1515)) ([745a3a0](https://github.com/looker-open-source/sdk-codegen/commit/745a3a038869a93dc508fca2224440b3026b81ce))
+
+## [24.16.2](https://github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v24.16.1...looker_sdk-v24.16.2) (2024-09-16)
+
+
+### Miscellaneous Chores
+
+* **looker_sdk:** Synchronize undefined versions
+
+## [24.16.1](https://github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v24.16.0...looker_sdk-v24.16.1) (2024-09-14)
+
+
+### Bug Fixes
+
+* fix release 24.16.2 ([#1505](https://github.com/looker-open-source/sdk-codegen/issues/1505)) ([1cd1806](https://github.com/looker-open-source/sdk-codegen/commit/1cd180615901d2daf1fb112b41f2a72d2caacf61))
+
+## [24.16.0](https://github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v24.14.0...looker_sdk-v24.16.0) (2024-09-11)
+
+
+### Features
+
+* generate SDKs for Looker 24.16 ([#1499](https://github.com/looker-open-source/sdk-codegen/issues/1499)) ([109839d](https://github.com/looker-open-source/sdk-codegen/commit/109839d2d4fae10e7aeab088378bba5e2b368019))
+
+## [24.14.0](https://github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v24.12.1...looker_sdk-v24.14.0) (2024-08-12)
+
+
+### Features
+
+* generate SDKs for Looker 24.14 ([#1490](https://github.com/looker-open-source/sdk-codegen/issues/1490)) ([1d72127](https://github.com/looker-open-source/sdk-codegen/commit/1d72127cebab0d1d9f03acc8281e3b14a16e8437))
+
+## [24.12.1](https://github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v24.12.0...looker_sdk-v24.12.1) (2024-07-29)
+
+
+### Bug Fixes
+
+* **python SDKError:** Fixed SDKError __str__ ([#1480](https://github.com/looker-open-source/sdk-codegen/issues/1480)) ([#1486](https://github.com/looker-open-source/sdk-codegen/issues/1486)) ([d8907fe](https://github.com/looker-open-source/sdk-codegen/commit/d8907fed8316bd89c055a4cb8fdef4a5770381dd))
+
+## [24.12.0](https://github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v24.10.0...looker_sdk-v24.12.0) (2024-07-15)
+
+
+### Features
+
+* generate SDKs for Looker 24.12 ([#1483](https://github.com/looker-open-source/sdk-codegen/issues/1483)) ([fba2a3a](https://github.com/looker-open-source/sdk-codegen/commit/fba2a3a7cee7863a3765c6bb40d8a897063ef225))
+
+## [24.10.0](https://github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v24.8.0...looker_sdk-v24.10.0) (2024-06-12)
+
+
+### Features
+
+* generate SDKs for Looker 24.10 ([#1472](https://github.com/looker-open-source/sdk-codegen/issues/1472)) ([5f8b10d](https://github.com/looker-open-source/sdk-codegen/commit/5f8b10dd43d8e688644e7d28a7318c06ccee1877))
+
+
+### Bug Fixes
+
+* **deps:** limit cattrs to versions &lt;23.2 ([#1469](https://github.com/looker-open-source/sdk-codegen/issues/1469)) ([b01b08d](https://github.com/looker-open-source/sdk-codegen/commit/b01b08d96c35cf44beadf677b6d4a2ecf1d52c19)), closes [#1468](https://github.com/looker-open-source/sdk-codegen/issues/1468)
+
+## [24.8.0](https://github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v24.4.0...looker_sdk-v24.8.0) (2024-05-07)
+
+
+### Features
+
+* generate SDKs for Looker 24.8 ([#1462](https://github.com/looker-open-source/sdk-codegen/issues/1462)) ([79228ad](https://github.com/looker-open-source/sdk-codegen/commit/79228adaff67bde216383801711c8cd7a2464edf))
+
+
+### Bug Fixes
+
+* backslash in regex causing warnings - switch to raw string ([#1461](https://github.com/looker-open-source/sdk-codegen/issues/1461)) ([6781219](https://github.com/looker-open-source/sdk-codegen/commit/6781219fe87a9dd3c39ac107cdb099261d97ec93))
+
 ## [24.4.0](https://github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v24.2.1...looker_sdk-v24.4.0) (2024-04-05)
 
 

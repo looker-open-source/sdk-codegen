@@ -135,7 +135,7 @@ export const DocSdkUsage: FC<DocSdkUsageProps> = ({ method }) => {
             <Pagination
               current={page}
               pages={pageLimit}
-              onChange={(nextPage) => {
+              onChange={nextPage => {
                 setPage(nextPage);
               }}
             />

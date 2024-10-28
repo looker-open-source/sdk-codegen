@@ -281,7 +281,7 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
           }
         }
       }
-      Object.keys(value).forEach((k) => {
+      Object.keys(value).forEach(k => {
         const v = this.typeCast(k, value[k]);
         (this as any)[k] = typeof v === 'string' ? decodeURI(v) : v;
       });
@@ -375,14 +375,14 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
   header(): ColumnHeaders {
     const keys = this.keys();
     const result = keys.filter(
-      (v) => !(v.startsWith('$') || RowModel.hide.has(v))
+      v => !(v.startsWith('$') || RowModel.hide.has(v))
     );
     return result;
   }
 
   displayHeader(): ColumnHeaders {
     return this.header().filter(
-      (v) => !(v.startsWith('_') || RowModel.hide.has(v))
+      v => !(v.startsWith('_') || RowModel.hide.has(v))
     );
   }
 
@@ -400,7 +400,7 @@ export abstract class RowModel<T extends IRowModel> implements IRowModel {
   values() {
     const result: SheetValues = [];
     const keys = this.header();
-    keys.forEach((key) => {
+    keys.forEach(key => {
       result.push(stringer((this as any)[key]));
     });
     return result;

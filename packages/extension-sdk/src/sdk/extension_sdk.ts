@@ -35,20 +35,12 @@ import { SdkConnection } from './sdk_connection';
 
 export class LookerExtensionSDK {
   /**
-   * Create an SDK client that uses SDK 4.0
-   * @param hostConnection extension host API
+   * Creates a [[LookerSDK]] 4.0 object.
    */
-  static create40Client(hostConnection: ExtensionHostApi): Looker40SDK {
-    return _LookerExtensionSDK.createClient(
-      new SdkConnection(hostConnection, ApiVersion.sdk40),
-      Looker40SDK
-    );
-  }
-
-  /**
-   * Creates a [[LookerSDK]] object.
-   */
-  static createClient(hostConnection: ExtensionHostApi) {
-    return LookerExtensionSDK.create40Client(hostConnection);
+  static createClient(hostConnection: ExtensionHostApi): Looker40SDK {
+    const sdk = new SdkConnection(hostConnection, ApiVersion.sdk40);
+    return _LookerExtensionSDK.createClient(sdk, Looker40SDK);
   }
 }
+
+export type LookerExtensionSDK40 = LookerExtensionSDK;

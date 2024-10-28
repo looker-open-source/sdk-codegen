@@ -98,7 +98,7 @@ export const runConfig = async (
   for (const language of languages) {
     if (
       targets.length === 0 ||
-      targets.find((t) => t.localeCompare(language.language) === 0)
+      targets.find(t => t.localeCompare(language.language) === 0)
     ) {
       const tag = `${name} API ${language.language} version ${apiVersion}`;
       log(`generating ${tag} ...`);

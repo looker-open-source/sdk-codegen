@@ -31,7 +31,7 @@ import type { MethodList } from '@looker/sdk-codegen';
  */
 export const getOperations = (methods: MethodList) => {
   const operationsSet = new Set<string>();
-  Object.values(methods).forEach((method) => {
+  Object.values(methods).forEach(method => {
     operationsSet.add(method.httpMethod);
   });
   return Array.from(operationsSet.values());

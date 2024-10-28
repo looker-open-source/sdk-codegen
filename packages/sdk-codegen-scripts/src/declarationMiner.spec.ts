@@ -26,15 +26,16 @@
 
 import path from 'path';
 import { NodeSettingsIniFile } from '@looker/sdk-node';
+import { TestConfig } from '@looker/sdk-codegen-utils';
 
 import {
   DeclarationMiner,
   rubyMethodProbe,
   rubyTypeProbe,
 } from './declarationMiner';
-import { TestConfig } from './testUtils';
+import { specToModel } from '@looker/sdk-codegen';
 
-const config = TestConfig();
+const config = TestConfig(specToModel);
 
 /**
  * This test suite requires a "Miner" section in the root's looker.ini with a

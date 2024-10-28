@@ -61,8 +61,8 @@ const getBodySize = (response: ResponseContent): string => {
     !response || !response.body
       ? 0
       : response?.body instanceof Blob
-        ? response?.body.size
-        : response?.body.toString().length;
+      ? response?.body.size
+      : response?.body.toString().length;
 
   return `${size} bytes`;
 };

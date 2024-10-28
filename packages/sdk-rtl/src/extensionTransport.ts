@@ -24,10 +24,10 @@
 
  */
 
-import type { Readable } from 'readable-stream';
 import type {
   Authenticator,
   HttpMethod,
+  IRawRequest,
   IRawResponse,
   ITransport,
   ITransportSettings,
@@ -56,7 +56,7 @@ export interface IHostConnection {
   ): Promise<any>;
 
   stream<T>(
-    callback: (readable: Readable) => Promise<T>,
+    callback: (readable: any) => Promise<T>,
     method: HttpMethod,
     path: string,
     queryParams?: Values,
@@ -143,5 +143,10 @@ export class ExtensionTransport implements ITransport {
       error: new Error('Should not be called!') as unknown as TError,
     };
     return Promise.resolve(result);
+  }
+
+  retry(_request: IRawRequest): Promise<IRawResponse> {
+    // TODO implement this
+    return Promise.reject(new Error('TODO: retry not implemented yet'));
   }
 }
