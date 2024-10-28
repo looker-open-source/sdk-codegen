@@ -24,7 +24,6 @@
 
  */
 
-import type { MouseEvent } from 'react';
 import type { IQuery } from '@looker/sdk';
 
 /**
