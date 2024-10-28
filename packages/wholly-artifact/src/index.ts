@@ -24,5 +24,5 @@
 
  */
 
-export * from './RowModel'
-export * from './WhollyArtifact'
+export * from './RowModel';
+export * from './WhollyArtifact';

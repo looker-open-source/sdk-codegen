@@ -8,9 +8,9 @@ The Looker SDK for Swift provides a convenient way to communicate with the Looke
 
 The Looker SDK can be used in a Swift application in 3 steps:
 
-* configure
-* install
-* use
+- configure
+- install
+- use
 
 ### Configure the SDK for your Looker server
 
@@ -172,13 +172,13 @@ Any script or configuration file used to provide credentials to your Looker SDK 
 
 ## Classes vs. Structs
 
-Both the [Swift documentation](https://developer.apple.com/documentation/swift/choosing_between_structures_and_classes) and LearnAppMaking has an  [overview of Swift classes vs. structs](https://learnappmaking.com/struct-vs-class-swift-how-to/) explain the choices between structs and classes in Swift.
+Both the [Swift documentation](https://developer.apple.com/documentation/swift/choosing_between_structures_and_classes) and LearnAppMaking has an [overview of Swift classes vs. structs](https://learnappmaking.com/struct-vs-class-swift-how-to/) explain the choices between structs and classes in Swift.
 
 The SDK generator uses both classes and structs. Classes are used where required in the SDK where class-specific features for:
 
-* inheritance
-* destructors (aka `deinit`)
-* identity comparisons
+- inheritance
+- destructors (aka `deinit`)
+- identity comparisons
 
 Otherwise, `struct`s, `enum`s, or `protocol`s are used for the declaration of complex method inputs, such as `body` parameters and the complex API structures returned from API endpoints.
 
@@ -192,7 +192,7 @@ The contents of this `Data` object can be used to initialize an image using Swif
 
 The primary SDK methods class `LookerSDK` now has a property called `stream` that is a reference to an initialized `LookerSDKStream` class.
 
-Requests for *image* types like **PNG** and **JPEG** should use this kind of pattern:
+Requests for _image_ types like **PNG** and **JPEG** should use this kind of pattern:
 
 ```swift
 let xp = BaseTransport(settings)
@@ -203,7 +203,6 @@ let query = try! sdk.ok(sdk.create_query(body))
 let png = try! sdk.ok(sdk.stream.run_query(query.id!, "png"))
 let jpg = try! sdk.ok(sdk.stream.run_query(query.id!, "jpg"))
 ```
-
 
 ## Use of AnyCodable
 

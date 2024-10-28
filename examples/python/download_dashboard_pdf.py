@@ -8,7 +8,7 @@ Examples:
     $ python download_dashboard_pdf.py "A Test Dashboard" '{"filter1": "value1, value2", "filter2": "value3"}'
     $ python download_dashboard_pdf.py "A Test Dashboard" {} "single_column"
 
-Last modified: August 25, 2021
+Last modified: Feb 27 2024
 """
 
 import json
@@ -19,10 +19,9 @@ import time
 from typing import cast, Dict, Optional
 
 import looker_sdk
-from looker_sdk import models
+from looker_sdk import models40 as models
 
 sdk = looker_sdk.init40("../../looker.ini")
-
 
 def main():
     dashboard_title = sys.argv[1] if len(sys.argv) > 1 else ""

@@ -23,11 +23,11 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { screen } from '@testing-library/react'
-import { renderWithTheme } from '@looker/components-test-utils'
+import React from 'react';
+import { screen } from '@testing-library/react';
+import { renderWithTheme } from '@looker/components-test-utils';
 
-import { CodeDisplay } from './CodeDisplay'
+import { CodeDisplay } from './CodeDisplay';
 
 describe('CodeDisplay', () => {
   const code = `
@@ -47,27 +47,27 @@ describe('CodeDisplay', () => {
       )
       assert isinstance(response, list)
       return response
-  `
+  `;
   test('it syntax highlights', () => {
-    renderWithTheme(<CodeDisplay code={code} language="python" />)
+    renderWithTheme(<CodeDisplay code={code} language="python" />);
     expect(screen.getByText('all_lookml_models').closest('span')).toHaveClass(
       'function'
-    )
-    expect(screen.getByText('def').closest('span')).toHaveClass('keyword')
+    );
+    expect(screen.getByText('def').closest('span')).toHaveClass('keyword');
     expect(
       screen
         .getByText('# GET /lookml_models -> Sequence[models.LookmlModel]')
         .closest('span')
-    ).toHaveClass('comment')
-  })
+    ).toHaveClass('comment');
+  });
 
   test('it highlights text matching search pattern', () => {
-    const highlightPattern = 'lookml_models'
+    const highlightPattern = 'lookml_models';
     renderWithTheme(
       <CodeDisplay code={code} language="python" pattern={highlightPattern} />
-    )
+    );
     expect(screen.getByText('all_lookml_models').closest('span')).toHaveClass(
       'match'
-    )
-  })
-})
+    );
+  });
+});

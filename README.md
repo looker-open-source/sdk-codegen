@@ -8,24 +8,23 @@ While Looker has developed and tested this code internally, we cannot guarantee
 that the open-source tools used by the scripts in this repository have not been
 modified with malicious code.
 
-**Important** - If you are using the Looker TypeScript SDK, please see the
-[note at the bottom](#very-important-note-regarding-the-looker-typescript-sdk)
-of this file explaining changes to dependencies and packaging.
+**Important** - If you are using the Looker TypeScript SDK, please see this
+[note on npmjs.com](https://www.npmjs.com/package/@looker/sdk#typescript-sdk-packages) explaining changes to dependencies and packaging.
 
 ### Support
+
 The TypeScript and Python SDKs are officially supported by Looker/Google.
 Issues can be logged here in the GitHub Issues page, but can also be logged
 with Looker Support. The other language SDKs are community supported. Issues
 for these should be logged only in the GitHub Issues page. Details of Looker
 API and SDK support can be found at [https://cloud.google.com/looker/docs/api-sdk-support-policy](https://cloud.google.com/looker/docs/api-sdk-support-policy).
 
-
 ## Overview
 
 This repository contains:
 
 - The [SDK code generator](packages/sdk-codegen) that generates the source code for Looker SDKs
-- Source code for the [Looker SDKs](#looker-sdks) produced by the code generator
+- Source code for the Looker SDKs produced by the code generator
 - Looker SDK source code [examples](examples)
 - the [API Explorer extension](packages/extension-api-explorer) that can be installed into a Looker instance
 - the stand-alone [API Explorer](packages/api-explorer)
@@ -44,8 +43,7 @@ The Looker SDK has several parts:
   specification](https://github.com/OAI/OpenAPI-Specification) (e.g., the
   Swagger 2.x representation found at
   `https://<your-looker-domain>:19999/api/4.0/swagger.json`). The 4.0 API is
-  our current & stable API. As of June 2022, [3.x is
-  deprecated](https://developers.looker.com/api/advanced-usage/version-3x-deprecation).
+  our current & stable API. As of October 2023, [3.x has been removed](https://cloud.google.com/looker/docs/api-3x-deprecation).
 
 - The **Looker API Explorer**, an interactive reference, accessible either
   stand-alone at
@@ -56,68 +54,17 @@ The Looker SDK has several parts:
 - **Language SDKs**, "smarter" client language classes and methods to improve
   the experience of calling the Looker API in various popular coding languages.
   Some SDKs are
-  [Looker-supported](https://docs.looker.com/reference/api-and-integration/api-sdk-support-policy#support_levels)
+  [Looker-supported](https://cloud.google.com/looker/docs/api-sdk-support-policy)
   whereas others are community-supported.
 
-## SDK multi-API-version support
+## SDK Versions
 
-The 4.0 version of the API is the current and stable version of the API, in
-addition to the 3.x API which is now
-[deprecated](https://developers.looker.com/api/advanced-usage/version-3x-deprecation).
+The 4.0 version of the API is the current and stable version of the API. The 3.x API has now been
+[removed](https://cloud.google.com/looker/docs/api-3x-deprecation).
 
-Some SDKs support and expose both API versions in the same SDK package,
-including all [Looker-supported
-SDKs](https://docs.looker.com/reference/api-and-integration/api-sdk-support-policy#language_sdks).
+For self-hosted instances on older versions of Looker, please use the corresponding release of `sdk-codegen`` to use API 3.x.
 
-For SDKs that support multiple API versions, there will be `methods.*` and
-`models.*` collections generated for each API version. Each API version is
-exposed under a distinct class name from which to instantiate an initial SDK
-object.
-
-API-version-specific files generally use shared Run-Time Library (RTL) code in
-the SDK package to minimize code duplication.
-
-Regardless of which API version you use, API credentials are unchanged, and may
-continue to be referred to as "API3" credentials.
-
-
-### Looker SDKs
-
-Please review the following table for a breakdown of the options to initialize
-the desired SDK object.
-
-| SDK                        | API 3.1 [(deprecated)](https://developers.looker.com/api/advanced-usage/version-3x-deprecation) | API 4.0                                                                  | Notes                                                                                                                                                                                                                                          |
-| -------------------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Python](python)           | `looker_sdk.init31()`                                                                           | `looker_sdk.init40()`                                                    |                                                                                                                                                            |
-| [TypeScript](packages/sdk) | `Looker31SDK()`, `LookerNodeSDK.init31()`, or `LookerBrowserSDK.init31()`                       | `Looker40SDK()`, `LookerNodeSDK.init40()` or `LookerBrowserSDK.init40()` | **Important** - See information on the [typescript SDK dependencies](#very-important-note-regarding-the-looker-typescript-sdk) at the bottom of this file. |
-| [Kotlin](kotlin)           | Not supported                                                                                   | `LookerSDK()`                                                            | Community-supported SDK. Uses API 4.0 exclusively. The initializer uses an unversioned name.                                                               |
-| [Swift](swift/looker)      | Not supported                                                                                   | `Looker40SDK()`                                                          | Community-supported SDK. Uses API 4.0 exclusively.                                                                                                         |
-| [Look#](csharp)            | Not supported                                                                                   | `Looker40SDK()`                                                          | Community-supported SDK. Uses API 4.0 exclusively.                                                                                                         |
-| [GoLook](go)               | Not supported                                                                                   | `v4.NewLookerSDK()`                                                      | Community-supported SDK. Uses API 4.0 exclusively.                                                                                                         |
-
-By supporting both API versions in the same SDK package, we hope the migration
-path to the latest API is simplified. Both SDK versions can be used at the same
-time, in the same source file, which should allow for iterative work to move to
-the new API version.
-
-For example:
-
-```typescript
-import {
-  Looker40SDK,
-  Looker31SDK,
-  NodeSession,
-  NodeSettingsIniFile,
-} from '@looker/sdk'
-
-const settings = new NodeSettingsIniFile()
-const session = new NodeSession(settings)
-const sdk = new Looker40SDK(session)
-const sdk31 = new Looker31SDK(session)
-
-const me40 = await sdk.ok(sdk.me())
-const me31 = await sdk.ok(sdk31.me()) // or sdk31.ok(sdk31.me())
-```
+Note: API credentials have not been changed between API 3.x and API 4 and may continue to be referred to as "API3" credentials in the Looker UI, docs, or elsewhere.
 
 ## Automatic URL encoding for input values
 
@@ -154,7 +101,7 @@ There are three steps for generating an SDK with this project:
   - **Note**: previous versions of the `looker.ini` file had an `api_version`
     entry. This is no longer required. The code generator project will read an
     `api_versions` value if that is found, but the SDKs ignore this value. If
-    `api_versions` is not found in the `ini` file, it defaults to "3.1,4.0" for
+    `api_versions` is not found in the `ini` file, it defaults to "4.0" for
     the generator to produce the definitions for the supported API versions.
 
 - install the code generator project dependencies by running:
@@ -170,7 +117,7 @@ The resources required to run the code generator are in [package.json](package.j
 
 - run the SDK generator with `yarn gen [language]`
 
-- **Note**: [Generating Client SDKs for the Looker API](https://discourse.looker.com/t/generating-client-sdks-for-the-looker-api/3185) describes the legacy, manual steps for generating an API language binding. This project replaces these manual steps, and uses an improved code generator.
+- **Note**: [Generating Client SDKs for the Looker API](https://www.googlecloudcommunity.com/gc/Developing-Applications/Generating-Client-SDKs-for-the-Looker-API/td-p/574683) describes the legacy, manual steps for generating an API language binding. This project replaces these manual steps, and uses an improved code generator.
 
 ## Configuring `looker.ini` or `.env`
 
@@ -181,10 +128,10 @@ file needs to be in the root folder of the code generator.
 To create `looker.ini`, copy [`looker-sample.ini`](looker-sample.ini) to
 `looker.ini` and fill in the required values. The values for `client_id` and
 `client_secret` can be retrieved by navigating to
-`https://<your_looker_endpoint>/admin/users`, editing your user, editing API3
+`https://<your_looker_endpoint>/admin/users`, editing your user, editing API
 keys, and clicking the "reveal" button to view your `client_id` and
-`client_secret`. If there are currently no API3 credentials, they can be
-generated by clicking “New API3 Key.”
+`client_secret`. If there are currently no API credentials, they can be
+generated by clicking “New API Key.”
 
 For your own source code repositories, be sure to configure your version
 control system to ignore the SDK configuration `.ini` file so it doesn't
@@ -307,7 +254,7 @@ and are also welcome to contribute additional examples.
 
 ## API Troubleshooting
 
-See the official documentation for [API Troubleshooting](https://docs.looker.com/reference/api-and-integration/api-troubleshooting) suggestions.
+See the official documentation for [API Troubleshooting](https://cloud.google.com/looker/docs/api-troubleshooting) suggestions.
 
 ## Notes
 
@@ -396,13 +343,13 @@ The following table describes the environment variables. By default, the SDK
 "namespace" is "LookerSDK" which is converted to UPPERCASE when used for naming
 environment variables.
 
-| Variable name           | Description                                                                                                                                                           |
-| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| LOOKERSDK_BASE_URL      | A URL like `https://my.looker.com:19999`. No default value.                                                                                                           |
-| LOOKERSDK_VERIFY_SSL    | `true`, `t`, `yes`, `y`, or `1` (case insensitive) to enable SSL verification. Any other value is treated as `false`. Defaults to `true` if not set.                  |
-| LOOKERSDK_TIMEOUT       | Request timeout in seconds. Defaults to `120` for most platforms.                                                                                                     |
-| LOOKERSDK_CLIENT_ID     | API3 credentials `client_id`. This and `client_secret` must be provided in some fashion to the Node SDK, or no calls to the API will be authorized. No default value. |
-| LOOKERSDK_CLIENT_SECRET | API3 credentials `client_secret`. No default value.                                                                                                                   |
+| Variable name           | Description                                                                                                                                                          |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| LOOKERSDK_BASE_URL      | A URL like `https://my.looker.com:19999`. No default value.                                                                                                          |
+| LOOKERSDK_VERIFY_SSL    | `true`, `t`, `yes`, `y`, or `1` (case insensitive) to enable SSL verification. Any other value is treated as `false`. Defaults to `true` if not set.                 |
+| LOOKERSDK_TIMEOUT       | Request timeout in seconds. Defaults to `120` for most platforms.                                                                                                    |
+| LOOKERSDK_CLIENT_ID     | API credentials `client_id`. This and `client_secret` must be provided in some fashion to the Node SDK, or no calls to the API will be authorized. No default value. |
+| LOOKERSDK_CLIENT_SECRET | API credentials `client_secret`. No default value.                                                                                                                   |
 
 ### Configuration variable precedence
 

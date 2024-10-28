@@ -11,11 +11,11 @@ Example:
 
 Authors: Lan
 
-Last modified: July 18, 2021
+Last modified: Feb 27 2024
 """
 
 import looker_sdk
-from looker_sdk import models40
+from looker_sdk import models40 as models
 sdk = looker_sdk.init40(config_file='../looker.ini', section='Looker')
 
 
@@ -41,17 +41,17 @@ def get_schedules(id, content, user_id=None, all_users=True):
 
   def resume_schedules(id, content, enabled, user_id=None, all_users=True):
 
-  """ Pause or resume all schedules of a Look, or a dashboard
-  
-  Args: 
-    id: id of the Looker content containing schedules    
-    content(str): 'look', 'dashboard', or 'lookml_dashboard'
-    enabled (bool): set "True" to resume schedule, or "False" to pause schedule
-  
-  Notes: Schedules with "enabled = False" will disappear from Admin > Schedules in Looker UI but 
-  their data can be retrived in Looker's System Activity. Once schedules are resumed with "enabled = True", 
-  they will be sent once and reappear in Admin > Schedules  
-  """
+    """ Pause or resume all schedules of a Look, or a dashboard
+    
+    Args: 
+      id: id of the Looker content containing schedules    
+      content(str): 'look', 'dashboard', or 'lookml_dashboard'
+      enabled (bool): set "True" to resume schedule, or "False" to pause schedule
+    
+    Notes: Schedules with "enabled = False" will disappear from Admin > Schedules in Looker UI but 
+    their data can be retrived in Looker's System Activity. Once schedules are resumed with "enabled = True", 
+    they will be sent once and reappear in Admin > Schedules  
+    """
 
   "Get all schedules of a Looker content"
   schedules = get_schedules(id=id, content=content)
@@ -59,7 +59,7 @@ def get_schedules(id, content, user_id=None, all_users=True):
   for i in range(0, len(schedules)):
     sdk.update_scheduled_plan(
     scheduled_plan_id=schedules[i]['id'],
-    body=models40.WriteScheduledPlan(
+    body=models.WriteScheduledPlan(
         enabled = enabled
     ))
 
@@ -70,16 +70,16 @@ def get_schedules(id, content, user_id=None, all_users=True):
 
   def copy_schedules(from_id, to_id, content, user_id=None, all_users=True):
 
-  """ Copy schedules from one Looker content to another content.
-  This script has only been tested for content of the same type (i.e.: look to look, dashboard to dashboard)
+    """ Copy schedules from one Looker content to another content.
+    This script has only been tested for content of the same type (i.e.: look to look, dashboard to dashboard)
 
-  Args: 
-    from_id: id of the Looker content containing schedules    
-    to_id: id of the Looker content which schedules will be copied to
-    content(str): 'look', 'dashboard', or 'lookml_dashboard'
-    user_id(int, optional): If user_id is None then schedules owned by the user calling the API will be returned
-    all_users(bool, optional): If all_user is True then return schedules owned by all users 
-  """
+    Args: 
+      from_id: id of the Looker content containing schedules    
+      to_id: id of the Looker content which schedules will be copied to
+      content(str): 'look', 'dashboard', or 'lookml_dashboard'
+      user_id(int, optional): If user_id is None then schedules owned by the user calling the API will be returned
+      all_users(bool, optional): If all_user is True then return schedules owned by all users 
+    """
 
   "Get all schedules of a Looker content"
   schedules = get_schedules(id=from_id, content=content, user_id=user_id, all_users=all_users)
@@ -88,7 +88,7 @@ def get_schedules(id, content, user_id=None, all_users=True):
   for i in range(0, len(schedules)):
 
     # Write the base schedule plans with all required fields
-    body = models40.WriteScheduledPlan(
+    body = models.WriteScheduledPlan(
 
           # Required fields for all content type 
           name = schedules[i]['name'],
@@ -110,7 +110,7 @@ def get_schedules(id, content, user_id=None, all_users=True):
     elif content == 'lookml_dashboard':
       body['lookml_dashboard_id'] = to_id
 
-    """Additional parameters can be added in the models40.WriteScheduledPlan() method for 'body',
+    """Additional parameters can be added in the models.WriteScheduledPlan() method for 'body',
     or through Python's dictionary syntax: body[parameter] = value """
 
 

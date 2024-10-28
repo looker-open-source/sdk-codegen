@@ -68,7 +68,7 @@ client_secret=
 def auth_session(config_file):
     settings = api_settings.ApiSettings(filename=config_file, env_prefix="LOOKERSDK")
     return auth.AuthSession(
-        settings, MockTransport.configure(settings), serialize.deserialize31, "3.1"
+        settings, MockTransport.configure(settings), serialize.deserialize40, "4.0"
     )
 
 
@@ -194,10 +194,10 @@ def test_it_fails_with_missing_credentials(
     monkeypatch.setenv("LOOKERSDK_CLIENT_SECRET", test_env_client_secret)
 
     settings = api_settings.ApiSettings(filename=config_file, section=test_section)
-    settings.api_version = "3.1"
+    settings.api_version = "4.0"
 
     auth_session = auth.AuthSession(
-        settings, MockTransport.configure(settings), serialize.deserialize31, "3.1"
+        settings, MockTransport.configure(settings), serialize.deserialize40, "4.0"
     )
 
     with pytest.raises(error.SDKError) as exc_info:
@@ -252,8 +252,8 @@ def oauth_session(config_file):
     return auth.OAuthSession(
         settings=settings,
         transport=MockTransport.configure(settings),
-        deserialize=serialize.deserialize31,
-        serialize=serialize.serialize31,
+        deserialize=serialize.deserialize40,
+        serialize=serialize.serialize40,
         crypto=auth.CryptoHash(),
         version="4.0",
     )

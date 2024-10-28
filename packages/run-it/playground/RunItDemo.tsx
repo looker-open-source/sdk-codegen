@@ -24,42 +24,42 @@
 
  */
 
-import type { FC } from 'react'
-import React, { useState } from 'react'
-import { BrowserRouter, Route } from 'react-router-dom'
-import { ApiModel } from '@looker/sdk-codegen'
+import type { FC } from 'react';
+import React, { useState } from 'react';
+import { BrowserRouter, Route } from 'react-router-dom';
+import { ApiModel } from '@looker/sdk-codegen';
 import {
+  Card,
   ComponentsProvider,
+  Flex,
   Select,
   Space,
-  Card,
-  Flex,
-} from '@looker/components'
-import { RunIt } from '../src'
+} from '@looker/components';
+import { RunIt } from '../src';
 
-import { specs } from '../../api-explorer/src/test-data'
-import { createInputs } from '../../api-explorer/src/scenes/MethodScene/utils'
-import { OAuthScene } from '../src/scenes'
+import { specs } from '../../api-explorer/src/test-data';
+import { createInputs } from '../../api-explorer/src/scenes/MethodScene/utils';
+import { OAuthScene } from '../src/scenes';
 
 export const RunItDemo: FC = () => {
-  const specKey = '4.0'
-  const api = ApiModel.fromJson(specs[specKey].specContent)
-  const [method, setMethod] = useState(api.methods.me)
-  const [inputs, setInputs] = useState(createInputs(api, method))
-  const options = Object.values(api.methods).map((m) => {
+  const specKey = '4.0';
+  const api = ApiModel.fromJson(specs[specKey].specContent);
+  const [method, setMethod] = useState(api.methods.me);
+  const [inputs, setInputs] = useState(createInputs(api, method));
+  const options = Object.values(api.methods).map(m => {
     const result: any = {
       value: m.name,
       label: `${m.name}: ${m.summary}`,
-    }
-    if (m.name === 'me') result.scrollIntoView = true
-    return result
-  })
+    };
+    if (m.name === 'me') result.scrollIntoView = true;
+    return result;
+  });
 
   const handleSelection = (value: string) => {
-    const method = api.methods[value]
-    setMethod(method)
-    setInputs(createInputs(api, method))
-  }
+    const method = api.methods[value];
+    setMethod(method);
+    setInputs(createInputs(api, method));
+  };
 
   return (
     <ComponentsProvider>
@@ -90,5 +90,5 @@ export const RunItDemo: FC = () => {
         </Flex>
       </BrowserRouter>
     </ComponentsProvider>
-  )
-}
+  );
+};

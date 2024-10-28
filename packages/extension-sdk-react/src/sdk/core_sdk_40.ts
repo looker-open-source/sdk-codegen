@@ -24,9 +24,9 @@
 
  */
 
-import type { Looker40SDK } from '@looker/sdk'
+import type { Looker40SDK } from '@looker/sdk';
 
-let _core40SDK: Looker40SDK | undefined
+let _core40SDK: Looker40SDK | undefined;
 
 /**
  * Register the core 4.0 SDK. The ExtensionProvider will automatically
@@ -36,24 +36,24 @@ let _core40SDK: Looker40SDK | undefined
  */
 export const registerCore40SDK = (coreSDK: Looker40SDK) => {
   if (_core40SDK) {
-    throw new Error('coreSDK can only be registered onces')
+    throw new Error('coreSDK can only be registered once');
   }
-  _core40SDK = coreSDK
-}
+  _core40SDK = coreSDK;
+};
 
 /**
  * Unregister the core 4.0 SDK. The ExtensionProvider will automatically
  * call this when it is unloaded. An extension using
  * the ExtensionProvider should  never call this.
  */
-export const unregisterCore40SDK = () => (_core40SDK = undefined)
+export const unregisterCore40SDK = () => (_core40SDK = undefined);
 
 /**
  * Global access to the core40SDK. An error will be thrown if accessed prematurely.
  */
 export const getCore40SDK = () => {
   if (!_core40SDK) {
-    throw new Error('Looker host connection not established')
+    throw new Error('Looker host connection not established');
   }
-  return _core40SDK
-}
+  return _core40SDK;
+};

@@ -23,25 +23,25 @@
  SOFTWARE.
 
  */
-import { createTestStore, preloadedState } from '../../test-utils'
-import { selectSdkLanguage, isInitialized, selectTagFilter } from './selectors'
+import { createTestStore, preloadedState } from '../../test-utils';
+import { isInitialized, selectSdkLanguage, selectTagFilter } from './selectors';
 
-const testStore = createTestStore()
+const testStore = createTestStore();
 
 describe('Settings selectors', () => {
-  const state = testStore.getState()
+  const state = testStore.getState();
 
   test('selectSdkLanguage selects', () => {
     expect(selectSdkLanguage(state)).toEqual(
       preloadedState.settings.sdkLanguage
-    )
-  })
+    );
+  });
 
   test('selectTagFilter selects', () => {
-    expect(selectTagFilter(state)).toEqual(preloadedState.settings.tagFilter)
-  })
+    expect(selectTagFilter(state)).toEqual(preloadedState.settings.tagFilter);
+  });
 
   test('isInitialized selects', () => {
-    expect(isInitialized(state)).toEqual(preloadedState.settings.initialized)
-  })
-})
+    expect(isInitialized(state)).toEqual(preloadedState.settings.initialized);
+  });
+});

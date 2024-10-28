@@ -24,15 +24,15 @@
 
  */
 
-import fs from 'fs'
-import { codeGenerators } from '@looker/sdk-codegen'
-import { doArgs, loadSpecs, prepGen } from './utils'
+import fs from 'fs';
+import { codeGenerators } from '@looker/sdk-codegen';
+import { doArgs, loadSpecs, prepGen } from './utils';
 
 const mockIni = `
 [Looker]
 base_url=https://self-signed.looker.com:19999
 client_id=id
-`
+`;
 
 const mockVersions = {
   looker_release_version: '21.0.25',
@@ -75,129 +75,129 @@ const mockVersions = {
     },
   ],
   api_server_url: 'https://self-signed.looker.com:19999',
-}
+};
 
 describe.skip('utils', () => {
-  jest.mock('fs')
+  jest.mock('fs');
   beforeAll(() => {
     jest.spyOn(fs, 'readFileSync').mockImplementation((path, _options) => {
-      path = path.toString()
-      if (path.match(/looker\.ini/)) return mockIni
-      if (path.match(/\.env/)) return ''
-      return JSON.stringify(mockVersions)
-    })
-    jest.spyOn(fs, 'existsSync').mockImplementation((_path) => {
-      return true
-    })
-  })
+      path = path.toString();
+      if (path.match(/looker\.ini/)) return mockIni;
+      if (path.match(/\.env/)) return '';
+      return JSON.stringify(mockVersions);
+    });
+    jest.spyOn(fs, 'existsSync').mockImplementation(_path => {
+      return true;
+    });
+  });
 
   describe('doArgs', () => {
     test('no args', () => {
       const expLangs = codeGenerators
-        .filter((l) => l.factory !== undefined)
-        .map((l) => l.language)
+        .filter(l => l.factory !== undefined)
+        .map(l => l.language);
 
-      const actual = doArgs([])
-      expect(actual).toBeDefined()
-      expect(actual.versions).toBeUndefined()
-      expect(actual.languages).toEqual(expLangs)
-    })
+      const actual = doArgs([]);
+      expect(actual).toBeDefined();
+      expect(actual.versions).toBeUndefined();
+      expect(actual.languages).toEqual(expLangs);
+    });
     test('ts,python,cs,typescript', () => {
-      const expected = ['TypeScript', 'Python', 'Csharp']
+      const expected = ['TypeScript', 'Python', 'Csharp'];
 
-      const actual = doArgs(['ts,python,cs,typescript'])
-      expect(actual).toBeDefined()
-      expect(actual.versions).toBeUndefined()
-      expect(actual.languages).toEqual(expected)
-    })
+      const actual = doArgs(['ts,python,cs,typescript']);
+      expect(actual).toBeDefined();
+      expect(actual.versions).toBeUndefined();
+      expect(actual.languages).toEqual(expected);
+    });
     test('-v foo.json kotlin', () => {
-      const expected = ['Kotlin']
-      const actual = doArgs('-v foo.json kotlin'.split(' '))
-      expect(actual).toBeDefined()
-      expect(actual.languages).toEqual(expected)
-      expect(actual.versions).toEqual(mockVersions)
-    })
+      const expected = ['Kotlin'];
+      const actual = doArgs('-v foo.json kotlin'.split(' '));
+      expect(actual).toBeDefined();
+      expect(actual.languages).toEqual(expected);
+      expect(actual.versions).toEqual(mockVersions);
+    });
     test('ts,py --versions foo.json kotlin', () => {
-      const expected = ['TypeScript', 'Python', 'Kotlin']
-      const actual = doArgs('ts,py --versions foo.json kotlin'.split(' '))
-      expect(actual).toBeDefined()
-      expect(actual.languages).toEqual(expected)
-      expect(actual.versions).toEqual(mockVersions)
-    })
-  })
+      const expected = ['TypeScript', 'Python', 'Kotlin'];
+      const actual = doArgs('ts,py --versions foo.json kotlin'.split(' '));
+      expect(actual).toBeDefined();
+      expect(actual.languages).toEqual(expected);
+      expect(actual.versions).toEqual(mockVersions);
+    });
+  });
 
   describe('prepGen', () => {
     test('default prepGen', async () => {
       const expLangs = codeGenerators
-        .filter((l) => l.factory !== undefined)
-        .map((l) => l.language)
+        .filter(l => l.factory !== undefined)
+        .map(l => l.language);
       const release = mockVersions.looker_release_version
         .split('.', 2)
-        .join('.')
-      const actual = await prepGen([])
-      expect(actual).toBeDefined()
-      expect(actual.languages).toEqual(expLangs)
-      expect(actual.lookerVersion).toEqual(release)
-      expect(actual.lookerVersions).toEqual(mockVersions)
-      expect(actual.apis).toEqual(['3.1', '4.0'])
-      expect(actual.name).toEqual('Looker')
-      expect(actual.lastApi).toEqual('4.0')
+        .join('.');
+      const actual = await prepGen([]);
+      expect(actual).toBeDefined();
+      expect(actual.languages).toEqual(expLangs);
+      expect(actual.lookerVersion).toEqual(release);
+      expect(actual.lookerVersions).toEqual(mockVersions);
+      expect(actual.apis).toEqual(['3.1', '4.0']);
+      expect(actual.name).toEqual('Looker');
+      expect(actual.lastApi).toEqual('4.0');
       expect(actual.props.base_url).toEqual(
         'https://self-signed.looker.com:19999'
-      )
-    })
+      );
+    });
     test('prepGen ts', async () => {
       const expLangs = codeGenerators
-        .filter((l) => l.factory !== undefined)
-        .map((l) => l.language)
+        .filter(l => l.factory !== undefined)
+        .map(l => l.language);
       const release = mockVersions.looker_release_version
         .split('.', 2)
-        .join('.')
-      const actual = await prepGen(['ts'])
-      expect(actual).toBeDefined()
-      expect(actual.languages).toEqual(expLangs)
-      expect(actual.lookerVersion).toEqual(release)
-      expect(actual.lookerVersions).toEqual(mockVersions)
-      expect(actual.apis).toEqual(['3.1', '4.0'])
-      expect(actual.name).toEqual('Looker')
-      expect(actual.lastApi).toEqual('4.0')
+        .join('.');
+      const actual = await prepGen(['ts']);
+      expect(actual).toBeDefined();
+      expect(actual.languages).toEqual(expLangs);
+      expect(actual.lookerVersion).toEqual(release);
+      expect(actual.lookerVersions).toEqual(mockVersions);
+      expect(actual.apis).toEqual(['3.1', '4.0']);
+      expect(actual.name).toEqual('Looker');
+      expect(actual.lastApi).toEqual('4.0');
       expect(actual.props.base_url).toEqual(
         'https://self-signed.looker.com:19999'
-      )
-    })
+      );
+    });
     test('-v foo.json ts', async () => {
-      const langs = ['TypeScript']
+      const langs = ['TypeScript'];
       const release = mockVersions.looker_release_version
         .split('.', 2)
-        .join('.')
-      const actual = await prepGen('-v foo.json ts'.split(' '))
-      expect(actual).toBeDefined()
-      expect(actual.languages).toEqual(langs)
-      expect(actual.lookerVersion).toEqual(release)
-      expect(actual.lookerVersions).toEqual(mockVersions)
-      expect(actual.apis).toEqual(['3.1', '4.0'])
-      expect(actual.name).toEqual('Looker')
-      expect(actual.lastApi).toEqual('4.0')
+        .join('.');
+      const actual = await prepGen('-v foo.json ts'.split(' '));
+      expect(actual).toBeDefined();
+      expect(actual.languages).toEqual(langs);
+      expect(actual.lookerVersion).toEqual(release);
+      expect(actual.lookerVersions).toEqual(mockVersions);
+      expect(actual.apis).toEqual(['3.1', '4.0']);
+      expect(actual.name).toEqual('Looker');
+      expect(actual.lastApi).toEqual('4.0');
       expect(actual.props.base_url).toEqual(
         'https://self-signed.looker.com:19999'
-      )
-    })
-  })
+      );
+    });
+  });
 
   describe('loadSpecs', () => {
     test('load mockVersions', async () => {
-      const config = await prepGen('-v foo.json'.split(' '))
-      expect(config).toBeDefined()
-      const actual = await loadSpecs(config, false)
-      expect(actual).toBeDefined()
-      expect(config.apis).toEqual(['3.1', '4.0', '4.0u'])
-    })
+      const config = await prepGen('-v foo.json'.split(' '));
+      expect(config).toBeDefined();
+      const actual = await loadSpecs(config, false);
+      expect(actual).toBeDefined();
+      expect(config.apis).toEqual(['3.1', '4.0', '4.0u']);
+    });
     test('no version, with ts', async () => {
-      const config = await prepGen(['ts'])
-      expect(config).toBeDefined()
-      const actual = await loadSpecs(config, false)
-      expect(actual).toBeDefined()
-      expect(config.apis).toEqual(['3.1', '4.0'])
-    })
-  })
-})
+      const config = await prepGen(['ts']);
+      expect(config).toBeDefined();
+      const actual = await loadSpecs(config, false);
+      expect(actual).toBeDefined();
+      expect(config.apis).toEqual(['3.1', '4.0']);
+    });
+  });
+});

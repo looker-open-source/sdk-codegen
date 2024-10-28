@@ -24,71 +24,71 @@
 
  */
 
-import { add } from 'date-fns'
-import type { AgendaItems } from './agendaUtils'
-import { agendaEras, gapDiff } from './agendaUtils'
+import { add } from 'date-fns';
+import type { AgendaItems } from './agendaUtils';
+import { agendaEras, gapDiff } from './agendaUtils';
 
-const now = new Date()
-const before = add(now, { hours: -1 })
-const after = add(now, { hours: 1 })
-const english = 'en'
-const japanese = 'ja_JP'
+const now = new Date();
+const before = add(now, { hours: -1 });
+const after = add(now, { hours: 1 });
+const english = 'en';
+const japanese = 'ja_JP';
 export const eraSchedule: AgendaItems = [
   { start: before, stop: add(now, { minutes: -1 }), description: 'past' },
   { start: now, stop: add(now, { minutes: 30 }), description: 'present' },
   { start: add(now, { minutes: 30 }), stop: after, description: 'future' },
-]
+];
 
 describe('agendaUtils', () => {
   describe('spanEta', () => {
     describe('in English', () => {
-      const locale = english
+      const locale = english;
       test('it shows before', () => {
-        const actual = gapDiff(now, add(now, { minutes: 30 }), after, locale)
-        expect(actual).toEqual('in 30 minutes')
-      })
+        const actual = gapDiff(now, add(now, { minutes: 30 }), after, locale);
+        expect(actual).toEqual('in 30 minutes');
+      });
 
       test('it shows during', () => {
-        const actual = gapDiff(now, before, after, locale)
-        expect(actual).toEqual('in about 1 hour')
-      })
+        const actual = gapDiff(now, before, after, locale);
+        expect(actual).toEqual('in about 1 hour');
+      });
 
       test('it shows after', () => {
-        const actual = gapDiff(now, before, add(now, { minutes: -30 }), locale)
-        expect(actual).toEqual('30 minutes ago')
-      })
-    })
+        const actual = gapDiff(now, before, add(now, { minutes: -30 }), locale);
+        expect(actual).toEqual('30 minutes ago');
+      });
+    });
     describe('in Japanese', () => {
-      const locale = japanese
+      const locale = japanese;
       test('it shows before', () => {
-        const actual = gapDiff(now, add(now, { minutes: 30 }), after, locale)
-        expect(actual).toEqual('30分後')
-      })
+        const actual = gapDiff(now, add(now, { minutes: 30 }), after, locale);
+        expect(actual).toEqual('30分後');
+      });
 
       test('it shows during', () => {
-        const actual = gapDiff(now, before, after, locale)
-        expect(actual).toEqual('約1時間後')
-      })
+        const actual = gapDiff(now, before, after, locale);
+        expect(actual).toEqual('約1時間後');
+      });
 
       test('it shows after', () => {
-        const actual = gapDiff(now, before, add(now, { minutes: -30 }), locale)
-        expect(actual).toEqual('30分前')
-      })
-    })
-  })
+        const actual = gapDiff(now, before, add(now, { minutes: -30 }), locale);
+        expect(actual).toEqual('30分前');
+      });
+    });
+  });
 
   test('agendaPeriods', () => {
-    const current = now.getTime()
-    expect(current).toBeGreaterThan(eraSchedule[0].start.getTime())
-    expect(current).toBeGreaterThan(eraSchedule[0].stop!.getTime())
-    expect(current).toBeGreaterThanOrEqual(eraSchedule[1].start.getTime())
-    expect(current).toBeLessThan(eraSchedule[1].stop!.getTime())
-    expect(current).toBeLessThan(eraSchedule[2].start.getTime())
-    expect(current).toBeLessThan(eraSchedule[2].stop!.getTime())
+    const current = now.getTime();
+    expect(current).toBeGreaterThan(eraSchedule[0].start.getTime());
+    expect(current).toBeGreaterThan(eraSchedule[0].stop!.getTime());
+    expect(current).toBeGreaterThanOrEqual(eraSchedule[1].start.getTime());
+    expect(current).toBeLessThan(eraSchedule[1].stop!.getTime());
+    expect(current).toBeLessThan(eraSchedule[2].start.getTime());
+    expect(current).toBeLessThan(eraSchedule[2].stop!.getTime());
 
-    const actual = agendaEras(eraSchedule, now)
-    expect(actual.past).toHaveLength(1)
-    expect(actual.present).toHaveLength(1)
-    expect(actual.future).toHaveLength(1)
-  })
-})
+    const actual = agendaEras(eraSchedule, now);
+    expect(actual.past).toHaveLength(1);
+    expect(actual.present).toHaveLength(1);
+    expect(actual.future).toHaveLength(1);
+  });
+});

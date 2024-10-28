@@ -23,20 +23,20 @@
  SOFTWARE.
 
  */
-import type { FC } from 'react'
-import React from 'react'
+import type { FC } from 'react';
+import React from 'react';
 import {
   ComponentsProvider,
   Flex,
   FlexItem,
   Heading,
   ProgressCircular,
-} from '@looker/components'
-import type { ThemeOverrides } from '@looker/extension-utils'
+} from '@looker/components';
+import type { ThemeOverrides } from '@looker/extension-utils';
 
 export interface LoaderProps {
-  themeOverrides: ThemeOverrides
-  message?: string
+  themeOverrides: ThemeOverrides;
+  message?: string;
 }
 
 export const Loader: FC<LoaderProps> = ({
@@ -55,4 +55,4 @@ export const Loader: FC<LoaderProps> = ({
       </FlexItem>
     </Flex>
   </ComponentsProvider>
-)
+);

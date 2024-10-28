@@ -23,19 +23,19 @@
  SOFTWARE.
 
  */
-import type { ApiModel, CodeGen, KeyedCollection } from '@looker/sdk-codegen'
-import { codeGenerators } from '@looker/sdk-codegen'
+import type { ApiModel, CodeGen, KeyedCollection } from '@looker/sdk-codegen';
+import { codeGenerators } from '@looker/sdk-codegen';
 
 /**
  * Returns a collection of generators for all supported (non legacy) languages
  * @param api Api spec
  */
 export const getGenerators = (api: ApiModel): KeyedCollection<CodeGen> => {
-  const codeGens = {}
+  const codeGens: any = {};
   codeGenerators
-    .filter((x) => x.factory !== undefined)
-    .forEach((gen) => {
-      codeGens[gen.language] = gen.factory!(api)
-    })
-  return codeGens
-}
+    .filter(x => x.factory !== undefined)
+    .forEach(gen => {
+      codeGens[gen.language] = gen.factory!(api);
+    });
+  return codeGens;
+};

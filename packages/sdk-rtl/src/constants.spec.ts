@@ -24,92 +24,92 @@
 
  */
 
-import { TestConfig } from './testUtils'
-import { boolDefault, isFalse, isTrue, unquote } from './constants'
-import { ResponseMode, responseMode } from './transport'
+import { TestConfig } from './testUtils';
+import { boolDefault, isFalse, isTrue, unquote } from './constants';
+import { ResponseMode, responseMode } from './transport';
 
-const config = TestConfig()
-const contentTypes = config.testData.content_types
-const binaryTypes: string[] = contentTypes.binary
-const stringTypes: string[] = contentTypes.string
+const config = TestConfig();
+const contentTypes = config.testData.content_types;
+const binaryTypes: string[] = contentTypes.binary;
+const stringTypes: string[] = contentTypes.string;
 
 describe('Constants functions', () => {
   it('isTrue', () => {
-    expect(isTrue('y')).toEqual(true)
-    expect(isTrue('Y')).toEqual(true)
-    expect(isTrue('yes')).toEqual(true)
-    expect(isTrue('Yes')).toEqual(true)
-    expect(isTrue('YeS')).toEqual(true)
-    expect(isTrue('Yes sir')).toEqual(false)
-    expect(isTrue('YES')).toEqual(true)
-    expect(isTrue('true')).toEqual(true)
-    expect(isTrue('True')).toEqual(true)
-    expect(isTrue('True dat')).toEqual(false)
-    expect(isTrue('TRUE')).toEqual(true)
-    expect(isTrue('t')).toEqual(true)
-    expect(isTrue('T')).toEqual(true)
-    expect(isTrue('1')).toEqual(true)
-    expect(isTrue('')).toEqual(false)
+    expect(isTrue('y')).toEqual(true);
+    expect(isTrue('Y')).toEqual(true);
+    expect(isTrue('yes')).toEqual(true);
+    expect(isTrue('Yes')).toEqual(true);
+    expect(isTrue('YeS')).toEqual(true);
+    expect(isTrue('Yes sir')).toEqual(false);
+    expect(isTrue('YES')).toEqual(true);
+    expect(isTrue('true')).toEqual(true);
+    expect(isTrue('True')).toEqual(true);
+    expect(isTrue('True dat')).toEqual(false);
+    expect(isTrue('TRUE')).toEqual(true);
+    expect(isTrue('t')).toEqual(true);
+    expect(isTrue('T')).toEqual(true);
+    expect(isTrue('1')).toEqual(true);
+    expect(isTrue('')).toEqual(false);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    expect(isTrue(undefined)).toEqual(false)
-  })
+    expect(isTrue(undefined)).toEqual(false);
+  });
 
   it('isFalse', () => {
-    expect(isFalse('f')).toEqual(true)
-    expect(isFalse('F')).toEqual(true)
-    expect(isFalse('no')).toEqual(true)
-    expect(isFalse('NO')).toEqual(true)
-    expect(isFalse('NOPE')).toEqual(false)
-    expect(isFalse('false')).toEqual(true)
-    expect(isFalse('False')).toEqual(true)
-    expect(isFalse('FALSE')).toEqual(true)
-    expect(isFalse('f')).toEqual(true)
-    expect(isFalse('F')).toEqual(true)
-    expect(isFalse('0')).toEqual(true)
-    expect(isFalse('')).toEqual(false)
+    expect(isFalse('f')).toEqual(true);
+    expect(isFalse('F')).toEqual(true);
+    expect(isFalse('no')).toEqual(true);
+    expect(isFalse('NO')).toEqual(true);
+    expect(isFalse('NOPE')).toEqual(false);
+    expect(isFalse('false')).toEqual(true);
+    expect(isFalse('False')).toEqual(true);
+    expect(isFalse('FALSE')).toEqual(true);
+    expect(isFalse('f')).toEqual(true);
+    expect(isFalse('F')).toEqual(true);
+    expect(isFalse('0')).toEqual(true);
+    expect(isFalse('')).toEqual(false);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    expect(isFalse(undefined)).toEqual(false)
-  })
+    expect(isFalse(undefined)).toEqual(false);
+  });
 
   it('boolDefault', () => {
-    expect(boolDefault('f', true)).toEqual(false)
-    expect(boolDefault('t', false)).toEqual(true)
-    expect(boolDefault('f')).toEqual(false)
-    expect(boolDefault('t')).toEqual(true)
-    expect(boolDefault('')).toEqual(false)
+    expect(boolDefault('f', true)).toEqual(false);
+    expect(boolDefault('t', false)).toEqual(true);
+    expect(boolDefault('f')).toEqual(false);
+    expect(boolDefault('t')).toEqual(true);
+    expect(boolDefault('')).toEqual(false);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    expect(boolDefault(undefined, false)).toEqual(false)
+    expect(boolDefault(undefined, false)).toEqual(false);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    expect(boolDefault(undefined, true)).toEqual(true)
-  })
+    expect(boolDefault(undefined, true)).toEqual(true);
+  });
 
   it('unquote', () => {
-    expect(unquote('`foo`')).toEqual('foo')
-    expect(unquote('foo`')).toEqual('foo`')
-    expect(unquote('`foo')).toEqual('`foo')
-    expect(unquote("'foo'")).toEqual('foo')
-    expect(unquote("foo'")).toEqual("foo'")
-    expect(unquote("'foo")).toEqual("'foo")
-    expect(unquote('"foo"')).toEqual('foo')
-    expect(unquote('foo"')).toEqual('foo"')
-    expect(unquote('"foo')).toEqual('"foo')
-  })
+    expect(unquote('`foo`')).toEqual('foo');
+    expect(unquote('foo`')).toEqual('foo`');
+    expect(unquote('`foo')).toEqual('`foo');
+    expect(unquote("'foo'")).toEqual('foo');
+    expect(unquote("foo'")).toEqual("foo'");
+    expect(unquote("'foo")).toEqual("'foo");
+    expect(unquote('"foo"')).toEqual('foo');
+    expect(unquote('foo"')).toEqual('foo"');
+    expect(unquote('"foo')).toEqual('"foo');
+  });
 
   it('string types match', () => {
-    stringTypes.forEach((t) => {
-      const mode = responseMode(t)
-      expect(mode).toEqual(ResponseMode.string)
-    })
-  })
+    stringTypes.forEach(t => {
+      const mode = responseMode(t);
+      expect(mode).toEqual(ResponseMode.string);
+    });
+  });
 
   it('binary types match', () => {
-    binaryTypes.forEach((t) => {
-      const mode = responseMode(t)
-      expect(mode).toEqual(ResponseMode.binary)
-    })
-  })
-})
+    binaryTypes.forEach(t => {
+      const mode = responseMode(t);
+      expect(mode).toEqual(ResponseMode.binary);
+    });
+  });
+});

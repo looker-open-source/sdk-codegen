@@ -25,9 +25,9 @@
  */
 
 export interface UserToAdd {
-  first: string
-  last: string
-  email: string
+  first: string;
+  last: string;
+  email: string;
 }
 
 export enum Actions {
@@ -38,43 +38,43 @@ export enum Actions {
 }
 
 export interface ParseCsvAction {
-  type: Actions.PARSE_CSV
-  payload: File
+  type: Actions.PARSE_CSV;
+  payload: File;
 }
 
 export interface AddUsersAction {
-  type: Actions.ADD_USERS
-  payload: Array<UserToAdd>
+  type: Actions.ADD_USERS;
+  payload: Array<UserToAdd>;
 }
 
 export interface IncrementUsersAddedAction {
-  type: Actions.INCREMENT_USERS_ADDED
+  type: Actions.INCREMENT_USERS_ADDED;
 }
 
 export interface ResetAddUsersAction {
-  type: Actions.RESET_ADD_USERS
+  type: Actions.RESET_ADD_USERS;
 }
 
 export type AddUserAction =
   | ParseCsvAction
   | AddUsersAction
   | IncrementUsersAddedAction
-  | ResetAddUsersAction
+  | ResetAddUsersAction;
 
 export const parseCsv = (csvFile: File): ParseCsvAction => ({
   type: Actions.PARSE_CSV,
   payload: csvFile,
-})
+});
 
 export const addUsers = (usersToAdd: Array<UserToAdd>): AddUsersAction => ({
   type: Actions.ADD_USERS,
   payload: usersToAdd,
-})
+});
 
 export const incrementUsersAdded = (): IncrementUsersAddedAction => ({
   type: Actions.INCREMENT_USERS_ADDED,
-})
+});
 
 export const resetAddUsers = (): ResetAddUsersAction => ({
   type: Actions.RESET_ADD_USERS,
-})
+});

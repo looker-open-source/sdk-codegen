@@ -1,6 +1,6 @@
 {
   "name": "@looker/sdk-codegen-scripts",
-  "version": "21.5.7",
+  "version": "21.5.26",
   "description": "Looker SDK Codegen scripts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -27,26 +27,27 @@
     "watch:cjs": "yarn lerna exec --scope @looker/sdk-codegen-scripts --stream 'BABEL_ENV=build_cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "dependencies": {
-    "@looker/sdk": "^23.12.0",
-    "@looker/sdk-codegen": "^21.8.1",
-    "@looker/sdk-codegen-utils": "^21.0.11",
-    "@looker/sdk-node": "^23.12.0",
-    "@looker/sdk-rtl": "^21.6.1",
+    "@looker/sdk": "24.18.1",
+    "@looker/sdk-codegen": "21.9.5",
+    "@looker/sdk-codegen-utils": "21.0.16",
+    "@looker/sdk-node": "24.18.1",
+    "@looker/sdk-rtl": "21.6.3",
     "config": "^3.3.1",
     "cross-env": "^7.0.2"
   },
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.1.23",
     "@types/config": "^0.0.36",
-    "@types/node-fetch": "^2.5.7",
     "dotenv": "^8.2.0",
+    "expect": "29.7.0",
     "file-type": "^16.5.4",
     "ini": "^1.3.8",
-    "js-yaml": "^3.13.1",
-    "openapi3-ts": "^2.0.0",
-    "prettier": "^2.4.1",
-    "swagger2openapi": "^7.0.3",
-    "lodash": "^4.17.21"
+    "js-yaml": "3.14.1",
+    "openapi3-ts": "2.0.2",
+    "@types/prettier": "2.7.3",
+    "prettier": "2.8.8",
+    "swagger2openapi": "7.0.8",
+    "lodash": "4.17.21"
   },
   "gitHead": "d16d6fd98594572f130dd0b7959d49a737de8722"
 }

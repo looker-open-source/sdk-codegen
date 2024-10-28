@@ -23,16 +23,19 @@
  SOFTWARE.
 
  */
-import type { IAPIMethods } from '@looker/sdk-rtl'
+import type { IAPIMethods } from '@looker/sdk-rtl';
 
-export type ServiceCreatorFunc<T> = (sdk: IAPIMethods, timeToLive?: number) => T
+export type ServiceCreatorFunc<T> = (
+  sdk: IAPIMethods,
+  timeToLive?: number
+) => T;
 
 export interface IServiceFactory {
   /**
    * Retrieves a service
    * @param serviceName to retrieve
    */
-  get<T>(serviceName: string): T
+  get<T>(serviceName: string): T;
   /**
    * Registers or creates a service
    * @param serviceName name of service.
@@ -43,22 +46,22 @@ export interface IServiceFactory {
     serviceName: string,
     serviceCreator: ServiceCreatorFunc<T>,
     timeToLive?: number
-  ): void
+  ): void;
 }
 
 /**
  * A factory for registering and maintaining services
  */
 class ServiceFactory implements IServiceFactory {
-  servicesMap: Record<string, any> = {}
+  servicesMap: Record<string, any> = {};
   constructor(private sdk: IAPIMethods) {}
 
   get<T>(serviceName: string): T {
-    const service = this.servicesMap[serviceName]
+    const service = this.servicesMap[serviceName];
     if (!service) {
-      throw new Error(`Service ${serviceName} not found`)
+      throw new Error(`Service ${serviceName} not found`);
     }
-    return service
+    return service;
   }
 
   register<T>(
@@ -66,23 +69,23 @@ class ServiceFactory implements IServiceFactory {
     serviceCreator: ServiceCreatorFunc<T>,
     timeToLive?: number
   ) {
-    let service = this.servicesMap[serviceName]
+    let service = this.servicesMap[serviceName];
     if (!service) {
-      service = serviceCreator(this.sdk, timeToLive)
-      this.servicesMap[serviceName] = service
+      service = serviceCreator(this.sdk, timeToLive);
+      this.servicesMap[serviceName] = service;
     }
-    return service
+    return service;
   }
 }
 
-let factory: IServiceFactory | undefined
+let factory: IServiceFactory | undefined;
 
 /**
  * Helper method for creating a singleton factory
  * @param sdk
  */
 export function createFactory(sdk: IAPIMethods) {
-  factory = new ServiceFactory(sdk)
+  factory = new ServiceFactory(sdk);
 }
 
 /**
@@ -90,14 +93,14 @@ export function createFactory(sdk: IAPIMethods) {
  */
 export function getFactory() {
   if (!factory) {
-    throw new Error('Factory must be created with an SDK.')
+    throw new Error('Factory must be created with an SDK.');
   }
-  return factory
+  return factory;
 }
 
 /**
  * Helper method for destroying the factory
  */
 export function destroyFactory() {
-  factory = undefined
+  factory = undefined;
 }

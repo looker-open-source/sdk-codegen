@@ -23,5 +23,5 @@
  SOFTWARE.
 
  */
-export * from './JudgingEditorScene'
-export * from './components'
+export * from './JudgingEditorScene';
+export * from './components';

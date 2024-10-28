@@ -36,7 +36,7 @@ fun base64UrlEncode(bytes: ByteArray): String {
 @ExperimentalUnsignedTypes
 class OAuthSession(
     override val apiSettings: ConfigurationProvider,
-    override val transport: Transport = Transport(apiSettings)
+    override val transport: Transport = Transport(apiSettings),
 ) :
     AuthSession(apiSettings, transport) {
     private var random = SecureRandom()
@@ -52,7 +52,7 @@ class OAuthSession(
             HttpMethod.POST,
             "/api/token",
             emptyMap(),
-            body
+            body,
         )
         val token = this.ok<AccessToken>(response)
         this.authToken.setToken(token)
@@ -69,8 +69,8 @@ class OAuthSession(
                         "grant_type" to "refresh_token",
                         "refresh_token" to this.activeToken().refreshToken,
                         "client_id" to config["client_id"],
-                        "redirect_uri" to config["redirect_uri"]
-                    )
+                        "redirect_uri" to config["redirect_uri"],
+                    ),
                 )
             }
         }
@@ -94,8 +94,8 @@ class OAuthSession(
                 "scope" to scope,
                 "state" to state,
                 "code_challenge_method" to "S256",
-                "code_challenge" to codeChallenge
-            )
+                "code_challenge" to codeChallenge,
+            ),
         )
     }
 
@@ -107,7 +107,7 @@ class OAuthSession(
             "code" to authCode,
             "code_verifier" to verifier,
             "client_id" to (config["client_id"] ?: error("")),
-            "redirect_uri" to (config["redirect_uri"] ?: error(""))
+            "redirect_uri" to (config["redirect_uri"] ?: error("")),
         )
     }
 

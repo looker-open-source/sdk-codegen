@@ -21,7 +21,7 @@ the Kotlin Looker SDK jar as follows
 2. `cd {repolocation}/kotlin`
 3. `./gradlew jar`
 4. copy `./build/libs/looker-kotlin-sdk.jar` to the `lib` directory of this
-project.
+   project.
 
 # Run
 
@@ -30,8 +30,8 @@ the example class.
 
 1. cd to the root of this example project.
 2. Create a `.env` in the root of this project. A sample .env_sample file is
-provided. You will need to populate the .env file with the Looker client id and
-secret obtained earlier.
+   provided. You will need to populate the .env file with the Looker client id and
+   secret obtained earlier.
 3. `./gradlew run`
 
 The run should print out:

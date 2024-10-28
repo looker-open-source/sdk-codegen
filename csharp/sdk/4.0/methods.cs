@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 461 API methods
+/// 467 API methods
 
 #nullable enable
 using System;
@@ -645,35 +645,42 @@ namespace Looker.SDK.API40
     return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/embed_config/secrets/{embed_secret_id}", null,null,options);
   }
 
-  /// ### Create SSO Embed URL
+  /// ### Create Signed Embed URL
   ///
-  /// Creates an SSO embed URL and cryptographically signs it with an embed secret.
+  /// Creates a signed embed URL and cryptographically signs it with an embed secret.
   /// This signed URL can then be used to instantiate a Looker embed session in a PBL web application.
-  /// Do not make any modifications to this URL - any change may invalidate the signature and
+  /// Do not make any modifications to the returned URL - any change may invalidate the signature and
   /// cause the URL to fail to load a Looker embed session.
   ///
-  /// A signed SSO embed URL can only be used once. After it has been used to request a page from the
-  /// Looker server, the URL is invalid. Future requests using the same URL will fail. This is to prevent
+  /// A signed embed URL can only be **used once**. After the URL has been used to request a page from the
+  /// Looker server, it is invalid. Future requests using the same URL will fail. This is to prevent
   /// 'replay attacks'.
   ///
   /// The `target_url` property must be a complete URL of a Looker UI page - scheme, hostname, path and query params.
   /// To load a dashboard with id 56 and with a filter of `Date=1 years`, the looker URL would look like `https:/myname.looker.com/dashboards/56?Date=1%20years`.
-  /// The best way to obtain this target_url is to navigate to the desired Looker page in your web browser,
-  /// copy the URL shown in the browser address bar and paste it into the `target_url` property as a quoted string value in this API request.
+  /// The best way to obtain this `target_url` is to navigate to the desired Looker page in your web browser and use the "Get embed URL" menu option
+  /// to copy it to your clipboard and paste it into the `target_url` property as a quoted string value in this API request.
   ///
-  /// Permissions for the embed user are defined by the groups in which the embed user is a member (group_ids property)
+  /// Permissions for the embed user are defined by the groups in which the embed user is a member (`group_ids` property)
   /// and the lists of models and permissions assigned to the embed user.
-  /// At a minimum, you must provide values for either the group_ids property, or both the models and permissions properties.
+  /// At a minimum, you must provide values for either the `group_ids` property, or **both** the models and permissions properties.
   /// These properties are additive; an embed user can be a member of certain groups AND be granted access to models and permissions.
   ///
-  /// The embed user's access is the union of permissions granted by the group_ids, models, and permissions properties.
+  /// The embed user's access is the union of permissions granted by the `group_ids`, `models`, and `permissions` properties.
   ///
   /// This function does not strictly require all group_ids, user attribute names, or model names to exist at the moment the
-  /// SSO embed url is created. Unknown group_id, user attribute names or model names will be passed through to the output URL.
-  /// To diagnose potential problems with an SSO embed URL, you can copy the signed URL into the Embed URI Validator text box in `<your looker instance>/admin/embed`.
+  /// embed url is created. Unknown group_id, user attribute names or model names will be passed through to the output URL.
+  /// Because of this, **these parameters are not validated** when the API call is made.
+  ///
+  /// The [Get Embed Url](https://cloud.google.com/looker/docs/r/get-signed-url) dialog can be used to determine and validate the correct permissions for signing an embed url.
+  /// This dialog also provides the SDK syntax for the API call to make. Alternatively, you can copy the signed URL into the Embed URI Validator text box
+  /// in `<your looker instance>/admin/embed` to diagnose potential problems.
   ///
   /// The `secret_id` parameter is optional. If specified, its value must be the id of an active secret defined in the Looker instance.
-  /// if not specified, the URL will be signed using the newest active secret defined in the Looker instance.
+  /// if not specified, the URL will be signed using the most recent active signing secret. If there is no active secret for signing embed urls,
+  /// a default secret will be created. This default secret is encrypted using HMAC/SHA-256.
+  ///
+  /// The `embed_domain` parameter is optional. If specified and valid, the domain will be added to the embed domain allowlist if it is missing.
   ///
   /// #### Security Note
   /// Protect this signed URL as you would an access token or password credentials - do not write
@@ -685,7 +692,7 @@ namespace Looker.SDK.API40
   ///
   /// POST /embed/sso_url -> EmbedUrlResponse
   ///
-  /// <returns><c>EmbedUrlResponse</c> Signed SSO URL (application/json)</returns>
+  /// <returns><c>EmbedUrlResponse</c> Signed Embed URL (application/json)</returns>
   ///
   public async Task<SdkResponse<EmbedUrlResponse, Exception>> create_sso_embed_url(
     EmbedSsoParams body,
@@ -701,7 +708,7 @@ namespace Looker.SDK.API40
   /// "Powered by Looker" (PBL) web application.
   ///
   /// This is similar to Private Embedding (https://cloud.google.com/looker/docs/r/admin/embed/private-embed). Instead of
-  /// of logging into the Web UI to authenticate, the user has already authenticated against the API to be able to
+  /// logging into the Web UI to authenticate, the user has already authenticated against the API to be able to
   /// make this call. However, unlike Private Embed where the user has access to any other part of the Looker UI,
   /// the embed web session created by requesting the EmbedUrlResponse.url in a browser only has access to
   /// content visible under the `/embed` context.
@@ -734,6 +741,21 @@ namespace Looker.SDK.API40
     return await AuthRequest<EmbedUrlResponse, Exception>(HttpMethod.Post, "/embed/token_url/me", null,body,options);
   }
 
+  /// ### Validate a Signed Embed URL
+  ///
+  /// GET /embed/sso/validate -> EmbedUrlResponse
+  ///
+  /// <returns><c>EmbedUrlResponse</c> Embed URL Validation (application/json)</returns>
+  ///
+  /// <param name="url">URL to validate</param>
+  public async Task<SdkResponse<EmbedUrlResponse, Exception>> validate_embed_url(
+    string? url = null,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<EmbedUrlResponse, Exception>(HttpMethod.Get, "/embed/sso/validate", new Values {
+      { "url", url }},null,options);
+  }
+
   /// ### Acquire a cookieless embed session.
   ///
   /// The acquire session endpoint negates the need for signing the embed url and passing it as a parameter
@@ -752,7 +774,7 @@ namespace Looker.SDK.API40
   /// If the `session_reference_token` is provided but the session has expired, the token will be ignored and a
   /// new embed session will be created. Note that the embed user definition will be updated in this scenario.
   ///
-  /// If the credentials do not match the credentials associated with an exisiting session_reference_token, a
+  /// If the credentials do not match the credentials associated with an existing session_reference_token, a
   /// 404 will be returned.
   ///
   /// The endpoint returns the following:
@@ -807,6 +829,13 @@ namespace Looker.SDK.API40
   /// The generate tokens endpoint should be called every time the Looker client asks for a token (except for the
   /// first time when the tokens returned by the acquire_session endpoint should be used).
   ///
+  /// #### Embed session expiration handling
+  ///
+  /// This endpoint does NOT return an error when the embed session expires. This is to simplify processing
+  /// in the caller as errors can happen for non session expiration reasons. Instead the endpoint returns
+  /// the session time to live in the `session_reference_token_ttl` response property. If this property
+  /// contains a zero, the embed session has expired.
+  ///
   /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
   ///
   /// PUT /embed/cookieless_session/generate_tokens -> EmbedCookielessSessionGenerateTokensResponse
@@ -829,7 +858,7 @@ namespace Looker.SDK.API40
   ///
   /// Configuring LDAP impacts authentication for all users. This configuration should be done carefully.
   ///
-  /// Looker maintains a single LDAP configuration. It can be read and updated.       Updates only succeed if the new state will be valid (in the sense that all required fields are populated);       it is up to you to ensure that the configuration is appropriate and correct).
+  /// Looker maintains a single LDAP configuration. It can be read and updated. Updates only succeed if the new state will be valid (in the sense that all required fields are populated); it is up to you to ensure that the configuration is appropriate and correct).
   ///
   /// LDAP is enabled or disabled for Looker using the **enabled** field.
   ///
@@ -908,9 +937,9 @@ namespace Looker.SDK.API40
 
   /// ### Test the connection authentication settings for an LDAP configuration.
   ///
-  /// This tests that the connection is possible and that a 'server' account to be used by Looker can       authenticate to the LDAP server given connection and authentication information.
+  /// This tests that the connection is possible and that a 'server' account to be used by Looker can authenticate to the LDAP server given connection and authentication information.
   ///
-  /// **connection_host**, **connection_port**, and **auth_username**, are required.       **connection_tls** and **auth_password** are optional.
+  /// **connection_host**, **connection_port**, and **auth_username**, are required. **connection_tls** and **auth_password** are optional.
   ///
   /// Example:
   /// ```json
@@ -923,7 +952,7 @@ namespace Looker.SDK.API40
   /// }
   /// ```
   ///
-  /// Looker will never return an **auth_password**. If this request omits the **auth_password** field, then       the **auth_password** value from the active config (if present) will be used for the test.
+  /// Looker will never return an **auth_password**. If this request omits the **auth_password** field, then the **auth_password** value from the active config (if present) will be used for the test.
   ///
   /// The active LDAP settings are not modified.
   ///
@@ -942,9 +971,9 @@ namespace Looker.SDK.API40
 
   /// ### Test the user authentication settings for an LDAP configuration without authenticating the user.
   ///
-  /// This test will let you easily test the mapping for user properties and roles for any user without      needing to authenticate as that user.
+  /// This test will let you easily test the mapping for user properties and roles for any user withoutneeding to authenticate as that user.
   ///
-  /// This test accepts a full LDAP configuration along with a username and attempts to find the full info      for the user from the LDAP server without actually authenticating the user. So, user password is not      required.The configuration is validated before attempting to contact the server.
+  /// This test accepts a full LDAP configuration along with a username and attempts to find the full infofor the user from the LDAP server without actually authenticating the user. So, user password is notrequired.The configuration is validated before attempting to contact the server.
   ///
   /// **test_ldap_user** is required.
   ///
@@ -965,9 +994,9 @@ namespace Looker.SDK.API40
 
   /// ### Test the user authentication settings for an LDAP configuration.
   ///
-  /// This test accepts a full LDAP configuration along with a username/password pair and attempts to       authenticate the user with the LDAP server. The configuration is validated before attempting the       authentication.
+  /// This test accepts a full LDAP configuration along with a username/password pair and attempts to authenticate the user with the LDAP server. The configuration is validated before attempting the authentication.
   ///
-  /// Looker will never return an **auth_password**. If this request omits the **auth_password** field, then       the **auth_password** value from the active config (if present) will be used for the test.
+  /// Looker will never return an **auth_password**. If this request omits the **auth_password** field, then the **auth_password** value from the active config (if present) will be used for the test.
   ///
   /// **test_ldap_user** and **test_ldap_password** are required.
   ///
@@ -1226,7 +1255,7 @@ namespace Looker.SDK.API40
   ///
   /// Configuring OIDC impacts authentication for all users. This configuration should be done carefully.
   ///
-  /// Looker maintains a single OIDC configuation. It can be read and updated.       Updates only succeed if the new state will be valid (in the sense that all required fields are populated);       it is up to you to ensure that the configuration is appropriate and correct).
+  /// Looker maintains a single OIDC configuration. It can be read and updated. Updates only succeed if the new state will be valid (in the sense that all required fields are populated); it is up to you to ensure that the configuration is appropriate and correct).
   ///
   /// OIDC is enabled or disabled for Looker using the **enabled** field.
   ///
@@ -1366,7 +1395,7 @@ namespace Looker.SDK.API40
   ///
   /// Configuring SAML impacts authentication for all users. This configuration should be done carefully.
   ///
-  /// Looker maintains a single SAML configuation. It can be read and updated.       Updates only succeed if the new state will be valid (in the sense that all required fields are populated);       it is up to you to ensure that the configuration is appropriate and correct).
+  /// Looker maintains a single SAML configuration. It can be read and updated. Updates only succeed if the new state will be valid (in the sense that all required fields are populated); it is up to you to ensure that the configuration is appropriate and correct).
   ///
   /// SAML is enabled or disabled for Looker using the **enabled** field.
   ///
@@ -1760,10 +1789,10 @@ namespace Looker.SDK.API40
   /// <param name="favorited">Return favorited boards when true.</param>
   /// <param name="creator_id">Filter on boards created by a particular user.</param>
   /// <param name="sorts">The fields to sort the results by</param>
-  /// <param name="page">The page to return. DEPRECATED. Use offset instead.</param>
-  /// <param name="per_page">The number of items in the returned page. DEPRECATED. Use limit instead.</param>
-  /// <param name="offset">The number of items to skip before returning any. (used with limit and takes priority over page and per_page)</param>
-  /// <param name="limit">The maximum number of items to return. (used with offset and takes priority over page and per_page)</param>
+  /// <param name="page">DEPRECATED. Use limit and offset instead. Return only page N of paginated results</param>
+  /// <param name="per_page">DEPRECATED. Use limit and offset instead. Return N rows of data per page</param>
+  /// <param name="offset">Number of results to return. (used with offset and takes priority over page and per_page)</param>
+  /// <param name="limit">Number of results to skip before returning any. (used with limit and takes priority over page and per_page)</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
   /// <param name="permission">Filter results based on permission, either show (default) or update</param>
   public async Task<SdkResponse<Board[], Exception>> search_boards(
@@ -2470,11 +2499,16 @@ namespace Looker.SDK.API40
   ///  - allow_user_timezones
   ///  - custom_welcome_email
   ///  - data_connector_default_enabled
+  ///  - dashboard_auto_refresh_restriction
+  ///  - dashboard_auto_refresh_minimum_interval
   ///  - extension_framework_enabled
   ///  - extension_load_url_enabled
+  ///  - instance_config
   ///  - marketplace_auto_install_enabled
+  ///  - marketplace_automation
   ///  - marketplace_terms_accepted
   ///  - marketplace_enabled
+  ///  - marketplace_site
   ///  - onboarding_enabled
   ///  - privatelabel_configuration
   ///  - timezone
@@ -2482,6 +2516,7 @@ namespace Looker.SDK.API40
   ///  - email_domain_allowlist
   ///  - embed_cookieless_v2
   ///  - embed_enabled
+  ///  - embed_config
   ///
   /// GET /setting -> Setting
   ///
@@ -2502,11 +2537,16 @@ namespace Looker.SDK.API40
   ///  - allow_user_timezones
   ///  - custom_welcome_email
   ///  - data_connector_default_enabled
+  ///  - dashboard_auto_refresh_restriction
+  ///  - dashboard_auto_refresh_minimum_interval
   ///  - extension_framework_enabled
   ///  - extension_load_url_enabled
+  ///  - instance_config
   ///  - marketplace_auto_install_enabled
+  ///  - marketplace_automation
   ///  - marketplace_terms_accepted
   ///  - marketplace_enabled
+  ///  - marketplace_site
   ///  - onboarding_enabled
   ///  - privatelabel_configuration
   ///  - timezone
@@ -2514,6 +2554,7 @@ namespace Looker.SDK.API40
   ///  - email_domain_allowlist
   ///  - embed_cookieless_v2
   ///  - embed_enabled
+  ///  - embed_config
   ///
   /// See the `Setting` type for more information on the specific values that can be configured.
   ///
@@ -2611,11 +2652,14 @@ namespace Looker.SDK.API40
   }
 
   /// ### This feature is enabled only by special license.
-  /// ### Gets the whitelabel configuration, which includes hiding documentation links, custom favicon uploading, etc.
+  ///
+  /// This endpoint provides the private label configuration, which includes hiding documentation links, custom favicon uploading, etc.
+  ///
+  /// This endpoint is deprecated. [Get Setting](#!/Config/get_setting) should be used to retrieve private label settings instead
   ///
   /// GET /whitelabel_configuration -> WhitelabelConfiguration
   ///
-  /// <returns><c>WhitelabelConfiguration</c> Whitelabel configuration (application/json)</returns>
+  /// <returns><c>WhitelabelConfiguration</c> Private label configuration (application/json)</returns>
   ///
   /// <param name="fields">Requested fields.</param>
   [Obsolete("Deprecated")]
@@ -2627,11 +2671,13 @@ namespace Looker.SDK.API40
       { "fields", fields }},null,options);
   }
 
-  /// ### Update the whitelabel configuration
+  /// ### Update the private label configuration
+  ///
+  /// This endpoint is deprecated. [Set Setting](#!/Config/set_setting) should be used to update private label settings instead
   ///
   /// PUT /whitelabel_configuration -> WhitelabelConfiguration
   ///
-  /// <returns><c>WhitelabelConfiguration</c> Whitelabel configuration (application/json)</returns>
+  /// <returns><c>WhitelabelConfiguration</c> Private label configuration (application/json)</returns>
   ///
   [Obsolete("Deprecated")]
   public async Task<SdkResponse<WhitelabelConfiguration, Exception>> update_whitelabel_configuration(
@@ -2836,6 +2882,24 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
     return await AuthRequest<ExternalOauthApplication, Exception>(HttpMethod.Post, "/external_oauth_applications", null,body,options);
+  }
+
+  /// ### Update an OAuth Application's client secret.
+  ///
+  /// This is an OAuth Application which Looker uses to access external systems.
+  ///
+  /// PATCH /external_oauth_applications/{client_id} -> ExternalOauthApplication
+  ///
+  /// <returns><c>ExternalOauthApplication</c> External OAuth Application (application/json)</returns>
+  ///
+  /// <param name="client_id">The client ID of the OAuth App to update</param>
+  public async Task<SdkResponse<ExternalOauthApplication, Exception>> update_external_oauth_application(
+    string client_id,
+    WriteExternalOauthApplication body,
+    ITransportSettings? options = null)
+{  
+      client_id = SdkUtils.EncodeParam(client_id);
+    return await AuthRequest<ExternalOauthApplication, Exception>(HttpMethod.Patch, $"/external_oauth_applications/{client_id}", null,body,options);
   }
 
   /// ### Create OAuth User state.
@@ -3288,15 +3352,15 @@ namespace Looker.SDK.API40
   ///
   /// GET /content/{terms} -> ContentSearch[]
   ///
-  /// <returns><c>ContentSearch[]</c> content (application/json)</returns>
+  /// <returns><c>ContentSearch[]</c> Matching content (application/json)</returns>
   ///
   /// <param name="terms">Search terms</param>
   /// <param name="fields">Requested fields.</param>
   /// <param name="types">Content types requested (dashboard, look, lookml_dashboard).</param>
   /// <param name="limit">Number of results to return. (used with offset and takes priority over page and per_page)</param>
   /// <param name="offset">Number of results to skip before returning any. (used with limit and takes priority over page and per_page)</param>
-  /// <param name="page">Requested page.</param>
-  /// <param name="per_page">Results per page.</param>
+  /// <param name="page">DEPRECATED. Use limit and offset instead. Return only page N of paginated results</param>
+  /// <param name="per_page">DEPRECATED. Use limit and offset instead. Return N rows of data per page</param>
   public async Task<SdkResponse<ContentSearch[], Exception>> search_content(
     string terms,
     string? fields = null,
@@ -3317,9 +3381,45 @@ namespace Looker.SDK.API40
       { "per_page", per_page }},null,options);
   }
 
+  /// ### Get Content Summary
+  ///
+  /// Retrieves a collection of content items related to user activity and engagement, such as recently viewed content,
+  /// favorites and scheduled items.
+  ///
+  /// GET /content_summary -> ContentSummary[]
+  ///
+  /// <returns><c>ContentSummary[]</c> Content Summary (application/json)</returns>
+  ///
+  /// <param name="fields">Comma-delimited names of fields to return in responses. Omit for all fields</param>
+  /// <param name="limit">Number of results to return. (used with offset)</param>
+  /// <param name="offset">Number of results to skip before returning any. (used with limit)</param>
+  /// <param name="target_group_id">Match group id</param>
+  /// <param name="target_user_id">Match user id</param>
+  /// <param name="target_content_type">Content type to match, options are: look, dashboard. Can be provided as a comma delimited list.</param>
+  /// <param name="sorts">Fields to sort by</param>
+  public async Task<SdkResponse<ContentSummary[], Exception>> content_summary(
+    string? fields = null,
+    long? limit = null,
+    long? offset = null,
+    string? target_group_id = null,
+    string? target_user_id = null,
+    string? target_content_type = null,
+    string? sorts = null,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<ContentSummary[], Exception>(HttpMethod.Get, "/content_summary", new Values {
+      { "fields", fields },
+      { "limit", limit },
+      { "offset", offset },
+      { "target_group_id", target_group_id },
+      { "target_user_id", target_user_id },
+      { "target_content_type", target_content_type },
+      { "sorts", sorts }},null,options);
+  }
+
   /// ### Get an image representing the contents of a dashboard or look.
   ///
-  /// The returned thumbnail is an abstract representation of the contents of a dashbord or look and does not
+  /// The returned thumbnail is an abstract representation of the contents of a dashboard or look and does not
   /// reflect the actual data displayed in the respective visualizations.
   ///
   /// GET /content_thumbnail/{type}/{resource_id} -> string
@@ -3452,7 +3552,7 @@ namespace Looker.SDK.API40
   ///
   /// # DEPRECATED:  Use [content_thumbnail()](#!/Content/content_thumbnail)
   ///
-  /// The returned thumbnail is an abstract representation of the contents of a dashbord or look and does not
+  /// The returned thumbnail is an abstract representation of the contents of a dashboard or look and does not
   /// reflect the actual data displayed in the respective visualizations.
   ///
   /// GET /vector_thumbnail/{type}/{resource_id} -> string
@@ -3566,7 +3666,7 @@ namespace Looker.SDK.API40
   /// <param name="title">Match Dashboard title.</param>
   /// <param name="description">Match Dashboard description.</param>
   /// <param name="content_favorite_id">Filter on a content favorite id.</param>
-  /// <param name="folder_id">Filter on a particular space.</param>
+  /// <param name="folder_id">Filter on a particular folder.</param>
   /// <param name="deleted">Filter on dashboards deleted status.</param>
   /// <param name="user_id">Filter on dashboards created by a particular user.</param>
   /// <param name="view_count">Filter on a particular value of view_count</param>
@@ -3716,7 +3816,7 @@ namespace Looker.SDK.API40
   /// You can use this function to change the string and integer properties of
   /// a dashboard. Nested objects such as filters, dashboard elements, or dashboard layout components
   /// cannot be modified by this function - use the update functions for the respective
-  /// nested object types (like [update_dashboard_filter()](#!/3.1/Dashboard/update_dashboard_filter) to change a filter)
+  /// nested object types (like [update_dashboard_filter()](#!/Dashboard/update_dashboard_filter) to change a filter)
   /// to modify nested objects referenced by a dashboard.
   ///
   /// If you receive a 422 error response when updating a dashboard, be sure to look at the
@@ -3757,7 +3857,7 @@ namespace Looker.SDK.API40
     return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/dashboards/{dashboard_id}", null,null,options);
   }
 
-  /// ### Get Aggregate Table LookML for Each Query on a Dahboard
+  /// ### Get Aggregate Table LookML for Each Query on a Dashboard
   ///
   /// Returns a JSON object that contains the dashboard id and Aggregate Table lookml
   ///
@@ -4545,21 +4645,18 @@ namespace Looker.SDK.API40
 
   /// ### Get information about all folders.
   ///
-  /// In API 3.x, this will not return empty personal folders, unless they belong to the calling user,
-  /// or if they contain soft-deleted content.
+  /// All personal folders will be returned.
   ///
-  /// In API 4.0+, all personal folders will be returned.
+  /// GET /folders -> FolderBase[]
   ///
-  /// GET /folders -> Folder[]
-  ///
-  /// <returns><c>Folder[]</c> Folder (application/json)</returns>
+  /// <returns><c>FolderBase[]</c> Folder (application/json)</returns>
   ///
   /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<Folder[], Exception>> all_folders(
+  public async Task<SdkResponse<FolderBase[], Exception>> all_folders(
     string? fields = null,
     ITransportSettings? options = null)
 {  
-    return await AuthRequest<Folder[], Exception>(HttpMethod.Get, "/folders", new Values {
+    return await AuthRequest<FolderBase[], Exception>(HttpMethod.Get, "/folders", new Values {
       { "fields", fields }},null,options);
   }
 
@@ -4673,7 +4770,6 @@ namespace Looker.SDK.API40
   }
 
   /// ### Get all looks in a folder.
-  /// In API 3.x, this will return all looks in a folder, including looks in the trash.
   /// In API 4.0+, all looks in a folder will be returned, excluding looks in the trash.
   ///
   /// GET /folders/{folder_id}/looks -> LookWithQuery[]
@@ -5388,25 +5484,6 @@ namespace Looker.SDK.API40
 
   #endregion Integration: Manage Integrations
 
-  #region JdbcInterface: LookML Model metadata for JDBC Clients
-
-  /// ### Handle Avatica RPC Requests
-  ///
-  /// GET /__jdbc_interface__ -> JdbcInterface
-  ///
-  /// <returns><c>JdbcInterface</c>  (application/json)</returns>
-  ///
-  /// <param name="avatica_request">Avatica RPC request</param>
-  public async Task<SdkResponse<JdbcInterface, Exception>> jdbc_interface(
-    string? avatica_request = null,
-    ITransportSettings? options = null)
-{  
-    return await AuthRequest<JdbcInterface, Exception>(HttpMethod.Get, "/__jdbc_interface__", new Values {
-      { "avatica_request", avatica_request }},null,options);
-  }
-
-  #endregion JdbcInterface: LookML Model metadata for JDBC Clients
-
   #region Look: Run and Manage Looks
 
   /// ### Get information about all active Looks
@@ -5580,7 +5657,7 @@ namespace Looker.SDK.API40
   ///
   /// Soft-deleted looks are excluded from the results of [all_looks()](#!/Look/all_looks) and [search_looks()](#!/Look/search_looks), so they
   /// essentially disappear from view even though they still reside in the db.
-  /// In API 3.1 and later, you can pass `deleted: true` as a parameter to [search_looks()](#!/3.1/Look/search_looks) to list soft-deleted looks.
+  /// You can pass `deleted: true` as a parameter to [search_looks()](#!/Look/search_looks) to list soft-deleted looks.
   ///
   /// NOTE: [delete_look()](#!/Look/delete_look) performs a "hard delete" - the look data is removed from the Looker
   /// database and destroyed. There is no "undo" for `delete_look()`.
@@ -5632,7 +5709,8 @@ namespace Looker.SDK.API40
   /// | result_format | Description
   /// | :-----------: | :--- |
   /// | json | Plain json
-  /// | json_detail | Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+  /// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
+  /// | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
   /// | csv | Comma separated values with a header
   /// | txt | Tab separated values with a header
   /// | html | Simple html
@@ -5844,16 +5922,19 @@ namespace Looker.SDK.API40
   /// <param name="lookml_model_name">Name of lookml model.</param>
   /// <param name="explore_name">Name of explore.</param>
   /// <param name="fields">Requested fields.</param>
+  /// <param name="add_drills_metadata">Whether response should include drill field metadata.</param>
   public async Task<SdkResponse<LookmlModelExplore, Exception>> lookml_model_explore(
     string lookml_model_name,
     string explore_name,
     string? fields = null,
+    bool? add_drills_metadata = null,
     ITransportSettings? options = null)
 {  
       lookml_model_name = SdkUtils.EncodeParam(lookml_model_name);
       explore_name = SdkUtils.EncodeParam(explore_name);
     return await AuthRequest<LookmlModelExplore, Exception>(HttpMethod.Get, $"/lookml_models/{lookml_model_name}/explores/{explore_name}", new Values {
-      { "fields", fields }},null,options);
+      { "fields", fields },
+      { "add_drills_metadata", add_drills_metadata }},null,options);
   }
 
   #endregion LookmlModel: Manage LookML Models
@@ -6738,8 +6819,6 @@ namespace Looker.SDK.API40
 
   /// ### Creates a tag for the most recent commit, or a specific ref is a SHA is provided
   ///
-  /// This is an internal-only, undocumented route.
-  ///
   /// POST /projects/{project_id}/tag -> Project
   ///
   /// <returns>
@@ -6855,8 +6934,6 @@ namespace Looker.SDK.API40
   /// <param name="path_prefix">Prefix to use for drill links (url encoded).</param>
   /// <param name="rebuild_pdts">Rebuild PDTS used in query.</param>
   /// <param name="server_table_calcs">Perform table calculations on query results</param>
-  /// <param name="image_width">DEPRECATED. Render width for image formats. Note that this parameter is always ignored by this method.</param>
-  /// <param name="image_height">DEPRECATED. Render height for image formats. Note that this parameter is always ignored by this method.</param>
   /// <param name="fields">Requested fields</param>
   public async Task<SdkResponse<QueryTask, Exception>> create_query_task(
     WriteCreateQueryTask body,
@@ -6870,8 +6947,6 @@ namespace Looker.SDK.API40
     string? path_prefix = null,
     bool? rebuild_pdts = null,
     bool? server_table_calcs = null,
-    long? image_width = null,
-    long? image_height = null,
     string? fields = null,
     ITransportSettings? options = null)
 {  
@@ -6886,8 +6961,6 @@ namespace Looker.SDK.API40
       { "path_prefix", path_prefix },
       { "rebuild_pdts", rebuild_pdts },
       { "server_table_calcs", server_table_calcs },
-      { "image_width", image_width },
-      { "image_height", image_height },
       { "fields", fields }},body,options);
   }
 
@@ -7081,7 +7154,8 @@ namespace Looker.SDK.API40
   /// | result_format | Description
   /// | :-----------: | :--- |
   /// | json | Plain json
-  /// | json_detail | Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+  /// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
+  /// | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
   /// | csv | Comma separated values with a header
   /// | txt | Tab separated values with a header
   /// | html | Simple html
@@ -7194,7 +7268,8 @@ namespace Looker.SDK.API40
   /// | result_format | Description
   /// | :-----------: | :--- |
   /// | json | Plain json
-  /// | json_detail | Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+  /// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
+  /// | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
   /// | csv | Comma separated values with a header
   /// | txt | Tab separated values with a header
   /// | html | Simple html
@@ -7278,7 +7353,7 @@ namespace Looker.SDK.API40
   /// Here is an example inline query URL:
   ///
   /// ```
-  /// https://looker.mycompany.com:19999/api/3.0/queries/models/thelook/views/inventory_items/run/json?fields=category.name,inventory_items.days_in_inventory_tier,products.count&f[category.name]=socks&sorts=products.count+desc+0&limit=500&query_timezone=America/Los_Angeles
+  /// https://looker.mycompany.com:19999/api/4.0/queries/models/thelook/views/inventory_items/run/json?fields=category.name,inventory_items.days_in_inventory_tier,products.count&f[category.name]=socks&sorts=products.count+desc+0&limit=500&query_timezone=America/Los_Angeles
   /// ```
   ///
   /// When invoking this endpoint with the Ruby SDK, pass the query parameter parts as a hash. The hash to match the above would look like:
@@ -7304,7 +7379,8 @@ namespace Looker.SDK.API40
   /// | result_format | Description
   /// | :-----------: | :--- |
   /// | json | Plain json
-  /// | json_detail | Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+  /// | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
+  /// | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
   /// | csv | Comma separated values with a header
   /// | txt | Tab separated values with a header
   /// | html | Simple html
@@ -7419,21 +7495,6 @@ namespace Looker.SDK.API40
     return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/running_queries/{query_task_id}", null,null,options);
   }
 
-  /// Get a SQL Runner query.
-  ///
-  /// GET /sql_queries/{slug} -> SqlQuery
-  ///
-  /// <returns><c>SqlQuery</c> SQL Runner Query (application/json)</returns>
-  ///
-  /// <param name="slug">slug of query</param>
-  public async Task<SdkResponse<SqlQuery, Exception>> sql_query(
-    string slug,
-    ITransportSettings? options = null)
-{  
-      slug = SdkUtils.EncodeParam(slug);
-    return await AuthRequest<SqlQuery, Exception>(HttpMethod.Get, $"/sql_queries/{slug}", null,null,options);
-  }
-
   /// ### Create a SQL Runner Query
   ///
   /// Either the `connection_name` or `model_name` parameter MUST be provided.
@@ -7449,17 +7510,28 @@ namespace Looker.SDK.API40
     return await AuthRequest<SqlQuery, Exception>(HttpMethod.Post, "/sql_queries", null,body,options);
   }
 
+  /// Get a SQL Runner query.
+  ///
+  /// GET /sql_queries/{slug} -> SqlQuery
+  ///
+  /// <returns><c>SqlQuery</c> SQL Runner Query (application/json)</returns>
+  ///
+  /// <param name="slug">slug of query</param>
+  public async Task<SdkResponse<SqlQuery, Exception>> sql_query(
+    string slug,
+    ITransportSettings? options = null)
+{  
+      slug = SdkUtils.EncodeParam(slug);
+    return await AuthRequest<SqlQuery, Exception>(HttpMethod.Get, $"/sql_queries/{slug}", null,null,options);
+  }
+
   /// Execute a SQL Runner query in a given result_format.
   ///
   /// POST /sql_queries/{slug}/run/{result_format} -> string
   ///
-  /// **Note**: Binary content may be returned by this method.
-  ///
   /// <returns>
   /// <c>string</c> SQL Runner Query (text)
   /// <c>string</c> SQL Runner Query (application/json)
-  /// <c>string</c> SQL Runner Query (image/png)
-  /// <c>string</c> SQL Runner Query (image/jpeg)
   /// </returns>
   ///
   /// <param name="slug">slug of query</param>
@@ -7561,6 +7633,7 @@ namespace Looker.SDK.API40
   /// <param name="pdf_paper_size">Paper size for pdf. Value can be one of: ["letter","legal","tabloid","a0","a1","a2","a3","a4","a5"]</param>
   /// <param name="pdf_landscape">Whether to render pdf in landscape paper orientation</param>
   /// <param name="long_tables">Whether or not to expand table vis to full length</param>
+  /// <param name="theme">Theme to apply. Will render embedded version of dashboard if valid</param>
   public async Task<SdkResponse<RenderTask, Exception>> create_dashboard_render_task(
     string dashboard_id,
     string result_format,
@@ -7571,6 +7644,7 @@ namespace Looker.SDK.API40
     string? pdf_paper_size = null,
     bool? pdf_landscape = null,
     bool? long_tables = null,
+    string? theme = null,
     ITransportSettings? options = null)
 {  
       dashboard_id = SdkUtils.EncodeParam(dashboard_id);
@@ -7581,7 +7655,8 @@ namespace Looker.SDK.API40
       { "fields", fields },
       { "pdf_paper_size", pdf_paper_size },
       { "pdf_landscape", pdf_landscape },
-      { "long_tables", long_tables }},body,options);
+      { "long_tables", long_tables },
+      { "theme", theme }},body,options);
   }
 
   /// ### Get information about a render task.
@@ -7906,6 +7981,7 @@ namespace Looker.SDK.API40
   }
 
   /// ### Update information about the permission set with a specific id.
+  /// Providing save_content permission alone will also provide you the abilities of save_looks and save_dashboards.
   ///
   /// PATCH /permission_sets/{permission_set_id} -> PermissionSet
   ///
@@ -7952,6 +8028,7 @@ namespace Looker.SDK.API40
   }
 
   /// ### Create a permission set with the specified information. Permission sets are used by Roles.
+  /// Providing save_content permission alone will also provide you the abilities of save_looks and save_dashboards.
   ///
   /// POST /permission_sets -> PermissionSet
   ///
@@ -8032,6 +8109,7 @@ namespace Looker.SDK.API40
   /// <param name="name">Match role name.</param>
   /// <param name="built_in">Match roles by built_in status.</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression.</param>
+  /// <param name="is_support_role">Search for Looker support roles.</param>
   public async Task<SdkResponse<Role[], Exception>> search_roles(
     string? fields = null,
     long? limit = null,
@@ -8041,6 +8119,7 @@ namespace Looker.SDK.API40
     string? name = null,
     bool? built_in = null,
     bool? filter_or = null,
+    bool? is_support_role = null,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<Role[], Exception>(HttpMethod.Get, "/roles/search", new Values {
@@ -8051,7 +8130,8 @@ namespace Looker.SDK.API40
       { "id", id },
       { "name", name },
       { "built_in", built_in },
-      { "filter_or", filter_or }},null,options);
+      { "filter_or", filter_or },
+      { "is_support_role", is_support_role }},null,options);
   }
 
   /// ### Search roles include user count
@@ -8503,6 +8583,76 @@ namespace Looker.SDK.API40
     return await AuthRequest<ScheduledPlan, Exception>(HttpMethod.Post, "/scheduled_plans/run_once", null,body,options);
   }
 
+  /// ### Search Scheduled Plans
+  ///
+  /// Returns all scheduled plans which matches the given search criteria.
+  ///
+  /// If no user_id is provided, this function returns the scheduled plans owned by the caller.
+  ///
+  ///
+  /// To list all schedules for all users, pass `all_users=true`.
+  ///
+  ///
+  /// The caller must have `see_schedules` permission to see other users' scheduled plans.
+  ///
+  /// GET /scheduled_plans/search -> ScheduledPlan[]
+  ///
+  /// <returns><c>ScheduledPlan[]</c> Scheduled Plan (application/json)</returns>
+  ///
+  /// <param name="user_id">Return scheduled plans belonging to this user_id. If not provided, returns scheduled plans owned by the caller.</param>
+  /// <param name="fields">Comma delimited list of field names. If provided, only the fields specified will be included in the response</param>
+  /// <param name="all_users">Return scheduled plans belonging to all users (caller needs see_schedules permission)</param>
+  /// <param name="limit">Number of results to return. (used with offset and takes priority over page and per_page)</param>
+  /// <param name="offset">Number of results to skip before returning any. (used with limit and takes priority over page and per_page)</param>
+  /// <param name="sorts">Fields to sort by.</param>
+  /// <param name="name">Match Scheduled plan's name.</param>
+  /// <param name="user_first_name">Returns scheduled plans belonging to user with this first name.</param>
+  /// <param name="user_last_name">Returns scheduled plans belonging to user with this last name.</param>
+  /// <param name="dashboard_id">Returns scheduled plans created on this Dashboard.</param>
+  /// <param name="look_id">Returns scheduled plans created on this Look.</param>
+  /// <param name="lookml_dashboard_id">Returns scheduled plans created on this LookML Dashboard.</param>
+  /// <param name="recipient">Match recipient address.</param>
+  /// <param name="destination_type">Match scheduled plan's destination type.</param>
+  /// <param name="delivery_format">Match scheduled plan's delivery format.</param>
+  /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
+  public async Task<SdkResponse<ScheduledPlan[], Exception>> search_scheduled_plans(
+    string? user_id = null,
+    string? fields = null,
+    bool? all_users = null,
+    long? limit = null,
+    long? offset = null,
+    string? sorts = null,
+    string? name = null,
+    string? user_first_name = null,
+    string? user_last_name = null,
+    string? dashboard_id = null,
+    string? look_id = null,
+    string? lookml_dashboard_id = null,
+    string? recipient = null,
+    string? destination_type = null,
+    string? delivery_format = null,
+    bool? filter_or = null,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<ScheduledPlan[], Exception>(HttpMethod.Get, "/scheduled_plans/search", new Values {
+      { "user_id", user_id },
+      { "fields", fields },
+      { "all_users", all_users },
+      { "limit", limit },
+      { "offset", offset },
+      { "sorts", sorts },
+      { "name", name },
+      { "user_first_name", user_first_name },
+      { "user_last_name", user_last_name },
+      { "dashboard_id", dashboard_id },
+      { "look_id", look_id },
+      { "lookml_dashboard_id", lookml_dashboard_id },
+      { "recipient", recipient },
+      { "destination_type", destination_type },
+      { "delivery_format", delivery_format },
+      { "filter_or", filter_or }},null,options);
+  }
+
   /// ### Get Scheduled Plans for a Look
   ///
   /// Returns all scheduled plans for a look which belong to the caller or given user.
@@ -8719,6 +8869,75 @@ namespace Looker.SDK.API40
 
   #endregion Session: Session Information
 
+  #region SqlInterfaceQuery: Run and Manage SQL Interface Queries
+
+  /// ### Handles Avatica RPC metadata requests for SQL Interface queries
+  ///
+  /// GET /sql_interface_queries/metadata -> SqlInterfaceQueryMetadata
+  ///
+  /// <returns><c>SqlInterfaceQueryMetadata</c>  (application/json)</returns>
+  ///
+  /// <param name="avatica_request">Avatica RPC request</param>
+  public async Task<SdkResponse<SqlInterfaceQueryMetadata, Exception>> sql_interface_metadata(
+    string? avatica_request = null,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<SqlInterfaceQueryMetadata, Exception>(HttpMethod.Get, "/sql_interface_queries/metadata", new Values {
+      { "avatica_request", avatica_request }},null,options);
+  }
+
+  /// ### Run a saved SQL interface query.
+  ///
+  /// This runs a previously created SQL interface query.
+  ///
+  /// The 'result_format' parameter specifies the desired structure and format of the response.
+  ///
+  /// Supported formats:
+  ///
+  /// | result_format | Description
+  /// | :-----------: | :--- |
+  /// | json_bi | Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+  ///
+  /// GET /sql_interface_queries/{query_id}/run/{result_format} -> JsonBi
+  ///
+  /// <returns>
+  /// <c>JsonBi</c> Query Result (text)
+  /// <c>JsonBi</c> Query Result (application/json)
+  /// </returns>
+  ///
+  /// <param name="query_id">Integer id of query</param>
+  /// <param name="result_format">Format of result, options are: ["json_bi"]</param>
+  public async Task<SdkResponse<TSuccess, Exception>> run_sql_interface_query<TSuccess>(
+    long query_id,
+    string result_format,
+    ITransportSettings? options = null) where TSuccess : class
+{  
+      result_format = SdkUtils.EncodeParam(result_format);
+    return await AuthRequest<TSuccess, Exception>(HttpMethod.Get, $"/sql_interface_queries/{query_id}/run/{result_format}", null,null,options);
+  }
+
+  /// ### Create a SQL interface query.
+  ///
+  /// This allows you to create a new SQL interface query that you can later run. Looker queries are immutable once created
+  /// and are not deleted. If you create a query that is exactly like an existing query then the existing query
+  /// will be returned and no new query will be created. Whether a new query is created or not, you can use
+  /// the 'id' in the returned query with the 'run' method.
+  ///
+  /// The query parameters are passed as json in the body of the request.
+  ///
+  /// POST /sql_interface_queries -> SqlInterfaceQuery
+  ///
+  /// <returns><c>SqlInterfaceQuery</c> SQL Interface Query (application/json)</returns>
+  ///
+  public async Task<SdkResponse<SqlInterfaceQuery, Exception>> create_sql_interface_query(
+    WriteSqlInterfaceQueryCreate body,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<SqlInterfaceQuery, Exception>(HttpMethod.Post, "/sql_interface_queries", null,body,options);
+  }
+
+  #endregion SqlInterfaceQuery: Run and Manage SQL Interface Queries
+
   #region Theme: Manage Themes
 
   /// ### Get an array of all existing themes
@@ -8727,7 +8946,7 @@ namespace Looker.SDK.API40
   ///
   /// This method returns an array of all existing themes. The active time for the theme is not considered.
   ///
-  /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+  /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
   ///
   /// GET /themes -> Theme[]
   ///
@@ -8756,7 +8975,7 @@ namespace Looker.SDK.API40
   ///
   /// For more information, see [Creating and Applying Themes](https://cloud.google.com/looker/docs/r/admin/themes).
   ///
-  /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+  /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
   ///
   /// POST /themes -> Theme
   ///
@@ -8806,7 +9025,7 @@ namespace Looker.SDK.API40
   ///
   /// Get a **single theme** by id with [Theme](#!/Theme/theme)
   ///
-  /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+  /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
   ///
   /// GET /themes/search -> Theme[]
   ///
@@ -8876,7 +9095,7 @@ namespace Looker.SDK.API40
   ///
   /// Returns the new specified default theme object.
   ///
-  /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+  /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
   ///
   /// PUT /themes/default -> Theme
   ///
@@ -8899,7 +9118,7 @@ namespace Looker.SDK.API40
   ///
   /// The optional `ts` parameter can specify a different timestamp than "now."
   ///
-  /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+  /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
   ///
   /// GET /themes/active -> Theme[]
   ///
@@ -8925,7 +9144,7 @@ namespace Looker.SDK.API40
   /// The optional `ts` parameter can specify a different timestamp than "now."
   /// Note: API users with `show` ability can call this function
   ///
-  /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+  /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
   ///
   /// GET /themes/theme_or_default -> Theme
   ///
@@ -8949,7 +9168,7 @@ namespace Looker.SDK.API40
   ///
   /// See [Create Theme](#!/Theme/create_theme) for constraints
   ///
-  /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+  /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
   ///
   /// POST /themes/validate -> ValidationError
   ///
@@ -8969,7 +9188,7 @@ namespace Looker.SDK.API40
   ///
   /// Use this to retrieve a specific theme, whether or not it's currently active.
   ///
-  /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+  /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
   ///
   /// GET /themes/{theme_id} -> Theme
   ///
@@ -8989,7 +9208,7 @@ namespace Looker.SDK.API40
 
   /// ### Update the theme by id.
   ///
-  /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+  /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
   ///
   /// PATCH /themes/{theme_id} -> Theme
   ///
@@ -9013,7 +9232,7 @@ namespace Looker.SDK.API40
   ///
   /// All IDs associated with a theme name can be retrieved by searching for the theme name with [Theme Search](#!/Theme/search).
   ///
-  /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+  /// **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
   ///
   /// DELETE /themes/{theme_id} -> string
   ///
@@ -10131,6 +10350,7 @@ namespace Looker.SDK.API40
   /// associated credentials.  Will overwrite all associated email addresses with
   /// the value supplied in the 'email' body param.
   /// The user's 'is_disabled' status must be true.
+  /// If the user has a credential email, they will receive a verification email and the user will be disabled until they verify the email
   ///
   /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///

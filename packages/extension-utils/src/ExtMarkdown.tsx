@@ -24,17 +24,17 @@
 
  */
 
-import type { FC, ReactNode } from 'react'
-import React from 'react'
-import { Markdown } from '@looker/code-editor'
-import { getEnvAdaptor } from './adaptorUtils'
+import type { FC, ReactNode } from 'react';
+import React from 'react';
+import { Markdown } from '@looker/code-editor';
+import { getEnvAdaptor } from './adaptorUtils';
 
 interface ExtMarkdownProps {
-  source: string
-  pattern?: string
-  transformLinkUri?: (url: string) => string
-  linkClickHandler?: (pathname: string, href: string) => void
-  paragraphOverride?: ({ children }: { children: ReactNode }) => ReactNode
+  source: string;
+  pattern?: string;
+  transformLinkUri?: (url: string) => string;
+  linkClickHandler?: (pathname: string, href: string) => void;
+  paragraphOverride?: ({ children }: { children: ReactNode }) => ReactNode;
 }
 
 /**
@@ -53,9 +53,9 @@ export const ExtMarkdown: FC<ExtMarkdownProps> = ({
   paragraphOverride,
 }) => {
   const openBrowserWindow = (_pathname: string, href: string) => {
-    const adaptor = getEnvAdaptor()
-    adaptor.openBrowserWindow(href)
-  }
+    const adaptor = getEnvAdaptor();
+    adaptor.openBrowserWindow(href);
+  };
 
   return (
     <Markdown
@@ -65,5 +65,5 @@ export const ExtMarkdown: FC<ExtMarkdownProps> = ({
       linkClickHandler={linkClickHandler || openBrowserWindow}
       paragraphOverride={paragraphOverride}
     />
-  )
-}
+  );
+};

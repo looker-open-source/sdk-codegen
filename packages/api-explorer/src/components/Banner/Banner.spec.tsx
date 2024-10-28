@@ -23,12 +23,12 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { renderWithTheme } from '@looker/components-test-utils'
-import { screen, fireEvent, waitFor } from '@testing-library/react'
-import type { IEnvironmentAdaptor } from '@looker/extension-utils'
-import type { SpecList } from '@looker/sdk-codegen'
-import { Banner } from './Banner'
+import React from 'react';
+import { renderWithTheme } from '@looker/components-test-utils';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
+import type { IEnvironmentAdaptor } from '@looker/extension-utils';
+import type { SpecList } from '@looker/sdk-codegen';
+import { Banner } from './Banner';
 
 describe('Banner', () => {
   const specs: any = {
@@ -38,62 +38,64 @@ describe('Banner', () => {
     '4.0': {
       status: 'beta',
     },
-  }
+  };
 
   test('renders with button that opens api 4.0 dev portal link in new page', async () => {
     const adaptor: any = {
       localStorageGetItem: jest.fn().mockReturnValue(Promise.resolve(null)),
       isExtension: jest.fn().mockReturnValue(true),
-    }
+    };
     renderWithTheme(
       <Banner
         adaptor={adaptor as IEnvironmentAdaptor}
         specs={specs as SpecList}
       />
-    )
+    );
 
     await waitFor(() => {
       expect(
         screen.getByText('API 4.0 moves from Beta', { exact: false })
-      ).toBeInTheDocument()
-      const link = screen.getByText('Announcement').closest('a')
+      ).toBeInTheDocument();
+      const link = screen.getByText('Announcement').closest('a');
+      // eslint-disable-next-line testing-library/no-wait-for-multiple-assertions
       expect(link).toHaveAttribute(
         'href',
         'https://developers.looker.com/api/advanced-usage/version-4-ga'
-      )
-      expect(link).toHaveAttribute('target', '_blank')
-    })
-  })
+      );
+      // eslint-disable-next-line testing-library/no-wait-for-multiple-assertions
+      expect(link).toHaveAttribute('target', '_blank');
+    });
+  });
 
   test('sets local storage value and unrenders on close button click', async () => {
     const adaptor: any = {
       localStorageGetItem: jest.fn().mockReturnValue(Promise.resolve(null)),
       localStorageSetItem: jest.fn(),
       isExtension: jest.fn().mockReturnValue(true),
-    }
+    };
 
     renderWithTheme(
       <Banner
         adaptor={adaptor as IEnvironmentAdaptor}
         specs={specs as SpecList}
       />
-    )
+    );
 
     await waitFor(() => {
       expect(
         screen.getByText('API 4.0 moves from Beta', { exact: false })
-      ).toBeInTheDocument()
-    })
+      ).toBeInTheDocument();
+    });
 
-    const closeButton = screen.getByText('Dismiss Inform').closest('button')
-    fireEvent.click(closeButton as HTMLButtonElement)
+    const closeButton = screen.getByText('Dismiss Inform').closest('button');
+    fireEvent.click(closeButton as HTMLButtonElement);
 
     expect(
       screen.queryByText('API 4.0 moves from Beta', { exact: false })
-    ).not.toBeInTheDocument()
+    ).not.toBeInTheDocument();
     expect(adaptor.localStorageSetItem).toHaveBeenCalledWith(
       'api-40-ga-apix-banner',
       'dismissed'
-    )
-  })
-})
+    );
+  });
+});

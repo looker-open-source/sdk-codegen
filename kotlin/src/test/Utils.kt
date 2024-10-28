@@ -28,7 +28,6 @@ import com.looker.rtl.*
 import com.looker.sdk.ApiSettings
 import com.looker.sdk.LookerSDK
 import com.looker.sdk.apiConfig
-import io.ktor.client.HttpClient
 import java.io.File
 
 typealias jsonDict = Map<String, Any>
@@ -38,15 +37,15 @@ val jsonDictType = object : TypeToken<jsonDict>() {}.type
 class TestSettingsIniFile(
     filename: String = "./looker.ini",
     section: String = "",
-    private val base: ConfigurationProvider = ApiSettings.fromIniFile(filename, section)
+    private val base: ConfigurationProvider = ApiSettings.fromIniFile(filename, section),
 ) : ConfigurationProvider by base {
 
     override fun readConfig(): Map<String, String> {
         return base.readConfig().plus(
             mapOf(
                 "client_id" to "test_client_id",
-                "redirect_uri" to "looker://"
-            )
+                "redirect_uri" to "looker://",
+            ),
         )
     }
 }
@@ -88,12 +87,5 @@ open class TestConfig() {
         options.timeout = 120
         options.verifySSL = false
         return options
-    }
-
-    /**
-     * Return an HTTP test client
-     */
-    fun testClient(): HttpClient {
-        return customClient(testSettings(settings))
     }
 }

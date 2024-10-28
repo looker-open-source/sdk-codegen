@@ -25,7 +25,7 @@
  */
 
 /**
- * 461 API methods
+ * 467 API methods
  */
 
 
@@ -736,35 +736,42 @@ open class LookerSDKStream: APIMethods {
     }
 
     /**
-     * ### Create SSO Embed URL
+     * ### Create Signed Embed URL
      *
-     * Creates an SSO embed URL and cryptographically signs it with an embed secret.
+     * Creates a signed embed URL and cryptographically signs it with an embed secret.
      * This signed URL can then be used to instantiate a Looker embed session in a PBL web application.
-     * Do not make any modifications to this URL - any change may invalidate the signature and
+     * Do not make any modifications to the returned URL - any change may invalidate the signature and
      * cause the URL to fail to load a Looker embed session.
      *
-     * A signed SSO embed URL can only be used once. After it has been used to request a page from the
-     * Looker server, the URL is invalid. Future requests using the same URL will fail. This is to prevent
+     * A signed embed URL can only be **used once**. After the URL has been used to request a page from the
+     * Looker server, it is invalid. Future requests using the same URL will fail. This is to prevent
      * 'replay attacks'.
      *
      * The `target_url` property must be a complete URL of a Looker UI page - scheme, hostname, path and query params.
      * To load a dashboard with id 56 and with a filter of `Date=1 years`, the looker URL would look like `https:/myname.looker.com/dashboards/56?Date=1%20years`.
-     * The best way to obtain this target_url is to navigate to the desired Looker page in your web browser,
-     * copy the URL shown in the browser address bar and paste it into the `target_url` property as a quoted string value in this API request.
+     * The best way to obtain this `target_url` is to navigate to the desired Looker page in your web browser and use the "Get embed URL" menu option
+     * to copy it to your clipboard and paste it into the `target_url` property as a quoted string value in this API request.
      *
-     * Permissions for the embed user are defined by the groups in which the embed user is a member (group_ids property)
+     * Permissions for the embed user are defined by the groups in which the embed user is a member (`group_ids` property)
      * and the lists of models and permissions assigned to the embed user.
-     * At a minimum, you must provide values for either the group_ids property, or both the models and permissions properties.
+     * At a minimum, you must provide values for either the `group_ids` property, or **both** the models and permissions properties.
      * These properties are additive; an embed user can be a member of certain groups AND be granted access to models and permissions.
      *
-     * The embed user's access is the union of permissions granted by the group_ids, models, and permissions properties.
+     * The embed user's access is the union of permissions granted by the `group_ids`, `models`, and `permissions` properties.
      *
      * This function does not strictly require all group_ids, user attribute names, or model names to exist at the moment the
-     * SSO embed url is created. Unknown group_id, user attribute names or model names will be passed through to the output URL.
-     * To diagnose potential problems with an SSO embed URL, you can copy the signed URL into the Embed URI Validator text box in `<your looker instance>/admin/embed`.
+     * embed url is created. Unknown group_id, user attribute names or model names will be passed through to the output URL.
+     * Because of this, **these parameters are not validated** when the API call is made.
+     *
+     * The [Get Embed Url](https://cloud.google.com/looker/docs/r/get-signed-url) dialog can be used to determine and validate the correct permissions for signing an embed url.
+     * This dialog also provides the SDK syntax for the API call to make. Alternatively, you can copy the signed URL into the Embed URI Validator text box
+     * in `<your looker instance>/admin/embed` to diagnose potential problems.
      *
      * The `secret_id` parameter is optional. If specified, its value must be the id of an active secret defined in the Looker instance.
-     * if not specified, the URL will be signed using the newest active secret defined in the Looker instance.
+     * if not specified, the URL will be signed using the most recent active signing secret. If there is no active secret for signing embed urls,
+     * a default secret will be created. This default secret is encrypted using HMAC/SHA-256.
+     *
+     * The `embed_domain` parameter is optional. If specified and valid, the domain will be added to the embed domain allowlist if it is missing.
      *
      * #### Security Note
      * Protect this signed URL as you would an access token or password credentials - do not write
@@ -795,7 +802,7 @@ open class LookerSDKStream: APIMethods {
      * "Powered by Looker" (PBL) web application.
      *
      * This is similar to Private Embedding (https://cloud.google.com/looker/docs/r/admin/embed/private-embed). Instead of
-     * of logging into the Web UI to authenticate, the user has already authenticated against the API to be able to
+     * logging into the Web UI to authenticate, the user has already authenticated against the API to be able to
      * make this call. However, unlike Private Embed where the user has access to any other part of the Looker UI,
      * the embed web session created by requesting the EmbedUrlResponse.url in a browser only has access to
      * content visible under the `/embed` context.
@@ -831,6 +838,23 @@ open class LookerSDKStream: APIMethods {
     }
 
     /**
+     * ### Validate a Signed Embed URL
+     *
+     * GET /embed/sso/validate -> EmbedUrlResponse
+     */
+    public func validate_embed_url(
+        /**
+         * @param {String} url URL to validate
+         */
+        url: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/embed/sso/validate", 
+            ["url": url], nil, options)
+        return result
+    }
+
+    /**
      * ### Acquire a cookieless embed session.
      *
      * The acquire session endpoint negates the need for signing the embed url and passing it as a parameter
@@ -849,7 +873,7 @@ open class LookerSDKStream: APIMethods {
      * If the `session_reference_token` is provided but the session has expired, the token will be ignored and a
      * new embed session will be created. Note that the embed user definition will be updated in this scenario.
      *
-     * If the credentials do not match the credentials associated with an exisiting session_reference_token, a
+     * If the credentials do not match the credentials associated with an existing session_reference_token, a
      * 404 will be returned.
      *
      * The endpoint returns the following:
@@ -909,6 +933,13 @@ open class LookerSDKStream: APIMethods {
      * The generate tokens endpoint should be called every time the Looker client asks for a token (except for the
      * first time when the tokens returned by the acquire_session endpoint should be used).
      *
+     * #### Embed session expiration handling
+     *
+     * This endpoint does NOT return an error when the embed session expires. This is to simplify processing
+     * in the caller as errors can happen for non session expiration reasons. Instead the endpoint returns
+     * the session time to live in the `session_reference_token_ttl` response property. If this property
+     * contains a zero, the embed session has expired.
+     *
      * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
      *
      * PUT /embed/cookieless_session/generate_tokens -> EmbedCookielessSessionGenerateTokensResponse
@@ -934,7 +965,7 @@ open class LookerSDKStream: APIMethods {
      *
      * Configuring LDAP impacts authentication for all users. This configuration should be done carefully.
      *
-     * Looker maintains a single LDAP configuration. It can be read and updated.       Updates only succeed if the new state will be valid (in the sense that all required fields are populated);       it is up to you to ensure that the configuration is appropriate and correct).
+     * Looker maintains a single LDAP configuration. It can be read and updated. Updates only succeed if the new state will be valid (in the sense that all required fields are populated); it is up to you to ensure that the configuration is appropriate and correct).
      *
      * LDAP is enabled or disabled for Looker using the **enabled** field.
      *
@@ -1019,9 +1050,9 @@ open class LookerSDKStream: APIMethods {
     /**
      * ### Test the connection authentication settings for an LDAP configuration.
      *
-     * This tests that the connection is possible and that a 'server' account to be used by Looker can       authenticate to the LDAP server given connection and authentication information.
+     * This tests that the connection is possible and that a 'server' account to be used by Looker can authenticate to the LDAP server given connection and authentication information.
      *
-     * **connection_host**, **connection_port**, and **auth_username**, are required.       **connection_tls** and **auth_password** are optional.
+     * **connection_host**, **connection_port**, and **auth_username**, are required. **connection_tls** and **auth_password** are optional.
      *
      * Example:
      * ```json
@@ -1034,7 +1065,7 @@ open class LookerSDKStream: APIMethods {
      * }
      * ```
      *
-     * Looker will never return an **auth_password**. If this request omits the **auth_password** field, then       the **auth_password** value from the active config (if present) will be used for the test.
+     * Looker will never return an **auth_password**. If this request omits the **auth_password** field, then the **auth_password** value from the active config (if present) will be used for the test.
      *
      * The active LDAP settings are not modified.
      *
@@ -1056,9 +1087,9 @@ open class LookerSDKStream: APIMethods {
     /**
      * ### Test the user authentication settings for an LDAP configuration without authenticating the user.
      *
-     * This test will let you easily test the mapping for user properties and roles for any user without      needing to authenticate as that user.
+     * This test will let you easily test the mapping for user properties and roles for any user withoutneeding to authenticate as that user.
      *
-     * This test accepts a full LDAP configuration along with a username and attempts to find the full info      for the user from the LDAP server without actually authenticating the user. So, user password is not      required.The configuration is validated before attempting to contact the server.
+     * This test accepts a full LDAP configuration along with a username and attempts to find the full infofor the user from the LDAP server without actually authenticating the user. So, user password is notrequired.The configuration is validated before attempting to contact the server.
      *
      * **test_ldap_user** is required.
      *
@@ -1082,9 +1113,9 @@ open class LookerSDKStream: APIMethods {
     /**
      * ### Test the user authentication settings for an LDAP configuration.
      *
-     * This test accepts a full LDAP configuration along with a username/password pair and attempts to       authenticate the user with the LDAP server. The configuration is validated before attempting the       authentication.
+     * This test accepts a full LDAP configuration along with a username/password pair and attempts to authenticate the user with the LDAP server. The configuration is validated before attempting the authentication.
      *
-     * Looker will never return an **auth_password**. If this request omits the **auth_password** field, then       the **auth_password** value from the active config (if present) will be used for the test.
+     * Looker will never return an **auth_password**. If this request omits the **auth_password** field, then the **auth_password** value from the active config (if present) will be used for the test.
      *
      * **test_ldap_user** and **test_ldap_password** are required.
      *
@@ -1386,7 +1417,7 @@ open class LookerSDKStream: APIMethods {
      *
      * Configuring OIDC impacts authentication for all users. This configuration should be done carefully.
      *
-     * Looker maintains a single OIDC configuation. It can be read and updated.       Updates only succeed if the new state will be valid (in the sense that all required fields are populated);       it is up to you to ensure that the configuration is appropriate and correct).
+     * Looker maintains a single OIDC configuration. It can be read and updated. Updates only succeed if the new state will be valid (in the sense that all required fields are populated); it is up to you to ensure that the configuration is appropriate and correct).
      *
      * OIDC is enabled or disabled for Looker using the **enabled** field.
      *
@@ -1539,7 +1570,7 @@ open class LookerSDKStream: APIMethods {
      *
      * Configuring SAML impacts authentication for all users. This configuration should be done carefully.
      *
-     * Looker maintains a single SAML configuation. It can be read and updated.       Updates only succeed if the new state will be valid (in the sense that all required fields are populated);       it is up to you to ensure that the configuration is appropriate and correct).
+     * Looker maintains a single SAML configuration. It can be read and updated. Updates only succeed if the new state will be valid (in the sense that all required fields are populated); it is up to you to ensure that the configuration is appropriate and correct).
      *
      * SAML is enabled or disabled for Looker using the **enabled** field.
      *
@@ -2009,19 +2040,19 @@ open class LookerSDKStream: APIMethods {
          */
         sorts: String? = nil,
         /**
-         * @param {Int64} page The page to return. DEPRECATED. Use offset instead.
+         * @param {Int64} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
          */
         page: Int64? = nil,
         /**
-         * @param {Int64} per_page The number of items in the returned page. DEPRECATED. Use limit instead.
+         * @param {Int64} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
          */
         per_page: Int64? = nil,
         /**
-         * @param {Int64} offset The number of items to skip before returning any. (used with limit and takes priority over page and per_page)
+         * @param {Int64} offset Number of results to return. (used with offset and takes priority over page and per_page)
          */
         offset: Int64? = nil,
         /**
-         * @param {Int64} limit The maximum number of items to return. (used with offset and takes priority over page and per_page)
+         * @param {Int64} limit Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
          */
         limit: Int64? = nil,
         /**
@@ -2815,11 +2846,16 @@ open class LookerSDKStream: APIMethods {
      *  - allow_user_timezones
      *  - custom_welcome_email
      *  - data_connector_default_enabled
+     *  - dashboard_auto_refresh_restriction
+     *  - dashboard_auto_refresh_minimum_interval
      *  - extension_framework_enabled
      *  - extension_load_url_enabled
+     *  - instance_config
      *  - marketplace_auto_install_enabled
+     *  - marketplace_automation
      *  - marketplace_terms_accepted
      *  - marketplace_enabled
+     *  - marketplace_site
      *  - onboarding_enabled
      *  - privatelabel_configuration
      *  - timezone
@@ -2827,6 +2863,7 @@ open class LookerSDKStream: APIMethods {
      *  - email_domain_allowlist
      *  - embed_cookieless_v2
      *  - embed_enabled
+     *  - embed_config
      *
      * GET /setting -> Setting
      */
@@ -2849,11 +2886,16 @@ open class LookerSDKStream: APIMethods {
      *  - allow_user_timezones
      *  - custom_welcome_email
      *  - data_connector_default_enabled
+     *  - dashboard_auto_refresh_restriction
+     *  - dashboard_auto_refresh_minimum_interval
      *  - extension_framework_enabled
      *  - extension_load_url_enabled
+     *  - instance_config
      *  - marketplace_auto_install_enabled
+     *  - marketplace_automation
      *  - marketplace_terms_accepted
      *  - marketplace_enabled
+     *  - marketplace_site
      *  - onboarding_enabled
      *  - privatelabel_configuration
      *  - timezone
@@ -2861,6 +2903,7 @@ open class LookerSDKStream: APIMethods {
      *  - email_domain_allowlist
      *  - embed_cookieless_v2
      *  - embed_enabled
+     *  - embed_config
      *
      * See the `Setting` type for more information on the specific values that can be configured.
      *
@@ -2974,7 +3017,10 @@ open class LookerSDKStream: APIMethods {
 
     /**
      * ### This feature is enabled only by special license.
-     * ### Gets the whitelabel configuration, which includes hiding documentation links, custom favicon uploading, etc.
+     *
+     * This endpoint provides the private label configuration, which includes hiding documentation links, custom favicon uploading, etc.
+     *
+     * This endpoint is deprecated. [Get Setting](#!/Config/get_setting) should be used to retrieve private label settings instead
      *
      * GET /whitelabel_configuration -> WhitelabelConfiguration
      */
@@ -2992,7 +3038,9 @@ open class LookerSDKStream: APIMethods {
     }
 
     /**
-     * ### Update the whitelabel configuration
+     * ### Update the private label configuration
+     *
+     * This endpoint is deprecated. [Set Setting](#!/Config/set_setting) should be used to update private label settings instead
      *
      * PUT /whitelabel_configuration -> WhitelabelConfiguration
      */
@@ -3239,6 +3287,29 @@ open class LookerSDKStream: APIMethods {
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let result: SDKResponse<Data, SDKError> = self.post("/external_oauth_applications", nil, try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Update an OAuth Application's client secret.
+     *
+     * This is an OAuth Application which Looker uses to access external systems.
+     *
+     * PATCH /external_oauth_applications/{client_id} -> ExternalOauthApplication
+     */
+    public func update_external_oauth_application(
+        /**
+         * @param {String} client_id The client ID of the OAuth App to update
+         */
+        _ client_id: String,
+        /**
+         * @param {WriteExternalOauthApplication} body
+         */
+        _ body: WriteExternalOauthApplication,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let path_client_id = encodeParam(client_id)
+        let result: SDKResponse<Data, SDKError> = self.patch("/external_oauth_applications/\(path_client_id)", nil, try! self.encode(body), options)
         return result
     }
 
@@ -3798,11 +3869,11 @@ open class LookerSDKStream: APIMethods {
          */
         offset: Int64? = nil,
         /**
-         * @param {Int64} page Requested page.
+         * @param {Int64} page DEPRECATED. Use limit and offset instead. Return only page N of paginated results
          */
         page: Int64? = nil,
         /**
-         * @param {Int64} per_page Results per page.
+         * @param {Int64} per_page DEPRECATED. Use limit and offset instead. Return N rows of data per page
          */
         per_page: Int64? = nil,
         options: ITransportSettings? = nil
@@ -3814,9 +3885,53 @@ open class LookerSDKStream: APIMethods {
     }
 
     /**
+     * ### Get Content Summary
+     *
+     * Retrieves a collection of content items related to user activity and engagement, such as recently viewed content,
+     * favorites and scheduled items.
+     *
+     * GET /content_summary -> [ContentSummary]
+     */
+    public func content_summary(
+        /**
+         * @param {String} fields Comma-delimited names of fields to return in responses. Omit for all fields
+         */
+        fields: String? = nil,
+        /**
+         * @param {Int64} limit Number of results to return. (used with offset)
+         */
+        limit: Int64? = nil,
+        /**
+         * @param {Int64} offset Number of results to skip before returning any. (used with limit)
+         */
+        offset: Int64? = nil,
+        /**
+         * @param {String} target_group_id Match group id
+         */
+        target_group_id: String? = nil,
+        /**
+         * @param {String} target_user_id Match user id
+         */
+        target_user_id: String? = nil,
+        /**
+         * @param {String} target_content_type Content type to match, options are: look, dashboard. Can be provided as a comma delimited list.
+         */
+        target_content_type: String? = nil,
+        /**
+         * @param {String} sorts Fields to sort by
+         */
+        sorts: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/content_summary", 
+            ["fields": fields, "limit": limit, "offset": offset, "target_group_id": target_group_id, "target_user_id": target_user_id, "target_content_type": target_content_type, "sorts": sorts], nil, options)
+        return result
+    }
+
+    /**
      * ### Get an image representing the contents of a dashboard or look.
      *
-     * The returned thumbnail is an abstract representation of the contents of a dashbord or look and does not
+     * The returned thumbnail is an abstract representation of the contents of a dashboard or look and does not
      * reflect the actual data displayed in the respective visualizations.
      *
      * GET /content_thumbnail/{type}/{resource_id} -> String
@@ -3972,7 +4087,7 @@ open class LookerSDKStream: APIMethods {
      *
      * # DEPRECATED:  Use [content_thumbnail()](#!/Content/content_thumbnail)
      *
-     * The returned thumbnail is an abstract representation of the contents of a dashbord or look and does not
+     * The returned thumbnail is an abstract representation of the contents of a dashboard or look and does not
      * reflect the actual data displayed in the respective visualizations.
      *
      * GET /vector_thumbnail/{type}/{resource_id} -> String
@@ -4112,7 +4227,7 @@ open class LookerSDKStream: APIMethods {
          */
         content_favorite_id: String? = nil,
         /**
-         * @param {String} folder_id Filter on a particular space.
+         * @param {String} folder_id Filter on a particular folder.
          */
         folder_id: String? = nil,
         /**
@@ -4288,7 +4403,7 @@ open class LookerSDKStream: APIMethods {
      * You can use this function to change the string and integer properties of
      * a dashboard. Nested objects such as filters, dashboard elements, or dashboard layout components
      * cannot be modified by this function - use the update functions for the respective
-     * nested object types (like [update_dashboard_filter()](#!/3.1/Dashboard/update_dashboard_filter) to change a filter)
+     * nested object types (like [update_dashboard_filter()](#!/Dashboard/update_dashboard_filter) to change a filter)
      * to modify nested objects referenced by a dashboard.
      *
      * If you receive a 422 error response when updating a dashboard, be sure to look at the
@@ -4336,7 +4451,7 @@ open class LookerSDKStream: APIMethods {
     }
 
     /**
-     * ### Get Aggregate Table LookML for Each Query on a Dahboard
+     * ### Get Aggregate Table LookML for Each Query on a Dashboard
      *
      * Returns a JSON object that contains the dashboard id and Aggregate Table lookml
      *
@@ -5295,12 +5410,9 @@ open class LookerSDKStream: APIMethods {
     /**
      * ### Get information about all folders.
      *
-     * In API 3.x, this will not return empty personal folders, unless they belong to the calling user,
-     * or if they contain soft-deleted content.
+     * All personal folders will be returned.
      *
-     * In API 4.0+, all personal folders will be returned.
-     *
-     * GET /folders -> [Folder]
+     * GET /folders -> [FolderBase]
      */
     public func all_folders(
         /**
@@ -5451,7 +5563,6 @@ open class LookerSDKStream: APIMethods {
 
     /**
      * ### Get all looks in a folder.
-     * In API 3.x, this will return all looks in a folder, including looks in the trash.
      * In API 4.0+, all looks in a folder will be returned, excluding looks in the trash.
      *
      * GET /folders/{folder_id}/looks -> [LookWithQuery]
@@ -6321,27 +6432,6 @@ open class LookerSDKStream: APIMethods {
 
 
 
-    // MARK JdbcInterface: LookML Model metadata for JDBC Clients
-
-    /**
-     * ### Handle Avatica RPC Requests
-     *
-     * GET /__jdbc_interface__ -> JdbcInterface
-     */
-    public func jdbc_interface(
-        /**
-         * @param {String} avatica_request Avatica RPC request
-         */
-        avatica_request: String? = nil,
-        options: ITransportSettings? = nil
-    ) -> SDKResponse<Data, SDKError> {
-        let result: SDKResponse<Data, SDKError> = self.get("/__jdbc_interface__", 
-            ["avatica_request": avatica_request], nil, options)
-        return result
-    }
-
-
-
     // MARK Look: Run and Manage Looks
 
     /**
@@ -6546,7 +6636,7 @@ open class LookerSDKStream: APIMethods {
      *
      * Soft-deleted looks are excluded from the results of [all_looks()](#!/Look/all_looks) and [search_looks()](#!/Look/search_looks), so they
      * essentially disappear from view even though they still reside in the db.
-     * In API 3.1 and later, you can pass `deleted: true` as a parameter to [search_looks()](#!/3.1/Look/search_looks) to list soft-deleted looks.
+     * You can pass `deleted: true` as a parameter to [search_looks()](#!/Look/search_looks) to list soft-deleted looks.
      *
      * NOTE: [delete_look()](#!/Look/delete_look) performs a "hard delete" - the look data is removed from the Looker
      * database and destroyed. There is no "undo" for `delete_look()`.
@@ -6607,7 +6697,8 @@ open class LookerSDKStream: APIMethods {
      * | result_format | Description
      * | :-----------: | :--- |
      * | json | Plain json
-     * | json_detail | Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+     * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
+     * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
      * | csv | Comma separated values with a header
      * | txt | Tab separated values with a header
      * | html | Simple html
@@ -6865,12 +6956,16 @@ open class LookerSDKStream: APIMethods {
          * @param {String} fields Requested fields.
          */
         fields: String? = nil,
+        /**
+         * @param {Bool} add_drills_metadata Whether response should include drill field metadata.
+         */
+        add_drills_metadata: Bool? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let path_lookml_model_name = encodeParam(lookml_model_name)
         let path_explore_name = encodeParam(explore_name)
         let result: SDKResponse<Data, SDKError> = self.get("/lookml_models/\(path_lookml_model_name)/explores/\(path_explore_name)", 
-            ["fields": fields], nil, options)
+            ["fields": fields, "add_drills_metadata": add_drills_metadata as Any?], nil, options)
         return result
     }
 
@@ -7893,8 +7988,6 @@ open class LookerSDKStream: APIMethods {
     /**
      * ### Creates a tag for the most recent commit, or a specific ref is a SHA is provided
      *
-     * This is an internal-only, undocumented route.
-     *
      * POST /projects/{project_id}/tag -> Project
      */
     public func tag_ref(
@@ -8063,21 +8156,13 @@ open class LookerSDKStream: APIMethods {
          */
         server_table_calcs: Bool? = nil,
         /**
-         * @param {Int64} image_width DEPRECATED. Render width for image formats. Note that this parameter is always ignored by this method.
-         */
-        image_width: Int64? = nil,
-        /**
-         * @param {Int64} image_height DEPRECATED. Render height for image formats. Note that this parameter is always ignored by this method.
-         */
-        image_height: Int64? = nil,
-        /**
          * @param {String} fields Requested fields
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let result: SDKResponse<Data, SDKError> = self.post("/query_tasks", 
-            ["limit": limit, "apply_formatting": apply_formatting as Any?, "apply_vis": apply_vis as Any?, "cache": cache as Any?, "generate_drill_links": generate_drill_links as Any?, "force_production": force_production as Any?, "cache_only": cache_only as Any?, "path_prefix": path_prefix, "rebuild_pdts": rebuild_pdts as Any?, "server_table_calcs": server_table_calcs as Any?, "image_width": image_width, "image_height": image_height, "fields": fields], try! self.encode(body), options)
+            ["limit": limit, "apply_formatting": apply_formatting as Any?, "apply_vis": apply_vis as Any?, "cache": cache as Any?, "generate_drill_links": generate_drill_links as Any?, "force_production": force_production as Any?, "cache_only": cache_only as Any?, "path_prefix": path_prefix, "rebuild_pdts": rebuild_pdts as Any?, "server_table_calcs": server_table_calcs as Any?, "fields": fields], try! self.encode(body), options)
         return result
     }
 
@@ -8288,7 +8373,8 @@ open class LookerSDKStream: APIMethods {
      * | result_format | Description
      * | :-----------: | :--- |
      * | json | Plain json
-     * | json_detail | Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+     * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
+     * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
      * | csv | Comma separated values with a header
      * | txt | Tab separated values with a header
      * | html | Simple html
@@ -8414,7 +8500,8 @@ open class LookerSDKStream: APIMethods {
      * | result_format | Description
      * | :-----------: | :--- |
      * | json | Plain json
-     * | json_detail | Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+     * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
+     * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
      * | csv | Comma separated values with a header
      * | txt | Tab separated values with a header
      * | html | Simple html
@@ -8511,7 +8598,7 @@ open class LookerSDKStream: APIMethods {
      * Here is an example inline query URL:
      *
      * ```
-     * https://looker.mycompany.com:19999/api/3.0/queries/models/thelook/views/inventory_items/run/json?fields=category.name,inventory_items.days_in_inventory_tier,products.count&f[category.name]=socks&sorts=products.count+desc+0&limit=500&query_timezone=America/Los_Angeles
+     * https://looker.mycompany.com:19999/api/4.0/queries/models/thelook/views/inventory_items/run/json?fields=category.name,inventory_items.days_in_inventory_tier,products.count&f[category.name]=socks&sorts=products.count+desc+0&limit=500&query_timezone=America/Los_Angeles
      * ```
      *
      * When invoking this endpoint with the Ruby SDK, pass the query parameter parts as a hash. The hash to match the above would look like:
@@ -8537,7 +8624,8 @@ open class LookerSDKStream: APIMethods {
      * | result_format | Description
      * | :-----------: | :--- |
      * | json | Plain json
-     * | json_detail | Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+     * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query. See JsonBi type for schema
+     * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
      * | csv | Comma separated values with a header
      * | txt | Tab separated values with a header
      * | html | Simple html
@@ -8664,23 +8752,6 @@ open class LookerSDKStream: APIMethods {
     }
 
     /**
-     * Get a SQL Runner query.
-     *
-     * GET /sql_queries/{slug} -> SqlQuery
-     */
-    public func sql_query(
-        /**
-         * @param {String} slug slug of query
-         */
-        _ slug: String,
-        options: ITransportSettings? = nil
-    ) -> SDKResponse<Data, SDKError> {
-        let path_slug = encodeParam(slug)
-        let result: SDKResponse<Data, SDKError> = self.get("/sql_queries/\(path_slug)", nil, nil, options)
-        return result
-    }
-
-    /**
      * ### Create a SQL Runner Query
      *
      * Either the `connection_name` or `model_name` parameter MUST be provided.
@@ -8699,11 +8770,26 @@ open class LookerSDKStream: APIMethods {
     }
 
     /**
+     * Get a SQL Runner query.
+     *
+     * GET /sql_queries/{slug} -> SqlQuery
+     */
+    public func sql_query(
+        /**
+         * @param {String} slug slug of query
+         */
+        _ slug: String,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let path_slug = encodeParam(slug)
+        let result: SDKResponse<Data, SDKError> = self.get("/sql_queries/\(path_slug)", nil, nil, options)
+        return result
+    }
+
+    /**
      * Execute a SQL Runner query in a given result_format.
      *
      * POST /sql_queries/{slug}/run/{result_format} -> String
-     *
-     * **Note**: Binary content may be returned by this method.
      */
     public func run_sql_query(
         /**
@@ -8855,12 +8941,16 @@ open class LookerSDKStream: APIMethods {
          * @param {Bool} long_tables Whether or not to expand table vis to full length
          */
         long_tables: Bool? = nil,
+        /**
+         * @param {String} theme Theme to apply. Will render embedded version of dashboard if valid
+         */
+        theme: String? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let path_dashboard_id = encodeParam(dashboard_id)
         let path_result_format = encodeParam(result_format)
         let result: SDKResponse<Data, SDKError> = self.post("/render_tasks/dashboards/\(path_dashboard_id)/\(path_result_format)", 
-            ["width": width, "height": height, "fields": fields, "pdf_paper_size": pdf_paper_size, "pdf_landscape": pdf_landscape as Any?, "long_tables": long_tables as Any?], try! self.encode(body), options)
+            ["width": width, "height": height, "fields": fields, "pdf_paper_size": pdf_paper_size, "pdf_landscape": pdf_landscape as Any?, "long_tables": long_tables as Any?, "theme": theme], try! self.encode(body), options)
         return result
     }
 
@@ -9238,6 +9328,7 @@ open class LookerSDKStream: APIMethods {
 
     /**
      * ### Update information about the permission set with a specific id.
+     * Providing save_content permission alone will also provide you the abilities of save_looks and save_dashboards.
      *
      * PATCH /permission_sets/{permission_set_id} -> PermissionSet
      */
@@ -9293,6 +9384,7 @@ open class LookerSDKStream: APIMethods {
 
     /**
      * ### Create a permission set with the specified information. Permission sets are used by Roles.
+     * Providing save_content permission alone will also provide you the abilities of save_looks and save_dashboards.
      *
      * POST /permission_sets -> PermissionSet
      */
@@ -9405,10 +9497,14 @@ open class LookerSDKStream: APIMethods {
          * @param {Bool} filter_or Combine given search criteria in a boolean OR expression.
          */
         filter_or: Bool? = nil,
+        /**
+         * @param {Bool} is_support_role Search for Looker support roles.
+         */
+        is_support_role: Bool? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let result: SDKResponse<Data, SDKError> = self.get("/roles/search", 
-            ["fields": fields, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "name": name, "built_in": built_in as Any?, "filter_or": filter_or as Any?], nil, options)
+            ["fields": fields, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "name": name, "built_in": built_in as Any?, "filter_or": filter_or as Any?, "is_support_role": is_support_role as Any?], nil, options)
         return result
     }
 
@@ -9924,6 +10020,93 @@ open class LookerSDKStream: APIMethods {
     }
 
     /**
+     * ### Search Scheduled Plans
+     *
+     * Returns all scheduled plans which matches the given search criteria.
+     *
+     * If no user_id is provided, this function returns the scheduled plans owned by the caller.
+     *
+     *
+     * To list all schedules for all users, pass `all_users=true`.
+     *
+     *
+     * The caller must have `see_schedules` permission to see other users' scheduled plans.
+     *
+     * GET /scheduled_plans/search -> [ScheduledPlan]
+     */
+    public func search_scheduled_plans(
+        /**
+         * @param {String} user_id Return scheduled plans belonging to this user_id. If not provided, returns scheduled plans owned by the caller.
+         */
+        user_id: String? = nil,
+        /**
+         * @param {String} fields Comma delimited list of field names. If provided, only the fields specified will be included in the response
+         */
+        fields: String? = nil,
+        /**
+         * @param {Bool} all_users Return scheduled plans belonging to all users (caller needs see_schedules permission)
+         */
+        all_users: Bool? = nil,
+        /**
+         * @param {Int64} limit Number of results to return. (used with offset and takes priority over page and per_page)
+         */
+        limit: Int64? = nil,
+        /**
+         * @param {Int64} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
+         */
+        offset: Int64? = nil,
+        /**
+         * @param {String} sorts Fields to sort by.
+         */
+        sorts: String? = nil,
+        /**
+         * @param {String} name Match Scheduled plan's name.
+         */
+        name: String? = nil,
+        /**
+         * @param {String} user_first_name Returns scheduled plans belonging to user with this first name.
+         */
+        user_first_name: String? = nil,
+        /**
+         * @param {String} user_last_name Returns scheduled plans belonging to user with this last name.
+         */
+        user_last_name: String? = nil,
+        /**
+         * @param {String} dashboard_id Returns scheduled plans created on this Dashboard.
+         */
+        dashboard_id: String? = nil,
+        /**
+         * @param {String} look_id Returns scheduled plans created on this Look.
+         */
+        look_id: String? = nil,
+        /**
+         * @param {String} lookml_dashboard_id Returns scheduled plans created on this LookML Dashboard.
+         */
+        lookml_dashboard_id: String? = nil,
+        /**
+         * @param {String} recipient Match recipient address.
+         */
+        recipient: String? = nil,
+        /**
+         * @param {String} destination_type Match scheduled plan's destination type.
+         */
+        destination_type: String? = nil,
+        /**
+         * @param {String} delivery_format Match scheduled plan's delivery format.
+         */
+        delivery_format: String? = nil,
+        /**
+         * @param {Bool} filter_or Combine given search criteria in a boolean OR expression
+         */
+        filter_or: Bool? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/scheduled_plans/search", 
+            ["user_id": user_id, "fields": fields, "all_users": all_users as Any?, "limit": limit, "offset": offset, "sorts": sorts, "name": name, "user_first_name": user_first_name, "user_last_name": user_last_name, "dashboard_id": dashboard_id, "look_id": look_id, "lookml_dashboard_id": lookml_dashboard_id, "recipient": recipient, "destination_type": destination_type, "delivery_format": delivery_format, "filter_or": filter_or as Any?], nil, options)
+        return result
+    }
+
+    /**
      * ### Get Scheduled Plans for a Look
      *
      * Returns all scheduled plans for a look which belong to the caller or given user.
@@ -10165,6 +10348,82 @@ open class LookerSDKStream: APIMethods {
 
 
 
+    // MARK SqlInterfaceQuery: Run and Manage SQL Interface Queries
+
+    /**
+     * ### Handles Avatica RPC metadata requests for SQL Interface queries
+     *
+     * GET /sql_interface_queries/metadata -> SqlInterfaceQueryMetadata
+     */
+    public func sql_interface_metadata(
+        /**
+         * @param {String} avatica_request Avatica RPC request
+         */
+        avatica_request: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/sql_interface_queries/metadata", 
+            ["avatica_request": avatica_request], nil, options)
+        return result
+    }
+
+    /**
+     * ### Run a saved SQL interface query.
+     *
+     * This runs a previously created SQL interface query.
+     *
+     * The 'result_format' parameter specifies the desired structure and format of the response.
+     *
+     * Supported formats:
+     *
+     * | result_format | Description
+     * | :-----------: | :--- |
+     * | json_bi | Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
+     *
+     * GET /sql_interface_queries/{query_id}/run/{result_format} -> JsonBi
+     */
+    public func run_sql_interface_query(
+        /**
+         * @param {Int64} query_id Integer id of query
+         */
+        _ query_id: Int64,
+        /**
+         * @param {String} result_format Format of result, options are: ["json_bi"]
+         */
+        _ result_format: String,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let path_query_id = encodeParam(query_id)
+        let path_result_format = encodeParam(result_format)
+        let result: SDKResponse<Data, SDKError> = self.get("/sql_interface_queries/\(path_query_id)/run/\(path_result_format)", nil, nil, options)
+        return result
+    }
+
+    /**
+     * ### Create a SQL interface query.
+     *
+     * This allows you to create a new SQL interface query that you can later run. Looker queries are immutable once created
+     * and are not deleted. If you create a query that is exactly like an existing query then the existing query
+     * will be returned and no new query will be created. Whether a new query is created or not, you can use
+     * the 'id' in the returned query with the 'run' method.
+     *
+     * The query parameters are passed as json in the body of the request.
+     *
+     * POST /sql_interface_queries -> SqlInterfaceQuery
+     */
+    public func create_sql_interface_query(
+        /**
+         * @param {WriteSqlInterfaceQueryCreate} body
+         */
+        _ body: WriteSqlInterfaceQueryCreate,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/sql_interface_queries", nil, try! self.encode(body), options)
+        return result
+    }
+
+
+
     // MARK Theme: Manage Themes
 
     /**
@@ -10174,7 +10433,7 @@ open class LookerSDKStream: APIMethods {
      *
      * This method returns an array of all existing themes. The active time for the theme is not considered.
      *
-     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
      *
      * GET /themes -> [Theme]
      */
@@ -10205,7 +10464,7 @@ open class LookerSDKStream: APIMethods {
      *
      * For more information, see [Creating and Applying Themes](https://cloud.google.com/looker/docs/r/admin/themes).
      *
-     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
      *
      * POST /themes -> Theme
      */
@@ -10258,7 +10517,7 @@ open class LookerSDKStream: APIMethods {
      *
      * Get a **single theme** by id with [Theme](#!/Theme/theme)
      *
-     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
      *
      * GET /themes/search -> [Theme]
      */
@@ -10340,7 +10599,7 @@ open class LookerSDKStream: APIMethods {
      *
      * Returns the new specified default theme object.
      *
-     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
      *
      * PUT /themes/default -> Theme
      */
@@ -10365,7 +10624,7 @@ open class LookerSDKStream: APIMethods {
      *
      * The optional `ts` parameter can specify a different timestamp than "now."
      *
-     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
      *
      * GET /themes/active -> [Theme]
      */
@@ -10395,7 +10654,7 @@ open class LookerSDKStream: APIMethods {
      * The optional `ts` parameter can specify a different timestamp than "now."
      * Note: API users with `show` ability can call this function
      *
-     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
      *
      * GET /themes/theme_or_default -> Theme
      */
@@ -10422,7 +10681,7 @@ open class LookerSDKStream: APIMethods {
      *
      * See [Create Theme](#!/Theme/create_theme) for constraints
      *
-     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
      *
      * POST /themes/validate -> ValidationError
      */
@@ -10442,7 +10701,7 @@ open class LookerSDKStream: APIMethods {
      *
      * Use this to retrieve a specific theme, whether or not it's currently active.
      *
-     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
      *
      * GET /themes/{theme_id} -> Theme
      */
@@ -10466,7 +10725,7 @@ open class LookerSDKStream: APIMethods {
     /**
      * ### Update the theme by id.
      *
-     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
      *
      * PATCH /themes/{theme_id} -> Theme
      */
@@ -10495,7 +10754,7 @@ open class LookerSDKStream: APIMethods {
      *
      * All IDs associated with a theme name can be retrieved by searching for the theme name with [Theme Search](#!/Theme/search).
      *
-     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+     * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
      *
      * DELETE /themes/{theme_id} -> String
      */
@@ -11838,6 +12097,7 @@ open class LookerSDKStream: APIMethods {
      * associated credentials.  Will overwrite all associated email addresses with
      * the value supplied in the 'email' body param.
      * The user's 'is_disabled' status must be true.
+     * If the user has a credential email, they will receive a verification email and the user will be disabled until they verify the email
      *
      * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *

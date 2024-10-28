@@ -57,7 +57,7 @@ me = sdk.me("id, first_name, last_name")
 Is nearly identical to the TypeScript code:
 
 ```typescript
-me = await sdk.me("id, first_name, last_name")
+me = await sdk.me('id, first_name, last_name');
 ```
 
 and that's a good thing.
@@ -79,7 +79,17 @@ looks = sdk.search_looks(fields="id, title, description")
 and the first iteration of the TypeScript implementation looked like this:
 
 ```typescript
-looks = await sdk.search_looks(undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, "id, title, description")
+looks = await sdk.search_looks(
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  undefined,
+  'id, title, description'
+);
 ```
 
 Clearly, this would not be a pleasant way to make SDK calls.
@@ -87,7 +97,7 @@ Clearly, this would not be a pleasant way to make SDK calls.
 To make TypeScript coding more enjoyable, methods that have more than one optional parameter (or two, if the body parameter is also present but optional), a `Request` structure is created that supports the sparse assignment of arguments. Thanks to the `IRequestSearchLooks` interface generated for TypeScript, `search_looks` can be called like this:
 
 ```typescript
-looks = await sdk.search_looks({fields: 'id,title,description'})
+looks = await sdk.search_looks({ fields: 'id,title,description' });
 ```
 
 Which is **just about** as convenient as the Python pattern.
@@ -209,31 +219,31 @@ export interface IBackupConfiguration {
   /**
    * Type of backup: looker-s3 or custom-s3
    */
-  type?: string
+  type?: string;
   /**
    * Name of bucket for custom-s3 backups
    */
-  custom_s3_bucket?: string
+  custom_s3_bucket?: string;
   /**
    * Name of region where the bucket is located
    */
-  custom_s3_bucket_region?: string
+  custom_s3_bucket_region?: string;
   /**
    * (Write-Only) AWS S3 key used for custom-s3 backups
    */
-  custom_s3_key?: string
+  custom_s3_key?: string;
   /**
    * (Write-Only) AWS S3 secret used for custom-s3 backups
    */
-  custom_s3_secret?: string
+  custom_s3_secret?: string;
   /**
    * Link to get this item
    */
-  url?: URL
+  url?: URL;
   /**
    * Operations the current user is able to perform on this object
    */
-  can?: IDictionary<boolean>
+  can?: IDictionary<boolean>;
 }
 ```
 
@@ -247,23 +257,23 @@ export interface IWriteBackupConfiguration {
   /**
    * Type of backup: looker-s3 or custom-s3
    */
-  type?: string
+  type?: string;
   /**
    * Name of bucket for custom-s3 backups
    */
-  custom_s3_bucket?: string
+  custom_s3_bucket?: string;
   /**
    * Name of region where the bucket is located
    */
-  custom_s3_bucket_region?: string
+  custom_s3_bucket_region?: string;
   /**
    * (Write-Only) AWS S3 key used for custom-s3 backups
    */
-  custom_s3_key?: string
+  custom_s3_key?: string;
   /**
    * (Write-Only) AWS S3 secret used for custom-s3 backups
    */
-  custom_s3_secret?: string
+  custom_s3_secret?: string;
 }
 ```
 
@@ -279,11 +289,11 @@ export interface IRequestAllHomepageSections {
   /**
    * Requested fields.
    */
-  fields?: string
+  fields?: string;
   /**
    * Fields to sort by.
    */
-  sorts?: string
+  sorts?: string;
 }
 ```
 
@@ -434,59 +444,59 @@ export interface IRequestCreateQueryTask {
   /**
    * body parameter for dynamically created request type
    */
-  body?: Partial<IWriteCreateQueryTask>
+  body?: Partial<IWriteCreateQueryTask>;
   /**
    * Row limit (may override the limit in the saved query).
    */
-  limit?: number
+  limit?: number;
   /**
    * Apply model-specified formatting to each result.
    */
-  apply_formatting?: boolean
+  apply_formatting?: boolean;
   /**
    * Apply visualization options to results.
    */
-  apply_vis?: boolean
+  apply_vis?: boolean;
   /**
    * Get results from cache if available.
    */
-  cache?: boolean
+  cache?: boolean;
   /**
    * Render width for image formats.
    */
-  image_width?: number
+  image_width?: number;
   /**
    * Render height for image formats.
    */
-  image_height?: number
+  image_height?: number;
   /**
    * Generate drill links (only applicable to 'json_detail' format.
    */
-  generate_drill_links?: boolean
+  generate_drill_links?: boolean;
   /**
    * Force use of production models even if the user is in development mode.
    */
-  force_production?: boolean
+  force_production?: boolean;
   /**
    * Retrieve any results from cache even if the results have expired.
    */
-  cache_only?: boolean
+  cache_only?: boolean;
   /**
    * Prefix to use for drill links (url encoded).
    */
-  path_prefix?: string
+  path_prefix?: string;
   /**
    * Rebuild PDTS used in query.
    */
-  rebuild_pdts?: boolean
+  rebuild_pdts?: boolean;
   /**
    * Perform table calculations on query results
    */
-  server_table_calcs?: boolean
+  server_table_calcs?: boolean;
   /**
    * Requested fields
    */
-  fields?: string
+  fields?: string;
 }
 ```
 

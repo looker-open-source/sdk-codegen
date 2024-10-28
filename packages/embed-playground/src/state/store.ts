@@ -23,9 +23,9 @@
  SOFTWARE.
 
  */
-import { createStore } from '@looker/redux'
-import { OAuthFormSlice } from '@looker/extension-utils'
+import { createStore } from '@looker/redux';
+import { OAuthFormSlice } from '@looker/extension-utils';
 
-export const store = createStore()
+export const store = createStore();
 
-store.addReducer(OAuthFormSlice.name, OAuthFormSlice.reducer)
+store.addReducer(OAuthFormSlice.name, OAuthFormSlice.reducer);

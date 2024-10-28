@@ -24,9 +24,41 @@
 
  */
 
-const { excludeNodeModulesExcept } = require('./babel.common')
+const { excludeNodeModulesExcept } = require('./babel.common');
 
-process.env.TZ = 'UTC'
+process.env.TZ = 'UTC';
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+if (!global.AbortSignal.timeout) {
+  global.AbortSignal.timeout = ms => {
+    const controller = new AbortController();
+    setTimeout(() => controller.abort(new DOMException('TimeoutError')), ms);
+    return controller.signal;
+  };
+}
+
+function anyAbortInAStorm(signals) {
+  const controller = new AbortController();
+
+  function onAbort(signal) {
+    controller.abort(signal.reason);
+    // Remove the event listeners once aborted to avoid memory leaks
+    signals.forEach(signal => signal.removeEventListener('abort', onAbort));
+  }
+
+  signals.forEach(signal => {
+    if (signal.aborted) {
+      onAbort(signal);
+    } else {
+      signal.addEventListener('abort', onAbort);
+    }
+  });
+
+  return controller.signal;
+}
+
+if (!global.AbortSignal.any) {
+  global.AbortSignal.any = signals => anyAbortInAStorm(signals);
+}
 
 module.exports = {
   automock: false,
@@ -46,7 +78,7 @@ module.exports = {
   setupFilesAfterEnv: [
     // eslint-disable-next-line node/no-path-concat
     `${__dirname}/jest.setup.js`,
-    '@testing-library/jest-dom/extend-expect',
+    '@testing-library/jest-dom',
     'regenerator-runtime/runtime',
   ],
   setupFiles: ['jest-localstorage-mock'],
@@ -61,9 +93,12 @@ module.exports = {
     url: 'http://localhost/',
   },
   globals: {
+    fetch: global.fetch,
+    AbortController: global.AbortController,
+    AbortSignal: global.AbortSignal,
     'ts-jest': {
       isolatedModules: true,
       diagnostics: false,
     },
   },
-}
+};

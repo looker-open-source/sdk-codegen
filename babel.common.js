@@ -27,7 +27,7 @@
 // It simply builds a cross-platform (i.e. windows-friendly) negative
 // lookahead RegExp that will exclude all node modules except those supplied
 // as its arguments.
-const excludeNodeModuleExcept = require('babel-loader-exclude-node-modules-except')
+const excludeNodeModuleExcept = require('babel-loader-exclude-node-modules-except');
 
 // Our own modules are built as esm to allow for tree shaking.
 const ownModules = [
@@ -37,9 +37,9 @@ const ownModules = [
   '@looker/design-tokens',
   'd3-color',
   'uuid',
-]
+];
 
-const excludeNodeModulesExceptRegExp = excludeNodeModuleExcept([...ownModules])
+const excludeNodeModulesExceptRegExp = excludeNodeModuleExcept([...ownModules]);
 
 // Attach as a property to the exported function object so that we can
 // conveniently import it in webpack.config.js and jest.config.js without
@@ -49,4 +49,4 @@ module.exports.excludeNodeModulesExcept = {
   regExp: excludeNodeModulesExceptRegExp,
   // string representation for jest.config.js
   string: excludeNodeModulesExceptRegExp.toString().slice(1, -2),
-}
+};

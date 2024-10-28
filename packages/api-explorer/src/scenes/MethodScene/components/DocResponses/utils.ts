@@ -24,7 +24,7 @@
 
  */
 
-import type { IMethodResponse, KeyedCollection } from '@looker/sdk-codegen'
+import type { IMethodResponse, KeyedCollection } from '@looker/sdk-codegen';
 
 /**
  * Given an array of method responses, group them by statusCode. The value of each status code is a collection of
@@ -34,11 +34,11 @@ import type { IMethodResponse, KeyedCollection } from '@looker/sdk-codegen'
 export const buildResponseTree = (
   responses: IMethodResponse[]
 ): KeyedCollection<KeyedCollection<IMethodResponse>> => {
-  const tree = {}
-  Object.values(responses).forEach((response) => {
-    const node = `${response.statusCode}: ${response.description}`
-    if (!(node in tree)) tree[node] = {}
-    tree[node][response.mediaType] = response
-  })
-  return tree
-}
+  const tree: KeyedCollection<KeyedCollection<IMethodResponse>> = {};
+  Object.values(responses).forEach(response => {
+    const node = `${response.statusCode}: ${response.description}`;
+    if (!(node in tree)) tree[node] = {};
+    tree[node][response.mediaType] = response;
+  });
+  return tree;
+};

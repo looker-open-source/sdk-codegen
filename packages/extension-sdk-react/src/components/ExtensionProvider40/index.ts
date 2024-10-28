@@ -24,4 +24,4 @@
 
  */
 
-export * from './ExtensionProvider40'
+export * from './ExtensionProvider40';

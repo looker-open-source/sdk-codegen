@@ -23,82 +23,82 @@
  SOFTWARE.
 
  */
-import { renderHook } from '@testing-library/react-hooks'
-import { useHistory } from 'react-router-dom'
-import type { Location } from 'history'
-import * as reactRedux from 'react-redux'
-import * as routerLocation from 'react-router-dom'
-import { createTestStore, withReduxProvider } from '../../../test-utils'
-import { useTagStoreSync } from './tagStoreSync'
+import { renderHook } from '@testing-library/react-hooks';
+import { useHistory } from 'react-router-dom';
+import type { Location } from 'history';
+import * as reactRedux from 'react-redux';
+import * as routerLocation from 'react-router-dom';
+import { createTestStore, withReduxProvider } from '../../../test-utils';
+import { useTagStoreSync } from './tagStoreSync';
 
 jest.mock('react-router', () => {
-  const ReactRouter = jest.requireActual('react-router')
+  const ReactRouter = jest.requireActual('react-router');
   return {
     ...ReactRouter,
     useHistory: jest
       .fn()
       .mockReturnValue({ push: jest.fn(), location: globalThis.location }),
     useLocation: jest.fn().mockReturnValue({ pathname: '/', search: '' }),
-  }
-})
+  };
+});
 
 describe.skip('useTagStoreSync', () => {
-  const mockDispatch = jest.fn()
+  const mockDispatch = jest.fn();
 
   afterEach(() => {
-    jest.clearAllMocks()
-  })
+    jest.clearAllMocks();
+  });
 
   test('does nothing if uninitialized', () => {
-    const { push } = useHistory()
-    const wrapper = ({ children }: any) => withReduxProvider(children)
-    renderHook(() => useTagStoreSync(), { wrapper })
-    expect(push).not.toHaveBeenCalled()
-  })
+    const { push } = useHistory();
+    const wrapper = ({ children }: any) => withReduxProvider(children);
+    renderHook(() => useTagStoreSync(), { wrapper });
+    expect(push).not.toHaveBeenCalled();
+  });
 
   describe.each([
     ['methods', 'get'],
     ['types', 'specification'],
   ])('tag filter verb for sidenav %s tab', (tagType, verb) => {
     test('overrides store tag filter given valid url tag filter param', () => {
-      const { push } = useHistory()
+      const { push } = useHistory();
       const store = createTestStore({
         settings: {
           initialized: true,
         },
-      })
+      });
       jest.spyOn(routerLocation, 'useLocation').mockReturnValue({
         pathname: `/4.0/${tagType}/ApiAuth`,
         search: `t=${verb}`,
-      } as unknown as Location)
-      jest.spyOn(reactRedux, 'useDispatch').mockReturnValue(mockDispatch)
-      const wrapper = ({ children }: any) => withReduxProvider(children, store)
-      renderHook(() => useTagStoreSync(), { wrapper })
-      expect(push).not.toHaveBeenCalled()
+      } as unknown as Location);
+      jest.spyOn(reactRedux, 'useDispatch').mockReturnValue(mockDispatch);
+      const wrapper = ({ children }: any) => withReduxProvider(children, store);
+      renderHook(() => useTagStoreSync(), { wrapper });
+      expect(push).not.toHaveBeenCalled();
       expect(mockDispatch).toHaveBeenLastCalledWith({
         payload: { tagFilter: verb.toUpperCase() },
         type: 'settings/setTagFilterAction',
-      })
-    })
+      });
+    });
 
     test('updates url with store tag filter given invalid url tag filter param', () => {
-      const { push } = useHistory()
+      const { push } = useHistory();
       const store = createTestStore({
         settings: {
           initialized: true,
         },
-      })
+      });
       jest.spyOn(routerLocation, 'useLocation').mockReturnValue({
         pathname: `/4.0/${tagType}/ApiAuth`,
         search: 't=invalid',
-      } as unknown as Location)
-      jest.spyOn(reactRedux, 'useDispatch').mockReturnValue(mockDispatch)
-      const wrapper = ({ children }: any) => withReduxProvider(children, store)
-      renderHook(() => useTagStoreSync(), { wrapper })
+      } as unknown as Location);
+      jest.spyOn(reactRedux, 'useDispatch').mockReturnValue(mockDispatch);
+      const wrapper = ({ children }: any) => withReduxProvider(children, store);
+      renderHook(() => useTagStoreSync(), { wrapper });
       expect(push).toHaveBeenCalledWith({
         pathname: `/4.0/${tagType}/ApiAuth`,
         search: '',
-      })
-    })
-  })
-})
+      });
+    });
+  });
+});

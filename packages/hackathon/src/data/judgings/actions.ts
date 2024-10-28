@@ -24,7 +24,7 @@
 
  */
 
-import type { IJudgingProps } from '../../models'
+import type { IJudgingProps } from '../../models';
 
 export enum Actions {
   GET_JUDGINGS_REQUEST = 'GET_JUDGINGS_REQUEST',
@@ -38,45 +38,45 @@ export enum Actions {
 }
 
 export interface GetJudgingsRequestAction {
-  type: Actions.GET_JUDGINGS_REQUEST
+  type: Actions.GET_JUDGINGS_REQUEST;
 }
 
 export interface GetJudgingsResponseAction {
-  type: Actions.GET_JUDGINGS_RESPONSE
-  payload: IJudgingProps[]
+  type: Actions.GET_JUDGINGS_RESPONSE;
+  payload: IJudgingProps[];
 }
 
 export interface GetJudgingRequestAction {
-  type: Actions.GET_JUDGING_REQUEST
-  payload: string
+  type: Actions.GET_JUDGING_REQUEST;
+  payload: string;
 }
 
 export interface GetJudgingResponseAction {
-  type: Actions.GET_JUDGING_RESPONSE
-  payload?: IJudgingProps
+  type: Actions.GET_JUDGING_RESPONSE;
+  payload?: IJudgingProps;
 }
 
 export interface SaveJudgingRequestAction {
-  type: Actions.SAVE_JUDGING_REQUEST
-  payload: IJudgingProps
+  type: Actions.SAVE_JUDGING_REQUEST;
+  payload: IJudgingProps;
 }
 
 export interface SaveJudgingResponseAction {
-  type: Actions.SAVE_JUDGING_RESPONSE
+  type: Actions.SAVE_JUDGING_RESPONSE;
   payload: {
-    judging: IJudgingProps
-    judgingUpdated: boolean
-  }
+    judging: IJudgingProps;
+    judgingUpdated: boolean;
+  };
 }
 
 export interface UpdateJudgingsPageNumAction {
-  type: Actions.UPDATE_JUDGINGS_PAGE_NUM
-  payload: number
+  type: Actions.UPDATE_JUDGINGS_PAGE_NUM;
+  payload: number;
 }
 
 export interface UpdateJudgingData {
-  type: Actions.UPDATE_JUDGING_DATA
-  payload: IJudgingProps
+  type: Actions.UPDATE_JUDGING_DATA;
+  payload: IJudgingProps;
 }
 
 export type JudgingAction =
@@ -87,46 +87,46 @@ export type JudgingAction =
   | SaveJudgingRequestAction
   | SaveJudgingResponseAction
   | UpdateJudgingsPageNumAction
-  | UpdateJudgingData
+  | UpdateJudgingData;
 
 export const getJudgingsRequest = (): GetJudgingsRequestAction => ({
   type: Actions.GET_JUDGINGS_REQUEST,
-})
+});
 
 export const getJudgingsResponse = (
   judgings: IJudgingProps[]
 ): GetJudgingsResponseAction => ({
   type: Actions.GET_JUDGINGS_RESPONSE,
   payload: judgings,
-})
+});
 
 export const getJudgingRequest = (
   judgingId: string
 ): GetJudgingRequestAction => ({
   type: Actions.GET_JUDGING_REQUEST,
   payload: judgingId,
-})
+});
 
 export const getJudgingResponse = (
   judging?: IJudgingProps
 ): GetJudgingResponseAction => ({
   type: Actions.GET_JUDGING_RESPONSE,
   payload: judging,
-})
+});
 
 export const updateJudgingData = (
   judging: IJudgingProps
 ): UpdateJudgingData => ({
   type: Actions.UPDATE_JUDGING_DATA,
   payload: judging,
-})
+});
 
 export const saveJudgingRequest = (
   judging: IJudgingProps
 ): SaveJudgingRequestAction => ({
   type: Actions.SAVE_JUDGING_REQUEST,
   payload: judging,
-})
+});
 
 export const saveJudgingResponse = (
   judging: IJudgingProps,
@@ -134,11 +134,11 @@ export const saveJudgingResponse = (
 ): SaveJudgingResponseAction => ({
   type: Actions.SAVE_JUDGING_RESPONSE,
   payload: { judging, judgingUpdated: success },
-})
+});
 
 export const updateJudgingsPageNum = (
   pageNum: number
 ): UpdateJudgingsPageNumAction => ({
   type: Actions.UPDATE_JUDGINGS_PAGE_NUM,
   payload: pageNum,
-})
+});

@@ -24,25 +24,25 @@
 
  */
 
-import { renderWithTheme } from '@looker/components-test-utils'
-import { screen } from '@testing-library/react'
-import React from 'react'
-import { Loading } from './Loading'
+import { renderWithTheme } from '@looker/components-test-utils';
+import { screen } from '@testing-library/react';
+import React from 'react';
+import { Loading } from './Loading';
 
 describe('Loading', () => {
   test('it displays nothing if loading is false', () => {
-    const message = 'Loading ...'
-    renderWithTheme(<Loading loading={false} />)
-    expect(screen.queryByText(message)).not.toBeInTheDocument()
-  })
+    const message = 'Loading ...';
+    renderWithTheme(<Loading loading={false} />);
+    expect(screen.queryByText(message)).not.toBeInTheDocument();
+  });
   test('it defaults the message to "Loading ..."', () => {
-    const message = 'Loading ...'
-    renderWithTheme(<Loading loading={true} />)
-    expect(screen.getByText(message)).toBeInTheDocument()
-  })
+    const message = 'Loading ...';
+    renderWithTheme(<Loading loading={true} />);
+    expect(screen.getByText(message)).toBeInTheDocument();
+  });
   test('it can have a custom message', () => {
-    const message = 'New Message'
-    renderWithTheme(<Loading loading={true} message={message} />)
-    expect(screen.getByText(message)).toBeInTheDocument()
-  })
-})
+    const message = 'New Message';
+    renderWithTheme(<Loading loading={true} message={message} />);
+    expect(screen.getByText(message)).toBeInTheDocument();
+  });
+});

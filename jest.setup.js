@@ -25,26 +25,32 @@
  */
 
 /* eslint-disable @typescript-eslint/no-var-requires */
-const Adapter = require('enzyme-adapter-react-16')
-const { configure } = require('enzyme')
-const ResizeObserver = require('resize-observer-polyfill')
+const Adapter = require('enzyme-adapter-react-16');
+const { configure } = require('enzyme');
+const ResizeObserver = require('resize-observer-polyfill');
 
-require('@testing-library/jest-dom/extend-expect')
-require('jest-canvas-mock')
-require('jest-styled-components')
-require('jest-environment-jsdom')
+require('@testing-library/jest-dom');
+require('jest-canvas-mock');
+require('jest-styled-components');
+require('jest-environment-jsdom');
 
-configure({ adapter: new Adapter() })
+configure({ adapter: new Adapter() });
 
 const observeMock = function (cb, config) {
-  this.observeCallback = cb
-  this.observeConfig = config
-  this.disconnect = jest.fn()
-  this.observe = jest.fn()
-}
+  this.observeCallback = cb;
+  this.observeConfig = config;
+  this.disconnect = jest.fn();
+  this.observe = jest.fn();
+};
 
-globalThis.IntersectionObserver = observeMock
-globalThis.ResizeObserver = ResizeObserver
+// if (!AbortSignal.any) {
+//   AbortSignal.any = signals => {
+//     return Promise.any(signals);
+//   };
+// }
+
+globalThis.IntersectionObserver = observeMock;
+globalThis.ResizeObserver = ResizeObserver;
 
 // js-dom doesn't do scrollIntoView
 // Element.prototype.scrollIntoView = jest.fn()
@@ -53,3 +59,16 @@ globalThis.ResizeObserver = ResizeObserver
 // beforeAll(() => {
 //   jest.resetAllMocks()
 // })
+
+beforeEach(() => {
+  if (!AbortSignal.timeout) {
+    AbortSignal.timeout = ms => {
+      const controller = new AbortController();
+      setTimeout(() => controller.abort(new DOMException('TimeoutError')), ms);
+      return controller.signal;
+    };
+  }
+  globalThis.fetch = global.fetch;
+  globalThis.AbortController = global.AbortController;
+  globalThis.AbortSignal = global.AbortSignal;
+});

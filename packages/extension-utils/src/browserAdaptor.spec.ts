@@ -24,10 +24,10 @@
 
  */
 
-import type { IAPIMethods } from '@looker/sdk-rtl'
-import type { ThemeOverrides } from './adaptorUtils'
-import { getThemeOverrides } from './adaptorUtils'
-import { BrowserAdaptor } from './browserAdaptor'
+import type { IAPIMethods } from '@looker/sdk-rtl';
+import type { ThemeOverrides } from './adaptorUtils';
+import { getThemeOverrides } from './adaptorUtils';
+import { BrowserAdaptor } from './browserAdaptor';
 
 describe('BrowserAdaptor', () => {
   test.each([
@@ -38,32 +38,32 @@ describe('BrowserAdaptor', () => {
   ])(
     'returns correct font overrides',
     (hostname: string, expectedOverrides: ThemeOverrides) => {
-      const saveLoc = window.location
-      delete (window as any).location
+      const saveLoc = window.location;
+      delete (window as any).location;
       window.location = {
         ...saveLoc,
         hostname,
-      }
+      };
       expect(new BrowserAdaptor({} as IAPIMethods).themeOverrides()).toEqual(
         expectedOverrides
-      )
-      window.location = saveLoc
+      );
+      window.location = saveLoc;
     }
-  )
+  );
 
   const mockClipboardCopy = jest
     .fn()
-    .mockImplementation(() => Promise.resolve())
+    .mockImplementation(() => Promise.resolve());
   Object.assign(navigator, {
     clipboard: {
       writeText: mockClipboardCopy,
     },
-  })
+  });
 
   test('copies location href to clipboard', async () => {
-    jest.spyOn(navigator.clipboard, 'writeText')
-    const adaptor = new BrowserAdaptor({} as IAPIMethods)
-    await adaptor.copyToClipboard()
-    expect(mockClipboardCopy).toHaveBeenCalledWith(location.href)
-  })
-})
+    jest.spyOn(navigator.clipboard, 'writeText');
+    const adaptor = new BrowserAdaptor({} as IAPIMethods);
+    await adaptor.copyToClipboard();
+    expect(mockClipboardCopy).toHaveBeenCalledWith(location.href);
+  });
+});

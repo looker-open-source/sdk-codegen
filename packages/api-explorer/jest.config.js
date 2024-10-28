@@ -23,18 +23,15 @@
  SOFTWARE.
 
  */
-const base = require('../../jest.config')
-const packageName = require('./package.json').name.split('/')[1]
+const base = require('../../jest.config');
+const packageName = require('./package.json').name.split('/')[1];
 
 module.exports = {
   ...base,
   displayName: packageName,
   name: packageName,
   rootDir: '../..',
-  setupFilesAfterEnv: [
-    ...base.setupFilesAfterEnv,
-    '@testing-library/jest-dom/extend-expect',
-  ],
+  setupFilesAfterEnv: [...base.setupFilesAfterEnv, '@testing-library/jest-dom'],
   testMatch: [`<rootDir>/packages/${packageName}/**/*.(spec|test).(ts|js)?(x)`],
   testEnvironment: 'jsdom',
-}
+};

@@ -23,13 +23,13 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { Space, CopyToClipboard } from '@looker/components'
-import type { CodeDisplayProps } from '..'
-import { CodeDisplay } from '..'
+import React from 'react';
+import { CopyToClipboard, Space } from '@looker/components';
+import type { CodeDisplayProps } from '..';
+import { CodeDisplay } from '..';
 
 interface CodeCopyProps extends CodeDisplayProps {
-  caption?: string
+  caption?: string;
 }
 /**
  * Shows code with clipboard copying support
@@ -56,5 +56,5 @@ export const CodeCopy = ({
       {/* TODO why is caption || 'Copy' required here? */}
       <CopyToClipboard content={code}>{caption || 'Copy'}</CopyToClipboard>
     </Space>
-  )
-}
+  );
+};

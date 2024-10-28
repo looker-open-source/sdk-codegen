@@ -23,109 +23,109 @@
  SOFTWARE.
 
  */
-import type { FC } from 'react'
-import React, { useEffect, useState } from 'react'
+import type { FC } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   DataTable,
-  DataTableItem,
   DataTableAction,
   DataTableCell,
+  DataTableItem,
+  Icon,
   Pagination,
   Tooltip,
-  Icon,
-} from '@looker/components'
-import { TextSnippet } from '@styled-icons/material-outlined/TextSnippet'
-import { Lock } from '@styled-icons/material-outlined/Lock'
-import { Create } from '@styled-icons/material-outlined/Create'
-import { Delete } from '@styled-icons/material-outlined/Delete'
-import { FactCheck } from '@styled-icons/material-outlined/FactCheck'
-import { Logout } from '@styled-icons/material-outlined/Logout'
-import { Login } from '@styled-icons/material-outlined/Login'
-import { useSelector, useDispatch } from 'react-redux'
-import { useHistory } from 'react-router-dom'
-import type { IHackerProps, IProjectProps } from '../../../models'
-import { sheetCell } from '../../../models'
+} from '@looker/components';
+import { TextSnippet } from '@styled-icons/material-outlined/TextSnippet';
+import { Lock } from '@styled-icons/material-outlined/Lock';
+import { Create } from '@styled-icons/material-outlined/Create';
+import { Delete } from '@styled-icons/material-outlined/Delete';
+import { FactCheck } from '@styled-icons/material-outlined/FactCheck';
+import { Logout } from '@styled-icons/material-outlined/Logout';
+import { Login } from '@styled-icons/material-outlined/Login';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
+import type { IHackerProps, IProjectProps } from '../../../models';
+import { sheetCell } from '../../../models';
 import {
   getHackerState,
   getProjectsHeadings,
-} from '../../../data/hack_session/selectors'
-import { canDoProjectAction, canJoinProject } from '../../../utils'
-import { PAGE_SIZE } from '../../../constants'
+} from '../../../data/hack_session/selectors';
+import { canDoProjectAction, canJoinProject } from '../../../utils';
+import { PAGE_SIZE } from '../../../constants';
 import {
-  deleteProject,
-  currentProjectsRequest,
-  updateProjectsPageNum,
   changeMembership,
-} from '../../../data/projects/actions'
+  currentProjectsRequest,
+  deleteProject,
+  updateProjectsPageNum,
+} from '../../../data/projects/actions';
 import {
   getCurrentProjectsState,
   getProjectsPageNumState,
-} from '../../../data/projects/selectors'
-import { ProjectViewDialog } from '../../../components/ProjectViewDialog'
+} from '../../../data/projects/selectors';
+import { ProjectViewDialog } from '../../../components/ProjectViewDialog';
 
 interface ProjectListProps {}
 
 export const ProjectList: FC<ProjectListProps> = () => {
-  const dispatch = useDispatch()
-  const currentPage = useSelector(getProjectsPageNumState)
-  const hacker = useSelector(getHackerState)
-  const columns = useSelector(getProjectsHeadings)
+  const dispatch = useDispatch();
+  const currentPage = useSelector(getProjectsPageNumState);
+  const hacker = useSelector(getHackerState);
+  const columns = useSelector(getProjectsHeadings);
   useEffect(() => {
-    dispatch(currentProjectsRequest())
-  }, [dispatch])
-  const projects = useSelector(getCurrentProjectsState)
+    dispatch(currentProjectsRequest());
+  }, [dispatch]);
+  const projects = useSelector(getCurrentProjectsState);
   const [currentProject, setCurrentProject] = useState<
     IProjectProps | undefined
-  >(undefined)
+  >(undefined);
 
   const handleDelete = (project: IProjectProps) => {
-    dispatch(deleteProject(project._id))
-  }
+    dispatch(deleteProject(project._id));
+  };
 
   const isProjectMember = (hacker: IHackerProps, project: IProjectProps) => {
     return !!project.$team.find(
-      (teamMember) => teamMember.user_id === String(hacker.id)
-    )
-  }
+      teamMember => teamMember.user_id === String(hacker.id)
+    );
+  };
 
   const handleJoin = (project: IProjectProps, hacker: IHackerProps) => {
-    const isMember = isProjectMember(hacker, project)
-    dispatch(changeMembership(project!._id, hacker.id, isMember))
-  }
+    const isMember = isProjectMember(hacker, project);
+    dispatch(changeMembership(project!._id, hacker.id, isMember));
+  };
 
-  const lockCol = columns[0]
-  lockCol.canSort = false
-  lockCol.size = 'auto'
-  lockCol.titleIcon = <Lock />
-  columns[1].size = 'auto'
-  columns[1].titleIcon = <FactCheck />
-  columns[2].size = 'medium' // title
-  columns[3].size = 'large' // description
-  columns[4].size = 'auto' // project type
+  const lockCol = columns[0];
+  lockCol.canSort = false;
+  lockCol.size = 'auto';
+  lockCol.titleIcon = <Lock />;
+  columns[1].size = 'auto';
+  columns[1].titleIcon = <FactCheck />;
+  columns[2].size = 'medium'; // title
+  columns[3].size = 'large'; // description
+  columns[4].size = 'auto'; // project type
   // columns[4].title = 'Project Type'
-  columns[5].size = 'medium' // technologies
-  columns[6].size = 'auto' // team count
+  columns[5].size = 'medium'; // technologies
+  columns[6].size = 'auto'; // team count
   // columns[6].title = 'Team Count'
-  columns[7].size = 'auto' // judge count
+  columns[7].size = 'auto'; // judge count
   // columns[7].title = 'Judge Count'
 
-  const history = useHistory()
+  const history = useHistory();
   const handleEdit = (projectId: string) => {
     setTimeout(() => {
-      history.push(`/projects/${projectId}`)
-    })
-  }
+      history.push(`/projects/${projectId}`);
+    });
+  };
 
   const handleView = (project: IProjectProps) => {
-    setCurrentProject(project)
-  }
+    setCurrentProject(project);
+  };
 
   const closeView = () => {
-    setCurrentProject(undefined)
-  }
+    setCurrentProject(undefined);
+  };
 
   const actions = (project: IProjectProps) => {
-    const isLocked = project.locked
+    const isLocked = project.locked;
 
     return (
       <>
@@ -167,8 +167,8 @@ export const ProjectList: FC<ProjectListProps> = () => {
           </DataTableAction>
         )}
       </>
-    )
-  }
+    );
+  };
 
   const projectCell = (project: IProjectProps, columnName: string) => {
     switch (columnName) {
@@ -179,30 +179,30 @@ export const ProjectList: FC<ProjectListProps> = () => {
               <Icon size="small" icon={<Lock />} />
             </Tooltip>
           )
-        )
+        );
       case '$team_count':
         return (
           <Tooltip content={project.$members.join(',')}>
             {sheetCell(project[columnName])}
           </Tooltip>
-        )
+        );
       case '$judge_count':
         if (!hacker.canAdmin && !hacker.canStaff)
-          return sheetCell(project[columnName])
+          return sheetCell(project[columnName]);
         return (
           <Tooltip content={project.$judges.join(',')}>
             {sheetCell(project[columnName])}
           </Tooltip>
-        )
+        );
       case '$techs':
-        return sheetCell(project.$techs.join(','))
+        return sheetCell(project.$techs.join(','));
       default:
-        return sheetCell(project[columnName])
+        return sheetCell(project[columnName]);
     }
-  }
+  };
 
-  const totalPages = Math.ceil(projects.length / PAGE_SIZE)
-  const startIdx = (currentPage - 1) * PAGE_SIZE
+  const totalPages = Math.ceil(projects.length / PAGE_SIZE);
+  const startIdx = (currentPage - 1) * PAGE_SIZE;
   const rows = projects
     .slice(startIdx, startIdx + PAGE_SIZE)
     .map((project, idx) => (
@@ -212,13 +212,13 @@ export const ProjectList: FC<ProjectListProps> = () => {
         actions={actions(project)}
         onClick={handleView.bind(null, project)}
       >
-        {columns.map((column) => (
+        {columns.map(column => (
           <DataTableCell key={`${idx}.${column.id}`}>
             {projectCell(project, column.id)}
           </DataTableCell>
         ))}
       </DataTableItem>
-    ))
+    ));
 
   return (
     <>
@@ -228,9 +228,9 @@ export const ProjectList: FC<ProjectListProps> = () => {
       <Pagination
         current={currentPage}
         pages={totalPages}
-        onChange={(pageNumber) => dispatch(updateProjectsPageNum(pageNumber))}
+        onChange={pageNumber => dispatch(updateProjectsPageNum(pageNumber))}
       />
       <ProjectViewDialog project={currentProject} onClose={closeView} />
     </>
-  )
-}
+  );
+};

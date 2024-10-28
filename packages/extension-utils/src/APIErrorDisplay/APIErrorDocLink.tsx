@@ -24,25 +24,25 @@
 
  */
 
-import React from 'react'
-import { Link } from '@looker/components'
-import { getEnvAdaptor } from '../adaptorUtils'
+import React from 'react';
+import { Link } from '@looker/components';
+import { getEnvAdaptor } from '../adaptorUtils';
 
 interface APIErrorDocLinkProps {
-  docUrl?: string
+  docUrl?: string;
 }
 
 export const APIErrorDocLink = ({ docUrl }: APIErrorDocLinkProps) => {
   const onClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    e.preventDefault()
-    const adaptor = getEnvAdaptor()
-    adaptor.openBrowserWindow(e.currentTarget.href)
-  }
+    e.preventDefault();
+    const adaptor = getEnvAdaptor();
+    adaptor.openBrowserWindow(e.currentTarget.href);
+  };
 
-  if (!docUrl) return <></>
+  if (!docUrl) return <></>;
   return (
     <Link href={docUrl} key={docUrl} onClick={onClick}>
       More information
     </Link>
-  )
-}
+  );
+};

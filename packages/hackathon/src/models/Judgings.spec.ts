@@ -32,13 +32,13 @@ import {
   mockStaff,
   mockUser,
   wait2Mins,
-} from '../test-data'
-import type { SheetData } from './SheetData'
+} from '../test-data';
+import type { SheetData } from './SheetData';
 // import { initActiveSheet } from './SheetData'
 
 // let sheetSDK: SheetSDK
 // let doc: ISheet
-let data: SheetData
+let data: SheetData;
 
 // Multiple comments to pass lint. Skipped all tests.
 // TODO: With WhollyArtifact change,
@@ -48,118 +48,118 @@ describe.skip('Judgings', () => {
     // sheetSDK = await initSheetSDK()
     // doc = await sheetSDK.index()
     // data = initActiveSheet(sheetSDK, doc)
-  })
+  });
   describe('Permissions', () => {
     test('user cannot judge', () => {
-      const hacker = mockUser
-      const actual = mockJudging(hacker.id)
-      expect(actual.canUpdate(hacker)).toEqual(false)
-      expect(actual.canDelete(hacker)).toEqual(false)
-      expect(actual.canCreate(hacker)).toEqual(false)
-    })
+      const hacker = mockUser;
+      const actual = mockJudging(hacker.id);
+      expect(actual.canUpdate(hacker)).toEqual(false);
+      expect(actual.canDelete(hacker)).toEqual(false);
+      expect(actual.canCreate(hacker)).toEqual(false);
+    });
     test('staff cannot judge', () => {
-      const hacker = mockStaff
-      const actual = mockJudging(hacker.id)
-      expect(actual.canUpdate(hacker)).toEqual(false)
-      expect(actual.canDelete(hacker)).toEqual(false)
-      expect(actual.canCreate(hacker)).toEqual(false)
-    })
+      const hacker = mockStaff;
+      const actual = mockJudging(hacker.id);
+      expect(actual.canUpdate(hacker)).toEqual(false);
+      expect(actual.canDelete(hacker)).toEqual(false);
+      expect(actual.canCreate(hacker)).toEqual(false);
+    });
     test("judge cannot judge someone else's assignment", () => {
-      const hacker = mockJudge
-      const actual = mockJudging(mockUser.id)
-      expect(actual.canUpdate(hacker)).toEqual(false)
-      expect(actual.canDelete(hacker)).toEqual(false)
-      expect(actual.canCreate(hacker)).toEqual(false)
-    })
+      const hacker = mockJudge;
+      const actual = mockJudging(mockUser.id);
+      expect(actual.canUpdate(hacker)).toEqual(false);
+      expect(actual.canDelete(hacker)).toEqual(false);
+      expect(actual.canCreate(hacker)).toEqual(false);
+    });
     test('judge can judge their own assignment', () => {
-      const hacker = mockJudge
-      const actual = mockJudging(hacker.id)
-      expect(actual.canUpdate(hacker)).toEqual(true)
-      expect(actual.canDelete(hacker)).toEqual(true)
-      expect(actual.canCreate(hacker)).toEqual(true)
-    })
+      const hacker = mockJudge;
+      const actual = mockJudging(hacker.id);
+      expect(actual.canUpdate(hacker)).toEqual(true);
+      expect(actual.canDelete(hacker)).toEqual(true);
+      expect(actual.canCreate(hacker)).toEqual(true);
+    });
     test('admin can judge anything', () => {
-      const hacker = mockAdmin
-      const actual = mockJudging(mockJudge.id)
-      expect(actual.canUpdate(hacker)).toEqual(true)
-      expect(actual.canDelete(hacker)).toEqual(true)
-      expect(actual.canCreate(hacker)).toEqual(true)
-    })
-  })
+      const hacker = mockAdmin;
+      const actual = mockJudging(mockJudge.id);
+      expect(actual.canUpdate(hacker)).toEqual(true);
+      expect(actual.canDelete(hacker)).toEqual(true);
+      expect(actual.canCreate(hacker)).toEqual(true);
+    });
+  });
   describe('prepare', () => {
     test('it shoots, it scores!', () => {
-      const actual = mockJudging(mockJudge.id)
-      expect(actual.score).toEqual(1)
-      actual.prepare()
-      expect(actual.score).toEqual(5)
-    })
-  })
+      const actual = mockJudging(mockJudge.id);
+      expect(actual.score).toEqual(1);
+      actual.prepare();
+      expect(actual.score).toEqual(5);
+    });
+  });
   describe('CRUD', () => {
     test('related properties are also loaded', () => {
-      expect(data.judgings.rows.length).toBeGreaterThan(0)
-      const actual = data.judgings.rows[0]
-      expect(actual.$title).toBeDefined()
-      expect(actual.$judge_name).toBeDefined()
-      expect(actual.$description).toBeDefined()
-    })
+      expect(data.judgings.rows.length).toBeGreaterThan(0);
+      const actual = data.judgings.rows[0];
+      expect(actual.$title).toBeDefined();
+      expect(actual.$judge_name).toBeDefined();
+      expect(actual.$description).toBeDefined();
+    });
     test('can refresh the tab', async () => {
-      expect(data.judgings.keyColumn).toEqual('_id')
-      const expected = data.judgings.rows
-      await data.judgings.refresh()
-      expect(data.judgings.rows).toEqual(expected)
-    })
+      expect(data.judgings.keyColumn).toEqual('_id');
+      const expected = data.judgings.rows;
+      await data.judgings.refresh();
+      expect(data.judgings.rows).toEqual(expected);
+    });
     test(
       'can update a row',
       async () => {
-        const rows = data.judgings.rows
-        expect(rows).toBeDefined()
-        expect(rows.length).toBeGreaterThan(0)
-        const j = rows[Math.max(rows.length - 2, 0)]
-        const impact = j.impact
+        const rows = data.judgings.rows;
+        expect(rows).toBeDefined();
+        expect(rows.length).toBeGreaterThan(0);
+        const j = rows[Math.max(rows.length - 2, 0)];
+        const impact = j.impact;
         // Make sure the score is calculated
-        let actual = await data.judgings.save(j)
-        expect(actual.impact).toEqual(impact)
-        const delta = 100
-        actual.impact = impact + delta
-        actual = await data.judgings.save(actual)
-        expect(actual.impact).toEqual(impact + delta)
+        let actual = await data.judgings.save(j);
+        expect(actual.impact).toEqual(impact);
+        const delta = 100;
+        actual.impact = impact + delta;
+        actual = await data.judgings.save(actual);
+        expect(actual.impact).toEqual(impact + delta);
         // restore the score
-        actual.impact = impact
-        actual = await data.judgings.save(actual)
-        expect(actual.impact).toEqual(impact)
+        actual.impact = impact;
+        actual = await data.judgings.save(actual);
+        expect(actual.impact).toEqual(impact);
       },
       wait2Mins
-    )
+    );
     test(
       'can create a row',
       async () => {
-        const judgings = data.judgings
-        expect(judgings.rows).toBeDefined()
-        const rowCount = judgings.rows.length
-        const j = mockJudging(mockJudge.id)
-        const actual = await data.judgings.save(j)
-        expect(actual.user_id).toEqual(j.user_id)
-        expect(actual.project_id).toEqual(j.project_id)
-        expect(judgings.rows.length).toEqual(rowCount + 1)
-        const found = judgings.find(actual._id)
-        expect(found).toBeDefined()
-        expect(found?._id).toEqual(actual._id)
+        const judgings = data.judgings;
+        expect(judgings.rows).toBeDefined();
+        const rowCount = judgings.rows.length;
+        const j = mockJudging(mockJudge.id);
+        const actual = await data.judgings.save(j);
+        expect(actual.user_id).toEqual(j.user_id);
+        expect(actual.project_id).toEqual(j.project_id);
+        expect(judgings.rows.length).toEqual(rowCount + 1);
+        const found = judgings.find(actual._id);
+        expect(found).toBeDefined();
+        expect(found?._id).toEqual(actual._id);
       },
       wait2Mins
-    )
+    );
     test(
       'can delete a row',
       async () => {
-        const judgings = data.judgings
-        const j = mockJudging(mockJudge.id)
-        const rowCount = judgings.rows.length
-        const created = await judgings.save(j)
-        const actual = await judgings.delete(created)
-        expect(actual).toEqual(true)
-        expect(judgings.rows.length).toEqual(rowCount)
-        expect(judgings.find(created._id)).not.toBeDefined()
+        const judgings = data.judgings;
+        const j = mockJudging(mockJudge.id);
+        const rowCount = judgings.rows.length;
+        const created = await judgings.save(j);
+        const actual = await judgings.delete(created);
+        expect(actual).toEqual(true);
+        expect(judgings.rows.length).toEqual(rowCount);
+        expect(judgings.find(created._id)).not.toBeDefined();
       },
       wait2Mins
-    )
-  })
-})
+    );
+  });
+});

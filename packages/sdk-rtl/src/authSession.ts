@@ -24,9 +24,9 @@
 
  */
 
-import type { IRequestProps, ITransport, SDKResponse } from './transport'
-import { sdkError } from './transport'
-import type { IApiSettings } from './apiSettings'
+import type { IRequestProps, ITransport, SDKResponse } from './transport';
+import { sdkError } from './transport';
+import type { IApiSettings } from './apiSettings';
 
 /**
  * Same as the Looker API access token object
@@ -36,19 +36,19 @@ export interface IAccessToken {
   /**
    * Access Token used for API calls (read-only)
    */
-  access_token?: string
+  access_token?: string;
   /**
    * Type of Token (read-only)
    */
-  token_type?: string
+  token_type?: string;
   /**
    * Number of seconds before the token expires (read-only)
    */
-  expires_in?: number
+  expires_in?: number;
   /**
    * Refresh token which can be used to obtain a new access token (read-only)
    */
-  refresh_token?: string
+  refresh_token?: string;
 }
 
 /**
@@ -59,35 +59,35 @@ export interface IError {
   /**
    * Error details (read-only)
    */
-  message: string | null
+  message: string | null;
   /**
    * Documentation link (read-only)
    */
-  documentation_url: string | null
+  documentation_url: string | null;
 }
 
 /**
  * Basic authorization session interface for most API authentication scenarios
  */
 export interface IAuthSession {
-  settings: IApiSettings
-  transport: ITransport
+  settings: IApiSettings;
+  transport: ITransport;
   /**
    * ID of sudo user
    */
-  sudoId: string
+  sudoId: string;
 
   /**
    * is the current session authenticated?
    */
-  isAuthenticated(): boolean
+  isAuthenticated(): boolean;
 
   /**
    * Decorate the request with authentication information
    * @param props Properties of request to use or update in callback
    * @returns the request properties with authentication information added
    */
-  authenticate(props: IRequestProps): Promise<IRequestProps>
+  authenticate(props: IRequestProps): Promise<IRequestProps>;
 
   /**
    * Log out the current user
@@ -97,7 +97,7 @@ export interface IAuthSession {
    *   - any subsequent SDK method calls will automatically log the API user back in for this scenario
    * @returns {Promise<boolean>} `true` if a logout happened, `false` otherwise
    */
-  logout(): Promise<boolean>
+  logout(): Promise<boolean>;
 
   /**
    * Typically returns an `IAccessToken` but could be any data used for auth.
@@ -106,25 +106,25 @@ export interface IAuthSession {
    *
    * @returns {Promise<any>} authentication information
    */
-  getToken(): Promise<any>
+  getToken(): Promise<any>;
 
   /**
    *
    * @returns `true` if the auth session is in sudo mode
    */
-  isSudo(): boolean
+  isSudo(): boolean;
 
   /**
    * Login to the auth session, optionally as a sudo user
    * @param {string | number} sudoId
    * @returns {Promise<any>} authentication data
    */
-  login(sudoId?: string | number): Promise<any>
+  login(sudoId?: string | number): Promise<any>;
 
   /**
    * Clears all authentication tracking. Does **not** log the API user out in default implementations.
    */
-  reset(): void
+  reset(): void;
 }
 
 /**
@@ -134,14 +134,14 @@ export interface IAuthSession {
  *
  */
 export abstract class AuthSession implements IAuthSession {
-  static TBD = 'Method not implemented in AuthSession'
-  settings: IApiSettings
-  sudoId = ''
-  transport: ITransport
+  static TBD = 'Method not implemented in AuthSession';
+  settings: IApiSettings;
+  sudoId = '';
+  transport: ITransport;
 
   protected constructor(settings: IApiSettings, transport: ITransport) {
-    this.settings = settings
-    this.transport = transport
+    this.settings = settings;
+    this.transport = transport;
   }
 
   /**
@@ -151,17 +151,17 @@ export abstract class AuthSession implements IAuthSession {
    *
    * @param props Request properties to use and/or modify in authentication method
    */
-  abstract authenticate(props: IRequestProps): Promise<IRequestProps>
+  abstract authenticate(props: IRequestProps): Promise<IRequestProps>;
 
   /**
    * Does the session have active authentication information?
    */
-  abstract isAuthenticated(): boolean
+  abstract isAuthenticated(): boolean;
 
   /**
    * Override this method to implement a authentication retrieval from the server
    */
-  abstract getToken(): Promise<any>
+  abstract getToken(): Promise<any>;
 
   /**
    * Override this method to implement API session login
@@ -169,7 +169,7 @@ export abstract class AuthSession implements IAuthSession {
    * @param sudoId ID of sudo user. A missing sudoId means the API credentials are used to login
    */
   login(_sudoId?: string | number): Promise<any> {
-    return Promise.reject(AuthSession.TBD)
+    return Promise.reject(AuthSession.TBD);
   }
 
   /**
@@ -178,34 +178,34 @@ export abstract class AuthSession implements IAuthSession {
    * The base implementation just returns a false promise.
    */
   logout(): Promise<boolean> {
-    return Promise.resolve(false)
+    return Promise.resolve(false);
   }
 
   /**
    * Is a sudo user active for this session?
    */
   isSudo(): boolean {
-    return this.sudoId !== '' && this.isAuthenticated()
+    return this.sudoId !== '' && this.isAuthenticated();
   }
 
   /**
    * Resets all authentication status, but standard implementations do NOT log out an API session
    */
   reset(): void {
-    this.sudoId = ''
+    this.sudoId = '';
   }
 
   protected async ok<TSuccess, TError>(
     promise: Promise<SDKResponse<TSuccess, TError>>
   ) {
-    const result = await promise
+    const result = await promise;
     if (result.ok) {
-      return result.value
+      return result.value;
     } else {
       if (result instanceof Buffer) {
-        throw sdkError({ message: result.toString('utf8') })
+        throw sdkError({ message: result.toString('utf8') });
       } else {
-        throw sdkError(result)
+        throw sdkError(result);
       }
     }
   }

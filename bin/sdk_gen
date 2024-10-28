@@ -8,67 +8,70 @@
  * create pull request https://docs.github.com/en/rest/pulls/pulls#create-a-pull-request
  * */
 
-const fs = require('fs')
-const path = require('path')
-const proc = require('child_process')
-const looker = require('@looker/sdk-node')
-const utf8 = { encoding: 'utf-8' }
+const fs = require('fs');
+const path = require('path');
+const proc = require('child_process');
+const looker = require('@looker/sdk-node');
+const utf8 = { encoding: 'utf-8' };
 
-const root = path.join(__dirname, '/../')
-let sdk = looker.LookerNodeSDK.init40()
+const root = path.join(__dirname, '/../');
+let sdk = looker.LookerNodeSDK.init40();
 
 async function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms))
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 /** wait for the Looker CI image to be responsive */
 const waitForLooker = async () => {
-  const max_tries = 30
-  const delay = 5
-  let alive = false
-  let tries = 1
+  const max_tries = 90;
+  const delay = 5;
+  let alive = false;
+  let tries = 1;
   while (tries <= max_tries && !alive) {
     try {
-      sdk = looker.LookerNodeSDK.init40() // re-init the SDK to make sure it's not a lingering instance
-      const user = await sdk.ok(sdk.me()) // make any API call
-      alive = sdk.authSession.isAuthenticated()
-      console.info(`Hi, ${user.first_name} ${user.last_name}!`)
-      await sdk.authSession.logout()
+      sdk = looker.LookerNodeSDK.init40(); // re-init the SDK to make sure it's not a lingering instance
+      const user = await sdk.ok(sdk.me()); // make any API call
+      alive = sdk.authSession.isAuthenticated();
+      console.info(`Hi, ${user.first_name} ${user.last_name}!`);
+      await sdk.authSession.logout();
     } catch {
-      await sleep(delay * 1000)
-      tries++
-      console.info(`Waiting ${delay} seconds before attempt ${tries} of ${max_tries} (Total: ${delay * (tries - 1)})`)
+      await sleep(delay * 1000);
+      tries++;
+      console.info(
+        `Waiting ${delay} seconds before attempt ${tries} of ${max_tries} (Total: ${
+          delay * (tries - 1)
+        })`
+      );
     }
   }
-  return alive
-}
+  return alive;
+};
 
 /**
  * Get the CI version for the release
  * @param release to munge
  * @returns release version with _ instead of .
  */
-const ciVersion = (release) => release.replace('.', '_')
+const ciVersion = (release) => release.replace('.', '_');
 
 const ok = (result) => {
   if (typeof result === 'string') {
-    return true
+    return true;
   }
-  console.error(result)
-  return false
-}
+  console.error(result);
+  return false;
+};
 
 const run = (command) => {
-  let result
+  let result;
   try {
-    console.info(`Running ${command} ...`)
-    result = proc.execSync(command).toString()
+    console.info(`Running ${command} ...`);
+    result = proc.execSync(command).toString();
+  } catch (error) {
+    result = error;
   }
-  catch (error) {
-    result = error
-  }
-  return result
-}
+  return result;
+};
 
 /**
  * Run multiple commands one after another, returning on first failure
@@ -81,29 +84,29 @@ const run = (command) => {
  * @param release CalVer of release, like 22.14
  */
 const batch = (commands, release) => {
-  let result = ''
+  let result = '';
   for (const command of commands) {
     if (command instanceof Function) {
-      console.info('running a function ...')
-      result = command(release)
+      console.info('running a function ...');
+      result = command(release);
     } else if (typeof command === 'string') {
-      result = run(command)
+      result = run(command);
     }
     if (!ok(result)) {
-      console.error(`${command} failed.`)
-      return result
+      console.error(`${command} failed.`);
+      return result;
     }
   }
-  return result
-}
+  return result;
+};
 
 /** get the trimmed output of the command as a UTF-8 string */
 const execRead = (command) => {
-  return proc.execSync(command, utf8).trim()
-}
+  return proc.execSync(command, utf8).trim();
+};
 
 /** get this git repository's current branch name */
-const branchActive = () => execRead('git rev-parse --abbrev-ref HEAD')
+const branchActive = () => execRead('git rev-parse --abbrev-ref HEAD');
 
 /**
  * Returns true if the branch exists locally or remote
@@ -111,43 +114,43 @@ const branchActive = () => execRead('git rev-parse --abbrev-ref HEAD')
  * @returns true if it exists
  */
 const branchExists = (branch) => {
-  const checkRemote = `git ls-remote --heads origin "${branch}" | wc -l `
-  let result = execRead(checkRemote)
+  const checkRemote = `git ls-remote --heads origin "${branch}" | wc -l `;
+  let result = execRead(checkRemote);
   if (result !== '1') {
-    const checkLocal = `git show-ref --verify refs/heads/"${branch}" | wc -l`
-    result = execRead(checkLocal)
+    const checkLocal = `git show-ref --verify refs/heads/"${branch}" | wc -l`;
+    result = execRead(checkLocal);
   }
-  return result === '1'
-}
+  return result === '1';
+};
 
 /**
  * Get the standardized name for this branch
  * @param release either xx.xx or xx_xx
  * @returns sdk_<release>
  */
-const branchName = (release) => `sdk_${ciVersion(release)}`
+const branchName = (release) => `sdk_${ciVersion(release)}`;
 
 /**
  * If currently on main, create or switch to the sdk_release branch
  * @param release version branch to create
  */
 const branchOffMain = (release) => {
-  let result = ''
-  let current = branchActive()
+  let result = '';
+  let current = branchActive();
   if (current === 'main') {
-    const branch = branchName(release)
+    const branch = branchName(release);
     if (branchExists(branch)) {
-      console.log(`Switching to branch ${branch} ...`)
-      result = run(`git checkout ${branch}`)
+      console.log(`Switching to branch ${branch} ...`);
+      result = run(`git checkout ${branch}`);
     } else {
-      console.log(`Creating branch ${branch} ...`)
-      result = run(`git checkout -b ${branch} origin/main`)
+      console.log(`Creating branch ${branch} ...`);
+      result = run(`git checkout -b ${branch} origin/main`);
     }
   } else {
-    console.log(`Using branch ${current} to generate SDKs for ${release}`)
+    console.log(`Using branch ${current} to generate SDKs for ${release}`);
   }
-  return result
-}
+  return result;
+};
 
 /**
  * Is the running version the desired release?
@@ -156,13 +159,13 @@ const branchOffMain = (release) => {
  */
 const checkVersion = async (release) => {
   try {
-    const payload = await sdk.ok(sdk.versions())
-    return payload.looker_release_version.startsWith(release)
+    const payload = await sdk.ok(sdk.versions());
+    return payload.looker_release_version.startsWith(release);
   } catch {
     // don't care what the error was, it failed
-    return false
+    return false;
   }
-}
+};
 
 /**
  * Pull the specified Looker CI image and wait for it to be ready
@@ -173,45 +176,50 @@ const pullci = async (release) => {
     cwd: root,
     maxBuffer: 1024 * 1024,
     stdio: 'inherit',
-  }
-  if (await checkVersion(release)) return true
-  const script = path.resolve(root, 'bin/pullci')
+  };
+  if (await checkVersion(release)) return true;
+  const script = path.resolve(root, 'bin/pullci');
   // Throws exception on error, which we want
-  proc.execFileSync(script, [ciVersion(release)], opts)
-  return await waitForLooker()
-}
+  proc.execFileSync(script, [ciVersion(release)], opts);
+  return await waitForLooker();
+};
 
 /** Regen against the specified release and complete flows */
 const regen = async (release) => {
-  console.info(`Generating SDKs for Looker ${release} ...`)
+  console.info(`Generating SDKs for Looker ${release} ...`);
   if (ok(branchOffMain(release))) {
-    const branch = branchActive()
+    const branch = branchActive();
     if (await pullci(release)) {
-      return batch([
-        'yarn gen',
-        'bin/smoke typescript python kotlin',
-        'git add -u',
-        `git commit -m "feat: generate SDKs for Looker ${release}" -m "Release-As: ${release}.0"`,
-        `git push origin ${branch}`,
-        /* create PR
-         */
-      ], release)
+      return batch(
+        [
+          'yarn gen',
+          'yarn fix', // Lint fix typescript
+          'pipenv run black python/looker_sdk/sdk/api40/*.py', // Lint fix python
+          './kotlin/gradlew -p kotlin spotlessApply', // Lint fix kotlin
+          'git add -u',
+          `git commit -m "feat: generate SDKs for Looker ${release}" -m "Release-As: ${release}.0"`,
+          `git push origin ${branch}`,
+          /* create PR
+           */
+        ],
+        release
+      );
     } else {
-      console.error(`timed out waiting for Looker ${release}`)
+      console.error(`timed out waiting for Looker ${release}`);
     }
   }
-}
+};
 
 (async () => {
-  console.info(`${process.argv[1]} <version>`)
-  console.info('  version: Looker release version, like 22.10')
-  const args = process.argv.slice(2)
+  console.info(`${process.argv[1]} <version>`);
+  console.info('  version: Looker release version, like 22.10');
+  const args = process.argv.slice(2);
   if (args.length >= 1) {
-    await regen(args[0])
-  } else
-  {
-    console.error('No release version was specified')
+    await regen(args[0]);
+    console.info('If generated SDKs fail CI, run "bin/smoke [language]"  locally to verify and debug')
+  } else {
+    console.error('No release version was specified');
   }
-})().catch( e => {
-  console.error(e)
-})
+})().catch((e) => {
+  console.error(e);
+});

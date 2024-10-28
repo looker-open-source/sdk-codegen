@@ -24,11 +24,11 @@
 
  */
 
-import type { IAPIMethods } from '@looker/sdk-rtl'
+import type { IAPIMethods } from '@looker/sdk-rtl';
 
 export interface IEmbedService {
   /** Instantiated browser sdk */
-  get sdk(): IAPIMethods
+  get sdk(): IAPIMethods;
 }
 
 export abstract class EntityService implements IEmbedService {

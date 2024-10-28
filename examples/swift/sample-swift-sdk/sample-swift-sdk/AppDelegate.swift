@@ -16,8 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let config = ApiConfig()
         // In the scheme make sure to set
         // LOOKERSDK_BASE_URL to the API server url
-        // LOOKER_SDK_API_VERSION to 3.1
-        // LOOKERSDK_CLIENT_ID to the API3 client id
+        // LOOKER_SDK_API_VERSION to 4.0
+        // LOOKERSDK_CLIENT_ID to the API client id
         // LOOKERSDK_CLIENT_SECRET to the 
         // as environment variables
         let xp = BaseTransport(config)

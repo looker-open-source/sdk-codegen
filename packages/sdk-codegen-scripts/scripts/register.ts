@@ -24,8 +24,8 @@
 
  */
 
-import { registerApp } from './utils'
-;(async () => {
-  const result = await registerApp()
-  console.log(result)
-})()
+import { registerApp } from './utils';
+(async () => {
+  const result = await registerApp();
+  console.log(result);
+})();

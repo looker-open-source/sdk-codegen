@@ -1,115 +1,118 @@
 html {
-    font-family: Roboto,Arial,Helvetica,sans-serif;
-    background: white;
-    padding: 1rem;
+  font-family: Roboto, Arial, Helvetica, sans-serif;
+  background: white;
+  padding: 1rem;
 }
 body {
-    max-width: 960px;
-    margin: 0 auto;
-    background: white;
-    border-radius: 4px;
+  max-width: 960px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 4px;
 }
 h1 {
-    font-family: Roboto,Arial,Helvetica,sans-serif;
-    color: #4285F4;
-    margin: 1rem 0;
+  font-family: Roboto, Arial, Helvetica, sans-serif;
+  color: #4285f4;
+  margin: 1rem 0;
 }
 a {
-    color: #4285F4;
+  color: #4285f4;
 }
 nav {
-    display: flex;
-    width: 960px;
-    justify-content: space-between;
-    padding: 0 0.5rem;
+  display: flex;
+  width: 960px;
+  justify-content: space-between;
+  padding: 0 0.5rem;
 }
 nav h1 {
-    flex: auto;
-    margin: 0;
+  flex: auto;
+  margin: 0;
 }
 nav h1 a {
-    text-decoration: none;
-    padding: 0.25rem 0.5rem;
+  text-decoration: none;
+  padding: 0.25rem 0.5rem;
 }
 nav ul {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
-nav ul li a, nav ul li span, header .action {
-    display: block;
-    padding: 0.5rem;
+nav ul li a,
+nav ul li span,
+header .action {
+  display: block;
+  padding: 0.5rem;
 }
 .content {
-    padding: 0 1rem 1rem;
+  padding: 0 1rem 1rem;
 }
 .content > header {
-    border-bottom: 1px solid #E8EAED;
-    display: flex;
-    align-items: flex-end;
+  border-bottom: 1px solid #e8eaed;
+  display: flex;
+  align-items: flex-end;
 }
 .content > header h1 {
-    flex: auto;
-    margin: 1rem 0 0.25rem 0;
+  flex: auto;
+  margin: 1rem 0 0.25rem 0;
 }
 .flash {
-    margin: 1em 0;
-    padding: 1em;
-    background: #8AB4F8;
-    border: 1px solid #4285F4;
+  margin: 1em 0;
+  padding: 1em;
+  background: #8ab4f8;
+  border: 1px solid #4285f4;
 }
 .post {
-    border-radius: 7px;
-    padding-left: 1em;
-    padding-right: 1em;
-    padding-bottom: 1em;
-    margin: 1em;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  border-radius: 7px;
+  padding-left: 1em;
+  padding-right: 1em;
+  padding-bottom: 1em;
+  margin: 1em;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 .post > header {
-    display: flex;
-    align-items: flex-end;
-    font-size: 0.85em;
+  display: flex;
+  align-items: flex-end;
+  font-size: 0.85em;
 }
 .post > header > div:first-of-type {
-    flex: auto;
+  flex: auto;
 }
 .post > header h1 {
-    font-size: 1.5em;
-    color: #202124;
-    margin-bottom: 0;
+  font-size: 1.5em;
+  color: #202124;
+  margin-bottom: 0;
 }
 .post .about {
-    color: #9AA0A6;
-    font-style: italic;
+  color: #9aa0a6;
+  font-style: italic;
 }
 .post .body {
-    white-space: pre-line;
+  white-space: pre-line;
 }
 .content:last-child {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 .content form {
-    margin: 1em 0;
-    display: flex;
-    flex-direction: column;
+  margin: 1em 0;
+  display: flex;
+  flex-direction: column;
 }
 .content label {
-    font-weight: bold;
-    margin-bottom: 0.5em;
+  font-weight: bold;
+  margin-bottom: 0.5em;
 }
-.content input, .content textarea {
-    margin-bottom: 1em;
+.content input,
+.content textarea {
+  margin-bottom: 1em;
 }
 .content textarea {
-    min-height: 12em;
-    resize: vertical;
+  min-height: 12em;
+  resize: vertical;
 }
 input.danger {
-    color: #EA4335;
+  color: #ea4335;
 }
-input[type=submit] {
-    align-self: start;
-    min-width: 10em;
+input[type='submit'] {
+  align-self: start;
+  min-width: 10em;
 }

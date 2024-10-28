@@ -24,21 +24,21 @@
 
  */
 
-import type { Readable } from 'readable-stream'
 import type {
   Authenticator,
   HttpMethod,
+  IAPIMethods,
   ITransportSettings,
   SDKResponse,
   Values,
-} from './transport'
-import { agentPrefix, sdkOk } from './transport'
-import type { IAuthSession } from './authSession'
+} from './transport';
+import { agentPrefix, sdkOk } from './transport';
+import type { IAuthSession } from './authSession';
 
 /**
  * Creates an "sdk" to be used with the TypeScript SDK's funcs.ts file
  * @param authSession authentication session
- * @param apiVersion version of API to use (e.g. "3.1" or "4.0")
+ * @param apiVersion version of API to use (e.g. "4.0")
  * @param sdkVersion Looker release version (e.g. "21.4")
  */
 export const functionalSdk = (
@@ -46,150 +46,18 @@ export const functionalSdk = (
   apiVersion: string,
   sdkVersion: string
 ) => {
-  const sdk = new APIMethods(authSession, sdkVersion)
-  sdk.apiVersion = apiVersion
+  const sdk = new APIMethods(authSession, sdkVersion);
+  sdk.apiVersion = apiVersion;
   sdk.apiPath =
     authSession.settings.base_url === ''
       ? ''
-      : authSession.settings.base_url + '/api/' + apiVersion
-  return sdk
-}
-
-export interface IAPIMethods {
-  authSession: IAuthSession
-  sdkVersion: string
-  apiPath: string
-  apiVersion: string
-
-  /** A helper method for simplifying error handling of SDK responses.
-   *
-   * Pass in a promise returned by any SDK method, and it will return a promise
-   * that rejects if the `SDKResponse` is not `ok`. This will swallow the type
-   * information in the error case, but allows you to route all the error cases
-   * into a single promise rejection.
-   *
-   * The promise will have an `Error` rejection reason with a string `message`.
-   * If the server error contains a `message` field, it will be provided, otherwise a
-   * generic message will occur.
-   *
-   * ```ts
-   * const sdk = LookerSDK({...})
-   * let look
-   * try {
-   *    look = await sdk.ok(sdk.create_look({...}))
-   *    // do something with look
-   * }
-   * catch(e) {
-   *    // handle error case
-   * }
-   * ```
-   */
-  ok<TSuccess, TError>(
-    promise: Promise<SDKResponse<TSuccess, TError>>
-  ): Promise<TSuccess>
-
-  /**
-   * Determine whether the url should be an API path, relative from base_url, or is already fully specified override
-   * @param path Request path
-   * @param options Transport settings
-   * @param authenticator optional callback
-   * @returns the fully specified request path including any query string parameters
-   */
-  makePath(
-    path: string,
-    options: Partial<ITransportSettings>,
-    authenticator?: Authenticator
-  ): string
-
-  /**
-   *
-   * A helper method to add authentication to an API request for deserialization
-   *
-   * @param {HttpMethod} method type of HTTP method
-   * @param {string} path API endpoint path
-   * @param {any} queryParams Optional query params collection for request
-   * @param {any} body Optional body for request
-   * @param {Partial<ITransportSettings>} options Optional overrides like timeout and verify_ssl
-   */
-  authRequest<TSuccess, TError>(
-    method: HttpMethod,
-    path: string,
-    queryParams?: Values,
-    body?: any,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<TSuccess, TError>>
-
-  /**
-   * A helper method to add authentication to an API request for streaming
-   * @param {(readable: Readable) => Promise<T>} callback
-   * @param {HttpMethod} method
-   * @param {string} path
-   * @param queryParams
-   * @param body
-   * @param {Partial<ITransportSettings>} options
-   * @returns {Promise<T>}
-   */
-  authStream<T>(
-    callback: (readable: Readable) => Promise<T>,
-    method: HttpMethod,
-    path: string,
-    queryParams?: Values,
-    body?: any,
-    options?: Partial<ITransportSettings>
-  ): Promise<T>
-
-  /** Make a GET request */
-  get<TSuccess, TError>(
-    path: string,
-    queryParams?: Values,
-    body?: any,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<TSuccess, TError>>
-
-  /** Make a HEAD request */
-  head<TSuccess, TError>(
-    path: string,
-    queryParams?: Values,
-    body?: any,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<TSuccess, TError>>
-
-  /** Make a DELETE request */
-  delete<TSuccess, TError>(
-    path: string,
-    queryParams?: Values,
-    body?: any,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<TSuccess, TError>>
-
-  /** Make a POST request */
-  post<TSuccess, TError>(
-    path: string,
-    queryParams?: Values,
-    body?: any,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<TSuccess, TError>>
-
-  /** Make a PUT request */
-  put<TSuccess, TError>(
-    path: string,
-    queryParams?: Values,
-    body?: any,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<TSuccess, TError>>
-
-  /** Make a PATCH request */
-  patch<TSuccess, TError>(
-    path: string,
-    queryParams?: Values,
-    body?: any,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<TSuccess, TError>>
-}
+      : authSession.settings.base_url + '/api/' + apiVersion;
+  return sdk;
+};
 
 export class APIMethods implements IAPIMethods {
-  private _apiPath = ''
-  private _apiVersion = ''
+  private _apiPath = '';
+  private _apiVersion = '';
 
   /**
    * Initialize the APIMethods wrapper
@@ -201,25 +69,25 @@ export class APIMethods implements IAPIMethods {
       !('agentTag' in authSession.settings && authSession.settings.agentTag)
     ) {
       // Initialize agentTag if it's not already explicitly set
-      authSession.settings.agentTag = `${agentPrefix} ${sdkVersion}`
+      authSession.settings.agentTag = `${agentPrefix} ${sdkVersion}`;
     }
   }
 
   get apiPath() {
-    return this._apiPath
+    return this._apiPath;
   }
 
   set apiPath(value: string) {
     if (this._apiPath) {
       throw new Error(
         `API Path is set to "${this._apiPath}" and cannot be reassigned`
-      )
+      );
     }
-    this._apiPath = value
+    this._apiPath = value;
   }
 
   get apiVersion() {
-    return this._apiVersion
+    return this._apiVersion;
   }
 
   set apiVersion(value: string) {
@@ -227,9 +95,9 @@ export class APIMethods implements IAPIMethods {
     if (this._apiVersion) {
       throw new Error(
         `API Version is set to "${this._apiVersion}" and cannot be reassigned`
-      )
+      );
     }
-    this._apiVersion = value
+    this._apiVersion = value;
   }
 
   /** A helper method for constructing with a type as a param
@@ -245,7 +113,7 @@ export class APIMethods implements IAPIMethods {
     authSession: IAuthSession
   ): T {
     // eslint-disable-next-line new-cap
-    return new type(authSession)
+    return new type(authSession);
   }
 
   /** A helper method for simplifying error handling of SDK responses.
@@ -272,7 +140,7 @@ export class APIMethods implements IAPIMethods {
    * ```
    */
   async ok<TSuccess, TError>(promise: Promise<SDKResponse<TSuccess, TError>>) {
-    return sdkOk<TSuccess, TError>(promise)
+    return sdkOk<TSuccess, TError>(promise);
   }
 
   /**
@@ -287,10 +155,10 @@ export class APIMethods implements IAPIMethods {
     options: Partial<ITransportSettings>,
     authenticator?: Authenticator
   ) {
-    if (path.match(/^(http:\/\/|https:\/\/)/gi)) return path
+    if (path.match(/^(http:\/\/|https:\/\/)/gi)) return path;
     // is this an API-versioned call?
-    const base = authenticator ? this.apiPath : options.base_url
-    return `${base}${path}` // path was relative
+    const base = authenticator ? this.apiPath : options.base_url;
+    return `${base}${path}`; // path was relative
   }
 
   /**
@@ -310,11 +178,11 @@ export class APIMethods implements IAPIMethods {
     body?: any,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<TSuccess, TError>> {
-    options = { ...this.authSession.settings, ...options }
+    options = { ...this.authSession.settings, ...options };
     const authenticator = (init: any) => {
-      return this.authSession.authenticate(init)
-    }
-    path = this.makePath(path, options, authenticator)
+      return this.authSession.authenticate(init);
+    };
+    path = this.makePath(path, options, authenticator);
     return this.authSession.transport.request<TSuccess, TError>(
       method,
       path,
@@ -322,32 +190,31 @@ export class APIMethods implements IAPIMethods {
       body,
       authenticator,
       options
-    )
+    );
   }
 
   /**
    * A helper method to add authentication to an API request for streaming
-   * @param {(readable: Readable) => Promise<T>} callback
-   * @param {HttpMethod} method
-   * @param {string} path
+   * @param callback for streaming
+   * @param method of HTTP request
+   * @param path HTTP path
    * @param queryParams
    * @param body
-   * @param {Partial<ITransportSettings>} options
-   * @returns {Promise<T>}
+   * @param options to override
    */
   async authStream<T>(
-    callback: (readable: Readable) => Promise<T>,
+    callback: (response: Response) => Promise<T>,
     method: HttpMethod,
     path: string,
     queryParams?: Values,
     body?: any,
     options?: Partial<ITransportSettings>
   ): Promise<T> {
-    options = { ...this.authSession.settings, ...options }
+    options = { ...this.authSession.settings, ...options };
     const authenticator = (init: any) => {
-      return this.authSession.authenticate(init)
-    }
-    path = this.makePath(path, options, authenticator)
+      return this.authSession.authenticate(init);
+    };
+    path = this.makePath(path, options, authenticator);
     return this.authSession.transport.stream<T>(
       callback,
       method,
@@ -355,10 +222,10 @@ export class APIMethods implements IAPIMethods {
       queryParams,
       body,
       (init: any) => {
-        return this.authSession.authenticate(init)
+        return this.authSession.authenticate(init);
       },
       options
-    )
+    );
   }
 
   // // dynamically evaluate a template string
@@ -387,7 +254,7 @@ export class APIMethods implements IAPIMethods {
       queryParams,
       body,
       options
-    )
+    );
   }
 
   /** Make a HEAD request */
@@ -403,7 +270,7 @@ export class APIMethods implements IAPIMethods {
       queryParams,
       body,
       options
-    )
+    );
   }
 
   /** Make a DELETE request */
@@ -419,7 +286,7 @@ export class APIMethods implements IAPIMethods {
       queryParams,
       body,
       options
-    )
+    );
   }
 
   /** Make a POST request */
@@ -435,7 +302,7 @@ export class APIMethods implements IAPIMethods {
       queryParams,
       body,
       options
-    )
+    );
   }
 
   /** Make a PUT request */
@@ -451,7 +318,7 @@ export class APIMethods implements IAPIMethods {
       queryParams,
       body,
       options
-    )
+    );
   }
 
   /** Make a PATCH request */
@@ -467,6 +334,6 @@ export class APIMethods implements IAPIMethods {
       queryParams,
       body,
       options
-    )
+    );
   }
 }

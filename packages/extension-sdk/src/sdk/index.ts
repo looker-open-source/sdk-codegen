@@ -24,4 +24,4 @@
 
  */
 
-export * from './extension_sdk'
+export * from './extension_sdk';

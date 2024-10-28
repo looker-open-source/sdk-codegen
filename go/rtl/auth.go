@@ -132,7 +132,7 @@ func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars m
 		timeoutInSeconds = options.Timeout
 	}
 
-	ctx, cncl := context.WithTimeout(context.Background(), time.Second * time.Duration(timeoutInSeconds))
+	ctx, cncl := context.WithTimeout(context.Background(), time.Second*time.Duration(timeoutInSeconds))
 	defer cncl()
 
 	// create new request

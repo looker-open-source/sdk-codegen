@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export * from './CodeCopy'
+export * from './CodeCopy';

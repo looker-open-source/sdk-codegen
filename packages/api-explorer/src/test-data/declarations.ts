@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import type { IDeclarationMine } from '@looker/sdk-codegen'
+import type { IDeclarationMine } from '@looker/sdk-codegen';
 
 export const declarations: IDeclarationMine = {
   commitHash: '1e9348b797c2f3760d03c1f94c60f18e534e8298',
@@ -40,4 +40,4 @@ export const declarations: IDeclarationMine = {
       sourceFile: 'packages/api-explorer/src/utils/lodeUtils.ts',
     },
   },
-}
+};

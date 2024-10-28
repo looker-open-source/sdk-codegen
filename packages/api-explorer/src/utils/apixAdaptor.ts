@@ -23,50 +23,53 @@
  SOFTWARE.
 
  */
-import type { IEnvironmentAdaptor } from '@looker/extension-utils'
-import { BrowserAdaptor, getEnvAdaptor } from '@looker/extension-utils'
-import type { IAPIMethods } from '@looker/sdk-rtl'
-import type { SpecItem, SpecList } from '@looker/sdk-codegen'
-import { getSpecsFromVersions } from '@looker/sdk-codegen'
-import { RunItConfigKey, RunItNoConfig } from '@looker/run-it'
-import cloneDeep from 'lodash/cloneDeep'
+import type { IEnvironmentAdaptor } from '@looker/extension-utils';
+import { BrowserAdaptor, getEnvAdaptor } from '@looker/extension-utils';
+import type { IAPIMethods } from '@looker/sdk-rtl';
+import type { SpecItem, SpecList } from '@looker/sdk-codegen';
+import { getSpecsFromVersions } from '@looker/sdk-codegen';
+import { RunItConfigKey, RunItNoConfig } from '@looker/run-it';
+import cloneDeep from 'lodash/cloneDeep';
 
-import { fullify, fallbackFetch, funFetch } from './adaptorUtils'
+import { fallbackFetch, fullify, funFetch } from './adaptorUtils';
 
 export interface IApixAdaptor extends IEnvironmentAdaptor {
-  fetchSpecList(versionsUrl?: string): Promise<SpecList>
-  fetchSpec(spec: SpecItem): Promise<SpecItem>
+  fetchSpecList(versionsUrl?: string): Promise<SpecList>;
+  fetchSpec(spec: SpecItem): Promise<SpecItem>;
 }
 
-export const getApixAdaptor = () => getEnvAdaptor() as IApixAdaptor
+export const getApixAdaptor = () => getEnvAdaptor() as IApixAdaptor;
 
 export class ApixAdaptor extends BrowserAdaptor implements IApixAdaptor {
   constructor(sdk: IAPIMethods, private readonly fallbackVersionsUrl: string) {
-    super(sdk)
+    super(sdk);
   }
 
   async fetchSpecList(versionsUrl?: string): Promise<SpecList> {
-    const data = await this.localStorageGetItem(RunItConfigKey)
-    const config = data ? JSON.parse(data) : RunItNoConfig
-    let url: string
+    const data = await this.localStorageGetItem(RunItConfigKey);
+    const config = data ? JSON.parse(data) : RunItNoConfig;
+    let url: string;
 
     if (versionsUrl) {
-      url = versionsUrl
+      url = versionsUrl;
     } else {
       url = config.base_url
         ? `${config.base_url}/versions`
-        : `${this.fallbackVersionsUrl}/versions.json`
+        : `${this.fallbackVersionsUrl}/versions.json`;
     }
 
-    const versions = await this.sdk.authSession.transport.rawRequest('GET', url)
-    const specs = await getSpecsFromVersions(JSON.parse(versions.body))
-    return specs
+    const versions = await this.sdk.authSession.transport.rawRequest(
+      'GET',
+      url
+    );
+    const specs = await getSpecsFromVersions(JSON.parse(versions.body));
+    return specs;
   }
 
   async fetchSpec(spec: SpecItem): Promise<SpecItem> {
-    const _spec = cloneDeep(spec)
-    _spec.specURL = fullify(spec.specURL!, origin)
-    _spec.api = await fallbackFetch(_spec, funFetch)
-    return _spec
+    const _spec = cloneDeep(spec);
+    _spec.specURL = fullify(spec.specURL!, origin);
+    _spec.api = await fallbackFetch(_spec, funFetch);
+    return _spec;
   }
 }

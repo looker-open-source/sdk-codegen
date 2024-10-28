@@ -23,60 +23,64 @@
  SOFTWARE.
 
  */
-import type { SpecItem, SpecList } from '@looker/sdk-codegen'
-import { call, put, takeEvery, select } from 'typed-redux-saga'
-import type { PayloadAction } from '@reduxjs/toolkit'
+import type { SpecItem, SpecList } from '@looker/sdk-codegen';
+import { call, put, select, takeEvery } from 'typed-redux-saga';
+import type { PayloadAction } from '@reduxjs/toolkit';
 
-import { getApixAdaptor } from '../../utils'
-import type { RootState } from '../store'
-import type { InitSpecsAction, SetCurrentSpecAction } from './slice'
-import { specActions } from './slice'
+import { getApixAdaptor } from '../../utils';
+import type { RootState } from '../store';
+import type { InitSpecsAction, SetCurrentSpecAction } from './slice';
+import { specActions } from './slice';
 
 function* initSaga(action: PayloadAction<InitSpecsAction>) {
-  const { initSpecsSuccessAction, initSpecsFailureAction } = specActions
-  const adaptor = getApixAdaptor()
+  const { initSpecsSuccessAction, initSpecsFailureAction } = specActions;
+  const adaptor = getApixAdaptor();
 
   try {
-    const specs: SpecList = yield* call([adaptor, 'fetchSpecList'])
-    let currentSpecKey = action.payload.specKey
+    const specs: SpecList = yield* call([adaptor, 'fetchSpecList']);
+    let currentSpecKey = action.payload.specKey;
     if (!currentSpecKey || !specs[currentSpecKey]) {
       // if current spec key is invalid or not assigned, default to the first "current" spec
       currentSpecKey = Object.values(specs).find(
-        (spec) => spec.status === 'current'
-      )!.key
+        spec => spec.status === 'current'
+      )!.key;
     }
-    const spec = yield* call([adaptor, 'fetchSpec'], specs[currentSpecKey])
-    specs[currentSpecKey] = spec
-    yield* put(initSpecsSuccessAction({ specs, currentSpecKey }))
+    const spec = yield* call([adaptor, 'fetchSpec'], specs[currentSpecKey]);
+    specs[currentSpecKey] = spec;
+    yield* put(initSpecsSuccessAction({ specs, currentSpecKey }));
   } catch (error: any) {
-    yield* put(initSpecsFailureAction(new Error(error.message)))
+    // TODO if an error occurs here extension api explorer hangs.
+    // Needs to be fixed. For now report the error.
+    console.error(error);
+    yield* put(initSpecsFailureAction(new Error(error.message)));
   }
 }
 
 function* setCurrentSpecSaga(action: PayloadAction<SetCurrentSpecAction>) {
   const { setCurrentSpecSuccessAction, setCurrentSpecFailureAction } =
-    specActions
-  const adaptor = getApixAdaptor()
+    specActions;
+  const adaptor = getApixAdaptor();
   const spec: SpecItem = yield* select(
     (state: RootState) => state.specs.specs[action.payload.currentSpecKey]
-  )
+  );
 
   try {
-    const newSpec = yield* call([adaptor, 'fetchSpec'], spec)
+    const newSpec = yield* call([adaptor, 'fetchSpec'], spec);
     yield* put(
       setCurrentSpecSuccessAction({
         api: newSpec.api!,
         currentSpecKey: action.payload.currentSpecKey,
       })
-    )
+    );
   } catch (error: any) {
-    yield put(setCurrentSpecFailureAction(new Error(error.message)))
+    console.error(error);
+    yield put(setCurrentSpecFailureAction(new Error(error.message)));
   }
 }
 
 export function* saga() {
-  const { initSpecsAction, setCurrentSpecAction } = specActions
+  const { initSpecsAction, setCurrentSpecAction } = specActions;
 
-  yield* takeEvery(initSpecsAction, initSaga)
-  yield* takeEvery(setCurrentSpecAction, setCurrentSpecSaga)
+  yield* takeEvery(initSpecsAction, initSaga);
+  yield* takeEvery(setCurrentSpecAction, setCurrentSpecSaga);
 }

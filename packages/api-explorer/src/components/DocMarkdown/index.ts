@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { DocMarkdown } from './DocMarkdown'
+export { DocMarkdown } from './DocMarkdown';

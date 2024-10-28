@@ -31,6 +31,6 @@ export const sdkLanguageMapping = {
   swift: 'Swift',
   go: 'Go',
   all: 'All',
-}
+};
 
-export const languages = Object.values(sdkLanguageMapping)
+export const languages = Object.values(sdkLanguageMapping);

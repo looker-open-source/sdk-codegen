@@ -25,5 +25,5 @@
  */
 
 describe('DocReferences utils', () => {
-  test.todo('<DocReferenceItems />')
-})
+  test.todo('<DocReferenceItems />');
+});

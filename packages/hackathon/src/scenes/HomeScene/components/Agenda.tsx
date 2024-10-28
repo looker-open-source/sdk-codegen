@@ -24,35 +24,35 @@
 
  */
 
-import React, { useEffect, useState } from 'react'
-import type { FC } from 'react'
-import type { IHackerProps } from '../../../models'
-import type { AgendaItems, IAgendaEras } from '.'
-import { AgendaEra, agendaEras, Era } from '.'
+import React, { useEffect, useState } from 'react';
+import type { FC } from 'react';
+import type { IHackerProps } from '../../../models';
+import type { AgendaItems, IAgendaEras } from '.';
+import { AgendaEra, Era, agendaEras } from '.';
 
 interface AgendaProps {
-  schedule: AgendaItems
-  hacker: IHackerProps
+  schedule: AgendaItems;
+  hacker: IHackerProps;
 }
 
 export const Agenda: FC<AgendaProps> = ({ schedule, hacker }) => {
-  const [eras, setEras] = useState<IAgendaEras>(() => agendaEras(schedule))
-  const [defaultEra, setDefaultEra] = useState<string>(Era.present)
+  const [eras, setEras] = useState<IAgendaEras>(() => agendaEras(schedule));
+  const [defaultEra, setDefaultEra] = useState<string>(Era.present);
 
   const calcDefaultEra = (newEras: IAgendaEras) => {
-    setEras(newEras)
+    setEras(newEras);
     if (newEras.present.length > 0) {
-      setDefaultEra(Era.present)
+      setDefaultEra(Era.present);
     } else if (newEras.future.length > 0) {
-      setDefaultEra(Era.future)
+      setDefaultEra(Era.future);
     } else {
-      setDefaultEra(Era.past)
+      setDefaultEra(Era.past);
     }
-  }
+  };
 
   useEffect(() => {
-    calcDefaultEra(agendaEras(schedule))
-  }, [schedule, hacker])
+    calcDefaultEra(agendaEras(schedule));
+  }, [schedule, hacker]);
 
   // TODO resurrect this after figuring out EF issues
   // useEffect(() => {
@@ -67,15 +67,15 @@ export const Agenda: FC<AgendaProps> = ({ schedule, hacker }) => {
 
   return (
     <>
-      {Object.keys(eras).map((era) => (
+      {Object.keys(eras).map(era => (
         <AgendaEra
           era={era}
           key={era}
-          agenda={eras[era]}
+          agenda={(eras as any)[era]}
           hacker={hacker}
           defaultOpen={era === defaultEra}
         />
       ))}
     </>
-  )
-}
+  );
+};

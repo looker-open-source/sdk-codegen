@@ -24,14 +24,14 @@
 
  */
 
-import React, { useCallback, useEffect, useState } from 'react'
-import { ErrorDoc } from '@looker/sdk-rtl'
-import { getEnvAdaptor } from '../adaptorUtils'
-import { ExtMarkdown } from '../ExtMarkdown'
-import { APIErrorDetails } from './APIErrorDetails'
-import { APIErrorDocLink } from './APIErrorDocLink'
-import type { APIErrorDisplayProps } from './APIErrorDisplay'
-import { apiErrorDisplayFetch } from './utils'
+import React, { useCallback, useEffect, useState } from 'react';
+import { ErrorDoc } from '@looker/sdk-rtl';
+import { getEnvAdaptor } from '../adaptorUtils';
+import { ExtMarkdown } from '../ExtMarkdown';
+import { APIErrorDetails } from './APIErrorDetails';
+import { APIErrorDocLink } from './APIErrorDocLink';
+import type { APIErrorDisplayProps } from './APIErrorDisplay';
+import { apiErrorDisplayFetch } from './utils';
 
 /**
  * Shows available content of an API Error response
@@ -39,21 +39,21 @@ import { apiErrorDisplayFetch } from './utils'
  * @param showDoc true to retrieve the corresponding error markdown
  */
 export const APIErrorContent = ({ error, showDoc }: APIErrorDisplayProps) => {
-  const [doc, setDoc] = useState<string>('')
+  const [doc, setDoc] = useState<string>('');
   const getDoc = useCallback(
     async (docUrl: string) => {
-      const adaptor = getEnvAdaptor()
-      const errDoc = new ErrorDoc(adaptor.sdk, apiErrorDisplayFetch)
-      setDoc(await errDoc.content(docUrl))
+      const adaptor = getEnvAdaptor();
+      const errDoc = new ErrorDoc(adaptor.sdk, apiErrorDisplayFetch);
+      setDoc(await errDoc.content(docUrl));
     },
     [error]
-  )
+  );
 
   useEffect(() => {
     if (showDoc && error && error.documentation_url) {
-      getDoc(error.documentation_url)
+      getDoc(error.documentation_url);
     }
-  }, [error, showDoc])
+  }, [error, showDoc]);
 
   return (
     <>
@@ -61,5 +61,5 @@ export const APIErrorContent = ({ error, showDoc }: APIErrorDisplayProps) => {
       {!showDoc && <APIErrorDocLink docUrl={error.documentation_url ?? ''} />}
       {showDoc && doc && <ExtMarkdown source={doc} />}
     </>
-  )
-}
+  );
+};

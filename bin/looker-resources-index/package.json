@@ -1,5 +1,6 @@
 {
-  "name": "looker-resources-index",
+  "name": "@internal/looker-resources-index",
+  "version": "0.0.0",
   "description": "A listing of Looker-related resources, and some automation for publishing the listing in consumable formats",
   "main": "src/resource-data/resources.ts",
   "private": true,
@@ -15,7 +16,7 @@
   "author": "Looker",
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^14.18.36",
-    "typescript": "4.6.3"
+    "@types/node": "22.5.4",
+    "typescript": "5.5.4"
   }
 }

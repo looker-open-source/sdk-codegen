@@ -24,5 +24,5 @@
 
  */
 
-export * from './types'
-export * from './ExtensionConnector'
+export * from './types';
+export * from './ExtensionConnector';

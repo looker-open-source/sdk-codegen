@@ -74,23 +74,23 @@ export type HttpMethod =
   | 'DELETE'
   | 'PATCH'
   | 'TRACE'
-  | 'HEAD'
+  | 'HEAD';
 
 /** Interface for API transport values */
 export interface ITransportSettings {
-  [key: string]: any
+  [key: string]: any;
   /** base URL of API REST web service */
-  base_url: string
+  base_url: string;
   /** standard headers to provide in all transport requests */
-  headers?: Headers
+  headers?: Headers;
   /** whether to verify ssl certs or not. Defaults to true */
-  verify_ssl: boolean
+  verify_ssl: boolean;
   /** request timeout in seconds. Default to 30 */
-  timeout: number
+  timeout: number;
   /** encoding override */
-  encoding?: string | null
+  encoding?: string | null;
   /** agent tag to use for the SDK requests */
-  agentTag: string
+  agentTag: string;
 }
 
 /**
@@ -98,15 +98,15 @@ export interface ITransportSettings {
  */
 export interface IRawResponse {
   /** ok is `true` if the response is successful, `false` otherwise */
-  ok: boolean
+  ok: boolean;
   /** HTTP response code */
-  statusCode: number
+  statusCode: number;
   /** HTTP response status message text */
-  statusMessage: string
+  statusMessage: string;
   /** MIME type of the response from the HTTP response header */
-  contentType: string
+  contentType: string;
   /** The body of the HTTP response, without any additional processing */
-  body: any
+  body: any;
 }
 
 /**
@@ -133,7 +133,7 @@ export interface ITransport {
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
-  ): Promise<IRawResponse>
+  ): Promise<IRawResponse>;
 
   /**
    * HTTP request function for atomic, fully downloaded responses
@@ -152,7 +152,7 @@ export interface ITransport {
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<TSuccess, TError>>
+  ): Promise<SDKResponse<TSuccess, TError>>;
 
   /**
    * HTTP request function for a streamable response
@@ -174,7 +174,7 @@ export interface ITransport {
     body?: any,
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
-  ): Promise<T>
+  ): Promise<T>;
 }
 ```
 
@@ -213,6 +213,7 @@ In the `ITransport` function parameters shown above:
   argument and returns a modified set of request properties that includes authorization information for the request.
   If an `authenticator` is not provided for a request, no special treatment of the HTTP url is performed. If an
   `authenticator` **is** specified for a request, the HTTP url for that particular request will be:
+
   - `base_url` (from `ITransportSettings`) `+`
   - `api_version` (from the SDK method class) `+`
   - `path` from the request parameter
@@ -230,25 +231,28 @@ export const LookerAppId = 'x-looker-appid'
 this.authSession.settings.agentTag = `${agentPrefix} ${lookerVersion}.${this.apiVersion}`
 ```
 
-Where `lookerVersion` is the version of Looker (like 7.10) and `apiVersion` is (currently) either `4.0` or `3.1` ([deprecated](https://developers.looker.com/api/advanced-usage/version-3x-deprecation)).
+Where `lookerVersion` is the version of Looker (like 23.18) and `apiVersion` is (currently) `4.0` ([Note: API 3.x has been removed](https://cloud.google.com/looker/docs/api-3x-deprecation)).
 
 This results in the agentTag appearing like `TS-SDK 22.6.4.0`.
 
 Additional attributes can be added to the agent tag by separating them with semicolons. (`;`)
 
-#### Request processing
+#### Processing requests
 
 The `rawRequest()` implementation:
+
 - constructs an HTTP request based on the properties passed into it, and returns the result of the response
-without any type conversion or error handling
+  without any type conversion or error handling
 - sets the `ok` property to `true` if successful or `false` if the request fails.
 
 The `request()` implementation:
+
 - sets the error status and data of the SDKResponse structure if an error occurs
 - sets the success status and data of an SDKResponse structure if the request succeeds
 - for successful requests, the response body is deserialized into the type indicated for the success value
 
 The `stream()` implementation:
+
 - throws an error if a request error occurs
 - passes the streamable HTTP response to the stream parameter of the method
 - for successful requests, the response body is deserialized into the type indicated for the success value
@@ -256,56 +260,56 @@ The `stream()` implementation:
 Here's a TypeScript code sample for streaming the download of a query's CSV result:
 
 ```ts
-  const request: IRequestRunInlineQuery = {
-    body: {
-      client_id: q.client_id || undefined,
-      column_limit: q.column_limit || undefined,
-      dynamic_fields: q.dynamic_fields || undefined,
-      fields: q.fields || undefined,
-      fill_fields: q.fill_fields || [],
-      filter_config: q.filter_config || undefined,
-      filter_expression: q.filter_expression || undefined,
-      filters: q.filters,
-      limit: limit.toString(10),
-      model: q.model!,
-      pivots: q.pivots || undefined,
-      query_timezone: q.query_timezone || undefined,
-      row_total: q.row_total || undefined,
-      sorts: q.sorts || [],
-      subtotals: q.subtotals || undefined,
-      total: typeof q.total !== 'undefined' ? q.total : false,
-      view: q.view!,
-      vis_config: q.vis_config || undefined,
-      visible_ui_sections: q.visible_ui_sections || undefined,
-    },
-    result_format: 'csv',
-  }
-  const csvFile = './query.csv'
-  const writer = fs.createWriteStream(csvFile)
-  await sdk.stream.run_inline_query(async (readable: Readable) => {
-    return new Promise<any>((resolve, reject) => {
-      readable
-        .pipe(writer)
-        .on('error', reject)
-        .on('finish', resolve)
-    })
-  }, request)
+const request: IRequestRunInlineQuery = {
+  body: {
+    client_id: q.client_id || undefined,
+    column_limit: q.column_limit || undefined,
+    dynamic_fields: q.dynamic_fields || undefined,
+    fields: q.fields || undefined,
+    fill_fields: q.fill_fields || [],
+    filter_config: q.filter_config || undefined,
+    filter_expression: q.filter_expression || undefined,
+    filters: q.filters,
+    limit: limit.toString(10),
+    model: q.model!,
+    pivots: q.pivots || undefined,
+    query_timezone: q.query_timezone || undefined,
+    row_total: q.row_total || undefined,
+    sorts: q.sorts || [],
+    subtotals: q.subtotals || undefined,
+    total: typeof q.total !== 'undefined' ? q.total : false,
+    view: q.view!,
+    vis_config: q.vis_config || undefined,
+    visible_ui_sections: q.visible_ui_sections || undefined,
+  },
+  result_format: 'csv',
+};
+const csvFile = './query.csv';
+const writer = fs.createWriteStream(csvFile);
+await sdk.stream.run_inline_query(async (readable: Readable) => {
+  return new Promise<any>((resolve, reject) => {
+    readable.pipe(writer).on('error', reject).on('finish', resolve);
+  });
+}, request);
 ```
 
 #### Request parameter encoding
 
 This section discusses how parameters should be processed by the run-time **before** submitting the HTTP request to the endpoint.
 
-**Path parameters**
+#### Path parameters
+
 - include all path parameters
 - url-encode the values for a path containing variables e.g., `/users/{user_id}`
 
-**Query parameters**
+#### Query parameters
+
 - url-encode all values
 - date values should be formatted in UTC time format like "2020-03-15T13:16:34.692-07:00"
 - skip `null` or `undefined` values
 
-**Body object**
+#### Body object
+
 - include all required properties (this is typically enforced by the declared method's interface)
 - skip properties that are optional and `null` or `undefined`
 
@@ -411,7 +415,7 @@ be set to `true` in this circumstance. In the [TypeScript generator](../packages
 the `methodHeaderDeclaration` function has this line:
 
 ```ts
-const requestType = this.requestTypeName(method)
+const requestType = this.requestTypeName(method);
 ```
 
 If the method requires a request type and `needRequestTypes` is `true`, the [`codeGen.ts`](../packages/sdk-codegen/src/codeGen.ts)
@@ -555,7 +559,8 @@ fun asBoolean(value: String?): Boolean? {
     return null
 }
 ```
-  - `readConfig()` overrides
+
+- `readConfig()` overrides
 
 - [HTTP parameter encoding](#request-parameter-encoding)
 
@@ -642,6 +647,7 @@ A script or command to deploy to the relevant package manager must be provided f
 The package versioning information must contain the Looker Release version.
 
 The package needs a `README` that:
+
 - introduces the SDK
 - describes how to get started
 - links to the SDK-Codegen repository

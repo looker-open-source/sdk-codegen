@@ -23,62 +23,62 @@
  SOFTWARE.
 
  */
-import type { ExtensionHostApiImpl } from './extension_host_api'
-import { FetchProxyImpl } from './fetch_proxy'
-import { FetchResponseBodyType } from './types'
+import type { ExtensionHostApiImpl } from './extension_host_api';
+import { FetchProxyImpl } from './fetch_proxy';
+import { FetchResponseBodyType } from './types';
 
 describe('extension_host_api tests', () => {
-  let mockExtensionSdk: ExtensionHostApiImpl
-  let extensionFetchProxySpy: Required<any>
+  let mockExtensionSdk: ExtensionHostApiImpl;
+  let extensionFetchProxySpy: Required<any>;
 
   beforeEach(() => {
     mockExtensionSdk = {
       fetchProxy: () => {
         // noop
       },
-    } as unknown as ExtensionHostApiImpl
-    extensionFetchProxySpy = jest.spyOn(mockExtensionSdk, 'fetchProxy')
-  })
+    } as unknown as ExtensionHostApiImpl;
+    extensionFetchProxySpy = jest.spyOn(mockExtensionSdk, 'fetchProxy');
+  });
 
   it('appends resource to base url', async () => {
     const fetchProxy = new FetchProxyImpl(
       mockExtensionSdk as any,
       'https://example.com'
-    )
-    await fetchProxy.fetchProxy('/posts')
+    );
+    await fetchProxy.fetchProxy('/posts');
     expect(extensionFetchProxySpy).toHaveBeenCalledWith(
       'https://example.com/posts',
       undefined,
       undefined
-    )
-  })
+    );
+  });
 
   it('uses init from create proxy', () => {
     const fetchProxy = new FetchProxyImpl(
       mockExtensionSdk as any,
       'https://example.com',
       { credentials: 'include' }
-    )
-    fetchProxy.fetchProxy('/posts')
+    );
+    fetchProxy.fetchProxy('/posts');
     expect(extensionFetchProxySpy).toHaveBeenCalledWith(
       'https://example.com/posts',
       { credentials: 'include' },
       undefined
-    )
-  })
+    );
+  });
 
   it('uses init from fetch request', () => {
     const fetchProxy = new FetchProxyImpl(
       mockExtensionSdk as any,
       'https://example.com'
-    )
-    fetchProxy.fetchProxy('/posts', { credentials: 'include' })
+    );
+    fetchProxy.fetchProxy('/posts', { credentials: 'include' });
     expect(extensionFetchProxySpy).toHaveBeenCalledWith(
       'https://example.com/posts',
       { credentials: 'include' },
       undefined
-    )
-  })
+    );
+  });
 
   it('merges init', () => {
     const fetchProxy = new FetchProxyImpl(mockExtensionSdk as any, undefined, {
@@ -87,7 +87,7 @@ describe('extension_host_api tests', () => {
         'x-header-1': 'x-header-1-value',
         'x-header-2': 'x-header-2-valueA',
       },
-    })
+    });
     fetchProxy.fetchProxy('https://example.com/posts', {
       method: 'POST',
       headers: {
@@ -95,7 +95,7 @@ describe('extension_host_api tests', () => {
         'x-header-3': 'x-header-3-value',
       },
       body: JSON.stringify({ hello: 'world' }),
-    })
+    });
     expect(extensionFetchProxySpy).toHaveBeenCalledWith(
       'https://example.com/posts',
       {
@@ -109,8 +109,8 @@ describe('extension_host_api tests', () => {
         body: JSON.stringify({ hello: 'world' }),
       },
       undefined
-    )
-  })
+    );
+  });
 
   it('use proxy response body tyoe', () => {
     const fetchProxy = new FetchProxyImpl(
@@ -118,14 +118,14 @@ describe('extension_host_api tests', () => {
       undefined,
       undefined,
       FetchResponseBodyType.json
-    )
-    fetchProxy.fetchProxy('https://example.com/posts')
+    );
+    fetchProxy.fetchProxy('https://example.com/posts');
     expect(extensionFetchProxySpy).toHaveBeenCalledWith(
       'https://example.com/posts',
       undefined,
       FetchResponseBodyType.json
-    )
-  })
+    );
+  });
 
   it('use request response body tyoe', () => {
     const fetchProxy = new FetchProxyImpl(
@@ -133,16 +133,16 @@ describe('extension_host_api tests', () => {
       undefined,
       undefined,
       FetchResponseBodyType.json
-    )
+    );
     fetchProxy.fetchProxy(
       'https://example.com/posts',
       undefined,
       FetchResponseBodyType.text
-    )
+    );
     expect(extensionFetchProxySpy).toHaveBeenCalledWith(
       'https://example.com/posts',
       undefined,
       FetchResponseBodyType.text
-    )
-  })
-})
+    );
+  });
+});

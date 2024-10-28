@@ -24,32 +24,32 @@
 
  */
 
-import type { ApiModel } from './sdkModels'
-import type { ICodeGen, IVersionInfo } from './codeGen'
-import { CSharpGen } from './csharp.gen'
-import { KotlinGen } from './kotlin.gen'
-import { SwiftGen } from './swift.gen'
-import { PythonGen } from './python.gen'
-import { TypescriptGen } from './typescript.gen'
-import { GoGen } from './go.gen'
+import type { ApiModel } from './sdkModels';
+import type { ICodeGen, IVersionInfo } from './codeGen';
+import { CSharpGen } from './csharp.gen';
+import { KotlinGen } from './kotlin.gen';
+import { SwiftGen } from './swift.gen';
+import { PythonGen } from './python.gen';
+import { TypescriptGen } from './typescript.gen';
+import { GoGen } from './go.gen';
 
 export interface IGeneratorSpec {
   /** source code file extension regex */
-  extension: RegExp
+  extension: RegExp;
   /** name of language SDK to generate */
-  language: string
+  language: string;
   /** path name for legacy generator output. Defaults to language */
-  path?: string
+  path?: string;
   /** code generator constructor */
-  factory?: (api: ApiModel, versions?: IVersionInfo) => ICodeGen
+  factory?: (api: ApiModel, versions?: IVersionInfo) => ICodeGen;
   /** options for the legacy code generator */
-  options?: string
+  options?: string;
   /** name of the legacy language generator */
-  legacy?: string // legacy language tag
+  legacy?: string; // legacy language tag
 }
 
 // To disable generation of any language specification, just comment it out
-export const Generators: Array<IGeneratorSpec> = [
+export const Generators: IGeneratorSpec[] = [
   {
     factory: (api: ApiModel, versions?: IVersionInfo) =>
       new PythonGen(api, versions),
@@ -117,9 +117,9 @@ export const Generators: Array<IGeneratorSpec> = [
   //   options: '-papiPackage=Looker -ppackageName=looker'
   //   extension: /\.rs/gi,
   // },
-]
+];
 
-export const codeGenerators = Generators.filter((x) => x.factory !== undefined)
+export const codeGenerators = Generators.filter(x => x.factory !== undefined);
 
 /**
  * Matches the code generator based on the language name, alias, file extension, or legacy name
@@ -127,16 +127,16 @@ export const codeGenerators = Generators.filter((x) => x.factory !== undefined)
  * @returns undefined if the label/language/extension isn't found, otherwise the generator entry
  */
 export const findGenerator = (target: string) => {
-  target = target.toLocaleLowerCase()
+  target = target.toLocaleLowerCase();
   // Convenience alias
   return codeGenerators.find(
-    (item) =>
+    item =>
       item.language.toLocaleLowerCase() === target ||
       target.match(item.extension) ||
       ('.' + target).match(item.extension) ||
       item.legacy?.toLocaleLowerCase() === target
-  )
-}
+  );
+};
 
 /**
  * constructs a language generator by name lookup
@@ -155,13 +155,13 @@ export const getCodeGenerator = (
   api: ApiModel,
   versions?: IVersionInfo
 ): ICodeGen | undefined => {
-  const generator = findGenerator(language)
+  const generator = findGenerator(language);
   if (generator && generator.factory) {
-    return generator.factory(api, versions)
+    return generator.factory(api, versions);
   }
-  return undefined
-}
+  return undefined;
+};
 
-export const legacyLanguages = (): Array<IGeneratorSpec> => {
-  return Generators.filter((x) => !!x.legacy)
-}
+export const legacyLanguages = (): IGeneratorSpec[] => {
+  return Generators.filter(x => !!x.legacy);
+};

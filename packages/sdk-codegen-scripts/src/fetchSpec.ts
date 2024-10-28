@@ -24,22 +24,22 @@
 
  */
 
-import { danger, log, warn } from '@looker/sdk-codegen-utils'
-import type { IVersionInfo, SpecItem } from '@looker/sdk-codegen'
-import type { ITransportSettings } from '@looker/sdk-rtl'
-import { defaultTimeout, sdkOk } from '@looker/sdk-rtl'
-import { NodeTransport } from '@looker/sdk-node'
+import { danger, log, warn } from '@looker/sdk-codegen-utils';
+import type { IVersionInfo, SpecItem } from '@looker/sdk-codegen';
+import type { ITransportSettings } from '@looker/sdk-rtl';
+import { defaultTimeout, mergeOptions, sdkOk } from '@looker/sdk-rtl';
+import { NodeTransport } from '@looker/sdk-node';
 import {
-  fail,
-  quit,
-  isFileSync,
-  readFileSync,
   createJsonFile,
-} from './nodeUtils'
-import type { ISDKConfigProps } from './sdkConfig'
-import { convertSpec } from './convert'
+  fail,
+  isFileSync,
+  quit,
+  readFileSync,
+} from './nodeUtils';
+import type { ISDKConfigProps } from './sdkConfig';
+import { convertSpec } from './convert';
 
-let transport: NodeTransport
+let transport: NodeTransport;
 
 /**
  * Customize request transport properties for SDK codegen
@@ -48,42 +48,42 @@ let transport: NodeTransport
  * @constructor
  */
 export const specTransport = (props: ISDKConfigProps) => {
-  if (transport) return transport
+  if (transport) return transport;
   const options: ITransportSettings = {
     agentTag: 'SDK Codegen',
     base_url: props.base_url,
     timeout: (props as unknown as any).timeout || defaultTimeout,
     verify_ssl: props.verify_ssl,
-  }
-  transport = new NodeTransport(options)
-  return transport
-}
+  };
+  transport = new NodeTransport(options);
+  return transport;
+};
 
 const loginUrl = (props: ISDKConfigProps) =>
-  `${props.base_url}/api/${props.api_version}/login`
+  `${props.base_url}/api/${props.api_version}/login`;
 
 const logoutUrl = (props: ISDKConfigProps) =>
-  `${props.base_url}/api/${props.api_version}/logout`
+  `${props.base_url}/api/${props.api_version}/logout`;
 
 export const supportedVersion = (version: string, versions: any) => {
   if (!('supported_versions' in versions)) {
-    danger('Could not find supported versions')
-    return undefined
+    danger('Could not find supported versions');
+    return undefined;
   }
   const found = Object.entries(versions.supported_versions).find(
     ([, value]) => (value as any).version === version
-  )
-  if (found) return found[1]
-  return undefined
-}
+  );
+  if (found) return found[1];
+  return undefined;
+};
 
-export const specPath = 'spec'
+export const specPath = 'spec';
 
 export const swaggerFileName = (name: string, specKey: string) =>
-  `${specPath}/${name}.${specKey}.json`
+  `${specPath}/${name}.${specKey}.json`;
 
 export const openApiFileName = (name: string, specKey: string) =>
-  `${specPath}/${name}.${specKey}.oas.json`
+  `${specPath}/${name}.${specKey}.oas.json`;
 
 /**
  * Is there an authentication error?
@@ -91,12 +91,12 @@ export const openApiFileName = (name: string, specKey: string) =>
  * @returns True if there's an authentication error
  */
 const badAuth = (content: string | Record<string, unknown>) => {
-  const text = typeof content === 'object' ? JSON.stringify(content) : content
-  return text.indexOf('Requires authentication') > 0
-}
+  const text = typeof content === 'object' ? JSON.stringify(content) : content;
+  return text.indexOf('Requires authentication') > 0;
+};
 
 export const logout = async (props: ISDKConfigProps, token: string) => {
-  const xp = specTransport(props)
+  const xp = specTransport(props);
 
   return sdkOk<string, Error>(
     xp.request<string, Error>(
@@ -107,40 +107,40 @@ export const logout = async (props: ISDKConfigProps, token: string) => {
       undefined,
       { headers: { Authorization: `Bearer ${token}` } }
     )
-  )
-}
+  );
+};
 
 export const login = async (props: ISDKConfigProps) => {
-  const xp = specTransport(props)
+  const xp = specTransport(props);
   const creds = {
     client_id: props.client_id ?? process.env.LOOKERSDK_CLIENT_ID,
     client_secret: props.client_secret ?? process.env.LOOKERSDK_CLIENT_SECRET,
-  }
-  const url = loginUrl(props)
+  };
+  const url = loginUrl(props);
 
   const response = await sdkOk<any, Error>(
-    xp.request<any, Error>('POST', url, creds, undefined, undefined, undefined)
-  )
-  const accessToken = await response.access_token
+    xp.request<any, Error>('POST', url, creds, undefined, undefined, props)
+  );
+  const accessToken = await response.access_token;
 
   if (accessToken) {
-    return accessToken
+    return accessToken;
   } else {
-    log(`Server Response: ${JSON.stringify(response)}`)
-    throw new Error('Access token could not be retrieved.')
+    log(`Server Response: ${JSON.stringify(response)}`);
+    throw new Error('Access token could not be retrieved.');
   }
-}
+};
 
 const checkCertError = (err: Error): boolean => {
   if (err.message && err.message.match(/self signed certificate/gi)) {
     warn(`
 NOTE! Certificate validation can be disabled with:
   NODE_TLS_REJECT_UNAUTHORIZED="0" {original command}
-`)
-    return true
+`);
+    return true;
   }
-  return false
-}
+  return false;
+};
 
 /**
  * gets either an http(s) url, or a file URL by reading directly if it's a file url
@@ -153,16 +153,16 @@ export const getUrl = async (
   url: string,
   options?: Partial<ITransportSettings>
 ) => {
-  const ref = new URL(url)
+  const ref = new URL(url);
 
   if (ref.protocol === 'file:') {
-    return readFileSync(ref.pathname)
+    return readFileSync(ref.pathname);
   }
-  const xp = specTransport(props)
+  const xp = specTransport(props);
   return await sdkOk<string, Error>(
     xp.request('GET', url, undefined, undefined, undefined, options)
-  )
-}
+  );
+};
 
 export const authGetUrl = async (
   props: ISDKConfigProps,
@@ -170,41 +170,44 @@ export const authGetUrl = async (
   failQuits = true,
   options?: Partial<ITransportSettings>
 ) => {
-  let token = null
-  let content: any = null
+  let token = null;
+  let content: any = null;
   try {
     // Try first without login. Most Looker instances don't require auth for spec retrieval
-    content = await getUrl(props, url, options)
+    content = await getUrl(props, url, options);
   } catch (err: any) {
     if (err.message.indexOf('ETIMEDOUT') > 0) {
-      throw err
+      throw err;
     }
     // Whoops!  Ok, try again with login
-    token = await login(props)
-    options = { options, ...{ headers: { Authorization: `Bearer ${token}` } } }
-    content = await getUrl(props, url, options)
+    options = mergeOptions(props, options ?? {});
+    options = mergeOptions(options, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    token = await login(options as ISDKConfigProps);
+    content = await getUrl(props, url, options);
     if (token) {
-      await logout(props, token)
+      await logout(props, token);
     }
   }
 
   if (badAuth(content)) {
-    const authFailed = 'Authentication failed'
+    const authFailed = 'Authentication failed';
     if (failQuits) {
-      return quit(authFailed)
+      return quit(authFailed);
     } else {
-      throw new Error(authFailed)
+      throw new Error(authFailed);
     }
   }
-  return content
-}
+  return content;
+};
 
 export const fetchLookerVersions = async (
   props: ISDKConfigProps,
   options?: Partial<ITransportSettings>
 ) => {
-  return await authGetUrl(props, `${props.base_url}/versions`, false, options)
-}
+  return await authGetUrl(props, `${props.base_url}/versions`, false, options);
+};
 
 export const fetchLookerVersion = async (
   props: ISDKConfigProps,
@@ -213,57 +216,57 @@ export const fetchLookerVersion = async (
 ) => {
   if (!versions) {
     try {
-      versions = await fetchLookerVersions(props, options)
+      versions = await fetchLookerVersions(props, options);
     } catch (e: any) {
       warn(
         `Could not retrieve looker release version from "${props.base_url}/versions": ${e.message}`
-      )
-      return ''
+      );
+      return '';
     }
   }
-  const matches = versions.looker_release_version.match(/^\d+\.\d+/i)
-  return matches[0]
-}
+  const matches = versions.looker_release_version.match(/^\d+\.\d+/i);
+  return matches[0];
+};
 
 export const fetchSpec = async (
   name: string,
   spec: SpecItem,
   props: ISDKConfigProps
 ) => {
-  const fileName = swaggerFileName(name, spec.key)
+  const fileName = swaggerFileName(name, spec.key);
   // No need to fetch if the file already exists
   // TODO make this a switch or remove caching?
-  if (isFileSync(fileName)) return fileName
+  if (isFileSync(fileName)) return fileName;
 
   try {
-    const content = await authGetUrl(props, spec.specURL || 'missing spec url')
+    const content = await authGetUrl(props, spec.specURL || 'missing spec url');
 
-    createJsonFile(fileName, content)
+    createJsonFile(fileName, content);
 
-    return fileName
+    return fileName;
   } catch (err: any) {
-    checkCertError(err)
-    return quit(err)
+    checkCertError(err);
+    return quit(err);
   }
-}
+};
 
 export const logFetchSpec = async (
   name: string,
   spec: SpecItem,
   props: ISDKConfigProps
 ) => {
-  const specFile = await fetchSpec(name, spec, props)
+  const specFile = await fetchSpec(name, spec, props);
   if (!specFile) {
-    return fail('fetchSpec', 'No specification file name returned')
+    return fail('fetchSpec', 'No specification file name returned');
   }
-  return specFile
-}
+  return specFile;
+};
 
 export const getVersionInfo = async (
   props: ISDKConfigProps
 ): Promise<IVersionInfo | undefined> => {
   try {
-    const lookerVersion = await fetchLookerVersion(props)
+    const lookerVersion = await fetchLookerVersion(props);
     return {
       spec: {
         key: props.api_version,
@@ -272,16 +275,16 @@ export const getVersionInfo = async (
         status: 'mocked',
       },
       lookerVersion,
-    }
+    };
   } catch (e: any) {
     warn(
       `Could not retrieve version information. Is ${props.base_url} running?`
-    )
-    checkCertError(e)
-    console.error({ e })
+    );
+    checkCertError(e);
+    console.error({ e });
   }
-  return undefined
-}
+  return undefined;
+};
 
 /**
  * Fetch (if needed) and convert a Swagger API specification to OpenAPI
@@ -298,15 +301,15 @@ export const logConvertSpec = async (
   force = false
 ) => {
   // if openApiFile is resolved correctly, this value will be the file name
-  let result = ''
-  const oaFile = openApiFileName(name, spec.key)
-  if (isFileSync(oaFile) && !force) return oaFile
+  let result = '';
+  const oaFile = openApiFileName(name, spec.key);
+  if (isFileSync(oaFile) && !force) return oaFile;
 
-  const specFile = await logFetchSpec(name, spec, props)
-  result = convertSpec(specFile, oaFile, force)
+  const specFile = await logFetchSpec(name, spec, props);
+  result = convertSpec(specFile, oaFile, force);
   if (!result) {
-    return fail('logConvert', 'No file name returned for openAPI upgrade')
+    return fail('logConvert', 'No file name returned for openAPI upgrade');
   }
 
-  return result
-}
+  return result;
+};

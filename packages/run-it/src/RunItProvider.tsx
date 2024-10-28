@@ -24,24 +24,24 @@
 
  */
 
-import type { FC, ReactElement } from 'react'
-import React, { createContext } from 'react'
+import type { FC, ReactElement } from 'react';
+import React, { createContext } from 'react';
 
 export interface RunItContextProps {
-  basePath: string
+  basePath: string;
 }
 
 export interface RunItProviderProps extends RunItContextProps {
-  children: ReactElement<any> | ReactElement[]
+  children: ReactElement<any> | ReactElement[];
 }
 
 const defaultRunItContextValue: RunItContextProps = {
   basePath: '',
-}
+};
 
 export const RunItContext = createContext<RunItContextProps>(
   defaultRunItContextValue
-)
+);
 
 /**
  * TODO: Eliminate this provider. Configurator currently duplicates adaptor
@@ -56,5 +56,5 @@ export const RunItProvider: FC<RunItProviderProps> = ({
     <RunItContext.Provider value={{ basePath }}>
       {children}
     </RunItContext.Provider>
-  )
-}
+  );
+};

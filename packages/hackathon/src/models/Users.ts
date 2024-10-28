@@ -24,20 +24,20 @@
 
  */
 
-import type { IRowModelProps, ITabTable } from '@looker/wholly-artifact'
-import { WhollyArtifact } from '@looker/wholly-artifact'
-import { getCore40SDK } from '@looker/extension-sdk-react'
+import type { IRowModelProps, ITabTable } from '@looker/wholly-artifact';
+import { WhollyArtifact } from '@looker/wholly-artifact';
+import { getCore40SDK } from '@looker/extension-sdk-react';
 
-import type { ISheetRow } from './SheetRow'
-import { SheetRow } from './SheetRow'
-import type { SheetData } from './SheetData'
+import type { ISheetRow } from './SheetRow';
+import { SheetRow } from './SheetRow';
+import type { SheetData } from './SheetData';
 
 /** IMPORTANT: properties must be declared in the tab sheet's columnar order, not sorted order */
 export interface IUserProps extends IRowModelProps {
-  first_name: string
-  last_name: string
-  looker_id: string
-  $name: string
+  first_name: string;
+  last_name: string;
+  looker_id: string;
+  $name: string;
 }
 
 export interface IUser extends ISheetRow, IUserProps {}
@@ -52,26 +52,26 @@ export interface IUser extends ISheetRow, IUserProps {}
  *
  */
 export class User extends SheetRow<IUser> {
-  first_name = ''
-  last_name = ''
-  looker_id = ''
+  first_name = '';
+  last_name = '';
+  looker_id = '';
   constructor(values?: any) {
-    super()
+    super();
     // IMPORTANT: this must be done after super() constructor is called so keys are established
     // there may be a way to overload the constructor so this isn't necessary but pattern hasn't been found
-    this.assign(values)
+    this.assign(values);
   }
 
   tableName() {
-    return 'User'
+    return 'User';
   }
 
   get $name(): string {
-    return `${this.first_name} ${this.last_name}`
+    return `${this.first_name} ${this.last_name}`;
   }
 
   toObject(): IUserProps {
-    return super.toObject() as IUserProps
+    return super.toObject() as IUserProps;
   }
 }
 
@@ -80,10 +80,10 @@ export class Users extends WhollyArtifact<User, IUserProps> {
     public readonly data: SheetData,
     public readonly table: ITabTable
   ) {
-    super(getCore40SDK(), table)
+    super(getCore40SDK(), table);
   }
 
   typeRow<User>(values?: any) {
-    return new User(values) as unknown as User
+    return new User(values) as unknown as User;
   }
 }

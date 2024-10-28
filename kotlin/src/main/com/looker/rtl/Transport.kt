@@ -24,17 +24,25 @@
 
 package com.looker.rtl
 
-import com.google.gson.Gson
+import com.google.api.client.http.ByteArrayContent
+import com.google.api.client.http.GenericUrl
+import com.google.api.client.http.HttpContent
+import com.google.api.client.http.HttpHeaders
+import com.google.api.client.http.HttpRequest
+import com.google.api.client.http.HttpRequestFactory
+import com.google.api.client.http.HttpRequestInitializer
+import com.google.api.client.http.HttpResponseException
+import com.google.api.client.http.HttpTransport
+import com.google.api.client.http.apache.v2.ApacheHttpTransport
+import com.google.api.client.http.javanet.NetHttpTransport
+import com.google.api.client.json.Json
 import com.google.gson.annotations.SerializedName
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.engine.okhttp.*
-import io.ktor.client.features.json.*
-import io.ktor.client.request.*
-import io.ktor.client.request.forms.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
-import kotlinx.coroutines.runBlocking
+import com.looker.rtl.GsonObjectParser.Companion.GSON
+import com.looker.rtl.SDKResponse.Companion.ERROR_BODY
+import org.apache.http.conn.ssl.NoopHostnameVerifier
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory
+import org.apache.http.ssl.SSLContextBuilder
+import java.io.BufferedReader
 import java.net.URLDecoder
 import java.net.URLEncoder
 import java.security.SecureRandom
@@ -44,20 +52,18 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
-import java.util.concurrent.TimeUnit
 import javax.net.ssl.HostnameVerifier
 import javax.net.ssl.SSLContext
 import javax.net.ssl.SSLSocketFactory
 import javax.net.ssl.X509TrustManager
 import kotlin.collections.component1
 import kotlin.collections.component2
-import kotlin.collections.set
 
 sealed class SDKResponse {
     /** A successful SDK call. */
     data class SDKSuccessResponse<T>(
         /** The object returned by the SDK call. */
-        val value: T
+        val value: T,
     ) : SDKResponse() {
         /** Whether the SDK call was successful. */
         val ok: Boolean = true
@@ -66,7 +72,7 @@ sealed class SDKResponse {
     /** An erroring SDK call. */
     data class SDKErrorResponse<T>(
         /** The error object returned by the SDK call. */
-        val value: T
+        val value: T,
     ) : SDKResponse() {
         /** Whether the SDK call was successful. */
         val ok: Boolean = false
@@ -75,6 +81,9 @@ sealed class SDKResponse {
     /** An error representing an issue in the SDK, like a network or parsing error. */
     data class SDKError(val message: String) : SDKResponse() {
         val type: String = "sdk_error"
+    }
+    companion object {
+        const val ERROR_BODY = "error_body"
     }
 }
 
@@ -90,20 +99,26 @@ fun <T> ok(response: SDKResponse): T {
     }
 }
 
-enum class HttpMethod(val value: io.ktor.http.HttpMethod) {
-    GET(io.ktor.http.HttpMethod.Get),
-    POST(io.ktor.http.HttpMethod.Post),
-    PUT(io.ktor.http.HttpMethod.Put),
-    DELETE(io.ktor.http.HttpMethod.Delete),
-    PATCH(io.ktor.http.HttpMethod.Patch),
-    HEAD(io.ktor.http.HttpMethod.Head)
-    // TODO: Using the ktor-client-apache may support TRACE?
+enum class HttpMethod {
+    GET,
+    POST,
+    PUT,
+    DELETE,
+    PATCH,
+    HEAD,
+}
+
+enum class HttpTransports(val label: String) {
+    APACHE("Apache HTTP Client"),
+    JAVA_NET("Native Java HTTP Client"),
+    // URL_FETCH("Google App Engine HTTP Client"), TODO: App Engine support? Requires App Engine SDK.
+    // KTOR("Kotlin based HTTP Client") TODO: Add ktor transport wrapper. Do we need this?
 }
 
 data class RequestSettings(
     val method: HttpMethod,
     val url: String,
-    val headers: Map<String, String> = emptyMap()
+    val headers: Map<String, String> = emptyMap(),
 )
 
 typealias Authenticator = (init: RequestSettings) -> RequestSettings
@@ -117,6 +132,7 @@ interface TransportOptions {
     var timeout: Int
     var headers: Map<String, String>
     var environmentPrefix: String
+    var httpTransport: String
 }
 
 interface ConfigurationProvider : TransportOptions {
@@ -131,6 +147,7 @@ data class TransportSettings(
     override var timeout: Int = DEFAULT_TIMEOUT,
     override var headers: Map<String, String> = emptyMap(),
     override var environmentPrefix: String = "LOOKERSDK",
+    override var httpTransport: String = DEFAULT_HTTP_TRANSPORT,
 ) : TransportOptions
 
 private val utcFormat by lazy { DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'") }
@@ -172,73 +189,29 @@ fun addQueryParams(path: String, params: Values = emptyMap()): String {
     return "$path?$qp"
 }
 
-fun customClient(options: TransportOptions): HttpClient {
-    // Timeout is passed in as seconds
-    val timeout = (options.timeout * 1000).toLong()
-    // We are using https://square.github.io/okhttp/4.x/okhttp/okhttp3/ as our cross-platform HttpClient
-    // it provides better performance and is compatible with Android
-    // This construction loosely adapted from https://ktor.io/clients/http-client/engines.html#artifact-7
-    return HttpClient(OkHttp) {
-        install(JsonFeature) {
-            serializer = GsonSerializer {
-                registerTypeAdapter(AuthToken::class.java, AuthTokenAdapter())
-            }
-        }
-        engine {
-            config {
-                connectTimeout(timeout, TimeUnit.MILLISECONDS)
-                callTimeout(timeout, TimeUnit.MILLISECONDS)
-                readTimeout(timeout, TimeUnit.MILLISECONDS)
-                followRedirects(true)
-                // https://square.github.io/okhttp/3.x/okhttp/okhttp3/Interceptor.html
-//                addInterceptor(interceptor)
-//                addNetworkInterceptor(interceptor)
+/** Returns a [HttpRequestInitializer] prepared with the provided requestSettings  */
+fun customInitializer(
+    options: TransportOptions,
+    requestSettings: RequestSettings,
+): HttpRequestInitializer {
+    return HttpRequestInitializer { request -> // Timeout is passed in as seconds
+        val timeout = (options.timeout * 1000)
+        request.connectTimeout = timeout
+        request.readTimeout = timeout
 
-//                /**
-//                 * Set okhttp client instance to use instead of creating one.
-//                 */
-//                preconfigured = okHttpClientInstance
-                if (!options.verifySSL) {
-                    // NOTE! This is completely insecure and should ONLY be used with local server instance
-                    // testing for development purposes
-                    val tm: X509TrustManager = object : X509TrustManager {
-                        override fun getAcceptedIssuers(): Array<X509Certificate?> {
-                            return arrayOfNulls(0)
-                        }
+        request.parser = GsonObjectParser()
+        request.followRedirects = true
 
-                        @Throws(CertificateException::class)
-                        override fun checkClientTrusted(
-                            certs: Array<X509Certificate?>?,
-                            authType: String?
-                        ) {
-                        }
-
-                        @Throws(CertificateException::class)
-                        override fun checkServerTrusted(
-                            certs: Array<X509Certificate?>?,
-                            authType: String?
-                        ) {
-                        }
-                    }
-                    val trustAllCerts = arrayOf(tm)
-                    val sslContext = SSLContext.getInstance("SSL")
-                    sslContext.init(null, trustAllCerts, SecureRandom())
-                    val sslSocketFactory: SSLSocketFactory = sslContext.socketFactory
-                    sslSocketFactory(
-                        sslSocketFactory, tm
-                    )
-
-                    val hostnameVerifier = HostnameVerifier { _, _ ->
-                        true
-                    }
-                    hostnameVerifier(hostnameVerifier)
-                }
+        // set headers
+        request.headers = HttpHeaders().also {
+            requestSettings.headers.forEach { (k, v) ->
+                it.set(k, v)
             }
         }
     }
 }
 
-class Transport(val options: TransportOptions) {
+open class Transport(val options: TransportOptions) {
 
     private val apiPath = "${options.baseUrl}/api/${options.apiVersion}"
 
@@ -252,7 +225,7 @@ class Transport(val options: TransportOptions) {
     fun makeUrl(
         path: String,
         queryParams: Values = emptyMap(),
-        authenticator: Authenticator? = null // TODO figure out why ::defaultAuthenticator is matching when it shouldn't
+        authenticator: Authenticator? = null, // TODO figure out why ::defaultAuthenticator is matching when it shouldn't
     ): String {
         return if (path.startsWith("http://", true) ||
             path.startsWith("https://", true)
@@ -267,20 +240,121 @@ class Transport(val options: TransportOptions) {
         } + addQueryParams(path, queryParams)
     }
 
-    inline fun <reified T> request(
+    open fun getAllTrustingVerifiers(): Pair<SSLSocketFactory, HostnameVerifier> {
+        // NOTE! This is completely insecure and should ONLY be used with local server instance
+        // testing for development purposes
+        val tm: X509TrustManager = object : X509TrustManager {
+            override fun getAcceptedIssuers(): Array<X509Certificate?> {
+                return arrayOfNulls(0)
+            }
+
+            @Throws(CertificateException::class)
+            override fun checkClientTrusted(
+                certs: Array<X509Certificate?>?,
+                authType: String?,
+            ) {
+            }
+
+            @Throws(CertificateException::class)
+            override fun checkServerTrusted(
+                certs: Array<X509Certificate?>?,
+                authType: String?,
+            ) {
+            }
+        }
+        val trustAllCerts = arrayOf(tm)
+        val sslContext = SSLContext.getInstance("SSL")
+        sslContext.init(null, trustAllCerts, SecureRandom())
+
+        val sslSocketFactory: SSLSocketFactory = sslContext.socketFactory
+        val hostnameVerifier = HostnameVerifier { _, _ -> true }
+
+        return Pair(sslSocketFactory, hostnameVerifier)
+    }
+
+    /** Given [TransportOptions], selects the requested [HttpTransport].
+     *
+     * Will disable SSL certificate verification iff [TransportOptions.verifySSL] is false.
+     */
+    open fun initTransport(options: TransportOptions): HttpTransport {
+        return when (HttpTransports.valueOf(options.httpTransport.uppercase())) {
+            HttpTransports.APACHE -> {
+                // TODO: fix bug upstream that does not pass client context to requests.
+                //  The `expire` datetime format used in the Looker response is not compatible with
+                //  the "default" CookieSpec. We should be able to select an alternative spec but
+                //  doing so here does not cascade to individual requests.
+                //  Disable cookie management for now.
+                val clientBuilder =
+                    ApacheHttpTransport.newDefaultHttpClientBuilder().disableCookieManagement()
+                if (!options.verifySSL) {
+                    val sslBuilder = SSLContextBuilder().loadTrustMaterial(null) {
+                            _, _ ->
+                        true
+                    }
+                    val sslSocketFactory = SSLConnectionSocketFactory(sslBuilder.build())
+                    clientBuilder
+                        .setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE)
+                        .setSSLSocketFactory(sslSocketFactory)
+                }
+
+                ApacheHttpTransport(clientBuilder.build())
+            }
+
+            HttpTransports.JAVA_NET -> {
+                if (!options.verifySSL) {
+                    val (sslSocketFactory, hostnameVerifier) = getAllTrustingVerifiers()
+                    val clientBuilder = NetHttpTransport.Builder()
+                    clientBuilder.sslSocketFactory = sslSocketFactory
+                    clientBuilder.hostnameVerifier = hostnameVerifier
+
+                    return clientBuilder.build()
+                }
+
+                NetHttpTransport()
+            }
+        }
+    }
+
+    inline fun <reified T : Any> request(
         method: HttpMethod,
         path: String,
         queryParams: Values = emptyMap(),
         body: Any? = null,
-        noinline authenticator: Authenticator? = null
+        noinline authenticator: Authenticator? = null,
     ): SDKResponse {
-        // TODO get overrides parameter to work without causing compilation errors in UserSession
+        val transport: HttpTransport = initTransport(options)
+
+        val finalizedRequestSettings: RequestSettings =
+            finalizeRequest(method, path, queryParams, authenticator)
+
+        val requestInitializer: HttpRequestInitializer =
+            customInitializer(options, finalizedRequestSettings)
+        val requestFactory: HttpRequestFactory = transport.createRequestFactory(requestInitializer)
+
+        val httpContent: HttpContent? = when (body) {
+            // the body has already been prepared as HttpContent
+            is HttpContent -> body
+            // body is a raw string to be converted to a byte array
+            is String -> ByteArrayContent("application/x-www-form-urlencoded", body.toByteArray())
+            // body is a data class to be serialized as JSON or null
+            else -> {
+                // TODO: Consider using JsonHttpContent()
+                if (body != null) {
+                    ByteArrayContent(Json.MEDIA_TYPE, GSON.toJson(body).toByteArray())
+                } else {
+                    null
+                }
+            }
+        }
+
+        val request: HttpRequest = requestFactory.buildRequest(
+            finalizedRequestSettings.method.toString(),
+            GenericUrl(finalizedRequestSettings.url),
+            httpContent,
+        ).setSuppressUserAgentSuffix(true)
+
+// TODO get overrides parameter to work without causing compilation errors in UserSession
 //            overrides: TransportOptions? = null): SDKResponse {
-
-        val builder = httpRequestBuilder(method, path, queryParams, authenticator, body)
-
-        val client = customClient(options)
-        // TODO get overrides parameter working
 //        overrides?.let { o ->
 //            if (options.verifySSL != o.verifySSL || options.timeout != o.timeout) {
 //                // need an HTTP client with custom options
@@ -288,79 +362,53 @@ class Transport(val options: TransportOptions) {
 //            }
 //        }
 
-        val result = try {
-            runBlocking {
-                SDKResponse.SDKSuccessResponse(
-                    client.request<HttpStatement>(builder).execute { response: HttpResponse ->
-                        response.receive<T>()
-                    }
-                )
+        val sdkResponse = try {
+            val response = request.execute()
+            if (response.content == null) {
+                return SDKResponse.SDKSuccessResponse(null)
             }
+            val rawResult: T = when (T::class) {
+                // some responses may be a string (e.g. query results in `csv` format)
+                String::class ->
+                    response.content.bufferedReader().use(BufferedReader::readText) as T
+                // TODO(https://github.com/looker-open-source/sdk-codegen/issues/1341):
+                //  add streaming support. Currently, `stream` methods read the entire response.
+                ByteArray::class -> response.content.readBytes() as T
+                // most responses are JSON
+                else -> response.parseAs(T::class.java)
+            }
+            SDKResponse.SDKSuccessResponse(rawResult)
+        } catch (e: HttpResponseException) {
+            SDKResponse.SDKErrorResponse("$method $path $ERROR_BODY: ${e.content}")
         } catch (e: Exception) {
-            SDKResponse.SDKErrorResponse("$method $path $e")
-        } finally {
-            client.close()
+            SDKResponse.SDKError(e.message ?: "Something went wrong")
         }
 
-        return result
+        return sdkResponse
     }
 
-    fun httpRequestBuilder(
+    /** Returns a [HttpRequestInitializer] that adds Looker auth headers and finalizes URL */
+    fun finalizeRequest(
         method: HttpMethod,
         path: String,
         queryParams: Values,
         authenticator: Authenticator?,
-        body: Any?
-    ): HttpRequestBuilder {
-        val builder = HttpRequestBuilder()
-        // Set the request method
-        builder.method = method.value
-
-        // Handle the headers
-        val headers = options.headers.toMutableMap()
-
+    ): RequestSettings {
         val requestPath = makeUrl(path, queryParams, authenticator)
+
+        // headers as provided by options but not yet finalized
+        val provisionalHeaders = options.headers.toMutableMap()
 
         var auth = authenticator ?: ::defaultAuthenticator
         if (path.startsWith("http://", true) ||
-            path.startsWith("https://", true)) {
+            path.startsWith("https://", true)
+        ) {
             // if a full path is passed in, this is a straight fetch, not an API call
             // so don't authenticate
             auth = ::defaultAuthenticator
         }
 
-        val finishedRequest = auth(RequestSettings(method, requestPath, headers))
-
-        builder.method = finishedRequest.method.value
-        finishedRequest.headers.forEach { (k, v) ->
-            builder.headers.append(k, v)
-        }
-        builder.url.takeFrom(finishedRequest.url)
-
-        if (body != null) {
-            when (body) {
-                is FormDataContent -> {
-                    // Encoded form, probably automatically does headers["Content-Type"] = "application/x-www-form-urlencoded"
-                    builder.body = body
-                }
-
-                is String -> {
-                    // Presume this is a manually user-encoded value
-                    headers["Content-Type"] = "application/x-www-form-urlencoded"
-                    builder.body = body
-                }
-
-                else -> {
-                    // Request body
-                    val json = defaultSerializer()
-                    val jsonBody = json.write(body)
-
-                    builder.body = jsonBody
-                    headers["Content-Length"] = jsonBody.contentLength.toString()
-                }
-            }
-        }
-        return builder
+        return auth(RequestSettings(method, requestPath, provisionalHeaders))
     }
 }
 
@@ -380,13 +428,12 @@ data class SDKErrorInfo(
 )
 
 fun parseSDKError(msg: String): SDKErrorInfo {
-    val rx = Regex("""\s+Text:\s+"(.*)"$""")
+    val rx = Regex("""(?<=$ERROR_BODY:).*$""")
     val info = rx.find(msg)
     var result = SDKErrorInfo("", listOf(), "")
     info?.let {
-        val (payload) = it.destructured
-        val gson = Gson()
-        result = gson.fromJson(payload, SDKErrorInfo::class.java)
+        val payload = info.value
+        result = GSON.fromJson(payload, SDKErrorInfo::class.java)
         // Ignore the linter suggestion to replace `.isNullOrEmpty()` with `.isEmpty()` because it's *wrong*
         if (result.errors.isNullOrEmpty()) {
             result.errors = listOf()

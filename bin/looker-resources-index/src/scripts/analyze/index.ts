@@ -23,6 +23,6 @@
  SOFTWARE.
 
  */
-export * from './missing-languages'
-export * from './missing-personas'
-export * from './platform-feature-x-content-type'
+export * from './missing-languages';
+export * from './missing-personas';
+export * from './platform-feature-x-content-type';

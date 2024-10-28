@@ -24,113 +24,183 @@
 
  */
 
-import type { ChattyHostConnection, Options } from '@looker/chatty'
-import intersects from 'semver/ranges/intersects'
-import { FetchProxyImpl } from './fetch_proxy'
+import type { ChattyHostConnection, Options } from '@looker/chatty';
+import intersects from 'semver/ranges/intersects';
+import { logError } from '../util';
 import type {
-  ExtensionInitializationResponse,
+  VisualizationDataReceivedCallback,
+  VisualizationSDK,
+  VisualizationSDKInternal,
+} from './visualization';
+import { VisualizationSDKImpl } from './visualization/visualization_sdk';
+import type {
+  TileHostDataChangedCallback,
+  TileSDK,
+  TileSDKInternal,
+} from './tile';
+import { TileSDKImpl } from './tile/tile_sdk';
+import { FetchProxyImpl } from './fetch_proxy';
+import type {
+  ApiVersion,
   ExtensionHostApi,
   ExtensionHostApiConfiguration,
+  ExtensionInitializationResponse,
   ExtensionNotification,
   FetchCustomParameters,
   FetchResponseBodyType,
   LookerHostData,
-  ApiVersion,
-  RouteChangeData,
-} from './types'
+} from './types';
 import {
   ExtensionEvent,
   ExtensionNotificationType,
   ExtensionRequestType,
-} from './types'
+  MountPoint,
+} from './types';
 
-export const EXTENSION_SDK_VERSION = '0.10.5'
+export const EXTENSION_SDK_VERSION = '0.10.5';
 
 export class ExtensionHostApiImpl implements ExtensionHostApi {
-  private _configuration: ExtensionHostApiConfiguration
-  private _lookerHostData?: Readonly<LookerHostData>
-  private chattyHost: ChattyHostConnection
-  private setInitialRoute?: (route: string, routeState?: any) => void
-  private hostChangedRoute?: (route: string, routeState?: any) => void
-  private contextData?: string
+  private _configuration: ExtensionHostApiConfiguration;
+  private _lookerHostData?: Readonly<LookerHostData>;
+  private chattyHost: ChattyHostConnection;
+  private setInitialRoute?: (route: string, routeState?: any) => void;
+  private hostChangedRoute?: (route: string, routeState?: any) => void;
+  private visualizationDataReceivedCallback?: VisualizationDataReceivedCallback;
+  private tileHostDataChangedCallback?: TileHostDataChangedCallback;
+  private _visualizationSDK?: VisualizationSDKInternal;
+  private _tileSDK?: TileSDKInternal;
+
+  private contextData?: string;
 
   constructor(configuration: ExtensionHostApiConfiguration) {
-    this._configuration = configuration
-    const { chattyHost, setInitialRoute, hostChangedRoute } =
-      this._configuration
-    this.chattyHost = chattyHost
-    this.setInitialRoute = setInitialRoute
-    this.hostChangedRoute = hostChangedRoute
+    this._configuration = configuration;
+    const {
+      chattyHost,
+      setInitialRoute,
+      hostChangedRoute,
+      visualizationDataReceivedCallback,
+      tileHostDataChangedCallback,
+    } = this._configuration;
+    this.chattyHost = chattyHost;
+    this.setInitialRoute = setInitialRoute;
+    this.hostChangedRoute = hostChangedRoute;
+    this.visualizationDataReceivedCallback = visualizationDataReceivedCallback;
+    this.tileHostDataChangedCallback = tileHostDataChangedCallback;
+  }
+
+  get isDashboardMountSupported(): boolean {
+    return (
+      !!this._lookerHostData?.extensionDashboardTileEnabled &&
+      (this.lookerHostData?.mountPoint === MountPoint.dashboardTile ||
+        this.lookerHostData?.mountPoint === MountPoint.dashboardVisualization ||
+        this.lookerHostData?.mountPoint === MountPoint.dashboardTilePopup)
+    );
+  }
+
+  get visualizationSDK(): VisualizationSDK {
+    if (!this._visualizationSDK) {
+      this._visualizationSDK = new VisualizationSDKImpl(this);
+    }
+    return this._visualizationSDK;
+  }
+
+  get tileSDK(): TileSDK {
+    if (!this._tileSDK) {
+      this._tileSDK = new TileSDKImpl(this);
+    }
+    return this._tileSDK;
   }
 
   get lookerHostData() {
-    return this._lookerHostData
+    return this._lookerHostData;
   }
 
   handleNotification(
-    message?: ExtensionNotification
+    message: ExtensionNotification
   ): ExtensionInitializationResponse | undefined {
-    const { type, payload } = message || {}
+    const { type } = message;
     switch (type) {
-      case ExtensionNotificationType.ROUTE_CHANGED:
+      case ExtensionNotificationType.ROUTE_CHANGED: {
+        const { payload } = message;
         if (this.hostChangedRoute && payload) {
-          const { route, routeState } = payload as RouteChangeData
+          const { route, routeState } = payload;
           if (route) {
-            this.hostChangedRoute(route, routeState)
+            this.hostChangedRoute(route, routeState);
           }
         }
-        return undefined
-      case ExtensionNotificationType.INITIALIZE: {
-        this._lookerHostData = payload as LookerHostData
-        if (this._lookerHostData) {
-          this.contextData = this._lookerHostData.contextData
+        return undefined;
+      }
+      case ExtensionNotificationType.VISUALIZATION_DATA: {
+        const { payload } = message;
+        (this.visualizationSDK as VisualizationSDKInternal).updateVisData(
+          payload
+        );
+        if (this.visualizationDataReceivedCallback) {
+          this.visualizationDataReceivedCallback(payload);
         }
-        let errorMessage
+        return undefined;
+      }
+      case ExtensionNotificationType.TILE_HOST_DATA: {
+        const { payload } = message;
+        (this.tileSDK as TileSDKInternal).tileHostDataChanged(payload);
+        if (this.tileHostDataChangedCallback) {
+          this.tileHostDataChangedCallback(payload);
+        }
+        return undefined;
+      }
+      case ExtensionNotificationType.INITIALIZE: {
+        const { payload } = message;
+        const lookerHostData = payload || {};
+        if (!lookerHostData.mountPoint) {
+          lookerHostData.mountPoint = MountPoint.standalone;
+        }
+        this._lookerHostData = lookerHostData;
+        this.contextData = lookerHostData.contextData;
+        let errorMessage;
         if (
           this._configuration.requiredLookerVersion &&
-          this._lookerHostData &&
-          this._lookerHostData.lookerVersion
+          lookerHostData.lookerVersion
         ) {
           errorMessage = this.verifyLookerVersion(
             this._configuration.requiredLookerVersion
-          )
+          );
           if (errorMessage) {
-            console.error(errorMessage)
+            logError(errorMessage);
           }
         }
         if (this.setInitialRoute && payload) {
-          const { route, routeState } = payload as LookerHostData
+          const { route, routeState } = payload;
           if (route) {
-            this.setInitialRoute(route, routeState)
+            this.setInitialRoute(route, routeState);
           }
         }
         return {
           extensionSdkVersion: EXTENSION_SDK_VERSION,
           errorMessage,
-        }
+        };
       }
       default:
-        console.error('Unrecognized extension notification', message)
-        throw new Error(`Unrecognized extension notification type ${type}`)
+        logError('Unrecognized extension notification', message);
+        throw new Error(`Unrecognized extension notification type ${type}`);
     }
   }
 
   createSecretKeyTag(keyName: string): string {
-    const errorMessage = this.verifyLookerVersion('>=7.11')
+    const errorMessage = this.verifyLookerVersion('>=7.11');
     if (errorMessage) {
-      throw new Error(errorMessage)
+      throw new Error(errorMessage);
     }
     if (!keyName.match(/^[A-Za-z0-9_.]+$/)) {
-      throw new Error('Unsupported characters in key name')
+      throw new Error('Unsupported characters in key name');
     }
-    return `{{${this._lookerHostData!.extensionId.replace(
+    return `{{${(this._lookerHostData as LookerHostData).extensionId.replace(
       /::|-/g,
       '_'
-    )}_${keyName}}}`
+    )}_${keyName}}}`;
   }
 
   async verifyHostConnection() {
-    return this.sendAndReceive(ExtensionRequestType.VERIFY_HOST)
+    return this.sendAndReceive(ExtensionRequestType.VERIFY_HOST);
   }
 
   async invokeCoreSdk(
@@ -150,7 +220,7 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
       authenticator,
       options,
       apiVersion,
-    })
+    });
   }
 
   async invokeCoreSdkRaw(
@@ -166,19 +236,19 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
       params,
       body,
       apiVersion,
-    })
+    });
   }
 
   updateTitle(title: string) {
-    this.send(ExtensionRequestType.UPDATE_TITLE, { title })
+    this.send(ExtensionRequestType.UPDATE_TITLE, { title });
   }
 
   updateLocation(url: string, state?: any, target?: string) {
-    this.send(ExtensionRequestType.UPDATE_LOCATION, { url, state, target })
+    this.send(ExtensionRequestType.UPDATE_LOCATION, { url, state, target });
   }
 
   spartanLogout() {
-    this.send(ExtensionRequestType.SPARTAN_LOGOUT)
+    this.send(ExtensionRequestType.SPARTAN_LOGOUT);
   }
 
   openBrowserWindow(url: string, target?: string) {
@@ -186,18 +256,18 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
       url,
       undefined,
       target: target || '_blank',
-    })
+    });
   }
 
   closeHostPopovers() {
-    this.send(ExtensionRequestType.CLOSE_HOST_POPOVERS)
+    this.send(ExtensionRequestType.CLOSE_HOST_POPOVERS);
   }
 
   clientRouteChanged(route: string, routeState?: any) {
     this.send(ExtensionRequestType.ROUTE_CHANGED, {
       route,
       routeState,
-    })
+    });
   }
 
   async localStorageSetItem(name: string, value = ''): Promise<boolean> {
@@ -206,13 +276,13 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
         new Error(
           'localStorageSetItem not supported by the current Looker host'
         )
-      )
+      );
     }
     return this.sendAndReceive(ExtensionRequestType.LOCAL_STORAGE, {
       type: 'set',
       name,
       value,
-    })
+    });
   }
 
   async localStorageGetItem(name: string): Promise<string | null> {
@@ -221,12 +291,12 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
         new Error(
           'localStorageGetItem not supported by the current Looker host'
         )
-      )
+      );
     }
     return this.sendAndReceive(ExtensionRequestType.LOCAL_STORAGE, {
       type: 'get',
       name,
-    })
+    });
   }
 
   async localStorageRemoveItem(name: string): Promise<boolean> {
@@ -235,108 +305,108 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
         new Error(
           'localStorageRemoveItem not supported by the current Looker host'
         )
-      )
+      );
     }
     return this.sendAndReceive(ExtensionRequestType.LOCAL_STORAGE, {
       type: 'remove',
       name,
-    })
+    });
   }
 
   async clipboardWrite(value: string): Promise<void> {
-    const errorMessage = this.verifyLookerVersion('>=21.7')
+    const errorMessage = this.verifyLookerVersion('>=21.7');
     if (errorMessage) {
-      return Promise.reject(new Error(errorMessage))
+      return Promise.reject(new Error(errorMessage));
     }
     return this.sendAndReceive(ExtensionRequestType.CLIPBOARD, {
       type: 'write',
       value,
-    })
+    });
   }
 
   async userAttributeSetItem(name: string, value = ''): Promise<boolean> {
     // User attributes added in Looker version 7.13, updated in 7.15
-    const errorMessage = this.verifyLookerVersion('>=7.15')
+    const errorMessage = this.verifyLookerVersion('>=7.15');
     if (errorMessage) {
-      return Promise.reject(new Error(errorMessage))
+      return Promise.reject(new Error(errorMessage));
     }
     return this.sendAndReceive(ExtensionRequestType.USER_ATTRIBUTE, {
       type: 'set',
       name,
       value,
-    })
+    });
   }
 
   async userAttributeGetItem(name: string): Promise<string | null> {
     // User attributes added in Looker version 7.13, updated in 7.15
-    const errorMessage = this.verifyLookerVersion('>=7.15')
+    const errorMessage = this.verifyLookerVersion('>=7.15');
     if (errorMessage) {
-      return Promise.reject(new Error(errorMessage))
+      return Promise.reject(new Error(errorMessage));
     }
     return this.sendAndReceive(ExtensionRequestType.USER_ATTRIBUTE, {
       type: 'get',
       name,
-    })
+    });
   }
 
   async userAttributeResetItem(name: string): Promise<void> {
     // User attributes added in Looker version 7.13, updated in 7.15
-    const errorMessage = this.verifyLookerVersion('>=7.15')
+    const errorMessage = this.verifyLookerVersion('>=7.15');
     if (errorMessage) {
-      return Promise.reject(new Error(errorMessage))
+      return Promise.reject(new Error(errorMessage));
     }
     return this.sendAndReceive(ExtensionRequestType.USER_ATTRIBUTE, {
       type: 'reset',
       name,
-    })
+    });
   }
 
   getContextData() {
-    const errorMessage = this.verifyLookerVersion('>=7.13')
+    const errorMessage = this.verifyLookerVersion('>=7.13');
     if (errorMessage) {
-      throw new Error(errorMessage)
+      throw new Error(errorMessage);
     }
     if (this.contextData) {
-      return JSON.parse(this.contextData)
+      return JSON.parse(this.contextData);
     } else {
-      return undefined
+      return undefined;
     }
   }
 
   async saveContextData(context: any): Promise<any> {
-    const errorMessage = this.verifyLookerVersion('>=7.13')
+    const errorMessage = this.verifyLookerVersion('>=7.13');
     if (errorMessage) {
-      return Promise.reject(new Error(errorMessage))
+      return Promise.reject(new Error(errorMessage));
     }
-    let contextData: string | undefined
+    let contextData: string | undefined;
     if (context) {
       try {
-        contextData = JSON.stringify(context)
+        contextData = JSON.stringify(context);
       } catch (err) {
-        return Promise.reject(new Error('context cannot be serialized'))
+        return Promise.reject(new Error('context cannot be serialized'));
       }
     } else {
-      contextData = undefined
+      contextData = undefined;
     }
     await this.sendAndReceive(ExtensionRequestType.CONTEXT_DATA, {
       type: 'save',
       contextData,
-    })
-    return this.getContextData()
+    });
+    return this.getContextData();
   }
 
   async refreshContextData(): Promise<any> {
-    const errorMessage = this.verifyLookerVersion('>=7.13')
+    const errorMessage = this.verifyLookerVersion('>=7.13');
     if (errorMessage) {
-      return Promise.reject(new Error(errorMessage))
+      return Promise.reject(new Error(errorMessage));
     }
     this.contextData = await this.sendAndReceive(
       ExtensionRequestType.CONTEXT_DATA,
       {
         type: 'refresh',
       }
-    )
-    return this.getContextData()
+    );
+    return this.getContextData();
   }
 
   track(name: string, trackAction: string, attributes?: Record<string, any>) {
@@ -344,29 +414,29 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
       name,
       trackAction,
       attributes,
-    })
+    });
   }
 
   error(errorEvent: ErrorEvent) {
     if (this._lookerHostData) {
-      const { message, filename, lineno, colno, error } = errorEvent || {}
+      const { message, filename, lineno, colno, error } = errorEvent || {};
       this.send(ExtensionRequestType.ERROR_EVENT, {
         message,
         filename,
         lineno,
         colno,
         error: error && error.toString ? error.toString() : error,
-      })
+      });
     } else {
-      console.error(
+      logError(
         'Unhandled error but Looker host connection not established',
         errorEvent
-      )
+      );
     }
   }
 
   unloaded() {
-    this.send(ExtensionRequestType.EXTENSION_UNLOADED, {})
+    this.send(ExtensionRequestType.EXTENSION_UNLOADED, {});
   }
 
   createFetchProxy(
@@ -374,7 +444,7 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
     init?: FetchCustomParameters,
     responseBodyType?: FetchResponseBodyType
   ) {
-    return new FetchProxyImpl(this, baseUrl, init, responseBodyType)
+    return new FetchProxyImpl(this, baseUrl, init, responseBodyType);
   }
 
   async fetchProxy(
@@ -383,9 +453,9 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
     responseBodyType?: FetchResponseBodyType
   ) {
     // Fetch proxy support added to Looker 7.9
-    const errorMessage = this.verifyLookerVersion('>=7.9')
+    const errorMessage = this.verifyLookerVersion('>=7.9');
     if (errorMessage) {
-      return Promise.reject(new Error(errorMessage))
+      return Promise.reject(new Error(errorMessage));
     }
     return this.sendAndReceive(ExtensionRequestType.INVOKE_EXTERNAL_API, {
       type: 'fetch',
@@ -394,7 +464,7 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
         init,
         responseBodyType,
       },
-    })
+    });
   }
 
   async serverProxy(
@@ -403,9 +473,9 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
     responseBodyType?: FetchResponseBodyType
   ) {
     // Server proxy support added to Looker 7.11
-    const errorMessage = this.verifyLookerVersion('>=7.11')
+    const errorMessage = this.verifyLookerVersion('>=7.11');
     if (errorMessage) {
-      return Promise.reject(new Error(errorMessage))
+      return Promise.reject(new Error(errorMessage));
     }
     return this.sendAndReceive(ExtensionRequestType.INVOKE_EXTERNAL_API, {
       type: 'server-proxy',
@@ -414,7 +484,7 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
         init,
         responseBodyType,
       },
-    })
+    });
   }
 
   async oauth2Authenticate(
@@ -423,13 +493,13 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
     httpMethod = 'POST'
   ) {
     // oauth2Authenticate proxy support added to Looker 7.9
-    let errorMessage = this.verifyLookerVersion('>=7.9')
+    let errorMessage = this.verifyLookerVersion('>=7.9');
     if (errorMessage) {
-      return Promise.reject(new Error(errorMessage))
+      return Promise.reject(new Error(errorMessage));
     }
-    errorMessage = this.validateAuthParameters(authParameters)
+    errorMessage = this.validateAuthParameters(authParameters);
     if (errorMessage) {
-      return Promise.reject(new Error(errorMessage))
+      return Promise.reject(new Error(errorMessage));
     }
     return this.sendAndReceive(
       ExtensionRequestType.INVOKE_EXTERNAL_API,
@@ -443,16 +513,16 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
       },
       // Adding the signal disables the default timeout
       { signal: new AbortController().signal }
-    )
+    );
   }
 
   async oauth2ExchangeCodeForToken(
     authEndpoint: string,
     authParameters: Record<string, string>
   ) {
-    const errorMessage = this.verifyLookerVersion('>=7.11')
+    const errorMessage = this.verifyLookerVersion('>=7.11');
     if (errorMessage) {
-      return Promise.reject(new Error(errorMessage))
+      return Promise.reject(new Error(errorMessage));
     }
     return this.sendAndReceive(ExtensionRequestType.INVOKE_EXTERNAL_API, {
       type: 'oauth2_exchange_code',
@@ -460,35 +530,43 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
         authEndpoint,
         authParameters,
       },
-    })
+    });
   }
 
-  private async sendAndReceive(
+  rendered(failureMessage?: string) {
+    this.send(ExtensionRequestType.RENDERED, { failureMessage });
+  }
+
+  async sendAndReceive(
     type: string,
     payload?: any,
     options?: Options
   ): Promise<any> {
     if (!this._lookerHostData) {
-      return Promise.reject(new Error('Looker host connection not established'))
+      return Promise.reject(
+        new Error('Looker host connection not established')
+      );
     }
     const messagePayload = {
       type,
       payload,
-    }
-    const chattyPayload = options ? [messagePayload, options] : [messagePayload]
+    };
+    const chattyPayload = options
+      ? [messagePayload, options]
+      : [messagePayload];
     return this.chattyHost
       .sendAndReceive(ExtensionEvent.EXTENSION_API_REQUEST, ...chattyPayload)
-      .then((values) => values[0])
+      .then(values => values[0]);
   }
 
-  private send(type: string, payload?: any) {
+  send(type: string, payload?: any) {
     if (!this._lookerHostData) {
-      throw new Error('Looker host connection not established')
+      throw new Error('Looker host connection not established');
     }
     this.chattyHost.send(ExtensionEvent.EXTENSION_API_REQUEST, {
       type,
       payload,
-    })
+    });
   }
 
   private verifyLookerVersion(version: string): string | undefined {
@@ -497,27 +575,27 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
     // likely will fail before reaching this point
     const lookerVersion = this._lookerHostData
       ? this._lookerHostData.lookerVersion || '7.0'
-      : '7.0'
+      : '7.0';
     if (!this._lookerHostData || !intersects(version, lookerVersion, true)) {
-      return `Extension requires Looker version ${version}, got ${lookerVersion}`
+      return `Extension requires Looker version ${version}, got ${lookerVersion}`;
     }
-    return undefined
+    return undefined;
   }
 
   private validateAuthParameters(authParameters: Record<string, string>) {
     if (!authParameters.client_id) {
-      return 'client_id missing'
+      return 'client_id missing';
     }
     if (authParameters.redirect_uri) {
-      return 'redirect_uri must NOT be included'
+      return 'redirect_uri must NOT be included';
     }
     if (
       authParameters.response_type !== 'token' &&
       authParameters.response_type !== 'id_token' &&
       authParameters.response_type !== 'code'
     ) {
-      return `invalid response_type, must be token, id_token or code, ${authParameters.response_type}`
+      return `invalid response_type, must be token, id_token or code, ${authParameters.response_type}`;
     }
-    return undefined
+    return undefined;
   }
 }

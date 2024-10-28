@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { TypeTagScene } from './TypeTagScene'
+export { TypeTagScene } from './TypeTagScene';

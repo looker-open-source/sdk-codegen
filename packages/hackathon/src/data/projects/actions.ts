@@ -23,8 +23,8 @@
  SOFTWARE.
 
  */
-import type { ValidationMessages } from '@looker/components'
-import type { IProjectProps } from '../../models'
+import type { ValidationMessages } from '@looker/components';
+import type { IProjectProps } from '../../models';
 
 export enum Actions {
   ALL_PROJECTS_REQUEST = 'ALL_PROJECTS_REQUEST',
@@ -46,95 +46,95 @@ export enum Actions {
 }
 
 export interface AllProjectsRequestAction {
-  type: Actions.ALL_PROJECTS_REQUEST
+  type: Actions.ALL_PROJECTS_REQUEST;
 }
 
 export interface AllProjectsResponseAction {
-  type: Actions.ALL_PROJECTS_RESPONSE
-  payload: IProjectProps[]
+  type: Actions.ALL_PROJECTS_RESPONSE;
+  payload: IProjectProps[];
 }
 
 export interface CurrentProjectsRequestAction {
-  type: Actions.CURRENT_PROJECTS_REQUEST
+  type: Actions.CURRENT_PROJECTS_REQUEST;
 }
 
 export interface CurrentProjectsResponseAction {
-  type: Actions.CURRENT_PROJECTS_RESPONSE
-  payload: IProjectProps[]
+  type: Actions.CURRENT_PROJECTS_RESPONSE;
+  payload: IProjectProps[];
 }
 
 export interface GetProjectRequestAction {
-  type: Actions.GET_PROJECT_REQUEST
-  payload?: string
+  type: Actions.GET_PROJECT_REQUEST;
+  payload?: string;
 }
 
 export interface GetProjectResponseAction {
-  type: Actions.GET_PROJECT_RESPONSE
-  payload: { project?: IProjectProps; isProjectMember?: boolean }
+  type: Actions.GET_PROJECT_RESPONSE;
+  payload: { project?: IProjectProps; isProjectMember?: boolean };
 }
 
 export interface UpdateProjectDataAction {
-  type: Actions.UPDATE_PROJECT_DATA
-  payload: IProjectProps
+  type: Actions.UPDATE_PROJECT_DATA;
+  payload: IProjectProps;
 }
 
 export interface UpdateProjectAction {
-  type: Actions.UPDATE_PROJECT
-  payload: IProjectProps
+  type: Actions.UPDATE_PROJECT;
+  payload: IProjectProps;
 }
 
 export interface UpdateProjectsPageNumAction {
-  type: Actions.UPDATE_PROJECTS_PAGE_NUM
-  payload: number
+  type: Actions.UPDATE_PROJECTS_PAGE_NUM;
+  payload: number;
 }
 
 export interface CreateProjectAction {
-  type: Actions.CREATE_PROJECT
+  type: Actions.CREATE_PROJECT;
   payload: {
-    hackerId: string
-    project: IProjectProps
-  }
+    hackerId: string;
+    project: IProjectProps;
+  };
 }
 
 export interface SaveProjectResponseAction {
-  type: Actions.SAVE_PROJECT_RESPONSE
+  type: Actions.SAVE_PROJECT_RESPONSE;
   payload: {
-    project: IProjectProps
-    validationMessages?: ValidationMessages
-    isProjectMember?: boolean
-  }
+    project: IProjectProps;
+    validationMessages?: ValidationMessages;
+    isProjectMember?: boolean;
+  };
 }
 
 export interface DeleteProjectAction {
-  type: Actions.DELETE_PROJECT
+  type: Actions.DELETE_PROJECT;
   payload: {
-    projectId: string
-  }
+    projectId: string;
+  };
 }
 
 export interface ChangeMembershipAction {
-  type: Actions.CHANGE_MEMBERSHIP
+  type: Actions.CHANGE_MEMBERSHIP;
   payload: {
-    leave: boolean
-    projectId: string
-    hackerId: string
-  }
+    leave: boolean;
+    projectId: string;
+    hackerId: string;
+  };
 }
 
 export interface LockProjectsAction {
-  type: Actions.LOCK_PROJECTS
+  type: Actions.LOCK_PROJECTS;
   payload: {
-    hackathonId?: string
-    lock: boolean
-  }
+    hackathonId?: string;
+    lock: boolean;
+  };
 }
 
 export interface LockProjectAction {
-  type: Actions.LOCK_PROJECT
+  type: Actions.LOCK_PROJECT;
   payload: {
-    projectId: string
-    lock: boolean
-  }
+    projectId: string;
+    lock: boolean;
+  };
 }
 
 export type ProjectAction =
@@ -152,36 +152,36 @@ export type ProjectAction =
   | LockProjectsAction
   | LockProjectAction
   | ChangeMembershipAction
-  | UpdateProjectsPageNumAction
+  | UpdateProjectsPageNumAction;
 
 export const allProjectsRequest = (): AllProjectsRequestAction => ({
   type: Actions.ALL_PROJECTS_REQUEST,
-})
+});
 
 export const allProjectsResponse = (
   projects: IProjectProps[]
 ): AllProjectsResponseAction => ({
   type: Actions.ALL_PROJECTS_RESPONSE,
   payload: projects,
-})
+});
 
 export const currentProjectsRequest = (): CurrentProjectsRequestAction => ({
   type: Actions.CURRENT_PROJECTS_REQUEST,
-})
+});
 
 export const currentProjectsResponse = (
   projects: IProjectProps[]
 ): CurrentProjectsResponseAction => ({
   type: Actions.CURRENT_PROJECTS_RESPONSE,
   payload: projects,
-})
+});
 
 export const getProjectRequest = (
   projectId?: string
 ): GetProjectRequestAction => ({
   type: Actions.GET_PROJECT_REQUEST,
   payload: projectId,
-})
+});
 
 export const getProjectResponse = (
   project?: IProjectProps,
@@ -189,26 +189,26 @@ export const getProjectResponse = (
 ): GetProjectResponseAction => ({
   type: Actions.GET_PROJECT_RESPONSE,
   payload: { project, isProjectMember },
-})
+});
 
 export const updateProjectData = (
   project: IProjectProps
 ): UpdateProjectDataAction => ({
   type: Actions.UPDATE_PROJECT_DATA,
   payload: project,
-})
+});
 
 export const updateProjectsPageNum = (
   pageNum: number
 ): UpdateProjectsPageNumAction => ({
   type: Actions.UPDATE_PROJECTS_PAGE_NUM,
   payload: pageNum,
-})
+});
 
 export const updateProject = (project: IProjectProps): UpdateProjectAction => ({
   type: Actions.UPDATE_PROJECT,
   payload: project,
-})
+});
 
 export const saveProjectResponse = (
   project: IProjectProps,
@@ -217,7 +217,7 @@ export const saveProjectResponse = (
 ): SaveProjectResponseAction => ({
   type: Actions.SAVE_PROJECT_RESPONSE,
   payload: { project, validationMessages, isProjectMember },
-})
+});
 
 export const createProject = (
   hackerId: string,
@@ -228,12 +228,12 @@ export const createProject = (
     hackerId,
     project,
   },
-})
+});
 
 export const deleteProject = (projectId: string): DeleteProjectAction => ({
   type: Actions.DELETE_PROJECT,
   payload: { projectId },
-})
+});
 
 export const lockProjects = (
   lock: boolean,
@@ -244,7 +244,7 @@ export const lockProjects = (
     hackathonId,
     lock,
   },
-})
+});
 
 export const lockProject = (
   lock: boolean,
@@ -255,7 +255,7 @@ export const lockProject = (
     projectId,
     lock,
   },
-})
+});
 
 export const changeMembership = (
   projectId: string,
@@ -268,4 +268,4 @@ export const changeMembership = (
     hackerId,
     leave,
   },
-})
+});

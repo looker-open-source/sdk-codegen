@@ -24,5 +24,5 @@
 
  */
 
-export * from './types'
-export * from './ErrorMessage'
+export * from './types';
+export * from './ErrorMessage';
