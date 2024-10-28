@@ -53,6 +53,7 @@ interface IErrorDetail {
 
 // This specifies SDK custom error options
 interface ILookerSDKErrorOptions {
+  statusCode?: number;
   errors?: IErrorDetail[];
   documentation_url?: string | null;
 }

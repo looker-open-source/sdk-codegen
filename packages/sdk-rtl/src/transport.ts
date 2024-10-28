@@ -694,6 +694,7 @@ export function sdkError(response: any) {
     }
     if ('message' in error) {
       return new LookerSDKError(response.error.message.toString(), {
+        statusCode: response.statusCode ?? undefined,
         errors: error?.errors ?? [],
         documentation_url: error?.documentation_url ?? '',
       });
