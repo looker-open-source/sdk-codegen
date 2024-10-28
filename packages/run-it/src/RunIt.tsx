@@ -159,7 +159,7 @@ export const RunIt: FC<RunItProps> = ({
   const toggleKeepBody: (_event: FormEventHandler<HTMLInputElement>) => void = (
     _event: FormEventHandler<HTMLInputElement>
   ) => {
-    setKeepBody((prev) => !prev);
+    setKeepBody(prev => !prev);
   };
 
   const handleConfig = (_e: BaseSyntheticEvent) => {

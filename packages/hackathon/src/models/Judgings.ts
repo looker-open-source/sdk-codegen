@@ -172,13 +172,10 @@ export class Judgings extends WhollyArtifact<Judging, IJudgingProps> {
     const projects = this.data.projects.filterBy(hackathon);
     if (hacker) {
       return this.rows.filter(
-        (j) =>
-          j.user_id === hacker.id &&
-          projects.find((p) => p._id === j.project_id)
+        j =>
+          j.user_id === hacker.id && projects.find(p => p._id === j.project_id)
       );
     }
-    return this.rows.filter((j) =>
-      projects.find((p) => p._id === j.project_id)
-    );
+    return this.rows.filter(j => projects.find(p => p._id === j.project_id));
   }
 }

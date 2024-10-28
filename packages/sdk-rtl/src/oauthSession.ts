@@ -67,7 +67,7 @@ export class OAuthSession extends AuthSession {
     ];
     const config = { ...this.settings, ...this.settings.readConfig() };
 
-    keys.forEach((key) => {
+    keys.forEach(key => {
       const value = config[key];
       if (!value) {
         throw sdkError({
@@ -222,12 +222,12 @@ export class OAuthSession extends AuthSession {
     const config = this.readConfig();
     const params: Record<string, string> = {
       client_id: config.client_id,
-      code_challenge: code_challenge,
+      code_challenge,
       code_challenge_method: 'S256',
       redirect_uri: config.redirect_uri,
       response_type: 'code',
-      scope: scope,
-      state: state,
+      scope,
+      state,
     };
     const url = new URL(config.looker_url);
     url.pathname = '/auth';

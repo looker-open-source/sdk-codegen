@@ -110,25 +110,25 @@ describe('path utils', () => {
 
     test.each(methodFilters)(
       'validates %s as a valid method filter',
-      (filter) => {
+      filter => {
         expect(isValidFilter(methodPath, filter)).toBe(true);
       }
     );
 
     test.each(methodFilters)(
       'invalidates %s when containing extra characters',
-      (filter) => {
+      filter => {
         expect(isValidFilter(methodPath, filter + 'x')).toBe(false);
       }
     );
 
-    test.each(typeFilters)('validates %s as a valid type filter', (filter) => {
+    test.each(typeFilters)('validates %s as a valid type filter', filter => {
       expect(isValidFilter(typePath, filter)).toBe(true);
     });
 
     test.each(typeFilters)(
       'invalidates %s when containing extra characters',
-      (filter) => {
+      filter => {
         expect(isValidFilter(typePath, filter + 'x')).toBe(false);
       }
     );
@@ -138,7 +138,7 @@ describe('path utils', () => {
       expect(isValidFilter(typePath, 'INVALID')).toBe(false);
     });
 
-    test.each(typeFilters)('validates %s as a valid type filter', (filter) => {
+    test.each(typeFilters)('validates %s as a valid type filter', filter => {
       expect(isValidFilter(typePath, filter)).toBe(true);
     });
   });

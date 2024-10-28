@@ -37,50 +37,50 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Repo Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - uses: tony84727/changed-file-filter@v0.2.2
+      - uses: tony84727/changed-file-filter@v0.2.3
         id: filter
         with:
           filters: |
             apix:
-              - package.json
-              - packages/code-editor/**/*
-              - packages/run-it/**/*
-              - packages/api-explorer/**/*
-              - packages/extension-api-explorer/**/*
-              - packages/extension-utils/**/*
-              - .github/workflows/apix-ci.yml
+              - 'package.json'
+              - 'packages/code-editor/**/*'
+              - 'packages/run-it/**/*'
+              - 'packages/api-explorer/**/*'
+              - 'packages/extension-api-explorer/**/*'
+              - 'packages/extension-utils/**/*'
+              - '.github/workflows/apix-ci.yml'
             codegen:
-              - package.json
-              - packages/sdk-codegen/**/*
-              - packages/sdk-codegen-utils/**/*
-              - packages/sdk-codegen-scripts/**/*
-              - .github/workflows/codegen-ci.yml
+              - 'package.json'
+              - 'packages/sdk-codegen/**/*'
+              - 'packages/sdk-codegen-utils/**/*'
+              - 'packages/sdk-codegen-scripts/**/*'
+              - '.github/workflows/codegen-ci.yml'
             hackathon:
-              - package.json
-              - packages/wholly-sheet/**/*
-              - packages/hackathon/**/*
-              - .github/workflows/hackathon-ci.yml
+              - 'package.json'
+              - 'packages/wholly-sheet/**/*'
+              - 'packages/hackathon/**/*'
+              - '.github/workflows/hackathon-ci.yml'
             python:
-              - python/**/*
-              - .github/workflows/python-ci.yml
+              - 'python/**/*'
+              - '.github/workflows/python-ci.yml'
             resources:
-              - bin/looker-resources-index/**/*
-              - docs/resources/**/*
-              - .github/workflows/resources-ci.yml
+              - 'bin/looker-resources-index/**/*'
+              - 'docs/resources/**/*'
+              - '.github/workflows/resources-ci.yml'
             tssdk:
-              - package.json
-              - packages/sdk/**/*
-              - packages/sdk-rtl/**/*
-              - packages/sdk-node/**/*
-              - packages/extension-sdk/**/*
-              - packages/extension-sdk-react/**/*
-              - packages/extension-utils/**/*
-              - .github/workflows/tssdk-ci.yml
+              - 'package.json'
+              - 'packages/sdk/**/*'
+              - 'packages/sdk-rtl/**/*'
+              - 'packages/sdk-node/**/*'
+              - 'packages/extension-sdk/**/*'
+              - 'packages/extension-sdk-react/**/*'
+              - 'packages/extension-utils/**/*'
+              - '.github/workflows/tssdk-ci.yml'
             gosdk:
-              - packages/go/**/*
-              - .github/workflows/go-ci.yml
+              - 'packages/go/**/*'
+              - '.github/workflows/go-ci.yml'
 
       - name: Debug info
         run: |

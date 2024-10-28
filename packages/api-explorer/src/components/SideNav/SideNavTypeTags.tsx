@@ -39,7 +39,7 @@ interface TypeTagsProps {
 export const SideNavTypeTags = styled(
   ({ tags, specKey, className, defaultOpen }: TypeTagsProps) => (
     <div className={className}>
-      {Object.keys(tags).map((tag) => (
+      {Object.keys(tags).map(tag => (
         <SideNavTypes
           key={tag}
           defaultOpen={defaultOpen}

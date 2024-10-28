@@ -78,7 +78,7 @@ export const DataGrid = ({ data, raw, pageSize = 15 }: DataGridProps) => {
           <Pagination
             current={page}
             pages={pageCount}
-            onChange={(nextPage) => {
+            onChange={nextPage => {
               setPage(nextPage);
             }}
           />

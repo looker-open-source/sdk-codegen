@@ -25,14 +25,14 @@
  */
 
 /**
- * 464 API methods
+ * 467 API methods
  */
 
 import type {
   DelimArray,
+  IDictionary,
   IAPIMethods,
   IAuthSession,
-  IDictionary,
   ITransportSettings,
   SDKResponse,
 } from '@looker/sdk-rtl';
@@ -65,6 +65,7 @@ import type {
   IContentMeta,
   IContentMetaGroupUser,
   IContentSearch,
+  IContentSummary,
   IContentValidation,
   IContentView,
   ICostEstimate,
@@ -85,8 +86,6 @@ import type {
   ICredentialsSaml,
   ICredentialsTotp,
   ICustomWelcomeEmail,
-  IDBConnection,
-  IDBConnectionTestResult,
   IDashboard,
   IDashboardAggregateTableLookml,
   IDashboardBase,
@@ -99,10 +98,12 @@ import type {
   IDataActionRequest,
   IDataActionResponse,
   IDatagroup,
+  IDBConnection,
+  IDBConnectionTestResult,
   IDependencyGraph,
   IDialectInfo,
-  IDigestEmailSend,
   IDigestEmails,
+  IDigestEmailSend,
   IEgressIpAddresses,
   IEmbedCookielessSessionAcquire,
   IEmbedCookielessSessionAcquireResponse,
@@ -115,6 +116,7 @@ import type {
   IError,
   IExternalOauthApplication,
   IFolder,
+  IFolderBase,
   IGitBranch,
   IGitConnectionTest,
   IGitConnectionTestResult,
@@ -129,16 +131,17 @@ import type {
   IIntegrationTestResult,
   IInternalHelpResources,
   IInternalHelpResourcesContent,
+  IJsonBi,
   ILDAPConfig,
   ILDAPConfigTestResult,
   ILegacyFeature,
   ILocale,
   ILook,
-  ILookWithQuery,
   ILookmlModel,
   ILookmlModelExplore,
   ILookmlTest,
   ILookmlTestResult,
+  ILookWithQuery,
   IManifest,
   IMaterializePDT,
   IMergeQuery,
@@ -147,8 +150,8 @@ import type {
   IModel,
   IModelFieldSuggestions,
   IModelSet,
-  IOIDCConfig,
   IOauthClientApp,
+  IOIDCConfig,
   IPasswordConfig,
   IPermission,
   IPermissionSet,
@@ -158,7 +161,6 @@ import type {
   IProjectValidationCache,
   IProjectWorkspace,
   IQuery,
-  IQueryFormats,
   IQueryTask,
   IRenderTask,
   IRepositoryCredential,
@@ -167,8 +169,8 @@ import type {
   IRequestAllBoardItems,
   IRequestAllBoardSections,
   IRequestAllExternalOauthApplications,
-  IRequestAllGroupUsers,
   IRequestAllGroups,
+  IRequestAllGroupUsers,
   IRequestAllIntegrations,
   IRequestAllLookmlModels,
   IRequestAllRoles,
@@ -181,6 +183,7 @@ import type {
   IRequestConnectionSchemas,
   IRequestConnectionSearchColumns,
   IRequestConnectionTables,
+  IRequestContentSummary,
   IRequestContentThumbnail,
   IRequestCreateDashboardElement,
   IRequestCreateDashboardRenderTask,
@@ -221,6 +224,7 @@ import type {
   IRequestSearchPermissionSets,
   IRequestSearchRoles,
   IRequestSearchRolesWithUserCount,
+  IRequestSearchScheduledPlans,
   IRequestSearchThemes,
   IRequestSearchUserLoginLockouts,
   IRequestSearchUsers,
@@ -280,7 +284,6 @@ import type {
   IWriteContentMeta,
   IWriteCreateDashboardFilter,
   IWriteCredentialsEmail,
-  IWriteDBConnection,
   IWriteDashboard,
   IWriteDashboardElement,
   IWriteDashboardFilter,
@@ -288,6 +291,7 @@ import type {
   IWriteDashboardLayoutComponent,
   IWriteDashboardLookml,
   IWriteDatagroup,
+  IWriteDBConnection,
   IWriteEmbedSecret,
   IWriteExternalOauthApplication,
   IWriteGitBranch,
@@ -298,13 +302,13 @@ import type {
   IWriteInternalHelpResourcesContent,
   IWriteLDAPConfig,
   IWriteLegacyFeature,
-  IWriteLookWithQuery,
   IWriteLookmlModel,
+  IWriteLookWithQuery,
   IWriteMergeQuery,
   IWriteMobileToken,
   IWriteModelSet,
-  IWriteOIDCConfig,
   IWriteOauthClientApp,
+  IWriteOIDCConfig,
   IWritePasswordConfig,
   IWritePermissionSet,
   IWriteProject,
@@ -1113,8 +1117,11 @@ export const delete_embed_secret = async (
  *
  * This function does not strictly require all group_ids, user attribute names, or model names to exist at the moment the
  * embed url is created. Unknown group_id, user attribute names or model names will be passed through to the output URL.
+ * Because of this, **these parameters are not validated** when the API call is made.
  *
- * To diagnose potential problems with an SSO embed URL, you can copy the signed URL into the Embed URI Validator text box in `<your looker instance>/admin/embed`.
+ * The [Get Embed Url](https://cloud.google.com/looker/docs/r/get-signed-url) dialog can be used to determine and validate the correct permissions for signing an embed url.
+ * This dialog also provides the SDK syntax for the API call to make. Alternatively, you can copy the signed URL into the Embed URI Validator text box
+ * in `<your looker instance>/admin/embed` to diagnose potential problems.
  *
  * The `secret_id` parameter is optional. If specified, its value must be the id of an active secret defined in the Looker instance.
  * if not specified, the URL will be signed using the most recent active signing secret. If there is no active secret for signing embed urls,
@@ -3704,8 +3711,11 @@ export const mobile_settings = async (
  *  - allow_user_timezones
  *  - custom_welcome_email
  *  - data_connector_default_enabled
+ *  - dashboard_auto_refresh_restriction
+ *  - dashboard_auto_refresh_minimum_interval
  *  - extension_framework_enabled
  *  - extension_load_url_enabled
+ *  - instance_config
  *  - marketplace_auto_install_enabled
  *  - marketplace_automation
  *  - marketplace_terms_accepted
@@ -3747,8 +3757,11 @@ export const get_setting = async (
  *  - allow_user_timezones
  *  - custom_welcome_email
  *  - data_connector_default_enabled
+ *  - dashboard_auto_refresh_restriction
+ *  - dashboard_auto_refresh_minimum_interval
  *  - extension_framework_enabled
  *  - extension_load_url_enabled
+ *  - instance_config
  *  - marketplace_auto_install_enabled
  *  - marketplace_automation
  *  - marketplace_terms_accepted
@@ -4247,6 +4260,36 @@ export const create_external_oauth_application = async (
 > => {
   return sdk.post<IExternalOauthApplication, IError | IValidationError>(
     '/external_oauth_applications',
+    null,
+    body,
+    options
+  );
+};
+
+/**
+ * ### Update an OAuth Application's client secret.
+ *
+ * This is an OAuth Application which Looker uses to access external systems.
+ *
+ * PATCH /external_oauth_applications/{client_id} -> IExternalOauthApplication
+ *
+ * @param sdk IAPIMethods implementation
+ * @param client_id The client ID of the OAuth App to update
+ * @param body Partial<IWriteExternalOauthApplication>
+ * @param options one-time API call overrides
+ *
+ */
+export const update_external_oauth_application = async (
+  sdk: IAPIMethods,
+  client_id: string,
+  body: Partial<IWriteExternalOauthApplication>,
+  options?: Partial<ITransportSettings>
+): Promise<
+  SDKResponse<IExternalOauthApplication, IError | IValidationError>
+> => {
+  client_id = encodeParam(client_id);
+  return sdk.patch<IExternalOauthApplication, IError | IValidationError>(
+    `/external_oauth_applications/${client_id}`,
     null,
     body,
     options
@@ -4928,6 +4971,40 @@ export const search_content = async (
       offset: request.offset,
       page: request.page,
       per_page: request.per_page,
+    },
+    null,
+    options
+  );
+};
+
+/**
+ * ### Get Content Summary
+ *
+ * Retrieves a collection of content items related to user activity and engagement, such as recently viewed content,
+ * favorites and scheduled items.
+ *
+ * GET /content_summary -> IContentSummary[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestContentSummary" for complex method parameters
+ * @param options one-time API call overrides
+ *
+ */
+export const content_summary = async (
+  sdk: IAPIMethods,
+  request: IRequestContentSummary,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IContentSummary[], IError | IValidationError>> => {
+  return sdk.get<IContentSummary[], IError | IValidationError>(
+    '/content_summary',
+    {
+      fields: request.fields,
+      limit: request.limit,
+      offset: request.offset,
+      target_group_id: request.target_group_id,
+      target_user_id: request.target_user_id,
+      target_content_type: request.target_content_type,
+      sorts: request.sorts,
     },
     null,
     options
@@ -6466,9 +6543,9 @@ export const delete_folder = async (
   sdk: IAPIMethods,
   folder_id: string,
   options?: Partial<ITransportSettings>
-): Promise<SDKResponse<string, IError>> => {
+): Promise<SDKResponse<string, IError | IValidationError>> => {
   folder_id = encodeParam(folder_id);
-  return sdk.delete<string, IError>(
+  return sdk.delete<string, IError | IValidationError>(
     `/folders/${folder_id}`,
     null,
     null,
@@ -6481,7 +6558,7 @@ export const delete_folder = async (
  *
  * All personal folders will be returned.
  *
- * GET /folders -> IFolder[]
+ * GET /folders -> IFolderBase[]
  *
  * @param sdk IAPIMethods implementation
  * @param fields Requested fields.
@@ -6492,8 +6569,8 @@ export const all_folders = async (
   sdk: IAPIMethods,
   fields?: string,
   options?: Partial<ITransportSettings>
-): Promise<SDKResponse<IFolder[], IError>> => {
-  return sdk.get<IFolder[], IError>('/folders', { fields }, null, options);
+): Promise<SDKResponse<IFolderBase[], IError>> => {
+  return sdk.get<IFolderBase[], IError>('/folders', { fields }, null, options);
 };
 
 /**
@@ -9380,7 +9457,7 @@ export const query_task = async (
  * will be in the message of the 400 error response, but not as detailed as expressed in `json_detail.errors`.
  * These data formats can only carry row data, and error info is not row data.
  *
- * GET /query_tasks/{query_task_id}/results -> IQueryTask
+ * GET /query_tasks/{query_task_id}/results -> string
  *
  * @param sdk IAPIMethods implementation
  * @param query_task_id ID of the Query Task
@@ -9391,9 +9468,9 @@ export const query_task_results = async (
   sdk: IAPIMethods,
   query_task_id: string,
   options?: Partial<ITransportSettings>
-): Promise<SDKResponse<IQueryTask, IError>> => {
+): Promise<SDKResponse<string, IError>> => {
   query_task_id = encodeParam(query_task_id);
-  return sdk.get<IQueryTask, IError>(
+  return sdk.get<string, IError>(
     `/query_tasks/${query_task_id}/results`,
     null,
     null,
@@ -10636,6 +10713,7 @@ export const search_roles = async (
       name: request.name,
       built_in: request.built_in,
       filter_or: request.filter_or,
+      is_support_role: request.is_support_role,
     },
     null,
     options
@@ -11201,6 +11279,56 @@ export const scheduled_plan_run_once = async (
 };
 
 /**
+ * ### Search Scheduled Plans
+ *
+ * Returns all scheduled plans which matches the given search criteria.
+ *
+ * If no user_id is provided, this function returns the scheduled plans owned by the caller.
+ *
+ *
+ * To list all schedules for all users, pass `all_users=true`.
+ *
+ *
+ * The caller must have `see_schedules` permission to see other users' scheduled plans.
+ *
+ * GET /scheduled_plans/search -> IScheduledPlan[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestSearchScheduledPlans" for complex method parameters
+ * @param options one-time API call overrides
+ *
+ */
+export const search_scheduled_plans = async (
+  sdk: IAPIMethods,
+  request: IRequestSearchScheduledPlans,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IScheduledPlan[], IError | IValidationError>> => {
+  return sdk.get<IScheduledPlan[], IError | IValidationError>(
+    '/scheduled_plans/search',
+    {
+      user_id: request.user_id,
+      fields: request.fields,
+      all_users: request.all_users,
+      limit: request.limit,
+      offset: request.offset,
+      sorts: request.sorts,
+      name: request.name,
+      user_first_name: request.user_first_name,
+      user_last_name: request.user_last_name,
+      dashboard_id: request.dashboard_id,
+      look_id: request.look_id,
+      lookml_dashboard_id: request.lookml_dashboard_id,
+      recipient: request.recipient,
+      destination_type: request.destination_type,
+      delivery_format: request.delivery_format,
+      filter_or: request.filter_or,
+    },
+    null,
+    options
+  );
+};
+
+/**
  * ### Get Scheduled Plans for a Look
  *
  * Returns all scheduled plans for a look which belong to the caller or given user.
@@ -11488,17 +11616,9 @@ export const sql_interface_metadata = async (
  *
  * | result_format | Description
  * | :-----------: | :--- |
- * | json | Plain json
- * | json_bi | (*RECOMMENDED*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
- * | json_detail | (*LEGACY*) Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
- * | csv | Comma separated values with a header
- * | txt | Tab separated values with a header
- * | html | Simple html
- * | md | Simple markdown
- * | xlsx | MS Excel spreadsheet
- * | sql | Returns the generated SQL rather than running the query
+ * | json_bi | Row data plus metadata describing the fields, pivots, table calcs, and other aspects of the query
  *
- * GET /sql_interface_queries/{query_id}/run/{result_format} -> IQueryFormats
+ * GET /sql_interface_queries/{query_id}/run/{result_format} -> IJsonBi
  *
  * @param sdk IAPIMethods implementation
  * @param query_id Integer id of query
@@ -11511,9 +11631,9 @@ export const run_sql_interface_query = async (
   query_id: number,
   result_format: string,
   options?: Partial<ITransportSettings>
-): Promise<SDKResponse<IQueryFormats, IError | IValidationError>> => {
+): Promise<SDKResponse<IJsonBi, IError | IValidationError>> => {
   result_format = encodeParam(result_format);
-  return sdk.get<IQueryFormats, IError | IValidationError>(
+  return sdk.get<IJsonBi, IError | IValidationError>(
     `/sql_interface_queries/${query_id}/run/${result_format}`,
     null,
     null,
@@ -13294,6 +13414,7 @@ export const send_user_credentials_email_password_reset = async (
  * associated credentials.  Will overwrite all associated email addresses with
  * the value supplied in the 'email' body param.
  * The user's 'is_disabled' status must be true.
+ * If the user has a credential email, they will receive a verification email and the user will be disabled until they verify the email
  *
  * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
  *

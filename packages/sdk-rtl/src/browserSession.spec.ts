@@ -43,10 +43,7 @@ const settings = new MockOauthSettings();
  * Mocking class for BrowserSession getToken() tests
  */
 class BrowserSessionMock extends BrowserSession {
-  constructor(
-    public settings: IApiSettings,
-    transport?: ITransport
-  ) {
+  constructor(public settings: IApiSettings, transport?: ITransport) {
     super(settings, transport);
   }
 

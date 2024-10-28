@@ -24,10 +24,11 @@
 
  */
 
-import { TestConfig } from './testUtils';
+import { TestConfig } from '@looker/sdk-codegen-utils';
 import { PseudoGen } from './pseudo.gen';
+import { specToModel } from './sdkModels';
 
-const config = TestConfig();
+const config = TestConfig(specToModel);
 const apiTestModel = config.apiTestModel;
 
 const gen = new PseudoGen(apiTestModel);
@@ -38,7 +39,7 @@ describe('pseudocode', () => {
       const method = apiTestModel.methods.create_user_credentials_email;
       expect(method).toBeDefined();
       const expected = `create_user_credentials_email(
-  user_id: int64,
+  user_id: string,
   body: CredentialsEmail,
   [fields: string]
 ): CredentialsEmail`;
@@ -50,10 +51,12 @@ describe('pseudocode', () => {
     it('optional body and additional param', () => {
       const method = apiTestModel.methods.create_user_credentials_email;
       expect(method).toBeDefined();
-      const expected = `"### Email/password login information for the specified user."
+      const expected = `"### Email/password login information for the specified user.
+"
+"Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview)."
 create_user_credentials_email(
-  "id of user"
-user_id: int64,
+  "Id of user"
+user_id: string,
   body: CredentialsEmail,
   "Requested fields."
 [fields: string]
@@ -69,11 +72,11 @@ all_datagroups(): Datagroup[]`;
       const actual = gen.methodSignature('', method);
       expect(actual).toEqual(expected);
     });
-    test('import_lookml_dashboard', () => {
+    it('import_lookml_dashboard', () => {
       const method = apiTestModel.methods.import_lookml_dashboard;
       const expected = `"### Import a LookML dashboard to a space as a UDD
 "Creates a UDD (a dashboard which exists in the Looker database rather than as a LookML file) from the LookML dashboard
-"and puts it in the space specified. The created UDD will have a lookml_link_id which links to the original LookML dashboard.
+"and places it in the space specified. The created UDD will have a lookml_link_id which links to the original LookML dashboard.
 "
 "To give the imported dashboard specify a (e.g. title: "my title") in the body of your request, otherwise the imported
 "dashboard will have the same title as the original LookML dashboard.
@@ -106,7 +109,7 @@ space_id: string,
   "UNIX timestamp at which this entry was created."
   [created_at: int64]
   "Unique ID of the datagroup"
-  [id: int64]
+  [id: string]
   "Name of the model containing the datagroup. Unique when combined with name."
   [model_name: string]
   "Name of the datagroup. Unique when combined with model_name."

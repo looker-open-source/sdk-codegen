@@ -91,7 +91,7 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
     return <></>;
   }
   const tag = Object.values(api.spec.tags!).find(
-    (tag) => tag.name === methodTag
+    tag => tag.name === methodTag
   )!;
   const operations = getOperations(methods);
 
@@ -107,7 +107,7 @@ export const MethodTagScene: FC<MethodTagSceneProps> = ({ api }) => {
         <ButtonItem key="ALL" px="large" py="xsmall">
           ALL
         </ButtonItem>
-        {operations.map((op) => (
+        {operations.map(op => (
           <ButtonItem key={op} px="large" py="xsmall">
             {op}
           </ButtonItem>

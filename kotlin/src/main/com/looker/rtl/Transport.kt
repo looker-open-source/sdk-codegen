@@ -211,7 +211,7 @@ fun customInitializer(
     }
 }
 
-class Transport(val options: TransportOptions) {
+open class Transport(val options: TransportOptions) {
 
     private val apiPath = "${options.baseUrl}/api/${options.apiVersion}"
 
@@ -240,7 +240,7 @@ class Transport(val options: TransportOptions) {
         } + addQueryParams(path, queryParams)
     }
 
-    private fun getAllTrustingVerifiers(): Pair<SSLSocketFactory, HostnameVerifier> {
+    open fun getAllTrustingVerifiers(): Pair<SSLSocketFactory, HostnameVerifier> {
         // NOTE! This is completely insecure and should ONLY be used with local server instance
         // testing for development purposes
         val tm: X509TrustManager = object : X509TrustManager {
@@ -276,7 +276,7 @@ class Transport(val options: TransportOptions) {
      *
      * Will disable SSL certificate verification iff [TransportOptions.verifySSL] is false.
      */
-    fun initTransport(options: TransportOptions): HttpTransport {
+    open fun initTransport(options: TransportOptions): HttpTransport {
         return when (HttpTransports.valueOf(options.httpTransport.uppercase())) {
             HttpTransports.APACHE -> {
                 // TODO: fix bug upstream that does not pass client context to requests.

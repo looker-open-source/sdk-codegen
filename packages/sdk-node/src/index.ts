@@ -24,7 +24,6 @@
 
  */
 
-// Version 21.0.4
 export * from './nodeServices';
 export * from './nodeSession';
 export * from './nodeSettings';

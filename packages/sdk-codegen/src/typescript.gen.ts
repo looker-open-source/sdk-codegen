@@ -32,7 +32,13 @@ import type {
   IProperty,
   IType,
 } from './sdkModels';
-import { EnumType, describeParam, isSpecialName, strBody } from './sdkModels';
+import {
+  EnumType,
+  describeParam,
+  isSpecialName,
+  strBody,
+  titleCase,
+} from './sdkModels';
 import type { CodeAssignment, IMappedType } from './codeGen';
 import { CodeGen, commentBlock } from './codeGen';
 
@@ -48,6 +54,7 @@ export class TypescriptGen extends CodeGen {
    * special case for TypeScript output path due to mono repository
    */
   useFunctions = true;
+  useSlices = true;
   useInterfaces = true;
   packagePath = 'sdk/src';
   itself = 'this';
@@ -67,13 +74,25 @@ export class TypescriptGen extends CodeGen {
   useNamedArguments = false;
   /** Track special imports of sdk-rtl */
   rtlNeeds = new Set<string>();
+  hookTypes = new Set<string>();
+  enumTypes = new Set<string>();
 
   reset() {
     this.rtlNeeds = new Set<string>();
+    this.hookTypes = new Set<string>();
+    this.enumTypes = new Set<string>();
   }
 
   sdkFileName(baseFileName: string) {
     return this.fileName(`${this.versions?.spec.key}/${baseFileName}`);
+  }
+
+  /**
+   * hacky conditional for which import to use for undocumented specifications
+   */
+  sdkImport(source = 'funcs') {
+    if (this.versions?.spec.status !== 'undocumented') return '@looker/sdk';
+    return `@looker/sdk/src/${this.versions?.spec.key}/${source}`;
   }
 
   /** lists all special sdk-rtl import types encountered */
@@ -88,20 +107,20 @@ export class TypescriptGen extends CodeGen {
   /** creates a full @looker/sdk-rtl import statement if one is required */
   rtlImportStatement() {
     const rtl = this.rtlImports();
-    return rtl ? `\nimport type { ${rtl} } from '@looker/sdk-rtl'\n` : '';
+    return rtl ? `\nimport type { ${rtl} } from '@looker/sdk-rtl';\n` : '';
   }
 
   methodsPrologue(_indent: string) {
     return `
-import type { ${this.rtlImports()}IAuthSession, ITransportSettings, SDKResponse } from '@looker/sdk-rtl'
-import { APIMethods, encodeParam } from '@looker/sdk-rtl'
+import type { ${this.rtlImports()}IAuthSession, ITransportSettings, SDKResponse } from '@looker/sdk-rtl';
+import { APIMethods, encodeParam } from '@looker/sdk-rtl';
 /**
  * ${this.warnEditing()}
  *
  */
-import { sdkVersion } from '../constants'
-import type { I${this.packageName} } from './methodsInterface'
-import type { ${this.typeNames().join(', ')} } from './models'
+import { sdkVersion } from '../constants';
+import type { I${this.packageName} } from './methodsInterface';
+import type { ${this.typeNames().join(', ')} } from './models';
 
 export class ${this.packageName} extends APIMethods implements I${
       this.packageName
@@ -119,18 +138,66 @@ export class ${this.packageName} extends APIMethods implements I${
 `;
   }
 
-  functionsPrologue(_indent: string) {
+  mocksPrologue(_indent: string): string {
     return `
-import type { ${this.rtlImports()}IAPIMethods, IAuthSession, ITransportSettings, SDKResponse } from '@looker/sdk-rtl'
-import { encodeParam, functionalSdk } from '@looker/sdk-rtl'
+import { mockApiSpec } from '@looker/sdk-codegen-utils';
+import { MockMethod } from '../mockMethod';
+/**
+ * ${this.warnEditing()}
+ *
+ */
+
+const apiSpec = mockApiSpec();
+
+`;
+  }
+
+  mocksEpilogue(_indent: string): string {
+    return '';
+  }
+
+  hooksPrologue(_indent: string) {
+    // TODO *** the various import permutations
+    const imp = this.sdkImport();
+    const valImp =
+      imp === '@looker/sdk'
+        ? `import { ${Array.from(this.enumTypes).join()}, ${Object.keys(
+            this.api.methods
+          ).join()} } from '${imp}';
+`
+        : `import { ${Object.keys(this.api.methods).join()} } from '${imp}';
+import { ${Array.from(this.enumTypes).join()} } from '${this.sdkImport(
+            'models'
+          )}';
+`;
+    return `
+import { createSdkHook } from '../createSdkHook';
 
 /**
  * ${this.warnEditing()}
  *
  */
 
-import { sdkVersion } from '../constants'
-import type { ${this.typeNames().join(', ')} } from './models'
+${valImp}
+`;
+  }
+
+  hooksEpilogue(_indent: string) {
+    return '';
+  }
+
+  functionsPrologue(_indent: string) {
+    return `
+import type { ${this.rtlImports()}IAPIMethods, IAuthSession, ITransportSettings, SDKResponse } from '@looker/sdk-rtl';
+import { encodeParam, functionalSdk } from '@looker/sdk-rtl';
+
+/**
+ * ${this.warnEditing()}
+ *
+ */
+
+import { sdkVersion } from '../constants';
+import type { ${this.typeNames().join(', ')} } from './models';
 
 /**
  * Creates a "functional sdk" that knows the API and Looker release version
@@ -140,19 +207,19 @@ export const functionalSdk${this.apiRef} = (
   authSession: IAuthSession,
 ) => {
   return functionalSdk(authSession, '${this.apiVersion}', sdkVersion)
-}
+};
 
 `;
   }
 
   interfacesPrologue(_indent: string) {
     return `
-import type { ${this.rtlImports()} IAPIMethods, ITransportSettings, SDKResponse } from '@looker/sdk-rtl'
+import type { ${this.rtlImports()} IAPIMethods, ITransportSettings, SDKResponse } from '@looker/sdk-rtl';
 /**
  * ${this.warnEditing()}
  *
  */
-import type { ${this.typeNames().join(', ')} } from './models'
+import type { ${this.typeNames().join(', ')} } from './models';
 
 export interface I${this.packageName} extends IAPIMethods {
 
@@ -161,26 +228,26 @@ export interface I${this.packageName} extends IAPIMethods {
 
   streamsPrologue(_indent: string): string {
     return `
-import type { Readable } from 'readable-stream'
-import type { ${this.rtlImports()}IAuthSession, ITransportSettings } from '@looker/sdk-rtl'
-import { APIMethods, encodeParam } from '@looker/sdk-rtl'
+import type { ${this.rtlImports()}IAuthSession, ITransportSettings } from '@looker/sdk-rtl';
+import { APIMethods, agentPrefix, encodeParam } from '@looker/sdk-rtl';
 
 /**
  * ${this.warnEditing()}
  *
  */
-import { sdkVersion } from '../constants'
-import type { ${this.typeNames().join(', ')} } from './models'
+import { sdkVersion } from '../constants';
+import type { ${this.typeNames().join(', ')} } from './models';
 
 export class ${this.packageName}Stream extends APIMethods {
-  static readonly ApiVersion = '${this.apiVersion}'
+  static readonly ApiVersion = '${this.apiVersion}';
   constructor(authSession: IAuthSession) {
-    super(authSession, sdkVersion)
-    this.apiVersion = ${this.packageName}Stream.ApiVersion
+    super(authSession, sdkVersion);
+    this.apiVersion = ${this.packageName}Stream.ApiVersion;
     this.apiPath =
       authSession.settings.base_url === ''
         ? ''
-        : authSession.settings.base_url + '/api/' + this.apiVersion
+        : authSession.settings.base_url + '/api/' + this.apiVersion;
+    authSession.settings.agentTag = agentPrefix + ' Streaming ' + sdkVersion;
   }
 `;
   }
@@ -275,7 +342,7 @@ export class ${this.packageName}Stream extends APIMethods {
 
     return `@param ${param.name} ${describeParam({
       ...param,
-      ...{ description: desc },
+      description: desc,
     })}`;
   }
 
@@ -334,7 +401,7 @@ let response = await sdk.ok(sdk.${method.name}(`;
       lines.push('');
     }
 
-    params.forEach((p) => lines.push(`@param ${p}`));
+    params.forEach(p => lines.push(`@param ${p}`));
 
     const args = method.allParams;
     if (args.length) {
@@ -349,7 +416,7 @@ let response = await sdk.ok(sdk.${method.name}(`;
           `@param request composed interface "${requestType}" for complex method parameters`
         );
       } else {
-        args.forEach((p) =>
+        args.forEach(p =>
           lines.push(this.paramComment(p, this.paramMappedType(p, method)))
         );
       }
@@ -386,13 +453,11 @@ let response = await sdk.ok(sdk.${method.name}(`;
     } else {
       const args = method.allParams; // get the params in signature order
       if (args && args.length > 0)
-        args.forEach((p) =>
-          params.push(this.declareParameter(bump, method, p))
-        );
+        args.forEach(p => params.push(this.declareParameter(bump, method, p)));
       fragment =
         params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : '';
     }
-    const callback = `callback: (readable: Readable) => Promise<${mapped.name}>,`;
+    const callback = `callback: (response: Response) => Promise<${mapped.name}>,`;
     const header =
       this.commentHeader(indent, headComment) +
       `${indent}async ${method.name}(` +
@@ -447,6 +512,125 @@ let response = await sdk.ok(sdk.${method.name}(`;
     return `Promise<SDKResponse<${mapped.name}, ${errors}>>`;
   }
 
+  customHeaderComment(term: string, method: IMethod, params: string[] = []) {
+    if (this.noComment) return '';
+    const lines: string[] = [];
+
+    lines.push(`${method.description?.trim() || method.name} ${term}`);
+    lines.push('');
+
+    const resultType = this.typeMap(method.type).name;
+    lines.push(`${method.httpMethod} ${method.endpoint} -> ${resultType}`);
+    lines.push('');
+
+    if (method.deprecated) {
+      lines.push('@deprecated');
+      lines.push('');
+    }
+
+    params.forEach(p => lines.push(`@param ${p}`));
+
+    const args = method.allParams;
+    if (args.length) {
+      let requestType = this.requestTypeName(method);
+
+      if (requestType) {
+        requestType =
+          method.httpMethod === 'PATCH'
+            ? `Partial<I${requestType}>`
+            : `I${requestType}`;
+        lines.push(
+          `@param request composed interface "${requestType}" for complex method parameters`
+        );
+      } else {
+        args.forEach(p =>
+          lines.push(this.paramComment(p, this.paramMappedType(p, method)))
+        );
+      }
+    }
+    lines.push('@param options one-time API call overrides');
+    lines.push('');
+
+    return lines.join('\n');
+  }
+
+  defaultHookValue(type: IType): string {
+    const stringer = (val: any, ptype: IType) => {
+      if (ptype instanceof EnumType) {
+        this.enumTypes.add(ptype.name);
+        return `${ptype.name}.${val}`;
+      }
+      if (typeof val === 'string') {
+        return `'${val}'`;
+      }
+      if (Array.isArray(val) || typeof val === 'object') {
+        return JSON.stringify(val);
+      }
+      return String(val);
+    };
+    const mapped = this.typeMap(type);
+    if (mapped.default) return mapped.default;
+    if (mapped.name === 'string') return `''`;
+    if (mapped.name === 'void') return 'undefined';
+    // if (
+    //   type.name !== 'any' &&
+    //   type.name.indexOf('<any>') < 0 &&
+    //   !type.name.startsWith('IDelimArray')
+    // ) {
+    if (Object.keys(type.requiredProperties).length > 0) {
+      this.hookTypes.add(mapped.name);
+      const props: string[] = [];
+      const inputs: ArgValues = type.mock({ empty: true });
+      Object.keys(inputs).forEach(k => {
+        const val = stringer(inputs[k], type.requiredProperties[k].type);
+        props.push(`${k}: ${val}`);
+      });
+      return `{ ${props.join(', ')} }`;
+    }
+    return `{}`;
+  }
+
+  declareHook(indent: string, method: IMethod): string {
+    const bump = this.bumper(indent);
+    const headComment = this.customHeaderComment('custom slice', method);
+    const defaultValue = this.defaultHookValue(method.type);
+    // const mapped = this.typeMap(method.type);
+    // const frag =
+    //   Object.keys(method.type.requiredProperties).length > 0
+    //     ? `, ${mapped.name}`
+    //     : '';
+    return `
+${this.commentHeader(indent, headComment)}${indent}export const use${titleCase(
+      method.name
+    )} = createSdkHook({
+${bump}fetch: ${method.name},
+${bump}initialState: ${defaultValue},
+${indent}})`;
+  }
+
+  mockPathArgs(method: IMethod) {
+    const args: string[] = [];
+    method.pathParams.forEach(p => {
+      const v = p.type.mock({ fields: p.name });
+      const val = this.argValue('', p, { [p.name]: v });
+      args.push(`${p.name}: ${val}`);
+    });
+    if (args.length > 0) {
+      return `\n## Requires:\n\`\`\`ts\n{ pathArgs: { ${args.join(
+        ', '
+      )} } }\n\`\`\``;
+    }
+    return '';
+  }
+
+  declareMock(indent: string, method: IMethod): string {
+    const pathArgs = this.mockPathArgs(method);
+    const comment = this.methodHeaderComment(method) + pathArgs;
+    return `${this.commentHeader(indent, comment)}${indent}export const ${
+      method.name
+    } = new MockMethod(apiSpec.methods.${method.name});`;
+  }
+
   functionSignature(indent: string, method: IMethod): string {
     let fragment: string;
     const requestType = this.requestTypeName(method);
@@ -469,9 +653,7 @@ let response = await sdk.ok(sdk.${method.name}(`;
     } else {
       const args = method.allParams; // get the params in signature order
       if (args && args.length > 0)
-        args.forEach((p) =>
-          params.push(this.declareParameter(bump, method, p))
-        );
+        args.forEach(p => params.push(this.declareParameter(bump, method, p)));
       fragment =
         params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : '';
     }
@@ -504,7 +686,7 @@ let response = await sdk.ok(sdk.${method.name}(`;
   declareInterface(indent: string, method: IMethod): string {
     let sig = this.methodSignature(indent, method).trimRight();
     sig = sig.replace(/^\s*async /gm, '');
-    sig = sig.substr(0, sig.length - 2);
+    sig = sig.substring(0, sig.length - 2);
     return `${sig}\n`;
   }
 
@@ -553,7 +735,7 @@ let response = await sdk.ok(sdk.${method.name}(`;
 
   errorResponses(_indent: string, method: IMethod) {
     const results: string[] = method.errorResponses.map(
-      (r) => `${this.typeName(r.type)}`
+      r => `${this.typeName(r.type)}`
     );
     return results.join(' | ');
   }
@@ -601,7 +783,7 @@ let response = await sdk.ok(sdk.${method.name}(`;
 
   argList(indent: string, args: Arg[], prefix?: string) {
     prefix = prefix || '';
-    const bits = args.map((a) => this.accessor(a, prefix));
+    const bits = args.map(a => this.accessor(a, prefix));
 
     return args && args.length !== 0
       ? `\n${indent}${bits.join(this.argDelimiter)}`
@@ -682,8 +864,8 @@ let response = await sdk.ok(sdk.${method.name}(`;
     if (!this.api) return names;
     const types = this.api.types;
     Object.values(types)
-      .filter((type) => type.refCount > 0 && !type.intrinsic)
-      .forEach((type) => names.push(this.typeName(type)));
+      .filter(type => type.refCount > 0 && !type.intrinsic)
+      .forEach(type => names.push(this.typeName(type)));
     return names;
   }
 
@@ -696,7 +878,8 @@ let response = await sdk.ok(sdk.${method.name}(`;
       any: { default: mt, name: 'any' },
       boolean: { default: mt, name: 'boolean' },
       // TODO can we use blob for binary somehow? https://developer.mozilla.org/en-US/docs/Web/API/Blob
-      byte: { default: mt, name: 'binary' },
+      byte: { default: mt, name: 'string' /* 'binary' */, asVal: asString },
+      binary: { default: mt, name: 'string', asVal: asString },
       date: { default: mt, name: 'Date' },
       datetime: { default: mt, name: 'Date' },
       double: { default: mt, name: 'number' },
@@ -707,6 +890,11 @@ let response = await sdk.ok(sdk.${method.name}(`;
       number: { default: mt, name: 'number' },
       object: { default: mt, name: 'any' },
       password: { default: mt, name: 'Password', asVal: asString },
+      email: { default: mt, name: 'string', asVal: asString },
+      uuid: { default: mt, name: 'string', asVal: asString },
+      hostname: { default: mt, name: 'string', asVal: asString },
+      ipv4: { default: mt, name: 'string', asVal: asString },
+      ipv6: { default: mt, name: 'string', asVal: asString },
       string: { default: mt, name: 'string', asVal: asString },
       uri: { default: mt, name: 'Url', asVal: asString },
       url: { default: mt, name: 'Url', asVal: asString },

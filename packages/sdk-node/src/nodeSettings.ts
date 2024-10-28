@@ -99,7 +99,7 @@ export const ApiConfigSection = (
 export const readEnvConfig = (envPrefix: string) => {
   const values: IApiSection = {};
   const configMap = ApiConfigMap(envPrefix);
-  Object.keys(configMap).forEach((key) => {
+  Object.keys(configMap).forEach(key => {
     const envKey = configMap[key];
     if (process.env[envKey] !== undefined) {
       // Value exists. Map environment variable keys to config variable keys
@@ -134,7 +134,7 @@ export const readIniConfig = (
     };
   }
   // Unquote any quoted configuration values
-  Object.keys(config).forEach((key) => {
+  Object.keys(config).forEach(key => {
     const val = config[key];
     if (typeof val === 'string') {
       config[key] = unquote(val);

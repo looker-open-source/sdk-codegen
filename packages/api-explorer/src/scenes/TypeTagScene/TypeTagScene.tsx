@@ -86,9 +86,7 @@ export const TypeTagScene: FC<TypeTagSceneProps> = ({ api }) => {
     return <></>;
   }
 
-  const tag = Object.values(api.spec.tags!).find(
-    (tag) => tag.name === typeTag
-  )!;
+  const tag = Object.values(api.spec.tags!).find(tag => tag.name === typeTag)!;
   const metaTypes = getMetaTypes(types);
   return (
     <ApixSection>
@@ -102,7 +100,7 @@ export const TypeTagScene: FC<TypeTagSceneProps> = ({ api }) => {
         <ButtonItem key="ALL" px="large" py="xsmall">
           ALL
         </ButtonItem>
-        {metaTypes.map((op) => (
+        {metaTypes.map(op => (
           <ButtonItem key={op} px="large" py="xsmall">
             {op}
           </ButtonItem>

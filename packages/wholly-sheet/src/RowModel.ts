@@ -195,11 +195,11 @@ export class RowModel<T extends IRowModel> implements IRowModel {
     // remove `row`
     return this.keys()
       .slice(1)
-      .filter((v) => !v.startsWith('$'));
+      .filter(v => !v.startsWith('$'));
   }
 
   displayHeader(): ColumnHeaders {
-    return this.header().filter((v) => !v.startsWith('_'));
+    return this.header().filter(v => !v.startsWith('_'));
   }
 
   prepare(): T {
@@ -215,7 +215,7 @@ export class RowModel<T extends IRowModel> implements IRowModel {
   values() {
     const result: SheetValues = [];
     const keys = this.header();
-    keys.forEach((key) => {
+    keys.forEach(key => {
       result.push(stringer(this[key as keyof RowModel<any>]));
     });
     return result;
