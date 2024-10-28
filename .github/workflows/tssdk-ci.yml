@@ -10,6 +10,7 @@ on:
       - packages/extension-sdk-react/**
       - packages/extension-utils/**
       - .github/workflows/tssdk-ci.yml
+      - yarn.lock
 
   push:
     branches:
@@ -23,6 +24,7 @@ on:
       - packages/extension-sdk-react/**
       - packages/extension-utils/**
       - .github/workflows/tssdk-ci.yml
+      - yarn.lock
 
   workflow_dispatch:
 

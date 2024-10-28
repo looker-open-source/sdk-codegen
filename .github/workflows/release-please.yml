@@ -8,8 +8,6 @@ jobs:
   release-please:
     runs-on: ubuntu-latest
     steps:
-      - uses: google-github-actions/release-please-action@v3.7.8
+      - uses: googleapis/release-please-action@v4.1.2
         with:
-          command: manifest
-          monorepo-tags: true
           token: ${{ secrets.LOS_AUTO_BOT_RP_TOKEN }}

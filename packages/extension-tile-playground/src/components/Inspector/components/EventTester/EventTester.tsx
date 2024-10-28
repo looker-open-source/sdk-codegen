@@ -24,7 +24,6 @@
 
  */
 import React, { useCallback, useContext, useState } from 'react';
-import type { MouseEvent } from 'react';
 import {
   Accordion2,
   ButtonOutline,
@@ -58,17 +57,20 @@ export const EventTester: React.FC = () => {
   }, [tileSDK]);
 
   const toggleCrossFilterClick = useCallback(
-    (event: MouseEvent) => {
+    (event: React.MouseEvent<HTMLButtonElement>) => {
       // TODO pivot and row data needs to be populated
-      tileSDK.toggleCrossFilter({ pivot: {} as any, row: {} as any }, event);
+      tileSDK.toggleCrossFilter(
+        { pivot: {} as any, row: {} as any },
+        event as unknown as MouseEvent
+      );
     },
     [tileSDK]
   );
 
   const openDrillMenuClick = useCallback(
-    (event: MouseEvent) => {
+    (event: React.MouseEvent<HTMLButtonElement>) => {
       // TODO links data needs to be populated
-      tileSDK.openDrillMenu({ links: [] }, event);
+      tileSDK.openDrillMenu({ links: [] }, event as unknown as MouseEvent);
     },
     [tileSDK]
   );
