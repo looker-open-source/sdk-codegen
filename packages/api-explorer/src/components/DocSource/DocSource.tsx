@@ -23,32 +23,32 @@
  SOFTWARE.
 
  */
-import type { FC } from 'react'
-import React from 'react'
-import type { IMethod, IType } from '@looker/sdk-codegen'
-import { codeSearchLink, findDeclaration } from '@looker/sdk-codegen'
-import { Icon, Link, Tooltip } from '@looker/components'
-import { IdeFileDocument } from '@looker/icons'
-import { useSelector } from 'react-redux'
+import type { FC } from 'react';
+import React from 'react';
+import type { IMethod, IType } from '@looker/sdk-codegen';
+import { codeSearchLink, findDeclaration } from '@looker/sdk-codegen';
+import { Icon, Link, Tooltip } from '@looker/components';
+import { IdeFileDocument } from '@looker/icons';
+import { useSelector } from 'react-redux';
 
-import { selectDeclarationsLode } from '../../state'
+import { selectDeclarationsLode } from '../../state';
 
 interface DocSourceProps {
-  method?: IMethod
-  type?: IType
+  method?: IMethod;
+  type?: IType;
 }
 
 export const DocSource: FC<DocSourceProps> = ({ method, type }) => {
-  const declarations = useSelector(selectDeclarationsLode)
-  let sourceLink
-  let declaration
+  const declarations = useSelector(selectDeclarationsLode);
+  let sourceLink;
+  let declaration;
   if (declarations) {
-    ;({ declaration, link: sourceLink } = findDeclaration(
+    ({ declaration, link: sourceLink } = findDeclaration(
       declarations,
       method?.id,
       type?.name,
       codeSearchLink
-    ))
+    ));
   }
 
   return (
@@ -64,5 +64,5 @@ export const DocSource: FC<DocSourceProps> = ({ method, type }) => {
         </Tooltip>
       )}
     </>
-  )
-}
+  );
+};

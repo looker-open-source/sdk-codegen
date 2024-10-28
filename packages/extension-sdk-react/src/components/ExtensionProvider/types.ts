@@ -24,24 +24,15 @@
 
  */
 
-import type { Looker31SDK, Looker40SDK } from '@looker/sdk'
-import type { BaseExtensionContextData } from '../ExtensionConnector'
+import type { Looker40SDK } from '@looker/sdk';
+import type { BaseExtensionContextData } from '../ExtensionConnector';
 
 /**
  * Extension context
  */
 export interface ExtensionContextData extends BaseExtensionContextData {
   /**
-   * Looker 3.1 SDK. Note that SDK calls are made by the extension host.
-   * @deprecated use core31SDK - coreSDK === core31SDK
-   */
-  coreSDK: Looker31SDK
-  /**
-   * Looker 31. SDK. Note that SDK calls are made by the extension host.
-   */
-  core31SDK: Looker31SDK
-  /**
    * Looker 4.0 SDK. Note that SDK calls are made by the extension host.
    */
-  core40SDK: Looker40SDK
+  core40SDK: Looker40SDK;
 }

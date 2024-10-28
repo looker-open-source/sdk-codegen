@@ -24,71 +24,71 @@
 
  */
 
-import { AuthToken } from './authToken'
-import type { IApiSettings } from './apiSettings'
-import type { ITransport, IRequestProps } from './transport'
-import type { IAccessToken } from './authSession'
-import { MockOauthSettings } from './oauthSession.spec'
-import { BrowserSession } from './browserSession'
+import { AuthToken } from './authToken';
+import type { IApiSettings } from './apiSettings';
+import type { IRequestProps, ITransport } from './transport';
+import type { IAccessToken } from './authSession';
+import { MockOauthSettings } from './oauthSession.spec';
+import { BrowserSession } from './browserSession';
 
 const mockToken: IAccessToken = {
   access_token: 'mocked',
   expires_in: 3600,
   token_type: 'Bearer',
-}
+};
 
-const settings = new MockOauthSettings()
+const settings = new MockOauthSettings();
 
 /**
  * Mocking class for BrowserSession getToken() tests
  */
 class BrowserSessionMock extends BrowserSession {
   constructor(public settings: IApiSettings, transport?: ITransport) {
-    super(settings, transport)
+    super(settings, transport);
   }
 
   async login() {
-    return await this.getToken()
+    return await this.getToken();
   }
 
   async logout() {
-    this.activeToken = new AuthToken()
-    return true
+    this.activeToken = new AuthToken();
+    return true;
   }
 
   async getToken() {
-    this.activeToken = new AuthToken(mockToken)
-    return Promise.resolve(this.activeToken)
+    this.activeToken = new AuthToken(mockToken);
+    return Promise.resolve(this.activeToken);
   }
 }
 
 describe('Browser session', () => {
   it('initialization', async () => {
-    const mock = new BrowserSessionMock(settings)
-    const token = await mock.login()
-    expect(token.access_token).toEqual(mockToken.access_token)
-    expect(token.expires_in).toEqual(mockToken.expires_in)
-    expect(token.token_type).toEqual(mockToken.token_type)
-    expect(mock.isAuthenticated()).toEqual(true)
-    expect(mock.isSudo()).toEqual(false)
-    const logout = await mock.logout()
-    expect(logout).toEqual(true)
-  })
+    const mock = new BrowserSessionMock(settings);
+    const token = await mock.login();
+    expect(token.access_token).toEqual(mockToken.access_token);
+    expect(token.expires_in).toEqual(mockToken.expires_in);
+    expect(token.token_type).toEqual(mockToken.token_type);
+    expect(mock.isAuthenticated()).toEqual(true);
+    expect(mock.isSudo()).toEqual(false);
+    const logout = await mock.logout();
+    expect(logout).toEqual(true);
+  });
 
   it('getToken is mocked', async () => {
-    const mock = new BrowserSessionMock(settings)
-    const token = await mock.getToken()
-    expect(token.access_token).toEqual(mockToken.access_token)
-    expect(token.expires_in).toEqual(mockToken.expires_in)
-    expect(token.token_type).toEqual(mockToken.token_type)
-  })
+    const mock = new BrowserSessionMock(settings);
+    const token = await mock.getToken();
+    expect(token.access_token).toEqual(mockToken.access_token);
+    expect(token.expires_in).toEqual(mockToken.expires_in);
+    expect(token.token_type).toEqual(mockToken.token_type);
+  });
 
   it('authenticate causes authentication', async () => {
-    const mock = new BrowserSessionMock(settings)
-    expect(mock.isAuthenticated()).toEqual(false)
-    const props = await mock.authenticate({ headers: {} } as IRequestProps)
-    expect(mock.isAuthenticated()).toEqual(true)
-    expect(props.mode).toEqual('cors')
-    expect(props.headers.Authorization).toEqual('Bearer mocked')
-  })
-})
+    const mock = new BrowserSessionMock(settings);
+    expect(mock.isAuthenticated()).toEqual(false);
+    const props = await mock.authenticate({ headers: {} } as IRequestProps);
+    expect(mock.isAuthenticated()).toEqual(true);
+    expect(props.mode).toEqual('cors');
+    expect(props.headers.Authorization).toEqual('Bearer mocked');
+  });
+});

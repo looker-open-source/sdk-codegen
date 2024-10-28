@@ -24,36 +24,37 @@
 
  */
 
-import { TestConfig } from './testUtils'
-import type { IEnumType } from './sdkModels'
-import { SwiftGen } from './swift.gen'
+import { TestConfig } from '@looker/sdk-codegen-utils';
+import type { IEnumType } from './sdkModels';
+import { SwiftGen } from './swift.gen';
+import { specToModel } from './sdkModels';
 
-const config = TestConfig()
-const apiTestModel = config.apiTestModel
-const gen = new SwiftGen(apiTestModel)
-const indent = ''
+const config = TestConfig(specToModel);
+const apiTestModel = config.apiTestModel;
+const gen = new SwiftGen(apiTestModel);
+const indent = '';
 
 describe('swift generator', () => {
   describe('comment header', () => {
     it('is empty with no comment', () => {
-      expect(gen.commentHeader(indent, '')).toEqual('')
-    })
+      expect(gen.commentHeader(indent, '')).toEqual('');
+    });
 
     it('is four lines with a two line comment', () => {
       const expected = `/**
  * foo
  * bar
  */
-`
-      expect(gen.commentHeader(indent, 'foo\nbar')).toEqual(expected)
-    })
-  })
+`;
+      expect(gen.commentHeader(indent, 'foo\nbar')).toEqual(expected);
+    });
+  });
 
   it('deprecated method with deprecated params', () => {
-    const method = apiTestModel.methods.old_login
-    const arg = method.params[0]
-    expect(arg.deprecated).toEqual(true)
-    const space = ' ' // Needed because editors trim trailing spaces!
+    const method = apiTestModel.methods.old_login;
+    const arg = method.params[0];
+    expect(arg.deprecated).toEqual(true);
+    const space = ' '; // Needed because editors trim trailing spaces!
     const expected = `/**
  * Endpoint to test deprecation flags
  *
@@ -70,45 +71,45 @@ public func old_login(
     let result: SDKResponse<AccessToken, SDKError> = self.get("/old_login",${space}
         ["old_cred": old_cred], nil, options)
     return result
-}`
-    const actual = gen.declareMethod(indent, method)
-    expect(actual).toEqual(expected)
-  })
+}`;
+    const actual = gen.declareMethod(indent, method);
+    expect(actual).toEqual(expected);
+  });
 
   describe('types', () => {
     it('enum type', () => {
-      const type = apiTestModel.types.PermissionType as IEnumType
-      expect(type).toBeDefined()
-      expect(type.values).toEqual(['view', 'edit'])
+      const type = apiTestModel.types.PermissionType as IEnumType;
+      expect(type).toBeDefined();
+      expect(type.values).toEqual(['view', 'edit']);
       const expected = `/**
  * Type of permission: "view" or "edit" Valid values are: "view", "edit". (Enum defined in ContentMetaGroupUser)
  */
 public enum PermissionType: String, Codable {
     case view = "view"
     case edit = "edit"
-}`
-      const actual = gen.declareType('', type)
-      expect(actual).toEqual(expected)
-    })
+}`;
+      const actual = gen.declareType('', type);
+      expect(actual).toEqual(expected);
+    });
     it('noComment enum type', () => {
-      const type = apiTestModel.types.PermissionType as IEnumType
-      expect(type).toBeDefined()
-      expect(type.values).toEqual(['view', 'edit'])
+      const type = apiTestModel.types.PermissionType as IEnumType;
+      expect(type).toBeDefined();
+      expect(type.values).toEqual(['view', 'edit']);
       const expected = `public enum PermissionType: String, Codable {
     case view = "view"
     case edit = "edit"
-}`
-      gen.noComment = true
-      const actual = gen.declareType('', type)
-      gen.noComment = false
-      expect(actual).toEqual(expected)
-    })
-  })
+}`;
+      gen.noComment = true;
+      const actual = gen.declareType('', type);
+      gen.noComment = false;
+      expect(actual).toEqual(expected);
+    });
+  });
 
   describe('special handling', () => {
     it('generates coding keys for special property names', () => {
-      const type = apiTestModel.types.HyphenType
-      const actual = gen.declareType(indent, type)
+      const type = apiTestModel.types.HyphenType;
+      const actual = gen.declareType(indent, type);
       const expected = `public struct HyphenType: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -145,13 +146,13 @@ public enum PermissionType: String, Codable {
         self.computation_time = computation_time
     }
 
-}`
-      expect(actual).toEqual(expected)
-    })
+}`;
+      expect(actual).toEqual(expected);
+    });
 
     it('optional string properties use map to AnyString', () => {
-      const type = apiTestModel.types.GitConnectionTestResult
-      const actual = gen.declareType(indent, type)
+      const type = apiTestModel.types.GitConnectionTestResult;
+      const actual = gen.declareType(indent, type);
       const expected = `public struct GitConnectionTestResult: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -199,13 +200,13 @@ public enum PermissionType: String, Codable {
         self._status = status.map(AnyString.init)
     }
 
-}`
-      expect(actual).toEqual(expected)
-    })
+}`;
+      expect(actual).toEqual(expected);
+    });
 
     it('reserved word string properties use map to AnyString', () => {
-      const type = apiTestModel.types.ProjectFile
-      const actual = gen.declareType(indent, type)
+      const type = apiTestModel.types.ProjectFile;
+      const actual = gen.declareType(indent, type);
       const expected = `public struct ProjectFile: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -297,13 +298,13 @@ public enum PermissionType: String, Codable {
         self.git_status = git_status
     }
 
-}`
-      expect(actual).toEqual(expected)
-    })
+}`;
+      expect(actual).toEqual(expected);
+    });
 
     it('required string properties use map to AnyString', () => {
-      const type = apiTestModel.types.CreateFolder
-      const actual = gen.declareType(indent, type)
+      const type = apiTestModel.types.CreateFolder;
+      const actual = gen.declareType(indent, type);
       const expected = `public struct CreateFolder: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -337,13 +338,13 @@ public enum PermissionType: String, Codable {
         self.init(name: name, parent_id: parent_id)
     }
 
-}`
-      expect(actual).toEqual(expected)
-    })
+}`;
+      expect(actual).toEqual(expected);
+    });
 
     it('numeric and array properties are marshalled with AnyInt and AnyString', () => {
-      const type = apiTestModel.types.AnyIds
-      const actual = gen.declareType(indent, type)
+      const type = apiTestModel.types.AnyIds;
+      const actual = gen.declareType(indent, type);
       const expected = `public struct AnyIds: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -399,26 +400,30 @@ public enum PermissionType: String, Codable {
         self.init(id: id, user_id: user_id, role_ids: role_ids, req_ids: req_ids)
     }
 
-}`
-      expect(actual).toEqual(expected)
-    })
-  })
+}`;
+      expect(actual).toEqual(expected);
+    });
+  });
 
   describe('constructor', () => {
     it('generates public inits with required/positional and optional args', () => {
-      const type = apiTestModel.types.EmbedParams
-      const actual = gen.declareType(indent, type)
+      const type = apiTestModel.types.EmbedParams;
+      const actual = gen.declareType(indent, type);
       const expected = `public struct EmbedParams: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
-        case target_url
+        case _target_url = "target_url"
         case _session_length = "session_length"
         case force_logout_login
     }
+    private var _target_url: AnyString
     /**
      * The complete URL of the Looker UI page to display in the embed context. For example, to display the dashboard with id 34, \`target_url\` would look like: \`https://mycompany.looker.com:9999/dashboards/34\`. \`target_uri\` MUST contain a scheme (HTTPS), domain name, and URL path. Port must be included if it is required to reach the Looker server from browser clients. If the Looker instance is behind a load balancer or other proxy, \`target_uri\` must be the public-facing domain name and port required to reach the Looker instance, not the actual internal network machine name of the Looker instance.
      */
-    public var target_url: URI
+    public var target_url: String {
+        get { _target_url.value }
+        set { _target_url = AnyString.init(newValue) }
+    }
 
     private var _session_length: AnyInt?
     /**
@@ -434,23 +439,23 @@ public enum PermissionType: String, Codable {
      */
     public var force_logout_login: Bool?
 
-    public init(target_url: URI, session_length: Int64? = nil, force_logout_login: Bool? = nil) {
-        self.target_url = target_url
+    public init(target_url: String, session_length: Int64? = nil, force_logout_login: Bool? = nil) {
+        self._target_url = AnyString.init(target_url)
         self._session_length = session_length.map(AnyInt.init)
         self.force_logout_login = force_logout_login
     }
 
-    public init(_ target_url: URI, session_length: Int64? = nil, force_logout_login: Bool? = nil) {
+    public init(_ target_url: String, session_length: Int64? = nil, force_logout_login: Bool? = nil) {
         self.init(target_url: target_url, session_length: session_length, force_logout_login: force_logout_login)
     }
 
-}`
-      expect(actual).toEqual(expected)
-    })
+}`;
+      expect(actual).toEqual(expected);
+    });
 
     it('generates one init for no required/positional args', () => {
-      const type = apiTestModel.types.ColorStop
-      const actual = gen.declareType(indent, type)
+      const type = apiTestModel.types.ColorStop;
+      const actual = gen.declareType(indent, type);
       const expected = `public struct ColorStop: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -480,8 +485,8 @@ public enum PermissionType: String, Codable {
         self._offset = offset.map(AnyInt.init)
     }
 
-}`
-      expect(actual).toEqual(expected)
-    })
-  })
-})
+}`;
+      expect(actual).toEqual(expected);
+    });
+  });
+});

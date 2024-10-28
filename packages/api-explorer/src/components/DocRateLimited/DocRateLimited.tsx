@@ -23,13 +23,13 @@
  SOFTWARE.
 
  */
-import type { FC } from 'react'
-import React from 'react'
-import { Code, Tooltip } from '@looker/components'
-import type { IMethod } from '@looker/sdk-codegen'
+import type { FC } from 'react';
+import React from 'react';
+import { Code, Tooltip } from '@looker/components';
+import type { IMethod } from '@looker/sdk-codegen';
 
 interface DocRateLimitedProps {
-  method: IMethod
+  method: IMethod;
 }
 export const DocRateLimited: FC<DocRateLimitedProps> = ({ method }) => (
   <>
@@ -41,4 +41,4 @@ export const DocRateLimited: FC<DocRateLimitedProps> = ({ method }) => (
       </>
     )}
   </>
-)
+);

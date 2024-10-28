@@ -1,0 +1,29 @@
+#!/bin/bash
+
+source "bin/args_parser.sh"
+args=()
+
+if [[ "${ARG_FIX}" == "false" ]]; then
+  args+=("--check")
+fi
+
+if [[ "${ARG_FIX}" == "true" ]] && [[ "${ARG_QUICK}" == "false" ]]; then
+  args+=("--write")
+fi
+
+cd "$(dirname "${0}")/.." || exit 1
+
+if [[ "${ARG_QUICK}" == "true" ]]; then
+  echo "Quick processing changed files supported by prettier"
+  # This flag is only supported by pretty-quick
+  if [[ "${ARG_STAGED}" == "true" ]]; then
+    args+=("--staged")
+  fi
+
+  echo "Sorry, quick isn't supported yet because pretty-quick is bloated and borked"
+  # yarn pretty-quick "${args[@]}"
+else
+  echo "👀 Running on your local dev machine? Consider using -q|--quick to check only changed files."
+  yarn prettier . "${args[@]}" --ignore ../.prettierignore --single-quote --semi --trailing-comma es5
+  #  When we switch to NPM, use npx --workspaces prettier . "${args[@]}" --single-quote --semi --trailing-comma es5
+fi

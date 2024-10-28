@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { SideNav } from './SideNav'
+export { SideNav } from './SideNav';

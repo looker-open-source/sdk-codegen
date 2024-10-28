@@ -23,40 +23,57 @@
  SOFTWARE.
 
  */
-import React, { useContext, useEffect, useCallback, useMemo } from 'react'
-import { SpaceVertical, Text } from '@looker/components'
-import { More } from '@looker/icons'
-import { ExtensionContext40 } from '@looker/extension-sdk-react'
-import { useWindowSize } from '../../hooks/use_window_size'
-import { LiquidFillGaugeViz } from '../LiquidFillGaugeViz'
-import { Layout } from '../Layout'
-import { NavigateButton } from '../NavigateButton'
-import { liquidFillDefaultConfig, getValueAndFormat } from './util/liquid_fill'
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import { Button, SpaceVertical, Text } from '@looker/components';
+import { More } from '@looker/icons';
+import { ExtensionContext40 } from '@looker/extension-sdk-react';
+import { useWindowSize } from '../../hooks/use_window_size';
+import { LiquidFillGaugeViz } from '../LiquidFillGaugeViz';
+import { Layout } from '../Layout';
+import { NavigateButton } from '../NavigateButton';
+import { getValueAndFormat, liquidFillVisOptions } from './util/liquid_fill';
 
 export const VisualizationTile: React.FC = () => {
-  const { height, width } = useWindowSize()
-  const vizSize = Math.min(height, width) - 250
+  const { height, width } = useWindowSize();
+  const vizSize = Math.min(height, width) - 250;
   const { visualizationData, visualizationSDK, extensionSDK } =
-    useContext(ExtensionContext40)
+    useContext(ExtensionContext40);
+
+  const [visConfigured, setVisConfigured] = useState<boolean>(true);
 
   const { value, valueFormat } = useMemo(() => {
     if (visualizationData) {
-      return getValueAndFormat(visualizationSDK)
+      return getValueAndFormat(visualizationSDK);
     }
-    return { value: undefined, valueFormat: null }
-  }, [visualizationData, visualizationSDK])
+    return { value: undefined, valueFormat: null };
+  }, [visualizationData, visualizationSDK]);
 
   useEffect(() => {
-    if (visualizationSDK) {
-      visualizationSDK.configureVisualization(liquidFillDefaultConfig)
+    if (visualizationSDK && !visConfigured) {
+      visualizationSDK.configureVisualization(liquidFillVisOptions);
+      setVisConfigured(true);
     }
-  }, [visualizationSDK])
+  }, [visualizationSDK]);
+
+  const toggleBackgroundColor = () => {
+    if (visualizationData?.visConfig?.circleColor === 'red') {
+      visualizationSDK.setVisConfig({ circleColor: 'blue' });
+    } else {
+      visualizationSDK.setVisConfig({ circleColor: 'red' });
+    }
+  };
 
   const renderComplete = useCallback(() => {
     if (visualizationData) {
-      extensionSDK.rendered()
+      extensionSDK.rendered();
     }
-  }, [extensionSDK, visualizationData])
+  }, [extensionSDK, visualizationData]);
 
   return (
     <Layout right={<NavigateButton path="/inspect" icon={<More />} />}>
@@ -64,6 +81,7 @@ export const VisualizationTile: React.FC = () => {
         <Text p="xxxxxlarge" fontSize="xxxxxlarge">
           Visualization Tile
         </Text>
+        <Button onClick={toggleBackgroundColor}>Change background color</Button>
         {value && (
           <LiquidFillGaugeViz
             width={vizSize}
@@ -81,5 +99,5 @@ export const VisualizationTile: React.FC = () => {
         )}
       </SpaceVertical>
     </Layout>
-  )
-}
+  );
+};

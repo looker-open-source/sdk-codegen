@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export * from './ProjectViewDialog'
+export * from './ProjectViewDialog';

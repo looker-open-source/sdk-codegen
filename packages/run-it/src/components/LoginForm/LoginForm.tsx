@@ -24,35 +24,35 @@
 
  */
 
-import type { BaseSyntheticEvent, FC } from 'react'
-import React from 'react'
-import { Button, Tooltip } from '@looker/components'
-import type { OAuthConfigProvider } from '@looker/extension-utils'
-import { getEnvAdaptor } from '@looker/extension-utils'
+import type { BaseSyntheticEvent, FC } from 'react';
+import React from 'react';
+import { Button, Tooltip } from '@looker/components';
+import type { OAuthConfigProvider } from '@looker/extension-utils';
+import { getEnvAdaptor } from '@looker/extension-utils';
 
-import { RunItFormKey } from '../ConfigForm'
-import type { RunItValues } from '../..'
+import { RunItFormKey } from '../ConfigForm';
+import type { RunItValues } from '../..';
 
 interface LoginFormProps {
-  requestContent: RunItValues
+  requestContent: RunItValues;
 }
 
 export const readyToLogin =
-  'OAuth is configured but your browser session is not authenticated. Click Login to enable RunIt.'
+  'OAuth is configured but your browser session is not authenticated. Click Login to enable RunIt.';
 
 export const notReadyToLogin =
-  'OAuth is not configured. Configure it to be able to Login.'
+  'OAuth is not configured. Configure it to be able to Login.';
 
 export const LoginForm: FC<LoginFormProps> = ({ requestContent }) => {
-  const adaptor = getEnvAdaptor()
+  const adaptor = getEnvAdaptor();
   const handleLogin = async (e: BaseSyntheticEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (requestContent) {
-      adaptor.localStorageSetItem(RunItFormKey, JSON.stringify(requestContent))
+      adaptor.localStorageSetItem(RunItFormKey, JSON.stringify(requestContent));
     }
     // This will set storage variables and return to OAuthScene when successful
-    await adaptor.login()
-  }
+    await adaptor.login();
+  };
 
   return (
     <Tooltip
@@ -66,5 +66,5 @@ export const LoginForm: FC<LoginFormProps> = ({ requestContent }) => {
     >
       <Button onClick={handleLogin}>Login</Button>
     </Tooltip>
-  )
-}
+  );
+};

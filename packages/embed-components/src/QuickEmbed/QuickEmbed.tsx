@@ -24,67 +24,67 @@
 
  */
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import {
-  InputText,
+  Button,
+  ButtonOutline,
   CopyToClipboard,
+  Heading,
+  InputText,
+  Label,
+  Section,
   Space,
   SpaceVertical,
-  Button,
-  Heading,
-  Label,
   Span,
-  Section,
-  ButtonOutline,
   ToggleSwitch,
-} from '@looker/components'
-import { Link } from '@styled-icons/material-outlined'
-import { EmbedUrl } from '@looker/embed-services'
-import { useThemesStoreState, SelectTheme, useThemeActions } from '../Theme'
+} from '@looker/components';
+import { Link } from '@styled-icons/material-outlined';
+import { EmbedUrl } from '@looker/embed-services';
+import { SelectTheme, useThemeActions, useThemesStoreState } from '../Theme';
 
 interface QuickEmbedProps {
   /** A function triggered when close button is clicked. */
-  onClose: () => void
+  onClose: () => void;
   /**
    * An optional callback triggered when the copy button is clicked.
    * The copy to clipboard action is already handled
    */
-  onCopy?: () => void
+  onCopy?: () => void;
 }
 
 export const QuickEmbed = ({ onClose, onCopy }: QuickEmbedProps) => {
-  const service = new EmbedUrl()
-  const [toggleValue, setToggle] = useState(false)
-  const [embedUrl, setEmbedUrl] = useState<string>(service.embedUrl(false))
-  const { selectedTheme } = useThemesStoreState()
-  const { selectThemeAction } = useThemeActions()
+  const service = new EmbedUrl();
+  const [toggleValue, setToggle] = useState(false);
+  const [embedUrl, setEmbedUrl] = useState<string>(service.embedUrl(false));
+  const { selectedTheme } = useThemesStoreState();
+  const { selectThemeAction } = useThemeActions();
 
   const handleCopy = () => {
     if (onCopy) {
-      onCopy()
+      onCopy();
     }
-  }
+  };
 
   const handleToggle = () => {
-    const newToggleValue = !toggleValue
+    const newToggleValue = !toggleValue;
     if (newToggleValue) {
       // Change the selected theme if there's a theme param in the url
-      const urlThemeName = service.searchParams.theme
+      const urlThemeName = service.searchParams.theme;
       if (urlThemeName) {
-        selectThemeAction({ key: urlThemeName })
+        selectThemeAction({ key: urlThemeName });
       }
     }
-    setToggle(newToggleValue)
-  }
+    setToggle(newToggleValue);
+  };
 
   useEffect(() => {
-    let overrides
+    let overrides;
     if (service.isThemable) {
-      overrides = { theme: selectedTheme.name }
+      overrides = { theme: selectedTheme.name };
     }
-    const newUrl = service.embedUrl(toggleValue, overrides)
-    setEmbedUrl(newUrl)
-  }, [toggleValue, selectedTheme])
+    const newUrl = service.embedUrl(toggleValue, overrides);
+    setEmbedUrl(newUrl);
+  }, [toggleValue, selectedTheme]);
 
   return (
     <Section padding="large">
@@ -128,5 +128,5 @@ export const QuickEmbed = ({ onClose, onCopy }: QuickEmbedProps) => {
         <Button onClick={onClose}>Close</Button>
       </Space>
     </Section>
-  )
-}
+  );
+};

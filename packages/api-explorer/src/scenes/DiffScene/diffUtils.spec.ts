@@ -24,10 +24,10 @@
 
  */
 
-import type { DiffRow } from '@looker/sdk-codegen'
-import { startCount } from '@looker/sdk-codegen'
-import { api, api40 } from '../../test-data'
-import { diffToSpec } from './diffUtils'
+import type { DiffRow } from '@looker/sdk-codegen';
+import { startCount } from '@looker/sdk-codegen';
+import { api, api40 } from '../../test-data';
+import { diffToSpec } from './diffUtils';
 
 describe('diffUtils', () => {
   test('builds a psuedo spec from diff', () => {
@@ -54,13 +54,13 @@ describe('diffUtils', () => {
         paramsDiff: '',
         responseDiff: '',
       },
-    ]
-    const spec = diffToSpec(delta, api, api40)
+    ];
+    const spec = diffToSpec(delta, api, api40);
     expect(Object.keys(spec.methods)).toEqual([
       'create_query',
       'search_dashboards',
-    ])
-    expect(Object.keys(spec.tags)).toEqual(['Query', 'Dashboard'])
-    expect(Object.keys(spec.types)).toEqual([])
-  })
-})
+    ]);
+    expect(Object.keys(spec.tags)).toEqual(['Query', 'Dashboard']);
+    expect(Object.keys(spec.types)).toEqual([]);
+  });
+});

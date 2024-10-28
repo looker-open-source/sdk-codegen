@@ -26,7 +26,7 @@ Because there are many different SDKs and languages included in this repository,
 - Use a clear and descriptive title for the issue
 - Note what version and which SDK you're using
 - Describe how to reproduce the problem
-    - Bonus points for a working example in [examples](/examples)
+  - Bonus points for a working example in [examples](/examples)
 - Explain the behavior your were expecting
 - Label your issue with "bug"
 
@@ -89,7 +89,8 @@ Edit the developer checklist to reflect only items relevant to your pull request
 Not sure if an item applies? Leave it in place and ask your reviewer to help determine if it's relevant.
 
 Thank you for opening a Pull Request! Before submitting your PR, there are a few things you can do to make sure it goes smoothly:
-- [ ] Make sure to open an issue as a [bug/issue](https://github.com/looker-open-source/sdk-codegen/issues/new/choose) before writing your code!  That way we can discuss the change, evaluate designs, and agree on the general idea
+
+- [ ] Make sure to open an issue as a [bug/issue](https://github.com/looker-open-source/sdk-codegen/issues/new/choose) before writing your code! That way we can discuss the change, evaluate designs, and agree on the general idea
 - [ ] Ensure the tests and linter pass
 - [ ] Appropriate docs were updated (if necessary)
 

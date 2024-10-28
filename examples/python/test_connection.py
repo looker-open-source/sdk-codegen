@@ -7,7 +7,7 @@ Example:
     
 Notes: Connections to Looker's internal database cannot be tested. 
 
-Last modified: August 25, 2021
+Last modified: Feb 27 2024
 """
 
 from functools import reduce
@@ -15,7 +15,7 @@ import sys
 from typing import cast, MutableSequence, Sequence
 
 import looker_sdk
-from looker_sdk import models
+from looker_sdk import models40 as models
 
 sdk = looker_sdk.init40("../../looker.ini")
 

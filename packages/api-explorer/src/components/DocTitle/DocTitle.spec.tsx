@@ -24,15 +24,15 @@
 
  */
 
-import React from 'react'
-import { screen } from '@testing-library/react'
-import { renderWithTheme } from '@looker/components-test-utils'
+import React from 'react';
+import { screen } from '@testing-library/react';
+import { renderWithTheme } from '@looker/components-test-utils';
 
-import { DocTitle } from './DocTitle'
+import { DocTitle } from './DocTitle';
 
 test('DocTitle renders a heading with title prop content', () => {
-  const title = 'An API Explorer by Looker'
-  renderWithTheme(<DocTitle>{title}</DocTitle>)
-  const heading = screen.getByRole('heading')
-  expect(heading).toHaveTextContent(title)
-})
+  const title = 'An API Explorer by Looker';
+  renderWithTheme(<DocTitle>{title}</DocTitle>);
+  const heading = screen.getByRole('heading');
+  expect(heading).toHaveTextContent(title);
+});

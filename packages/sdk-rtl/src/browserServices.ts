@@ -24,24 +24,24 @@
 
  */
 
-import type { ICryptoHash } from './cryptoHash'
-import type { IApiSettings } from './apiSettings'
-import type { ITransport } from './transport'
-import { sdkError } from './transport'
-import { BrowserCryptoHash, BrowserTransport } from './browserTransport'
-import type { IPlatformServices } from './platformServices'
+import type { ICryptoHash } from './cryptoHash';
+import type { IApiSettings } from './apiSettings';
+import type { ITransport } from './transport';
+import { sdkError } from './transport';
+import { BrowserCryptoHash, BrowserTransport } from './browserTransport';
+import type { IPlatformServices } from './platformServices';
 
 export class BrowserServices implements IPlatformServices {
-  crypto: ICryptoHash
-  settings: IApiSettings
-  transport: ITransport
+  crypto: ICryptoHash;
+  settings: IApiSettings;
+  transport: ITransport;
 
   constructor(services: Partial<IPlatformServices>) {
     if (!services.settings) {
-      throw sdkError({ message: 'Missing required IApiSettings' })
+      throw sdkError({ message: 'Missing required IApiSettings' });
     }
-    this.settings = services.settings
-    this.transport = services.transport || new BrowserTransport(this.settings)
-    this.crypto = services.crypto || new BrowserCryptoHash()
+    this.settings = services.settings;
+    this.transport = services.transport || new BrowserTransport(this.settings);
+    this.crypto = services.crypto || new BrowserCryptoHash();
   }
 }

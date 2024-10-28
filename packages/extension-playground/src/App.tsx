@@ -23,13 +23,13 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { ExtensionProvider40 } from '@looker/extension-sdk-react'
+import React from 'react';
+import { ExtensionProvider40 } from '@looker/extension-sdk-react';
 
-import { Playground } from './Playground'
+import { Playground } from './Playground';
 
 export const App = () => (
   <ExtensionProvider40>
     <Playground />
   </ExtensionProvider40>
-)
+);

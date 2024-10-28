@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { MethodBadge } from './MethodBadge'
+export { MethodBadge } from './MethodBadge';

@@ -27,14 +27,14 @@
 import type {
   CompatibleHTMLProps,
   TypographyProps,
-} from '@looker/design-tokens'
+} from '@looker/design-tokens';
 import {
   generatePressed,
   intentUIBlend,
   typography,
-} from '@looker/design-tokens'
-import type { HttpMethod } from '@looker/sdk-rtl'
-import styled, { css } from 'styled-components'
+} from '@looker/design-tokens';
+import type { HttpMethod } from '@looker/sdk-rtl';
+import styled, { css } from 'styled-components';
 
 /**
  * Status of endpoint method.
@@ -46,16 +46,16 @@ type MethodStatus =
   | 'experimental'
   | 'deprecated'
   | 'inform'
-  | 'undocumented'
+  | 'undocumented';
 
 interface MethodBadgeProps
   extends CompatibleHTMLProps<HTMLDivElement>,
     TypographyProps {
   /** Determines background color */
-  type: HttpMethod | MethodStatus | string
-  compact?: boolean
-  minWidth?: string
-  titleStatus?: boolean
+  type: HttpMethod | MethodStatus | string;
+  compact?: boolean;
+  minWidth?: string;
+  titleStatus?: boolean;
 }
 
 /**
@@ -67,38 +67,37 @@ type ApixIntentNames =
   | 'key'
   | 'neutral'
   | 'positive'
-  | 'warn'
+  | 'warn';
 
 export const pickBadgeIntent = (type: HttpMethod | MethodStatus | string) => {
   switch (type) {
     case 'alpha':
     case 'DELETE':
     case 'deprecated':
-      return 'critical'
+      return 'critical';
     case 'HEAD':
-      return 'neutral'
+      return 'neutral';
     case 'PATCH':
     case 'TRACE':
     case 'experimental':
     case 'undocumented':
-      return 'warn'
+      return 'warn';
     case 'POST':
     case 'stable':
-      return 'positive'
+      return 'positive';
     case 'PUT':
     case 'beta':
-      return 'key'
+      return 'key';
     case 'GET':
     default:
-      return 'inform'
+      return 'inform';
   }
-}
+};
 
-export const cssForIntent = (intent: ApixIntentNames) =>
-  css`
-    background: ${intentUIBlend(intent, 1)};
-    color: ${({ theme }) => generatePressed(theme.colors[intent])};
-  `
+export const cssForIntent = (intent: ApixIntentNames) => css`
+  background: ${intentUIBlend(intent, 1)};
+  color: ${({ theme }) => generatePressed(theme.colors[intent])};
+`;
 
 export const MethodBadge = styled.div.attrs(
   ({
@@ -126,4 +125,4 @@ export const MethodBadge = styled.div.attrs(
   min-width: ${({ minWidth }) => minWidth};
   padding: ${({ compact, theme: { space } }) =>
     `${space.xxsmall} ${compact ? space.none : space.xsmall}`};
-`
+`;

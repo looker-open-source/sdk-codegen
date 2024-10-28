@@ -24,50 +24,50 @@
 
  */
 
-import type { FC } from 'react'
-import React, { useEffect } from 'react'
-import type { ApiModel } from '@looker/sdk-codegen'
-import { typeRefs, methodRefs } from '@looker/sdk-codegen'
-import { useHistory, useParams } from 'react-router-dom'
-import { Space, Box } from '@looker/components'
+import type { FC } from 'react';
+import React, { useEffect } from 'react';
+import type { ApiModel } from '@looker/sdk-codegen';
+import { methodRefs, typeRefs } from '@looker/sdk-codegen';
+import { useHistory, useParams } from 'react-router-dom';
+import { Box, Space } from '@looker/components';
 
 import {
   ApixSection,
   DocReferences,
   DocSDKs,
+  DocSchema,
   DocSource,
   DocTitle,
   ExploreType,
-  DocSchema,
-} from '../../components'
-import { useNavigation } from '../../utils'
+} from '../../components';
+import { useNavigation } from '../../utils';
 
 interface DocTypeProps {
-  api: ApiModel
+  api: ApiModel;
 }
 
 interface DocTypeParams {
-  specKey: string
-  typeTag: string
-  typeName: string
+  specKey: string;
+  typeTag: string;
+  typeName: string;
 }
 
 export const TypeScene: FC<DocTypeProps> = ({ api }) => {
-  const { specKey, typeTag, typeName } = useParams<DocTypeParams>()
-  const type = api.types[typeName]
-  const history = useHistory()
-  const { navigate } = useNavigation()
-  const typesUsed = typeRefs(api, type?.customTypes)
-  const methodsUsedBy = methodRefs(api, type?.methodRefs)
-  const typesUsedBy = typeRefs(api, type?.parentTypes)
+  const { specKey, typeTag, typeName } = useParams<DocTypeParams>();
+  const type = api.types[typeName];
+  const history = useHistory();
+  const { navigate } = useNavigation();
+  const typesUsed = typeRefs(api, type?.customTypes);
+  const methodsUsedBy = methodRefs(api, type?.methodRefs);
+  const typesUsedBy = typeRefs(api, type?.parentTypes);
   useEffect(() => {
     if (!type) {
       const route = api.typeTags[typeTag]
         ? `/${specKey}/types/${typeTag}`
-        : `/${specKey}/types`
-      navigate(route)
+        : `/${specKey}/types`;
+      navigate(route);
     }
-  }, [history, specKey, type])
+  }, [history, specKey, type]);
 
   return (
     <>
@@ -92,5 +92,5 @@ export const TypeScene: FC<DocTypeProps> = ({ api }) => {
         </ApixSection>
       )}
     </>
-  )
-}
+  );
+};

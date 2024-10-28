@@ -24,30 +24,30 @@
 
  */
 
-import { useState, useEffect } from 'react'
-import type { TagList, TypeList } from '@looker/sdk-codegen'
+import { useEffect, useState } from 'react';
+import type { TagList, TypeList } from '@looker/sdk-codegen';
 
 export const useDebounce = <T>(value: T, delay: number): T => {
-  const [debouncedValue, setDebouncedValue] = useState(value)
+  const [debouncedValue, setDebouncedValue] = useState(value);
   useEffect(() => {
     // Update debounced value only once delay has been elapsed
     const handler = setTimeout(() => {
-      setDebouncedValue(value)
-    }, delay)
+      setDebouncedValue(value);
+    }, delay);
     // Reset the timeout on receiving a new keyword
     return () => {
-      clearTimeout(handler)
-    }
-  }, [value])
-  return debouncedValue
-}
+      clearTimeout(handler);
+    };
+  }, [value]);
+  return debouncedValue;
+};
 
 export const countMethods = (tags: TagList) => {
-  let result = 0
-  Object.values(tags).forEach((methods) => {
-    result += Object.entries(methods).length
-  })
-  return result
-}
+  let result = 0;
+  Object.values(tags).forEach(methods => {
+    result += Object.entries(methods).length;
+  });
+  return result;
+};
 
-export const countTypes = (types: TypeList) => Object.entries(types).length
+export const countTypes = (types: TypeList) => Object.entries(types).length;

@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export * from './AdminScene'
+export * from './AdminScene';

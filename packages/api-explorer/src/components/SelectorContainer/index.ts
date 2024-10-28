@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export { SelectorContainer } from './SelectorContainer'
+export { SelectorContainer } from './SelectorContainer';

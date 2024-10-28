@@ -23,13 +23,13 @@
  SOFTWARE.
 
  */
-import type { FC, PropsWithChildren } from 'react'
-import React from 'react'
-import { DataTableCell, Span } from '@looker/components'
+import type { FC, PropsWithChildren } from 'react';
+import React from 'react';
+import { DataTableCell, Span } from '@looker/components';
 
-import { getTableItemBottomBorder } from './utils'
+import { getTableItemBottomBorder } from './utils';
 
-export const DocSdkExampleCell: FC<PropsWithChildren<any>> = (props) => (
+export const DocSdkExampleCell: FC<PropsWithChildren<any>> = props => (
   <DataTableCell
     style={{ borderBottom: getTableItemBottomBorder(props.hideBorderBottom) }}
   >
@@ -37,4 +37,4 @@ export const DocSdkExampleCell: FC<PropsWithChildren<any>> = (props) => (
       {props.children}
     </Span>
   </DataTableCell>
-)
+);

@@ -23,20 +23,20 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { screen } from '@testing-library/react'
-import { codeGenerators } from '@looker/sdk-codegen'
-import type { Store } from 'redux'
+import React from 'react';
+import { screen } from '@testing-library/react';
+import { codeGenerators } from '@looker/sdk-codegen';
+import type { Store } from 'redux';
 
-import { api } from '../../test-data'
-import { renderWithReduxProvider, createTestStore } from '../../test-utils'
-import type { RootState } from '../../state'
-import { DocSDKs } from './DocSDKs'
+import { api } from '../../test-data';
+import { createTestStore, renderWithReduxProvider } from '../../test-utils';
+import type { RootState } from '../../state';
+import { DocSDKs } from './DocSDKs';
 
 describe('DocSDKs', () => {
-  let store: Store<RootState>
-  const supportedLanguages = codeGenerators.map((g) => g.language)
-  const pattern = new RegExp(`${supportedLanguages.join('|')}`)
+  let store: Store<RootState>;
+  const supportedLanguages = codeGenerators.map(g => g.language);
+  const pattern = new RegExp(`${supportedLanguages.join('|')}`);
 
   beforeAll(() => {
     store = createTestStore({
@@ -44,8 +44,8 @@ describe('DocSDKs', () => {
         initialized: false,
         sdkLanguage: 'All',
       },
-    })
-  })
+    });
+  });
 
   test.each([
     ['method', { method: api.methods.run_look }],
@@ -53,32 +53,32 @@ describe('DocSDKs', () => {
   ])(
     'it can render an SDK declaration for all supported languages',
     (_, props) => {
-      renderWithReduxProvider(<DocSDKs api={api} {...props} />, store)
+      renderWithReduxProvider(<DocSDKs api={api} {...props} />, store);
       expect(
         screen.getAllByRole('tab', {
           name: pattern,
         })
-      ).toHaveLength(supportedLanguages.length)
+      ).toHaveLength(supportedLanguages.length);
     }
-  )
+  );
 
   test.each(supportedLanguages)(
     'it can render a %s method declaration',
-    (sdkLanguage) => {
+    sdkLanguage => {
       store = createTestStore({
         settings: {
           initialized: false,
           sdkLanguage: sdkLanguage,
         },
-      })
+      });
       renderWithReduxProvider(
         <DocSDKs api={api} method={api.methods.run_look} />,
         store
-      )
-      expect(screen.queryByRole('tab')).not.toBeInTheDocument()
+      );
+      expect(screen.queryByRole('tab')).not.toBeInTheDocument();
       expect(
         screen.getByRole('heading', { name: `${sdkLanguage} Declaration` })
-      ).toBeInTheDocument()
+      ).toBeInTheDocument();
     }
-  )
-})
+  );
+});

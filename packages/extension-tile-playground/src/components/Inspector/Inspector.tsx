@@ -23,14 +23,14 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { SpaceVertical, Box2 } from '@looker/components'
-import { DashboardGauge } from '@looker/icons'
-import { Layout } from '../Layout'
-import { NavigateButton } from '../NavigateButton'
-import { EventTester } from './components/EventTester'
-import { TileHostData } from './components/TileHostData'
-import { VisualizationData } from './components/VisualizationData'
+import React from 'react';
+import { Box2, SpaceVertical } from '@looker/components';
+import { DashboardGauge } from '@looker/icons';
+import { Layout } from '../Layout';
+import { NavigateButton } from '../NavigateButton';
+import { EventTester } from './components/EventTester';
+import { TileHostData } from './components/TileHostData';
+import { VisualizationData } from './components/VisualizationData';
 
 export const Inspector: React.FC = () => {
   return (
@@ -47,5 +47,5 @@ export const Inspector: React.FC = () => {
         </Box2>
       </SpaceVertical>
     </Layout>
-  )
-}
+  );
+};

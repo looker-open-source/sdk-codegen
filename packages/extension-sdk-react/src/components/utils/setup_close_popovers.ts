@@ -24,22 +24,22 @@
 
  */
 
-import type { ExtensionSDK } from '@looker/extension-sdk'
+import type { ExtensionSDK } from '@looker/extension-sdk';
 
 export const setupClosePopoversListener = (extensionSDK?: ExtensionSDK) => {
   const onBodyMousedown = () => {
     if (extensionSDK) {
-      extensionSDK.closeHostPopovers()
+      extensionSDK.closeHostPopovers();
     }
-  }
+  };
   const body: HTMLBodyElement | undefined | null =
-    document.querySelector('body')
+    document.querySelector('body');
   if (body) {
-    body.addEventListener('mousedown', onBodyMousedown)
+    body.addEventListener('mousedown', onBodyMousedown);
   }
   return () => {
     if (body) {
-      body.removeEventListener('mousedown', onBodyMousedown)
+      body.removeEventListener('mousedown', onBodyMousedown);
     }
-  }
-}
+  };
+};

@@ -24,7 +24,7 @@
 
  */
 
-import type { Row } from '../tile'
+import type { Row } from '../tile';
 
 /**
  * Callback that is invoked when visualization data is received
@@ -32,7 +32,7 @@ import type { Row } from '../tile'
  */
 export type VisualizationDataReceivedCallback = (
   visualizationData: RawVisualizationData
-) => void
+) => void;
 
 /**
  * Raw visualization data. Basic typing for configuration data
@@ -40,8 +40,8 @@ export type VisualizationDataReceivedCallback = (
  * <code>Looker >=22.8</code>
  */
 export interface RawVisualizationData {
-  visConfig: RawVisConfig
-  queryResponse: RawVisQueryResponse
+  visConfig: RawVisConfig;
+  queryResponse: RawVisQueryResponse;
 }
 
 /**
@@ -50,74 +50,189 @@ export interface RawVisualizationData {
  * <code>Looker >=22.8</code>
  */
 export interface RawVisConfig {
-  [key: string]: RawVisConfigValue
+  [key: string]: RawVisConfigValue;
 }
 
-export type RawVisConfigValue = any
+export type RawVisConfigValue = any;
 
 /**
  * Query response data
  * <code>Looker >=22.8</code>
  */
 export interface RawVisQueryResponse {
-  [key: string]: any
-  data: RawVisData
+  [key: string]: any;
+  data: RawVisData;
   fields: {
-    [key: string]: any[]
-  }
-  pivots: RawPivotConfig[]
+    [key: string]: any[];
+  };
+  pivots: RawPivotConfig[];
 }
 
-export type RawVisData = Row[]
+export type RawVisData = Row[];
 
 export interface RawPivotConfig {
-  key: string
-  is_total: boolean
-  data: { [key: string]: string }
-  metadata: { [key: string]: { [key: string]: string } }
+  key: string;
+  is_total: boolean;
+  data: { [key: string]: string };
+  metadata: { [key: string]: { [key: string]: string } };
 }
 
 export interface Measure extends RawVisConfig {
-  [key: string]: any
+  [key: string]: any;
 }
 
 export interface Dimension extends RawVisConfig {
-  [key: string]: any
+  [key: string]: any;
 }
 
 export interface TableCalculation {
-  [key: string]: any
+  [key: string]: any;
 }
 
 export interface PivotConfig extends RawPivotConfig {
-  [key: string]: any
+  [key: string]: any;
 }
 
+/**
+ * Visualization configuration data.
+ */
 export interface VisualizationConfig {
-  queryFieldMeasures: Measure[]
-  queryFieldDimensions: Dimension[]
-  queryFieldTableCalculations: TableCalculation[]
-  queryFieldPivots: PivotConfig[]
-  visConfig: RawVisConfig
+  /**
+   * Measure information
+   */
+  queryFieldMeasures: Measure[];
+  /**
+   * Dimension information
+   */
+  queryFieldDimensions: Dimension[];
+  /**
+   * Table calculation information
+   */
+  queryFieldTableCalculations: TableCalculation[];
+  /**
+   * Pivot information
+   */
+  queryFieldPivots: PivotConfig[];
+  /**
+   * Visual configuration data. This should be merged with the default
+   * configuration and applied to the visualization rendered by the
+   * extension.
+   */
+  visConfig: RawVisConfig;
 }
 
 export interface QueryResponse {
-  data: Row[]
-  fieldMeasures: Measure[]
-  fieldDimensions: Dimension[]
-  fieldTableCalculations: TableCalculation[]
-  fieldPivots: PivotConfig[]
-  fieldMeasureLike: Measure[]
-  fieldDimensionLike: Dimension[]
+  /**
+   * Row data.
+   */
+  data: Row[];
+  /**
+   * Field measure information
+   */
+  fieldMeasures: Measure[];
+  /**
+   * Field dimension information
+   */
+  fieldDimensions: Dimension[];
+  /**
+   * Field table calculation information
+   */
+  fieldTableCalculations: TableCalculation[];
+  /**
+   * Field pivot information
+   */
+  fieldPivots: PivotConfig[];
+  /*
+   * A concatenated array of field measure information and table calculations
+   * that behave like measures.
+   */
+  fieldMeasureLike: Measure[];
+  /*
+   * A concatenated array of field dimension information and table calculations
+   * that behave like dimensions.
+   */
+  fieldDimensionLike: Dimension[];
+}
+
+/**
+ * For internal use only.
+ */
+export interface VisualizationSDKInternal extends VisualizationSDK {
+  updateVisData: (rawVisData: RawVisualizationData) => void;
 }
 
 /**
  * Extension visualization SDK
  */
 export interface VisualizationSDK {
-  visualizationData?: RawVisualizationData
-  visConfig: VisualizationConfig
-  queryResponse: QueryResponse
-  updateVisData: (rawVisData: RawVisualizationData) => void
-  configureVisualization: (options: RawVisConfig) => void
+  /**
+   * Visualization (combination of visConfig and queryResponse data)
+   */
+  visualizationData?: RawVisualizationData;
+  /**
+   * Visualization configuration data.
+   * - measure configurations
+   * - dimension configurations
+   * - table calculations
+   * - pivot configurations
+   * - visualization configurations. These would be used to customize
+   *   the look and feel of a visualization in an explore.
+   */
+  visConfig: VisualizationConfig;
+  /**
+   * Response data from query.
+   * - row data
+   * - field measures
+   * - field table calculations
+   * - field pivots
+   * - field measure like
+   * - field dimension like
+   */
+  queryResponse: QueryResponse;
+  /**
+   * Set the default configurations for an extension visualization.
+   * The configurations will be rendered inside of the explore
+   * visualization editor. This should only be called once.
+   */
+  configureVisualization: (options: VisOptions) => void;
+  /**
+   * Update the visualization configuration.
+   */
+  setVisConfig: (config: RawVisConfig) => void;
+  /**
+   * Update the query row limit.
+   */
+  updateRowLimit: (rowLimit: number) => void;
+}
+
+export interface VisOptionValue {
+  [label: string]: string;
+}
+
+export interface VisOption {
+  type: string;
+  values?: VisOptionValue[];
+  display?: string;
+  default?: any;
+  label?: string;
+  section?: string;
+  placeholder?: string;
+  display_size?: 'half' | 'third' | 'normal';
+  order?: number;
+  hidden?: (setOptions: RawVisConfig) => boolean;
+  disabledReason?: (
+    setOptions: RawVisConfig,
+    queryResponse: QueryResponse
+  ) => string | null;
+  min?: number;
+  max?: number;
+  required?: boolean;
+  words?: VisOptionValue[];
+  supports?: string[];
+  color_application?: string;
+  sublabel?: string;
+}
+
+export interface VisOptions {
+  [optionName: string]: VisOption;
 }

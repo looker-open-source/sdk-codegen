@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-console.log('Please read the README.md')
+console.log('Please read the README.md');

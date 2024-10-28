@@ -24,10 +24,10 @@
 
  */
 
-import type { FC } from 'react'
-import React from 'react'
-import { RunItHeading } from '@looker/run-it'
+import type { FC } from 'react';
+import React from 'react';
+import { RunItHeading } from '@looker/run-it';
 
-export const DocTitle: FC = (props) => (
+export const DocTitle: FC = props => (
   <RunItHeading fontSize="xxxlarge" {...props} />
-)
+);

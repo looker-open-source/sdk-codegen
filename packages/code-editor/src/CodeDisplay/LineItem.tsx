@@ -24,9 +24,9 @@
 
  */
 
-import type { FC } from 'react'
-import React from 'react'
-import type { LineItemProps } from './types'
+import type { FC } from 'react';
+import React from 'react';
+import type { LineItemProps } from './types';
 
 /**
  * Takes a 'line of code' as a list of Tokens and returns syntax highlighting styled spans
@@ -35,9 +35,9 @@ import type { LineItemProps } from './types'
  * @param pattern - search pattern to consider
  */
 export const LineItem: FC<LineItemProps> = ({ index, tokenProps, pattern }) => {
-  const text = tokenProps.children.toLowerCase()
+  const text = tokenProps.children.toLowerCase();
   if (pattern !== '' && text.includes(pattern.toLowerCase())) {
-    tokenProps.className += ' match'
+    tokenProps.className += ' match';
   }
-  return <span key={index} {...tokenProps} />
-}
+  return <span key={index} {...tokenProps} />;
+};

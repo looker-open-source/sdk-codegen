@@ -24,7 +24,7 @@
 
  */
 
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 export const Scroller = styled.div`
   overflow: auto;
@@ -33,4 +33,4 @@ export const Scroller = styled.div`
   -webkit-scrollbar {
     display: none; /* Safari and Chrome */
   }
-`
+`;

@@ -23,29 +23,29 @@
  SOFTWARE.
 
  */
-import { call, put, takeEvery } from 'typed-redux-saga'
-import type { PayloadAction } from '@reduxjs/toolkit'
+import { call, put, takeEvery } from 'typed-redux-saga';
+import type { PayloadAction } from '@reduxjs/toolkit';
 
-import { getLoded } from '../../utils'
-import type { InitPayload } from './slice'
-import { lodeActions } from './slice'
+import { getLoded } from '../../utils';
+import type { InitPayload } from './slice';
+import { lodeActions } from './slice';
 
 function* initSaga(action: PayloadAction<InitPayload>) {
-  const { initLodesSuccessAction, initLodesFailureAction } = lodeActions
+  const { initLodesSuccessAction, initLodesFailureAction } = lodeActions;
   try {
     const lode = yield* call(
       getLoded,
       action.payload.examplesLodeUrl,
       action.payload.declarationsLodeUrl
-    )
-    yield* put(initLodesSuccessAction(lode))
+    );
+    yield* put(initLodesSuccessAction(lode));
   } catch (error: any) {
-    yield* put(initLodesFailureAction(error))
+    yield* put(initLodesFailureAction(error));
   }
 }
 
 export function* saga() {
-  const { initLodesAction } = lodeActions
+  const { initLodesAction } = lodeActions;
 
-  yield* takeEvery(initLodesAction, initSaga)
+  yield* takeEvery(initLodesAction, initSaga);
 }

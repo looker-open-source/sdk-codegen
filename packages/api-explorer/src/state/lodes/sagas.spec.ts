@@ -23,70 +23,70 @@
  SOFTWARE.
 
  */
-import ReduxSagaTester from 'redux-saga-tester'
-import { examples, declarations } from '../../test-data'
-import * as lodeUtils from '../../utils/lodeUtils'
-import * as sagas from './sagas'
-import { lodeActions, lodesSlice } from './slice'
+import ReduxSagaTester from 'redux-saga-tester';
+import { declarations, examples } from '../../test-data';
+import * as lodeUtils from '../../utils/lodeUtils';
+import * as sagas from './sagas';
+import { lodeActions, lodesSlice } from './slice';
 
 describe('Lode sagas', () => {
-  let sagaTester: ReduxSagaTester<any>
+  let sagaTester: ReduxSagaTester<any>;
 
   beforeEach(() => {
-    jest.resetAllMocks()
+    jest.resetAllMocks();
     sagaTester = new ReduxSagaTester({
       initialState: { lodes: { examples, declarations } },
       reducers: {
         lodes: lodesSlice.reducer,
       },
-    })
-    sagaTester.start(sagas.saga)
-  })
+    });
+    sagaTester.start(sagas.saga);
+  });
 
   describe('initSaga', () => {
     const { initLodesAction, initLodesSuccessAction, initLodesFailureAction } =
-      lodeActions
-    const examplesLodeUrl = 'https://foo.com/examples.json'
-    const declarationsLodeUrl = 'https://foo.com/declarations.json'
+      lodeActions;
+    const examplesLodeUrl = 'https://foo.com/examples.json';
+    const declarationsLodeUrl = 'https://foo.com/declarations.json';
 
     test('sends initLodesSuccessAction with examples and declarations on success', async () => {
       jest
         .spyOn(lodeUtils, 'getLoded')
-        .mockResolvedValueOnce({ examples, declarations })
+        .mockResolvedValueOnce({ examples, declarations });
 
       sagaTester.dispatch(
         initLodesAction({ examplesLodeUrl, declarationsLodeUrl })
-      )
+      );
 
-      await sagaTester.waitFor('lodes/initLodesSuccessAction')
-      const calledActions = sagaTester.getCalledActions()
-      expect(calledActions).toHaveLength(2)
+      await sagaTester.waitFor('lodes/initLodesSuccessAction');
+      const calledActions = sagaTester.getCalledActions();
+      expect(calledActions).toHaveLength(2);
       expect(calledActions[0]).toEqual(
         initLodesAction({ examplesLodeUrl, declarationsLodeUrl })
-      )
+      );
       expect(calledActions[1]).toEqual(
         initLodesSuccessAction({
           examples,
           declarations,
         })
-      )
-    })
+      );
+    });
 
     test('sends initLodesFailureAction on error', async () => {
-      const error = new Error('boom')
-      jest.spyOn(lodeUtils, 'getLoded').mockRejectedValueOnce(error)
+      const error = new Error('boom');
+      jest.spyOn(lodeUtils, 'getLoded').mockRejectedValueOnce(error);
 
       sagaTester.dispatch(
         initLodesAction({ examplesLodeUrl, declarationsLodeUrl })
-      )
+      );
 
-      await sagaTester.waitFor('lodes/initLodesFailureAction')
-      const calledActions = sagaTester.getCalledActions()
-      expect(calledActions).toHaveLength(2)
+      await sagaTester.waitFor('lodes/initLodesFailureAction');
+      const calledActions = sagaTester.getCalledActions();
+      expect(calledActions).toHaveLength(2);
       expect(calledActions[0]).toEqual(
         initLodesAction({ examplesLodeUrl, declarationsLodeUrl })
-      )
-      expect(calledActions[1]).toEqual(initLodesFailureAction(error))
-    })
-  })
-})
+      );
+      expect(calledActions[1]).toEqual(initLodesFailureAction(error));
+    });
+  });
+});

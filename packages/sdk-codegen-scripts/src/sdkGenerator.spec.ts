@@ -23,56 +23,57 @@
  SOFTWARE.
 
  */
-import type { IMethodResponse } from '@looker/sdk-codegen'
-import { TestConfig } from './testUtils'
+import type { IMethodResponse, ApiModel } from '@looker/sdk-codegen';
+import { TestConfig } from '@looker/sdk-codegen-utils';
+import { specToModel } from '@looker/sdk-codegen';
 
-const config = TestConfig()
-const apiTestModel = config.apiTestModel
+const config = TestConfig(specToModel);
+const apiTestModel = config.apiTestModel as ApiModel;
 
 describe('sdk generator test', () => {
   it('resolves OAS schemas into types', () => {
     expect(typeof apiTestModel.types.ValidationError.elementType).toEqual(
       'undefined'
-    )
+    );
 
     const test =
-      apiTestModel.types.ValidationError.properties.errors.type.elementType
-    expect(test && test.name).toEqual('ValidationErrorDetail')
-  })
+      apiTestModel.types.ValidationError.properties.errors.type.elementType;
+    expect(test && test.name).toEqual('ValidationErrorDetail');
+  });
 
   it('loads a method with a ref type response', () => {
-    const method = apiTestModel.methods.user
-    expect(method.primaryResponse.statusCode).toEqual(200)
-    expect(method.primaryResponse.type.name).toEqual('User')
-    expect(method.type.name).toEqual('User')
-    expect(method.endpoint).toEqual('/users/{user_id}')
+    const method = apiTestModel.methods.user;
+    expect(method.primaryResponse.statusCode).toEqual(200);
+    expect(method.primaryResponse.type.name).toEqual('User');
+    expect(method.type.name).toEqual('User');
+    expect(method.endpoint).toEqual('/users/{user_id}');
     const response = method.responses.find(
       (a: IMethodResponse) => a.statusCode === 400
-    )
-    expect(response).toBeDefined()
+    );
+    expect(response).toBeDefined();
     if (response) {
-      expect(response.type.name).toEqual('Error')
+      expect(response.type.name).toEqual('Error');
     }
-  })
+  });
 
   it('loads 204 methods with void response type', () => {
-    const method = apiTestModel.methods.delete_group_user
-    expect(method.primaryResponse.statusCode).toEqual(204)
-    expect(method.primaryResponse.type.name).toEqual('void')
-  })
+    const method = apiTestModel.methods.delete_group_user;
+    expect(method.primaryResponse.statusCode).toEqual(204);
+    expect(method.primaryResponse.type.name).toEqual('void');
+  });
 
   it('has collections by key order', () => {
     // TODO we may remove this behavior if we decide API Explorer should display methods in natural order
-    let keys = Object.keys(apiTestModel.methods)
-    let sorted = keys.sort((a, b) => a.localeCompare(b))
-    let names = Object.values(apiTestModel.methods).map((item) => item.name)
-    expect(keys).toEqual(sorted)
-    expect(names).toEqual(sorted)
+    let keys = Object.keys(apiTestModel.methods);
+    let sorted = keys.sort((a, b) => a.localeCompare(b));
+    let names = Object.values(apiTestModel.methods).map(item => item.name);
+    expect(keys).toEqual(sorted);
+    expect(names).toEqual(sorted);
 
-    keys = Object.keys(apiTestModel.types)
-    sorted = keys.sort((a, b) => a.localeCompare(b))
-    names = Object.values(apiTestModel.types).map((item) => item.name)
-    expect(keys).toEqual(sorted)
-    expect(names).toEqual(sorted)
-  })
-})
+    keys = Object.keys(apiTestModel.types);
+    sorted = keys.sort((a, b) => a.localeCompare(b));
+    names = Object.values(apiTestModel.types).map(item => item.name);
+    expect(keys).toEqual(sorted);
+    expect(names).toEqual(sorted);
+  });
+});

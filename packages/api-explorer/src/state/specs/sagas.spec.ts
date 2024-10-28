@@ -23,113 +23,113 @@
  SOFTWARE.
 
  */
-import ReduxSagaTester from 'redux-saga-tester'
-import { registerTestEnvAdaptor } from '@looker/extension-utils'
-import { initRunItSdk } from '@looker/run-it'
-import cloneDeep from 'lodash/cloneDeep'
-import { ApixAdaptor } from '../../utils'
+import ReduxSagaTester from 'redux-saga-tester';
+import { registerTestEnvAdaptor } from '@looker/extension-utils';
+import { initRunItSdk } from '@looker/run-it';
+import cloneDeep from 'lodash/cloneDeep';
+import { ApixAdaptor } from '../../utils';
 
-import { getLoadedSpecs } from '../../test-data'
-import { specActions, specsSlice } from './slice'
-import * as sagas from './sagas'
+import { getLoadedSpecs } from '../../test-data';
+import { specActions, specsSlice } from './slice';
+import * as sagas from './sagas';
 
 describe('Specs Sagas', () => {
-  let sagaTester: ReduxSagaTester<any>
-  const adaptor = new ApixAdaptor(initRunItSdk(), '')
-  registerTestEnvAdaptor(adaptor)
-  const specState = getLoadedSpecs()
-  const mockError = new Error('boom')
+  let sagaTester: ReduxSagaTester<any>;
+  const adaptor = new ApixAdaptor(initRunItSdk(), '');
+  registerTestEnvAdaptor(adaptor);
+  const specState = getLoadedSpecs();
+  const mockError = new Error('boom');
 
   beforeEach(() => {
-    jest.resetAllMocks()
+    jest.resetAllMocks();
     sagaTester = new ReduxSagaTester({
       initialState: { specs: { specs: specState } },
       reducers: {
         specs: specsSlice.reducer,
       },
-    })
-    sagaTester.start(sagas.saga)
-  })
+    });
+    sagaTester.start(sagas.saga);
+  });
 
   describe('initSaga', () => {
     const { initSpecsAction, initSpecsFailureAction, initSpecsSuccessAction } =
-      specActions
+      specActions;
 
     it('sends initSpecsFailureAction on error', async () => {
-      jest.spyOn(adaptor, 'fetchSpecList').mockRejectedValueOnce(mockError)
+      jest.spyOn(adaptor, 'fetchSpecList').mockRejectedValueOnce(mockError);
 
-      sagaTester.dispatch(initSpecsAction({ specKey: null }))
-      await sagaTester.waitFor('specs/initSpecsFailureAction')
-      const calledActions = sagaTester.getCalledActions()
-      expect(calledActions).toHaveLength(2)
-      expect(calledActions[0]).toEqual(initSpecsAction({ specKey: null }))
-      expect(calledActions[1]).toEqual(initSpecsFailureAction(mockError))
-    })
+      sagaTester.dispatch(initSpecsAction({ specKey: null }));
+      await sagaTester.waitFor('specs/initSpecsFailureAction');
+      const calledActions = sagaTester.getCalledActions();
+      expect(calledActions).toHaveLength(2);
+      expect(calledActions[0]).toEqual(initSpecsAction({ specKey: null }));
+      expect(calledActions[1]).toEqual(initSpecsFailureAction(mockError));
+    });
 
     it('sends initSpecsSuccessAction on success', async () => {
       // fetchSpecList returns the test specs
       jest
         .spyOn(adaptor, 'fetchSpecList')
-        .mockResolvedValueOnce(cloneDeep(specState))
+        .mockResolvedValueOnce(cloneDeep(specState));
 
-      const currentSpec = specState['3.1']
-      jest.spyOn(adaptor, 'fetchSpec').mockResolvedValueOnce(currentSpec!)
+      const currentSpec = specState['3.1'];
+      jest.spyOn(adaptor, 'fetchSpec').mockResolvedValueOnce(currentSpec!);
 
       // expected state is all the specs with the current spec containing the ApiModel
-      const expected = cloneDeep(specState)
-      expected[currentSpec.key] = currentSpec
+      const expected = cloneDeep(specState);
+      expected[currentSpec.key] = currentSpec;
 
-      sagaTester.dispatch(initSpecsAction({ specKey: null }))
-      await sagaTester.waitFor('specs/initSpecsSuccessAction')
-      const calledActions = sagaTester.getCalledActions()
-      expect(calledActions).toHaveLength(2)
-      expect(calledActions[0]).toEqual(initSpecsAction({ specKey: null }))
+      sagaTester.dispatch(initSpecsAction({ specKey: null }));
+      await sagaTester.waitFor('specs/initSpecsSuccessAction');
+      const calledActions = sagaTester.getCalledActions();
+      expect(calledActions).toHaveLength(2);
+      expect(calledActions[0]).toEqual(initSpecsAction({ specKey: null }));
       expect(calledActions[1]).toEqual(
         initSpecsSuccessAction({
           specs: expected,
           currentSpecKey: currentSpec.key,
         })
-      )
-    })
-  })
+      );
+    });
+  });
 
   describe('setCurrentSpecSaga', () => {
     const {
       setCurrentSpecAction,
       setCurrentSpecSuccessAction,
       setCurrentSpecFailureAction,
-    } = specActions
-    const spec = specState['4.0']
+    } = specActions;
+    const spec = specState['4.0'];
 
     it('sends setCurrentSpecSuccessAction on success', async () => {
-      jest.spyOn(adaptor, 'fetchSpec').mockResolvedValueOnce(spec)
+      jest.spyOn(adaptor, 'fetchSpec').mockResolvedValueOnce(spec);
 
-      sagaTester.dispatch(setCurrentSpecAction({ currentSpecKey: spec.key }))
-      await sagaTester.waitFor('specs/setCurrentSpecAction')
-      const calledActions = sagaTester.getCalledActions()
-      expect(calledActions).toHaveLength(2)
+      sagaTester.dispatch(setCurrentSpecAction({ currentSpecKey: spec.key }));
+      await sagaTester.waitFor('specs/setCurrentSpecAction');
+      const calledActions = sagaTester.getCalledActions();
+      expect(calledActions).toHaveLength(2);
       expect(calledActions[0]).toEqual(
         setCurrentSpecAction({ currentSpecKey: spec.key })
-      )
+      );
       expect(calledActions[1]).toEqual(
         setCurrentSpecSuccessAction({
           api: spec.api!,
           currentSpecKey: spec.key,
         })
-      )
-    })
+      );
+    });
 
     it('sends setCurrentSpecFailureAction on failure', async () => {
-      jest.spyOn(adaptor, 'fetchSpec').mockRejectedValueOnce(mockError)
+      jest.spyOn(adaptor, 'fetchSpec').mockRejectedValueOnce(mockError);
 
-      sagaTester.dispatch(setCurrentSpecAction({ currentSpecKey: spec.key }))
-      await sagaTester.waitFor('specs/setCurrentSpecAction')
-      const calledActions = sagaTester.getCalledActions()
-      expect(calledActions).toHaveLength(2)
+      sagaTester.dispatch(setCurrentSpecAction({ currentSpecKey: spec.key }));
+      await sagaTester.waitFor('specs/setCurrentSpecAction');
+      const calledActions = sagaTester.getCalledActions();
+      expect(calledActions).toHaveLength(2);
       expect(calledActions[0]).toEqual(
         setCurrentSpecAction({ currentSpecKey: spec.key })
-      )
-      expect(calledActions[1]).toEqual(setCurrentSpecFailureAction(mockError))
-    })
-  })
-})
+      );
+      expect(calledActions[1]).toEqual(setCurrentSpecFailureAction(mockError));
+    });
+  });
+});

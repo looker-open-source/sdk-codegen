@@ -24,8 +24,8 @@
 
  */
 
-import type { MouseEvent } from 'react'
-import type { IQuery } from '@looker/sdk'
+import type { MouseEvent } from 'react';
+import type { IQuery } from '@looker/sdk';
 
 /**
  * Callback that is invoked when a change in the host happens
@@ -33,7 +33,7 @@ import type { IQuery } from '@looker/sdk'
  */
 export type TileHostDataChangedCallback = (
   tileHostData: Partial<TileHostData>
-) => void
+) => void;
 
 /**
  * Defines the current run state of the dashboard
@@ -49,17 +49,17 @@ export interface TileHostData {
    * When true indicates that the tile is being configured as
    * a visualization inside of an explore.
    */
-  isExploring?: boolean
+  isExploring?: boolean;
   /**
    * The dashboard id the tile is being rendered in. If the tile
    * is being configured as an explore this will not be populated.
    */
-  dashboardId?: string
+  dashboardId?: string;
   /**
    * The element id of the tile being rendered. If the tile
    * is being configured as an explore this will not be populated.
    */
-  elementId?: string
+  elementId?: string;
   /**
    * The query id of the tile being rendered if it is associated with
    * a visualization. If the tile is being configured as an explore
@@ -72,7 +72,7 @@ export interface TileHostData {
    * the data shown in the QueryResponse. As such the queryId may not be
    * that useful. See filteredQuery for query object with filters applied.
    */
-  queryId?: string
+  queryId?: string;
   /**
    * The query slug of the tile being rendered if it is associated with
    * a visualization. If the tile is being configured as an explore
@@ -85,12 +85,12 @@ export interface TileHostData {
    * the data shown in the QueryResponse. As such the queryId may not be
    * that useful. See filteredQuery for query object with filters applied.
    */
-  querySlug?: string
+  querySlug?: string;
   /**
    * The filters being applied to the dashboard. If the tile
    * is being configured as an explore this will not be populated.
    */
-  dashboardFilters?: Filters
+  dashboardFilters?: Filters;
   /**
    * Indicates whether the dashboard is running. If the tile
    * is being configured as an explore the state will be UNKNOWN.
@@ -102,23 +102,23 @@ export interface TileHostData {
    * has been run, detecting differences in the lastRunStartTime
    * is the reliable way.
    */
-  dashboardRunState?: DashboardRunState
+  dashboardRunState?: DashboardRunState;
   /**
    * When true, the dashboard is being edited. If the tile
    * is being configured as an explore this will not be populated.
    */
-  isDashboardEditing?: boolean
+  isDashboardEditing?: boolean;
   /**
    * When true, cross filtering. If the tile
    * is being configured as an explore this will not be populated.
    */
-  isDashboardCrossFilteringEnabled?: boolean
+  isDashboardCrossFilteringEnabled?: boolean;
   /**
    * A query object that matches the query ID associated with the
    * underlying dashboard element with any dashboard filters and
    * timezone changes made at the dashboard level applied.
    */
-  filteredQuery?: IQuery
+  filteredQuery?: IQuery;
   /**
    * The id of the tile extension element that triggered the last
    * dashboard run. The id will be undefined if the dashboard run
@@ -130,14 +130,14 @@ export interface TileHostData {
    * if the extension triggers a dashboard run, it will be notified
    * when the dashboard run starts and finishes.
    */
-  lastRunSourceElementId?: string
+  lastRunSourceElementId?: string;
   /**
    * Indicates the last dashboard run start time. If the tile
    * is being configured as an explore this will not be populated.
    * Note that the start and end times reported should not
    * used for capturing performance metrics.
    */
-  lastRunStartTime?: number
+  lastRunStartTime?: number;
   /**
    * Indicates the last dashboard run end time. If the tile
    * is being configured as an explore this will not be populated.
@@ -145,86 +145,122 @@ export interface TileHostData {
    * Note that the start and end times reported should not
    * used for capturing performance metrics.
    */
-  lastRunEndTime?: number
+  lastRunEndTime?: number;
   /**
    * Indicates whether the last dashboard run was succesful or not.
    * If the tile is being configured as an explore this will not be
    * populated.
    * If the tile is running, this will not be populated.
    */
-  lastRunSuccess?: boolean
+  lastRunSuccess?: boolean;
 }
 
 export interface Pivot {
-  key: string
-  is_total: boolean
-  data: { [key: string]: string }
-  metadata: { [key: string]: { [key: string]: string | Link[] } }
-  labels: { [key: string]: string }
-  sort_values?: { [key: string]: string }
+  key: string;
+  is_total: boolean;
+  data: { [key: string]: string };
+  metadata: { [key: string]: { [key: string]: string | Link[] } };
+  labels: { [key: string]: string };
+  sort_values?: { [key: string]: string };
 }
 
 export interface Cell {
-  [key: string]: any
-  value: any
-  rendered?: string
-  html?: string
-  links?: Link[]
+  [key: string]: any;
+  value: any;
+  rendered?: string;
+  html?: string;
+  links?: Link[];
 }
 
 export interface Link {
-  label: string
-  type: string
-  type_label: string
-  url: string
+  label: string;
+  type: string;
+  type_label: string;
+  url: string;
 }
 
 export interface PivotCell {
-  [pivotKey: string]: Cell
+  [pivotKey: string]: Cell;
 }
 
 export interface Row {
-  [fieldName: string]: PivotCell | Cell
+  [fieldName: string]: PivotCell | Cell;
 }
 
 export interface TileError {
-  title: string
-  message: string
-  group: string
+  title: string;
+  message: string;
+  group: string;
 }
 
 export interface CrossFilterOptions {
-  pivot: Pivot
-  row: Row
+  pivot: Pivot;
+  row: Row;
 }
 
-// TODO build out type
-export type TriggerConfig = any
-
-// TODO build out type
-export type DrillMenuOptions = any
+export type DrillMenuOptions = any;
 
 export interface Filters {
-  [key: string]: string
+  [key: string]: string;
+}
+
+/**
+ * For internal use only
+ */
+export interface TileSDKInternal extends TileSDK {
+  tileHostDataChanged: (hostData: Partial<TileHostData>) => void;
 }
 
 /**
  * Extension tile SDK
  */
 export interface TileSDK {
-  tileHostData: TileHostData
-  tileHostDataChanged: (hostData: Partial<TileHostData>) => void
-  addErrors: (...errors: TileError[]) => void
-  clearErrors: (group?: string) => void
-  trigger: (
-    message: string,
-    config: TriggerConfig[],
-    event?: MouseEvent
-  ) => void
-  openDrillMenu: (options: DrillMenuOptions, event?: MouseEvent) => void
-  toggleCrossFilter: (options: CrossFilterOptions, event?: MouseEvent) => void
-  runDashboard: () => void
-  stopDashboard: () => void
-  updateFilters: (filters: Filters, runDashboard?: boolean) => void
-  openScheduleDialog: () => Promise<void>
+  /**
+   * Tile host data.
+   */
+  tileHostData: TileHostData;
+  /**
+   * Display an error beneath the tile extension.
+   */
+  addError: (error: TileError) => void;
+  /**
+   * Clear an error beneath the tile extension.
+   */
+  clearError: () => void;
+  /**
+   * Display an error beneath the tile extension.
+   * @deprecated
+   */
+  addErrors: (...errors: TileError[]) => void;
+  /**
+   * Clear an error beneath the tile extension.
+   * @deprecated
+   */
+  clearErrors: (group?: string) => void;
+  /**
+   * Open a drill menu. The event controls positioning of the drill menu.
+   * Set the pageX and pageY properties on the event to control the
+   * positioning (all other properties are ignored).
+   */
+  openDrillMenu: (options: DrillMenuOptions, event?: MouseEvent) => void;
+  /**
+   * Toggle cross filters. This is ignored when running in an explore.
+   */
+  toggleCrossFilter: (options: CrossFilterOptions, event?: MouseEvent) => void;
+  /**
+   * Run the current dashboard. This is ignored when running in an explore.
+   */
+  runDashboard: () => void;
+  /**
+   * Stop the current dashboard. This is ignored when running in an explore.
+   */
+  stopDashboard: () => void;
+  /**
+   * Update the current filters.
+   */
+  updateFilters: (filters: Filters, run?: boolean) => void;
+  /**
+   * Open the schedule dialog. This is ignored when running in an explore.
+   */
+  openScheduleDialog: () => Promise<void>;
 }

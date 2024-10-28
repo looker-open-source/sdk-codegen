@@ -24,18 +24,18 @@
 
  */
 
-import { add } from 'date-fns'
-import { zonedTimeToUtc } from 'date-fns-tz'
-import type { AgendaItems } from './components'
-const day1 = zonedTimeToUtc('2022-12-06 00:00:00', 'America/Los_Angeles')
-const day2 = add(day1, { days: 1 })
-const day3 = add(day2, { days: 1 })
-let current = day1
+import { add } from 'date-fns';
+import { zonedTimeToUtc } from 'date-fns-tz';
+import type { AgendaItems } from './components';
+const day1 = zonedTimeToUtc('2022-12-06 00:00:00', 'America/Los_Angeles');
+const day2 = add(day1, { days: 1 });
+const day3 = add(day2, { days: 1 });
+let current = day1;
 
 const later = (start: Date, hours: number) => {
-  current = add(start, { minutes: hours * 60 })
-  return current
-}
+  current = add(start, { minutes: hours * 60 });
+  return current;
+};
 
 // NOTE: if stop values are not defined, they default to the start of the next agenda item. All other stop values can default. The final stop value is required.
 export const agenda = [
@@ -192,13 +192,14 @@ Grab a drink and virtually chill out with your fellow Cloud BI Developers!<br>[*
 他の Cloud BI 開発者たちと飲み物を片手にバーチャルでリラックスしましょう。<br>[**ライブ セッション リンク**](https://meet.google.com/bmn-cepn-fws)`,
     },
   },
-]
+];
 
 export const localAgenda = (loc: string): AgendaItems =>
-  agenda.map((i) => {
+  agenda.map(i => {
+    const desc: any = i.description;
     return {
       start: i.start,
       stop: i.stop,
-      description: i.description[loc] ? i.description[loc] : i.description.en,
-    }
-  })
+      description: desc[loc] ? desc[loc] : desc.en,
+    };
+  });

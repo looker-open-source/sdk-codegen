@@ -24,10 +24,10 @@
 
  */
 
-import * as path from 'path'
-import * as fs from 'fs'
-import { LookerNodeSDK } from '@looker/sdk-node'
-import type { IArtifact, IGroup, IUser } from '@looker/sdk'
+import * as path from 'path';
+import * as fs from 'fs';
+import { LookerNodeSDK } from '@looker/sdk-node';
+import type { IArtifact, IGroup, IUser } from '@looker/sdk';
 import {
   add_group_user,
   create_group,
@@ -36,23 +36,23 @@ import {
   search_groups,
   search_users,
   update_artifacts,
-} from '@looker/sdk'
+} from '@looker/sdk';
 
-const root = path.join(__dirname, '/../../../')
-const indexFile = path.join(root, 'hackathons.json')
-const compareFile = path.join(root, 'hackCompare.json')
-const utf8 = { encoding: 'utf-8' }
-const content = fs.readFileSync(indexFile, utf8)
-const artifacts = JSON.parse(content) as IArtifact[]
-const sdk = LookerNodeSDK.init40()
-const groupName = 'Looker_hack: Hackathon:cloudbi_2022'
-const namespace = 'Hackathon'
-let group: IGroup
+const root = path.join(__dirname, '/../../../');
+const indexFile = path.join(root, 'hackathons.json');
+const compareFile = path.join(root, 'hackCompare.json');
+const utf8 = { encoding: 'utf-8' };
+const content = fs.readFileSync(indexFile, utf8);
+const artifacts = JSON.parse(content) as IArtifact[];
+const sdk = LookerNodeSDK.init40();
+const groupName = 'Looker_hack: Hackathon:cloudbi_2022';
+const namespace = 'Hackathon';
+let group: IGroup;
 
 /** gets all user records from the json snapshot */
 const getUsers = () => {
-  return artifacts.filter((x) => x.key.startsWith('User:')).map((x) => x)
-}
+  return artifacts.filter(x => x.key.startsWith('User:')).map(x => x);
+};
 
 /**
  * make or create the group for the hackathon identified by `groupName`
@@ -60,12 +60,12 @@ const getUsers = () => {
  * of extra API calls
  */
 const findOrMakeGroup = async () => {
-  if (group) return group
-  const groups = await sdk.ok(search_groups(sdk, { name: groupName }))
-  if (groups.length > 0) group = groups[0]
-  else group = await sdk.ok(create_group(sdk, { name: groupName }))
-  return group
-}
+  if (group) return group;
+  const groups = await sdk.ok(search_groups(sdk, { name: groupName }));
+  if (groups.length > 0) group = groups[0];
+  else group = await sdk.ok(create_group(sdk, { name: groupName }));
+  return group;
+};
 
 /**
  * find all references for this user id in all artifact's value collection and update it
@@ -73,28 +73,28 @@ const findOrMakeGroup = async () => {
  * @param userId to use for replacement
  */
 const swapUserId = (user: IArtifact, userId: string) => {
-  const oldKey = user.key
-  const newKey = `User:${userId}`
-  if (oldKey === newKey) return // no swap required
-  const _user_id = '_user_id'
-  const user_id = 'user_id'
+  const oldKey = user.key;
+  const newKey = `User:${userId}`;
+  if (oldKey === newKey) return; // no swap required
+  const _user_id = '_user_id';
+  const user_id = 'user_id';
 
-  artifacts.forEach((a) => {
-    const val = JSON.parse(a.value)
-    const uid = user_id in val ? user_id : _user_id
+  artifacts.forEach(a => {
+    const val = JSON.parse(a.value);
+    const uid = user_id in val ? user_id : _user_id;
     if (uid in val && val[uid] === oldKey) {
       // console.log(`Swapping ${a.key} ${uid} ${oldKey} to ${newKey}`)
-      val[uid] = newKey
-      a.value = JSON.stringify(val)
+      val[uid] = newKey;
+      a.value = JSON.stringify(val);
     }
-  })
-  user.key = newKey
-  const val = JSON.parse(user.value)
-  val._id = newKey
-  val.looker_id = userId
-  user.value = JSON.stringify(val)
-  return user
-}
+  });
+  user.key = newKey;
+  const val = JSON.parse(user.value);
+  val._id = newKey;
+  val.looker_id = userId;
+  user.value = JSON.stringify(val);
+  return user;
+};
 
 /**
  * Finds or makes a user represented by the artifact
@@ -104,27 +104,27 @@ const swapUserId = (user: IArtifact, userId: string) => {
  * @param art
  */
 const findOrMakeUser = async (art: IArtifact) => {
-  const f = JSON.parse(art.value)
+  const f = JSON.parse(art.value);
   const users = await sdk.ok(
     search_users(sdk, {
       first_name: f.first_name,
       last_name: f.last_name,
       fields: 'id,first_name,last_name,group_ids',
     })
-  )
-  let user: IUser
+  );
+  let user: IUser;
   if (users.length > 0) {
-    user = users[0]
+    user = users[0];
   } else {
     user = await sdk.ok(
       create_user(sdk, { first_name: f.first_name, last_name: f.last_name })
-    )
+    );
   }
   if (!user?.group_ids?.includes(group.id!)) {
-    await sdk.ok(add_group_user(sdk, group.id!, { user_id: user.id! }))
+    await sdk.ok(add_group_user(sdk, group.id!, { user_id: user.id! }));
   }
-  return swapUserId(art, user.id!)
-}
+  return swapUserId(art, user.id!);
+};
 
 // const removeHackUsers = async () => {
 //   return
@@ -136,41 +136,41 @@ const findOrMakeUser = async (art: IArtifact) => {
 
 /** populate the missing users by name */
 const populi = async () => {
-  group = await findOrMakeGroup()
+  group = await findOrMakeGroup();
   // await removeHackUsers()
-  const users = getUsers()
+  const users = getUsers();
   for (const user of users) {
-    await findOrMakeUser(user)
+    await findOrMakeUser(user);
   }
-}
+};
 
 /** set artifact versions to 0 so creating the artifact will work */
 const prepArtifacts = () => {
-  const keys = artifacts.map((o) => o.key)
+  const keys = artifacts.map(o => o.key);
   const prepped = artifacts.filter(
     ({ key }, index) => !keys.includes(key, index + 1)
-  )
-  prepped.forEach((a) => {
-    a.version = 0
-    const vals = JSON.parse(a.value)
-    const keys = Object.keys(vals)
+  );
+  prepped.forEach(a => {
+    a.version = 0;
+    const vals = JSON.parse(a.value);
+    const keys = Object.keys(vals);
     for (const key of keys) {
       vals[key] =
-        typeof vals[key] === 'string' ? encodeURI(vals[key]) : vals[key]
+        typeof vals[key] === 'string' ? encodeURI(vals[key]) : vals[key];
     }
 
-    a.value = JSON.stringify(vals)
-  })
-  return prepped
-}
+    a.value = JSON.stringify(vals);
+  });
+  return prepped;
+};
 
-;(async () => {
-  await populi()
-  const prepped = prepArtifacts()
-  fs.writeFileSync(compareFile, JSON.stringify(artifacts, null, 2), utf8)
+(async () => {
+  await populi();
+  const prepped = prepArtifacts();
+  fs.writeFileSync(compareFile, JSON.stringify(artifacts, null, 2), utf8);
   console.log(
     `${artifacts.length} entries from ${indexFile}, ${prepped.length} prepped`
-  )
-  await sdk.ok(purge_artifacts(sdk, namespace))
-  await sdk.ok(update_artifacts(sdk, namespace, prepped))
-})()
+  );
+  await sdk.ok(purge_artifacts(sdk, namespace));
+  await sdk.ok(update_artifacts(sdk, namespace, prepped));
+})();

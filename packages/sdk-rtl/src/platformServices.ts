@@ -24,15 +24,15 @@
 
  */
 
-import type { IApiSettings } from './apiSettings'
-import type { ITransport } from './transport'
-import type { ICryptoHash } from './cryptoHash'
+import type { IApiSettings } from './apiSettings';
+import type { ITransport } from './transport';
+import type { ICryptoHash } from './cryptoHash';
 
 /**
  * Contract for OAuth authentication services
  */
 export interface IPlatformServices {
-  settings: IApiSettings
-  transport: ITransport
-  crypto: ICryptoHash
+  settings: IApiSettings;
+  transport: ITransport;
+  crypto: ICryptoHash;
 }

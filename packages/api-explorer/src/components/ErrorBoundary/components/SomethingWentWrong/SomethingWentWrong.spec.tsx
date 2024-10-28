@@ -23,26 +23,26 @@
  SOFTWARE.
 
  */
-import React from 'react'
-import { renderWithTheme } from '@looker/components-test-utils'
-import { screen } from '@testing-library/react'
-import { SomethingWentWrong } from './SomethingWentWrong'
+import React from 'react';
+import { renderWithTheme } from '@looker/components-test-utils';
+import { screen } from '@testing-library/react';
+import { SomethingWentWrong } from './SomethingWentWrong';
 
 const getMockedComponent = (propOverrides = {}) => {
   const defaultProps = {
     header: '',
     actionMessage: '',
     altText: '',
-  }
-  const updatedProps = { ...defaultProps, ...propOverrides }
-  return <SomethingWentWrong {...updatedProps} />
-}
+  };
+  const updatedProps = { ...defaultProps, ...propOverrides };
+  return <SomethingWentWrong {...updatedProps} />;
+};
 
 describe('SomethingWentWrong', () => {
   it('Should render proper component with correct texts', () => {
-    const header = 'Uh oh something went wrong'
-    const actionMessage = 'User please do this action. It might help'
-    const altText = '500 error graphic'
+    const header = 'Uh oh something went wrong';
+    const actionMessage = 'User please do this action. It might help';
+    const altText = '500 error graphic';
 
     renderWithTheme(
       getMockedComponent({
@@ -50,10 +50,10 @@ describe('SomethingWentWrong', () => {
         actionMessage,
         altText,
       })
-    )
+    );
 
-    expect(screen.getByText(header)).toBeVisible()
-    expect(screen.getByText(actionMessage)).toBeVisible()
-    expect(screen.getByTitle(altText)).toBeInTheDocument()
-  })
-})
+    expect(screen.getByText(header)).toBeVisible();
+    expect(screen.getByText(actionMessage)).toBeVisible();
+    expect(screen.getByTitle(altText)).toBeInTheDocument();
+  });
+});

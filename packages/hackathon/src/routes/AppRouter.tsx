@@ -23,21 +23,21 @@
  SOFTWARE.
 
  */
-import type { FC } from 'react'
-import React from 'react'
-import { Redirect, Route, Switch } from 'react-router-dom'
-import type { IHackerProps, IHackathonProps } from '../models'
+import type { FC } from 'react';
+import React from 'react';
+import { Redirect, Route, Switch } from 'react-router-dom';
+import type { IHackathonProps, IHackerProps } from '../models';
 import {
-  HomeScene,
-  UsersScene,
-  JudgingScene,
-  JudgingEditorScene,
   AdminScene,
+  HomeScene,
+  JudgingEditorScene,
+  JudgingScene,
   NotFoundScene,
-  ProjectsScene,
   ProjectEditorScene,
+  ProjectsScene,
   ResourceScene,
-} from '../scenes'
+  UsersScene,
+} from '../scenes';
 
 export enum Routes {
   HOME = '/home',
@@ -53,37 +53,37 @@ export enum Routes {
 }
 
 export interface AppRouterProps {
-  hacker: IHackerProps
-  authorizedRoutes: Routes[]
+  hacker: IHackerProps;
+  authorizedRoutes: Routes[];
 }
 
 export const getAuthorizedRoutes = (
   hacker?: IHackerProps,
   currentHackathon?: IHackathonProps
 ): Routes[] => {
-  const authorizedRoutes: Routes[] = []
-  authorizedRoutes.push(Routes.HOME)
-  authorizedRoutes.push(Routes.RESOURCES)
+  const authorizedRoutes: Routes[] = [];
+  authorizedRoutes.push(Routes.HOME);
+  authorizedRoutes.push(Routes.RESOURCES);
   if (hacker) {
     if (currentHackathon) {
-      authorizedRoutes.push(Routes.PROJECTS)
-      authorizedRoutes.push(Routes.VIEW_PROJECT)
-      authorizedRoutes.push(Routes.CREATE_PROJECT)
-      authorizedRoutes.push(Routes.EDIT_PROJECT)
+      authorizedRoutes.push(Routes.PROJECTS);
+      authorizedRoutes.push(Routes.VIEW_PROJECT);
+      authorizedRoutes.push(Routes.CREATE_PROJECT);
+      authorizedRoutes.push(Routes.EDIT_PROJECT);
       if (hacker.canAdmin || hacker.canJudge || hacker.canStaff) {
-        authorizedRoutes.push(Routes.JUDGING)
-        authorizedRoutes.push(Routes.EDIT_JUDGING)
+        authorizedRoutes.push(Routes.JUDGING);
+        authorizedRoutes.push(Routes.EDIT_JUDGING);
       }
       if (hacker.canAdmin || hacker.canStaff) {
-        authorizedRoutes.push(Routes.USERS)
+        authorizedRoutes.push(Routes.USERS);
       }
     }
     if (hacker.canAdmin) {
-      authorizedRoutes.push(Routes.ADMIN)
+      authorizedRoutes.push(Routes.ADMIN);
     }
   }
-  return authorizedRoutes
-}
+  return authorizedRoutes;
+};
 
 export const AppRouter: FC<AppRouterProps> = ({ authorizedRoutes, hacker }) => (
   <Switch>
@@ -146,4 +146,4 @@ export const AppRouter: FC<AppRouterProps> = ({ authorizedRoutes, hacker }) => (
       </Route>
     )}
   </Switch>
-)
+);

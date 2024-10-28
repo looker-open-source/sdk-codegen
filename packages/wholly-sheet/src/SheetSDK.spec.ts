@@ -24,31 +24,31 @@
 
  */
 
-import * as fs from 'fs'
-import * as path from 'path'
-import { cred, initSheetSDK, sheetTimeout } from './testUtils/testUtils'
-import type { SheetSDK } from './SheetSDK'
-import { tabName } from './SheetSDK'
-let sheets: SheetSDK
+import * as fs from 'fs';
+import * as path from 'path';
+import { cred, initSheetSDK, sheetTimeout } from './testUtils/testUtils';
+import type { SheetSDK } from './SheetSDK';
+import { tabName } from './SheetSDK';
+let sheets: SheetSDK;
 
 describe('SheetSDK', () => {
   beforeAll(async () => {
-    sheets = await initSheetSDK()
-  })
+    sheets = await initSheetSDK();
+  });
 
   test(
     'can get sheet',
     async () => {
-      const actual = await sheets.read()
-      expect(actual).toBeDefined()
-      expect(actual.spreadsheetId).toEqual(cred.sheet_id)
-      expect(actual.properties).toBeDefined()
-      expect(actual.sheets).toBeDefined()
-      expect(actual.sheets.length).toBeGreaterThan(0)
-      expect(actual.spreadsheetUrl).toBeDefined()
+      const actual = await sheets.read();
+      expect(actual).toBeDefined();
+      expect(actual.spreadsheetId).toEqual(cred.sheet_id);
+      expect(actual.properties).toBeDefined();
+      expect(actual.sheets).toBeDefined();
+      expect(actual.sheets.length).toBeGreaterThan(0);
+      expect(actual.spreadsheetUrl).toBeDefined();
     },
     sheetTimeout
-  )
+  );
   // test('can get default sheet values', async () => {
   //   const actual = await sheets.values()
   //   expect(actual).toBeDefined()
@@ -65,27 +65,27 @@ describe('SheetSDK', () => {
   test(
     'can index tab values',
     async () => {
-      const actual = await sheets.index()
-      expect(actual).toBeDefined()
-      expect(actual.sheets.length).toBeGreaterThan(0)
-      expect(Object.entries(actual.tabs).length).toEqual(actual.sheets.length)
-      actual.sheets.forEach((t) => {
-        const tab = actual.tabs[tabName(t)]
-        expect(tab).toBeDefined()
-        expect(tab.header).toBeDefined()
-        expect(tab.header.length).toBeGreaterThan(0)
+      const actual = await sheets.index();
+      expect(actual).toBeDefined();
+      expect(actual.sheets.length).toBeGreaterThan(0);
+      expect(Object.entries(actual.tabs).length).toEqual(actual.sheets.length);
+      actual.sheets.forEach(t => {
+        const tab = actual.tabs[tabName(t)];
+        expect(tab).toBeDefined();
+        expect(tab.header).toBeDefined();
+        expect(tab.header.length).toBeGreaterThan(0);
         // No empty data rows
-        tab.rows.forEach((row) => {
-          expect(Object.keys(row).length).toBeGreaterThan(0)
-          expect(row._row).toBeGreaterThan(0)
-        })
-      })
-      const sheetFile = path.join(__dirname, '/', 'tabs.json')
-      const json = JSON.stringify(actual.tabs, null, 2)
+        tab.rows.forEach(row => {
+          expect(Object.keys(row).length).toBeGreaterThan(0);
+          expect(row._row).toBeGreaterThan(0);
+        });
+      });
+      const sheetFile = path.join(__dirname, '/', 'tabs.json');
+      const json = JSON.stringify(actual.tabs, null, 2);
       fs.writeFileSync(sheetFile, json, {
         encoding: 'utf-8',
-      })
+      });
     },
     sheetTimeout
-  )
-})
+  );
+});

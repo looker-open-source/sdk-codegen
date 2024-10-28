@@ -24,7 +24,7 @@
 
  */
 
-import type { IRawResponse } from '@looker/sdk-rtl'
+import type { IRawResponse } from '@looker/sdk-rtl';
 
 export const testJsonResponse: IRawResponse = {
   method: 'GET',
@@ -37,7 +37,7 @@ export const testJsonResponse: IRawResponse = {
   body: Buffer.from('[{"key1": "value1" }]'),
   requestStarted: 1000,
   responseCompleted: 2000,
-}
+};
 
 export const testOneRowComplexJson: IRawResponse = {
   method: 'GET',
@@ -101,7 +101,7 @@ export const testOneRowComplexJson: IRawResponse = {
 }`),
   requestStarted: 1000,
   responseCompleted: 2000,
-}
+};
 
 export const testTextResponse: IRawResponse = {
   method: 'GET',
@@ -114,7 +114,7 @@ export const testTextResponse: IRawResponse = {
   body: Buffer.from('some text data'),
   requestStarted: 1000,
   responseCompleted: 2000,
-}
+};
 
 export const testHtmlResponse: IRawResponse = {
   method: 'GET',
@@ -132,7 +132,7 @@ export const testHtmlResponse: IRawResponse = {
   ),
   requestStarted: 1000,
   responseCompleted: 2000,
-}
+};
 
 export const testSqlResponse: IRawResponse = {
   method: 'GET',
@@ -149,7 +149,7 @@ LEFT JOIN demo_db.products  AS products ON inventory_items.product_id = products
 LIMIT 500`),
   requestStarted: 1000,
   responseCompleted: 2000,
-}
+};
 
 export const testImageResponse = (contentType = 'image/png'): IRawResponse => ({
   method: 'GET',
@@ -162,7 +162,7 @@ export const testImageResponse = (contentType = 'image/png'): IRawResponse => ({
   body: Buffer.from('some image data'),
   requestStarted: 1000,
   responseCompleted: 2000,
-})
+});
 
 export const testUnknownResponse: IRawResponse = {
   method: 'GET',
@@ -175,7 +175,7 @@ export const testUnknownResponse: IRawResponse = {
   body: Buffer.from('some data'),
   requestStarted: 1000,
   responseCompleted: 2000,
-}
+};
 
 export const testErrorResponse: IRawResponse = {
   method: 'GET',
@@ -190,7 +190,7 @@ export const testErrorResponse: IRawResponse = {
   statusMessage: 'some status message',
   requestStarted: 1000,
   responseCompleted: 2000,
-}
+};
 
 export const testBogusJsonResponse: IRawResponse = {
   method: 'GET',
@@ -203,4 +203,4 @@ export const testBogusJsonResponse: IRawResponse = {
   body: Buffer.from('<html><body>I AM A LYING JSON RESPONSE</body></html>'),
   requestStarted: 1000,
   responseCompleted: 2000,
-}
+};

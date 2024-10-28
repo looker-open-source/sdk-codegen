@@ -24,8 +24,8 @@
 
  */
 
-import { log } from '@looker/sdk-codegen-utils'
-import { upgradeSpec } from '@looker/sdk-codegen'
+import { log } from '@looker/sdk-codegen-utils';
+import { upgradeSpec } from '@looker/sdk-codegen';
 import {
   createJsonFile,
   fail,
@@ -33,7 +33,7 @@ import {
   readFileSync,
   run,
   writeFileSync,
-} from './nodeUtils'
+} from './nodeUtils';
 
 /**
  * Convert a Swagger specification to OpenAPI
@@ -51,11 +51,11 @@ export const convertSpec = (
   force = false
 ) => {
   if (isFileSync(openApiFilename) && !force) {
-    log(`${openApiFilename} already exists. Skipping conversion.`)
-    return openApiFilename
+    log(`${openApiFilename} already exists. Skipping conversion.`);
+    return openApiFilename;
   }
-  const spec = readFileSync(specFileName)
-  const swagger = JSON.parse(spec)
+  const spec = readFileSync(specFileName);
+  const swagger = JSON.parse(spec);
   if (swagger.swagger) {
     // Still a swagger spec. Convert it.
     // https://github.com/Mermade/oas-kit/tree/master/packages/swagger2openapi config options:
@@ -69,17 +69,17 @@ export const convertSpec = (
       '""',
       '-o',
       openApiFilename,
-    ])
+    ]);
   } else if (swagger.openapi) {
     // We've already got an OpenAPI file
-    writeFileSync(openApiFilename, JSON.stringify(swagger))
+    writeFileSync(openApiFilename, JSON.stringify(swagger));
   } else {
-    throw new Error(`Bad specification file ${specFileName}`)
+    throw new Error(`Bad specification file ${specFileName}`);
   }
   if (!isFileSync(openApiFilename)) {
-    return fail('convertSpec', `creating ${openApiFilename} failed`)
+    return fail('convertSpec', `creating ${openApiFilename} failed`);
   }
-  const source = upgradeSpec(readFileSync(openApiFilename))
-  createJsonFile(openApiFilename, source)
-  return openApiFilename
-}
+  const source = upgradeSpec(readFileSync(openApiFilename));
+  createJsonFile(openApiFilename, source);
+  return openApiFilename;
+};

@@ -23,6 +23,6 @@
  SOFTWARE.
 
  */
-export { DocMethodSummary } from './DocMethodSummary'
-export { DocSummaryStatus } from './DocSummaryStatus'
-export { pickTooltipContent } from './utils'
+export { DocMethodSummary } from './DocMethodSummary';
+export { DocSummaryStatus } from './DocSummaryStatus';
+export { pickTooltipContent } from './utils';

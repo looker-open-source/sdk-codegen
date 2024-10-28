@@ -23,8 +23,8 @@
  SOFTWARE.
 
  */
-export * from './ApiExplorer'
-export * from './StandaloneApiExplorer'
-export * from './components'
-export * from './state'
-export * from './utils'
+export * from './ApiExplorer';
+export * from './StandaloneApiExplorer';
+export * from './components';
+export * from './state';
+export * from './utils';

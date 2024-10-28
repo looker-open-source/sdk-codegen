@@ -23,5 +23,5 @@
  SOFTWARE.
 
  */
-export * from './common'
-export * from './Loader'
+export * from './common';
+export * from './Loader';

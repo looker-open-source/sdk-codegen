@@ -24,48 +24,48 @@
 
  */
 
-import * as fs from 'fs'
+import * as fs from 'fs';
 import {
   Looker40SDK as LookerSDK,
   IDashboard,
   IRequestCreateDashboardRenderTask,
-} from '@looker/sdk'
-import { NodeSettingsIniFile, NodeSession } from '@looker/sdk-node'
-import { getDashboard, rootIni, waitForRender } from './utils'
+} from '@looker/sdk';
+import { NodeSettingsIniFile, NodeSession } from '@looker/sdk-node';
+import { getDashboard, rootIni, waitForRender } from './utils';
 
-const localConfig = rootIni()
+const localConfig = rootIni();
 
 /**
  *
  * @type {NodeSettingsIniFile} Settings retrieved from the configuration file
  */
-const settings = new NodeSettingsIniFile('', localConfig, 'Looker')
+const settings = new NodeSettingsIniFile('', localConfig, 'Looker');
 
 /**
  * Automatic authentication support for the Node SDK
  * @type {NodeSession} Initialized node-based session manager
  */
-const session = new NodeSession(settings)
+const session = new NodeSession(settings);
 
 /**
  * Initialized SDK object
  * @type {LookerSDK} SDK object configured for use with Node
  */
-const sdk = new LookerSDK(session)
+const sdk = new LookerSDK(session);
 
 /**
  * Read command-line parameters. Still have a bug for png argument
  * @returns {{dashboardTitle: string, renderFormat: string}}
  */
 const getParams = () => {
-  const offset = 1
+  const offset = 1;
   return {
     dashboardTitle:
       process.argv.length > offset + 1 ? process.argv[offset + 1] : '',
     outputFormat:
       process.argv.length > offset + 2 ? process.argv[offset + 2] : 'pdf',
-  }
-}
+  };
+};
 
 /**
  * Download a dashboard using a render task
@@ -79,7 +79,7 @@ const downloadDashboard = async (
   dashboard: IDashboard,
   format: string
 ) => {
-  let fileName
+  let fileName;
   try {
     const req: IRequestCreateDashboardRenderTask = {
       dashboard_id: dashboard.id!,
@@ -87,49 +87,49 @@ const downloadDashboard = async (
       body: {},
       width: 1920,
       height: 1080,
-    }
-    const task = await sdk.ok(sdk.create_dashboard_render_task(req))
+    };
+    const task = await sdk.ok(sdk.create_dashboard_render_task(req));
 
     if (!task || !task.id) {
-      console.error(`Could not create a render task for ${dashboard.title}`)
-      return
+      console.error(`Could not create a render task for ${dashboard.title}`);
+      return;
     }
 
-    const result = await waitForRender(sdk, task.id!)
+    const result = await waitForRender(sdk, task.id!);
     if (result) {
-      fileName = `${dashboard.title}.${format}`
+      fileName = `${dashboard.title}.${format}`;
       fs.writeFile(fileName, result, 'binary', (err) => {
         if (err) {
-          fileName = undefined
-          console.error(err)
+          fileName = undefined;
+          console.error(err);
         }
-      })
+      });
     }
   } catch (err) {
-    console.error(`'${format}' is probably not a valid format`)
-    console.error(err)
+    console.error(`'${format}' is probably not a valid format`);
+    console.error(err);
   }
-  return fileName
-}
-;(async () => {
-  const { dashboardTitle, outputFormat } = getParams()
+  return fileName;
+};
+(async () => {
+  const { dashboardTitle, outputFormat } = getParams();
   if (!dashboardTitle) {
-    console.warn('Please provide: <dashboardTitle> [<outputFormat>]')
+    console.warn('Please provide: <dashboardTitle> [<outputFormat>]');
     console.warn(
       '  outputFormat defaults to "pdf". png and jpg are also supported.'
-    )
-    return
+    );
+    return;
   }
-  console.log(`Rendering dashboard "${dashboardTitle}" as ${outputFormat} ...`)
+  console.log(`Rendering dashboard "${dashboardTitle}" as ${outputFormat} ...`);
 
-  const dashboard = await getDashboard(sdk, dashboardTitle)
+  const dashboard = await getDashboard(sdk, dashboardTitle);
   if (dashboard) {
-    const fileName = await downloadDashboard(sdk, dashboard, outputFormat)
-    console.log(`open "${fileName}" to see the download`)
+    const fileName = await downloadDashboard(sdk, dashboard, outputFormat);
+    console.log(`open "${fileName}" to see the download`);
   }
 
-  await sdk.authSession.logout() // logout of API session
+  await sdk.authSession.logout(); // logout of API session
   if (!sdk.authSession.isAuthenticated()) {
-    console.log('Logout successful')
+    console.log('Logout successful');
   }
-})()
+})();

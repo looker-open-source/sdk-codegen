@@ -34,10 +34,6 @@ npm install @looker/sdk @looker/sdk-rtl @looker/sdk-node
 
 Some other dependencies may be required for your project to build and run correctly.
 
-```bash
-yarn install @types/readable-stream @types/request @types/request-promise-native -D
-```
-
 ### TypeScript SDK packages
 
 The Looker TypeScript SDK has different packages to prevent node dependencies being linked into browser usage of the SDK (the node dependencies are not available in the browser and can cause compilation errors). There are three packages for the Typescript SDK available on npm:
@@ -76,8 +72,8 @@ Verify authentication works and that API calls will succeed with code similar to
 ```typescript
 import { LookerNodeSDK } from '@looker/sdk-node'
 (async () => {
-  // create a Node SDK object for API 3.1
-  const sdk = LookerNodeSDK.init31()
+  // create a Node SDK object for API 4.0
+  const sdk = LookerNodeSDK.init40()
   // retrieve your user account to verify correct credentials
   const me = await sdk.ok(sdk.me(
     "id, first_name, last_name, display_name, email, personal_space_id, home_space_id, group_ids, role_ids"))
@@ -101,37 +97,19 @@ import { LookerNodeSDK } from '@looker/sdk-node'
 })()
 ```
 
-**NOTE**: By default, `LookerNodeSDK.init31()` and `LookerNodeSDK.init40()` will check for environment variables. Environment variables can be ignored by passing an empty string to the NodeSettings constructor.
+**NOTE**: By default, `LookerNodeSDK.init40()` will check for environment variables. Environment variables can be ignored by passing an empty string to the NodeSettings constructor.
 
 ```typescript
 // Ignore any SDK environment variables for the node runtime
-const settings = new NodeSettingsIniFile('')
-const sdk = LookerNodeSDK.init40(settings)
-const sdk31 = LookerNodeSDK.init31(settings)
+const settings = new NodeSettingsIniFile('');
+const sdk = LookerNodeSDK.init40(settings);
 ```
 
 ### Developing with multiple API versions
 
-Starting with Looker release 7.2, the experimental version of API 4.0 is available. To support iterative migration to API 4.0 from API 3.1, the single Looker SDK package now supports multiple API versions for the generated SDK classes. Both API 3.1 and API 4.0 are supported for Node and Browser-based use.
+Starting with Looker release 23.18, API 3.1 and 3.0 have been removed. Please use the stable and current version API 4.0 as shown below.
 
-`LookerNodeSDK.init31()` `LookerBrowserSDK.init31()` and `Looker31SDK()` all initialize the API 3.1 implementation of the SDK.
-
-`LookerNodeSDK.init40()` `LookerBrowserSDK.init40()` and `Looker40SDK()` all initialize the API 4.1 implementation of the SDK.
-
-Code similar to the following can be used to develop with both the 3.1 and 4.0 SDKs in the same source file:
-
-```typescript
-import { Looker40SDK, Looker31SDK } from '@looker/sdk'
-import { NodeSession, NodeSettingsIniFile } from '@looker/sdk-node'
-
-const settings = new NodeSettingsIniFile()
-const session = new NodeSession(settings)
-const sdk = new Looker40SDK(session)
-const sdk31 = new Looker31SDK(session)
-
-const me40 = await sdk.ok(sdk.me())
-const me31 = await sdk.ok(sdk31.me()) // or sdk31.ok(sdk31.me())
-```
+`LookerNodeSDK.init40()` `LookerBrowserSDK.init40()` and `Looker40SDK()` all initialize the API 4.0 implementation of the SDK.
 
 ## Using NodeSession for automatic authentication
 
@@ -141,7 +119,7 @@ The `settings` provided to the `NodeSession` class include the base URL for the 
 
 ### Sudo behavior with NodeSession
 
-The `NodeSession` also directly supports logging in as another user, which is usually called `sudo as` another user in the Looker browser application.
+`NodeSession` also directly supports logging in as another user, which is usually called `sudo as` another user in the Looker browser application.
 
 An API user with appropriate permissions can `sudo` as another user by passing a different user ID to the `NodeSession.login()` method. Only one user can be impersonated at a time via `NodeSession`. When a `sudo` session is active, all SDK requests are processed as that user.
 
@@ -152,58 +130,58 @@ describe('sudo', () => {
   it(
     'login/logout',
     async () => {
-      const sdk = new LookerSDK(session)
-      const apiUser = await sdk.ok(sdk.me())
+      const sdk = new LookerSDK(session);
+      const apiUser = await sdk.ok(sdk.me());
       let all = await sdk.ok(
         sdk.all_users({
           fields: 'id,is_disabled',
         })
-      )
+      );
 
       // find users who are not the API user
       const others = all
-        .filter((u) => u.id !== apiUser.id && !u.is_disabled)
-        .slice(0, 2)
-      expect(others.length).toEqual(2)
+        .filter(u => u.id !== apiUser.id && !u.is_disabled)
+        .slice(0, 2);
+      expect(others.length).toEqual(2);
       if (others.length > 1) {
         // pick two other active users for `sudo` tests
-        const [sudoA, sudoB] = others
+        const [sudoA, sudoB] = others;
         // get auth support for login()
-        const auth = sdk.authSession as IAuthSession
+        const auth = sdk.authSession as IAuthSession;
 
         // login as sudoA
-        await auth.login(sudoA.id.toString())
-        let sudo = await sdk.ok(sdk.me()) // `me` returns `sudoA` user
-        expect(sudo.id).toEqual(sudoA.id)
+        await auth.login(sudoA.id.toString());
+        let sudo = await sdk.ok(sdk.me()); // `me` returns `sudoA` user
+        expect(sudo.id).toEqual(sudoA.id);
 
         // login as sudoB directly from sudoA
-        await auth.login(sudoB.id)
-        sudo = await sdk.ok(sdk.me()) // `me` returns `sudoB` user
-        expect(sudo.id).toEqual(sudoB.id)
+        await auth.login(sudoB.id);
+        sudo = await sdk.ok(sdk.me()); // `me` returns `sudoB` user
+        expect(sudo.id).toEqual(sudoB.id);
 
         // logging out sudo resets to API user
-        await auth.logout()
-        let user = await sdk.ok(sdk.me()) // `me` returns `apiUser` user
-        expect(sdk.authSession.isAuthenticated()).toEqual(true)
-        expect(user).toEqual(apiUser)
+        await auth.logout();
+        let user = await sdk.ok(sdk.me()); // `me` returns `apiUser` user
+        expect(sdk.authSession.isAuthenticated()).toEqual(true);
+        expect(user).toEqual(apiUser);
 
         // login as sudoA again to test plain `login()` later
-        await auth.login(sudoA.id)
-        sudo = await sdk.ok(sdk.me())
-        expect(sudo.id).toEqual(sudoA.id)
+        await auth.login(sudoA.id);
+        sudo = await sdk.ok(sdk.me());
+        expect(sudo.id).toEqual(sudoA.id);
 
         // login() without a sudo ID logs in the API user
-        await auth.login()
-        user = await sdk.ok(sdk.me()) // `me` returns `apiUser` user
-        expect(sdk.authSession.isAuthenticated()).toEqual(true)
-        expect(user.id).toEqual(apiUser.id)
+        await auth.login();
+        user = await sdk.ok(sdk.me()); // `me` returns `apiUser` user
+        expect(sdk.authSession.isAuthenticated()).toEqual(true);
+        expect(user.id).toEqual(apiUser.id);
       }
-      await sdk.authSession.logout()
-      expect(sdk.authSession.isAuthenticated()).toEqual(false)
+      await sdk.authSession.logout();
+      expect(sdk.authSession.isAuthenticated()).toEqual(false);
     },
     testTimeout
-  )
-})
+  );
+});
 ```
 
 ## Environment variable configuration
@@ -213,15 +191,23 @@ describe('sudo', () => {
 Once the desired environment variables are set, the following code is all that's required to initialize the Looker SDK and retrieve the API credential's `User` information.
 
 ```typescript
-const sdk = LookerNodeSDK.init31(new NodeSettings())
-const me = await sdk.ok(sdk.me())
+const sdk = LookerNodeSDK.init40(new NodeSettings());
+const me = await sdk.ok(sdk.me());
 ```
 
-### Streaming API responses
+## Streaming with the SDK
+
+The [deprecated NodeJS `request` package](https://www.npmjs.com/package/request) dependency has been removed from all Looker TypeScript packages. This removal prompted a **BREAKING** interface change for the streaming SDK.
+The streaming method callback signature changed from `(readable: Readable) => Promise<x>` to `(response: Response) => Promise<x>`. Using `Response` as the parameter to the callback greatly
+increases the flexibility of streaming implementations and provides other valuable information like `Content-Type` and other headers to the streaming callback.
+
+For the Browser SDK (`@looker/sdk`), the standard `fetch` function is still used. For the Node SDK (`@looker/sdk-node`), the global [`fetch`](https://nodejs.org/api/globals.html#fetch) function from NodeJS is used, which was marked **stable** in version 22.
+
+This means the Looker Node SDK now requires Node 20 or above.
 
 The streaming version of the SDK methods should be initialized using the same `AuthSession` as the main SDK to reduce authentication thrashing.
 
-Construction of the streaming SDK can use code similar to the following, which is taken from the [downloadTile.ts example](/examples/typescript/downloadTile.ts#L124:L160):
+Construction of the streaming SDK can use code similar to the following, which is taken from the [downloadTile.ts example](/examples/typescript/downloadTile.ts#L129:L157):
 
 ```ts
 /**
@@ -236,31 +222,23 @@ const downloadTileAs = async (
   tile: IDashboardElement,
   format: string
 ) => {
-  let fileName
-  fileName = `${tile.title}.${format}`
+  const fileName = `${tile.title}.${format}`;
 
-  const writer = fs.createWriteStream(fileName)
+  const writer = createWritableStream(fs.createWriteStream(fileName));
   const request: IRequestRunQuery = {
     result_format: format,
     query_id: tile.query_id!,
     // apply_formatting: true,
     // apply_vis: true
-  }
-  const sdkStream = new Looker40SDKStream(sdk.authSession)
-  await sdkStream.run_query(async (readable: Readable) => {
-    return new Promise<any>((resolve, reject) => {
-      readable
-        .pipe(writer)
-        .on('error', () => {
-          fileName = undefined
-          throw reject
-        })
-        .on('finish', resolve)
-    })
-  }, request)
+  };
+  const sdkStream = new Looker40SDKStream(sdk.authSession);
+  await sdkStream.run_query(async (response: Response) => {
+    await response.body.pipeTo(writer);
+    return 'streamed';
+  }, request);
 
-  return fileName
-}
+  return fileName;
+};
 ```
 
 ### More examples

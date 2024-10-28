@@ -24,19 +24,19 @@
 
  */
 
-import React from 'react'
-import { screen } from '@testing-library/react'
-import { renderWithTheme } from '@looker/components-test-utils'
-import { CodeCopy } from './CodeCopy'
+import React from 'react';
+import { screen } from '@testing-library/react';
+import { renderWithTheme } from '@looker/components-test-utils';
+import { CodeCopy } from './CodeCopy';
 
 describe('CodeCopy', () => {
   test('displays code and clipboard UI', async () => {
-    const code = 'Some text. Supposed to be good for you.'
-    const caption = 'Copy this!'
-    renderWithTheme(<CodeCopy code={code} caption={caption} language="text" />)
-    const copy = screen.getByRole('button', { name: caption })
-    expect(copy).toBeInTheDocument()
-    const pre = screen.getByText(code)
-    expect(pre).toHaveTextContent(code)
-  })
-})
+    const code = 'Some text. Supposed to be good for you.';
+    const caption = 'Copy this!';
+    renderWithTheme(<CodeCopy code={code} caption={caption} language="text" />);
+    const copy = screen.getByRole('button', { name: caption });
+    expect(copy).toBeInTheDocument();
+    const pre = screen.getByText(code);
+    expect(pre).toHaveTextContent(code);
+  });
+});

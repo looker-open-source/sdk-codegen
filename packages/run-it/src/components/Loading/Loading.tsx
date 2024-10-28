@@ -24,13 +24,13 @@
 
  */
 
-import type { FC } from 'react'
-import React from 'react'
-import { Space, ProgressCircular, Text } from '@looker/components'
+import type { FC } from 'react';
+import React from 'react';
+import { ProgressCircular, Space, Text } from '@looker/components';
 
 interface LoadingProps {
-  loading: boolean
-  message?: string
+  loading: boolean;
+  message?: string;
 }
 
 export const Loading: FC<LoadingProps> = ({
@@ -45,4 +45,4 @@ export const Loading: FC<LoadingProps> = ({
       </Space>
     )}
   </>
-)
+);

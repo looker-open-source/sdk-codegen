@@ -24,31 +24,31 @@
 
  */
 
-import type { FC } from 'react'
-import React, { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import type { FC } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import type {
+  ApiModel,
+  CodeGen,
   IMethod,
   IType,
-  ApiModel,
   KeyedCollection,
-  CodeGen,
-} from '@looker/sdk-codegen'
-import { CollapserCard, getGenerators } from '@looker/run-it'
+} from '@looker/sdk-codegen';
+import { CollapserCard, getGenerators } from '@looker/run-it';
 
-import { DocCode } from '../DocCode'
-import { selectSdkLanguage } from '../../state'
-import { isMethod } from '../../utils/path'
-import { noComment } from './utils'
-import { DocDeclarations } from './DocDeclarations'
+import { DocCode } from '../DocCode';
+import { selectSdkLanguage } from '../../state';
+import { isMethod } from '../../utils/path';
+import { noComment } from './utils';
+import { DocDeclarations } from './DocDeclarations';
 
 interface LanguageSDKProps {
   /** API spec */
-  api: ApiModel
+  api: ApiModel;
   /** An SDK method */
-  method?: IMethod
+  method?: IMethod;
   /** An SDK type */
-  type?: IType
+  type?: IType;
 }
 
 const getDeclarations = (
@@ -56,44 +56,44 @@ const getDeclarations = (
   sdkLanguage: string,
   item: IMethod | IType
 ) => {
-  const declarations: KeyedCollection<string> = {}
+  const declarations: KeyedCollection<string> = {};
   Object.entries(generators).forEach(([language, gen]) => {
     if (sdkLanguage === 'All' || language === sdkLanguage) {
       const code = isMethod(item)
         ? gen.declareMethod('', item as IMethod)
-        : gen.declareType('', item as IType)
-      declarations[language] = code
+        : gen.declareType('', item as IType);
+      declarations[language] = code;
     }
-  })
-  return declarations
-}
+  });
+  return declarations;
+};
 
 /**
  * Given a method or a type, it renders its SDK declaration in all supported languages.
  */
 export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
-  const sdkLanguage = useSelector(selectSdkLanguage)
-  const generators = getGenerators(api)
-  const [item, setItem] = useState(method ? noComment(method) : type!)
+  const sdkLanguage = useSelector(selectSdkLanguage);
+  const generators = getGenerators(api);
+  const [item, setItem] = useState(method ? noComment(method) : type!);
   const [declarations, setDeclarations] = useState(
     getDeclarations(generators, sdkLanguage, item)
-  )
-  const [header, setHeader] = useState(`${sdkLanguage} Declaration`)
+  );
+  const [header, setHeader] = useState(`${sdkLanguage} Declaration`);
 
   useEffect(() => {
-    setItem(method ? noComment(method) : type!)
-  }, [method, type])
+    setItem(method ? noComment(method) : type!);
+  }, [method, type]);
 
   useEffect(() => {
-    const declarations = getDeclarations(generators, sdkLanguage, item)
-    setDeclarations(declarations)
-    const languages = Object.keys(declarations)
+    const declarations = getDeclarations(generators, sdkLanguage, item);
+    setDeclarations(declarations);
+    const languages = Object.keys(declarations);
     if (languages.length > 1) {
-      setHeader('Declarations')
+      setHeader('Declarations');
     } else {
-      setHeader(`${languages[0]} Declaration`)
+      setHeader(`${languages[0]} Declaration`);
     }
-  }, [sdkLanguage, item])
+  }, [sdkLanguage, item]);
 
   return (
     <CollapserCard heading={header} id="sdk declarations">
@@ -106,5 +106,5 @@ export const DocSDKs: FC<LanguageSDKProps> = ({ api, method, type }) => {
         />
       )}
     </CollapserCard>
-  )
-}
+  );
+};

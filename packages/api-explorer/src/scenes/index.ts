@@ -23,9 +23,9 @@
  SOFTWARE.
 
  */
-export { ErrorDetailScene } from './ErrorDetailScene'
-export { HomeScene } from './HomeScene'
-export { MethodScene } from './MethodScene'
-export { TypeScene } from './TypeScene'
-export { MethodTagScene } from './MethodTagScene'
-export { TypeTagScene } from './TypeTagScene'
+export { ErrorDetailScene } from './ErrorDetailScene';
+export { HomeScene } from './HomeScene';
+export { MethodScene } from './MethodScene';
+export { TypeScene } from './TypeScene';
+export { MethodTagScene } from './MethodTagScene';
+export { TypeTagScene } from './TypeTagScene';

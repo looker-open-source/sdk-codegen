@@ -23,24 +23,24 @@
  SOFTWARE.
 
  */
-import type { ApiModel } from '@looker/sdk-codegen'
-import type { FC } from 'react'
-import React from 'react'
-import { useParams } from 'react-router-dom'
-import { Space, Span, Tooltip } from '@looker/components'
-import { ApixSection, DocMarkdown, DocTitle } from '../../components'
+import type { ApiModel } from '@looker/sdk-codegen';
+import type { FC } from 'react';
+import React from 'react';
+import { useParams } from 'react-router-dom';
+import { Space, Span, Tooltip } from '@looker/components';
+import { ApixSection, DocMarkdown, DocTitle } from '../../components';
 
 interface DocHomeProps {
-  api: ApiModel
+  api: ApiModel;
 }
 
 interface DocHomeParams {
-  specKey: string
+  specKey: string;
 }
 
 export const HomeScene: FC<DocHomeProps> = ({ api }) => {
-  const { specKey } = useParams<DocHomeParams>()
-  const lookerVersion = 'x-looker-release-version'
+  const { specKey } = useParams<DocHomeParams>();
+  const lookerVersion = 'x-looker-release-version';
 
   return (
     <ApixSection>
@@ -56,5 +56,5 @@ export const HomeScene: FC<DocHomeProps> = ({ api }) => {
         <DocMarkdown source={api.spec.info.description} specKey={specKey} />
       )}
     </ApixSection>
-  )
-}
+  );
+};

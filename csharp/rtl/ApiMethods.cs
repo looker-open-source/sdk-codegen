@@ -24,7 +24,7 @@ namespace Looker.RTL
         /// Recommended constructor for ApiMethods
         /// </summary>
         /// <param name="authSession">AuthSession to manage automatic auth</param>
-        /// <param name="apiVersion">Version of the API. Typically "3.1" or "4.0"</param>
+        /// <param name="apiVersion">Version of the API. Should be "4.0"</param>
         public ApiMethods(IAuthSession authSession, string apiVersion = Constants.DefaultApiVersion)
         {
             _authenticator = request => AuthSession.Authenticate(request);

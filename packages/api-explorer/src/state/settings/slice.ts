@@ -23,24 +23,24 @@
  SOFTWARE.
 
  */
-import { createSlice } from '@reduxjs/toolkit'
-import type { PayloadAction } from '@reduxjs/toolkit'
-import { createSliceHooks } from '@looker/redux'
-import type { SearchCriterionTerm } from '@looker/sdk-codegen'
-import { SearchAll, setToCriteria } from '@looker/sdk-codegen'
+import { createSlice } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
+import { createSliceHooks } from '@looker/redux';
+import type { SearchCriterionTerm } from '@looker/sdk-codegen';
+import { SearchAll, setToCriteria } from '@looker/sdk-codegen';
 
-import { saga } from './sagas'
+import { saga } from './sagas';
 
 export interface UserDefinedSettings {
-  sdkLanguage: string
+  sdkLanguage: string;
 }
 
 export interface SettingState extends UserDefinedSettings {
-  searchPattern: string
-  searchCriteria: SearchCriterionTerm[]
-  tagFilter: string
-  initialized: boolean
-  error?: Error
+  searchPattern: string;
+  searchCriteria: SearchCriterionTerm[];
+  tagFilter: string;
+  initialized: boolean;
+  error?: Error;
 }
 
 export const defaultSettings = {
@@ -48,18 +48,18 @@ export const defaultSettings = {
   searchPattern: '',
   searchCriteria: setToCriteria(SearchAll) as SearchCriterionTerm[],
   tagFilter: 'ALL',
-}
+};
 
 export const defaultSettingsState: SettingState = {
   ...defaultSettings,
   initialized: false,
-}
+};
 
-type SetSearchPatternAction = Pick<SettingState, 'searchPattern'>
-type SetSdkLanguageAction = Pick<SettingState, 'sdkLanguage'>
-type SetTagFilterAction = Pick<SettingState, 'tagFilter'>
+type SetSearchPatternAction = Pick<SettingState, 'searchPattern'>;
+type SetSdkLanguageAction = Pick<SettingState, 'sdkLanguage'>;
+type SetTagFilterAction = Pick<SettingState, 'tagFilter'>;
 
-export type InitSuccessPayload = UserDefinedSettings
+export type InitSuccessPayload = UserDefinedSettings;
 
 export const settingsSlice = createSlice({
   name: 'settings',
@@ -71,30 +71,30 @@ export const settingsSlice = createSlice({
       state,
       action: PayloadAction<InitSuccessPayload>
     ) {
-      state.sdkLanguage = action.payload.sdkLanguage
-      state.initialized = true
+      state.sdkLanguage = action.payload.sdkLanguage;
+      state.initialized = true;
     },
     initSettingsFailureAction(state, action: PayloadAction<Error>) {
-      state.error = action.payload
-      state.initialized = false
+      state.error = action.payload;
+      state.initialized = false;
     },
     setSdkLanguageAction(state, action: PayloadAction<SetSdkLanguageAction>) {
-      state.sdkLanguage = action.payload.sdkLanguage
+      state.sdkLanguage = action.payload.sdkLanguage;
     },
     setSearchPatternAction(
       state,
       action: PayloadAction<SetSearchPatternAction>
     ) {
-      state.searchPattern = action.payload.searchPattern
+      state.searchPattern = action.payload.searchPattern;
     },
     setTagFilterAction(state, action: PayloadAction<SetTagFilterAction>) {
-      state.tagFilter = action.payload.tagFilter
+      state.tagFilter = action.payload.tagFilter;
     },
   },
-})
+});
 
-export const settingActions = settingsSlice.actions
+export const settingActions = settingsSlice.actions;
 export const {
   useActions: useSettingActions,
   useStoreState: useSettingStoreState,
-} = createSliceHooks(settingsSlice, saga)
+} = createSliceHooks(settingsSlice, saga);

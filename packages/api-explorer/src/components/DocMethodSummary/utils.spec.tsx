@@ -23,7 +23,7 @@
  SOFTWARE.
 
  */
-import { pickTooltipContent } from './utils'
+import { pickTooltipContent } from './utils';
 
 describe('DocMethodSummary utils', () => {
   test.each`
@@ -38,8 +38,8 @@ describe('DocMethodSummary utils', () => {
   `(
     'pickTooltipContent returns correct $status item tooltip content',
     ({ status, expected }) => {
-      const actual = pickTooltipContent(status)
-      expect(actual).toEqual(expected)
+      const actual = pickTooltipContent(status);
+      expect(actual).toEqual(expected);
     }
-  )
-})
+  );
+});

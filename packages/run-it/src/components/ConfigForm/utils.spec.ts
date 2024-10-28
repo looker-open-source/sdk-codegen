@@ -24,42 +24,42 @@
 
  */
 
-import { validateUrl } from './utils'
+import { validateUrl } from './utils';
 
 describe('configUtils', () => {
   describe('validateUrl', () => {
     test('invalid urls are empty', () => {
-      const actual = validateUrl('foo')
-      expect(actual).toEqual('')
-    })
+      const actual = validateUrl('foo');
+      expect(actual).toEqual('');
+    });
 
     test('parseable urls are normalized', () => {
-      let actual = validateUrl('h')
-      expect(actual).toEqual('')
-      actual = validateUrl('http')
-      expect(actual).toEqual('')
-      actual = validateUrl('http:foo')
-      expect(actual).toEqual('http://foo')
-      actual = validateUrl('http:foo?bar')
-      expect(actual).toEqual('http://foo')
-      actual = validateUrl('http://foo?bar')
-      expect(actual).toEqual('http://foo')
-      actual = validateUrl('http://foo/bar')
-      expect(actual).toEqual('http://foo')
-      actual = validateUrl('http:/foo')
-      expect(actual).toEqual('http://foo')
-      actual = validateUrl('http://foo')
-      expect(actual).toEqual('http://foo')
-      actual = validateUrl('http://foo:')
-      expect(actual).toEqual('http://foo:')
-      actual = validateUrl('http://foo:1')
-      expect(actual).toEqual('http://foo:1')
-      actual = validateUrl('https:/foo:19999/')
-      expect(actual).toEqual('https://foo:19999')
-      actual = validateUrl('https:/foo:19999/?foo=bar')
-      expect(actual).toEqual('https://foo:19999')
-      actual = validateUrl('https://foo:19999/')
-      expect(actual).toEqual('https://foo:19999')
-    })
-  })
-})
+      let actual = validateUrl('h');
+      expect(actual).toEqual('');
+      actual = validateUrl('http');
+      expect(actual).toEqual('');
+      actual = validateUrl('http:foo');
+      expect(actual).toEqual('http://foo');
+      actual = validateUrl('http:foo?bar');
+      expect(actual).toEqual('http://foo');
+      actual = validateUrl('http://foo?bar');
+      expect(actual).toEqual('http://foo');
+      actual = validateUrl('http://foo/bar');
+      expect(actual).toEqual('http://foo');
+      actual = validateUrl('http:/foo');
+      expect(actual).toEqual('http://foo');
+      actual = validateUrl('http://foo');
+      expect(actual).toEqual('http://foo');
+      actual = validateUrl('http://foo:');
+      expect(actual).toEqual('http://foo:');
+      actual = validateUrl('http://foo:1');
+      expect(actual).toEqual('http://foo:1');
+      actual = validateUrl('https:/foo:19999/');
+      expect(actual).toEqual('https://foo:19999');
+      actual = validateUrl('https:/foo:19999/?foo=bar');
+      expect(actual).toEqual('https://foo:19999');
+      actual = validateUrl('https://foo:19999/');
+      expect(actual).toEqual('https://foo:19999');
+    });
+  });
+});

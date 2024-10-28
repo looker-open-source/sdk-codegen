@@ -23,8 +23,8 @@
  SOFTWARE.
 
  */
-import type { Resource } from '../types'
-import { ContentType, Language, Persona, PlatformFeature } from '../types'
+import type { Resource } from '../types';
+import { ContentType, Language, Persona, PlatformFeature } from '../types';
 
 // Common, unambiguous values for conciseness
 const {
@@ -37,8 +37,8 @@ const {
   reference,
   sourceCode,
   video,
-} = ContentType
-const { javascript, typescript, python } = Language
+} = ContentType;
+const { javascript, typescript, python } = Language;
 const {
   admin,
   developer,
@@ -47,7 +47,7 @@ const {
   modeler,
   analyst,
   investigator,
-} = Persona
+} = Persona;
 const {
   actions,
   api,
@@ -56,7 +56,7 @@ const {
   extensions,
   git,
   customVisualization,
-} = PlatformFeature
+} = PlatformFeature;
 
 export const resources: Resource[] = [
   {
@@ -635,4 +635,4 @@ export const resources: Resource[] = [
     platformFeatures: [embed],
     personas: [developer],
   },
-]
+];

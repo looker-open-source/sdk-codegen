@@ -24,45 +24,45 @@
 
  */
 
-import { AuthToken } from './authToken'
+import { AuthToken } from './authToken';
 
 describe('AccessToken', () => {
   it('defaults with empty token', () => {
-    const actual = new AuthToken()
-    expect(actual.access_token).toEqual('')
-    expect(actual.token_type).toEqual('')
-    expect(actual.expires_in).toEqual(0)
-    expect(actual.isActive()).toEqual(false)
-  })
+    const actual = new AuthToken();
+    expect(actual.access_token).toEqual('');
+    expect(actual.token_type).toEqual('');
+    expect(actual.expires_in).toEqual(0);
+    expect(actual.isActive()).toEqual(false);
+  });
 
   it('is active with full token', () => {
     const actual = new AuthToken({
       access_token: 'all-access',
       expires_in: 3600,
       token_type: 'backstage',
-    })
-    expect(actual.access_token).toEqual('all-access')
-    expect(actual.token_type).toEqual('backstage')
-    expect(actual.expires_in).toEqual(3600)
-    expect(actual.isActive()).toEqual(true)
-  })
+    });
+    expect(actual.access_token).toEqual('all-access');
+    expect(actual.token_type).toEqual('backstage');
+    expect(actual.expires_in).toEqual(3600);
+    expect(actual.isActive()).toEqual(true);
+  });
 
   it('has a 10 second lag time for expiration', () => {
     let actual = new AuthToken({
       access_token: 'all-access',
       expires_in: 9,
       token_type: 'backstage',
-    })
-    expect(actual.access_token).toEqual('all-access')
-    expect(actual.token_type).toEqual('backstage')
-    expect(actual.expires_in).toEqual(9)
-    expect(actual.isActive()).toEqual(false)
+    });
+    expect(actual.access_token).toEqual('all-access');
+    expect(actual.token_type).toEqual('backstage');
+    expect(actual.expires_in).toEqual(9);
+    expect(actual.isActive()).toEqual(false);
     actual = new AuthToken({
       access_token: 'all-access',
       expires_in: 11,
       token_type: 'backstage',
-    })
-    expect(actual.expires_in).toEqual(11)
-    expect(actual.isActive()).toEqual(true)
-  })
-})
+    });
+    expect(actual.expires_in).toEqual(11);
+    expect(actual.isActive()).toEqual(true);
+  });
+});

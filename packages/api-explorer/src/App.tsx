@@ -24,26 +24,26 @@
 
  */
 
-import React from 'react'
-import { BrowserRouter as Router } from 'react-router-dom'
-import ReactDOM from 'react-dom'
-import { createGlobalStyle } from 'styled-components'
-import { StandaloneApiExplorer } from './StandaloneApiExplorer'
+import React from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import ReactDOM from 'react-dom';
+import { createGlobalStyle } from 'styled-components';
+import { StandaloneApiExplorer } from './StandaloneApiExplorer';
 
 const BodyReset = createGlobalStyle`
   body {
     margin: 0;
   }
-`
+`;
 
 const basename = (window as any).LOOKER_DEV_PORTAL
   ? (window as any).LOOKER_DEV_PORTAL.basename
-  : undefined
+  : undefined;
 
 const versionsUrl = new URL(
   'versions.json',
   (window as any).location.origin
-).toString()
+).toString();
 
 ReactDOM.render(
   <Router basename={basename}>
@@ -51,4 +51,4 @@ ReactDOM.render(
     <BodyReset />
   </Router>,
   document.getElementById('container')
-)
+);

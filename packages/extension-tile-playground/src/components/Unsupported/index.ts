@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export * from './Unsupported'
+export * from './Unsupported';

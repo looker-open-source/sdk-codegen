@@ -1,21 +1,20 @@
 version: '3'
 services:
+  base:
+    image: base-sdk
+    build:
+      context: docker/base/
 
-    base:
-      image: base-sdk
-      build:
-        context: docker/base/
-
-    python:
-      environment:
-        - LOOKERSDK_BASE_URL=${LOOKERSDK_BASE_URL}
-        - LOOKERSDK_API_VERSION=${LOOKERSDK_API_VERSION}
-        - LOOKERSDK_VERIFY_SSL=${LOOKERSDK_VERIFY_SSL}
-        - LOOKERSDK_TIMEOUT=${LOOKERSDK_TIMEOUT}
-        - LOOKERSDK_CLIENT_ID=${LOOKERSDK_CLIENT_ID}
-        - LOOKERSDK_CLIENT_SECRET=${LOOKERSDK_CLIENT_SECRET}
-      build: docker/python/
-      stdin_open: true
-      tty: true
-      volumes:
-        - '.:/sdk_codegen'
+  python:
+    environment:
+      - LOOKERSDK_BASE_URL=${LOOKERSDK_BASE_URL}
+      - LOOKERSDK_API_VERSION=${LOOKERSDK_API_VERSION}
+      - LOOKERSDK_VERIFY_SSL=${LOOKERSDK_VERIFY_SSL}
+      - LOOKERSDK_TIMEOUT=${LOOKERSDK_TIMEOUT}
+      - LOOKERSDK_CLIENT_ID=${LOOKERSDK_CLIENT_ID}
+      - LOOKERSDK_CLIENT_SECRET=${LOOKERSDK_CLIENT_SECRET}
+    build: docker/python/
+    stdin_open: true
+    tty: true
+    volumes:
+      - '.:/sdk_codegen'

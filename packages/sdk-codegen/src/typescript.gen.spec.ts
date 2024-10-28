@@ -24,17 +24,19 @@
 
  */
 
-import { DelimArray } from '@looker/sdk-rtl'
-import { TestConfig } from './testUtils'
-import { TypescriptGen } from './typescript.gen'
-import { EnumType, titleCase } from './sdkModels'
-import { trimInputs } from './codeGen'
+import { DelimArray } from '@looker/sdk-rtl';
+import { TestConfig } from '@looker/sdk-codegen-utils';
+import { TypescriptGen } from './typescript.gen';
+import type { IType } from './sdkModels';
+import { EnumType, specToModel } from './sdkModels';
+import { trimInputs } from './codeGen';
 
-const config = TestConfig()
-const apiTestModel = config.apiTestModel
+const config = TestConfig(specToModel);
+const apiTestModel = config.apiTestModel;
 
-const gen = new TypescriptGen(apiTestModel)
-const indent = ''
+const gen = new TypescriptGen(apiTestModel);
+const indent = '';
+/** eslint-disable jest/no-disabled-tests */
 
 describe('typescript generator', () => {
   describe('trimInputs tests here instead of CodeGen', () => {
@@ -47,30 +49,30 @@ describe('typescript generator', () => {
         five: '',
         six: {},
         seven: [],
-      }
-      const expected = { two: 'assigned', three: true, four: false, six: {} }
-      const actual = trimInputs(inputs)
-      expect(actual).toEqual(expected)
-    })
+      };
+      const expected = { two: 'assigned', three: true, four: false, six: {} };
+      const actual = trimInputs(inputs);
+      expect(actual).toEqual(expected);
+    });
 
     it('assigns arrays', () => {
       const inputs = {
         zero: [0, 1, 2, 3],
-      }
+      };
       const expected = {
         zero: [0, 1, 2, 3],
-      }
-      const actual = trimInputs(inputs)
-      expect(actual).toEqual(expected)
-    })
+      };
+      const actual = trimInputs(inputs);
+      expect(actual).toEqual(expected);
+    });
 
     it('returns DelimArray', () => {
       const inputs = {
         ids: new DelimArray<number>([1, 2, 3]),
-      }
-      const actual = trimInputs(inputs)
-      expect(actual).toEqual(inputs)
-    })
+      };
+      const actual = trimInputs(inputs);
+      expect(actual).toEqual(inputs);
+    });
 
     it('trims nested levels', () => {
       const inputs = {
@@ -81,17 +83,17 @@ describe('typescript generator', () => {
         four: false,
         five: '',
         six: { a: true, b: 0, c: null, d: {}, e: '' },
-      }
+      };
       const expected = {
         zero: [0, 1, 2, 3],
         two: 'assigned',
         three: true,
         four: false,
         six: { a: true, b: 0 },
-      }
-      const actual = trimInputs(inputs)
-      expect(actual).toEqual(expected)
-    })
+      };
+      const actual = trimInputs(inputs);
+      expect(actual).toEqual(expected);
+    });
 
     it('keeps empty body values', () => {
       const inputs = {
@@ -99,15 +101,15 @@ describe('typescript generator', () => {
         two: 2,
         four: '',
         body: { a: true, b: 0, c: null, d: {}, e: '' },
-      }
+      };
       const expected = {
         one: '1',
         two: 2,
         body: { a: true, b: 0, c: null, d: {}, e: '' },
-      }
-      const actual = trimInputs(inputs, true)
-      expect(actual).toEqual(expected)
-    })
+      };
+      const actual = trimInputs(inputs, true);
+      expect(actual).toEqual(expected);
+    });
 
     it('keeps empty body objects', () => {
       const inputs = {
@@ -149,7 +151,7 @@ describe('typescript generator', () => {
             key_color: '',
           },
         },
-      }
+      };
       const expected = {
         one: '1',
         two: 2,
@@ -188,10 +190,10 @@ describe('typescript generator', () => {
             key_color: '',
           },
         },
-      }
-      const actual = trimInputs(inputs, true)
-      expect(actual).toEqual(expected)
-    })
+      };
+      const actual = trimInputs(inputs, true);
+      expect(actual).toEqual(expected);
+    });
     /**
      * {
      *   "description": "",
@@ -229,32 +231,32 @@ describe('typescript generator', () => {
      *   }
      * }
      */
-  })
+  });
 
   it('comment header', () => {
-    const text = 'line 1\nline 2'
-    let actual = gen.commentHeader(indent, text)
+    const text = 'line 1\nline 2';
+    let actual = gen.commentHeader(indent, text);
     let expected = `/**
  * line 1
  * line 2
  */
-`
-    expect(actual).toEqual(expected)
+`;
+    expect(actual).toEqual(expected);
 
-    actual = gen.commentHeader(indent, text, ' ')
+    actual = gen.commentHeader(indent, text, ' ');
     expected = `/**
 
  line 1
  line 2
  */
-`
-    expect(actual).toEqual(expected)
-  })
+`;
+    expect(actual).toEqual(expected);
+  });
 
   it('license comment header', () => {
     const text =
-      'MIT License\n\nCopyright (c) 2021 Looker Data Sciences, Inc.\n\nPermission\n'
-    const actual = gen.commentHeader('', text, ' ')
+      'MIT License\n\nCopyright (c) 2021 Looker Data Sciences, Inc.\n\nPermission\n';
+    const actual = gen.commentHeader('', text, ' ');
     const expected = `/*
 
  MIT License
@@ -264,83 +266,83 @@ describe('typescript generator', () => {
  Permission
 
  */
-`
-    expect(actual).toEqual(expected)
-  })
+`;
+    expect(actual).toEqual(expected);
+  });
 
   describe('parameter declarations', () => {
     it('required parameter', () => {
-      const method = apiTestModel.methods.run_query
-      const param = method.params[0]
-      const actual = gen.declareParameter(indent, method, param)
-      expect(actual).toEqual(`query_id: number`)
-    })
+      const method = apiTestModel.methods.run_query;
+      const param = method.params[0];
+      const actual = gen.declareParameter(indent, method, param);
+      expect(actual).toEqual(`query_id: string`);
+    });
 
     it('intrinsic body', () => {
-      const method = apiTestModel.methods.parse_saml_idp_metadata
-      const param = method.params[0]
-      const actual = gen.declareParameter(indent, method, param)
-      expect(actual).toEqual(`body: string`)
-    })
+      const method = apiTestModel.methods.parse_saml_idp_metadata;
+      const param = method.params[0];
+      const actual = gen.declareParameter(indent, method, param);
+      expect(actual).toEqual(`body: string`);
+    });
 
     it('optional parameter', () => {
-      const method = apiTestModel.methods.run_query
-      const param = method.params[2]
-      const actual = gen.declareParameter(indent, method, param)
-      expect(actual).toEqual(`limit?: number`)
-    })
+      const method = apiTestModel.methods.run_query;
+      const param = method.params[2];
+      const actual = gen.declareParameter(indent, method, param);
+      expect(actual).toEqual(`limit?: number`);
+    });
 
     it('required typed parameter', () => {
-      const method = apiTestModel.methods.create_query_render_task
-      const param = method.params[2]
-      const actual = gen.declareParameter(indent, method, param)
-      expect(actual).toEqual(`width: number`)
-    })
+      const method = apiTestModel.methods.create_query_render_task;
+      const param = method.params[2];
+      const actual = gen.declareParameter(indent, method, param);
+      expect(actual).toEqual(`width: number`);
+    });
 
     it('csv formatted parameter', () => {
-      const method = apiTestModel.methods.query_task_multi_results
-      const param = method.params[0]
-      const actual = gen.declareParameter(indent, method, param)
-      expect(actual).toEqual(`query_task_ids: DelimArray<string>`)
-    })
-  })
+      const method = apiTestModel.methods.query_task_multi_results;
+      const param = method.params[0];
+      const actual = gen.declareParameter(indent, method, param);
+      expect(actual).toEqual(`query_task_ids: DelimArray<string>`);
+    });
+  });
 
   describe('makeTheCall', () => {
-    const fields = 'id,user_id,title,description'
+    const fields = 'id,user_id,title,description';
     it('handles no params', () => {
-      const inputs = {}
-      const method = apiTestModel.methods.run_look
-      const actual = gen.makeTheCall(method, inputs)
+      const inputs = {};
+      const method = apiTestModel.methods.run_look;
+      const actual = gen.makeTheCall(method, inputs);
       const expected = `// functional SDK syntax is recommended for minimizing browser payloads
 let response = await sdk.ok(run_look(sdk))
 // monolithic SDK syntax can also be used for Node apps
-let response = await sdk.ok(sdk.run_look())`
-      expect(actual).toEqual(expected)
-    })
+let response = await sdk.ok(sdk.run_look())`;
+      expect(actual).toEqual(expected);
+    });
 
     it('assigns single param', () => {
-      const inputs = { look_id: 17 }
-      const method = apiTestModel.methods.look
-      const actual = gen.makeTheCall(method, inputs)
+      const inputs = { look_id: 17 };
+      const method = apiTestModel.methods.look;
+      const actual = gen.makeTheCall(method, inputs);
       const expected = `// functional SDK syntax is recommended for minimizing browser payloads
-let response = await sdk.ok(look(sdk,17))
+let response = await sdk.ok(look(sdk,'17'))
 // monolithic SDK syntax can also be used for Node apps
-let response = await sdk.ok(sdk.look(17))`
-      expect(actual).toEqual(expected)
-    })
+let response = await sdk.ok(sdk.look('17'))`;
+      expect(actual).toEqual(expected);
+    });
 
     it('assigns simple params', () => {
-      const inputs = { look_id: 17, fields }
-      const method = apiTestModel.methods.look
-      const actual = gen.makeTheCall(method, inputs)
+      const inputs = { look_id: 17, fields };
+      const method = apiTestModel.methods.look;
+      const actual = gen.makeTheCall(method, inputs);
       const expected = `// functional SDK syntax is recommended for minimizing browser payloads
 let response = await sdk.ok(look(sdk,
-  17, '${fields}'))
+  '17', '${fields}'))
 // monolithic SDK syntax can also be used for Node apps
 let response = await sdk.ok(sdk.look(
-  17, '${fields}'))`
-      expect(actual).toEqual(expected)
-    })
+  '17', '${fields}'))`;
+      expect(actual).toEqual(expected);
+    });
 
     it('assigns a body param', () => {
       const body = {
@@ -351,13 +353,13 @@ let response = await sdk.ok(sdk.look(
           view: 'users',
           total: true,
         },
-      }
-      const inputs = { look_id: 17, body, fields }
-      const method = apiTestModel.methods.update_look
-      const actual = gen.makeTheCall(method, inputs)
+      };
+      const inputs = { look_id: 17, body, fields };
+      const method = apiTestModel.methods.update_look;
+      const actual = gen.makeTheCall(method, inputs);
       const expected = `// functional SDK syntax is recommended for minimizing browser payloads
 let response = await sdk.ok(update_look(sdk,
-  17, {
+  '17', {
     title: 'test title',
     description: 'gen test',
     query: {
@@ -368,7 +370,7 @@ let response = await sdk.ok(update_look(sdk,
   }, 'id,user_id,title,description'))
 // monolithic SDK syntax can also be used for Node apps
 let response = await sdk.ok(sdk.update_look(
-  17, {
+  '17', {
     title: 'test title',
     description: 'gen test',
     query: {
@@ -376,28 +378,28 @@ let response = await sdk.ok(sdk.update_look(
       view: 'users',
       total: true
     }
-  }, 'id,user_id,title,description'))`
-      expect(actual).toEqual(expected)
-    })
+  }, 'id,user_id,title,description'))`;
+      expect(actual).toEqual(expected);
+    });
 
     it('assigns request params', () => {
-      const inputs = { look_id: 17, result_format: 'png' }
-      const method = apiTestModel.methods.run_look
-      const actual = gen.makeTheCall(method, inputs)
+      const inputs = { look_id: 17, result_format: 'png' };
+      const method = apiTestModel.methods.run_look;
+      const actual = gen.makeTheCall(method, inputs);
       const expected = `// functional SDK syntax is recommended for minimizing browser payloads
 let response = await sdk.ok(run_look(sdk,
   {
-    look_id: 17,
+    look_id: '17',
     result_format: 'png'
   }))
 // monolithic SDK syntax can also be used for Node apps
 let response = await sdk.ok(sdk.run_look(
   {
-    look_id: 17,
+    look_id: '17',
     result_format: 'png'
-  }))`
-      expect(actual).toEqual(expected)
-    })
+  }))`;
+      expect(actual).toEqual(expected);
+    });
 
     it('assigns an enum', () => {
       const inputs = {
@@ -405,14 +407,14 @@ let response = await sdk.ok(sdk.run_look(
           query_id: 1,
           result_format: 'csv',
         },
-      }
-      const method = apiTestModel.methods.create_query_task
-      const actual = gen.makeTheCall(method, inputs)
+      };
+      const method = apiTestModel.methods.create_query_task;
+      const actual = gen.makeTheCall(method, inputs);
       const expected = `// functional SDK syntax is recommended for minimizing browser payloads
 let response = await sdk.ok(create_query_task(sdk,
   {
     body: {
-      query_id: 1,
+      query_id: '1',
       result_format: ResultFormat.csv
     }
   }))
@@ -420,31 +422,31 @@ let response = await sdk.ok(create_query_task(sdk,
 let response = await sdk.ok(sdk.create_query_task(
   {
     body: {
-      query_id: 1,
+      query_id: '1',
       result_format: ResultFormat.csv
     }
-  }))`
-      expect(actual).toEqual(expected)
-    })
+  }))`;
+      expect(actual).toEqual(expected);
+    });
 
     it('assigns a DelimArray', () => {
       const inputs = {
-        ids: new DelimArray<number>([1, 2, 3]),
-      }
-      const method = apiTestModel.methods.all_users
-      const actual = gen.makeTheCall(method, inputs)
+        ids: new DelimArray<string>(['1', '2', '3']),
+      };
+      const method = apiTestModel.methods.all_users;
+      const actual = gen.makeTheCall(method, inputs);
       const expected = `// functional SDK syntax is recommended for minimizing browser payloads
 let response = await sdk.ok(all_users(sdk,
   {
-    ids: new DelimArray<number>([1,2,3])
+    ids: new DelimArray<string>([1,2,3])
   }))
 // monolithic SDK syntax can also be used for Node apps
 let response = await sdk.ok(sdk.all_users(
   {
-    ids: new DelimArray<number>([1,2,3])
-  }))`
-      expect(actual).toEqual(expected)
-    })
+    ids: new DelimArray<string>([1,2,3])
+  }))`;
+      expect(actual).toEqual(expected);
+    });
 
     it('assigns simple and complex arrays', () => {
       const body = {
@@ -472,10 +474,10 @@ let response = await sdk.ok(sdk.all_users(
             ],
           },
         ],
-      }
-      const inputs = { body, fields }
-      const method = apiTestModel.methods.create_merge_query
-      const actual = gen.makeTheCall(method, inputs)
+      };
+      const inputs = { body, fields };
+      const method = apiTestModel.methods.create_merge_query;
+      const actual = gen.makeTheCall(method, inputs);
       const expected = `// functional SDK syntax is recommended for minimizing browser payloads
 let response = await sdk.ok(create_merge_query(sdk,
   {
@@ -495,7 +497,7 @@ let response = await sdk.ok(create_merge_query(sdk,
             }
           ],
           name: 'first query',
-          query_id: 1
+          query_id: '1'
         },
         {
           merge_fields: [
@@ -505,7 +507,7 @@ let response = await sdk.ok(create_merge_query(sdk,
             }
           ],
           name: 'second query',
-          query_id: 2
+          query_id: '2'
         }
       ]
     },
@@ -530,7 +532,7 @@ let response = await sdk.ok(sdk.create_merge_query(
             }
           ],
           name: 'first query',
-          query_id: 1
+          query_id: '1'
         },
         {
           merge_fields: [
@@ -540,23 +542,23 @@ let response = await sdk.ok(sdk.create_merge_query(
             }
           ],
           name: 'second query',
-          query_id: 2
+          query_id: '2'
         }
       ]
     },
     fields: 'id,user_id,title,description'
-  }))`
-      expect(actual).toEqual(expected)
-    })
+  }))`;
+      expect(actual).toEqual(expected);
+    });
 
     it('assigns dictionaries', () => {
       const query = {
         connection_name: 'looker',
         model_name: 'the_look',
         vis_config: { first: 1, second: 'two' },
-      }
-      const inputs = { body: query }
-      const method = apiTestModel.methods.create_sql_query
+      };
+      const inputs = { body: query };
+      const method = apiTestModel.methods.create_sql_query;
       const expected = `// functional SDK syntax is recommended for minimizing browser payloads
 let response = await sdk.ok(create_sql_query(sdk,
   {
@@ -576,10 +578,10 @@ let response = await sdk.ok(sdk.create_sql_query(
       first: 1,
       second: 'two'
     }
-  }))`
-      const actual = gen.makeTheCall(method, inputs)
-      expect(actual).toEqual(expected)
-    })
+  }))`;
+      const actual = gen.makeTheCall(method, inputs);
+      expect(actual).toEqual(expected);
+    });
 
     it('includes empty objects', () => {
       const inputs = {
@@ -617,8 +619,8 @@ let response = await sdk.ok(sdk.create_sql_query(
             key_color: '',
           },
         },
-      }
-      const method = apiTestModel.methods.update_dashboard
+      };
+      const method = apiTestModel.methods.update_dashboard;
       const expected = `// functional SDK syntax is recommended for minimizing browser payloads
 let response = await sdk.ok(update_dashboard(sdk,
   '10', {
@@ -628,14 +630,17 @@ let response = await sdk.ok(update_dashboard(sdk,
     refresh_interval: '',
     folder: {},
     title: '',
+    slug: '',
+    preferred_viewer: '',
+    alert_sync_with_dashboard_filter_enabled: false,
     background_color: '',
     crossfilter_enabled: false,
     deleted: false,
+    filters_bar_collapsed: false,
     load_configuration: '',
     lookml_link_id: '',
     show_filters_bar: false,
     show_title: false,
-    slug: '',
     folder_id: '',
     text_tile_text_color: '',
     tile_background_color: '',
@@ -649,8 +654,7 @@ let response = await sdk.ok(update_dashboard(sdk,
       tile_background_color: '',
       tile_shadow: false,
       key_color: ''
-    },
-    preferred_viewer: ''
+    }
   }))
 // monolithic SDK syntax can also be used for Node apps
 let response = await sdk.ok(sdk.update_dashboard(
@@ -661,14 +665,17 @@ let response = await sdk.ok(sdk.update_dashboard(
     refresh_interval: '',
     folder: {},
     title: '',
+    slug: '',
+    preferred_viewer: '',
+    alert_sync_with_dashboard_filter_enabled: false,
     background_color: '',
     crossfilter_enabled: false,
     deleted: false,
+    filters_bar_collapsed: false,
     load_configuration: '',
     lookml_link_id: '',
     show_filters_bar: false,
     show_title: false,
-    slug: '',
     folder_id: '',
     text_tile_text_color: '',
     tile_background_color: '',
@@ -682,12 +689,11 @@ let response = await sdk.ok(sdk.update_dashboard(
       tile_background_color: '',
       tile_shadow: false,
       key_color: ''
-    },
-    preferred_viewer: ''
-  }))`
-      const actual = gen.makeTheCall(method, inputs)
-      expect(actual).toEqual(expected)
-    })
+    }
+  }))`;
+      const actual = gen.makeTheCall(method, inputs);
+      expect(actual).toEqual(expected);
+    });
 
     describe('hashValue', () => {
       it('assigns a hash with heterogeneous values', () => {
@@ -695,9 +701,9 @@ let response = await sdk.ok(sdk.update_dashboard(
           access_token: 'backstage',
           token_type: 'test',
           expires_in: 10,
-        }
-        const oneItem = [1]
-        const threeItems = ['Abe', 'Zeb', token]
+        };
+        const oneItem = [1];
+        const threeItems = ['Abe', 'Zeb', token];
         const inputs = {
           item: oneItem,
           items: threeItems,
@@ -705,7 +711,7 @@ let response = await sdk.ok(sdk.update_dashboard(
           second: 'two',
           third: false,
           token,
-        }
+        };
         const expected = `{
   item: [1],
   items: [
@@ -725,11 +731,11 @@ let response = await sdk.ok(sdk.update_dashboard(
     token_type: 'test',
     expires_in: 10
   }
-}`
-        const actual = gen.hashValue('', inputs)
-        expect(actual).toEqual(expected)
-      })
-    })
+}`;
+        const actual = gen.hashValue('', inputs);
+        expect(actual).toEqual(expected);
+      });
+    });
     describe('assignType', () => {
       it('assigns a complex type', () => {
         const inputs = {
@@ -741,9 +747,9 @@ let response = await sdk.ok(sdk.update_dashboard(
               source_field_name: 'source_1',
             },
           ],
-        }
-        const type = apiTestModel.types.MergeQuerySourceQuery
-        expect(type).toBeDefined()
+        };
+        const type = apiTestModel.types.MergeQuerySourceQuery;
+        expect(type).toBeDefined();
         const expected = `{
     merge_fields: [
       {
@@ -752,12 +758,12 @@ let response = await sdk.ok(sdk.update_dashboard(
       }
     ],
     name: 'first query',
-    query_id: 1
-  }`
-        const actual = gen.assignType(gen.indentStr, type, inputs)
-        expect(actual).toEqual(expected)
-      })
-    })
+    query_id: '1'
+  }`;
+        const actual = gen.assignType(gen.indentStr, type, inputs);
+        expect(actual).toEqual(expected);
+      });
+    });
 
     describe('arrayValue', () => {
       it('assigns complex arrays', () => {
@@ -782,11 +788,11 @@ let response = await sdk.ok(sdk.update_dashboard(
               },
             ],
           },
-        ]
-        const props = apiTestModel.types.WriteMergeQuery.properties
-        const type = props.source_queries.type
-        expect(type).toBeDefined()
-        const actual = gen.arrayValue('', type, sourceQueries)
+        ];
+        const props = apiTestModel.types.WriteMergeQuery.properties;
+        const type = props.source_queries.type;
+        expect(type).toBeDefined();
+        const actual = gen.arrayValue('', type, sourceQueries);
         const expected = `[
   {
     merge_fields: [
@@ -796,7 +802,7 @@ let response = await sdk.ok(sdk.update_dashboard(
       }
     ],
     name: 'first query',
-    query_id: 1
+    query_id: '1'
   },
   {
     merge_fields: [
@@ -806,19 +812,19 @@ let response = await sdk.ok(sdk.update_dashboard(
       }
     ],
     name: 'second query',
-    query_id: 2
+    query_id: '2'
   }
-]`
-        expect(actual).toEqual(expected)
-      })
-    })
-  })
+]`;
+        expect(actual).toEqual(expected);
+      });
+    });
+  });
 
   describe('args locations', () => {
     it('path and query args', () => {
-      const method = apiTestModel.methods.run_query
-      expect(method.pathArgs).toEqual(['query_id', 'result_format'])
-      expect(method.bodyArg).toEqual('')
+      const method = apiTestModel.methods.run_query;
+      expect(method.pathArgs).toEqual(['query_id', 'result_format']);
+      expect(method.bodyArg).toEqual('');
       expect(method.queryArgs).toEqual([
         'limit',
         'apply_formatting',
@@ -832,98 +838,101 @@ let response = await sdk.ok(sdk.update_dashboard(
         'path_prefix',
         'rebuild_pdts',
         'server_table_calcs',
-      ])
-      expect(method.headerArgs).toEqual([])
-      expect(method.cookieArgs).toEqual([])
-    })
+        'source',
+      ]);
+      expect(method.headerArgs).toEqual([]);
+      expect(method.cookieArgs).toEqual([]);
+    });
 
     it('body for create_query', () => {
-      const method = apiTestModel.methods.create_query
-      expect(method.pathArgs).toEqual([])
-      const body = method.getParams('body')
-      expect(body.length).toEqual(1)
-      expect(body[0].type.name).toEqual('Query')
-      const param = gen.declareParameter(indent, method, body[0])
-      expect(param).toEqual(`body: Partial<IWriteQuery>`)
-      expect(method.bodyArg).toEqual('body')
-      expect(method.queryArgs).toEqual(['fields'])
-      expect(method.headerArgs).toEqual([])
-      expect(method.cookieArgs).toEqual([])
-    })
+      const method = apiTestModel.methods.create_query;
+      expect(method.pathArgs).toEqual([]);
+      const body = method.getParams('body');
+      expect(body).toHaveLength(1);
+      expect(body[0].type.name).toEqual('Query');
+      const param = gen.declareParameter(indent, method, body[0]);
+      expect(param).toEqual(`body: Partial<IWriteQuery>`);
+      expect(method.bodyArg).toEqual('body');
+      expect(method.queryArgs).toEqual(['fields']);
+      expect(method.headerArgs).toEqual([]);
+      expect(method.cookieArgs).toEqual([]);
+    });
 
     it('body for create_dashboard', () => {
-      const method = apiTestModel.methods.create_dashboard
-      expect(method.pathArgs).toEqual([])
-      const body = method.getParams('body')
-      expect(body.length).toEqual(1)
-      expect(body[0].type.name).toEqual('Dashboard')
-      const param = gen.declareParameter(indent, method, body[0])
-      expect(param).toEqual(`body: Partial<IWriteDashboard>`)
-      expect(method.bodyArg).toEqual('body')
-      expect(method.queryArgs).toEqual([])
-      expect(method.headerArgs).toEqual([])
-      expect(method.cookieArgs).toEqual([])
-    })
-  })
+      const method = apiTestModel.methods.create_dashboard;
+      expect(method.pathArgs).toEqual([]);
+      const body = method.getParams('body');
+      expect(body).toHaveLength(1);
+      expect(body[0].type.name).toEqual('Dashboard');
+      const param = gen.declareParameter(indent, method, body[0]);
+      expect(param).toEqual(`body: Partial<IWriteDashboard>`);
+      expect(method.bodyArg).toEqual('body');
+      expect(method.queryArgs).toEqual([]);
+      expect(method.headerArgs).toEqual([]);
+      expect(method.cookieArgs).toEqual([]);
+    });
+  });
 
   describe('httpArgs', () => {
     it('add_group_group', () => {
-      const method = apiTestModel.methods.add_group_group
-      const args = gen.httpArgs('', method).trim()
-      expect(args).toEqual('null, body, options')
-    })
+      const method = apiTestModel.methods.add_group_group;
+      const args = gen.httpArgs('', method).trim();
+      expect(args).toEqual('null, body, options');
+    });
     it('create_query', () => {
-      const method = apiTestModel.methods.create_query
-      const args = gen.httpArgs('', method).trim()
-      expect(args).toEqual('{fields}, body, options')
-    })
+      const method = apiTestModel.methods.create_query;
+      const args = gen.httpArgs('', method).trim();
+      expect(args).toEqual('{fields}, body, options');
+    });
     it('create_dashboard', () => {
-      const method = apiTestModel.methods.create_dashboard
-      const args = gen.httpArgs('', method).trim()
-      expect(args).toEqual('null, body, options')
-    })
-  })
+      const method = apiTestModel.methods.create_dashboard;
+      const args = gen.httpArgs('', method).trim();
+      expect(args).toEqual('null, body, options');
+    });
+  });
 
   describe('method signature', () => {
     // TODO find a new method with an optional body, or modify these tests to use other non-Looker spec input
     it('optional body and additional param', () => {
-      const method = apiTestModel.methods.create_user_credentials_email
-      expect(method).toBeDefined()
+      const method = apiTestModel.methods.create_user_credentials_email;
+      expect(method).toBeDefined();
       const expected = `/**
  * ### Email/password login information for the specified user.
  *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
  * POST /users/{user_id}/credentials_email -> ICredentialsEmail
  *
- * @param user_id id of user
+ * @param user_id Id of user
  * @param body Partial<IWriteCredentialsEmail>
  * @param fields Requested fields.
  * @param options one-time API call overrides
  *
  */
 async create_user_credentials_email(
-  user_id: number,
+  user_id: string,
   body: Partial<IWriteCredentialsEmail>,
   fields?: string, options?: Partial<ITransportSettings>): Promise<SDKResponse<ICredentialsEmail, IError | IValidationError>> {
-`
-      const actual = gen.methodSignature('', method)
-      expect(actual).toEqual(expected)
-    })
+`;
+      const actual = gen.methodSignature('', method);
+      expect(actual).toEqual(expected);
+    });
     it('noComment optional body and additional param', () => {
-      const method = apiTestModel.methods.create_user_credentials_email
-      expect(method).toBeDefined()
+      const method = apiTestModel.methods.create_user_credentials_email;
+      expect(method).toBeDefined();
       const expected = `async create_user_credentials_email(
-  user_id: number,
+  user_id: string,
   body: Partial<IWriteCredentialsEmail>,
   fields?: string, options?: Partial<ITransportSettings>): Promise<SDKResponse<ICredentialsEmail, IError | IValidationError>> {
-`
-      gen.noComment = true
-      const actual = gen.methodSignature('', method)
-      gen.noComment = false
-      expect(actual).toEqual(expected)
-    })
+`;
+      gen.noComment = true;
+      const actual = gen.methodSignature('', method);
+      gen.noComment = false;
+      expect(actual).toEqual(expected);
+    });
     it('no params', () => {
-      const method = apiTestModel.methods.all_datagroups
-      expect(method).toBeDefined()
+      const method = apiTestModel.methods.all_datagroups;
+      expect(method).toBeDefined();
       const expected = `/**
  * ### Get information about all datagroups.
  *
@@ -933,54 +942,55 @@ async create_user_credentials_email(
  *
  */
 async all_datagroups(options?: Partial<ITransportSettings>): Promise<SDKResponse<IDatagroup[], IError>> {
-`
-      const actual = gen.methodSignature('', method)
-      expect(actual).toEqual(expected)
-    })
-  })
+`;
+      const actual = gen.methodSignature('', method);
+      expect(actual).toEqual(expected);
+    });
+  });
 
   describe('method body', () => {
     it('encodes string path params', () => {
-      const method = apiTestModel.methods.run_url_encoded_query
+      const method = apiTestModel.methods.run_url_encoded_query;
       const expected = `  model_name = encodeParam(model_name)
   view_name = encodeParam(view_name)
   result_format = encodeParam(result_format)
-`
-      const actual = gen.encodePathParams('', method)
-      expect(actual).toEqual(expected)
-    })
+`;
+      const actual = gen.encodePathParams('', method);
+      expect(actual).toEqual(expected);
+    });
     // TODO eventually add method that has a date type path param
     it('encodes only string or date path params', () => {
-      const method = apiTestModel.methods.run_look
+      const method = apiTestModel.methods.run_look;
       // should NOT escape request.look_id (int)
-      const expected =
-        '  request.result_format = encodeParam(request.result_format)\n'
-      const actual = gen.encodePathParams('', method)
-      expect(actual).toEqual(expected)
-    })
+      const expected = `  request.look_id = encodeParam(request.look_id)
+  request.result_format = encodeParam(request.result_format)
+`;
+      const actual = gen.encodePathParams('', method);
+      expect(actual).toEqual(expected);
+    });
     it('assert response is model add_group_group', () => {
-      const method = apiTestModel.methods.add_group_group
+      const method = apiTestModel.methods.add_group_group;
       const expected =
         // eslint-disable-next-line no-template-curly-in-string
-        'return this.post<IGroup, IError>(`/groups/${group_id}/groups`, null, body, options)'
-      const actual = gen.httpCall(indent, method)
-      expect(actual).toEqual(expected)
-    })
+        'return this.post<IGroup, IError>(`/groups/${group_id}/groups`, null, body, options)';
+      const actual = gen.httpCall(indent, method);
+      expect(actual).toEqual(expected);
+    });
     it('assert response is None delete_group_from_group', () => {
-      const method = apiTestModel.methods.delete_group_from_group
+      const method = apiTestModel.methods.delete_group_from_group;
       const expected =
         // eslint-disable-next-line no-template-curly-in-string
-        'return this.delete<void, IError>(`/groups/${group_id}/groups/${deleting_group_id}`, null, null, options)'
-      const actual = gen.httpCall(indent, method)
-      expect(actual).toEqual(expected)
-    })
+        'return this.delete<void, IError>(`/groups/${group_id}/groups/${deleting_group_id}`, null, null, options)';
+      const actual = gen.httpCall(indent, method);
+      expect(actual).toEqual(expected);
+    });
     it('assert response is list active_themes', () => {
-      const method = apiTestModel.methods.active_themes
-      const expected = `return this.get<ITheme[], IError>('/themes/active', {name: request.name, ts: request.ts, fields: request.fields}, null, options)`
-      const actual = gen.httpCall(indent, method)
-      expect(actual).toEqual(expected)
-    })
-  })
+      const method = apiTestModel.methods.active_themes;
+      const expected = `return this.get<ITheme[], IError>('/themes/active', {name: request.name, ts: request.ts, fields: request.fields}, null, options)`;
+      const actual = gen.httpCall(indent, method);
+      expect(actual).toEqual(expected);
+    });
+  });
 
   describe('accessor syntax', () => {
     it.each<[string, string, string]>([
@@ -988,14 +998,14 @@ async all_datagroups(options?: Partial<ITransportSettings>): Promise<SDKResponse
       ['foo', 'bar', 'bar.foo'],
       ['f-o-o', 'bar', "bar['f-o-o']"],
     ])('name:"%s" prefix:"%s" should be "%s"', (name, prefix, expected) => {
-      const actual = gen.accessor(name, prefix)
-      expect(actual).toEqual(expected)
-    })
-  })
+      const actual = gen.accessor(name, prefix);
+      expect(actual).toEqual(expected);
+    });
+  });
 
   describe('complete declarations', () => {
     it('streaming method', () => {
-      const method = apiTestModel.methods.logout
+      const method = apiTestModel.methods.logout;
       const expected = `/**
  * ### Logout of the API and invalidate the current access token.
  *
@@ -1006,15 +1016,15 @@ async all_datagroups(options?: Partial<ITransportSettings>): Promise<SDKResponse
  *
  */
 async logout(
-  callback: (readable: Readable) => Promise<string>,options?: Partial<ITransportSettings>) {
+  callback: (response: Response) => Promise<string>,options?: Partial<ITransportSettings>) {
   return this.authStream<string>(callback, 'DELETE', '/logout', null, null, options)
-}`
-      const actual = gen.declareStreamer(indent, method)
-      expect(actual).toEqual(expected)
-    })
+}`;
+      const actual = gen.declareStreamer(indent, method);
+      expect(actual).toEqual(expected);
+    });
 
     it('method with request body', () => {
-      const method = apiTestModel.methods.create_dashboard_render_task
+      const method = apiTestModel.methods.create_dashboard_render_task;
       const expected = `/**
  * ### Create a new task to render a dashboard to a document or image.
  *
@@ -1032,15 +1042,13 @@ async create_dashboard_render_task(request: IRequestCreateDashboardRenderTask, o
   request.dashboard_id = encodeParam(request.dashboard_id)
   request.result_format = encodeParam(request.result_format)
   return this.post<IRenderTask, IError | IValidationError>(\`/render_tasks/dashboards/\${request.dashboard_id}/\${request.result_format}\`, {width: request.width, height: request.height, fields: request.fields, pdf_paper_size: request.pdf_paper_size, pdf_landscape: request.pdf_landscape, long_tables: request.long_tables}, request.body, options)
-}`
-      const actual = gen.declareMethod(indent, method)
-      expect(actual).toEqual(expected)
-    })
+}`;
+      const actual = gen.declareMethod(indent, method);
+      expect(actual).toEqual(expected);
+    });
 
     it('deprecated method with deprecated params', () => {
-      const method = apiTestModel.methods.old_login
-      const arg = method.params[0]
-      expect(arg.deprecated).toEqual(true)
+      const method = apiTestModel.methods.old_login;
       const expected = `/**
  * Endpoint to test deprecation flags
  *
@@ -1055,13 +1063,13 @@ async create_dashboard_render_task(request: IRequestCreateDashboardRenderTask, o
 async old_login(
   old_cred?: string, options?: Partial<ITransportSettings>): Promise<SDKResponse<IAccessToken, IError>> {
   return this.get<IAccessToken, IError>('/old_login', {old_cred}, null, options)
-}`
-      const actual = gen.declareMethod(indent, method)
-      expect(actual).toEqual(expected)
-    })
+}`;
+      const actual = gen.declareMethod(indent, method);
+      expect(actual).toEqual(expected);
+    });
 
     it('function with request body', () => {
-      const method = apiTestModel.methods.create_dashboard_render_task
+      const method = apiTestModel.methods.create_dashboard_render_task;
       const expected = `/**
  * ### Create a new task to render a dashboard to a document or image.
  *
@@ -1080,13 +1088,13 @@ export const create_dashboard_render_task = async (sdk: IAPIMethods, request: IR
   request.dashboard_id = encodeParam(request.dashboard_id)
   request.result_format = encodeParam(request.result_format)
   return sdk.post<IRenderTask, IError | IValidationError>(\`/render_tasks/dashboards/\${request.dashboard_id}/\${request.result_format}\`, {width: request.width, height: request.height, fields: request.fields, pdf_paper_size: request.pdf_paper_size, pdf_landscape: request.pdf_landscape, long_tables: request.long_tables}, request.body, options)
-}`
-      const actual = gen.declareFunction(indent, method)
-      expect(actual).toEqual(expected)
-    })
+}`;
+      const actual = gen.declareFunction(indent, method);
+      expect(actual).toEqual(expected);
+    });
 
     it('interface with request body', () => {
-      const method = apiTestModel.methods.create_dashboard_render_task
+      const method = apiTestModel.methods.create_dashboard_render_task;
       const expected = `/**
  * ### Create a new task to render a dashboard to a document or image.
  *
@@ -1101,12 +1109,12 @@ export const create_dashboard_render_task = async (sdk: IAPIMethods, request: IR
  *
  */
 create_dashboard_render_task(request: IRequestCreateDashboardRenderTask, options?: Partial<ITransportSettings>): Promise<SDKResponse<IRenderTask, IError | IValidationError>>
-`
-      const actual = gen.declareInterface(indent, method)
-      expect(actual).toEqual(expected)
-    })
+`;
+      const actual = gen.declareInterface(indent, method);
+      expect(actual).toEqual(expected);
+    });
     it('method without request body', () => {
-      const method = apiTestModel.methods.content_thumbnail
+      const method = apiTestModel.methods.content_thumbnail;
       const expected = `/**
  * ### Get an image representing the contents of a dashboard or look.
  *
@@ -1122,17 +1130,17 @@ create_dashboard_render_task(request: IRequestCreateDashboardRenderTask, options
  * @param options one-time API call overrides
  *
  */
-async content_thumbnail(request: IRequestContentThumbnail, options?: Partial<ITransportSettings>): Promise<SDKResponse<string, IError>> {
+async content_thumbnail(request: IRequestContentThumbnail, options?: Partial<ITransportSettings>): Promise<SDKResponse<string, IError | IValidationError>> {
   request.type = encodeParam(request.type)
   request.resource_id = encodeParam(request.resource_id)
-  return this.get<string, IError>(\`/content_thumbnail/$\{request.type}/\${request.resource_id}\`, {reload: request.reload, format: request.format, width: request.width, height: request.height}, null, options)
-}`
-      const actual = gen.declareMethod(indent, method)
-      expect(actual).toEqual(expected)
-    })
+  return this.get<string, IError | IValidationError>(\`/content_thumbnail/$\{request.type}/$\{request.resource_id}\`, {reload: request.reload, theme: request.theme, format: request.format, width: request.width, height: request.height}, null, options)
+}`;
+      const actual = gen.declareMethod(indent, method);
+      expect(actual).toEqual(expected);
+    });
 
     it('function without request body', () => {
-      const method = apiTestModel.methods.content_thumbnail
+      const method = apiTestModel.methods.content_thumbnail;
       const expected = `/**
  * ### Get an image representing the contents of a dashboard or look.
  *
@@ -1149,17 +1157,17 @@ async content_thumbnail(request: IRequestContentThumbnail, options?: Partial<ITr
  * @param options one-time API call overrides
  *
  */
-export const content_thumbnail = async (sdk: IAPIMethods, request: IRequestContentThumbnail, options?: Partial<ITransportSettings>): Promise<SDKResponse<string, IError>> => {
+export const content_thumbnail = async (sdk: IAPIMethods, request: IRequestContentThumbnail, options?: Partial<ITransportSettings>): Promise<SDKResponse<string, IError | IValidationError>> => {
   request.type = encodeParam(request.type)
   request.resource_id = encodeParam(request.resource_id)
-  return sdk.get<string, IError>(\`/content_thumbnail/$\{request.type}/\${request.resource_id}\`, {reload: request.reload, format: request.format, width: request.width, height: request.height}, null, options)
-}`
-      const actual = gen.declareFunction(indent, method)
-      expect(actual).toEqual(expected)
-    })
+  return sdk.get<string, IError | IValidationError>(\`/content_thumbnail/$\{request.type}/$\{request.resource_id}\`, {reload: request.reload, theme: request.theme, format: request.format, width: request.width, height: request.height}, null, options)
+}`;
+      const actual = gen.declareFunction(indent, method);
+      expect(actual).toEqual(expected);
+    });
 
     it('deprecated function', () => {
-      const method = apiTestModel.methods.vector_thumbnail
+      const method = apiTestModel.methods.vector_thumbnail;
       const expected = `/**
  * ### Get a vector image representing the contents of a dashboard or look.
  *
@@ -1187,13 +1195,13 @@ sdk: IAPIMethods,
   type = encodeParam(type)
   resource_id = encodeParam(resource_id)
   return sdk.get<string, IError>(\`/vector_thumbnail/$\{type}/$\{resource_id}\`, {reload}, null, options)
-}`
-      const actual = gen.declareFunction(indent, method)
-      expect(actual).toEqual(expected)
-    })
+}`;
+      const actual = gen.declareFunction(indent, method);
+      expect(actual).toEqual(expected);
+    });
 
     it('interface without request body', () => {
-      const method = apiTestModel.methods.content_thumbnail
+      const method = apiTestModel.methods.content_thumbnail;
       const expected = `/**
  * ### Get an image representing the contents of a dashboard or look.
  *
@@ -1209,14 +1217,14 @@ sdk: IAPIMethods,
  * @param options one-time API call overrides
  *
  */
-content_thumbnail(request: IRequestContentThumbnail, options?: Partial<ITransportSettings>): Promise<SDKResponse<string, IError>>
-`
-      const actual = gen.declareInterface(indent, method)
-      expect(actual).toEqual(expected)
-    })
+content_thumbnail(request: IRequestContentThumbnail, options?: Partial<ITransportSettings>): Promise<SDKResponse<string, IError | IValidationError>>
+`;
+      const actual = gen.declareInterface(indent, method);
+      expect(actual).toEqual(expected);
+    });
 
     it('interface without initializer', () => {
-      const method = apiTestModel.methods.fetch_integration_form
+      const method = apiTestModel.methods.fetch_integration_form;
       const expected = `/**
  * Returns the Integration form for presentation to the user.
  *
@@ -1230,35 +1238,76 @@ content_thumbnail(request: IRequestContentThumbnail, options?: Partial<ITranspor
 fetch_integration_form(
   integration_id: string,
   body?: Partial<IDictionary<string>>, options?: Partial<ITransportSettings>): Promise<SDKResponse<IDataActionForm, IError | IValidationError>>
-`
-      const actual = gen.declareInterface(indent, method)
-      expect(actual).toEqual(expected)
-    })
-  })
+`;
+      const actual = gen.declareInterface(indent, method);
+      expect(actual).toEqual(expected);
+    });
+  });
 
   describe('type creation', () => {
+    it('creates IMockType', () => {
+      const mock = apiTestModel.types.MockType;
+      const expected = `export interface IMockType {
+  any: any
+  /**
+   * Operations the current user is able to perform on this object (read-only)
+   */
+  can: IDictionary<boolean>
+  id: string
+  bool?: boolean
+  uri: Url
+  url: Url
+  date: Date
+  datetime: Date
+  password: Password
+  byte: string
+  binary: string
+  email?: string
+  uuid?: string
+  hostname?: string
+  ipv4?: string
+  ipv6?: string
+  integer: number
+  int32: number
+  int64: number
+  number: number
+  double: number
+  float: number
+  /**
+   * Fields on which to run subtotals
+   */
+  subtotals: string[] | null
+  /**
+   * The local state of each project in the workspace (read-only)
+   */
+  projects: IProject[] | null
+}`;
+      const actual = gen.declareType('', mock);
+      expect(actual).toEqual(expected);
+    });
+
     it('request type with body', () => {
-      const method = apiTestModel.methods.create_dashboard_render_task
-      const type = apiTestModel.getRequestType(method)
-      expect(type).toBeDefined()
-      if (type) {
-        const dashboard_id = type.properties.dashboard_id
-        const actual_dashboard_id = gen.declareProperty(indent, dashboard_id)
-        expect(actual_dashboard_id).toEqual(`/**
+      const method = apiTestModel.methods.create_dashboard_render_task;
+      const type = apiTestModel.getRequestType(method);
+      expect(type).toBeDefined();
+      const t = type as IType;
+      const dashboard_id = t.properties.dashboard_id;
+      const actual_dashboard_id = gen.declareProperty(indent, dashboard_id);
+      expect(actual_dashboard_id).toEqual(`/**
  * Id of dashboard to render. The ID can be a LookML dashboard also.
  */
-dashboard_id: string`)
-        const body = type.properties.body
-        const actual_body = gen.declareProperty(indent, body)
-        expect(actual_body).toEqual(`/**
+dashboard_id: string`);
+      const body = t.properties.body;
+      const actual_body = gen.declareProperty(indent, body);
+      expect(actual_body).toEqual(`/**
  * body parameter for dynamically created request type
  */
-body: ICreateDashboardRenderTask`)
-      }
-    })
+body: ICreateDashboardRenderTask`);
+    });
+
     it('with arrays and hashes', () => {
-      const type = apiTestModel.types.Workspace
-      const actual = gen.declareType(indent, type)
+      const type = apiTestModel.types.Workspace;
+      const actual = gen.declareType(indent, type);
       expect(actual).toEqual(`export interface IWorkspace {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -1272,27 +1321,34 @@ body: ICreateDashboardRenderTask`)
    * The local state of each project in the workspace (read-only)
    */
   projects?: IProject[] | null
-}`)
-    })
+}`);
+    });
     it('with refs, arrays and nullable', () => {
-      const type = apiTestModel.types.ApiVersion
-      const actual = gen.declareType(indent, type)
+      const type = apiTestModel.types.ApiVersion;
+      const actual = gen.declareType(indent, type);
       expect(actual).toEqual(`export interface IApiVersion {
   /**
    * Current Looker release version number (read-only)
    */
-  looker_release_version?: string | null
+  looker_release_version?: string
   current_version?: IApiVersionElement
   /**
    * Array of versions supported by this Looker instance (read-only)
    */
-  supported_versions?: IApiVersionElement[] | null
-}`)
-    })
+  supported_versions?: IApiVersionElement[]
+  /**
+   * API server base url (read-only)
+   */
+  api_server_url?: string
+  /**
+   * Web server base url (read-only)
+   */
+  web_server_url?: string
+}`);
+    });
     it('required properties', () => {
-      const type = apiTestModel.types.CreateQueryTask
-      const actual = gen.declareType(indent, type)
-      const name = titleCase('result_format')
+      const type = apiTestModel.types.CreateQueryTask;
+      const actual = gen.declareType(indent, type);
       expect(actual).toEqual(`export interface ICreateQueryTask {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -1301,11 +1357,11 @@ body: ICreateDashboardRenderTask`)
   /**
    * Id of query to run
    */
-  query_id: number | null
+  query_id: string | null
   /**
-   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
+   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
    */
-  result_format: ${name} | null
+  result_format: ResultFormat | null
   /**
    * Source of query task
    */
@@ -1317,40 +1373,40 @@ body: ICreateDashboardRenderTask`)
   /**
    * Id of look associated with query.
    */
-  look_id?: number | null
+  look_id?: string | null
   /**
    * Id of dashboard associated with query.
    */
   dashboard_id?: string | null
-}`)
-    })
+}`);
+    });
 
     describe('special symbol names', () => {
       interface HiFen {
-        'a-one': string
-        'a two': boolean
-        'a-three': number
+        'a-one': string;
+        'a two': boolean;
+        'a-three': number;
       }
 
       it('handles special names in json', () => {
-        const json = `{"a-one":"one", "a two":true, "a-three":3}`
-        const actual: HiFen = JSON.parse(json)
-        expect(actual['a-one']).toEqual('one')
-        expect(actual['a two']).toEqual(true)
-        expect(actual['a-three']).toEqual(3)
-      })
+        const json = `{"a-one":"one", "a two":true, "a-three":3}`;
+        const actual: HiFen = JSON.parse(json);
+        expect(actual['a-one']).toEqual('one');
+        expect(actual['a two']).toEqual(true);
+        expect(actual['a-three']).toEqual(3);
+      });
 
       it('does not reserve body param array type names', () => {
-        const actual = gen.reserve('IProjectGeneratorTable[]')
-        expect(actual).toEqual('IProjectGeneratorTable[]')
-      })
+        const actual = gen.reserve('IProjectGeneratorTable[]');
+        expect(actual).toEqual('IProjectGeneratorTable[]');
+      });
 
       it('reserves special names in method parameters', () => {
-        const method = apiTestModel.methods.me
-        const save = method.params[0].name
-        method.params[0].name = 'hi-test'
-        const actual = gen.declareMethod(indent, method)
-        method.params[0].name = save
+        const method = apiTestModel.methods.me;
+        const save = method.params[0].name;
+        method.params[0].name = 'hi-test';
+        const actual = gen.declareMethod(indent, method);
+        method.params[0].name = save;
         const expected = `/**
  * ### Get information about the current user; i.e. the user account currently calling the API.
  *
@@ -1363,17 +1419,17 @@ body: ICreateDashboardRenderTask`)
 async me(
   'hi-test'?: string, options?: Partial<ITransportSettings>): Promise<SDKResponse<IUser, IError>> {
   return this.get<IUser, IError>('/user', {'hi-test'}, null, options)
-}`
-        expect(actual).toEqual(expected)
-      })
+}`;
+        expect(actual).toEqual(expected);
+      });
 
       it('reserves special names in method request objects', () => {
-        const method = apiTestModel.methods.role_users
-        const swap = 2
-        const save = method.params[swap].name
-        method.params[swap].name = 'direct-association-only'
-        const actual = gen.declareMethod(indent, method)
-        method.params[swap].name = save
+        const method = apiTestModel.methods.role_users;
+        const swap = 2;
+        const save = method.params[swap].name;
+        method.params[swap].name = 'direct-association-only';
+        const actual = gen.declareMethod(indent, method);
+        method.params[swap].name = save;
         const expected = `/**
  * ### Get information about all the users with the role that has a specific id.
  *
@@ -1384,50 +1440,53 @@ async me(
  *
  */
 async role_users(request: IRequestRoleUsers, options?: Partial<ITransportSettings>): Promise<SDKResponse<IUser[], IError>> {
-  return this.get<IUser[], IError>(\`/roles/\${request.role_id}/users\`, {fields: request.fields, 'direct-association-only': request['direct-association-only']}, null, options)
-}`
-        expect(actual).toEqual(expected)
-      })
-    })
+  request.role_id = encodeParam(request.role_id)
+  return this.get<IUser[], IError>(\`/roles/$\{request.role_id}/users\`, {fields: request.fields, 'direct-association-only': request['direct-association-only']}, null, options)
+}`;
+        expect(actual).toEqual(expected);
+      });
+    });
 
     describe('enums', () => {
       it('Result format declaration', () => {
         const type =
-          apiTestModel.types.CreateQueryTask.properties.result_format.type
-        expect(type instanceof EnumType).toBeTruthy()
-        const actual = gen.declareType('', type)
+          apiTestModel.types.CreateQueryTask.properties.result_format.type;
+        expect(type instanceof EnumType).toBeTruthy();
+        const actual = gen.declareType('', type);
         expect(actual).toEqual(`/**
- * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml". (Enum defined in CreateQueryTask)
+ * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql". (Enum defined in CreateQueryTask)
  */
 export enum ResultFormat {
   inline_json = 'inline_json',
   json = 'json',
   json_detail = 'json_detail',
   json_fe = 'json_fe',
+  json_bi = 'json_bi',
   csv = 'csv',
   html = 'html',
   md = 'md',
   txt = 'txt',
   xlsx = 'xlsx',
-  gsxml = 'gsxml'
-}`)
-      })
+  gsxml = 'gsxml',
+  sql = 'sql'
+}`);
+      });
       it('Align declaration', () => {
         const type =
-          apiTestModel.types.LookmlModelExploreField.properties.align.type
-        expect(type instanceof EnumType).toBeTruthy()
-        const actual = gen.declareType('', type)
+          apiTestModel.types.LookmlModelExploreField.properties.align.type;
+        expect(type instanceof EnumType).toBeTruthy();
+        const actual = gen.declareType('', type);
         expect(actual).toEqual(`/**
  * The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: "left", "right". (Enum defined in LookmlModelExploreField)
  */
 export enum Align {
   left = 'left',
   right = 'right'
-}`)
-      })
+}`);
+      });
       it('array of enums', () => {
-        const type = apiTestModel.types.RequiredResponseWithEnums
-        const actual = gen.declareType(indent, type)
+        const type = apiTestModel.types.RequiredResponseWithEnums;
+        const actual = gen.declareType(indent, type);
         expect(actual).toEqual(`export interface IRequiredResponseWithEnums {
   /**
    * Id of query to run
@@ -1436,7 +1495,7 @@ export enum Align {
   /**
    * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "csv", "html", "md", "txt", "xlsx", "gsxml".
    */
-  result_format: ResultFormat | null
+  result_format: RequiredResponseWithEnumsResultFormat | null
   /**
    * An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode". (read-only)
    */
@@ -1446,18 +1505,18 @@ export enum Align {
    * Roles assigned to group (read-only)
    */
   roles?: IRole[] | null
-}`)
-      })
+}`);
+      });
 
       it('duplicate enum resolution', () => {
-        const type = apiTestModel.types.SecondResponseWithEnums
+        const type = apiTestModel.types.SecondResponseWithEnums;
         // Should have:
         // - a fully named ResultFormat type because it doesn't match the other `ResultFormat` type declared previously
         // - an `another_format` property with `AnotherFormat` enum name with the same values as the previously declared `ResultFormat` type
-        const type1 = apiTestModel.types.RequiredResponseWithEnums
-        const rf1 = type1.properties.result_format.type as EnumType
-        const rf2 = type.properties.another_format.type as EnumType
-        const rf3 = type.properties.result_format.type as EnumType
+        const type1 = apiTestModel.types.RequiredResponseWithEnums;
+        const rf1 = type1.properties.result_format.type as EnumType;
+        const rf2 = type.properties.another_format.type as EnumType;
+        const rf3 = type.properties.result_format.type as EnumType;
         const otherValues = [
           'other',
           'json',
@@ -1467,11 +1526,11 @@ export enum Align {
           'txt',
           'xlsx',
           'gsxml',
-        ]
-        expect(rf1.values).toEqual(rf2.values)
-        expect(rf3.values).toEqual(otherValues)
+        ];
+        expect(rf1.values).toEqual(rf2.values);
+        expect(rf3.values).toEqual(otherValues);
 
-        const actual = gen.declareType(indent, type)
+        const actual = gen.declareType(indent, type);
         expect(actual).toEqual(`export interface ISecondResponseWithEnums {
   /**
    * Id of query to run
@@ -1494,8 +1553,256 @@ export enum Align {
    * Roles assigned to group (read-only)
    */
   roles?: IRole[] | null
-}`)
-      })
-    })
-  })
-})
+}`);
+      });
+    });
+  });
+
+  describe('Mocks', () => {
+    it('create_user', () => {
+      const method = apiTestModel.methods.create_user;
+      const expected = `/**
+ * ### Create a user with the specified information.
+ *
+ * POST /users -> IUser
+ *
+ * @param body Partial<IWriteUser>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
+ */
+export const create_user = new MockMethod(apiSpec.methods.create_user);`;
+      const actual = gen.declareMock('', method);
+      expect(actual).toEqual(expected);
+    });
+
+    it('content_thumbnail', () => {
+      const method = apiTestModel.methods.content_thumbnail;
+      const expected = `/**
+ * ### Get an image representing the contents of a dashboard or look.
+ *
+ * The returned thumbnail is an abstract representation of the contents of a dashbord or look and does not
+ * reflect the actual data displayed in the respective visualizations.
+ *
+ * GET /content_thumbnail/{type}/{resource_id} -> string
+ *
+ * @remarks
+ * **NOTE**: Binary content may be returned by this function.
+ *
+ * @param request composed interface "IRequestContentThumbnail" for complex method parameters
+ * @param options one-time API call overrides
+ *
+ * ## Requires:
+ * \`\`\`ts
+ * { pathArgs: { type: 'string', resource_id: 'string' } }
+ * \`\`\`
+ */
+export const content_thumbnail = new MockMethod(apiSpec.methods.content_thumbnail);`;
+      const actual = gen.declareMock('', method);
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  it('hooks ValidationError success responses', () => {
+    const method = apiTestModel.methods.validate_theme;
+    const expected = `
+/**
+ * ### Validate a theme with the specified information
+ *
+ * Validates all values set for the theme, returning any errors encountered, or 200 OK if valid
+ *
+ * See [Create Theme](#!/Theme/create_theme) for constraints
+ *
+ * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature. custom slice
+ *
+ * POST /themes/validate -> IValidationError
+ *
+ * @param body Partial<IWriteTheme>
+ * @param options one-time API call overrides
+ *
+ */
+export const useValidateTheme = createSdkHook({
+  fetch: validate_theme,
+  initialState: { message: '', documentation_url: '' },
+})`;
+    const actual = gen.declareHook(indent, method);
+    expect(actual).toEqual(expected);
+  });
+
+  it('hooks get_alert', () => {
+    const alert = apiTestModel.methods.get_alert;
+    const expected = `
+/**
+ * ### Get an alert by a given alert ID custom slice
+ *
+ * GET /alerts/{alert_id} -> IAlert
+ *
+ * @param alert_id ID of an alert
+ * @param options one-time API call overrides
+ *
+ */
+export const useGetAlert = createSdkHook({
+  fetch: get_alert,
+  initialState: { comparison_type: ComparisonType.EQUAL_TO, cron: '', destinations: [], field: {"title":"","name":""}, owner_id: '', threshold: 0 },
+})`;
+    const actual = gen.declareHook('', alert);
+    expect(actual).toEqual(expected);
+  });
+
+  describe('CRUDS SDK data hooks', () => {
+    it('useCreateUser', () => {
+      const method = apiTestModel.methods.create_user;
+      const expected = `
+/**
+ * ### Create a user with the specified information. custom slice
+ *
+ * POST /users -> IUser
+ *
+ * @param body Partial<IWriteUser>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
+ */
+export const useCreateUser = createSdkHook({
+  fetch: create_user,
+  initialState: {},
+})`;
+      const actual = gen.declareHook(indent, method);
+      expect(actual).toEqual(expected);
+    });
+
+    it('useUser', () => {
+      const method = apiTestModel.methods.user;
+      const expected = `
+/**
+ * ### Get information about the user with a specific id.
+ *
+ * If the caller is an admin or the caller is the user being specified, then full user information will
+ * be returned. Otherwise, a minimal 'public' variant of the user information will be returned. This contains
+ * The user name and avatar url, but no sensitive information. custom slice
+ *
+ * GET /users/{user_id} -> IUser
+ *
+ * @param user_id Id of user
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
+ */
+export const useUser = createSdkHook({
+  fetch: user,
+  initialState: {},
+})`;
+      const actual = gen.declareHook(indent, method);
+      expect(actual).toEqual(expected);
+    });
+    it('useAllUsers', () => {
+      const method = apiTestModel.methods.all_users;
+      const expected = `
+/**
+ * ### Get information about all users. custom slice
+ *
+ * GET /users -> IUser[]
+ *
+ * @param request composed interface "IRequestAllUsers" for complex method parameters
+ * @param options one-time API call overrides
+ *
+ */
+export const useAllUsers = createSdkHook({
+  fetch: all_users,
+  initialState: [],
+})`;
+      const actual = gen.declareHook(indent, method);
+      expect(actual).toEqual(expected);
+    });
+    it('useUpdateUser', () => {
+      const method = apiTestModel.methods.update_user;
+      const expected = `
+/**
+ * ### Update information about the user with a specific id. custom slice
+ *
+ * PATCH /users/{user_id} -> IUser
+ *
+ * @param user_id Id of user
+ * @param body Partial<IWriteUser>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
+ */
+export const useUpdateUser = createSdkHook({
+  fetch: update_user,
+  initialState: {},
+})`;
+      const actual = gen.declareHook(indent, method);
+      expect(actual).toEqual(expected);
+    });
+    it('useDeleteUser', () => {
+      const method = apiTestModel.methods.delete_user;
+      const expected = `
+/**
+ * ### Delete the user with a specific id.
+ *
+ * **DANGER** this will delete the user and all looks and other information owned by the user. custom slice
+ *
+ * DELETE /users/{user_id} -> string
+ *
+ * @param user_id Id of user
+ * @param options one-time API call overrides
+ *
+ */
+export const useDeleteUser = createSdkHook({
+  fetch: delete_user,
+  initialState: '',
+})`;
+      const actual = gen.declareHook(indent, method);
+      expect(actual).toEqual(expected);
+    });
+    it('useSearchUsers', () => {
+      const method = apiTestModel.methods.search_users;
+      const expected = `
+/**
+ * ### Search users
+ *
+ * Returns all<sup>*</sup> user records that match the given search criteria.
+ *
+ * If multiple search params are given and \`filter_or\` is FALSE or not specified,
+ * search params are combined in a logical AND operation.
+ * Only rows that match *all* search param criteria will be returned.
+ *
+ * If \`filter_or\` is TRUE, multiple search params are combined in a logical OR operation.
+ * Results will include rows that match **any** of the search criteria.
+ *
+ * String search params use case-insensitive matching.
+ * String search params can contain \`%\` and '_' as SQL LIKE pattern match wildcard expressions.
+ * example="dan%" will match "danger" and "Danzig" but not "David"
+ * example="D_m%" will match "Damage" and "dump"
+ *
+ * Integer search params can accept a single value or a comma separated list of values. The multiple
+ * values will be combined under a logical OR operation - results will match at least one of
+ * the given values.
+ *
+ * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+ * or exclude (respectively) rows where the column is null.
+ *
+ * Boolean search params accept only "true" and "false" as values.
+ *
+ *
+ * (<sup>*</sup>) Results are always filtered to the level of information the caller is permitted to view.
+ * Looker admins can see all user details; normal users in an open system can see
+ * names of other users but no details; normal users in a closed system can only see
+ * names of other users who are members of the same group as the user. custom slice
+ *
+ * GET /users/search -> IUser[]
+ *
+ * @param request composed interface "IRequestSearchUsers" for complex method parameters
+ * @param options one-time API call overrides
+ *
+ */
+export const useSearchUsers = createSdkHook({
+  fetch: search_users,
+  initialState: [],
+})`;
+      const actual = gen.declareHook(indent, method);
+      expect(actual).toEqual(expected);
+    });
+  });
+});

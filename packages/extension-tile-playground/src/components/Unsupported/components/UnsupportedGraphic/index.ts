@@ -23,4 +23,4 @@
  SOFTWARE.
 
  */
-export * from './UnsupportedGraphic'
+export * from './UnsupportedGraphic';

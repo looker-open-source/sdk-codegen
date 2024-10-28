@@ -24,30 +24,30 @@
 
  */
 
-import { combineReducers } from 'redux'
-import type { CommonState } from './common/reducer'
-import { commonReducer } from './common/reducer'
-import type { AdminState } from './admin/reducer'
-import { adminReducer } from './admin/reducer'
-import type { AddUserState } from './add_user/reducer'
-import { addUserReducer } from './add_user/reducer'
-import type { ProjectsState } from './projects/reducer'
-import { projectsReducer } from './projects/reducer'
-import type { HackSessionState } from './hack_session/reducer'
-import { hackSessionReducer } from './hack_session/reducer'
-import type { HackersState } from './hackers/reducer'
-import { hackersReducer } from './hackers/reducer'
-import type { JudgingsState } from './judgings/reducer'
-import { judgingsReducer } from './judgings/reducer'
+import { combineReducers } from 'redux';
+import type { CommonState } from './common/reducer';
+import { commonReducer } from './common/reducer';
+import type { AdminState } from './admin/reducer';
+import { adminReducer } from './admin/reducer';
+import type { AddUserState } from './add_user/reducer';
+import { addUserReducer } from './add_user/reducer';
+import type { ProjectsState } from './projects/reducer';
+import { projectsReducer } from './projects/reducer';
+import type { HackSessionState } from './hack_session/reducer';
+import { hackSessionReducer } from './hack_session/reducer';
+import type { HackersState } from './hackers/reducer';
+import { hackersReducer } from './hackers/reducer';
+import type { JudgingsState } from './judgings/reducer';
+import { judgingsReducer } from './judgings/reducer';
 
 export interface RootStore {
-  commonState: CommonState
-  adminState: AdminState
-  addUserState: AddUserState
-  hackSessionState: HackSessionState
-  projectsState: ProjectsState
-  hackersState: HackersState
-  judgingsState: JudgingsState
+  commonState: CommonState;
+  adminState: AdminState;
+  addUserState: AddUserState;
+  hackSessionState: HackSessionState;
+  projectsState: ProjectsState;
+  hackersState: HackersState;
+  judgingsState: JudgingsState;
 }
 
 export const rootReducer = combineReducers({
@@ -58,6 +58,6 @@ export const rootReducer = combineReducers({
   projectsState: projectsReducer,
   hackersState: hackersReducer,
   judgingsState: judgingsReducer,
-})
+});
 
-export type RootState = ReturnType<typeof rootReducer>
+export type RootState = ReturnType<typeof rootReducer>;
