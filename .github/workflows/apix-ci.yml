@@ -9,6 +9,7 @@ on:
       - packages/extension-api-explorer/**
       - packages/extension-utils/**
       - .github/workflows/apix-ci.yml
+      - yarn.lock
 
   push:
     branches:
@@ -21,6 +22,7 @@ on:
       - packages/extension-api-explorer/**
       - packages/extension-utils/**
       - .github/workflows/apix-ci.yml
+      - yarn.lock
 
   workflow_dispatch:
 

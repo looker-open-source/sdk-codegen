@@ -4,6 +4,8 @@ on:
     paths:
       - python/**
       - .github/workflows/python-ci.yml
+      - Pipfile
+      - Pipfile.lock
 
   push:
     branches:
@@ -11,6 +13,8 @@ on:
     paths:
       - python/**
       - .github/workflows/python-ci.yml
+      - Pipfile
+      - Pipfile.lock
 
   workflow_dispatch:
 
