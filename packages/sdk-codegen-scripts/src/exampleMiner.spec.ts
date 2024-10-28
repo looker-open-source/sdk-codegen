@@ -64,7 +64,7 @@ describe('example mining', () => {
         undefined,
         filter.bind(null, /^download_.*\.py/)
       );
-      expect(actual).toHaveLength(3);
+      expect(actual).toHaveLength(4);
     });
   });
 
