@@ -8,7 +8,7 @@ The script works by running a System Activity query to grab a list of all dashbo
 
 Screenshot of what the warning text tile looks like:
 
-![image](https://github.com/vishal-dharm/large_dashboard_warning_automation/assets/61256217/a220f212-8049-48e4-9d01-cf0be371b750)
+![image](dashboard_warning.png)
 
 Please note, you should inform your users before running this automation as it will make changes to their dashboards.
 
