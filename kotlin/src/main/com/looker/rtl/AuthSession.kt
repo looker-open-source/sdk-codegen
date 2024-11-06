@@ -48,7 +48,7 @@ open class AuthSession(
     /**
      * Is there an active authentication token?
      */
-    fun isAuthenticated(): Boolean {
+    open fun isAuthenticated(): Boolean {
         val token = activeToken()
         if (token.accessToken.isBlank()) return false
         return token.isActive()
