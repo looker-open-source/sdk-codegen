@@ -12483,9 +12483,9 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
     body: Partial<string[]>,
     fields?: string,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IRole[], IError>> {
+  ): Promise<SDKResponse<IRole[], IError | IValidationError>> {
     user_id = encodeParam(user_id);
-    return this.put<IRole[], IError>(
+    return this.put<IRole[], IError | IValidationError>(
       `/users/${user_id}/roles`,
       { fields },
       body,

@@ -8872,7 +8872,7 @@ export interface ILooker40SDK extends IAPIMethods {
     body: Partial<string[]>,
     fields?: string,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IRole[], IError>>;
+  ): Promise<SDKResponse<IRole[], IError | IValidationError>>;
 
   /**
    * ### Get user attribute values for a given user.

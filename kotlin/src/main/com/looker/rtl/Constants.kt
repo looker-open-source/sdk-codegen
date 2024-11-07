@@ -110,7 +110,7 @@ internal fun ZonedDateTime(utcDateTime: String): ZonedDateTime {
 }
 
 internal fun Date(utcDateTime: String): Date {
-    val utcFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    val utcFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
     utcFormat.timeZone = TimeZone.getTimeZone("UTC")
     return utcFormat.parse(utcDateTime)
 }

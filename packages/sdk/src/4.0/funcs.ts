@@ -13256,9 +13256,9 @@ export const set_user_roles = async (
   body: Partial<string[]>,
   fields?: string,
   options?: Partial<ITransportSettings>
-): Promise<SDKResponse<IRole[], IError>> => {
+): Promise<SDKResponse<IRole[], IError | IValidationError>> => {
   user_id = encodeParam(user_id);
-  return sdk.put<IRole[], IError>(
+  return sdk.put<IRole[], IError | IValidationError>(
     `/users/${user_id}/roles`,
     { fields },
     body,

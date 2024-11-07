@@ -4510,7 +4510,7 @@ enum class PullRequestMode : Serializable {
  * @property filters Filters will contain data pertaining to complex filters that do not contain "or" conditions. When "or" conditions are present, filter data will be found on the `filter_expression` property.
  * @property filter_expression Filter Expression
  * @property sorts Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.
- * @property limit Limit
+ * @property limit Row limit. To download unlimited results, set the limit to -1 (negative one).
  * @property column_limit Column Limit
  * @property total Total
  * @property row_total Raw Total
@@ -7111,7 +7111,7 @@ data class WriteProject(
  * @property filters Filters will contain data pertaining to complex filters that do not contain "or" conditions. When "or" conditions are present, filter data will be found on the `filter_expression` property.
  * @property filter_expression Filter Expression
  * @property sorts Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.
- * @property limit Limit
+ * @property limit Row limit. To download unlimited results, set the limit to -1 (negative one).
  * @property column_limit Column Limit
  * @property total Total
  * @property row_total Raw Total
