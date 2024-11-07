@@ -2402,7 +2402,7 @@ type Query struct {
 	Filters              *map[string]interface{} `json:"filters,omitempty"`                // Filters will contain data pertaining to complex filters that do not contain "or" conditions. When "or" conditions are present, filter data will be found on the `filter_expression` property.
 	FilterExpression     *string                 `json:"filter_expression,omitempty"`      // Filter Expression
 	Sorts                *[]string               `json:"sorts,omitempty"`                  // Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.
-	Limit                *string                 `json:"limit,omitempty"`                  // Limit
+	Limit                *string                 `json:"limit,omitempty"`                  // Row limit. To download unlimited results, set the limit to -1 (negative one).
 	ColumnLimit          *string                 `json:"column_limit,omitempty"`           // Column Limit
 	Total                *bool                   `json:"total,omitempty"`                  // Total
 	RowTotal             *string                 `json:"row_total,omitempty"`              // Raw Total
@@ -4579,7 +4579,7 @@ type WriteQuery struct {
 	Filters           *map[string]interface{} `json:"filters,omitempty"`             // Filters will contain data pertaining to complex filters that do not contain "or" conditions. When "or" conditions are present, filter data will be found on the `filter_expression` property.
 	FilterExpression  *string                 `json:"filter_expression,omitempty"`   // Filter Expression
 	Sorts             *[]string               `json:"sorts,omitempty"`               // Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.
-	Limit             *string                 `json:"limit,omitempty"`               // Limit
+	Limit             *string                 `json:"limit,omitempty"`               // Row limit. To download unlimited results, set the limit to -1 (negative one).
 	ColumnLimit       *string                 `json:"column_limit,omitempty"`        // Column Limit
 	Total             *bool                   `json:"total,omitempty"`               // Total
 	RowTotal          *string                 `json:"row_total,omitempty"`           // Raw Total

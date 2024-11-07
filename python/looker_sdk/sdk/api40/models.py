@@ -9477,7 +9477,7 @@ class Query(model.Model):
         filters: Filters will contain data pertaining to complex filters that do not contain "or" conditions. When "or" conditions are present, filter data will be found on the `filter_expression` property.
         filter_expression: Filter Expression
         sorts: Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.
-        limit: Limit
+        limit: Row limit. To download unlimited results, set the limit to -1 (negative one).
         column_limit: Column Limit
         total: Total
         row_total: Raw Total
@@ -14758,7 +14758,7 @@ class WriteQuery(model.Model):
             filters: Filters will contain data pertaining to complex filters that do not contain "or" conditions. When "or" conditions are present, filter data will be found on the `filter_expression` property.
             filter_expression: Filter Expression
             sorts: Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.
-            limit: Limit
+            limit: Row limit. To download unlimited results, set the limit to -1 (negative one).
             column_limit: Column Limit
             total: Total
             row_total: Raw Total

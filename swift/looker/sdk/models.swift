@@ -17925,7 +17925,7 @@ public struct Query: SDKModel {
 
     private var _limit: AnyString?
     /**
-     * Limit
+     * Row limit. To download unlimited results, set the limit to -1 (negative one).
      */
     public var limit: String? {
         get { _limit?.value }
@@ -27792,7 +27792,7 @@ public struct WriteQuery: SDKModel {
 
     private var _limit: AnyString?
     /**
-     * Limit
+     * Row limit. To download unlimited results, set the limit to -1 (negative one).
      */
     public var limit: String? {
         get { _limit?.value }

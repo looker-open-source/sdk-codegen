@@ -7314,7 +7314,7 @@ export interface IQuery {
    */
   sorts?: string[] | null;
   /**
-   * Limit
+   * Row limit. To download unlimited results, set the limit to -1 (negative one).
    */
   limit?: string | null;
   /**
@@ -13857,7 +13857,7 @@ export interface IWriteQuery {
    */
   sorts?: string[] | null;
   /**
-   * Limit
+   * Row limit. To download unlimited results, set the limit to -1 (negative one).
    */
   limit?: string | null;
   /**
