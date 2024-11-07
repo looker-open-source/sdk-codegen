@@ -1,5 +1,20 @@
 # Changelog
 
+## [24.20.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.18.1...sdk-codegen-all-v24.20.0) (2024-11-07)
+
+
+### Features
+
+* add Python example for downloading a dashboard as CSV ([#1389](https://github.com/looker-open-source/sdk-codegen/issues/1389)) ([5b55daa](https://github.com/looker-open-source/sdk-codegen/commit/5b55daa47763637ed81a5f78a5f5cdf7ed03bc55)), closes [#1363](https://github.com/looker-open-source/sdk-codegen/issues/1363)
+* generate SDKs for Looker 24_20 ([#1537](https://github.com/looker-open-source/sdk-codegen/issues/1537)) ([7544a37](https://github.com/looker-open-source/sdk-codegen/commit/7544a37694d3b64d49116bf69d5e5c5c8dd5db19))
+* Kotlin: make isAuthenticated func in AuthSession open for extension to allow custom / proxy AuthSession ([#1535](https://github.com/looker-open-source/sdk-codegen/issues/1535)) ([f95ca75](https://github.com/looker-open-source/sdk-codegen/commit/f95ca75a059e7f14daa995736320dae0cd28c720))
+* Kotlin: make Transport class open for extension to allow custom… ([#1520](https://github.com/looker-open-source/sdk-codegen/issues/1520)) ([9fd622f](https://github.com/looker-open-source/sdk-codegen/commit/9fd622f323ed9540dab6fb47b9eaef3c1c79678b))
+
+
+### Bug Fixes
+
+* remove reference to react in extension-sdk ([#1532](https://github.com/looker-open-source/sdk-codegen/issues/1532)) ([bae0fe3](https://github.com/looker-open-source/sdk-codegen/commit/bae0fe3a599ac081af5573a7c8632fd5f31dfefe))
+
 ## [24.18.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.18.0...sdk-codegen-all-v24.18.1) (2024-10-21)
 
 
