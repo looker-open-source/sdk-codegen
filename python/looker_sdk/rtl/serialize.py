@@ -78,7 +78,7 @@ def deserialize(
 def serialize(*, api_model: TModelOrSequence, converter: cattr.Converter) -> bytes:
     """Translate api_model into formdata encoded json bytes"""
     data = converter.unstructure(api_model)  # type: ignore
-    return json.dumps(data).encode("utf-8")  # type: ignore
+    return json.dumps(data,default=lambda o: o.__dict__).encode("utf-8")  # type: ignore
 
 
 def forward_ref_structure_hook(context, converter, data, forward_ref):
