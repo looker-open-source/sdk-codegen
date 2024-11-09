@@ -4309,7 +4309,7 @@ public class Query : SdkModel
   public string? filter_expression { get; set; } = null;
   /// <summary>Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.</summary>
   public string[]? sorts { get; set; } = null;
-  /// <summary>Limit</summary>
+  /// <summary>Row limit. To download unlimited results, set the limit to -1 (negative one).</summary>
   public string? limit { get; set; } = null;
   /// <summary>Column Limit</summary>
   public string? column_limit { get; set; } = null;
@@ -6800,7 +6800,7 @@ public class WriteQuery : SdkModel
   public string? filter_expression { get; set; } = null;
   /// <summary>Sorting for the query results. Use the format `["view.field", ...]` to sort on fields in ascending order. Use the format `["view.field desc", ...]` to sort on fields in descending order. Use `["__UNSORTED__"]` (2 underscores before and after) to disable sorting entirely. Empty sorts `[]` will trigger a default sort.</summary>
   public string[]? sorts { get; set; } = null;
-  /// <summary>Limit</summary>
+  /// <summary>Row limit. To download unlimited results, set the limit to -1 (negative one).</summary>
   public string? limit { get; set; } = null;
   /// <summary>Column Limit</summary>
   public string? column_limit { get; set; } = null;

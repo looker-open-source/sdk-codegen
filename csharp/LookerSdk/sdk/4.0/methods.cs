@@ -429,7 +429,7 @@ namespace Looker.SDK.API40
   ///
   /// <returns><c>string</c> Artifact value (application/json)</returns>
   ///
-  /// <param name="namespace">Artifact storage namespace</param>
+  /// <param name="@namespace">Artifact storage namespace</param>
   /// <param name="key">Artifact storage key. Namespace + Key must be unique</param>
   public async Task<SdkResponse<string, Exception>> artifact_value(
     string @namespace,
@@ -449,7 +449,7 @@ namespace Looker.SDK.API40
   ///
   /// <returns><c>void</c> All artifacts are purged. ()</returns>
   ///
-  /// <param name="namespace">Artifact storage namespace</param>
+  /// <param name="@namespace">Artifact storage namespace</param>
   public async Task<SdkResponse<string, Exception>> purge_artifacts(
     string @namespace,
     ITransportSettings? options = null)
@@ -480,7 +480,7 @@ namespace Looker.SDK.API40
   ///
   /// <returns><c>Artifact[]</c> Artifacts (application/json)</returns>
   ///
-  /// <param name="namespace">Artifact storage namespace</param>
+  /// <param name="@namespace">Artifact storage namespace</param>
   /// <param name="fields">Comma-delimited names of fields to return in responses. Omit for all fields</param>
   /// <param name="key">Key pattern to match</param>
   /// <param name="user_ids">Ids of users who created or updated the artifact (comma-delimited list)</param>
@@ -520,7 +520,7 @@ namespace Looker.SDK.API40
   ///
   /// <returns><c>Artifact[]</c> Created or updated artifacts (application/json)</returns>
   ///
-  /// <param name="namespace">Artifact storage namespace</param>
+  /// <param name="@namespace">Artifact storage namespace</param>
   /// <param name="key">Comma-delimited list of keys. Wildcards not allowed.</param>
   /// <param name="fields">Comma-delimited names of fields to return in responses. Omit for all fields</param>
   /// <param name="limit">Number of results to return. (used with offset)</param>
@@ -551,7 +551,7 @@ namespace Looker.SDK.API40
   ///
   /// <returns><c>void</c> The artifact is deleted. ()</returns>
   ///
-  /// <param name="@namespace">Artifact storage @namespace</param>
+  /// <param name="@namespace">Artifact storage namespace</param>
   /// <param name="key">Comma-delimited list of keys. Wildcards not allowed.</param>
   public async Task<SdkResponse<string, Exception>> delete_artifact(
     string @namespace,
@@ -590,11 +590,11 @@ namespace Looker.SDK.API40
   ///
   /// **Note**: The artifact storage API can only be used by Looker-built extensions.
   ///
-  /// PUT /artifacts/{@namespace} -> Artifact[]
+  /// PUT /artifacts/{namespace} -> Artifact[]
   ///
   /// <returns><c>Artifact[]</c> Created or updated artifacts (application/json)</returns>
   ///
-  /// <param name="@namespace">Artifact storage @namespace</param>
+  /// <param name="@namespace">Artifact storage namespace</param>
   /// <param name="fields">Comma-delimited names of fields to return in responses. Omit for all fields</param>
   public async Task<SdkResponse<Artifact[], Exception>> update_artifacts(
     string @namespace,
@@ -2899,7 +2899,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       client_id = SdkUtils.EncodeParam(client_id);
-    return await AuthRequest<ExternalOauthApplication, Exception>(HttpMethod.Patch, $"/external_oauth_applications/{client_id}", null,body,options);
+    return await AuthRequest<ExternalOauthApplication, Exception>(new HttpMethod("PATCH"), $"/external_oauth_applications/{client_id}", null,body,options);
   }
 
   /// ### Create OAuth User state.
@@ -6356,7 +6356,7 @@ namespace Looker.SDK.API40
   ///
   /// <param name="project_id">Id of project</param>
   /// <param name="branch">Branch to deploy to production</param>
-  /// <param name="ref">Ref to deploy to production</param>
+  /// <param name="@ref">Ref to deploy to production</param>
   public async Task<SdkResponse<TSuccess, Exception>> deploy_ref_to_production<TSuccess>(
     string project_id,
     string? branch = null,
