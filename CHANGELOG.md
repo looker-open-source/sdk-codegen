@@ -1,5 +1,12 @@
 # Changelog
 
+## [24.20.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.20.0...sdk-codegen-all-v24.20.1) (2024-12-02)
+
+
+### Bug Fixes
+
+* Improve error handling in Transport.kt ([#1540](https://github.com/looker-open-source/sdk-codegen/issues/1540)) ([a091549](https://github.com/looker-open-source/sdk-codegen/commit/a091549945b0c1604cfe41be9aac6fdfb080719f))
+
 ## [24.20.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.18.1...sdk-codegen-all-v24.20.0) (2024-11-07)
 
 
