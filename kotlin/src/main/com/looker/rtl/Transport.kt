@@ -73,23 +73,67 @@ sealed class SDKResponse {
     data class SDKErrorResponse<T>(
         /** The error object returned by the SDK call. */
         val value: T,
+        val method: HttpMethod,
+        val path: String,
+        val statusCode: Int,
+        val statusMessage: String,
+        val responseHeaders: HttpHeaders,
+        val responseBody: String,
     ) : SDKResponse() {
         /** Whether the SDK call was successful. */
         val ok: Boolean = false
     }
 
     /** An error representing an issue in the SDK, like a network or parsing error. */
-    data class SDKError(val message: String) : SDKResponse() {
+    data class SDKError(val message: String, val cause: Exception) : SDKResponse() {
         val type: String = "sdk_error"
     }
+
+    inline fun <reified V> getOrThrow(): V =
+        when (this) {
+          is SDKResponse.SDKSuccessResponse<*> ->
+            checkNotNull(value as? V) {
+              if (value == null) {
+                "Expected value of type ${V::class}, but was null"
+              } else {
+                "Expected value of type ${V::class}, but was ${value::class}"
+              }
+            }
+        
+          is SDKResponse.SDKErrorResponse<*> ->
+            throw LookerApiException(
+              method,
+              path,
+              statusCode,
+              statusMessage,
+              responseHeaders,
+              responseBody,
+            )
+        
+          is SDKResponse.SDKError -> throw cause
+        }
+    
     companion object {
         const val ERROR_BODY = "error_body"
     }
 }
 
-/**
- * Response handler that throws an error on error response, returns success result on success
- */
+/** Thrown when a Looker API call returns an error. */
+data class LookerApiException(
+  val method: HttpMethod,
+  val path: String,
+  val statusCode: Int,
+  val statusMessage: String,
+  val responseHeaders: HttpHeaders,
+  val responseBody: String,
+) : Exception() {
+  override val message = "$method $path $statusCode: $statusMessage"
+}
+
+/** Response handler that throws an error on error response, returns success result on success */
+@Deprecated(
+  "This method throws java.lang.Error, which is not recommended for use in application code. Please use SDKResponse.getOrThrow() instead."
+)
 fun <T> ok(response: SDKResponse): T {
     @Suppress("UNCHECKED_CAST")
     when (response) {
@@ -379,9 +423,17 @@ open class Transport(val options: TransportOptions) {
             }
             SDKResponse.SDKSuccessResponse(rawResult)
         } catch (e: HttpResponseException) {
-            SDKResponse.SDKErrorResponse("$method $path $ERROR_BODY: ${e.content}")
+            SDKResponse.SDKErrorResponse(
+                "$method $path $ERROR_BODY: ${e.content}",
+                method,
+                path,
+                e.statusCode,
+                e.statusMessage,
+                e.headers,
+                e.content,
+            )
         } catch (e: Exception) {
-            SDKResponse.SDKError(e.message ?: "Something went wrong")
+            SDKResponse.SDKError(e.message ?: "Something went wrong", e)
         }
 
         return sdkResponse
