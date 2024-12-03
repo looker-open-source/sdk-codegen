@@ -30,14 +30,11 @@ open class AuthSession(
     open val apiSettings: ConfigurationProvider,
     open val transport: Transport = Transport(apiSettings),
 ) {
-
     var authToken: AuthToken = AuthToken()
     private var sudoToken: AuthToken = AuthToken()
     var sudoId: String = ""
 
-    /**
-     * Abstraction of AuthToken retrieval to support sudo mode
-     */
+    /** Abstraction of AuthToken retrieval to support sudo mode */
     fun activeToken(): AuthToken {
         if (sudoToken.accessToken.isNotEmpty()) {
             return sudoToken
@@ -45,9 +42,7 @@ open class AuthSession(
         return authToken
     }
 
-    /**
-     * Is there an active authentication token?
-     */
+    /** Is there an active authentication token? */
     open fun isAuthenticated(): Boolean {
         val token = activeToken()
         if (token.accessToken.isBlank()) return false
@@ -56,8 +51,8 @@ open class AuthSession(
 
     /**
      * Add authentication data to the pending API request
-     * @param[init] Initialized API request properties
      *
+     * @param[init] Initialized API request properties
      * @return The updated request properties
      */
     fun authenticate(init: RequestSettings): RequestSettings {
@@ -69,13 +64,11 @@ open class AuthSession(
         return init.copy(headers = headers)
     }
 
-    fun isSudo(): Boolean {
-        return sudoId.isNotBlank() && sudoToken.isActive()
-    }
+    fun isSudo(): Boolean = sudoId.isNotBlank() && sudoToken.isActive()
 
     /**
-     * Retrieve the current authentication token. If there is no active token, performs default login to retrieve the
-     * token.
+     * Retrieve the current authentication token. If there is no active token, performs default
+     * login to retrieve the token.
      */
     open fun getToken(): AuthToken {
         if (!isAuthenticated()) {
@@ -84,9 +77,7 @@ open class AuthSession(
         return activeToken()
     }
 
-    /**
-     * Reset the authentication session
-     */
+    /** Reset the authentication session */
     fun reset() {
         sudoId = ""
         authToken.reset()
@@ -95,13 +86,14 @@ open class AuthSession(
 
     /**
      * Activate the authentication token for the API3 or sudo user
+     *
      * @param[sudoId] If provided, impersonates the user specified
      */
-
     fun login(sudoId: String = ""): AuthToken = doLogin(sudoId)
 
     /**
-     * Logout the active user. If the active user is impersonated , the session reverts to the API3 user.
+     * Logout the active user. If the active user is impersonated , the session reverts to the API3
+     * user.
      */
     fun logout(): Boolean {
         if (isAuthenticated()) {
@@ -110,14 +102,7 @@ open class AuthSession(
         return false
     }
 
-    fun <T> ok(response: SDKResponse): T {
-        @Suppress("UNCHECKED_CAST")
-        when (response) {
-            is SDKResponse.SDKErrorResponse<*> -> throw Error(response.value.toString())
-            is SDKResponse.SDKSuccessResponse<*> -> return response.value as T
-            else -> throw Error("Fail!!")
-        }
-    }
+    fun <T> ok(response: SDKResponse) = SDKResponse.ok<T>(response)
 
     private fun sudoLogout(): Boolean {
         var result = false
@@ -140,37 +125,39 @@ open class AuthSession(
             val client_secret = "client_secret"
             val config = apiSettings.readConfig()
             val clientId =
-                unQuote(System.getProperty("${apiSettings.environmentPrefix}_CLIENT_ID") ?: config[client_id])
+                unQuote(
+                    System.getProperty("${apiSettings.environmentPrefix}_CLIENT_ID")
+                        ?: config[client_id],
+                )
             val clientSecret =
-                unQuote(System.getProperty("${apiSettings.environmentPrefix}_CLIENT_SECRET") ?: config[client_secret])
-            val params = mapOf(
-                client_id to clientId,
-                client_secret to clientSecret,
-            )
+                unQuote(
+                    System.getProperty("${apiSettings.environmentPrefix}_CLIENT_SECRET")
+                        ?: config[client_secret],
+                )
+            val params = mapOf(client_id to clientId, client_secret to clientSecret)
             val body = UrlEncodedContent(params)
-            val token = ok<AuthToken>(
-                transport.request<AuthToken>(
-                    HttpMethod.POST,
-                    "$apiPath/login",
-                    emptyMap(),
-                    body,
-                ),
-            )
+            val token =
+                ok<AuthToken>(
+                    transport.request<AuthToken>(
+                        HttpMethod.POST,
+                        "$apiPath/login",
+                        emptyMap(),
+                        body,
+                    ),
+                )
             authToken = token
         }
 
         if (sudoId.isNotBlank()) {
             val token = activeToken()
-            val sudoToken = transport.request<AuthToken>(
-                HttpMethod.POST,
-                "/login/$newId",
-            ) { requestSettings ->
-                val headers = requestSettings.headers.toMutableMap()
-                if (token.accessToken.isNotBlank()) {
-                    headers["Authorization"] = "Bearer ${token.accessToken}"
+            val sudoToken =
+                transport.request<AuthToken>(HttpMethod.POST, "/login/$newId") { requestSettings ->
+                    val headers = requestSettings.headers.toMutableMap()
+                    if (token.accessToken.isNotBlank()) {
+                        headers["Authorization"] = "Bearer ${token.accessToken}"
+                    }
+                    requestSettings.copy(headers = headers)
                 }
-                requestSettings.copy(headers = headers)
-            }
             this.sudoToken = ok(sudoToken)
         }
         return activeToken()
@@ -178,19 +165,21 @@ open class AuthSession(
 
     private fun doLogout(): Boolean {
         val token = activeToken()
-        val resp = transport.request<String>(HttpMethod.DELETE, "/logout") {
-            val headers = it.headers.toMutableMap()
-            if (token.accessToken.isNotBlank()) {
-                headers["Authorization"] = "Bearer ${token.accessToken}"
+        val resp =
+            transport.request<String>(HttpMethod.DELETE, "/logout") {
+                val headers = it.headers.toMutableMap()
+                if (token.accessToken.isNotBlank()) {
+                    headers["Authorization"] = "Bearer ${token.accessToken}"
+                }
+                it.copy(headers = headers)
             }
-            it.copy(headers = headers)
-        }
 
-        val success = when (resp) {
-            is SDKResponse.SDKSuccessResponse<*> -> true
-            is SDKResponse.SDKErrorResponse<*> -> false
-            else -> false
-        }
+        val success =
+            when (resp) {
+                is SDKResponse.SDKSuccessResponse<*> -> true
+                is SDKResponse.SDKErrorResponse<*> -> false
+                else -> false
+            }
         if (sudoId.isNotBlank()) {
             sudoId = ""
             sudoToken.reset()
