@@ -122,7 +122,7 @@ const reservedWords = new Set<string>([
  */
 export class CSharpGen extends CodeGen {
   codePath = './csharp';
-  packagePath = '';
+  packagePath = '/LookerSdk';
   itself = 'this';
   fileExtension = '.cs';
   commentStr = '// ';
@@ -138,6 +138,11 @@ export class CSharpGen extends CodeGen {
   needsRequestTypes = false;
   willItStream = false;
   codeQuote = '"';
+
+  // sdkFileName(baseFileName: string) {
+  //   // return this.fileName(`sdk/${baseFileName}${this.apiRef}`)
+  //   return this.fileName(`LookerSdk/${baseFileName}`);
+  // }
 
   commentHeader(indent: string, text: string | undefined) {
     if (this.noComment) return '';
@@ -310,10 +315,16 @@ namespace Looker.SDK.API${this.apiRef}
 
   httpPath(path: string, prefix?: string) {
     prefix = prefix || '';
+    let dollah = '';
     if (path.indexOf('{') >= 0) {
-      return `$"${path.replace(/{/gi, '{' + prefix)}"`;
+      dollah = '$';
+      const rx = /{?(\w+)}/gm;
+      path = path.replace(rx, a => {
+        const arg = a.substring(1, a.length - 1);
+        return `${prefix}{${this.reserve(arg)}}`;
+      });
     }
-    return `'${path}'`;
+    return `${dollah}"${path}"`;
   }
 
   declareMethod(indent: string, method: IMethod) {
@@ -356,14 +367,16 @@ namespace Looker.SDK.API${this.apiRef}
   httpCall(indent: string, method: IMethod) {
     const bump = indent + this.indentStr;
     const args = this.httpArgs(bump, method);
-    const dollah = method.pathArgs.length ? '$' : '';
     // const errors = `(${this.errorResponses(indent, method)})`
     const bits = this.genericBits(method);
-    const fragment = `AuthRequest<${
-      bits.success
-    }, Exception>(HttpMethod.${firstCase(method.httpMethod)}, ${dollah}"${
-      method.endpoint
-    }"${args ? ', ' + args : ''})`;
+    const http =
+      method.httpMethod === 'PATCH'
+        ? 'new HttpMethod("PATCH")'
+        : `HttpMethod.${firstCase(method.httpMethod)}`;
+    const path = this.httpPath(method.endpoint);
+    const fragment = `AuthRequest<${bits.success}, Exception>(${http}, ${path}${
+      args ? ', ' + args : ''
+    })`;
     return `${indent}return await ${fragment};`;
   }
 
@@ -373,7 +386,8 @@ namespace Looker.SDK.API${this.apiRef}
     if (method.pathParams.length > 0) {
       for (const param of method.pathParams) {
         if (param.doEncode()) {
-          encodings += `${bump}${param.name} = SdkUtils.EncodeParam(${param.name});\n`;
+          const name = this.reserve(param.name);
+          encodings += `${bump}${name} = SdkUtils.EncodeParam(${name});\n`;
         }
       }
     }
@@ -391,7 +405,9 @@ namespace Looker.SDK.API${this.apiRef}
 
   paramComment(param: IParameter) {
     return param.description
-      ? `\n<param name="${param.name}">${describeParam(param)}</param>`
+      ? `\n<param name="${this.reserve(param.name)}">${describeParam(
+          param
+        )}</param>`
       : '';
   }
 

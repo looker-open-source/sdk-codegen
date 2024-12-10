@@ -246,6 +246,47 @@ public async Task<SdkResponse<TSuccess, Exception>> run_sql_query<TSuccess>(
       const actual = gen.declareMethod(indent, method);
       expect(actual).toEqual(expected);
     });
+    it('generates bug work around syntax for HttpMethod.Patch', () => {
+      const method = apiTestModel.methods.update_ssh_server;
+      const expected = `public async Task<SdkResponse<SshServer, Exception>> update_ssh_server(
+  string ssh_server_id,
+  WriteSshServer body,
+  ITransportSettings? options = null)
+{
+    ssh_server_id = SdkUtils.EncodeParam(ssh_server_id);
+  return await AuthRequest<SshServer, Exception>(new HttpMethod("PATCH"), $"/ssh_server/{ssh_server_id}", null,body,options);
+}`;
+      gen.noComment = true;
+      const actual = gen.declareMethod(indent, method);
+      gen.noComment = false;
+      expect(actual).toEqual(expected);
+    });
+    it('escapes namespace as a reserved word', () => {
+      const method = apiTestModel.methods.delete_artifact;
+      const expected = `/// ### Delete one or more artifacts
+///
+/// To avoid rate limiting on deletion requests, multiple artifacts can be deleted at the same time by using a comma-delimited list of artifact keys.
+///
+/// **Note**: The artifact storage API can only be used by Looker-built extensions.
+///
+/// DELETE /artifact/{namespace} -> void
+///
+/// <returns><c>void</c> The artifact is deleted. ()</returns>
+///
+/// <param name="@namespace">Artifact storage namespace</param>
+/// <param name="key">Comma-delimited list of keys. Wildcards not allowed.</param>
+public async Task<SdkResponse<string, Exception>> delete_artifact(
+  string @namespace,
+  string key,
+  ITransportSettings? options = null)
+{
+    @namespace = SdkUtils.EncodeParam(@namespace);
+  return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/artifact/{@namespace}", new Values {
+      { "key", key }},null,options);
+}`;
+      const actual = gen.declareMethod(indent, method);
+      expect(actual).toEqual(expected);
+    });
     it('noComment method with multiple return types', () => {
       const method = apiTestModel.methods.run_sql_query;
       const expected = `public async Task<SdkResponse<TSuccess, Exception>> run_sql_query<TSuccess>(
