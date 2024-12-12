@@ -1,5 +1,12 @@
 # Changelog
 
+## [24.20.2](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.20.1...sdk-codegen-all-v24.20.2) (2024-12-12)
+
+
+### Bug Fixes
+
+* Improve ok() helper function ([#1542](https://github.com/looker-open-source/sdk-codegen/issues/1542)) ([7b15f90](https://github.com/looker-open-source/sdk-codegen/commit/7b15f9002a263799c04d92d6278e4c4764b53e47))
+
 ## [24.20.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.20.0...sdk-codegen-all-v24.20.1) (2024-12-02)
 
 
