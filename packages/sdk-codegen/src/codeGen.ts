@@ -1290,8 +1290,9 @@ export abstract class CodeGen implements ICodeGen {
 
   argList(indent: string, args: Arg[], prefix?: string) {
     prefix = prefix || '';
+    const names = args.map(a => this.reserve(a));
     return args && args.length !== 0
-      ? `${indent}${prefix}${args.join(this.argDelimiter + prefix)}`
+      ? `${indent}${prefix}${names.join(this.argDelimiter + prefix)}`
       : this.nullStr;
   }
 
@@ -1301,7 +1302,7 @@ export abstract class CodeGen implements ICodeGen {
       // Don't append trailing optional arguments if none have been set yet
       return '';
     }
-    return `${args}${current ? this.argDelimiter : ''}${current}`;
+    return `${args}${current ? this.argDelimiter : ''}${this.reserve(current)}`;
   }
 
   httpPath(path: string, _prefix?: string) {
