@@ -1,5 +1,17 @@
 # Changelog
 
+## [25.0.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.20.1...sdk-codegen-all-v25.0.0) (2025-01-13)
+
+
+### Features
+
+* generate SDKs for Looker 25.0 ([#1558](https://github.com/looker-open-source/sdk-codegen/issues/1558)) ([56502e5](https://github.com/looker-open-source/sdk-codegen/commit/56502e5535155c3e8007781b15a46b5927f2a825))
+
+
+### Bug Fixes
+
+* Improve ok() helper function ([#1542](https://github.com/looker-open-source/sdk-codegen/issues/1542)) ([7b15f90](https://github.com/looker-open-source/sdk-codegen/commit/7b15f9002a263799c04d92d6278e4c4764b53e47))
+
 ## [24.20.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.20.0...sdk-codegen-all-v24.20.1) (2024-12-02)
 
 
