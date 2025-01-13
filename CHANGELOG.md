@@ -2,6 +2,10 @@
 
 ## [25.0.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.20.1...sdk-codegen-all-v25.0.0) (2025-01-13)
 
+* The `content-validation` endpoint and associated method has a breaking
+  change for at least some languages, notably TypeScript. The passed
+  parameters have changed.
+
 
 ### Features
 
