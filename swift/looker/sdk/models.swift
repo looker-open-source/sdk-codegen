@@ -25,7 +25,7 @@
  */
 
 /**
- * 342 API models: 259 Spec, 0 Request, 61 Write, 22 Enum
+ * 343 API models: 259 Spec, 0 Request, 62 Write, 22 Enum
  */
 
 
@@ -7014,6 +7014,7 @@ public struct DBConnection: SDKModel {
         case ssl
         case verify_ssl
         case _tmp_db_name = "tmp_db_name"
+        case _tmp_db_host = "tmp_db_host"
         case _jdbc_additional_params = "jdbc_additional_params"
         case _pool_timeout = "pool_timeout"
         case _dialect_name = "dialect_name"
@@ -7227,6 +7228,15 @@ public struct DBConnection: SDKModel {
     public var tmp_db_name: String? {
         get { _tmp_db_name?.value }
         set { _tmp_db_name = newValue.map(AnyString.init) }
+    }
+
+    private var _tmp_db_host: AnyString?
+    /**
+     * Name of temporary host (if used)
+     */
+    public var tmp_db_host: String? {
+        get { _tmp_db_host?.value }
+        set { _tmp_db_host = newValue.map(AnyString.init) }
     }
 
     private var _jdbc_additional_params: AnyString?
@@ -7459,7 +7469,7 @@ public struct DBConnection: SDKModel {
         set { _p4sa_name = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, uses_oauth: Bool? = nil, uses_instance_oauth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, supports_data_studio_link: Bool? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, default_bq_connection: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil, p4sa_name: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, uses_oauth: Bool? = nil, uses_instance_oauth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, tmp_db_host: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, supports_data_studio_link: Bool? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, default_bq_connection: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil, p4sa_name: String? = nil) {
         self.can = can
         self._name = name.map(AnyString.init)
         self.dialect = dialect
@@ -7484,6 +7494,7 @@ public struct DBConnection: SDKModel {
         self.ssl = ssl
         self.verify_ssl = verify_ssl
         self._tmp_db_name = tmp_db_name.map(AnyString.init)
+        self._tmp_db_host = tmp_db_host.map(AnyString.init)
         self._jdbc_additional_params = jdbc_additional_params.map(AnyString.init)
         self._pool_timeout = pool_timeout.map(AnyInt.init)
         self._dialect_name = dialect_name.map(AnyString.init)
@@ -8335,6 +8346,7 @@ public struct EmbedConfig: SDKModel {
         case strict_sameorigin_for_login
         case look_filters
         case hide_look_navigation
+        case embed_enabled
     }
     private var _domain_allowlist: [AnyString]?
     /**
@@ -8407,7 +8419,12 @@ public struct EmbedConfig: SDKModel {
      */
     public var hide_look_navigation: Bool?
 
-    public init(domain_allowlist: [String]? = nil, alert_url_allowlist: [String]? = nil, alert_url_param_owner: String? = nil, alert_url_label: String? = nil, sso_auth_enabled: Bool? = nil, embed_cookieless_v2: Bool? = nil, embed_content_navigation: Bool? = nil, embed_content_management: Bool? = nil, strict_sameorigin_for_login: Bool? = nil, look_filters: Bool? = nil, hide_look_navigation: Bool? = nil) {
+    /**
+     * True if embedding is licensed for this Looker instance. (read-only)
+     */
+    public var embed_enabled: Bool?
+
+    public init(domain_allowlist: [String]? = nil, alert_url_allowlist: [String]? = nil, alert_url_param_owner: String? = nil, alert_url_label: String? = nil, sso_auth_enabled: Bool? = nil, embed_cookieless_v2: Bool? = nil, embed_content_navigation: Bool? = nil, embed_content_management: Bool? = nil, strict_sameorigin_for_login: Bool? = nil, look_filters: Bool? = nil, hide_look_navigation: Bool? = nil, embed_enabled: Bool? = nil) {
         if let v = domain_allowlist { _domain_allowlist = v.map { AnyString.init($0) } } else { _domain_allowlist = nil }
         if let v = alert_url_allowlist { _alert_url_allowlist = v.map { AnyString.init($0) } } else { _alert_url_allowlist = nil }
         self._alert_url_param_owner = alert_url_param_owner.map(AnyString.init)
@@ -8419,6 +8436,7 @@ public struct EmbedConfig: SDKModel {
         self.strict_sameorigin_for_login = strict_sameorigin_for_login
         self.look_filters = look_filters
         self.hide_look_navigation = hide_look_navigation
+        self.embed_enabled = embed_enabled
     }
 
 }
@@ -20790,6 +20808,7 @@ public struct Setting: SDKModel {
         case _login_notification_text = "login_notification_text"
         case dashboard_auto_refresh_restriction
         case _dashboard_auto_refresh_minimum_interval = "dashboard_auto_refresh_minimum_interval"
+        case _managed_certificate_uri = "managed_certificate_uri"
     }
     public var instance_config: InstanceConfig?
 
@@ -20920,7 +20939,16 @@ public struct Setting: SDKModel {
         set { _dashboard_auto_refresh_minimum_interval = newValue.map(AnyString.init) }
     }
 
-    public init(instance_config: InstanceConfig? = nil, extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_site: String? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_enabled: Bool? = nil, embed_config: EmbedConfig? = nil, login_notification_enabled: Bool? = nil, login_notification_text: String? = nil, dashboard_auto_refresh_restriction: Bool? = nil, dashboard_auto_refresh_minimum_interval: String? = nil) {
+    private var _managed_certificate_uri: AnyString?
+    /**
+     * URI pointing to the location of a private root certificate in Secret Manager
+     */
+    public var managed_certificate_uri: String? {
+        get { _managed_certificate_uri?.value }
+        set { _managed_certificate_uri = newValue.map(AnyString.init) }
+    }
+
+    public init(instance_config: InstanceConfig? = nil, extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_site: String? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_enabled: Bool? = nil, embed_config: EmbedConfig? = nil, login_notification_enabled: Bool? = nil, login_notification_text: String? = nil, dashboard_auto_refresh_restriction: Bool? = nil, dashboard_auto_refresh_minimum_interval: String? = nil, managed_certificate_uri: String? = nil) {
         self.instance_config = instance_config
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
@@ -20945,6 +20973,7 @@ public struct Setting: SDKModel {
         self._login_notification_text = login_notification_text.map(AnyString.init)
         self.dashboard_auto_refresh_restriction = dashboard_auto_refresh_restriction
         self._dashboard_auto_refresh_minimum_interval = dashboard_auto_refresh_minimum_interval.map(AnyString.init)
+        self._managed_certificate_uri = managed_certificate_uri.map(AnyString.init)
     }
 
 }
@@ -25468,6 +25497,7 @@ public struct WriteDBConnection: SDKModel {
         case ssl
         case verify_ssl
         case _tmp_db_name = "tmp_db_name"
+        case _tmp_db_host = "tmp_db_host"
         case _jdbc_additional_params = "jdbc_additional_params"
         case _pool_timeout = "pool_timeout"
         case _dialect_name = "dialect_name"
@@ -25647,6 +25677,15 @@ public struct WriteDBConnection: SDKModel {
         set { _tmp_db_name = newValue.map(AnyString.init) }
     }
 
+    private var _tmp_db_host: AnyString?
+    /**
+     * Name of temporary host (if used)
+     */
+    public var tmp_db_host: String? {
+        get { _tmp_db_host?.value }
+        set { _tmp_db_host = newValue.map(AnyString.init) }
+    }
+
     private var _jdbc_additional_params: AnyString?
     /**
      * Additional params to add to JDBC connection string
@@ -25816,7 +25855,7 @@ public struct WriteDBConnection: SDKModel {
      */
     public var bq_roles_verified: Bool?
 
-    public init(name: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: WriteDBConnectionOverride? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil) {
+    public init(name: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, tmp_db_host: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: WriteDBConnectionOverride? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil) {
         self._name = name.map(AnyString.init)
         self._host = host.map(AnyString.init)
         self._port = port.map(AnyString.init)
@@ -25835,6 +25874,7 @@ public struct WriteDBConnection: SDKModel {
         self.ssl = ssl
         self.verify_ssl = verify_ssl
         self._tmp_db_name = tmp_db_name.map(AnyString.init)
+        self._tmp_db_host = tmp_db_host.map(AnyString.init)
         self._jdbc_additional_params = jdbc_additional_params.map(AnyString.init)
         self._pool_timeout = pool_timeout.map(AnyInt.init)
         self._dialect_name = dialect_name.map(AnyString.init)
@@ -25993,6 +26033,112 @@ public struct WriteDBConnectionOverride: SDKModel {
         self._schema = schema.map(AnyString.init)
         self._jdbc_additional_params = jdbc_additional_params.map(AnyString.init)
         self._after_connect_statements = after_connect_statements.map(AnyString.init)
+    }
+
+}
+
+/**
+ * Dynamic writeable type for EmbedConfig removes:
+ * embed_enabled
+ */
+public struct WriteEmbedConfig: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _domain_allowlist = "domain_allowlist"
+        case _alert_url_allowlist = "alert_url_allowlist"
+        case _alert_url_param_owner = "alert_url_param_owner"
+        case _alert_url_label = "alert_url_label"
+        case sso_auth_enabled
+        case embed_cookieless_v2
+        case embed_content_navigation
+        case embed_content_management
+        case strict_sameorigin_for_login
+        case look_filters
+        case hide_look_navigation
+    }
+    private var _domain_allowlist: [AnyString]?
+    /**
+     * List of domains to allow for embedding
+     */
+    public var domain_allowlist: [String]? {
+        get { if let v = _domain_allowlist { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _domain_allowlist = v.map { AnyString.init($0) } } else { _domain_allowlist = nil } }
+    }
+
+    private var _alert_url_allowlist: [AnyString]?
+    /**
+     * List of base urls to allow for alert/schedule
+     */
+    public var alert_url_allowlist: [String]? {
+        get { if let v = _alert_url_allowlist { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _alert_url_allowlist = v.map { AnyString.init($0) } } else { _alert_url_allowlist = nil } }
+    }
+
+    private var _alert_url_param_owner: AnyString?
+    /**
+     * Owner of who defines the alert/schedule params on the base url
+     */
+    public var alert_url_param_owner: String? {
+        get { _alert_url_param_owner?.value }
+        set { _alert_url_param_owner = newValue.map(AnyString.init) }
+    }
+
+    private var _alert_url_label: AnyString?
+    /**
+     * Label for the alert/schedule url
+     */
+    public var alert_url_label: String? {
+        get { _alert_url_label?.value }
+        set { _alert_url_label = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Is SSO embedding enabled for this Looker
+     */
+    public var sso_auth_enabled: Bool?
+
+    /**
+     * Is Cookieless embedding enabled for this Looker
+     */
+    public var embed_cookieless_v2: Bool?
+
+    /**
+     * Is embed content navigation enabled for this looker
+     */
+    public var embed_content_navigation: Bool?
+
+    /**
+     * Is embed content management enabled for this Looker
+     */
+    public var embed_content_management: Bool?
+
+    /**
+     * When true, prohibits the use of Looker login pages in non-Looker iframes. When false, Looker login pages may be used in non-Looker hosted iframes.
+     */
+    public var strict_sameorigin_for_login: Bool?
+
+    /**
+     * When true, filters are enabled on embedded Looks
+     */
+    public var look_filters: Bool?
+
+    /**
+     * When true, removes navigation to Looks from embedded dashboards and explores.
+     */
+    public var hide_look_navigation: Bool?
+
+    public init(domain_allowlist: [String]? = nil, alert_url_allowlist: [String]? = nil, alert_url_param_owner: String? = nil, alert_url_label: String? = nil, sso_auth_enabled: Bool? = nil, embed_cookieless_v2: Bool? = nil, embed_content_navigation: Bool? = nil, embed_content_management: Bool? = nil, strict_sameorigin_for_login: Bool? = nil, look_filters: Bool? = nil, hide_look_navigation: Bool? = nil) {
+        if let v = domain_allowlist { _domain_allowlist = v.map { AnyString.init($0) } } else { _domain_allowlist = nil }
+        if let v = alert_url_allowlist { _alert_url_allowlist = v.map { AnyString.init($0) } } else { _alert_url_allowlist = nil }
+        self._alert_url_param_owner = alert_url_param_owner.map(AnyString.init)
+        self._alert_url_label = alert_url_label.map(AnyString.init)
+        self.sso_auth_enabled = sso_auth_enabled
+        self.embed_cookieless_v2 = embed_cookieless_v2
+        self.embed_content_navigation = embed_content_navigation
+        self.embed_content_management = embed_content_management
+        self.strict_sameorigin_for_login = strict_sameorigin_for_login
+        self.look_filters = look_filters
+        self.hide_look_navigation = hide_look_navigation
     }
 
 }
@@ -28636,6 +28782,7 @@ public struct WriteSetting: SDKModel {
         case embed_config
         case dashboard_auto_refresh_restriction
         case _dashboard_auto_refresh_minimum_interval = "dashboard_auto_refresh_minimum_interval"
+        case _managed_certificate_uri = "managed_certificate_uri"
     }
     /**
      * Toggle extension framework on or off
@@ -28724,7 +28871,11 @@ public struct WriteSetting: SDKModel {
      */
     public var embed_cookieless_v2: Bool?
 
-    public var embed_config: EmbedConfig?
+    /**
+     * Dynamic writeable type for EmbedConfig removes:
+     * embed_enabled
+     */
+    public var embed_config: WriteEmbedConfig?
 
     /**
      * Toggle Dashboard Auto Refresh restriction
@@ -28740,7 +28891,16 @@ public struct WriteSetting: SDKModel {
         set { _dashboard_auto_refresh_minimum_interval = newValue.map(AnyString.init) }
     }
 
-    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_config: EmbedConfig? = nil, dashboard_auto_refresh_restriction: Bool? = nil, dashboard_auto_refresh_minimum_interval: String? = nil) {
+    private var _managed_certificate_uri: AnyString?
+    /**
+     * URI pointing to the location of a private root certificate in Secret Manager
+     */
+    public var managed_certificate_uri: String? {
+        get { _managed_certificate_uri?.value }
+        set { _managed_certificate_uri = newValue.map(AnyString.init) }
+    }
+
+    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_config: WriteEmbedConfig? = nil, dashboard_auto_refresh_restriction: Bool? = nil, dashboard_auto_refresh_minimum_interval: String? = nil, managed_certificate_uri: String? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
@@ -28760,6 +28920,7 @@ public struct WriteSetting: SDKModel {
         self.embed_config = embed_config
         self.dashboard_auto_refresh_restriction = dashboard_auto_refresh_restriction
         self._dashboard_auto_refresh_minimum_interval = dashboard_auto_refresh_minimum_interval.map(AnyString.init)
+        self._managed_certificate_uri = managed_certificate_uri.map(AnyString.init)
     }
 
 }

@@ -181,6 +181,7 @@ import type {
   IRequestConnectionTables,
   IRequestContentSummary,
   IRequestContentThumbnail,
+  IRequestContentValidation,
   IRequestCreateDashboardElement,
   IRequestCreateDashboardRenderTask,
   IRequestCreateQueryTask,
@@ -1102,7 +1103,7 @@ export class Looker40SDKStream extends APIMethods {
    *
    * The value of the `secret` field will be set by Looker and returned.
    *
-   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+   * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
    *
    * POST /embed_config/secrets -> IEmbedSecret
    *
@@ -1129,7 +1130,7 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### Delete an embed secret.
    *
-   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+   * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
    *
    * DELETE /embed_config/secrets/{embed_secret_id} -> string
    *
@@ -1198,7 +1199,7 @@ export class Looker40SDKStream extends APIMethods {
    * encrypted transport.
    *
    *
-   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+   * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
    *
    * POST /embed/sso_url -> IEmbedUrlResponse
    *
@@ -1250,7 +1251,7 @@ export class Looker40SDKStream extends APIMethods {
    * encrypted transport.
    *
    *
-   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+   * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
    *
    * POST /embed/token_url/me -> IEmbedUrlResponse
    *
@@ -1331,7 +1332,7 @@ export class Looker40SDKStream extends APIMethods {
    * - Navigation token - lives for 10 minutes. The Looker client will ask for this token once it is loaded into
    *   the iframe.
    *
-   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+   * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
    *
    * POST /embed/cookieless_session/acquire -> IEmbedCookielessSessionAcquireResponse
    *
@@ -1364,7 +1365,7 @@ export class Looker40SDKStream extends APIMethods {
    * in the session and session reference data being cleared from the system. This endpoint can be used to log an embed
    * user out of the Looker instance.
    *
-   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+   * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
    *
    * DELETE /embed/cookieless_session/{session_reference_token} -> string
    *
@@ -1405,7 +1406,7 @@ export class Looker40SDKStream extends APIMethods {
    * the session time to live in the `session_reference_token_ttl` response property. If this property
    * contains a zero, the embed session has expired.
    *
-   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+   * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
    *
    * PUT /embed/cookieless_session/generate_tokens -> IEmbedCookielessSessionGenerateTokensResponse
    *
@@ -3990,6 +3991,7 @@ export class Looker40SDKStream extends APIMethods {
    *  - extension_framework_enabled
    *  - extension_load_url_enabled
    *  - instance_config
+   *  - managed_certificate_uri
    *  - marketplace_auto_install_enabled
    *  - marketplace_automation
    *  - marketplace_terms_accepted
@@ -4038,6 +4040,7 @@ export class Looker40SDKStream extends APIMethods {
    *  - extension_framework_enabled
    *  - extension_load_url_enabled
    *  - instance_config
+   *  - managed_certificate_uri
    *  - marketplace_auto_install_enabled
    *  - marketplace_automation
    *  - marketplace_terms_accepted
@@ -5435,20 +5438,24 @@ export class Looker40SDKStream extends APIMethods {
    * GET /content_validation -> IContentValidation
    *
    * @param callback streaming output function
-   * @param fields Requested fields.
+   * @param request composed interface "IRequestContentValidation" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async content_validation(
     callback: (response: Response) => Promise<IContentValidation>,
-    fields?: string,
+    request: IRequestContentValidation,
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IContentValidation>(
       callback,
       'GET',
       '/content_validation',
-      { fields },
+      {
+        fields: request.fields,
+        project_names: request.project_names,
+        space_ids: request.space_ids,
+      },
       null,
       options
     );
@@ -8565,7 +8572,14 @@ export class Looker40SDKStream extends APIMethods {
       callback,
       'GET',
       '/lookml_models',
-      { fields: request.fields, limit: request.limit, offset: request.offset },
+      {
+        fields: request.fields,
+        limit: request.limit,
+        offset: request.offset,
+        exclude_empty: request.exclude_empty,
+        exclude_hidden: request.exclude_hidden,
+        include_internal: request.include_internal,
+      },
       null,
       options
     );
@@ -10138,7 +10152,7 @@ export class Looker40SDKStream extends APIMethods {
    *
    * Returns the results of an async query task if the query has completed.
    *
-   * If the query task is still running or waiting to run, this function returns 204 No Content.
+   * If the query task is still running or waiting to run, this function returns 202 Accepted.
    *
    * If the query task ID is invalid or the cached results of the query task have expired, this function returns 404 Not Found.
    *
@@ -13908,7 +13922,7 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### Embed login information for the specified user.
    *
-   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+   * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
    *
    * GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> ICredentialsEmbed
    *
@@ -13941,7 +13955,7 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### Embed login information for the specified user.
    *
-   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+   * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
    *
    * DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> string
    *
@@ -13972,7 +13986,7 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### Embed login information for the specified user.
    *
-   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+   * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
    *
    * GET /users/{user_id}/credentials_embed -> ICredentialsEmbed[]
    *
@@ -14436,7 +14450,7 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * Create an embed user from an external user ID
    *
-   * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+   * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
    *
    * POST /users/embed_user -> IUserPublic
    *
