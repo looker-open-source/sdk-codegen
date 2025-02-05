@@ -107,6 +107,16 @@ export const writeCodeFile = (fileName: string, content: string): string => {
           writeCodeFile(gen.sdkFileName(`funcs`), output);
         }
 
+        if (gen.useSlices && useHooks) {
+          log(`generating ${api} hooks and slices ...`);
+          const s = new HookGenerator(apiModel, gen);
+          let output = s.render(gen.indentStr, noStreams);
+          writeCodeFile(gen.sdkFileName(`hooks`), output);
+          const m = new MockGenerator(apiModel, gen);
+          output = m.render(gen.indentStr, noStreams);
+          writeCodeFile(gen.sdkFileName(`mocks`), output);
+        }
+
         if (gen.useInterfaces) {
           log(`generating ${api} interfaces ...`);
           const s = new InterfaceGenerator(apiModel, gen);

@@ -18,16 +18,16 @@ The Looker SDK can be used in a node application in 3 steps:
 
 ### Install the Looker SDK into your node application
 
-Using `yarn`:
-
-```bash
-yarn add @looker/sdk @looker/sdk-rtl @looker/sdk-node
-```
-
 Using `npm`:
 
 ```bash
 npm install @looker/sdk @looker/sdk-rtl @looker/sdk-node
+```
+
+Using `Yarn`:
+
+```bash
+yarn add @looker/sdk @looker/sdk-rtl @looker/sdk-node
 ```
 
 **Note**: If you are only intending to use the SDK in a browser, omit `@looker/sdk-node`.

@@ -35,6 +35,8 @@ import {
   logConvertSpec,
 } from '../../sdk-codegen-scripts/src/fetchSpec';
 
+/* eslint no-console: 0 */
+
 const supportedApiVersions = ['3.1', '4.0'];
 
 const homeToRoost = '../../../';

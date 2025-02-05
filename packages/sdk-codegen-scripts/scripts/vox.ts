@@ -38,6 +38,8 @@ import {
   update_artifacts,
 } from '@looker/sdk';
 
+/* eslint no-console: 0 */
+
 const root = path.join(__dirname, '/../../../');
 const indexFile = path.join(root, 'hackathons.json');
 const compareFile = path.join(root, 'hackCompare.json');

@@ -53,7 +53,7 @@ describe('Declaration miner', () => {
   const originOverride = settings.origin_override;
   const isConfigured = () => !!sourcePath;
 
-  test('should mine files matching the probe settings', () => {
+  it('should mine files matching the probe settings', () => {
     if (!isConfigured()) return;
     const miner = new DeclarationMiner(
       sourcePath,
@@ -75,7 +75,7 @@ describe('Declaration miner', () => {
     });
   });
 
-  test('should retrieve remoteOrigin', () => {
+  it('should retrieve remoteOrigin', () => {
     if (!isConfigured()) return;
     const miner = new DeclarationMiner(
       sourcePath,

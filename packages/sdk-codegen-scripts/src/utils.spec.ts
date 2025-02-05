@@ -92,7 +92,7 @@ describe.skip('utils', () => {
   });
 
   describe('doArgs', () => {
-    test('no args', () => {
+    it('no args', () => {
       const expLangs = codeGenerators
         .filter(l => l.factory !== undefined)
         .map(l => l.language);
@@ -102,7 +102,7 @@ describe.skip('utils', () => {
       expect(actual.versions).toBeUndefined();
       expect(actual.languages).toEqual(expLangs);
     });
-    test('ts,python,cs,typescript', () => {
+    it('ts,python,cs,typescript', () => {
       const expected = ['TypeScript', 'Python', 'Csharp'];
 
       const actual = doArgs(['ts,python,cs,typescript']);
@@ -110,14 +110,14 @@ describe.skip('utils', () => {
       expect(actual.versions).toBeUndefined();
       expect(actual.languages).toEqual(expected);
     });
-    test('-v foo.json kotlin', () => {
+    it('-v foo.json kotlin', () => {
       const expected = ['Kotlin'];
       const actual = doArgs('-v foo.json kotlin'.split(' '));
       expect(actual).toBeDefined();
       expect(actual.languages).toEqual(expected);
       expect(actual.versions).toEqual(mockVersions);
     });
-    test('ts,py --versions foo.json kotlin', () => {
+    it('ts,py --versions foo.json kotlin', () => {
       const expected = ['TypeScript', 'Python', 'Kotlin'];
       const actual = doArgs('ts,py --versions foo.json kotlin'.split(' '));
       expect(actual).toBeDefined();
@@ -127,7 +127,7 @@ describe.skip('utils', () => {
   });
 
   describe('prepGen', () => {
-    test('default prepGen', async () => {
+    it('default prepGen', async () => {
       const expLangs = codeGenerators
         .filter(l => l.factory !== undefined)
         .map(l => l.language);
@@ -146,7 +146,7 @@ describe.skip('utils', () => {
         'https://self-signed.looker.com:19999'
       );
     });
-    test('prepGen ts', async () => {
+    it('prepGen ts', async () => {
       const expLangs = codeGenerators
         .filter(l => l.factory !== undefined)
         .map(l => l.language);
@@ -165,7 +165,7 @@ describe.skip('utils', () => {
         'https://self-signed.looker.com:19999'
       );
     });
-    test('-v foo.json ts', async () => {
+    it('-v foo.json ts', async () => {
       const langs = ['TypeScript'];
       const release = mockVersions.looker_release_version
         .split('.', 2)
@@ -185,14 +185,14 @@ describe.skip('utils', () => {
   });
 
   describe('loadSpecs', () => {
-    test('load mockVersions', async () => {
+    it('load mockVersions', async () => {
       const config = await prepGen('-v foo.json'.split(' '));
       expect(config).toBeDefined();
       const actual = await loadSpecs(config, false);
       expect(actual).toBeDefined();
       expect(config.apis).toEqual(['3.1', '4.0', '4.0u']);
     });
-    test('no version, with ts', async () => {
+    it('no version, with ts', async () => {
       const config = await prepGen(['ts']);
       expect(config).toBeDefined();
       const actual = await loadSpecs(config, false);

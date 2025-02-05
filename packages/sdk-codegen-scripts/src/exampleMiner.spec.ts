@@ -112,7 +112,7 @@ describe('example mining', () => {
         it('processes standard url patterns', () => {
           const md = '[summary1](example.ts#strip me!)';
           const actual = marker.mineContent('example/typescript/README.md', md);
-          expect(actual.length).toEqual(1);
+          expect(actual).toHaveLength(1);
           const first = actual[0];
           expect(first.summary).toEqual('summary1');
           expect(first.sourceFile).toEqual('example/typescript/example.ts');
@@ -124,7 +124,7 @@ describe('example mining', () => {
             'packages/sdk-codegen/README.md',
             md
           );
-          expect(actual.length).toEqual(2);
+          expect(actual).toHaveLength(2);
           const first = actual[0];
           expect(first.summary).toEqual('TypeScript');
           expect(first.sourceFile).toEqual(
@@ -141,7 +141,7 @@ describe('example mining', () => {
         const md =
           'Logout all users on the instance [[link]](logout_all_users.rb)';
         const actual = marker.mineContent('example/ruby/README.md', md);
-        expect(actual.length).toEqual(1);
+        expect(actual).toHaveLength(1);
         const first = actual[0];
         expect(first.summary).toEqual('Logout all users on the instance');
         expect(first.sourceFile).toEqual('example/ruby/logout_all_users.rb');
@@ -150,7 +150,7 @@ describe('example mining', () => {
         const md =
           '\t  -  Logout all users on the instance [[link]](logout_all_users.rb)';
         const actual = marker.mineContent('example/ruby/README.md', md);
-        expect(actual.length).toEqual(1);
+        expect(actual).toHaveLength(1);
         const first = actual[0];
         expect(first.summary).toEqual('Logout all users on the instance');
         expect(first.sourceFile).toEqual('example/ruby/logout_all_users.rb');
@@ -159,7 +159,7 @@ describe('example mining', () => {
         const md =
           '\t  -  Logout all users on the instance [[link]](logout_all_users.rb) logs in [[link]](logs_in.rb)';
         const actual = marker.mineContent('example/ruby/README.md', md);
-        expect(actual.length).toEqual(2);
+        expect(actual).toHaveLength(2);
         const first = actual[0];
         expect(first.summary).toEqual('Logout all users on the instance');
         expect(first.sourceFile).toEqual('example/ruby/logout_all_users.rb');

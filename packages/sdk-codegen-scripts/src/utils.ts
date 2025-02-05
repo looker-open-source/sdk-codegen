@@ -67,6 +67,8 @@ export interface IGenProps {
   lastApi: string;
   /** Skip generating streams files? */
   noStreams: boolean;
+  /** True to generate hooks and slices (only for TypeScript) */
+  useHooks: boolean;
 }
 
 const generatorHelp = () => {
@@ -75,6 +77,7 @@ const generatorHelp = () => {
   languages...:   zero or more language specifiers separated by space or comma. Defaults to all supported languages.
   -v|--versions:  location of a JSON versions file in ILookerVersions format to read for getting specs
   -n|--nostreams: skip generation of a language SDK 'streams' files (if it supports streaming)
+  -ho|--hooks:    generate hooks and mocks for the TypeScript SDK
   -h|--help:      display this output
 
   examples:
@@ -98,6 +101,7 @@ const generatorHelp = () => {
 export const doArgs = (args: string[]) => {
   let versions: ILookerVersions | undefined;
   let noStreams = false;
+  let hooks = false;
 
   const langs: string[] = [];
   if (args.length > 0 && args.toString().toLowerCase() !== 'all') {
@@ -120,6 +124,10 @@ export const doArgs = (args: string[]) => {
         case '-n':
         case '--nostreams':
           noStreams = true;
+          break;
+        case '-ho':
+        case '--hooks':
+          hooks = true;
           break;
         default:
           {
@@ -149,7 +157,7 @@ export const doArgs = (args: string[]) => {
       : codeGenerators.filter(l => l.factory !== undefined).map(l => l.language)
   ).filter((value, index, all) => all.indexOf(value) === index);
 
-  return { languages, versions, noStreams };
+  return { languages, versions, noStreams, hooks };
 };
 
 /**
@@ -166,7 +174,7 @@ export const loadConfig = () => {
  * @param args command-line style arguments to parse.
  */
 export const prepGen = async (args: string[]): Promise<IGenProps> => {
-  const { languages, versions, noStreams } = doArgs(args);
+  const { languages, versions, noStreams, hooks } = doArgs(args);
   const { name, props } = loadConfig();
   let lookerVersions;
   let lookerVersion = '';
@@ -186,14 +194,8 @@ export const prepGen = async (args: string[]): Promise<IGenProps> => {
     lookerVersions = {
       supported_versions: [
         {
-          version: '3.1',
-          status: 'stable',
-          full_version: '',
-          swagger_url: `https://${props.base_url}/api/3.1/swagger.json`,
-        },
-        {
           version: '4.0',
-          status: 'experimental',
+          status: 'stable',
           full_version: '',
           swagger_url: `https://${props.base_url}/api/4.0/swagger.json`,
         },
@@ -214,6 +216,7 @@ export const prepGen = async (args: string[]): Promise<IGenProps> => {
     apis,
     lastApi,
     noStreams,
+    useHooks: hooks,
   };
 };
 

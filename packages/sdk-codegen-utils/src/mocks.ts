@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2023 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -24,9 +24,14 @@
 
  */
 
-import { registerApp } from './utils';
-(async () => {
-  const result = await registerApp();
-  /* eslint-disable no-console */
-  console.log(result);
-})();
+import type { ICryptoHash } from '@looker/sdk-rtl';
+
+export class MockCrypto implements ICryptoHash {
+  secureRandom(_byteCount: number): string {
+    return 'feedface';
+  }
+
+  sha256Hash(_message: string): Promise<string> {
+    return Promise.resolve('baadf00d');
+  }
+}
