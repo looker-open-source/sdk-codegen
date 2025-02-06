@@ -1,5 +1,22 @@
 # Changelog
 
+## [25.0.1](https://github.com/looker-open-source/sdk-codegen/compare/embed-components-v25.0.0...embed-components-v25.0.1) (2025-02-06)
+
+
+### Bug Fixes
+
+* update looker TypeScript package dependencies ([#1559](https://github.com/looker-open-source/sdk-codegen/issues/1559)) ([7421d43](https://github.com/looker-open-source/sdk-codegen/commit/7421d4313b09d828e03b5c9c04abd5f2b6c90ae6))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/embed-services bumped from 25.0.0 to 25.0.1
+    * @looker/sdk bumped from 25.0.0 to 25.0.1
+  * devDependencies
+    * @looker/sdk-node bumped from 25.0.0 to 25.0.1
+
 ## [25.0.0](https://github.com/looker-open-source/sdk-codegen/compare/embed-components-v24.20.0...embed-components-v25.0.0) (2025-01-13)
 
 
