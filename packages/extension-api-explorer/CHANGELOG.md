@@ -271,6 +271,18 @@
     * @looker/sdk bumped from 24.18.1 to 24.20.0
     * @looker/sdk-codegen bumped from 21.9.5 to 21.9.6
 
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/api-explorer bumped from 0.9.70 to 0.9.71
+    * @looker/extension-sdk bumped from 24.20.0 to 25.0.0
+    * @looker/extension-sdk-react bumped from 24.20.0 to 25.0.0
+    * @looker/extension-utils bumped from 0.1.47 to 0.1.48
+    * @looker/run-it bumped from 0.9.70 to 0.9.71
+    * @looker/sdk bumped from 24.20.0 to 25.0.0
+    * @looker/sdk-codegen bumped from 21.9.6 to 21.9.7
+
 ## [22.21.23](https://github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v22.21.22...extension-api-explorer-v22.21.23) (2024-09-14)
 
 

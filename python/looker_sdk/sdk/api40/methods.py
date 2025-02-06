@@ -751,7 +751,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # The value of the `secret` field will be set by Looker and returned.
     #
-    # Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+    # **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
     #
     # POST /embed_config/secrets -> mdls.EmbedSecret
     def create_embed_secret(
@@ -773,7 +773,7 @@ class Looker40SDK(api_methods.APIMethods):
 
     # ### Delete an embed secret.
     #
-    # Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+    # **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
     #
     # DELETE /embed_config/secrets/{embed_secret_id} -> str
     def delete_embed_secret(
@@ -837,7 +837,7 @@ class Looker40SDK(api_methods.APIMethods):
     # encrypted transport.
     #
     #
-    # Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+    # **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
     #
     # POST /embed/sso_url -> mdls.EmbedUrlResponse
     def create_sso_embed_url(
@@ -884,7 +884,7 @@ class Looker40SDK(api_methods.APIMethods):
     # encrypted transport.
     #
     #
-    # Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+    # **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
     #
     # POST /embed/token_url/me -> mdls.EmbedUrlResponse
     def create_embed_url_as_me(
@@ -956,7 +956,7 @@ class Looker40SDK(api_methods.APIMethods):
     # - Navigation token - lives for 10 minutes. The Looker client will ask for this token once it is loaded into
     #   the iframe.
     #
-    # Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+    # **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
     #
     # POST /embed/cookieless_session/acquire -> mdls.EmbedCookielessSessionAcquireResponse
     def acquire_embed_cookieless_session(
@@ -982,7 +982,7 @@ class Looker40SDK(api_methods.APIMethods):
     # in the session and session reference data being cleared from the system. This endpoint can be used to log an embed
     # user out of the Looker instance.
     #
-    # Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+    # **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
     #
     # DELETE /embed/cookieless_session/{session_reference_token} -> str
     def delete_embed_cookieless_session(
@@ -1018,7 +1018,7 @@ class Looker40SDK(api_methods.APIMethods):
     # the session time to live in the `session_reference_token_ttl` response property. If this property
     # contains a zero, the embed session has expired.
     #
-    # Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+    # **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
     #
     # PUT /embed/cookieless_session/generate_tokens -> mdls.EmbedCookielessSessionGenerateTokensResponse
     def generate_tokens_for_cookieless_session(
@@ -3242,6 +3242,7 @@ class Looker40SDK(api_methods.APIMethods):
     #  - extension_framework_enabled
     #  - extension_load_url_enabled
     #  - instance_config
+    #  - managed_certificate_uri
     #  - marketplace_auto_install_enabled
     #  - marketplace_automation
     #  - marketplace_terms_accepted
@@ -3286,6 +3287,7 @@ class Looker40SDK(api_methods.APIMethods):
     #  - extension_framework_enabled
     #  - extension_load_url_enabled
     #  - instance_config
+    #  - managed_certificate_uri
     #  - marketplace_auto_install_enabled
     #  - marketplace_automation
     #  - marketplace_terms_accepted
@@ -4522,6 +4524,10 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Requested fields.
         fields: Optional[str] = None,
+        # Optional list of project names to filter by
+        project_names: Optional[mdls.DelimSequence[str]] = None,
+        # Optional list of space ids to filter by
+        space_ids: Optional[mdls.DelimSequence[str]] = None,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.ContentValidation:
         """Validate Content"""
@@ -4530,7 +4536,11 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/content_validation",
                 structure=mdls.ContentValidation,
-                query_params={"fields": fields},
+                query_params={
+                    "fields": fields,
+                    "project_names": project_names,
+                    "space_ids": space_ids,
+                },
                 transport_options=transport_options,
             ),
         )
@@ -7516,6 +7526,12 @@ class Looker40SDK(api_methods.APIMethods):
         limit: Optional[int] = None,
         # Number of results to skip before returning any. (Defaults to 0 if not set when limit is used)
         offset: Optional[int] = None,
+        # Whether or not to exclude models with no explores from the response (Defaults to false)
+        exclude_empty: Optional[bool] = None,
+        # Whether or not to exclude hidden explores from the response (Defaults to false)
+        exclude_hidden: Optional[bool] = None,
+        # Whether or not to include built-in models such as System Activity (Defaults to false)
+        include_internal: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[mdls.LookmlModel]:
         """Get All LookML Models"""
@@ -7524,7 +7540,14 @@ class Looker40SDK(api_methods.APIMethods):
             self.get(
                 path="/lookml_models",
                 structure=Sequence[mdls.LookmlModel],
-                query_params={"fields": fields, "limit": limit, "offset": offset},
+                query_params={
+                    "fields": fields,
+                    "limit": limit,
+                    "offset": offset,
+                    "exclude_empty": exclude_empty,
+                    "exclude_hidden": exclude_hidden,
+                    "include_internal": include_internal,
+                },
                 transport_options=transport_options,
             ),
         )
@@ -8974,7 +8997,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # Returns the results of an async query task if the query has completed.
     #
-    # If the query task is still running or waiting to run, this function returns 204 No Content.
+    # If the query task is still running or waiting to run, this function returns 202 Accepted.
     #
     # If the query task ID is invalid or the cached results of the query task have expired, this function returns 404 Not Found.
     #
@@ -12580,7 +12603,7 @@ class Looker40SDK(api_methods.APIMethods):
 
     # ### Embed login information for the specified user.
     #
-    # Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+    # **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
     #
     # GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> mdls.CredentialsEmbed
     def user_credentials_embed(
@@ -12609,7 +12632,7 @@ class Looker40SDK(api_methods.APIMethods):
 
     # ### Embed login information for the specified user.
     #
-    # Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+    # **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
     #
     # DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> str
     def delete_user_credentials_embed(
@@ -12635,7 +12658,7 @@ class Looker40SDK(api_methods.APIMethods):
 
     # ### Embed login information for the specified user.
     #
-    # Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+    # **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
     #
     # GET /users/{user_id}/credentials_embed -> Sequence[mdls.CredentialsEmbed]
     def all_user_credentials_embeds(
@@ -13055,7 +13078,7 @@ class Looker40SDK(api_methods.APIMethods):
 
     # Create an embed user from an external user ID
     #
-    # Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+    # **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
     #
     # POST /users/embed_user -> mdls.UserPublic
     def create_embed_user(

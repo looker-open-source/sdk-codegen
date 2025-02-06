@@ -25,7 +25,7 @@
  */
 
 /**
- * 411 API models: 259 Spec, 69 Request, 61 Write, 22 Enum
+ * 413 API models: 259 Spec, 70 Request, 62 Write, 22 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl';
@@ -2856,6 +2856,10 @@ export interface IDBConnection {
    */
   tmp_db_name?: string | null;
   /**
+   * Name of temporary host (if used)
+   */
+  tmp_db_host?: string | null;
+  /**
    * Additional params to add to JDBC connection string
    */
   jdbc_additional_params?: string | null;
@@ -3403,6 +3407,10 @@ export interface IEmbedConfig {
    * When true, removes navigation to Looks from embedded dashboards and explores.
    */
   hide_look_navigation?: boolean;
+  /**
+   * True if embedding is licensed for this Looker instance. (read-only)
+   */
+  embed_enabled?: boolean;
 }
 
 export interface IEmbedCookielessSessionAcquire {
@@ -7757,6 +7765,18 @@ export interface IRequestAllLookmlModels {
    * Number of results to skip before returning any. (Defaults to 0 if not set when limit is used)
    */
   offset?: number | null;
+  /**
+   * Whether or not to exclude models with no explores from the response (Defaults to false)
+   */
+  exclude_empty?: boolean | null;
+  /**
+   * Whether or not to exclude hidden explores from the response (Defaults to false)
+   */
+  exclude_hidden?: boolean | null;
+  /**
+   * Whether or not to include built-in models such as System Activity (Defaults to false)
+   */
+  include_internal?: boolean | null;
 }
 
 /**
@@ -8057,6 +8077,24 @@ export interface IRequestContentThumbnail {
    * The height of the image if format is supplied
    */
   height?: number | null;
+}
+
+/**
+ * Dynamically generated request type for content_validation
+ */
+export interface IRequestContentValidation {
+  /**
+   * Requested fields.
+   */
+  fields?: string | null;
+  /**
+   * Optional list of project names to filter by
+   */
+  project_names?: DelimArray<string> | null;
+  /**
+   * Optional list of space ids to filter by
+   */
+  space_ids?: DelimArray<string> | null;
 }
 
 /**
@@ -10936,6 +10974,10 @@ export interface ISetting {
    * Minimum time interval for dashboard element automatic refresh. Examples: (30 seconds, 1 minute)
    */
   dashboard_auto_refresh_minimum_interval?: string | null;
+  /**
+   * URI pointing to the location of a private root certificate in Secret Manager
+   */
+  managed_certificate_uri?: string | null;
 }
 
 export interface ISmtpNodeStatus {
@@ -12917,6 +12959,10 @@ export interface IWriteDBConnection {
    */
   tmp_db_name?: string | null;
   /**
+   * Name of temporary host (if used)
+   */
+  tmp_db_host?: string | null;
+  /**
    * Additional params to add to JDBC connection string
    */
   jdbc_additional_params?: string | null;
@@ -13064,6 +13110,57 @@ export interface IWriteDBConnectionOverride {
    * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
    */
   after_connect_statements?: string | null;
+}
+
+/**
+ * Dynamic writeable type for EmbedConfig removes:
+ * embed_enabled
+ */
+export interface IWriteEmbedConfig {
+  /**
+   * List of domains to allow for embedding
+   */
+  domain_allowlist?: string[] | null;
+  /**
+   * List of base urls to allow for alert/schedule
+   */
+  alert_url_allowlist?: string[] | null;
+  /**
+   * Owner of who defines the alert/schedule params on the base url
+   */
+  alert_url_param_owner?: string | null;
+  /**
+   * Label for the alert/schedule url
+   */
+  alert_url_label?: string | null;
+  /**
+   * Is SSO embedding enabled for this Looker
+   */
+  sso_auth_enabled?: boolean;
+  /**
+   * Is Cookieless embedding enabled for this Looker
+   */
+  embed_cookieless_v2?: boolean;
+  /**
+   * Is embed content navigation enabled for this looker
+   */
+  embed_content_navigation?: boolean;
+  /**
+   * Is embed content management enabled for this Looker
+   */
+  embed_content_management?: boolean;
+  /**
+   * When true, prohibits the use of Looker login pages in non-Looker iframes. When false, Looker login pages may be used in non-Looker hosted iframes.
+   */
+  strict_sameorigin_for_login?: boolean;
+  /**
+   * When true, filters are enabled on embedded Looks
+   */
+  look_filters?: boolean;
+  /**
+   * When true, removes navigation to Looks from embedded dashboards and explores.
+   */
+  hide_look_navigation?: boolean;
 }
 
 /**
@@ -14283,7 +14380,11 @@ export interface IWriteSetting {
    * (DEPRECATED) Use embed_config.embed_cookieless_v2 instead. If embed_config.embed_cookieless_v2 is specified, it overrides this value.
    */
   embed_cookieless_v2?: boolean;
-  embed_config?: IEmbedConfig | null;
+  /**
+   * Dynamic writeable type for EmbedConfig removes:
+   * embed_enabled
+   */
+  embed_config?: IWriteEmbedConfig | null;
   /**
    * Toggle Dashboard Auto Refresh restriction
    */
@@ -14292,6 +14393,10 @@ export interface IWriteSetting {
    * Minimum time interval for dashboard element automatic refresh. Examples: (30 seconds, 1 minute)
    */
   dashboard_auto_refresh_minimum_interval?: string | null;
+  /**
+   * URI pointing to the location of a private root certificate in Secret Manager
+   */
+  managed_certificate_uri?: string | null;
 }
 
 /**
