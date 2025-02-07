@@ -10376,6 +10376,7 @@ export class Looker40SDKStream extends APIMethods {
         rebuild_pdts: request.rebuild_pdts,
         server_table_calcs: request.server_table_calcs,
         source: request.source,
+        enable_oauth_error_response: request.enable_oauth_error_response,
       },
       null,
       options
@@ -10468,6 +10469,7 @@ export class Looker40SDKStream extends APIMethods {
         path_prefix: request.path_prefix,
         rebuild_pdts: request.rebuild_pdts,
         server_table_calcs: request.server_table_calcs,
+        enable_oauth_error_response: request.enable_oauth_error_response,
       },
       request.body,
       options
@@ -10743,7 +10745,7 @@ export class Looker40SDKStream extends APIMethods {
    *
    * @param callback streaming output function
    * @param slug slug of query
-   * @param result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "json_label"]
+   * @param result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "odc", "json_label"]
    * @param download Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.
    * @param options one-time API call overrides
    *

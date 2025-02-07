@@ -575,7 +575,7 @@ type CreateOAuthApplicationUserStateResponse struct {
 type CreateQueryTask struct {
 	Can          *map[string]bool `json:"can,omitempty"`          // Operations the current user is able to perform on this object
 	QueryId      string           `json:"query_id"`               // Id of query to run
-	ResultFormat ResultFormat     `json:"result_format"`          // Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
+	ResultFormat ResultFormat     `json:"result_format"`          // Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "odc".
 	Source       *string          `json:"source,omitempty"`       // Source of query task
 	Deferred     *bool            `json:"deferred,omitempty"`     // Create the task but defer execution
 	LookId       *string          `json:"look_id,omitempty"`      // Id of look associated with query.
@@ -944,6 +944,7 @@ type DBConnection struct {
 	Dialect                           *Dialect              `json:"dialect,omitempty"`
 	Snippets                          *[]Snippet            `json:"snippets,omitempty"`                     // SQL Runner snippets for this connection
 	PdtsEnabled                       *bool                 `json:"pdts_enabled,omitempty"`                 // True if PDTs are enabled on this connection
+	NamedDriverVersion                *string               `json:"named_driver_version,omitempty"`         // JDBC driver version name
 	Host                              *string               `json:"host,omitempty"`                         // Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.
 	Port                              *string               `json:"port,omitempty"`                         // Port number on server. If the connection is over an SSH tunnel, then the local port associated with the SSH tunnel.
 	Username                          *string               `json:"username,omitempty"`                     // Username for server authentication
@@ -997,6 +998,7 @@ type DBConnection struct {
 	BqStorageProjectId                *string               `json:"bq_storage_project_id,omitempty"`                // The project id of the default BigQuery storage project.
 	BqRolesVerified                   *bool                 `json:"bq_roles_verified,omitempty"`                    // When true, represents that all project roles have been verified.
 	P4saName                          *string               `json:"p4sa_name,omitempty"`                            // The name of P4SA service account that is associated with the Looker instance
+	QueryHoldingDisabled              *bool                 `json:"query_holding_disabled,omitempty"`               // Disable query holding for this connection.
 }
 
 type DBConnectionBase struct {
@@ -2786,20 +2788,21 @@ type RequestRunGitConnectionTest struct {
 
 // Dynamically generated request type for run_inline_query
 type RequestRunInlineQuery struct {
-	ResultFormat       string     `json:"result_format"` // Format of result
-	Body               WriteQuery `json:"body"`
-	Limit              *int64     `json:"limit,omitempty"`                // Row limit (may override the limit in the saved query).
-	ApplyFormatting    *bool      `json:"apply_formatting,omitempty"`     // Apply model-specified formatting to each result.
-	ApplyVis           *bool      `json:"apply_vis,omitempty"`            // Apply visualization options to results.
-	Cache              *bool      `json:"cache,omitempty"`                // Get results from cache if available.
-	ImageWidth         *int64     `json:"image_width,omitempty"`          // Render width for image formats.
-	ImageHeight        *int64     `json:"image_height,omitempty"`         // Render height for image formats.
-	GenerateDrillLinks *bool      `json:"generate_drill_links,omitempty"` // Generate drill links (only applicable to 'json_detail' format.
-	ForceProduction    *bool      `json:"force_production,omitempty"`     // Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
-	CacheOnly          *bool      `json:"cache_only,omitempty"`           // Retrieve any results from cache even if the results have expired.
-	PathPrefix         *string    `json:"path_prefix,omitempty"`          // Prefix to use for drill links (url encoded).
-	RebuildPdts        *bool      `json:"rebuild_pdts,omitempty"`         // Rebuild PDTS used in query.
-	ServerTableCalcs   *bool      `json:"server_table_calcs,omitempty"`   // Perform table calculations on query results
+	ResultFormat             string     `json:"result_format"` // Format of result
+	Body                     WriteQuery `json:"body"`
+	Limit                    *int64     `json:"limit,omitempty"`                       // Row limit (may override the limit in the saved query).
+	ApplyFormatting          *bool      `json:"apply_formatting,omitempty"`            // Apply model-specified formatting to each result.
+	ApplyVis                 *bool      `json:"apply_vis,omitempty"`                   // Apply visualization options to results.
+	Cache                    *bool      `json:"cache,omitempty"`                       // Get results from cache if available.
+	ImageWidth               *int64     `json:"image_width,omitempty"`                 // Render width for image formats.
+	ImageHeight              *int64     `json:"image_height,omitempty"`                // Render height for image formats.
+	GenerateDrillLinks       *bool      `json:"generate_drill_links,omitempty"`        // Generate drill links (only applicable to 'json_detail' format.
+	ForceProduction          *bool      `json:"force_production,omitempty"`            // Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
+	CacheOnly                *bool      `json:"cache_only,omitempty"`                  // Retrieve any results from cache even if the results have expired.
+	PathPrefix               *string    `json:"path_prefix,omitempty"`                 // Prefix to use for drill links (url encoded).
+	RebuildPdts              *bool      `json:"rebuild_pdts,omitempty"`                // Rebuild PDTS used in query.
+	ServerTableCalcs         *bool      `json:"server_table_calcs,omitempty"`          // Perform table calculations on query results
+	EnableOauthErrorResponse *bool      `json:"enable_oauth_error_response,omitempty"` // Return a specialized OAuth error response if a database OAuth error occurs.
 }
 
 // Dynamically generated request type for run_look
@@ -2830,21 +2833,22 @@ type RequestRunLookmlTest struct {
 
 // Dynamically generated request type for run_query
 type RequestRunQuery struct {
-	QueryId            string  `json:"query_id"`                       // Id of query
-	ResultFormat       string  `json:"result_format"`                  // Format of result
-	Limit              *int64  `json:"limit,omitempty"`                // Row limit (may override the limit in the saved query).
-	ApplyFormatting    *bool   `json:"apply_formatting,omitempty"`     // Apply model-specified formatting to each result.
-	ApplyVis           *bool   `json:"apply_vis,omitempty"`            // Apply visualization options to results.
-	Cache              *bool   `json:"cache,omitempty"`                // Get results from cache if available.
-	ImageWidth         *int64  `json:"image_width,omitempty"`          // Render width for image formats.
-	ImageHeight        *int64  `json:"image_height,omitempty"`         // Render height for image formats.
-	GenerateDrillLinks *bool   `json:"generate_drill_links,omitempty"` // Generate drill links (only applicable to 'json_detail' format.
-	ForceProduction    *bool   `json:"force_production,omitempty"`     // Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
-	CacheOnly          *bool   `json:"cache_only,omitempty"`           // Retrieve any results from cache even if the results have expired.
-	PathPrefix         *string `json:"path_prefix,omitempty"`          // Prefix to use for drill links (url encoded).
-	RebuildPdts        *bool   `json:"rebuild_pdts,omitempty"`         // Rebuild PDTS used in query.
-	ServerTableCalcs   *bool   `json:"server_table_calcs,omitempty"`   // Perform table calculations on query results
-	Source             *string `json:"source,omitempty"`               // Specifies the source of this call.
+	QueryId                  string  `json:"query_id"`                              // Id of query
+	ResultFormat             string  `json:"result_format"`                         // Format of result
+	Limit                    *int64  `json:"limit,omitempty"`                       // Row limit (may override the limit in the saved query).
+	ApplyFormatting          *bool   `json:"apply_formatting,omitempty"`            // Apply model-specified formatting to each result.
+	ApplyVis                 *bool   `json:"apply_vis,omitempty"`                   // Apply visualization options to results.
+	Cache                    *bool   `json:"cache,omitempty"`                       // Get results from cache if available.
+	ImageWidth               *int64  `json:"image_width,omitempty"`                 // Render width for image formats.
+	ImageHeight              *int64  `json:"image_height,omitempty"`                // Render height for image formats.
+	GenerateDrillLinks       *bool   `json:"generate_drill_links,omitempty"`        // Generate drill links (only applicable to 'json_detail' format.
+	ForceProduction          *bool   `json:"force_production,omitempty"`            // Force use of production models even if the user is in development mode. Note that this flag being false does not guarantee development models will be used.
+	CacheOnly                *bool   `json:"cache_only,omitempty"`                  // Retrieve any results from cache even if the results have expired.
+	PathPrefix               *string `json:"path_prefix,omitempty"`                 // Prefix to use for drill links (url encoded).
+	RebuildPdts              *bool   `json:"rebuild_pdts,omitempty"`                // Rebuild PDTS used in query.
+	ServerTableCalcs         *bool   `json:"server_table_calcs,omitempty"`          // Perform table calculations on query results
+	Source                   *string `json:"source,omitempty"`                      // Specifies the source of this call.
+	EnableOauthErrorResponse *bool   `json:"enable_oauth_error_response,omitempty"` // Return a specialized OAuth error response if a database OAuth error occurs.
 }
 
 // Dynamically generated request type for scheduled_plans_for_dashboard
@@ -3271,6 +3275,7 @@ const ResultFormat_Txt ResultFormat = "txt"
 const ResultFormat_Xlsx ResultFormat = "xlsx"
 const ResultFormat_Gsxml ResultFormat = "gsxml"
 const ResultFormat_Sql ResultFormat = "sql"
+const ResultFormat_Odc ResultFormat = "odc"
 
 type ResultMakerFilterables struct {
 	Model  *string                         `json:"model,omitempty"`  // The model this filterable comes from (used for field suggestions).
@@ -4119,7 +4124,7 @@ type WriteCreateDashboardFilter struct {
 // can
 type WriteCreateQueryTask struct {
 	QueryId      string       `json:"query_id"`               // Id of query to run
-	ResultFormat ResultFormat `json:"result_format"`          // Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
+	ResultFormat ResultFormat `json:"result_format"`          // Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "odc".
 	Source       *string      `json:"source,omitempty"`       // Source of query task
 	Deferred     *bool        `json:"deferred,omitempty"`     // Create the task but defer execution
 	LookId       *string      `json:"look_id,omitempty"`      // Id of look associated with query.
@@ -4255,6 +4260,7 @@ type WriteDatagroup struct {
 // can, dialect, snippets, pdts_enabled, uses_oauth, uses_instance_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, p4sa_name
 type WriteDBConnection struct {
 	Name                     *string                    `json:"name,omitempty"`                         // Name of the connection. Also used as the unique identifier
+	NamedDriverVersion       *string                    `json:"named_driver_version,omitempty"`         // JDBC driver version name
 	Host                     *string                    `json:"host,omitempty"`                         // Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.
 	Port                     *string                    `json:"port,omitempty"`                         // Port number on server. If the connection is over an SSH tunnel, then the local port associated with the SSH tunnel.
 	Username                 *string                    `json:"username,omitempty"`                     // Username for server authentication
@@ -4298,6 +4304,7 @@ type WriteDBConnection struct {
 	ConnectionPooling                 *bool   `json:"connection_pooling,omitempty"`                   // Enable database connection pooling.
 	BqStorageProjectId                *string `json:"bq_storage_project_id,omitempty"`                // The project id of the default BigQuery storage project.
 	BqRolesVerified                   *bool   `json:"bq_roles_verified,omitempty"`                    // When true, represents that all project roles have been verified.
+	QueryHoldingDisabled              *bool   `json:"query_holding_disabled,omitempty"`               // Disable query holding for this connection.
 }
 
 // Dynamic writeable type for DBConnectionOverride removes:

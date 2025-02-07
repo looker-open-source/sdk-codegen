@@ -1590,7 +1590,7 @@ export interface ICreateQueryTask {
    */
   query_id: string | null;
   /**
-   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
+   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "odc".
    */
   result_format: ResultFormat | null;
   /**
@@ -2780,6 +2780,10 @@ export interface IDBConnection {
    */
   pdts_enabled?: boolean;
   /**
+   * JDBC driver version name
+   */
+  named_driver_version?: string | null;
+  /**
    * Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.
    */
   host?: string | null;
@@ -2988,6 +2992,10 @@ export interface IDBConnection {
    * The name of P4SA service account that is associated with the Looker instance (read-only)
    */
   p4sa_name?: string | null;
+  /**
+   * Disable query holding for this connection.
+   */
+  query_holding_disabled?: boolean;
 }
 
 export interface IDBConnectionBase {
@@ -8505,6 +8513,10 @@ export interface IRequestRunInlineQuery {
    * Perform table calculations on query results
    */
   server_table_calcs?: boolean | null;
+  /**
+   * Return a specialized OAuth error response if a database OAuth error occurs.
+   */
+  enable_oauth_error_response?: boolean | null;
 }
 
 /**
@@ -8655,6 +8667,10 @@ export interface IRequestRunQuery {
    * Specifies the source of this call.
    */
   source?: string | null;
+  /**
+   * Return a specialized OAuth error response if a database OAuth error occurs.
+   */
+  enable_oauth_error_response?: boolean | null;
 }
 
 /**
@@ -9998,7 +10014,7 @@ export interface IRequestUserRoles {
 }
 
 /**
- * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql". (Enum defined in CreateQueryTask)
+ * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "odc". (Enum defined in CreateQueryTask)
  */
 export enum ResultFormat {
   inline_json = 'inline_json',
@@ -10013,6 +10029,7 @@ export enum ResultFormat {
   xlsx = 'xlsx',
   gsxml = 'gsxml',
   sql = 'sql',
+  odc = 'odc',
 }
 
 export interface IResultMakerFilterables {
@@ -12495,7 +12512,7 @@ export interface IWriteCreateQueryTask {
    */
   query_id: string | null;
   /**
-   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
+   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "odc".
    */
   result_format: ResultFormat | null;
   /**
@@ -12891,6 +12908,10 @@ export interface IWriteDBConnection {
    */
   name?: string;
   /**
+   * JDBC driver version name
+   */
+  named_driver_version?: string | null;
+  /**
    * Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.
    */
   host?: string | null;
@@ -13059,6 +13080,10 @@ export interface IWriteDBConnection {
    * When true, represents that all project roles have been verified.
    */
   bq_roles_verified?: boolean | null;
+  /**
+   * Disable query holding for this connection.
+   */
+  query_holding_disabled?: boolean;
 }
 
 /**

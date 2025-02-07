@@ -4051,7 +4051,7 @@ public struct CreateQueryTask: SDKModel {
     }
 
     /**
-     * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
+     * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "odc".
      */
     public var result_format: ResultFormat
 
@@ -6995,6 +6995,7 @@ public struct DBConnection: SDKModel {
         case dialect
         case snippets
         case pdts_enabled
+        case _named_driver_version = "named_driver_version"
         case _host = "host"
         case _port = "port"
         case _username = "username"
@@ -7048,6 +7049,7 @@ public struct DBConnection: SDKModel {
         case _bq_storage_project_id = "bq_storage_project_id"
         case bq_roles_verified
         case _p4sa_name = "p4sa_name"
+        case query_holding_disabled
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -7074,6 +7076,15 @@ public struct DBConnection: SDKModel {
      * True if PDTs are enabled on this connection (read-only)
      */
     public var pdts_enabled: Bool?
+
+    private var _named_driver_version: AnyString?
+    /**
+     * JDBC driver version name
+     */
+    public var named_driver_version: String? {
+        get { _named_driver_version?.value }
+        set { _named_driver_version = newValue.map(AnyString.init) }
+    }
 
     private var _host: AnyString?
     /**
@@ -7469,12 +7480,18 @@ public struct DBConnection: SDKModel {
         set { _p4sa_name = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, uses_oauth: Bool? = nil, uses_instance_oauth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, tmp_db_host: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, supports_data_studio_link: Bool? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, default_bq_connection: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil, p4sa_name: String? = nil) {
+    /**
+     * Disable query holding for this connection.
+     */
+    public var query_holding_disabled: Bool?
+
+    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, named_driver_version: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, uses_oauth: Bool? = nil, uses_instance_oauth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, tmp_db_host: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, supports_data_studio_link: Bool? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, default_bq_connection: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil, p4sa_name: String? = nil, query_holding_disabled: Bool? = nil) {
         self.can = can
         self._name = name.map(AnyString.init)
         self.dialect = dialect
         self.snippets = snippets
         self.pdts_enabled = pdts_enabled
+        self._named_driver_version = named_driver_version.map(AnyString.init)
         self._host = host.map(AnyString.init)
         self._port = port.map(AnyString.init)
         self._username = username.map(AnyString.init)
@@ -7528,6 +7545,7 @@ public struct DBConnection: SDKModel {
         self._bq_storage_project_id = bq_storage_project_id.map(AnyString.init)
         self.bq_roles_verified = bq_roles_verified
         self._p4sa_name = p4sa_name.map(AnyString.init)
+        self.query_holding_disabled = query_holding_disabled
     }
 
 }
@@ -18586,7 +18604,7 @@ public struct RepositoryCredential: SDKModel {
 }
 
 /**
- * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql". (Enum defined in CreateQueryTask)
+ * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "odc". (Enum defined in CreateQueryTask)
  */
 public enum ResultFormat: String, Codable {
     case inline_json = "inline_json"
@@ -18601,6 +18619,7 @@ public enum ResultFormat: String, Codable {
     case xlsx = "xlsx"
     case gsxml = "gsxml"
     case sql = "sql"
+    case odc = "odc"
 }
 
 public struct ResultMakerFilterables: SDKModel {
@@ -24565,7 +24584,7 @@ public struct WriteCreateQueryTask: SDKModel {
     }
 
     /**
-     * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
+     * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "odc".
      */
     public var result_format: ResultFormat
 
@@ -25480,6 +25499,7 @@ public struct WriteDBConnection: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
         case _name = "name"
+        case _named_driver_version = "named_driver_version"
         case _host = "host"
         case _port = "port"
         case _username = "username"
@@ -25522,6 +25542,7 @@ public struct WriteDBConnection: SDKModel {
         case connection_pooling
         case _bq_storage_project_id = "bq_storage_project_id"
         case bq_roles_verified
+        case query_holding_disabled
     }
     private var _name: AnyString?
     /**
@@ -25530,6 +25551,15 @@ public struct WriteDBConnection: SDKModel {
     public var name: String? {
         get { _name?.value }
         set { _name = newValue.map(AnyString.init) }
+    }
+
+    private var _named_driver_version: AnyString?
+    /**
+     * JDBC driver version name
+     */
+    public var named_driver_version: String? {
+        get { _named_driver_version?.value }
+        set { _named_driver_version = newValue.map(AnyString.init) }
     }
 
     private var _host: AnyString?
@@ -25855,8 +25885,14 @@ public struct WriteDBConnection: SDKModel {
      */
     public var bq_roles_verified: Bool?
 
-    public init(name: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, tmp_db_host: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: WriteDBConnectionOverride? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil) {
+    /**
+     * Disable query holding for this connection.
+     */
+    public var query_holding_disabled: Bool?
+
+    public init(name: String? = nil, named_driver_version: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, tmp_db_host: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: WriteDBConnectionOverride? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil, query_holding_disabled: Bool? = nil) {
         self._name = name.map(AnyString.init)
+        self._named_driver_version = named_driver_version.map(AnyString.init)
         self._host = host.map(AnyString.init)
         self._port = port.map(AnyString.init)
         self._username = username.map(AnyString.init)
@@ -25899,6 +25935,7 @@ public struct WriteDBConnection: SDKModel {
         self.connection_pooling = connection_pooling
         self._bq_storage_project_id = bq_storage_project_id.map(AnyString.init)
         self.bq_roles_verified = bq_roles_verified
+        self.query_holding_disabled = query_holding_disabled
     }
 
 }
