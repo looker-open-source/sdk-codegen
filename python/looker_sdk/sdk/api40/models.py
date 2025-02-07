@@ -2186,7 +2186,7 @@ class CreateQueryTask(model.Model):
     """
     Attributes:
         query_id: Id of query to run
-        result_format: Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
+        result_format: Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "odc".
         can: Operations the current user is able to perform on this object
         source: Source of query task
         deferred: Create the task but defer execution
@@ -3685,6 +3685,7 @@ class DBConnection(model.Model):
         dialect:
         snippets: SQL Runner snippets for this connection
         pdts_enabled: True if PDTs are enabled on this connection
+        named_driver_version: JDBC driver version name
         host: Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.
         port: Port number on server. If the connection is over an SSH tunnel, then the local port associated with the SSH tunnel.
         username: Username for server authentication
@@ -3738,6 +3739,7 @@ class DBConnection(model.Model):
         bq_storage_project_id: The project id of the default BigQuery storage project.
         bq_roles_verified: When true, represents that all project roles have been verified.
         p4sa_name: The name of P4SA service account that is associated with the Looker instance
+        query_holding_disabled: Disable query holding for this connection.
     """
 
     can: Optional[MutableMapping[str, bool]] = None
@@ -3745,6 +3747,7 @@ class DBConnection(model.Model):
     dialect: Optional["Dialect"] = None
     snippets: Optional[Sequence["Snippet"]] = None
     pdts_enabled: Optional[bool] = None
+    named_driver_version: Optional[str] = None
     host: Optional[str] = None
     port: Optional[str] = None
     username: Optional[str] = None
@@ -3798,6 +3801,7 @@ class DBConnection(model.Model):
     bq_storage_project_id: Optional[str] = None
     bq_roles_verified: Optional[bool] = None
     p4sa_name: Optional[str] = None
+    query_holding_disabled: Optional[bool] = None
 
     def __init__(
         self,
@@ -3807,6 +3811,7 @@ class DBConnection(model.Model):
         dialect: Optional["Dialect"] = None,
         snippets: Optional[Sequence["Snippet"]] = None,
         pdts_enabled: Optional[bool] = None,
+        named_driver_version: Optional[str] = None,
         host: Optional[str] = None,
         port: Optional[str] = None,
         username: Optional[str] = None,
@@ -3859,13 +3864,15 @@ class DBConnection(model.Model):
         default_bq_connection: Optional[bool] = None,
         bq_storage_project_id: Optional[str] = None,
         bq_roles_verified: Optional[bool] = None,
-        p4sa_name: Optional[str] = None
+        p4sa_name: Optional[str] = None,
+        query_holding_disabled: Optional[bool] = None
     ):
         self.can = can
         self.name = name
         self.dialect = dialect
         self.snippets = snippets
         self.pdts_enabled = pdts_enabled
+        self.named_driver_version = named_driver_version
         self.host = host
         self.port = port
         self.username = username
@@ -3919,6 +3926,7 @@ class DBConnection(model.Model):
         self.bq_storage_project_id = bq_storage_project_id
         self.bq_roles_verified = bq_roles_verified
         self.p4sa_name = p4sa_name
+        self.query_holding_disabled = query_holding_disabled
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -9817,7 +9825,7 @@ class RepositoryCredential(model.Model):
 
 class ResultFormat(enum.Enum):
     """
-    Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql". (Enum defined in CreateQueryTask)
+    Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "odc". (Enum defined in CreateQueryTask)
 
     """
 
@@ -9833,6 +9841,7 @@ class ResultFormat(enum.Enum):
     xlsx = "xlsx"
     gsxml = "gsxml"
     sql = "sql"
+    odc = "odc"
     invalid_api_enum_value = "invalid_api_enum_value"
 
 
@@ -13096,7 +13105,7 @@ class WriteCreateQueryTask(model.Model):
 
         Attributes:
             query_id: Id of query to run
-            result_format: Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
+            result_format: Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "odc".
             source: Source of query task
             deferred: Create the task but defer execution
             look_id: Id of look associated with query.
@@ -13587,6 +13596,7 @@ class WriteDBConnection(model.Model):
 
         Attributes:
             name: Name of the connection. Also used as the unique identifier
+            named_driver_version: JDBC driver version name
             host: Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.
             port: Port number on server. If the connection is over an SSH tunnel, then the local port associated with the SSH tunnel.
             username: Username for server authentication
@@ -13630,9 +13640,11 @@ class WriteDBConnection(model.Model):
             connection_pooling: Enable database connection pooling.
             bq_storage_project_id: The project id of the default BigQuery storage project.
             bq_roles_verified: When true, represents that all project roles have been verified.
+            query_holding_disabled: Disable query holding for this connection.
     """
 
     name: Optional[str] = None
+    named_driver_version: Optional[str] = None
     host: Optional[str] = None
     port: Optional[str] = None
     username: Optional[str] = None
@@ -13675,11 +13687,13 @@ class WriteDBConnection(model.Model):
     connection_pooling: Optional[bool] = None
     bq_storage_project_id: Optional[str] = None
     bq_roles_verified: Optional[bool] = None
+    query_holding_disabled: Optional[bool] = None
 
     def __init__(
         self,
         *,
         name: Optional[str] = None,
+        named_driver_version: Optional[str] = None,
         host: Optional[str] = None,
         port: Optional[str] = None,
         username: Optional[str] = None,
@@ -13721,9 +13735,11 @@ class WriteDBConnection(model.Model):
         pdt_api_control_enabled: Optional[bool] = None,
         connection_pooling: Optional[bool] = None,
         bq_storage_project_id: Optional[str] = None,
-        bq_roles_verified: Optional[bool] = None
+        bq_roles_verified: Optional[bool] = None,
+        query_holding_disabled: Optional[bool] = None
     ):
         self.name = name
+        self.named_driver_version = named_driver_version
         self.host = host
         self.port = port
         self.username = username
@@ -13766,6 +13782,7 @@ class WriteDBConnection(model.Model):
         self.connection_pooling = connection_pooling
         self.bq_storage_project_id = bq_storage_project_id
         self.bq_roles_verified = bq_roles_verified
+        self.query_holding_disabled = query_holding_disabled
 
 
 @attr.s(auto_attribs=True, init=False)

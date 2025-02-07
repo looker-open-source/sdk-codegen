@@ -8471,12 +8471,16 @@ open class LookerSDKStream: APIMethods {
          * @param {String} source Specifies the source of this call.
          */
         source: String? = nil,
+        /**
+         * @param {Bool} enable_oauth_error_response Return a specialized OAuth error response if a database OAuth error occurs.
+         */
+        enable_oauth_error_response: Bool? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let path_query_id = encodeParam(query_id)
         let path_result_format = encodeParam(result_format)
         let result: SDKResponse<Data, SDKError> = self.get("/queries/\(path_query_id)/run/\(path_result_format)", 
-            ["limit": limit, "apply_formatting": apply_formatting as Any?, "apply_vis": apply_vis as Any?, "cache": cache as Any?, "image_width": image_width, "image_height": image_height, "generate_drill_links": generate_drill_links as Any?, "force_production": force_production as Any?, "cache_only": cache_only as Any?, "path_prefix": path_prefix, "rebuild_pdts": rebuild_pdts as Any?, "server_table_calcs": server_table_calcs as Any?, "source": source], nil, options)
+            ["limit": limit, "apply_formatting": apply_formatting as Any?, "apply_vis": apply_vis as Any?, "cache": cache as Any?, "image_width": image_width, "image_height": image_height, "generate_drill_links": generate_drill_links as Any?, "force_production": force_production as Any?, "cache_only": cache_only as Any?, "path_prefix": path_prefix, "rebuild_pdts": rebuild_pdts as Any?, "server_table_calcs": server_table_calcs as Any?, "source": source, "enable_oauth_error_response": enable_oauth_error_response as Any?], nil, options)
         return result
     }
 
@@ -8594,11 +8598,15 @@ open class LookerSDKStream: APIMethods {
          * @param {Bool} server_table_calcs Perform table calculations on query results
          */
         server_table_calcs: Bool? = nil,
+        /**
+         * @param {Bool} enable_oauth_error_response Return a specialized OAuth error response if a database OAuth error occurs.
+         */
+        enable_oauth_error_response: Bool? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let path_result_format = encodeParam(result_format)
         let result: SDKResponse<Data, SDKError> = self.post("/queries/run/\(path_result_format)", 
-            ["limit": limit, "apply_formatting": apply_formatting as Any?, "apply_vis": apply_vis as Any?, "cache": cache as Any?, "image_width": image_width, "image_height": image_height, "generate_drill_links": generate_drill_links as Any?, "force_production": force_production as Any?, "cache_only": cache_only as Any?, "path_prefix": path_prefix, "rebuild_pdts": rebuild_pdts as Any?, "server_table_calcs": server_table_calcs as Any?], try! self.encode(body), options)
+            ["limit": limit, "apply_formatting": apply_formatting as Any?, "apply_vis": apply_vis as Any?, "cache": cache as Any?, "image_width": image_width, "image_height": image_height, "generate_drill_links": generate_drill_links as Any?, "force_production": force_production as Any?, "cache_only": cache_only as Any?, "path_prefix": path_prefix, "rebuild_pdts": rebuild_pdts as Any?, "server_table_calcs": server_table_calcs as Any?, "enable_oauth_error_response": enable_oauth_error_response as Any?], try! self.encode(body), options)
         return result
     }
 
@@ -8819,7 +8827,7 @@ open class LookerSDKStream: APIMethods {
          */
         _ slug: String,
         /**
-         * @param {String} result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "json_label"]
+         * @param {String} result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "odc", "json_label"]
          */
         _ result_format: String,
         /**

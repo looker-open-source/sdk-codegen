@@ -9202,6 +9202,8 @@ class Looker40SDK(api_methods.APIMethods):
         server_table_calcs: Optional[bool] = None,
         # Specifies the source of this call.
         source: Optional[str] = None,
+        # Return a specialized OAuth error response if a database OAuth error occurs.
+        enable_oauth_error_response: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> Union[str, bytes]:
         """Run Query"""
@@ -9226,6 +9228,7 @@ class Looker40SDK(api_methods.APIMethods):
                     "rebuild_pdts": rebuild_pdts,
                     "server_table_calcs": server_table_calcs,
                     "source": source,
+                    "enable_oauth_error_response": enable_oauth_error_response,
                 },
                 transport_options=transport_options,
             ),
@@ -9314,6 +9317,8 @@ class Looker40SDK(api_methods.APIMethods):
         rebuild_pdts: Optional[bool] = None,
         # Perform table calculations on query results
         server_table_calcs: Optional[bool] = None,
+        # Return a specialized OAuth error response if a database OAuth error occurs.
+        enable_oauth_error_response: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> Union[str, bytes]:
         """Run Inline Query"""
@@ -9336,6 +9341,7 @@ class Looker40SDK(api_methods.APIMethods):
                     "path_prefix": path_prefix,
                     "rebuild_pdts": rebuild_pdts,
                     "server_table_calcs": server_table_calcs,
+                    "enable_oauth_error_response": enable_oauth_error_response,
                 },
                 body=body,
                 transport_options=transport_options,
@@ -9576,7 +9582,7 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # slug of query
         slug: str,
-        # Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "json_label"]
+        # Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "odc", "json_label"]
         result_format: str,
         # Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.
         download: Optional[str] = None,

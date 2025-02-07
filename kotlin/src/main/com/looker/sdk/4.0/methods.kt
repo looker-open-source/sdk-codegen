@@ -7351,6 +7351,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * @param {Boolean} rebuild_pdts Rebuild PDTS used in query.
      * @param {Boolean} server_table_calcs Perform table calculations on query results
      * @param {String} source Specifies the source of this call.
+     * @param {Boolean} enable_oauth_error_response Return a specialized OAuth error response if a database OAuth error occurs.
      *
      * GET /queries/{query_id}/run/{result_format} -> String
      *
@@ -7372,6 +7373,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
         rebuild_pdts: Boolean? = null,
         server_table_calcs: Boolean? = null,
         source: String? = null,
+        enable_oauth_error_response: Boolean? = null,
     ): SDKResponse {
         val path_query_id = encodeParam(query_id)
         val path_result_format = encodeParam(result_format)
@@ -7391,6 +7393,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
                 "rebuild_pdts" to rebuild_pdts,
                 "server_table_calcs" to server_table_calcs,
                 "source" to source,
+                "enable_oauth_error_response" to enable_oauth_error_response,
             ),
         )
     }
@@ -7462,6 +7465,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * @param {String} path_prefix Prefix to use for drill links (url encoded).
      * @param {Boolean} rebuild_pdts Rebuild PDTS used in query.
      * @param {Boolean} server_table_calcs Perform table calculations on query results
+     * @param {Boolean} enable_oauth_error_response Return a specialized OAuth error response if a database OAuth error occurs.
      *
      * POST /queries/run/{result_format} -> String
      *
@@ -7482,6 +7486,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
         path_prefix: String? = null,
         rebuild_pdts: Boolean? = null,
         server_table_calcs: Boolean? = null,
+        enable_oauth_error_response: Boolean? = null,
     ): SDKResponse {
         val path_result_format = encodeParam(result_format)
         return this.post<String>(
@@ -7499,6 +7504,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
                 "path_prefix" to path_prefix,
                 "rebuild_pdts" to rebuild_pdts,
                 "server_table_calcs" to server_table_calcs,
+                "enable_oauth_error_response" to enable_oauth_error_response,
             ),
             body,
         )
@@ -7690,7 +7696,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * Execute a SQL Runner query in a given result_format.
      *
      * @param {String} slug slug of query
-     * @param {String} result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "json_label"]
+     * @param {String} result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "odc", "json_label"]
      * @param {String} download Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.
      *
      * POST /sql_queries/{slug}/run/{result_format} -> String
