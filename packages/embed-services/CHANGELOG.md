@@ -1,5 +1,21 @@
 # Changelog
 
+## [25.2.0](https://github.com/looker-open-source/sdk-codegen/compare/embed-services-v25.0.1...embed-services-v25.2.0) (2025-02-07)
+
+
+### Miscellaneous Chores
+
+* **embed-services:** Synchronize undefined versions
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from 25.0.1 to 25.2.0
+  * devDependencies
+    * @looker/sdk-node bumped from 25.0.1 to 25.2.0
+
 ## [25.0.1](https://github.com/looker-open-source/sdk-codegen/compare/embed-services-v25.0.0...embed-services-v25.0.1) (2025-02-06)
 
 
