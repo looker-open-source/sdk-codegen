@@ -43,7 +43,7 @@ import {
 const root = path.join(__dirname, '/../../../');
 const indexFile = path.join(root, 'hackathons.json');
 const compareFile = path.join(root, 'hackCompare.json');
-const utf8 = { encoding: 'utf-8' };
+const utf8 = 'utf8';
 const content = fs.readFileSync(indexFile, utf8);
 const artifacts = JSON.parse(content) as IArtifact[];
 const sdk = LookerNodeSDK.init40();
@@ -122,10 +122,12 @@ const findOrMakeUser = async (art: IArtifact) => {
       create_user(sdk, { first_name: f.first_name, last_name: f.last_name })
     );
   }
-  if (!user?.group_ids?.includes(group.id!)) {
-    await sdk.ok(add_group_user(sdk, group.id!, { user_id: user.id! }));
+  if (!user?.group_ids?.includes(group.id ?? '')) {
+    await sdk.ok(
+      add_group_user(sdk, group.id ?? '', { user_id: user.id ?? '' })
+    );
   }
-  return swapUserId(art, user.id!);
+  return swapUserId(art, user.id ?? '');
 };
 
 // const removeHackUsers = async () => {

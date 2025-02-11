@@ -30,8 +30,10 @@ import { danger, log, warn } from '@looker/sdk-codegen-utils';
 import type { IVersionInfo } from '@looker/sdk-codegen';
 import {
   FunctionGenerator,
+  HookGenerator,
   InterfaceGenerator,
   MethodGenerator,
+  MockGenerator,
   StreamGenerator,
   TypeGenerator,
 } from './sdkGenerator';
@@ -64,7 +66,8 @@ export const writeCodeFile = (fileName: string, content: string): string => {
     quit(e);
   }
   if (!config) return;
-  const { props, languages, lookerVersion, lastApi, noStreams } = config;
+  const { props, languages, lookerVersion, lastApi, noStreams, useHooks } =
+    config;
 
   // load the specifications and create the unique keys in case of spec API version overlap
   const specs = await loadSpecs(config);

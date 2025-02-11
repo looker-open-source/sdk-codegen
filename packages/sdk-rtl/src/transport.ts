@@ -840,7 +840,7 @@ export const mergeOptions = (
   custom: Partial<ITransportSettings>
 ): Partial<ITransportSettings> => {
   const headers = { ...base.headers, ...custom.headers } ?? {};
-  const result = { ...base, ...custom, ...{ headers } };
+  const result = { ...base, ...custom, headers };
   return result;
 };
 

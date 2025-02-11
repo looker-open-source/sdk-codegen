@@ -27,7 +27,7 @@
 import * as OAS from 'openapi3-ts';
 import md5 from 'blueimp-md5';
 import isEmpty from 'lodash/isEmpty';
-import type { HttpMethod } from '@looker/sdk-rtl';
+import type { ArgValues, HttpMethod } from '@looker/sdk-rtl';
 import {
   DelimArray,
   ResponseMode,
@@ -197,11 +197,6 @@ export const isSpecialName = (name: string) => {
   const result = simpleName.test(name);
   return !result;
 };
-
-/**
- * Argument values passed into functions like makeTheCall
- */
-export type ArgValues = { [key: string]: any };
 
 /**
  * convert string to a safe variable name

@@ -229,7 +229,7 @@ export const loadSpecs = async (config: IGenProps, fetch = true) => {
   const specFetch = async (spec: SpecItem) => {
     if (!fetch) return undefined;
     if (!spec.specURL) return undefined;
-    const p = { ...config.props, ...{ api_version: spec.version } };
+    const p = { ...config.props, api_version: spec.version };
     let source = await authGetUrl(p, spec.specURL);
     if (typeof source === 'string') source = JSON.parse(source);
     const upgrade = upgradeSpecObject(source);

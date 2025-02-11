@@ -100,3 +100,8 @@ export interface IDictionary<T> {
  * Documented type alias for password spec
  */
 export type Password = string;
+
+/**
+ * Argument values passed into functions like makeTheCall
+ */
+export type ArgValues = { [key: string]: any };

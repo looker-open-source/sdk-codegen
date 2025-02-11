@@ -24,9 +24,9 @@
 
  */
 
+import type { ArgValues } from '@looker/sdk-rtl';
 import type {
   Arg,
-  ArgValues,
   EnumValueType,
   IMethod,
   IParameter,

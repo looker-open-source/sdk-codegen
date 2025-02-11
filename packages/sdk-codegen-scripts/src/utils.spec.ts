@@ -77,6 +77,7 @@ const mockVersions = {
   api_server_url: 'https://self-signed.looker.com:19999',
 };
 
+/** eslint-disable jest/no-disabled-tests */
 describe.skip('utils', () => {
   jest.mock('fs');
   beforeAll(() => {

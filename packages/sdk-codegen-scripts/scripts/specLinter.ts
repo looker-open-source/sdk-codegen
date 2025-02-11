@@ -85,6 +85,7 @@ status=beta|all
     }
     result.status = args[4].toLowerCase();
   }
+  /* eslint-disable no-console */
   console.log(`using:\n${JSON.stringify(result, null, 2)}`);
 
   return result;

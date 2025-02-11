@@ -107,10 +107,10 @@ const brokenPromise = (message: string) => Promise.reject(new Error(message));
 export const registerApp = async () => {
   const args = process.argv.slice(2);
   const total = args.length;
-  // eslint-disable-next-line node/no-path-concat
-  const iniFile = total < 1 ? `${__dirname}/../../../looker.ini` : args[0];
-  // eslint-disable-next-line node/no-path-concat
-  const configFile = total < 2 ? `${__dirname}/appconfig.json` : args[1];
+  const iniFile =
+    total < 1 ? path.join(__dirname, '/../../../looker.ini') : args[0];
+  const configFile =
+    total < 2 ? path.join(__dirname, 'appconfig.json') : args[1];
   let result = '';
   console.log(
     `Using ${iniFile} to register the OAuth application configured in ${configFile}`

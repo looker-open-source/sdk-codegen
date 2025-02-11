@@ -44,6 +44,6 @@ const prettierTs: prettier.Options = {
  * @param options prettier.Options to override the default processing. Typescript options are the default
  */
 export const prettify = (code: string, options: prettier.Options = {}) => {
-  const merged: prettier.Options = { ...prettierTs, ...{ options } };
+  const merged: prettier.Options = { ...prettierTs, ...options };
   return prettier.format(code, merged);
 };

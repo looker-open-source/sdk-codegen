@@ -25,6 +25,7 @@
  */
 
 import path from 'path';
+import fs from 'fs';
 import { NodeSettingsIniFile } from '@looker/sdk-node';
 import { TestConfig } from '@looker/sdk-codegen-utils';
 
@@ -43,15 +44,20 @@ const config = TestConfig(specToModel);
  * Tests are skipped if this configuration is not found.
  */
 describe('Declaration miner', () => {
-  const settings = new NodeSettingsIniFile(
-    '',
-    path.join(config.rootPath, 'looker.ini'),
-    'Miner'
-  ).readConfig();
+  let sourcePath = '';
+  let originOverride = '';
+  const iniFile = path.join(config.rootPath, 'looker.ini');
+  if (fs.existsSync(iniFile)) {
+    const settings = new NodeSettingsIniFile(
+      '',
+      path.join(config.rootPath, 'looker.ini'),
+      'Miner'
+    ).readConfig();
 
-  const sourcePath = settings.base_url;
-  const originOverride = settings.origin_override;
-  const isConfigured = () => !!sourcePath;
+    sourcePath = settings.base_url;
+    originOverride = settings?.origin_override;
+  }
+  const isConfigured = () => Boolean(sourcePath);
 
   it('should mine files matching the probe settings', () => {
     if (!isConfigured()) return;
