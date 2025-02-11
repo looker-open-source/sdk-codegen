@@ -987,7 +987,7 @@ public class CreateQueryTask : SdkModel
   public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>Id of query to run</summary>
   public string query_id { get; set; } = "";
-  /// <summary>Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".</summary>
+  /// <summary>Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "odc".</summary>
   [JsonConverter(typeof(StringEnumConverter))]
   public ResultFormat result_format { get; set; }
   /// <summary>Source of query task</summary>
@@ -1658,6 +1658,8 @@ public class DBConnection : SdkModel
   public Snippet[]? snippets { get; set; } = null;
   /// <summary>True if PDTs are enabled on this connection (read-only)</summary>
   public bool? pdts_enabled { get; set; } = null;
+  /// <summary>JDBC driver version name</summary>
+  public string? named_driver_version { get; set; } = null;
   /// <summary>Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.</summary>
   public string? host { get; set; } = null;
   /// <summary>Port number on server. If the connection is over an SSH tunnel, then the local port associated with the SSH tunnel.</summary>
@@ -1763,6 +1765,8 @@ public class DBConnection : SdkModel
   public bool? bq_roles_verified { get; set; } = null;
   /// <summary>The name of P4SA service account that is associated with the Looker instance (read-only)</summary>
   public string? p4sa_name { get; set; } = null;
+  /// <summary>Disable query holding for this connection.</summary>
+  public bool? query_holding_disabled { get; set; } = null;
 }
 
 public class DBConnectionBase : SdkModel
@@ -4452,7 +4456,7 @@ public class RepositoryCredential : SdkModel
   public bool? is_configured { get; set; } = null;
 }
 
-/// Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql". (Enum defined in CreateQueryTask)
+/// Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "odc". (Enum defined in CreateQueryTask)
 public enum ResultFormat
 {
   [EnumMember(Value = "inline_json")]
@@ -4478,7 +4482,9 @@ public enum ResultFormat
   [EnumMember(Value = "gsxml")]
   gsxml,
   [EnumMember(Value = "sql")]
-  sql
+  sql,
+  [EnumMember(Value = "odc")]
+  odc
 }
 
 public class ResultMakerFilterables : SdkModel
@@ -5991,7 +5997,7 @@ public class WriteCreateQueryTask : SdkModel
 {
   /// <summary>Id of query to run</summary>
   public string query_id { get; set; } = "";
-  /// <summary>Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".</summary>
+  /// <summary>Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "odc".</summary>
   [JsonConverter(typeof(StringEnumConverter))]
   public ResultFormat result_format { get; set; }
   /// <summary>Source of query task</summary>
@@ -6228,6 +6234,8 @@ public class WriteDBConnection : SdkModel
 {
   /// <summary>Name of the connection. Also used as the unique identifier</summary>
   public string? name { get; set; } = null;
+  /// <summary>JDBC driver version name</summary>
+  public string? named_driver_version { get; set; } = null;
   /// <summary>Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.</summary>
   public string? host { get; set; } = null;
   /// <summary>Port number on server. If the connection is over an SSH tunnel, then the local port associated with the SSH tunnel.</summary>
@@ -6315,6 +6323,8 @@ public class WriteDBConnection : SdkModel
   public string? bq_storage_project_id { get; set; } = null;
   /// <summary>When true, represents that all project roles have been verified.</summary>
   public bool? bq_roles_verified { get; set; } = null;
+  /// <summary>Disable query holding for this connection.</summary>
+  public bool? query_holding_disabled { get; set; } = null;
 }
 
 /// Dynamic writeable type for DBConnectionOverride removes:

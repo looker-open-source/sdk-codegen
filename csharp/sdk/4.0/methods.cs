@@ -7206,6 +7206,7 @@ namespace Looker.SDK.API40
   /// <param name="rebuild_pdts">Rebuild PDTS used in query.</param>
   /// <param name="server_table_calcs">Perform table calculations on query results</param>
   /// <param name="source">Specifies the source of this call.</param>
+  /// <param name="enable_oauth_error_response">Return a specialized OAuth error response if a database OAuth error occurs.</param>
   public async Task<SdkResponse<TSuccess, Exception>> run_query<TSuccess>(
     string query_id,
     string result_format,
@@ -7222,6 +7223,7 @@ namespace Looker.SDK.API40
     bool? rebuild_pdts = null,
     bool? server_table_calcs = null,
     string? source = null,
+    bool? enable_oauth_error_response = null,
     ITransportSettings? options = null) where TSuccess : class
 {  
       query_id = SdkUtils.EncodeParam(query_id);
@@ -7239,7 +7241,8 @@ namespace Looker.SDK.API40
       { "path_prefix", path_prefix },
       { "rebuild_pdts", rebuild_pdts },
       { "server_table_calcs", server_table_calcs },
-      { "source", source }},null,options);
+      { "source", source },
+      { "enable_oauth_error_response", enable_oauth_error_response }},null,options);
   }
 
   /// ### Run the query that is specified inline in the posted body.
@@ -7318,6 +7321,7 @@ namespace Looker.SDK.API40
   /// <param name="path_prefix">Prefix to use for drill links (url encoded).</param>
   /// <param name="rebuild_pdts">Rebuild PDTS used in query.</param>
   /// <param name="server_table_calcs">Perform table calculations on query results</param>
+  /// <param name="enable_oauth_error_response">Return a specialized OAuth error response if a database OAuth error occurs.</param>
   public async Task<SdkResponse<TSuccess, Exception>> run_inline_query<TSuccess>(
     string result_format,
     WriteQuery body,
@@ -7333,6 +7337,7 @@ namespace Looker.SDK.API40
     string? path_prefix = null,
     bool? rebuild_pdts = null,
     bool? server_table_calcs = null,
+    bool? enable_oauth_error_response = null,
     ITransportSettings? options = null) where TSuccess : class
 {  
       result_format = SdkUtils.EncodeParam(result_format);
@@ -7348,7 +7353,8 @@ namespace Looker.SDK.API40
       { "cache_only", cache_only },
       { "path_prefix", path_prefix },
       { "rebuild_pdts", rebuild_pdts },
-      { "server_table_calcs", server_table_calcs }},body,options);
+      { "server_table_calcs", server_table_calcs },
+      { "enable_oauth_error_response", enable_oauth_error_response }},body,options);
   }
 
   /// ### Run an URL encoded query.
@@ -7550,7 +7556,7 @@ namespace Looker.SDK.API40
   /// </returns>
   ///
   /// <param name="slug">slug of query</param>
-  /// <param name="result_format">Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "json_label"]</param>
+  /// <param name="result_format">Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "odc", "json_label"]</param>
   /// <param name="download">Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.</param>
   public async Task<SdkResponse<TSuccess, Exception>> run_sql_query<TSuccess>(
     string slug,

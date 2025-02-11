@@ -1,5 +1,19 @@
 # Changelog
 
+## [25.2.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v25.0.1...sdk-codegen-all-v25.2.0) (2025-02-07)
+
+
+### Features
+
+* generate SDKs for Looker 25.2 ([#1561](https://github.com/looker-open-source/sdk-codegen/issues/1561)) ([8c4ccfa](https://github.com/looker-open-source/sdk-codegen/commit/8c4ccfaf43bacffcfb2b50ddb2f932c48182ff6f))
+
+## [25.0.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v25.0.0...sdk-codegen-all-v25.0.1) (2025-02-06)
+
+
+### Bug Fixes
+
+* update looker TypeScript package dependencies ([#1559](https://github.com/looker-open-source/sdk-codegen/issues/1559)) ([7421d43](https://github.com/looker-open-source/sdk-codegen/commit/7421d4313b09d828e03b5c9c04abd5f2b6c90ae6))
+
 ## [25.0.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.20.1...sdk-codegen-all-v25.0.0) (2025-01-13)
 
 * The `content-validation` endpoint and associated method has a breaking

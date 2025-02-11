@@ -1042,7 +1042,7 @@ data class CreateOAuthApplicationUserStateResponse(
 /**
  * @property can Operations the current user is able to perform on this object (read-only)
  * @property query_id Id of query to run
- * @property result_format Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
+ * @property result_format Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "odc".
  * @property source Source of query task
  * @property deferred Create the task but defer execution
  * @property look_id Id of look associated with query.
@@ -1749,6 +1749,7 @@ data class Datagroup(
  * @property dialect
  * @property snippets SQL Runner snippets for this connection (read-only)
  * @property pdts_enabled True if PDTs are enabled on this connection (read-only)
+ * @property named_driver_version JDBC driver version name
  * @property host Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.
  * @property port Port number on server. If the connection is over an SSH tunnel, then the local port associated with the SSH tunnel.
  * @property username Username for server authentication
@@ -1802,6 +1803,7 @@ data class Datagroup(
  * @property bq_storage_project_id The project id of the default BigQuery storage project.
  * @property bq_roles_verified When true, represents that all project roles have been verified.
  * @property p4sa_name The name of P4SA service account that is associated with the Looker instance (read-only)
+ * @property query_holding_disabled Disable query holding for this connection.
  */
 data class DBConnection(
     var can: Map<String, Boolean>? = null,
@@ -1809,6 +1811,7 @@ data class DBConnection(
     var dialect: Dialect? = null,
     var snippets: Array<Snippet>? = null,
     var pdts_enabled: Boolean? = null,
+    var named_driver_version: String? = null,
     var host: String? = null,
     var port: String? = null,
     var username: String? = null,
@@ -1862,6 +1865,7 @@ data class DBConnection(
     var bq_storage_project_id: String? = null,
     var bq_roles_verified: Boolean? = null,
     var p4sa_name: String? = null,
+    var query_holding_disabled: Boolean? = null,
 ) : Serializable
 
 /**
@@ -4670,7 +4674,7 @@ data class RepositoryCredential(
 ) : Serializable
 
 /**
- * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql". (Enum defined in CreateQueryTask)
+ * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "odc". (Enum defined in CreateQueryTask)
  */
 enum class ResultFormat : Serializable {
     inline_json,
@@ -4685,6 +4689,7 @@ enum class ResultFormat : Serializable {
     xlsx,
     gsxml,
     sql,
+    odc,
 }
 
 /**
@@ -6256,7 +6261,7 @@ data class WriteCreateDashboardFilter(
  * can
  *
  * @property query_id Id of query to run
- * @property result_format Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
+ * @property result_format Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "odc".
  * @property source Source of query task
  * @property deferred Create the task but defer execution
  * @property look_id Id of look associated with query.
@@ -6503,6 +6508,7 @@ data class WriteDatagroup(
  * can, dialect, snippets, pdts_enabled, uses_oauth, uses_instance_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, p4sa_name
  *
  * @property name Name of the connection. Also used as the unique identifier
+ * @property named_driver_version JDBC driver version name
  * @property host Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.
  * @property port Port number on server. If the connection is over an SSH tunnel, then the local port associated with the SSH tunnel.
  * @property username Username for server authentication
@@ -6546,9 +6552,11 @@ data class WriteDatagroup(
  * @property connection_pooling Enable database connection pooling.
  * @property bq_storage_project_id The project id of the default BigQuery storage project.
  * @property bq_roles_verified When true, represents that all project roles have been verified.
+ * @property query_holding_disabled Disable query holding for this connection.
  */
 data class WriteDBConnection(
     var name: String? = null,
+    var named_driver_version: String? = null,
     var host: String? = null,
     var port: String? = null,
     var username: String? = null,
@@ -6591,6 +6599,7 @@ data class WriteDBConnection(
     var connection_pooling: Boolean? = null,
     var bq_storage_project_id: String? = null,
     var bq_roles_verified: Boolean? = null,
+    var query_holding_disabled: Boolean? = null,
 ) : Serializable
 
 /**
