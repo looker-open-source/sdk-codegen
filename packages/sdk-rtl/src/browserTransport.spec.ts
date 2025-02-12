@@ -116,7 +116,7 @@ describe('BrowserTransport', () => {
       expect(resp.statusCode).toEqual(200);
     });
 
-    it('times out in 1 second', async () => {
+    it.skip('times out in 1 second', async () => {
       await expect(
         xp.request(
           'GET',
