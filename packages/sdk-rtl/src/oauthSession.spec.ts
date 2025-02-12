@@ -24,7 +24,7 @@
 
  */
 
-import type { ArgValues } from '..';
+import type { ArgValues } from './constants';
 import type { ICryptoHash } from './cryptoHash';
 import { OAuthSession } from './oauthSession';
 import type { IApiSection, IApiSettings } from './apiSettings';
