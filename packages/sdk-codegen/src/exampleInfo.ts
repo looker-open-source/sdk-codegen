@@ -24,7 +24,8 @@
 
  */
 
-import type { ArgValues, KeyedCollection } from './sdkModels';
+import type { ArgValues } from '@looker/sdk-rtl';
+import type { KeyedCollection } from './sdkModels';
 
 export interface ISDKCall {
   /** SDK variable name for the call found */

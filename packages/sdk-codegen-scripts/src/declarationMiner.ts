@@ -60,9 +60,9 @@ export const rubyMethodProbe = {
   declarationPattern:
     /(?<verb>GET|POST|DELETE|PUT|PATCH)\s(?:"|')\/api\/3\.x(?<path>\S+)(?:"|')/i,
   matchToSpecKeyTransform: (match: RegExpExecArray) => {
-    const verb = match.groups!.verb.toLocaleUpperCase();
-    const path = match
-      .groups!.path.replace(':#', '')
+    const verb = match.groups?.verb.toLocaleUpperCase();
+    const path = match.groups?.path
+      .replace(':#', '')
       .replace('#', '')
       .replace(/:(\w+)/g, '{$1}');
     const key = `${verb} ${path}`;
@@ -76,6 +76,7 @@ export const rubyMethodProbe = {
 export const rubyTypeProbe: IProbe = {
   fileNamePattern: /^(?!test).*_mapper.rb$/,
   declarationPattern: /class\s(?<typeName>\w+)Mapper/i,
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   matchToSpecKeyTransform: (match: RegExpExecArray) => match.groups!.typeName,
 };
 

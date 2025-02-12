@@ -66,6 +66,7 @@ import {
     }
   }
   const indexFile = path.join(root, indexName);
+  /* eslint-disable no-console */
   console.log(`Mining declarations from ${sourcePath} ...`);
 
   const miner = new DeclarationMiner(
@@ -78,6 +79,7 @@ import {
   fs.writeFileSync(indexFile, JSON.stringify(result, null, 2), {
     encoding: 'utf-8',
   });
+  /* eslint-disable no-console */
   console.log(
     `${
       Object.entries(result.methods).length +
@@ -89,12 +91,14 @@ import {
     fs.writeFileSync(indexCopy, JSON.stringify(result, null, 2), {
       encoding: 'utf-8',
     });
+    /* eslint-disable no-console */
     console.log(`Copied declaration nuggets to ${indexCopy}`);
     const examplesIndex = 'examplesIndex.json';
     const examples = path.join(root, examplesIndex);
     if (fs.existsSync(examples)) {
       const examplesCopy = path.join(copyPath, examplesIndex);
       fs.copyFileSync(examples, examplesCopy);
+      /* eslint-disable no-console */
       console.log(`Copied example nuggets to ${examplesCopy}`);
     }
   }

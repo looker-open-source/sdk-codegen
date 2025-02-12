@@ -24,14 +24,8 @@
 
  */
 
-import type {
-  Arg,
-  ArgValues,
-  IMethod,
-  IParameter,
-  IProperty,
-  IType,
-} from './sdkModels';
+import type { ArgValues } from '@looker/sdk-rtl';
+import type { Arg, IMethod, IParameter, IProperty, IType } from './sdkModels';
 import { EnumType, describeParam, strBody } from './sdkModels';
 import type { CodeAssignment, IMappedType } from './codeGen';
 import { CodeGen } from './codeGen';

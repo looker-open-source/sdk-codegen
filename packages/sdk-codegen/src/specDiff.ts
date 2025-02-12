@@ -24,8 +24,8 @@
 
  */
 
+import type { ArgValues } from '@looker/sdk-rtl';
 import type {
-  ArgValues,
   IApiModel,
   IMethod,
   IParameter,

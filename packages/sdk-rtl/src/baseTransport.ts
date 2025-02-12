@@ -24,6 +24,8 @@
 
  */
 
+/* eslint-disable no-console */
+
 import {
   StatusCode,
   addQueryParams,
@@ -154,10 +156,8 @@ export abstract class BaseTransport implements ITransport {
     options?: Partial<ITransportSettings>
   ) {
     const agentTag = options?.agentTag || this.options.agentTag || agentPrefix;
-    options = mergeOptions(
-      { ...this.options, ...{ headers: { [LookerAppId]: agentTag } } },
-      options ?? {}
-    );
+    const agent = { headers: { [LookerAppId]: agentTag } };
+    options = mergeOptions({ ...this.options, ...agent }, options ?? {});
     const headers = options.headers ?? {};
 
     // Make sure an empty body is undefined
@@ -170,17 +170,29 @@ export abstract class BaseTransport implements ITransport {
       }
     }
 
-    const ms = sdkTimeout(options) * 1000;
-    let signaller = AbortSignal.timeout(ms);
-    if ('signal' in options && options.signal) {
-      // AbortSignal.any may not be available, tolerate its absence
-      if (AbortSignal.any) {
-        signaller = AbortSignal.any([options.signal, signaller]);
+    let signaller;
+    if (AbortSignal.timeout) {
+      const ms = sdkTimeout(options) * 1000;
+      let signaller = AbortSignal.timeout(ms);
+      if ('signal' in options && options.signal) {
+        // AbortSignal.any may not be available, tolerate its absence
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        if (AbortSignal.any) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          signaller = AbortSignal.any([options.signal, signaller]);
+        } else {
+          console.debug(
+            'Cannot combine cancel signal and timeout. AbortSignal.any is not available in this transport.'
+          );
+          console.debug({ AbortSignal });
+        }
       } else {
         console.debug(
-          'Cannot combine cancel signal and timeout. AbortSignal.any is not available in this transport.'
+          'AbortSignal.timeout is not defined. Timeout will use default behavior'
         );
-        console.debug({ AbortSignal });
       }
     }
 

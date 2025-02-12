@@ -527,7 +527,8 @@ describe('spec conversion', () => {
       expect(keys).toHaveLength(Object.keys(defs).length);
     });
 
-    it.skip('matches a reference OpenAPI conversion', () => {
+    /** eslint-disable jest/no-disabled-tests */
+    it('matches a reference OpenAPI conversion', { skip: true }, () => {
       // TODO There is a different branch to address this
       const spec = upgradeSpec(swaggerSource);
       expect(spec).toBeDefined();

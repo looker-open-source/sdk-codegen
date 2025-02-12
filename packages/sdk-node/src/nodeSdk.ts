@@ -24,6 +24,7 @@
 
  */
 
+/* eslint-disable no-restricted-imports */
 import type { IApiSettings, IAuthSession, ITransport } from '@looker/sdk-rtl';
 import { Looker40SDK, environmentPrefix } from '@looker/sdk';
 import { NodeSession, NodeSettingsIniFile, NodeTransport } from '.';

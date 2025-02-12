@@ -60,6 +60,7 @@ const getOptions = () => {
     status: 'beta',
   };
   const args = process.argv.slice(1);
+  /* eslint-disable no-console */
   console.log(`${args[0]} [fileA] [fileB] [format] [status]\n
 format=csv|md
 status=beta|all
@@ -84,6 +85,7 @@ status=beta|all
     }
     result.status = args[4].toLowerCase();
   }
+  /* eslint-disable no-console */
   console.log(`using:\n${JSON.stringify(result, null, 2)}`);
 
   return result;
@@ -127,6 +129,7 @@ function checkSpecs() {
   writeFileSync(outFile, result, {
     encoding: 'utf-8',
   });
+  /* eslint-disable no-console */
   console.log(`Wrote ${diff.length} method differences to ${outFile}`);
 }
 

@@ -24,11 +24,11 @@
 
  */
 
+import type { ArgValues } from '@looker/sdk-rtl';
 import { DelimArray } from '@looker/sdk-rtl';
 import type {
   ApiModel,
   Arg,
-  ArgValues,
   EnumValueType,
   IMethod,
   IParameter,
