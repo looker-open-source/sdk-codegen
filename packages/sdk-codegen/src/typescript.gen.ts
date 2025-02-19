@@ -24,14 +24,8 @@
 
  */
 
-import type {
-  Arg,
-  ArgValues,
-  IMethod,
-  IParameter,
-  IProperty,
-  IType,
-} from './sdkModels';
+import type { ArgValues } from '@looker/sdk-rtl';
+import type { Arg, IMethod, IParameter, IProperty, IType } from './sdkModels';
 import {
   EnumType,
   describeParam,
@@ -140,8 +134,7 @@ export class ${this.packageName} extends APIMethods implements I${
 
   mocksPrologue(_indent: string): string {
     return `
-import { mockApiSpec } from '@looker/sdk-codegen-utils';
-import { MockMethod } from '../mockMethod';
+import { mockApiSpec, MockMethod } from '../mockMethod';
 /**
  * ${this.warnEditing()}
  *

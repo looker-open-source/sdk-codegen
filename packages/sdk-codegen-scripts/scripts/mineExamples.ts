@@ -33,12 +33,14 @@ import { ExampleMiner } from '../src/exampleMiner';
   const root = path.join(__dirname, '/../../../');
   const sourcePath = total < 1 ? root : path.join(root, args[0]);
   const indexFile = path.join(sourcePath, '/examplesIndex.json');
+  /* eslint-disable no-console */
   console.log(`Mining examples from ${sourcePath} ...`);
   const miner = new ExampleMiner(sourcePath);
   const result = miner.execute();
   fs.writeFileSync(indexFile, JSON.stringify(result, null, 2), {
     encoding: 'utf-8',
   });
+  /* eslint-disable no-console */
   console.log(
     `${Object.entries(result.nuggets).length} nuggets written to ${indexFile}`
   );
