@@ -701,7 +701,7 @@ open class LookerSDKStream: APIMethods {
      *
      * The value of the `secret` field will be set by Looker and returned.
      *
-     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+     * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
      *
      * POST /embed_config/secrets -> EmbedSecret
      */
@@ -719,7 +719,7 @@ open class LookerSDKStream: APIMethods {
     /**
      * ### Delete an embed secret.
      *
-     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+     * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
      *
      * DELETE /embed_config/secrets/{embed_secret_id} -> String
      */
@@ -779,7 +779,7 @@ open class LookerSDKStream: APIMethods {
      * encrypted transport.
      *
      *
-     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+     * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
      *
      * POST /embed/sso_url -> EmbedUrlResponse
      */
@@ -822,7 +822,7 @@ open class LookerSDKStream: APIMethods {
      * encrypted transport.
      *
      *
-     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+     * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
      *
      * POST /embed/token_url/me -> EmbedUrlResponse
      */
@@ -886,7 +886,7 @@ open class LookerSDKStream: APIMethods {
      * - Navigation token - lives for 10 minutes. The Looker client will ask for this token once it is loaded into
      *   the iframe.
      *
-     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+     * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
      *
      * POST /embed/cookieless_session/acquire -> EmbedCookielessSessionAcquireResponse
      */
@@ -908,7 +908,7 @@ open class LookerSDKStream: APIMethods {
      * in the session and session reference data being cleared from the system. This endpoint can be used to log an embed
      * user out of the Looker instance.
      *
-     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+     * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
      *
      * DELETE /embed/cookieless_session/{session_reference_token} -> String
      */
@@ -940,7 +940,7 @@ open class LookerSDKStream: APIMethods {
      * the session time to live in the `session_reference_token_ttl` response property. If this property
      * contains a zero, the embed session has expired.
      *
-     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+     * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
      *
      * PUT /embed/cookieless_session/generate_tokens -> EmbedCookielessSessionGenerateTokensResponse
      */
@@ -2851,6 +2851,7 @@ open class LookerSDKStream: APIMethods {
      *  - extension_framework_enabled
      *  - extension_load_url_enabled
      *  - instance_config
+     *  - managed_certificate_uri
      *  - marketplace_auto_install_enabled
      *  - marketplace_automation
      *  - marketplace_terms_accepted
@@ -2891,6 +2892,7 @@ open class LookerSDKStream: APIMethods {
      *  - extension_framework_enabled
      *  - extension_load_url_enabled
      *  - instance_config
+     *  - managed_certificate_uri
      *  - marketplace_auto_install_enabled
      *  - marketplace_automation
      *  - marketplace_terms_accepted
@@ -3989,10 +3991,18 @@ open class LookerSDKStream: APIMethods {
          * @param {String} fields Requested fields.
          */
         fields: String? = nil,
+        /**
+         * @param {DelimArray<String>} project_names Optional list of project names to filter by
+         */
+        project_names: DelimArray<String>? = nil,
+        /**
+         * @param {DelimArray<String>} space_ids Optional list of space ids to filter by
+         */
+        space_ids: DelimArray<String>? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let result: SDKResponse<Data, SDKError> = self.get("/content_validation", 
-            ["fields": fields], nil, options)
+            ["fields": fields, "project_names": project_names as Any?, "space_ids": space_ids as Any?], nil, options)
         return result
     }
 
@@ -6855,10 +6865,22 @@ open class LookerSDKStream: APIMethods {
          * @param {Int64} offset Number of results to skip before returning any. (Defaults to 0 if not set when limit is used)
          */
         offset: Int64? = nil,
+        /**
+         * @param {Bool} exclude_empty Whether or not to exclude models with no explores from the response (Defaults to false)
+         */
+        exclude_empty: Bool? = nil,
+        /**
+         * @param {Bool} exclude_hidden Whether or not to exclude hidden explores from the response (Defaults to false)
+         */
+        exclude_hidden: Bool? = nil,
+        /**
+         * @param {Bool} include_internal Whether or not to include built-in models such as System Activity (Defaults to false)
+         */
+        include_internal: Bool? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let result: SDKResponse<Data, SDKError> = self.get("/lookml_models", 
-            ["fields": fields, "limit": limit, "offset": offset], nil, options)
+            ["fields": fields, "limit": limit, "offset": offset, "exclude_empty": exclude_empty as Any?, "exclude_hidden": exclude_hidden as Any?, "include_internal": include_internal as Any?], nil, options)
         return result
     }
 
@@ -8222,7 +8244,7 @@ open class LookerSDKStream: APIMethods {
      *
      * Returns the results of an async query task if the query has completed.
      *
-     * If the query task is still running or waiting to run, this function returns 204 No Content.
+     * If the query task is still running or waiting to run, this function returns 202 Accepted.
      *
      * If the query task ID is invalid or the cached results of the query task have expired, this function returns 404 Not Found.
      *
@@ -8449,12 +8471,16 @@ open class LookerSDKStream: APIMethods {
          * @param {String} source Specifies the source of this call.
          */
         source: String? = nil,
+        /**
+         * @param {Bool} enable_oauth_error_response Return a specialized OAuth error response if a database OAuth error occurs.
+         */
+        enable_oauth_error_response: Bool? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let path_query_id = encodeParam(query_id)
         let path_result_format = encodeParam(result_format)
         let result: SDKResponse<Data, SDKError> = self.get("/queries/\(path_query_id)/run/\(path_result_format)", 
-            ["limit": limit, "apply_formatting": apply_formatting as Any?, "apply_vis": apply_vis as Any?, "cache": cache as Any?, "image_width": image_width, "image_height": image_height, "generate_drill_links": generate_drill_links as Any?, "force_production": force_production as Any?, "cache_only": cache_only as Any?, "path_prefix": path_prefix, "rebuild_pdts": rebuild_pdts as Any?, "server_table_calcs": server_table_calcs as Any?, "source": source], nil, options)
+            ["limit": limit, "apply_formatting": apply_formatting as Any?, "apply_vis": apply_vis as Any?, "cache": cache as Any?, "image_width": image_width, "image_height": image_height, "generate_drill_links": generate_drill_links as Any?, "force_production": force_production as Any?, "cache_only": cache_only as Any?, "path_prefix": path_prefix, "rebuild_pdts": rebuild_pdts as Any?, "server_table_calcs": server_table_calcs as Any?, "source": source, "enable_oauth_error_response": enable_oauth_error_response as Any?], nil, options)
         return result
     }
 
@@ -8572,11 +8598,15 @@ open class LookerSDKStream: APIMethods {
          * @param {Bool} server_table_calcs Perform table calculations on query results
          */
         server_table_calcs: Bool? = nil,
+        /**
+         * @param {Bool} enable_oauth_error_response Return a specialized OAuth error response if a database OAuth error occurs.
+         */
+        enable_oauth_error_response: Bool? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let path_result_format = encodeParam(result_format)
         let result: SDKResponse<Data, SDKError> = self.post("/queries/run/\(path_result_format)", 
-            ["limit": limit, "apply_formatting": apply_formatting as Any?, "apply_vis": apply_vis as Any?, "cache": cache as Any?, "image_width": image_width, "image_height": image_height, "generate_drill_links": generate_drill_links as Any?, "force_production": force_production as Any?, "cache_only": cache_only as Any?, "path_prefix": path_prefix, "rebuild_pdts": rebuild_pdts as Any?, "server_table_calcs": server_table_calcs as Any?], try! self.encode(body), options)
+            ["limit": limit, "apply_formatting": apply_formatting as Any?, "apply_vis": apply_vis as Any?, "cache": cache as Any?, "image_width": image_width, "image_height": image_height, "generate_drill_links": generate_drill_links as Any?, "force_production": force_production as Any?, "cache_only": cache_only as Any?, "path_prefix": path_prefix, "rebuild_pdts": rebuild_pdts as Any?, "server_table_calcs": server_table_calcs as Any?, "enable_oauth_error_response": enable_oauth_error_response as Any?], try! self.encode(body), options)
         return result
     }
 
@@ -8797,7 +8827,7 @@ open class LookerSDKStream: APIMethods {
          */
         _ slug: String,
         /**
-         * @param {String} result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "json_label"]
+         * @param {String} result_format Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "odc", "json_label"]
          */
         _ result_format: String,
         /**
@@ -11674,7 +11704,7 @@ open class LookerSDKStream: APIMethods {
     /**
      * ### Embed login information for the specified user.
      *
-     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+     * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
      *
      * GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> CredentialsEmbed
      */
@@ -11703,7 +11733,7 @@ open class LookerSDKStream: APIMethods {
     /**
      * ### Embed login information for the specified user.
      *
-     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+     * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
      *
      * DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> String
      */
@@ -11727,7 +11757,7 @@ open class LookerSDKStream: APIMethods {
     /**
      * ### Embed login information for the specified user.
      *
-     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+     * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
      *
      * GET /users/{user_id}/credentials_embed -> [CredentialsEmbed]
      */
@@ -12127,7 +12157,7 @@ open class LookerSDKStream: APIMethods {
     /**
      * Create an embed user from an external user ID
      *
-     * Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+     * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
      *
      * POST /users/embed_user -> UserPublic
      */

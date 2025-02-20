@@ -1,5 +1,42 @@
 # Changelog
 
+## [25.2.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v25.0.1...sdk-codegen-all-v25.2.0) (2025-02-07)
+
+
+### Features
+
+* generate SDKs for Looker 25.2 ([#1561](https://github.com/looker-open-source/sdk-codegen/issues/1561)) ([8c4ccfa](https://github.com/looker-open-source/sdk-codegen/commit/8c4ccfaf43bacffcfb2b50ddb2f932c48182ff6f))
+
+## [25.0.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v25.0.0...sdk-codegen-all-v25.0.1) (2025-02-06)
+
+
+### Bug Fixes
+
+* update looker TypeScript package dependencies ([#1559](https://github.com/looker-open-source/sdk-codegen/issues/1559)) ([7421d43](https://github.com/looker-open-source/sdk-codegen/commit/7421d4313b09d828e03b5c9c04abd5f2b6c90ae6))
+
+## [25.0.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.20.1...sdk-codegen-all-v25.0.0) (2025-01-13)
+
+* The `content-validation` endpoint and associated method has a breaking
+  change for at least some languages, notably TypeScript. The passed
+  parameters have changed.
+
+
+### Features
+
+* generate SDKs for Looker 25.0 ([#1558](https://github.com/looker-open-source/sdk-codegen/issues/1558)) ([56502e5](https://github.com/looker-open-source/sdk-codegen/commit/56502e5535155c3e8007781b15a46b5927f2a825))
+
+
+### Bug Fixes
+
+* Improve ok() helper function ([#1542](https://github.com/looker-open-source/sdk-codegen/issues/1542)) ([7b15f90](https://github.com/looker-open-source/sdk-codegen/commit/7b15f9002a263799c04d92d6278e4c4764b53e47))
+
+## [24.20.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.20.0...sdk-codegen-all-v24.20.1) (2024-12-02)
+
+
+### Bug Fixes
+
+* Improve error handling in Transport.kt ([#1540](https://github.com/looker-open-source/sdk-codegen/issues/1540)) ([a091549](https://github.com/looker-open-source/sdk-codegen/commit/a091549945b0c1604cfe41be9aac6fdfb080719f))
+
 ## [24.20.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v24.18.1...sdk-codegen-all-v24.20.0) (2024-11-07)
 
 

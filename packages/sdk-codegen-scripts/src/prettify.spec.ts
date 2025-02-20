@@ -24,6 +24,7 @@
 
  */
 
+// eslint-disable @looker/license-header
 import { prettify } from './prettify';
 
 describe('prettify', () => {

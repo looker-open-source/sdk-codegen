@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2022 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -84,6 +84,7 @@ export const ApiConfigSection = (
     throw new Error(`No section named "${section}" was found`);
   }
   if (settings.api_version) {
+    // eslint-disable-next-line no-console
     console.warn(
       'api_version is no longer read from a configuration file by the SDK'
     );

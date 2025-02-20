@@ -25,7 +25,7 @@
  */
 
 /**
- * 411 API models: 259 Spec, 69 Request, 61 Write, 22 Enum
+ * 413 API models: 259 Spec, 70 Request, 62 Write, 22 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl';
@@ -1590,7 +1590,7 @@ export interface ICreateQueryTask {
    */
   query_id: string | null;
   /**
-   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
+   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "odc".
    */
   result_format: ResultFormat | null;
   /**
@@ -2780,6 +2780,10 @@ export interface IDBConnection {
    */
   pdts_enabled?: boolean;
   /**
+   * JDBC driver version name
+   */
+  named_driver_version?: string | null;
+  /**
    * Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.
    */
   host?: string | null;
@@ -2855,6 +2859,10 @@ export interface IDBConnection {
    * Name of temporary database (if used)
    */
   tmp_db_name?: string | null;
+  /**
+   * Name of temporary host (if used)
+   */
+  tmp_db_host?: string | null;
   /**
    * Additional params to add to JDBC connection string
    */
@@ -2984,6 +2992,10 @@ export interface IDBConnection {
    * The name of P4SA service account that is associated with the Looker instance (read-only)
    */
   p4sa_name?: string | null;
+  /**
+   * Disable query holding for this connection.
+   */
+  query_holding_disabled?: boolean;
 }
 
 export interface IDBConnectionBase {
@@ -3403,6 +3415,10 @@ export interface IEmbedConfig {
    * When true, removes navigation to Looks from embedded dashboards and explores.
    */
   hide_look_navigation?: boolean;
+  /**
+   * True if embedding is licensed for this Looker instance. (read-only)
+   */
+  embed_enabled?: boolean;
 }
 
 export interface IEmbedCookielessSessionAcquire {
@@ -7757,6 +7773,18 @@ export interface IRequestAllLookmlModels {
    * Number of results to skip before returning any. (Defaults to 0 if not set when limit is used)
    */
   offset?: number | null;
+  /**
+   * Whether or not to exclude models with no explores from the response (Defaults to false)
+   */
+  exclude_empty?: boolean | null;
+  /**
+   * Whether or not to exclude hidden explores from the response (Defaults to false)
+   */
+  exclude_hidden?: boolean | null;
+  /**
+   * Whether or not to include built-in models such as System Activity (Defaults to false)
+   */
+  include_internal?: boolean | null;
 }
 
 /**
@@ -8057,6 +8085,24 @@ export interface IRequestContentThumbnail {
    * The height of the image if format is supplied
    */
   height?: number | null;
+}
+
+/**
+ * Dynamically generated request type for content_validation
+ */
+export interface IRequestContentValidation {
+  /**
+   * Requested fields.
+   */
+  fields?: string | null;
+  /**
+   * Optional list of project names to filter by
+   */
+  project_names?: DelimArray<string> | null;
+  /**
+   * Optional list of space ids to filter by
+   */
+  space_ids?: DelimArray<string> | null;
 }
 
 /**
@@ -8467,6 +8513,10 @@ export interface IRequestRunInlineQuery {
    * Perform table calculations on query results
    */
   server_table_calcs?: boolean | null;
+  /**
+   * Return a specialized OAuth error response if a database OAuth error occurs.
+   */
+  enable_oauth_error_response?: boolean | null;
 }
 
 /**
@@ -8617,6 +8667,10 @@ export interface IRequestRunQuery {
    * Specifies the source of this call.
    */
   source?: string | null;
+  /**
+   * Return a specialized OAuth error response if a database OAuth error occurs.
+   */
+  enable_oauth_error_response?: boolean | null;
 }
 
 /**
@@ -9960,7 +10014,7 @@ export interface IRequestUserRoles {
 }
 
 /**
- * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql". (Enum defined in CreateQueryTask)
+ * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "odc". (Enum defined in CreateQueryTask)
  */
 export enum ResultFormat {
   inline_json = 'inline_json',
@@ -9975,6 +10029,7 @@ export enum ResultFormat {
   xlsx = 'xlsx',
   gsxml = 'gsxml',
   sql = 'sql',
+  odc = 'odc',
 }
 
 export interface IResultMakerFilterables {
@@ -10936,6 +10991,10 @@ export interface ISetting {
    * Minimum time interval for dashboard element automatic refresh. Examples: (30 seconds, 1 minute)
    */
   dashboard_auto_refresh_minimum_interval?: string | null;
+  /**
+   * URI pointing to the location of a private root certificate in Secret Manager
+   */
+  managed_certificate_uri?: string | null;
 }
 
 export interface ISmtpNodeStatus {
@@ -12453,7 +12512,7 @@ export interface IWriteCreateQueryTask {
    */
   query_id: string | null;
   /**
-   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".
+   * Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "odc".
    */
   result_format: ResultFormat | null;
   /**
@@ -12849,6 +12908,10 @@ export interface IWriteDBConnection {
    */
   name?: string;
   /**
+   * JDBC driver version name
+   */
+  named_driver_version?: string | null;
+  /**
    * Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.
    */
   host?: string | null;
@@ -12916,6 +12979,10 @@ export interface IWriteDBConnection {
    * Name of temporary database (if used)
    */
   tmp_db_name?: string | null;
+  /**
+   * Name of temporary host (if used)
+   */
+  tmp_db_host?: string | null;
   /**
    * Additional params to add to JDBC connection string
    */
@@ -13013,6 +13080,10 @@ export interface IWriteDBConnection {
    * When true, represents that all project roles have been verified.
    */
   bq_roles_verified?: boolean | null;
+  /**
+   * Disable query holding for this connection.
+   */
+  query_holding_disabled?: boolean;
 }
 
 /**
@@ -13064,6 +13135,57 @@ export interface IWriteDBConnectionOverride {
    * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
    */
   after_connect_statements?: string | null;
+}
+
+/**
+ * Dynamic writeable type for EmbedConfig removes:
+ * embed_enabled
+ */
+export interface IWriteEmbedConfig {
+  /**
+   * List of domains to allow for embedding
+   */
+  domain_allowlist?: string[] | null;
+  /**
+   * List of base urls to allow for alert/schedule
+   */
+  alert_url_allowlist?: string[] | null;
+  /**
+   * Owner of who defines the alert/schedule params on the base url
+   */
+  alert_url_param_owner?: string | null;
+  /**
+   * Label for the alert/schedule url
+   */
+  alert_url_label?: string | null;
+  /**
+   * Is SSO embedding enabled for this Looker
+   */
+  sso_auth_enabled?: boolean;
+  /**
+   * Is Cookieless embedding enabled for this Looker
+   */
+  embed_cookieless_v2?: boolean;
+  /**
+   * Is embed content navigation enabled for this looker
+   */
+  embed_content_navigation?: boolean;
+  /**
+   * Is embed content management enabled for this Looker
+   */
+  embed_content_management?: boolean;
+  /**
+   * When true, prohibits the use of Looker login pages in non-Looker iframes. When false, Looker login pages may be used in non-Looker hosted iframes.
+   */
+  strict_sameorigin_for_login?: boolean;
+  /**
+   * When true, filters are enabled on embedded Looks
+   */
+  look_filters?: boolean;
+  /**
+   * When true, removes navigation to Looks from embedded dashboards and explores.
+   */
+  hide_look_navigation?: boolean;
 }
 
 /**
@@ -14283,7 +14405,11 @@ export interface IWriteSetting {
    * (DEPRECATED) Use embed_config.embed_cookieless_v2 instead. If embed_config.embed_cookieless_v2 is specified, it overrides this value.
    */
   embed_cookieless_v2?: boolean;
-  embed_config?: IEmbedConfig | null;
+  /**
+   * Dynamic writeable type for EmbedConfig removes:
+   * embed_enabled
+   */
+  embed_config?: IWriteEmbedConfig | null;
   /**
    * Toggle Dashboard Auto Refresh restriction
    */
@@ -14292,6 +14418,10 @@ export interface IWriteSetting {
    * Minimum time interval for dashboard element automatic refresh. Examples: (30 seconds, 1 minute)
    */
   dashboard_auto_refresh_minimum_interval?: string | null;
+  /**
+   * URI pointing to the location of a private root certificate in Secret Manager
+   */
+  managed_certificate_uri?: string | null;
 }
 
 /**

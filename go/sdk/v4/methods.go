@@ -495,7 +495,7 @@ func (l *LookerSDK) UpdateArtifacts(
 //
 // The value of the `secret` field will be set by Looker and returned.
 //
-// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+// **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
 //
 // POST /embed_config/secrets -> EmbedSecret
 func (l *LookerSDK) CreateEmbedSecret(
@@ -509,7 +509,7 @@ func (l *LookerSDK) CreateEmbedSecret(
 
 // ### Delete an embed secret.
 //
-// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+// **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
 //
 // DELETE /embed_config/secrets/{embed_secret_id} -> string
 func (l *LookerSDK) DeleteEmbedSecret(
@@ -564,7 +564,7 @@ func (l *LookerSDK) DeleteEmbedSecret(
 // it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
 // encrypted transport.
 //
-// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+// **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
 //
 // POST /embed/sso_url -> EmbedUrlResponse
 func (l *LookerSDK) CreateSsoEmbedUrl(
@@ -602,7 +602,7 @@ func (l *LookerSDK) CreateSsoEmbedUrl(
 // it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
 // encrypted transport.
 //
-// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+// **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
 //
 // POST /embed/token_url/me -> EmbedUrlResponse
 func (l *LookerSDK) CreateEmbedUrlAsMe(
@@ -657,7 +657,7 @@ func (l *LookerSDK) ValidateEmbedUrl(
 //   - Navigation token - lives for 10 minutes. The Looker client will ask for this token once it is loaded into
 //     the iframe.
 //
-// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+// **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
 //
 // POST /embed/cookieless_session/acquire -> EmbedCookielessSessionAcquireResponse
 func (l *LookerSDK) AcquireEmbedCookielessSession(
@@ -675,7 +675,7 @@ func (l *LookerSDK) AcquireEmbedCookielessSession(
 // in the session and session reference data being cleared from the system. This endpoint can be used to log an embed
 // user out of the Looker instance.
 //
-// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+// **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
 //
 // DELETE /embed/cookieless_session/{session_reference_token} -> string
 func (l *LookerSDK) DeleteEmbedCookielessSession(
@@ -703,7 +703,7 @@ func (l *LookerSDK) DeleteEmbedCookielessSession(
 // the session time to live in the `session_reference_token_ttl` response property. If this property
 // contains a zero, the embed session has expired.
 //
-// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+// **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
 //
 // PUT /embed/cookieless_session/generate_tokens -> EmbedCookielessSessionGenerateTokensResponse
 func (l *LookerSDK) GenerateTokensForCookielessSession(
@@ -2117,6 +2117,7 @@ func (l *LookerSDK) MobileSettings(
 //   - extension_framework_enabled
 //   - extension_load_url_enabled
 //   - instance_config
+//   - managed_certificate_uri
 //   - marketplace_auto_install_enabled
 //   - marketplace_automation
 //   - marketplace_terms_accepted
@@ -2152,6 +2153,7 @@ func (l *LookerSDK) GetSetting(
 //   - extension_framework_enabled
 //   - extension_load_url_enabled
 //   - instance_config
+//   - managed_certificate_uri
 //   - marketplace_auto_install_enabled
 //   - marketplace_automation
 //   - marketplace_terms_accepted
@@ -2867,11 +2869,10 @@ func (l *LookerSDK) ContentThumbnail(request RequestContentThumbnail,
 // Returns a list of errors found as well as metadata about the content validation run.
 //
 // GET /content_validation -> ContentValidation
-func (l *LookerSDK) ContentValidation(
-	fields string,
+func (l *LookerSDK) ContentValidation(request RequestContentValidation,
 	options *rtl.ApiSettings) (ContentValidation, error) {
 	var result ContentValidation
-	err := l.session.Do(&result, "GET", "/4.0", "/content_validation", map[string]interface{}{"fields": fields}, nil, options)
+	err := l.session.Do(&result, "GET", "/4.0", "/content_validation", map[string]interface{}{"fields": request.Fields, "project_names": request.ProjectNames, "space_ids": request.SpaceIds}, nil, options)
 	return result, err
 
 }
@@ -4513,7 +4514,7 @@ func (l *LookerSDK) MoveLook(
 func (l *LookerSDK) AllLookmlModels(request RequestAllLookmlModels,
 	options *rtl.ApiSettings) ([]LookmlModel, error) {
 	var result []LookmlModel
-	err := l.session.Do(&result, "GET", "/4.0", "/lookml_models", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset}, nil, options)
+	err := l.session.Do(&result, "GET", "/4.0", "/lookml_models", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "exclude_empty": request.ExcludeEmpty, "exclude_hidden": request.ExcludeHidden, "include_internal": request.IncludeInternal}, nil, options)
 	return result, err
 
 }
@@ -5385,7 +5386,7 @@ func (l *LookerSDK) QueryTask(
 //
 // Returns the results of an async query task if the query has completed.
 //
-// If the query task is still running or waiting to run, this function returns 204 No Content.
+// If the query task is still running or waiting to run, this function returns 202 Accepted.
 //
 // If the query task ID is invalid or the cached results of the query task have expired, this function returns 404 Not Found.
 //
@@ -5527,7 +5528,7 @@ func (l *LookerSDK) RunQuery(request RequestRunQuery,
 	request.QueryId = url.PathEscape(request.QueryId)
 	request.ResultFormat = url.PathEscape(request.ResultFormat)
 	var result string
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/queries/%v/run/%v", request.QueryId, request.ResultFormat), map[string]interface{}{"limit": request.Limit, "apply_formatting": request.ApplyFormatting, "apply_vis": request.ApplyVis, "cache": request.Cache, "image_width": request.ImageWidth, "image_height": request.ImageHeight, "generate_drill_links": request.GenerateDrillLinks, "force_production": request.ForceProduction, "cache_only": request.CacheOnly, "path_prefix": request.PathPrefix, "rebuild_pdts": request.RebuildPdts, "server_table_calcs": request.ServerTableCalcs, "source": request.Source}, nil, options)
+	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/queries/%v/run/%v", request.QueryId, request.ResultFormat), map[string]interface{}{"limit": request.Limit, "apply_formatting": request.ApplyFormatting, "apply_vis": request.ApplyVis, "cache": request.Cache, "image_width": request.ImageWidth, "image_height": request.ImageHeight, "generate_drill_links": request.GenerateDrillLinks, "force_production": request.ForceProduction, "cache_only": request.CacheOnly, "path_prefix": request.PathPrefix, "rebuild_pdts": request.RebuildPdts, "server_table_calcs": request.ServerTableCalcs, "source": request.Source, "enable_oauth_error_response": request.EnableOauthErrorResponse}, nil, options)
 	return result, err
 
 }
@@ -5595,7 +5596,7 @@ func (l *LookerSDK) RunInlineQuery(request RequestRunInlineQuery,
 	options *rtl.ApiSettings) (string, error) {
 	request.ResultFormat = url.PathEscape(request.ResultFormat)
 	var result string
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/queries/run/%v", request.ResultFormat), map[string]interface{}{"limit": request.Limit, "apply_formatting": request.ApplyFormatting, "apply_vis": request.ApplyVis, "cache": request.Cache, "image_width": request.ImageWidth, "image_height": request.ImageHeight, "generate_drill_links": request.GenerateDrillLinks, "force_production": request.ForceProduction, "cache_only": request.CacheOnly, "path_prefix": request.PathPrefix, "rebuild_pdts": request.RebuildPdts, "server_table_calcs": request.ServerTableCalcs}, request.Body, options)
+	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/queries/run/%v", request.ResultFormat), map[string]interface{}{"limit": request.Limit, "apply_formatting": request.ApplyFormatting, "apply_vis": request.ApplyVis, "cache": request.Cache, "image_width": request.ImageWidth, "image_height": request.ImageHeight, "generate_drill_links": request.GenerateDrillLinks, "force_production": request.ForceProduction, "cache_only": request.CacheOnly, "path_prefix": request.PathPrefix, "rebuild_pdts": request.RebuildPdts, "server_table_calcs": request.ServerTableCalcs, "enable_oauth_error_response": request.EnableOauthErrorResponse}, request.Body, options)
 	return result, err
 
 }
@@ -7580,7 +7581,7 @@ func (l *LookerSDK) CreateUserCredentialsApi3(
 
 // ### Embed login information for the specified user.
 //
-// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+// **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
 //
 // GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> CredentialsEmbed
 func (l *LookerSDK) UserCredentialsEmbed(
@@ -7598,7 +7599,7 @@ func (l *LookerSDK) UserCredentialsEmbed(
 
 // ### Embed login information for the specified user.
 //
-// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+// **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
 //
 // DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> string
 func (l *LookerSDK) DeleteUserCredentialsEmbed(
@@ -7615,7 +7616,7 @@ func (l *LookerSDK) DeleteUserCredentialsEmbed(
 
 // ### Embed login information for the specified user.
 //
-// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+// **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
 //
 // GET /users/{user_id}/credentials_embed -> []CredentialsEmbed
 func (l *LookerSDK) AllUserCredentialsEmbeds(
@@ -7871,7 +7872,7 @@ func (l *LookerSDK) WipeoutUserEmails(
 
 // Create an embed user from an external user ID
 //
-// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+// **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
 //
 // POST /users/embed_user -> UserPublic
 func (l *LookerSDK) CreateEmbedUser(

@@ -27,5 +27,6 @@
 import { registerApp } from './utils';
 (async () => {
   const result = await registerApp();
+  /* eslint-disable no-console */
   console.log(result);
 })();

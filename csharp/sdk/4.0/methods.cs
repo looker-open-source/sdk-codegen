@@ -615,7 +615,7 @@ namespace Looker.SDK.API40
   ///
   /// The value of the `secret` field will be set by Looker and returned.
   ///
-  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+  /// **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
   ///
   /// POST /embed_config/secrets -> EmbedSecret
   ///
@@ -630,7 +630,7 @@ namespace Looker.SDK.API40
 
   /// ### Delete an embed secret.
   ///
-  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+  /// **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
   ///
   /// DELETE /embed_config/secrets/{embed_secret_id} -> string
   ///
@@ -688,7 +688,7 @@ namespace Looker.SDK.API40
   /// encrypted transport.
   ///
   ///
-  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+  /// **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
   ///
   /// POST /embed/sso_url -> EmbedUrlResponse
   ///
@@ -728,7 +728,7 @@ namespace Looker.SDK.API40
   /// encrypted transport.
   ///
   ///
-  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+  /// **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
   ///
   /// POST /embed/token_url/me -> EmbedUrlResponse
   ///
@@ -787,7 +787,7 @@ namespace Looker.SDK.API40
   /// - Navigation token - lives for 10 minutes. The Looker client will ask for this token once it is loaded into
   ///   the iframe.
   ///
-  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+  /// **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
   ///
   /// POST /embed/cookieless_session/acquire -> EmbedCookielessSessionAcquireResponse
   ///
@@ -806,7 +806,7 @@ namespace Looker.SDK.API40
   /// in the session and session reference data being cleared from the system. This endpoint can be used to log an embed
   /// user out of the Looker instance.
   ///
-  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+  /// **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
   ///
   /// DELETE /embed/cookieless_session/{session_reference_token} -> string
   ///
@@ -836,7 +836,7 @@ namespace Looker.SDK.API40
   /// the session time to live in the `session_reference_token_ttl` response property. If this property
   /// contains a zero, the embed session has expired.
   ///
-  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+  /// **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
   ///
   /// PUT /embed/cookieless_session/generate_tokens -> EmbedCookielessSessionGenerateTokensResponse
   ///
@@ -2504,6 +2504,7 @@ namespace Looker.SDK.API40
   ///  - extension_framework_enabled
   ///  - extension_load_url_enabled
   ///  - instance_config
+  ///  - managed_certificate_uri
   ///  - marketplace_auto_install_enabled
   ///  - marketplace_automation
   ///  - marketplace_terms_accepted
@@ -2542,6 +2543,7 @@ namespace Looker.SDK.API40
   ///  - extension_framework_enabled
   ///  - extension_load_url_enabled
   ///  - instance_config
+  ///  - managed_certificate_uri
   ///  - marketplace_auto_install_enabled
   ///  - marketplace_automation
   ///  - marketplace_terms_accepted
@@ -3468,12 +3470,18 @@ namespace Looker.SDK.API40
   /// <returns><c>ContentValidation</c> Content validation results (application/json)</returns>
   ///
   /// <param name="fields">Requested fields.</param>
+  /// <param name="project_names">Optional list of project names to filter by</param>
+  /// <param name="space_ids">Optional list of space ids to filter by</param>
   public async Task<SdkResponse<ContentValidation, Exception>> content_validation(
     string? fields = null,
+    DelimArray<string>? project_names = null,
+    DelimArray<string>? space_ids = null,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<ContentValidation, Exception>(HttpMethod.Get, "/content_validation", new Values {
-      { "fields", fields }},null,options);
+      { "fields", fields },
+      { "project_names", project_names },
+      { "space_ids", space_ids }},null,options);
   }
 
   /// ### Search Content Views
@@ -5839,16 +5847,25 @@ namespace Looker.SDK.API40
   /// <param name="fields">Requested fields.</param>
   /// <param name="limit">Number of results to return. (can be used with offset)</param>
   /// <param name="offset">Number of results to skip before returning any. (Defaults to 0 if not set when limit is used)</param>
+  /// <param name="exclude_empty">Whether or not to exclude models with no explores from the response (Defaults to false)</param>
+  /// <param name="exclude_hidden">Whether or not to exclude hidden explores from the response (Defaults to false)</param>
+  /// <param name="include_internal">Whether or not to include built-in models such as System Activity (Defaults to false)</param>
   public async Task<SdkResponse<LookmlModel[], Exception>> all_lookml_models(
     string? fields = null,
     long? limit = null,
     long? offset = null,
+    bool? exclude_empty = null,
+    bool? exclude_hidden = null,
+    bool? include_internal = null,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<LookmlModel[], Exception>(HttpMethod.Get, "/lookml_models", new Values {
       { "fields", fields },
       { "limit", limit },
-      { "offset", offset }},null,options);
+      { "offset", offset },
+      { "exclude_empty", exclude_empty },
+      { "exclude_hidden", exclude_hidden },
+      { "include_internal", include_internal }},null,options);
   }
 
   /// ### Create a lookml model using the specified configuration.
@@ -7013,7 +7030,7 @@ namespace Looker.SDK.API40
   ///
   /// Returns the results of an async query task if the query has completed.
   ///
-  /// If the query task is still running or waiting to run, this function returns 204 No Content.
+  /// If the query task is still running or waiting to run, this function returns 202 Accepted.
   ///
   /// If the query task ID is invalid or the cached results of the query task have expired, this function returns 404 Not Found.
   ///
@@ -7038,8 +7055,6 @@ namespace Looker.SDK.API40
   /// <returns>
   /// <c>string</c> The query results. (text)
   /// <c>string</c> The query results. (application/json)
-  /// <c>string</c> The query is not finished (text)
-  /// <c>string</c> The query is not finished (application/json)
   /// </returns>
   ///
   /// <param name="query_task_id">ID of the Query Task</param>
@@ -7191,6 +7206,7 @@ namespace Looker.SDK.API40
   /// <param name="rebuild_pdts">Rebuild PDTS used in query.</param>
   /// <param name="server_table_calcs">Perform table calculations on query results</param>
   /// <param name="source">Specifies the source of this call.</param>
+  /// <param name="enable_oauth_error_response">Return a specialized OAuth error response if a database OAuth error occurs.</param>
   public async Task<SdkResponse<TSuccess, Exception>> run_query<TSuccess>(
     string query_id,
     string result_format,
@@ -7207,6 +7223,7 @@ namespace Looker.SDK.API40
     bool? rebuild_pdts = null,
     bool? server_table_calcs = null,
     string? source = null,
+    bool? enable_oauth_error_response = null,
     ITransportSettings? options = null) where TSuccess : class
 {  
       query_id = SdkUtils.EncodeParam(query_id);
@@ -7224,7 +7241,8 @@ namespace Looker.SDK.API40
       { "path_prefix", path_prefix },
       { "rebuild_pdts", rebuild_pdts },
       { "server_table_calcs", server_table_calcs },
-      { "source", source }},null,options);
+      { "source", source },
+      { "enable_oauth_error_response", enable_oauth_error_response }},null,options);
   }
 
   /// ### Run the query that is specified inline in the posted body.
@@ -7303,6 +7321,7 @@ namespace Looker.SDK.API40
   /// <param name="path_prefix">Prefix to use for drill links (url encoded).</param>
   /// <param name="rebuild_pdts">Rebuild PDTS used in query.</param>
   /// <param name="server_table_calcs">Perform table calculations on query results</param>
+  /// <param name="enable_oauth_error_response">Return a specialized OAuth error response if a database OAuth error occurs.</param>
   public async Task<SdkResponse<TSuccess, Exception>> run_inline_query<TSuccess>(
     string result_format,
     WriteQuery body,
@@ -7318,6 +7337,7 @@ namespace Looker.SDK.API40
     string? path_prefix = null,
     bool? rebuild_pdts = null,
     bool? server_table_calcs = null,
+    bool? enable_oauth_error_response = null,
     ITransportSettings? options = null) where TSuccess : class
 {  
       result_format = SdkUtils.EncodeParam(result_format);
@@ -7333,7 +7353,8 @@ namespace Looker.SDK.API40
       { "cache_only", cache_only },
       { "path_prefix", path_prefix },
       { "rebuild_pdts", rebuild_pdts },
-      { "server_table_calcs", server_table_calcs }},body,options);
+      { "server_table_calcs", server_table_calcs },
+      { "enable_oauth_error_response", enable_oauth_error_response }},body,options);
   }
 
   /// ### Run an URL encoded query.
@@ -7535,7 +7556,7 @@ namespace Looker.SDK.API40
   /// </returns>
   ///
   /// <param name="slug">slug of query</param>
-  /// <param name="result_format">Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "json_label"]</param>
+  /// <param name="result_format">Format of result, options are: ["inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "odc", "json_label"]</param>
   /// <param name="download">Defaults to false. If set to true, the HTTP response will have content-disposition and other headers set to make the HTTP response behave as a downloadable attachment instead of as inline content.</param>
   public async Task<SdkResponse<TSuccess, Exception>> run_sql_query<TSuccess>(
     string slug,
@@ -10000,7 +10021,7 @@ namespace Looker.SDK.API40
 
   /// ### Embed login information for the specified user.
   ///
-  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+  /// **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
   ///
   /// GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> CredentialsEmbed
   ///
@@ -10023,7 +10044,7 @@ namespace Looker.SDK.API40
 
   /// ### Embed login information for the specified user.
   ///
-  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+  /// **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
   ///
   /// DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> string
   ///
@@ -10043,7 +10064,7 @@ namespace Looker.SDK.API40
 
   /// ### Embed login information for the specified user.
   ///
-  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+  /// **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
   ///
   /// GET /users/{user_id}/credentials_embed -> CredentialsEmbed[]
   ///
@@ -10373,7 +10394,7 @@ namespace Looker.SDK.API40
 
   /// Create an embed user from an external user ID
   ///
-  /// Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled
+  /// **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
   ///
   /// POST /users/embed_user -> UserPublic
   ///

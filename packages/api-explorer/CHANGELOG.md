@@ -284,6 +284,53 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     * @looker/sdk-codegen-scripts bumped from 21.5.26 to 21.5.27
     * @looker/sdk-node bumped from 24.18.1 to 24.20.0
 
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from 0.1.37 to 0.1.38
+    * @looker/extension-utils bumped from 0.1.47 to 0.1.48
+    * @looker/run-it bumped from 0.9.70 to 0.9.71
+    * @looker/sdk bumped from 24.20.0 to 25.0.0
+    * @looker/sdk-codegen bumped from 21.9.6 to 21.9.7
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from 21.5.27 to 21.5.28
+    * @looker/sdk-node bumped from 24.20.0 to 25.0.0
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from 0.1.39 to 0.1.40
+    * @looker/extension-utils bumped from 0.1.49 to 0.1.50
+    * @looker/run-it bumped from 0.9.72 to 0.9.73
+    * @looker/sdk bumped from 25.0.1 to 25.2.0
+    * @looker/sdk-codegen bumped from 21.9.8 to 21.9.9
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from 21.5.29 to 21.5.30
+    * @looker/sdk-node bumped from 25.0.1 to 25.2.0
+
+## [0.9.72](https://github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.71...api-explorer-v0.9.72) (2025-02-06)
+
+
+### Bug Fixes
+
+* update looker TypeScript package dependencies ([#1559](https://github.com/looker-open-source/sdk-codegen/issues/1559)) ([7421d43](https://github.com/looker-open-source/sdk-codegen/commit/7421d4313b09d828e03b5c9c04abd5f2b6c90ae6))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from 0.1.38 to 0.1.39
+    * @looker/extension-utils bumped from 0.1.48 to 0.1.49
+    * @looker/run-it bumped from 0.9.71 to 0.9.72
+    * @looker/sdk bumped from 25.0.0 to 25.0.1
+    * @looker/sdk-codegen bumped from 21.9.7 to 21.9.8
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from 21.5.28 to 21.5.29
+    * @looker/sdk-node bumped from 25.0.0 to 25.0.1
+
 ## [0.9.66](https://github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.65...api-explorer-v0.9.66) (2024-09-14)
 
 

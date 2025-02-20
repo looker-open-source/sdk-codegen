@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 342 API models: 259 Spec, 0 Request, 61 Write, 22 Enum
+/// 343 API models: 259 Spec, 0 Request, 62 Write, 22 Enum
 
 #nullable enable
 using System;
@@ -987,7 +987,7 @@ public class CreateQueryTask : SdkModel
   public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>Id of query to run</summary>
   public string query_id { get; set; } = "";
-  /// <summary>Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".</summary>
+  /// <summary>Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "odc".</summary>
   [JsonConverter(typeof(StringEnumConverter))]
   public ResultFormat result_format { get; set; }
   /// <summary>Source of query task</summary>
@@ -1658,6 +1658,8 @@ public class DBConnection : SdkModel
   public Snippet[]? snippets { get; set; } = null;
   /// <summary>True if PDTs are enabled on this connection (read-only)</summary>
   public bool? pdts_enabled { get; set; } = null;
+  /// <summary>JDBC driver version name</summary>
+  public string? named_driver_version { get; set; } = null;
   /// <summary>Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.</summary>
   public string? host { get; set; } = null;
   /// <summary>Port number on server. If the connection is over an SSH tunnel, then the local port associated with the SSH tunnel.</summary>
@@ -1696,6 +1698,8 @@ public class DBConnection : SdkModel
   public bool? verify_ssl { get; set; } = null;
   /// <summary>Name of temporary database (if used)</summary>
   public string? tmp_db_name { get; set; } = null;
+  /// <summary>Name of temporary host (if used)</summary>
+  public string? tmp_db_host { get; set; } = null;
   /// <summary>Additional params to add to JDBC connection string</summary>
   public string? jdbc_additional_params { get; set; } = null;
   /// <summary>Connection Pool Timeout, in seconds</summary>
@@ -1761,6 +1765,8 @@ public class DBConnection : SdkModel
   public bool? bq_roles_verified { get; set; } = null;
   /// <summary>The name of P4SA service account that is associated with the Looker instance (read-only)</summary>
   public string? p4sa_name { get; set; } = null;
+  /// <summary>Disable query holding for this connection.</summary>
+  public bool? query_holding_disabled { get; set; } = null;
 }
 
 public class DBConnectionBase : SdkModel
@@ -2022,6 +2028,8 @@ public class EmbedConfig : SdkModel
   public bool? look_filters { get; set; } = null;
   /// <summary>When true, removes navigation to Looks from embedded dashboards and explores.</summary>
   public bool? hide_look_navigation { get; set; } = null;
+  /// <summary>True if embedding is licensed for this Looker instance. (read-only)</summary>
+  public bool? embed_enabled { get; set; } = null;
 }
 
 public class EmbedCookielessSessionAcquire : SdkModel
@@ -4448,7 +4456,7 @@ public class RepositoryCredential : SdkModel
   public bool? is_configured { get; set; } = null;
 }
 
-/// Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql". (Enum defined in CreateQueryTask)
+/// Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "odc". (Enum defined in CreateQueryTask)
 public enum ResultFormat
 {
   [EnumMember(Value = "inline_json")]
@@ -4474,7 +4482,9 @@ public enum ResultFormat
   [EnumMember(Value = "gsxml")]
   gsxml,
   [EnumMember(Value = "sql")]
-  sql
+  sql,
+  [EnumMember(Value = "odc")]
+  odc
 }
 
 public class ResultMakerFilterables : SdkModel
@@ -5023,6 +5033,8 @@ public class Setting : SdkModel
   public bool? dashboard_auto_refresh_restriction { get; set; } = null;
   /// <summary>Minimum time interval for dashboard element automatic refresh. Examples: (30 seconds, 1 minute)</summary>
   public string? dashboard_auto_refresh_minimum_interval { get; set; } = null;
+  /// <summary>URI pointing to the location of a private root certificate in Secret Manager</summary>
+  public string? managed_certificate_uri { get; set; } = null;
 }
 
 public class SmtpNodeStatus : SdkModel
@@ -5985,7 +5997,7 @@ public class WriteCreateQueryTask : SdkModel
 {
   /// <summary>Id of query to run</summary>
   public string query_id { get; set; } = "";
-  /// <summary>Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql".</summary>
+  /// <summary>Desired async query result format. Valid values are: "inline_json", "json", "json_detail", "json_fe", "json_bi", "csv", "html", "md", "txt", "xlsx", "gsxml", "sql", "odc".</summary>
   [JsonConverter(typeof(StringEnumConverter))]
   public ResultFormat result_format { get; set; }
   /// <summary>Source of query task</summary>
@@ -6222,6 +6234,8 @@ public class WriteDBConnection : SdkModel
 {
   /// <summary>Name of the connection. Also used as the unique identifier</summary>
   public string? name { get; set; } = null;
+  /// <summary>JDBC driver version name</summary>
+  public string? named_driver_version { get; set; } = null;
   /// <summary>Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.</summary>
   public string? host { get; set; } = null;
   /// <summary>Port number on server. If the connection is over an SSH tunnel, then the local port associated with the SSH tunnel.</summary>
@@ -6256,6 +6270,8 @@ public class WriteDBConnection : SdkModel
   public bool? verify_ssl { get; set; } = null;
   /// <summary>Name of temporary database (if used)</summary>
   public string? tmp_db_name { get; set; } = null;
+  /// <summary>Name of temporary host (if used)</summary>
+  public string? tmp_db_host { get; set; } = null;
   /// <summary>Additional params to add to JDBC connection string</summary>
   public string? jdbc_additional_params { get; set; } = null;
   /// <summary>Connection Pool Timeout, in seconds</summary>
@@ -6307,6 +6323,8 @@ public class WriteDBConnection : SdkModel
   public string? bq_storage_project_id { get; set; } = null;
   /// <summary>When true, represents that all project roles have been verified.</summary>
   public bool? bq_roles_verified { get; set; } = null;
+  /// <summary>Disable query holding for this connection.</summary>
+  public bool? query_holding_disabled { get; set; } = null;
 }
 
 /// Dynamic writeable type for DBConnectionOverride removes:
@@ -6335,6 +6353,34 @@ public class WriteDBConnectionOverride : SdkModel
   public string? jdbc_additional_params { get; set; } = null;
   /// <summary>SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature</summary>
   public string? after_connect_statements { get; set; } = null;
+}
+
+/// Dynamic writeable type for EmbedConfig removes:
+/// embed_enabled
+public class WriteEmbedConfig : SdkModel
+{
+  /// <summary>List of domains to allow for embedding</summary>
+  public string[]? domain_allowlist { get; set; } = null;
+  /// <summary>List of base urls to allow for alert/schedule</summary>
+  public string[]? alert_url_allowlist { get; set; } = null;
+  /// <summary>Owner of who defines the alert/schedule params on the base url</summary>
+  public string? alert_url_param_owner { get; set; } = null;
+  /// <summary>Label for the alert/schedule url</summary>
+  public string? alert_url_label { get; set; } = null;
+  /// <summary>Is SSO embedding enabled for this Looker</summary>
+  public bool? sso_auth_enabled { get; set; } = null;
+  /// <summary>Is Cookieless embedding enabled for this Looker</summary>
+  public bool? embed_cookieless_v2 { get; set; } = null;
+  /// <summary>Is embed content navigation enabled for this looker</summary>
+  public bool? embed_content_navigation { get; set; } = null;
+  /// <summary>Is embed content management enabled for this Looker</summary>
+  public bool? embed_content_management { get; set; } = null;
+  /// <summary>When true, prohibits the use of Looker login pages in non-Looker iframes. When false, Looker login pages may be used in non-Looker hosted iframes.</summary>
+  public bool? strict_sameorigin_for_login { get; set; } = null;
+  /// <summary>When true, filters are enabled on embedded Looks</summary>
+  public bool? look_filters { get; set; } = null;
+  /// <summary>When true, removes navigation to Looks from embedded dashboards and explores.</summary>
+  public bool? hide_look_navigation { get; set; } = null;
 }
 
 /// Dynamic writeable type for EmbedSecret removes:
@@ -7042,11 +7088,17 @@ public class WriteSetting : SdkModel
   public string[]? email_domain_allowlist { get; set; } = null;
   /// <summary>(DEPRECATED) Use embed_config.embed_cookieless_v2 instead. If embed_config.embed_cookieless_v2 is specified, it overrides this value.</summary>
   public bool? embed_cookieless_v2 { get; set; } = null;
-  public EmbedConfig? embed_config { get; set; }
+  /// <summary>
+  /// Dynamic writeable type for EmbedConfig removes:
+  /// embed_enabled
+  /// </summary>
+  public WriteEmbedConfig? embed_config { get; set; }
   /// <summary>Toggle Dashboard Auto Refresh restriction</summary>
   public bool? dashboard_auto_refresh_restriction { get; set; } = null;
   /// <summary>Minimum time interval for dashboard element automatic refresh. Examples: (30 seconds, 1 minute)</summary>
   public string? dashboard_auto_refresh_minimum_interval { get; set; } = null;
+  /// <summary>URI pointing to the location of a private root certificate in Secret Manager</summary>
+  public string? managed_certificate_uri { get; set; } = null;
 }
 
 /// Dynamic writeable type for SqlInterfaceQueryCreate removes:

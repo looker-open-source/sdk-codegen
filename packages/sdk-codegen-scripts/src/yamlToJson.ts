@@ -2,7 +2,7 @@
 
  MIT License
 
- Copyright (c) 2021 Looker Data Sciences, Inc.
+ Copyright (c) 2023 Looker Data Sciences, Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -28,6 +28,8 @@ import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 import { quit } from './nodeUtils';
 
+/* eslint-disable no-console */
+
 /**
  * Use this script to convert any valid YAML file to pretty-printed JSON
  */
@@ -40,7 +42,7 @@ if (args.length < 1) {
 const yamlFile = args[0];
 const jsonFile = args.length > 1 ? args[1] : yamlFile + '.json';
 
-const data = yaml.safeLoad(fs.readFileSync(yamlFile, utf8));
+const data = yaml.load(fs.readFileSync(yamlFile, utf8));
 const json = JSON.stringify(data, undefined, 2);
 fs.writeFileSync(jsonFile, json, utf8);
 console.log(`Converted ${yamlFile} to ${jsonFile}`);
