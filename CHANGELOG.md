@@ -1,5 +1,13 @@
 # Changelog
 
+## [25.2.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v25.2.0...sdk-codegen-all-v25.2.1) (2025-02-21)
+
+
+### Bug Fixes
+
+* add new generators  for the TypeScript SDK ([#1563](https://github.com/looker-open-source/sdk-codegen/issues/1563)) ([86ab782](https://github.com/looker-open-source/sdk-codegen/commit/86ab7820c4ca095be20e219c5bd19ef3bfc3f030))
+* Object of type MergeQuerySourceQuery is not JSON serializable ([#1538](https://github.com/looker-open-source/sdk-codegen/issues/1538)) ([100e3c9](https://github.com/looker-open-source/sdk-codegen/commit/100e3c9fca5f70cbe728e11513a13c89fe6550a6))
+
 ## [25.2.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v25.0.1...sdk-codegen-all-v25.2.0) (2025-02-07)
 
 
