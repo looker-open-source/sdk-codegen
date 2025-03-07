@@ -295,7 +295,7 @@ class TestMethods {
 
     @Test
     fun testAllFolders() {
-        testAll<Folder, String, Folder>(
+        testAll<FolderBase, String, FolderBase>(
             { sdk.all_folders() },
             { item -> item.id!! },
             { id, fields -> sdk.folder(id, fields) },
