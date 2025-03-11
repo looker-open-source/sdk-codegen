@@ -25,7 +25,7 @@
  */
 
 /**
- * 467 API methods
+ * 469 API methods
  */
 
 import type {
@@ -163,6 +163,7 @@ import type {
   IQuery,
   IQueryTask,
   IRenderTask,
+  IReport,
   IRepositoryCredential,
   IRequestActiveThemes,
   IRequestAlertNotifications,
@@ -223,6 +224,7 @@ import type {
   IRequestSearchLooks,
   IRequestSearchModelSets,
   IRequestSearchPermissionSets,
+  IRequestSearchReports,
   IRequestSearchRoles,
   IRequestSearchRolesWithUserCount,
   IRequestSearchScheduledPlans,
@@ -913,6 +915,7 @@ export const search_artifacts = async (
       max_size: request.max_size,
       limit: request.limit,
       offset: request.offset,
+      tally: request.tally,
     },
     null,
     options
@@ -946,6 +949,7 @@ export const artifact = async (
       fields: request.fields,
       limit: request.limit,
       offset: request.offset,
+      tally: request.tally,
     },
     null,
     options
@@ -10266,6 +10270,66 @@ export const create_dashboard_element_render_task = async (
 };
 
 //#endregion RenderTask: Manage Render Tasks
+
+//#region Report: Report
+
+/**
+ * ### Search Reports
+ *
+ * Returns an **array of Report objects** that match the specified search criteria.
+ *
+ * If multiple search params are given and `filter_or` is FALSE or not specified,
+ * search params are combined in a logical AND operation.
+ * Only rows that match *all* search param criteria will be returned.
+ *
+ * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+ * Results will include rows that match **any** of the search criteria.
+ *
+ * String search params use case-insensitive matching.
+ * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+ * example="dan%" will match "danger" and "Danzig" but not "David"
+ * example="D_m%" will match "Damage" and "dump"
+ *
+ * Integer search params can accept a single value or a comma separated list of values. The multiple
+ * values will be combined under a logical OR operation - results will match at least one of
+ * the given values.
+ *
+ * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+ * or exclude (respectively) rows where the column is null.
+ *
+ * Boolean search params accept only "true" and "false" as values.
+ *
+ * GET /reports/search -> IReport[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestSearchReports" for complex method parameters
+ * @param options one-time API call overrides
+ *
+ */
+export const search_reports = async (
+  sdk: IAPIMethods,
+  request: IRequestSearchReports,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IReport[], IError>> => {
+  return sdk.get<IReport[], IError>(
+    '/reports/search',
+    {
+      folder_id: request.folder_id,
+      favorite: request.favorite,
+      recent: request.recent,
+      id: request.id,
+      title: request.title,
+      sorts: request.sorts,
+      limit: request.limit,
+      fields: request.fields,
+      next_page_token: request.next_page_token,
+    },
+    null,
+    options
+  );
+};
+
+//#endregion Report: Report
 
 //#region Role: Manage Roles
 

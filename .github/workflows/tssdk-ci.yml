@@ -33,6 +33,9 @@ env:
   LOOKERSDK_VERIFY_SSL: false
   TS_JUNIT_OUTPUT_DIR: results/tssdk
 
+permissions:
+  checks: write
+
 jobs:
   unit:
     name: Unit - ${{ matrix.os }} / Node ${{ matrix.node-version }}

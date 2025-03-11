@@ -21,6 +21,9 @@ defaults:
     shell: bash
     working-directory: bin/looker-resources-index
 
+permissions:
+  checks: write
+
 jobs:
   analyzebuild:
     name: Analyze and Build

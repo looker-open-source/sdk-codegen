@@ -23,6 +23,9 @@ env:
   LOOKERSDK_VERIFY_SSL: false
   TOX_JUNIT_OUTPUT_DIR: results
 
+permissions:
+  checks: write
+
 jobs:
   setup:
     uses: looker-open-source/reusable-actions/.github/workflows/supported-versions.yml@main

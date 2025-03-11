@@ -19,6 +19,9 @@ on:
       - kotlin/**
       - .github/workflows/gradle.yml
 
+permissions:
+  checks: write
+
 # TODO(#1544): Also run tests
 jobs:
   build:

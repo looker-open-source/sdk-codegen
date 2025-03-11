@@ -25,7 +25,7 @@
  */
 
 /**
- * 467 API methods
+ * 469 API methods
  */
 
 
@@ -569,11 +569,15 @@ open class LookerSDKStream: APIMethods {
          * @param {Int64} offset Number of results to skip before returning any. (used with limit)
          */
         offset: Int64? = nil,
+        /**
+         * @param {Bool} tally Return the full count of results in the X-Total-Count response header. (Slight performance hit.)
+         */
+        tally: Bool? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let path_namespace = encodeParam(namespace)
         let result: SDKResponse<Data, SDKError> = self.get("/artifact/\(path_namespace)/search", 
-            ["fields": fields, "key": key, "user_ids": user_ids, "min_size": min_size, "max_size": max_size, "limit": limit, "offset": offset], nil, options)
+            ["fields": fields, "key": key, "user_ids": user_ids, "min_size": min_size, "max_size": max_size, "limit": limit, "offset": offset, "tally": tally as Any?], nil, options)
         return result
     }
 
@@ -607,11 +611,15 @@ open class LookerSDKStream: APIMethods {
          * @param {Int64} offset Number of results to skip before returning any. (used with limit)
          */
         offset: Int64? = nil,
+        /**
+         * @param {Bool} tally Return the full count of results in the X-Total-Count response header. (Slight performance hit.)
+         */
+        tally: Bool? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let path_namespace = encodeParam(namespace)
         let result: SDKResponse<Data, SDKError> = self.get("/artifact/\(path_namespace)", 
-            ["key": key, "fields": fields, "limit": limit, "offset": offset], nil, options)
+            ["key": key, "fields": fields, "limit": limit, "offset": offset, "tally": tally as Any?], nil, options)
         return result
     }
 
@@ -9082,6 +9090,82 @@ open class LookerSDKStream: APIMethods {
         let path_result_format = encodeParam(result_format)
         let result: SDKResponse<Data, SDKError> = self.post("/render_tasks/dashboard_elements/\(path_dashboard_element_id)/\(path_result_format)", 
             ["width": width, "height": height, "fields": fields], nil, options)
+        return result
+    }
+
+
+
+    // MARK Report: Report
+
+    /**
+     * ### Search Reports
+     *
+     * Returns an **array of Report objects** that match the specified search criteria.
+     *
+     * If multiple search params are given and `filter_or` is FALSE or not specified,
+     * search params are combined in a logical AND operation.
+     * Only rows that match *all* search param criteria will be returned.
+     *
+     * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+     * Results will include rows that match **any** of the search criteria.
+     *
+     * String search params use case-insensitive matching.
+     * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+     * example="dan%" will match "danger" and "Danzig" but not "David"
+     * example="D_m%" will match "Damage" and "dump"
+     *
+     * Integer search params can accept a single value or a comma separated list of values. The multiple
+     * values will be combined under a logical OR operation - results will match at least one of
+     * the given values.
+     *
+     * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+     * or exclude (respectively) rows where the column is null.
+     *
+     * Boolean search params accept only "true" and "false" as values.
+     *
+     * GET /reports/search -> [Report]
+     */
+    public func search_reports(
+        /**
+         * @param {String} folder_id Select reports in a particular folder.
+         */
+        folder_id: String? = nil,
+        /**
+         * @param {Bool} favorite Select favorite reports.
+         */
+        favorite: Bool? = nil,
+        /**
+         * @param {Bool} recent Select reports viewed recently.
+         */
+        recent: Bool? = nil,
+        /**
+         * @param {String} id Match report id.
+         */
+        id: String? = nil,
+        /**
+         * @param {String} title Match report title.
+         */
+        title: String? = nil,
+        /**
+         * @param {String} sorts One or more fields to sort results by.
+         */
+        sorts: String? = nil,
+        /**
+         * @param {Int64} limit Number of results to return.(used with next_page_token)
+         */
+        limit: Int64? = nil,
+        /**
+         * @param {String} fields Comma delimited list of field names. If provided, only the fields specified will be included in the response.
+         */
+        fields: String? = nil,
+        /**
+         * @param {String} next_page_token Contains a token that can be used to return up to Number of results to return.(used with next_page_token) additional results. A next_page_token will not be returned if there are no additional results to display.
+         */
+        next_page_token: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/reports/search", 
+            ["folder_id": folder_id, "favorite": favorite as Any?, "recent": recent as Any?, "id": id, "title": title, "sorts": sorts, "limit": limit, "fields": fields, "next_page_token": next_page_token], nil, options)
         return result
     }
 

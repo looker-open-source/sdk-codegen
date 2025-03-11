@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 467 API methods
+/// 469 API methods
 
 #nullable enable
 using System;
@@ -488,6 +488,7 @@ namespace Looker.SDK.API40
   /// <param name="max_size">Maximum storage size of the artifact</param>
   /// <param name="limit">Number of results to return. (used with offset)</param>
   /// <param name="offset">Number of results to skip before returning any. (used with limit)</param>
+  /// <param name="tally">Return the full count of results in the X-Total-Count response header. (Slight performance hit.)</param>
   public async Task<SdkResponse<Artifact[], Exception>> search_artifacts(
     string @namespace,
     string? fields = null,
@@ -497,6 +498,7 @@ namespace Looker.SDK.API40
     long? max_size = null,
     long? limit = null,
     long? offset = null,
+    bool? tally = null,
     ITransportSettings? options = null)
 {  
       namespace = SdkUtils.EncodeParam(namespace);
@@ -507,7 +509,8 @@ namespace Looker.SDK.API40
       { "min_size", min_size },
       { "max_size", max_size },
       { "limit", limit },
-      { "offset", offset }},null,options);
+      { "offset", offset },
+      { "tally", tally }},null,options);
   }
 
   /// ### Get one or more artifacts
@@ -525,12 +528,14 @@ namespace Looker.SDK.API40
   /// <param name="fields">Comma-delimited names of fields to return in responses. Omit for all fields</param>
   /// <param name="limit">Number of results to return. (used with offset)</param>
   /// <param name="offset">Number of results to skip before returning any. (used with limit)</param>
+  /// <param name="tally">Return the full count of results in the X-Total-Count response header. (Slight performance hit.)</param>
   public async Task<SdkResponse<Artifact[], Exception>> artifact(
     string @namespace,
     string key,
     string? fields = null,
     long? limit = null,
     long? offset = null,
+    bool? tally = null,
     ITransportSettings? options = null)
 {  
       namespace = SdkUtils.EncodeParam(namespace);
@@ -538,7 +543,8 @@ namespace Looker.SDK.API40
       { "key", key },
       { "fields", fields },
       { "limit", limit },
-      { "offset", offset }},null,options);
+      { "offset", offset },
+      { "tally", tally }},null,options);
   }
 
   /// ### Delete one or more artifacts
@@ -7771,6 +7777,72 @@ namespace Looker.SDK.API40
   }
 
   #endregion RenderTask: Manage Render Tasks
+
+  #region Report: Report
+
+  /// ### Search Reports
+  ///
+  /// Returns an **array of Report objects** that match the specified search criteria.
+  ///
+  /// If multiple search params are given and `filter_or` is FALSE or not specified,
+  /// search params are combined in a logical AND operation.
+  /// Only rows that match *all* search param criteria will be returned.
+  ///
+  /// If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+  /// Results will include rows that match **any** of the search criteria.
+  ///
+  /// String search params use case-insensitive matching.
+  /// String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+  /// example="dan%" will match "danger" and "Danzig" but not "David"
+  /// example="D_m%" will match "Damage" and "dump"
+  ///
+  /// Integer search params can accept a single value or a comma separated list of values. The multiple
+  /// values will be combined under a logical OR operation - results will match at least one of
+  /// the given values.
+  ///
+  /// Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+  /// or exclude (respectively) rows where the column is null.
+  ///
+  /// Boolean search params accept only "true" and "false" as values.
+  ///
+  /// GET /reports/search -> Report[]
+  ///
+  /// <returns><c>Report[]</c> returns a list of reports. (application/json)</returns>
+  ///
+  /// <param name="folder_id">Select reports in a particular folder.</param>
+  /// <param name="favorite">Select favorite reports.</param>
+  /// <param name="recent">Select reports viewed recently.</param>
+  /// <param name="id">Match report id.</param>
+  /// <param name="title">Match report title.</param>
+  /// <param name="sorts">One or more fields to sort results by.</param>
+  /// <param name="limit">Number of results to return.(used with next_page_token)</param>
+  /// <param name="fields">Comma delimited list of field names. If provided, only the fields specified will be included in the response.</param>
+  /// <param name="next_page_token">Contains a token that can be used to return up to Number of results to return.(used with next_page_token) additional results. A next_page_token will not be returned if there are no additional results to display.</param>
+  public async Task<SdkResponse<Report[], Exception>> search_reports(
+    string? folder_id = null,
+    bool? favorite = null,
+    bool? recent = null,
+    string? id = null,
+    string? title = null,
+    string? sorts = null,
+    long? limit = null,
+    string? fields = null,
+    string? next_page_token = null,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<Report[], Exception>(HttpMethod.Get, "/reports/search", new Values {
+      { "folder_id", folder_id },
+      { "favorite", favorite },
+      { "recent", recent },
+      { "id", id },
+      { "title", title },
+      { "sorts", sorts },
+      { "limit", limit },
+      { "fields", fields },
+      { "next_page_token", next_page_token }},null,options);
+  }
+
+  #endregion Report: Report
 
   #region Role: Manage Roles
 

@@ -25,7 +25,7 @@
  */
 
 /**
- * 413 API models: 259 Spec, 70 Request, 62 Write, 22 Enum
+ * 415 API models: 260 Spec, 71 Request, 62 Write, 22 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl';
@@ -2780,9 +2780,13 @@ export interface IDBConnection {
    */
   pdts_enabled?: boolean;
   /**
-   * JDBC driver version name
+   * Requested JDBC driver version name
    */
-  named_driver_version?: string | null;
+  named_driver_version_requested?: string | null;
+  /**
+   * Resolved JDBC driver version (read-only)
+   */
+  named_driver_version_actual?: string | null;
   /**
    * Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.
    */
@@ -3028,17 +3032,33 @@ export interface IDBConnectionOverride {
    */
   host?: string | null;
   /**
+   * Host name/address of server (same as host)
+   */
+  pdt_host?: string | null;
+  /**
    * Port number on server
    */
   port?: string | null;
+  /**
+   * Port number on server (same as port)
+   */
+  pdt_port?: string | null;
   /**
    * Username for server authentication
    */
   username?: string | null;
   /**
+   * Username for server authentication (same as username)
+   */
+  pdt_username?: string | null;
+  /**
    * (Write-Only) Password for server authentication
    */
   password?: string | null;
+  /**
+   * (Write-Only) Password for server authentication (same as password)
+   */
+  pdt_password?: string | null;
   /**
    * Whether or not the password is overridden in this context (read-only)
    */
@@ -3048,25 +3068,49 @@ export interface IDBConnectionOverride {
    */
   certificate?: string | null;
   /**
+   * (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect) (same as certificate).
+   */
+  pdt_certificate?: string | null;
+  /**
    * (Write-Only) Certificate keyfile type - .json or .p12
    */
   file_type?: string | null;
+  /**
+   * (Write-Only) Certificate keyfile type - .json or .p12 (same as file_type)
+   */
+  pdt_file_type?: string | null;
   /**
    * Database name
    */
   database?: string | null;
   /**
+   * Database name (same as database)
+   */
+  pdt_database?: string | null;
+  /**
    * Schema name
    */
   schema?: string | null;
+  /**
+   * Schema name (same as schema)
+   */
+  pdt_schema?: string | null;
   /**
    * Additional params to add to JDBC connection string
    */
   jdbc_additional_params?: string | null;
   /**
+   * Additional params to add to JDBC connection string (same as jdbc_additional_params)
+   */
+  pdt_jdbc_additional_params?: string | null;
+  /**
    * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
    */
   after_connect_statements?: string | null;
+  /**
+   * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature (same as after_connect_statements)
+   */
+  pdt_after_connect_statements?: string | null;
 }
 
 export interface IDBConnectionTestResult {
@@ -3236,6 +3280,14 @@ export interface IDialectInfo {
    * The name of the dialect (read-only)
    */
   name?: string | null;
+  /**
+   * The name of the driver used for this dialect (read-only)
+   */
+  supported_driver_name?: string | null;
+  /**
+   * Array of supported drivers for a given dialect (read-only)
+   */
+  supported_driver_versions?: string[] | null;
   supported_options?: IDialectInfoOptions;
 }
 
@@ -7554,6 +7606,78 @@ export interface IRenderTask {
   width?: number | null;
 }
 
+export interface IReport {
+  /**
+   * Operations the current user is able to perform on this object (read-only)
+   */
+  can?: IDictionary<boolean>;
+  /**
+   * ID of the report
+   */
+  id?: string;
+  /**
+   * Title of the report
+   */
+  title?: string | null;
+  /**
+   * User Id of the owner of the report
+   */
+  user_id?: string | null;
+  /**
+   * Created at (read-only)
+   */
+  created_at?: Date | null;
+  /**
+   * Modified at (read-only)
+   */
+  updated_at?: Date | null;
+  /**
+   * Last viewed at (read-only)
+   */
+  last_viewed_at?: Date | null;
+  /**
+   * Is favorite report
+   */
+  favorite?: boolean;
+  /**
+   * Favorite count (read-only)
+   */
+  favorite_count?: number | null;
+  /**
+   * View count (read-only)
+   */
+  view_count?: number | null;
+  folder?: IFolderBase;
+  /**
+   * Id of the folder where the report is stored
+   */
+  folder_id?: string | null;
+  /**
+   * Relative URL of the report (read-only)
+   */
+  url?: string | null;
+  /**
+   * Name of User that created the Studio Report. (read-only)
+   */
+  user_name?: string | null;
+  /**
+   * Deleted at (read-only)
+   */
+  deleted_at?: Date | null;
+  /**
+   * Last Accessed at (read-only)
+   */
+  last_accessed_at?: Date | null;
+  /**
+   * User Id of the deleter of the report (read-only)
+   */
+  deleter_user_id?: string | null;
+  /**
+   * Name of User that deleted the Report. (read-only)
+   */
+  deleter_user_name?: string | null;
+}
+
 export interface IRepositoryCredential {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -7891,6 +8015,10 @@ export interface IRequestArtifact {
    * Number of results to skip before returning any. (used with limit)
    */
   offset?: number | null;
+  /**
+   * Return the full count of results in the X-Total-Count response header. (Slight performance hit.)
+   */
+  tally?: boolean | null;
 }
 
 /**
@@ -8821,6 +8949,10 @@ export interface IRequestSearchArtifacts {
    * Number of results to skip before returning any. (used with limit)
    */
   offset?: number | null;
+  /**
+   * Return the full count of results in the X-Total-Count response header. (Slight performance hit.)
+   */
+  tally?: boolean | null;
 }
 
 /**
@@ -9541,6 +9673,48 @@ export interface IRequestSearchPermissionSets {
    * Combine given search criteria in a boolean OR expression.
    */
   filter_or?: boolean | null;
+}
+
+/**
+ * Dynamically generated request type for search_reports
+ */
+export interface IRequestSearchReports {
+  /**
+   * Select reports in a particular folder.
+   */
+  folder_id?: string | null;
+  /**
+   * Select favorite reports.
+   */
+  favorite?: boolean | null;
+  /**
+   * Select reports viewed recently.
+   */
+  recent?: boolean | null;
+  /**
+   * Match report id.
+   */
+  id?: string | null;
+  /**
+   * Match report title.
+   */
+  title?: string | null;
+  /**
+   * One or more fields to sort results by.
+   */
+  sorts?: string | null;
+  /**
+   * Number of results to return.(used with next_page_token)
+   */
+  limit?: number | null;
+  /**
+   * Comma delimited list of field names. If provided, only the fields specified will be included in the response.
+   */
+  fields?: string | null;
+  /**
+   * Contains a token that can be used to return up to Number of results to return.(used with next_page_token) additional results. A next_page_token will not be returned if there are no additional results to display.
+   */
+  next_page_token?: string | null;
 }
 
 /**
@@ -10992,9 +11166,9 @@ export interface ISetting {
    */
   dashboard_auto_refresh_minimum_interval?: string | null;
   /**
-   * URI pointing to the location of a private root certificate in Secret Manager
+   * Array of URIs pointing to the location of a root certificate in Secret Manager
    */
-  managed_certificate_uri?: string | null;
+  managed_certificate_uri?: string[] | null;
 }
 
 export interface ISmtpNodeStatus {
@@ -11770,6 +11944,10 @@ export interface IUser {
    * (Embed only) ID of user's group folder based on the external_group_id optionally specified during embed user login (read-only)
    */
   embed_group_folder_id?: string | null;
+  /**
+   * User is an IAM Admin - only available in Looker (Google Cloud core) (read-only)
+   */
+  is_iam_admin?: boolean;
   /**
    * Link to get this item (read-only)
    */
@@ -12900,7 +13078,7 @@ export interface IWriteDatagroup {
 
 /**
  * Dynamic writeable type for DBConnection removes:
- * can, dialect, snippets, pdts_enabled, uses_oauth, uses_instance_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, p4sa_name
+ * can, dialect, snippets, pdts_enabled, named_driver_version_actual, uses_oauth, uses_instance_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, p4sa_name
  */
 export interface IWriteDBConnection {
   /**
@@ -12908,9 +13086,9 @@ export interface IWriteDBConnection {
    */
   name?: string;
   /**
-   * JDBC driver version name
+   * Requested JDBC driver version name
    */
-  named_driver_version?: string | null;
+  named_driver_version_requested?: string | null;
   /**
    * Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.
    */
@@ -13100,41 +13278,81 @@ export interface IWriteDBConnectionOverride {
    */
   host?: string | null;
   /**
+   * Host name/address of server (same as host)
+   */
+  pdt_host?: string | null;
+  /**
    * Port number on server
    */
   port?: string | null;
+  /**
+   * Port number on server (same as port)
+   */
+  pdt_port?: string | null;
   /**
    * Username for server authentication
    */
   username?: string | null;
   /**
+   * Username for server authentication (same as username)
+   */
+  pdt_username?: string | null;
+  /**
    * (Write-Only) Password for server authentication
    */
   password?: string | null;
+  /**
+   * (Write-Only) Password for server authentication (same as password)
+   */
+  pdt_password?: string | null;
   /**
    * (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
    */
   certificate?: string | null;
   /**
+   * (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect) (same as certificate).
+   */
+  pdt_certificate?: string | null;
+  /**
    * (Write-Only) Certificate keyfile type - .json or .p12
    */
   file_type?: string | null;
+  /**
+   * (Write-Only) Certificate keyfile type - .json or .p12 (same as file_type)
+   */
+  pdt_file_type?: string | null;
   /**
    * Database name
    */
   database?: string | null;
   /**
+   * Database name (same as database)
+   */
+  pdt_database?: string | null;
+  /**
    * Schema name
    */
   schema?: string | null;
+  /**
+   * Schema name (same as schema)
+   */
+  pdt_schema?: string | null;
   /**
    * Additional params to add to JDBC connection string
    */
   jdbc_additional_params?: string | null;
   /**
+   * Additional params to add to JDBC connection string (same as jdbc_additional_params)
+   */
+  pdt_jdbc_additional_params?: string | null;
+  /**
    * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
    */
   after_connect_statements?: string | null;
+  /**
+   * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature (same as after_connect_statements)
+   */
+  pdt_after_connect_statements?: string | null;
 }
 
 /**
@@ -14419,9 +14637,9 @@ export interface IWriteSetting {
    */
   dashboard_auto_refresh_minimum_interval?: string | null;
   /**
-   * URI pointing to the location of a private root certificate in Secret Manager
+   * Array of URIs pointing to the location of a root certificate in Secret Manager
    */
-  managed_certificate_uri?: string | null;
+  managed_certificate_uri?: string[] | null;
 }
 
 /**
@@ -14507,7 +14725,7 @@ export interface IWriteTheme {
 
 /**
  * Dynamic writeable type for User removes:
- * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, url
+ * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, url
  */
 export interface IWriteUser {
   /**
