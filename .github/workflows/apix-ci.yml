@@ -26,6 +26,9 @@ on:
 
   workflow_dispatch:
 
+permissions:
+  checks: write
+
 env:
   TS_JUNIT_OUTPUT_DIR: results/apix
 
