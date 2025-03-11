@@ -25,7 +25,7 @@
  */
 
 /**
- * 343 API models: 259 Spec, 0 Request, 62 Write, 22 Enum
+ * 344 API models: 260 Spec, 0 Request, 62 Write, 22 Enum
  */
 
 
@@ -6995,7 +6995,8 @@ public struct DBConnection: SDKModel {
         case dialect
         case snippets
         case pdts_enabled
-        case _named_driver_version = "named_driver_version"
+        case _named_driver_version_requested = "named_driver_version_requested"
+        case _named_driver_version_actual = "named_driver_version_actual"
         case _host = "host"
         case _port = "port"
         case _username = "username"
@@ -7077,13 +7078,22 @@ public struct DBConnection: SDKModel {
      */
     public var pdts_enabled: Bool?
 
-    private var _named_driver_version: AnyString?
+    private var _named_driver_version_requested: AnyString?
     /**
-     * JDBC driver version name
+     * Requested JDBC driver version name
      */
-    public var named_driver_version: String? {
-        get { _named_driver_version?.value }
-        set { _named_driver_version = newValue.map(AnyString.init) }
+    public var named_driver_version_requested: String? {
+        get { _named_driver_version_requested?.value }
+        set { _named_driver_version_requested = newValue.map(AnyString.init) }
+    }
+
+    private var _named_driver_version_actual: AnyString?
+    /**
+     * Resolved JDBC driver version (read-only)
+     */
+    public var named_driver_version_actual: String? {
+        get { _named_driver_version_actual?.value }
+        set { _named_driver_version_actual = newValue.map(AnyString.init) }
     }
 
     private var _host: AnyString?
@@ -7485,13 +7495,14 @@ public struct DBConnection: SDKModel {
      */
     public var query_holding_disabled: Bool?
 
-    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, named_driver_version: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, uses_oauth: Bool? = nil, uses_instance_oauth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, tmp_db_host: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, supports_data_studio_link: Bool? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, default_bq_connection: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil, p4sa_name: String? = nil, query_holding_disabled: Bool? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, named_driver_version_requested: String? = nil, named_driver_version_actual: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, uses_oauth: Bool? = nil, uses_instance_oauth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, tmp_db_host: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, supports_data_studio_link: Bool? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, default_bq_connection: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil, p4sa_name: String? = nil, query_holding_disabled: Bool? = nil) {
         self.can = can
         self._name = name.map(AnyString.init)
         self.dialect = dialect
         self.snippets = snippets
         self.pdts_enabled = pdts_enabled
-        self._named_driver_version = named_driver_version.map(AnyString.init)
+        self._named_driver_version_requested = named_driver_version_requested.map(AnyString.init)
+        self._named_driver_version_actual = named_driver_version_actual.map(AnyString.init)
         self._host = host.map(AnyString.init)
         self._port = port.map(AnyString.init)
         self._username = username.map(AnyString.init)
@@ -7600,16 +7611,26 @@ public struct DBConnectionOverride: SDKModel {
     private enum CodingKeys : String, CodingKey {
         case _context = "context"
         case _host = "host"
+        case _pdt_host = "pdt_host"
         case _port = "port"
+        case _pdt_port = "pdt_port"
         case _username = "username"
+        case _pdt_username = "pdt_username"
         case _password = "password"
+        case _pdt_password = "pdt_password"
         case has_password
         case _certificate = "certificate"
+        case _pdt_certificate = "pdt_certificate"
         case _file_type = "file_type"
+        case _pdt_file_type = "pdt_file_type"
         case _database = "database"
+        case _pdt_database = "pdt_database"
         case _schema = "schema"
+        case _pdt_schema = "pdt_schema"
         case _jdbc_additional_params = "jdbc_additional_params"
+        case _pdt_jdbc_additional_params = "pdt_jdbc_additional_params"
         case _after_connect_statements = "after_connect_statements"
+        case _pdt_after_connect_statements = "pdt_after_connect_statements"
     }
     private var _context: AnyString?
     /**
@@ -7629,6 +7650,15 @@ public struct DBConnectionOverride: SDKModel {
         set { _host = newValue.map(AnyString.init) }
     }
 
+    private var _pdt_host: AnyString?
+    /**
+     * Host name/address of server (same as host)
+     */
+    public var pdt_host: String? {
+        get { _pdt_host?.value }
+        set { _pdt_host = newValue.map(AnyString.init) }
+    }
+
     private var _port: AnyString?
     /**
      * Port number on server
@@ -7636,6 +7666,15 @@ public struct DBConnectionOverride: SDKModel {
     public var port: String? {
         get { _port?.value }
         set { _port = newValue.map(AnyString.init) }
+    }
+
+    private var _pdt_port: AnyString?
+    /**
+     * Port number on server (same as port)
+     */
+    public var pdt_port: String? {
+        get { _pdt_port?.value }
+        set { _pdt_port = newValue.map(AnyString.init) }
     }
 
     private var _username: AnyString?
@@ -7647,6 +7686,15 @@ public struct DBConnectionOverride: SDKModel {
         set { _username = newValue.map(AnyString.init) }
     }
 
+    private var _pdt_username: AnyString?
+    /**
+     * Username for server authentication (same as username)
+     */
+    public var pdt_username: String? {
+        get { _pdt_username?.value }
+        set { _pdt_username = newValue.map(AnyString.init) }
+    }
+
     private var _password: AnyString?
     /**
      * (Write-Only) Password for server authentication
@@ -7654,6 +7702,15 @@ public struct DBConnectionOverride: SDKModel {
     public var password: String? {
         get { _password?.value }
         set { _password = newValue.map(AnyString.init) }
+    }
+
+    private var _pdt_password: AnyString?
+    /**
+     * (Write-Only) Password for server authentication (same as password)
+     */
+    public var pdt_password: String? {
+        get { _pdt_password?.value }
+        set { _pdt_password = newValue.map(AnyString.init) }
     }
 
     /**
@@ -7670,6 +7727,15 @@ public struct DBConnectionOverride: SDKModel {
         set { _certificate = newValue.map(AnyString.init) }
     }
 
+    private var _pdt_certificate: AnyString?
+    /**
+     * (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect) (same as certificate).
+     */
+    public var pdt_certificate: String? {
+        get { _pdt_certificate?.value }
+        set { _pdt_certificate = newValue.map(AnyString.init) }
+    }
+
     private var _file_type: AnyString?
     /**
      * (Write-Only) Certificate keyfile type - .json or .p12
@@ -7677,6 +7743,15 @@ public struct DBConnectionOverride: SDKModel {
     public var file_type: String? {
         get { _file_type?.value }
         set { _file_type = newValue.map(AnyString.init) }
+    }
+
+    private var _pdt_file_type: AnyString?
+    /**
+     * (Write-Only) Certificate keyfile type - .json or .p12 (same as file_type)
+     */
+    public var pdt_file_type: String? {
+        get { _pdt_file_type?.value }
+        set { _pdt_file_type = newValue.map(AnyString.init) }
     }
 
     private var _database: AnyString?
@@ -7688,6 +7763,15 @@ public struct DBConnectionOverride: SDKModel {
         set { _database = newValue.map(AnyString.init) }
     }
 
+    private var _pdt_database: AnyString?
+    /**
+     * Database name (same as database)
+     */
+    public var pdt_database: String? {
+        get { _pdt_database?.value }
+        set { _pdt_database = newValue.map(AnyString.init) }
+    }
+
     private var _schema: AnyString?
     /**
      * Schema name
@@ -7695,6 +7779,15 @@ public struct DBConnectionOverride: SDKModel {
     public var schema: String? {
         get { _schema?.value }
         set { _schema = newValue.map(AnyString.init) }
+    }
+
+    private var _pdt_schema: AnyString?
+    /**
+     * Schema name (same as schema)
+     */
+    public var pdt_schema: String? {
+        get { _pdt_schema?.value }
+        set { _pdt_schema = newValue.map(AnyString.init) }
     }
 
     private var _jdbc_additional_params: AnyString?
@@ -7706,6 +7799,15 @@ public struct DBConnectionOverride: SDKModel {
         set { _jdbc_additional_params = newValue.map(AnyString.init) }
     }
 
+    private var _pdt_jdbc_additional_params: AnyString?
+    /**
+     * Additional params to add to JDBC connection string (same as jdbc_additional_params)
+     */
+    public var pdt_jdbc_additional_params: String? {
+        get { _pdt_jdbc_additional_params?.value }
+        set { _pdt_jdbc_additional_params = newValue.map(AnyString.init) }
+    }
+
     private var _after_connect_statements: AnyString?
     /**
      * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
@@ -7715,19 +7817,38 @@ public struct DBConnectionOverride: SDKModel {
         set { _after_connect_statements = newValue.map(AnyString.init) }
     }
 
-    public init(context: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, has_password: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, schema: String? = nil, jdbc_additional_params: String? = nil, after_connect_statements: String? = nil) {
+    private var _pdt_after_connect_statements: AnyString?
+    /**
+     * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature (same as after_connect_statements)
+     */
+    public var pdt_after_connect_statements: String? {
+        get { _pdt_after_connect_statements?.value }
+        set { _pdt_after_connect_statements = newValue.map(AnyString.init) }
+    }
+
+    public init(context: String? = nil, host: String? = nil, pdt_host: String? = nil, port: String? = nil, pdt_port: String? = nil, username: String? = nil, pdt_username: String? = nil, password: String? = nil, pdt_password: String? = nil, has_password: Bool? = nil, certificate: String? = nil, pdt_certificate: String? = nil, file_type: String? = nil, pdt_file_type: String? = nil, database: String? = nil, pdt_database: String? = nil, schema: String? = nil, pdt_schema: String? = nil, jdbc_additional_params: String? = nil, pdt_jdbc_additional_params: String? = nil, after_connect_statements: String? = nil, pdt_after_connect_statements: String? = nil) {
         self._context = context.map(AnyString.init)
         self._host = host.map(AnyString.init)
+        self._pdt_host = pdt_host.map(AnyString.init)
         self._port = port.map(AnyString.init)
+        self._pdt_port = pdt_port.map(AnyString.init)
         self._username = username.map(AnyString.init)
+        self._pdt_username = pdt_username.map(AnyString.init)
         self._password = password.map(AnyString.init)
+        self._pdt_password = pdt_password.map(AnyString.init)
         self.has_password = has_password
         self._certificate = certificate.map(AnyString.init)
+        self._pdt_certificate = pdt_certificate.map(AnyString.init)
         self._file_type = file_type.map(AnyString.init)
+        self._pdt_file_type = pdt_file_type.map(AnyString.init)
         self._database = database.map(AnyString.init)
+        self._pdt_database = pdt_database.map(AnyString.init)
         self._schema = schema.map(AnyString.init)
+        self._pdt_schema = pdt_schema.map(AnyString.init)
         self._jdbc_additional_params = jdbc_additional_params.map(AnyString.init)
+        self._pdt_jdbc_additional_params = pdt_jdbc_additional_params.map(AnyString.init)
         self._after_connect_statements = after_connect_statements.map(AnyString.init)
+        self._pdt_after_connect_statements = pdt_after_connect_statements.map(AnyString.init)
     }
 
 }
@@ -8033,6 +8154,8 @@ public struct DialectInfo: SDKModel {
         case _label_for_database_equivalent = "label_for_database_equivalent"
         case _label_for_schema_equivalent = "label_for_schema_equivalent"
         case _name = "name"
+        case _supported_driver_name = "supported_driver_name"
+        case _supported_driver_versions = "supported_driver_versions"
         case supported_options
     }
     /**
@@ -8099,9 +8222,27 @@ public struct DialectInfo: SDKModel {
         set { _name = newValue.map(AnyString.init) }
     }
 
+    private var _supported_driver_name: AnyString?
+    /**
+     * The name of the driver used for this dialect (read-only)
+     */
+    public var supported_driver_name: String? {
+        get { _supported_driver_name?.value }
+        set { _supported_driver_name = newValue.map(AnyString.init) }
+    }
+
+    private var _supported_driver_versions: [AnyString]?
+    /**
+     * Array of supported drivers for a given dialect (read-only)
+     */
+    public var supported_driver_versions: [String]? {
+        get { if let v = _supported_driver_versions { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _supported_driver_versions = v.map { AnyString.init($0) } } else { _supported_driver_versions = nil } }
+    }
+
     public var supported_options: DialectInfoOptions?
 
-    public init(can: StringDictionary<Bool>? = nil, default_max_connections: String? = nil, default_port: String? = nil, installed: Bool? = nil, label: String? = nil, label_for_database_equivalent: String? = nil, label_for_schema_equivalent: String? = nil, name: String? = nil, supported_options: DialectInfoOptions? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, default_max_connections: String? = nil, default_port: String? = nil, installed: Bool? = nil, label: String? = nil, label_for_database_equivalent: String? = nil, label_for_schema_equivalent: String? = nil, name: String? = nil, supported_driver_name: String? = nil, supported_driver_versions: [String]? = nil, supported_options: DialectInfoOptions? = nil) {
         self.can = can
         self._default_max_connections = default_max_connections.map(AnyString.init)
         self._default_port = default_port.map(AnyString.init)
@@ -8110,6 +8251,8 @@ public struct DialectInfo: SDKModel {
         self._label_for_database_equivalent = label_for_database_equivalent.map(AnyString.init)
         self._label_for_schema_equivalent = label_for_schema_equivalent.map(AnyString.init)
         self._name = name.map(AnyString.init)
+        self._supported_driver_name = supported_driver_name.map(AnyString.init)
+        if let v = supported_driver_versions { _supported_driver_versions = v.map { AnyString.init($0) } } else { _supported_driver_versions = nil }
         self.supported_options = supported_options
     }
 
@@ -18514,6 +18657,178 @@ public struct RenderTask: SDKModel {
 
 }
 
+public struct Report: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _id = "id"
+        case _title = "title"
+        case _user_id = "user_id"
+        case created_at
+        case updated_at
+        case last_viewed_at
+        case favorite
+        case _favorite_count = "favorite_count"
+        case _view_count = "view_count"
+        case folder
+        case _folder_id = "folder_id"
+        case _url = "url"
+        case _user_name = "user_name"
+        case deleted_at
+        case last_accessed_at
+        case _deleter_user_id = "deleter_user_id"
+        case _deleter_user_name = "deleter_user_name"
+    }
+    /**
+     * Operations the current user is able to perform on this object (read-only)
+     */
+    public var can: StringDictionary<Bool>?
+
+    private var _id: AnyString?
+    /**
+     * ID of the report
+     */
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
+    private var _title: AnyString?
+    /**
+     * Title of the report
+     */
+    public var title: String? {
+        get { _title?.value }
+        set { _title = newValue.map(AnyString.init) }
+    }
+
+    private var _user_id: AnyString?
+    /**
+     * User Id of the owner of the report
+     */
+    public var user_id: String? {
+        get { _user_id?.value }
+        set { _user_id = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Created at (read-only)
+     */
+    public var created_at: Date?
+
+    /**
+     * Modified at (read-only)
+     */
+    public var updated_at: Date?
+
+    /**
+     * Last viewed at (read-only)
+     */
+    public var last_viewed_at: Date?
+
+    /**
+     * Is favorite report
+     */
+    public var favorite: Bool?
+
+    private var _favorite_count: AnyInt?
+    /**
+     * Favorite count (read-only)
+     */
+    public var favorite_count: Int64? {
+        get { _favorite_count?.value }
+        set { _favorite_count = newValue.map(AnyInt.init) }
+    }
+
+    private var _view_count: AnyInt?
+    /**
+     * View count (read-only)
+     */
+    public var view_count: Int64? {
+        get { _view_count?.value }
+        set { _view_count = newValue.map(AnyInt.init) }
+    }
+
+    public var folder: FolderBase?
+
+    private var _folder_id: AnyString?
+    /**
+     * Id of the folder where the report is stored
+     */
+    public var folder_id: String? {
+        get { _folder_id?.value }
+        set { _folder_id = newValue.map(AnyString.init) }
+    }
+
+    private var _url: AnyString?
+    /**
+     * Relative URL of the report (read-only)
+     */
+    public var url: String? {
+        get { _url?.value }
+        set { _url = newValue.map(AnyString.init) }
+    }
+
+    private var _user_name: AnyString?
+    /**
+     * Name of User that created the Studio Report. (read-only)
+     */
+    public var user_name: String? {
+        get { _user_name?.value }
+        set { _user_name = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Deleted at (read-only)
+     */
+    public var deleted_at: Date?
+
+    /**
+     * Last Accessed at (read-only)
+     */
+    public var last_accessed_at: Date?
+
+    private var _deleter_user_id: AnyString?
+    /**
+     * User Id of the deleter of the report (read-only)
+     */
+    public var deleter_user_id: String? {
+        get { _deleter_user_id?.value }
+        set { _deleter_user_id = newValue.map(AnyString.init) }
+    }
+
+    private var _deleter_user_name: AnyString?
+    /**
+     * Name of User that deleted the Report. (read-only)
+     */
+    public var deleter_user_name: String? {
+        get { _deleter_user_name?.value }
+        set { _deleter_user_name = newValue.map(AnyString.init) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, title: String? = nil, user_id: String? = nil, created_at: Date? = nil, updated_at: Date? = nil, last_viewed_at: Date? = nil, favorite: Bool? = nil, favorite_count: Int64? = nil, view_count: Int64? = nil, folder: FolderBase? = nil, folder_id: String? = nil, url: String? = nil, user_name: String? = nil, deleted_at: Date? = nil, last_accessed_at: Date? = nil, deleter_user_id: String? = nil, deleter_user_name: String? = nil) {
+        self.can = can
+        self._id = id.map(AnyString.init)
+        self._title = title.map(AnyString.init)
+        self._user_id = user_id.map(AnyString.init)
+        self.created_at = created_at
+        self.updated_at = updated_at
+        self.last_viewed_at = last_viewed_at
+        self.favorite = favorite
+        self._favorite_count = favorite_count.map(AnyInt.init)
+        self._view_count = view_count.map(AnyInt.init)
+        self.folder = folder
+        self._folder_id = folder_id.map(AnyString.init)
+        self._url = url.map(AnyString.init)
+        self._user_name = user_name.map(AnyString.init)
+        self.deleted_at = deleted_at
+        self.last_accessed_at = last_accessed_at
+        self._deleter_user_id = deleter_user_id.map(AnyString.init)
+        self._deleter_user_name = deleter_user_name.map(AnyString.init)
+    }
+
+}
+
 public struct RepositoryCredential: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -20958,16 +21273,16 @@ public struct Setting: SDKModel {
         set { _dashboard_auto_refresh_minimum_interval = newValue.map(AnyString.init) }
     }
 
-    private var _managed_certificate_uri: AnyString?
+    private var _managed_certificate_uri: [AnyString]?
     /**
-     * URI pointing to the location of a private root certificate in Secret Manager
+     * Array of URIs pointing to the location of a root certificate in Secret Manager
      */
-    public var managed_certificate_uri: String? {
-        get { _managed_certificate_uri?.value }
-        set { _managed_certificate_uri = newValue.map(AnyString.init) }
+    public var managed_certificate_uri: [String]? {
+        get { if let v = _managed_certificate_uri { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _managed_certificate_uri = v.map { AnyString.init($0) } } else { _managed_certificate_uri = nil } }
     }
 
-    public init(instance_config: InstanceConfig? = nil, extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_site: String? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_enabled: Bool? = nil, embed_config: EmbedConfig? = nil, login_notification_enabled: Bool? = nil, login_notification_text: String? = nil, dashboard_auto_refresh_restriction: Bool? = nil, dashboard_auto_refresh_minimum_interval: String? = nil, managed_certificate_uri: String? = nil) {
+    public init(instance_config: InstanceConfig? = nil, extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_site: String? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_enabled: Bool? = nil, embed_config: EmbedConfig? = nil, login_notification_enabled: Bool? = nil, login_notification_text: String? = nil, dashboard_auto_refresh_restriction: Bool? = nil, dashboard_auto_refresh_minimum_interval: String? = nil, managed_certificate_uri: [String]? = nil) {
         self.instance_config = instance_config
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
@@ -20992,7 +21307,7 @@ public struct Setting: SDKModel {
         self._login_notification_text = login_notification_text.map(AnyString.init)
         self.dashboard_auto_refresh_restriction = dashboard_auto_refresh_restriction
         self._dashboard_auto_refresh_minimum_interval = dashboard_auto_refresh_minimum_interval.map(AnyString.init)
-        self._managed_certificate_uri = managed_certificate_uri.map(AnyString.init)
+        if let v = managed_certificate_uri { _managed_certificate_uri = v.map { AnyString.init($0) } } else { _managed_certificate_uri = nil }
     }
 
 }
@@ -22587,6 +22902,7 @@ public struct User: SDKModel {
         case allow_normal_group_membership
         case allow_roles_from_normal_groups
         case _embed_group_folder_id = "embed_group_folder_id"
+        case is_iam_admin
         case _url = "url"
     }
     /**
@@ -22803,6 +23119,11 @@ public struct User: SDKModel {
         set { _embed_group_folder_id = newValue.map(AnyString.init) }
     }
 
+    /**
+     * User is an IAM Admin - only available in Looker (Google Cloud core) (read-only)
+     */
+    public var is_iam_admin: Bool?
+
     private var _url: AnyString?
     /**
      * Link to get this item (read-only)
@@ -22812,7 +23133,7 @@ public struct User: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, avatar_url: String? = nil, avatar_url_without_sizing: String? = nil, credentials_api3: [CredentialsApi3]? = nil, credentials_email: CredentialsEmail? = nil, credentials_embed: [CredentialsEmbed]? = nil, credentials_google: CredentialsGoogle? = nil, credentials_ldap: CredentialsLDAP? = nil, credentials_looker_openid: CredentialsLookerOpenid? = nil, credentials_oidc: CredentialsOIDC? = nil, credentials_saml: CredentialsSaml? = nil, credentials_totp: CredentialsTotp? = nil, display_name: String? = nil, email: String? = nil, embed_group_space_id: String? = nil, first_name: String? = nil, group_ids: [String]? = nil, home_folder_id: String? = nil, id: String? = nil, is_disabled: Bool? = nil, last_name: String? = nil, locale: String? = nil, looker_versions: [String]? = nil, models_dir_validated: Bool? = nil, personal_folder_id: String? = nil, presumed_looker_employee: Bool? = nil, role_ids: [String]? = nil, sessions: [Session]? = nil, ui_state: StringDictionary<AnyCodable>? = nil, verified_looker_employee: Bool? = nil, roles_externally_managed: Bool? = nil, allow_direct_roles: Bool? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, embed_group_folder_id: String? = nil, url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, avatar_url: String? = nil, avatar_url_without_sizing: String? = nil, credentials_api3: [CredentialsApi3]? = nil, credentials_email: CredentialsEmail? = nil, credentials_embed: [CredentialsEmbed]? = nil, credentials_google: CredentialsGoogle? = nil, credentials_ldap: CredentialsLDAP? = nil, credentials_looker_openid: CredentialsLookerOpenid? = nil, credentials_oidc: CredentialsOIDC? = nil, credentials_saml: CredentialsSaml? = nil, credentials_totp: CredentialsTotp? = nil, display_name: String? = nil, email: String? = nil, embed_group_space_id: String? = nil, first_name: String? = nil, group_ids: [String]? = nil, home_folder_id: String? = nil, id: String? = nil, is_disabled: Bool? = nil, last_name: String? = nil, locale: String? = nil, looker_versions: [String]? = nil, models_dir_validated: Bool? = nil, personal_folder_id: String? = nil, presumed_looker_employee: Bool? = nil, role_ids: [String]? = nil, sessions: [Session]? = nil, ui_state: StringDictionary<AnyCodable>? = nil, verified_looker_employee: Bool? = nil, roles_externally_managed: Bool? = nil, allow_direct_roles: Bool? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, embed_group_folder_id: String? = nil, is_iam_admin: Bool? = nil, url: String? = nil) {
         self.can = can
         self._avatar_url = avatar_url.map(AnyString.init)
         self._avatar_url_without_sizing = avatar_url_without_sizing.map(AnyString.init)
@@ -22848,6 +23169,7 @@ public struct User: SDKModel {
         self.allow_normal_group_membership = allow_normal_group_membership
         self.allow_roles_from_normal_groups = allow_roles_from_normal_groups
         self._embed_group_folder_id = embed_group_folder_id.map(AnyString.init)
+        self.is_iam_admin = is_iam_admin
         self._url = url.map(AnyString.init)
     }
 
@@ -25493,13 +25815,13 @@ public struct WriteDatagroup: SDKModel {
 
 /**
  * Dynamic writeable type for DBConnection removes:
- * can, dialect, snippets, pdts_enabled, uses_oauth, uses_instance_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, p4sa_name
+ * can, dialect, snippets, pdts_enabled, named_driver_version_actual, uses_oauth, uses_instance_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, p4sa_name
  */
 public struct WriteDBConnection: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
         case _name = "name"
-        case _named_driver_version = "named_driver_version"
+        case _named_driver_version_requested = "named_driver_version_requested"
         case _host = "host"
         case _port = "port"
         case _username = "username"
@@ -25553,13 +25875,13 @@ public struct WriteDBConnection: SDKModel {
         set { _name = newValue.map(AnyString.init) }
     }
 
-    private var _named_driver_version: AnyString?
+    private var _named_driver_version_requested: AnyString?
     /**
-     * JDBC driver version name
+     * Requested JDBC driver version name
      */
-    public var named_driver_version: String? {
-        get { _named_driver_version?.value }
-        set { _named_driver_version = newValue.map(AnyString.init) }
+    public var named_driver_version_requested: String? {
+        get { _named_driver_version_requested?.value }
+        set { _named_driver_version_requested = newValue.map(AnyString.init) }
     }
 
     private var _host: AnyString?
@@ -25890,9 +26212,9 @@ public struct WriteDBConnection: SDKModel {
      */
     public var query_holding_disabled: Bool?
 
-    public init(name: String? = nil, named_driver_version: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, tmp_db_host: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: WriteDBConnectionOverride? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil, query_holding_disabled: Bool? = nil) {
+    public init(name: String? = nil, named_driver_version_requested: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, tmp_db_host: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: WriteDBConnectionOverride? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil, query_holding_disabled: Bool? = nil) {
         self._name = name.map(AnyString.init)
-        self._named_driver_version = named_driver_version.map(AnyString.init)
+        self._named_driver_version_requested = named_driver_version_requested.map(AnyString.init)
         self._host = host.map(AnyString.init)
         self._port = port.map(AnyString.init)
         self._username = username.map(AnyString.init)
@@ -25949,15 +26271,25 @@ public struct WriteDBConnectionOverride: SDKModel {
     private enum CodingKeys : String, CodingKey {
         case _context = "context"
         case _host = "host"
+        case _pdt_host = "pdt_host"
         case _port = "port"
+        case _pdt_port = "pdt_port"
         case _username = "username"
+        case _pdt_username = "pdt_username"
         case _password = "password"
+        case _pdt_password = "pdt_password"
         case _certificate = "certificate"
+        case _pdt_certificate = "pdt_certificate"
         case _file_type = "file_type"
+        case _pdt_file_type = "pdt_file_type"
         case _database = "database"
+        case _pdt_database = "pdt_database"
         case _schema = "schema"
+        case _pdt_schema = "pdt_schema"
         case _jdbc_additional_params = "jdbc_additional_params"
+        case _pdt_jdbc_additional_params = "pdt_jdbc_additional_params"
         case _after_connect_statements = "after_connect_statements"
+        case _pdt_after_connect_statements = "pdt_after_connect_statements"
     }
     private var _context: AnyString?
     /**
@@ -25977,6 +26309,15 @@ public struct WriteDBConnectionOverride: SDKModel {
         set { _host = newValue.map(AnyString.init) }
     }
 
+    private var _pdt_host: AnyString?
+    /**
+     * Host name/address of server (same as host)
+     */
+    public var pdt_host: String? {
+        get { _pdt_host?.value }
+        set { _pdt_host = newValue.map(AnyString.init) }
+    }
+
     private var _port: AnyString?
     /**
      * Port number on server
@@ -25984,6 +26325,15 @@ public struct WriteDBConnectionOverride: SDKModel {
     public var port: String? {
         get { _port?.value }
         set { _port = newValue.map(AnyString.init) }
+    }
+
+    private var _pdt_port: AnyString?
+    /**
+     * Port number on server (same as port)
+     */
+    public var pdt_port: String? {
+        get { _pdt_port?.value }
+        set { _pdt_port = newValue.map(AnyString.init) }
     }
 
     private var _username: AnyString?
@@ -25995,6 +26345,15 @@ public struct WriteDBConnectionOverride: SDKModel {
         set { _username = newValue.map(AnyString.init) }
     }
 
+    private var _pdt_username: AnyString?
+    /**
+     * Username for server authentication (same as username)
+     */
+    public var pdt_username: String? {
+        get { _pdt_username?.value }
+        set { _pdt_username = newValue.map(AnyString.init) }
+    }
+
     private var _password: AnyString?
     /**
      * (Write-Only) Password for server authentication
@@ -26002,6 +26361,15 @@ public struct WriteDBConnectionOverride: SDKModel {
     public var password: String? {
         get { _password?.value }
         set { _password = newValue.map(AnyString.init) }
+    }
+
+    private var _pdt_password: AnyString?
+    /**
+     * (Write-Only) Password for server authentication (same as password)
+     */
+    public var pdt_password: String? {
+        get { _pdt_password?.value }
+        set { _pdt_password = newValue.map(AnyString.init) }
     }
 
     private var _certificate: AnyString?
@@ -26013,6 +26381,15 @@ public struct WriteDBConnectionOverride: SDKModel {
         set { _certificate = newValue.map(AnyString.init) }
     }
 
+    private var _pdt_certificate: AnyString?
+    /**
+     * (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect) (same as certificate).
+     */
+    public var pdt_certificate: String? {
+        get { _pdt_certificate?.value }
+        set { _pdt_certificate = newValue.map(AnyString.init) }
+    }
+
     private var _file_type: AnyString?
     /**
      * (Write-Only) Certificate keyfile type - .json or .p12
@@ -26020,6 +26397,15 @@ public struct WriteDBConnectionOverride: SDKModel {
     public var file_type: String? {
         get { _file_type?.value }
         set { _file_type = newValue.map(AnyString.init) }
+    }
+
+    private var _pdt_file_type: AnyString?
+    /**
+     * (Write-Only) Certificate keyfile type - .json or .p12 (same as file_type)
+     */
+    public var pdt_file_type: String? {
+        get { _pdt_file_type?.value }
+        set { _pdt_file_type = newValue.map(AnyString.init) }
     }
 
     private var _database: AnyString?
@@ -26031,6 +26417,15 @@ public struct WriteDBConnectionOverride: SDKModel {
         set { _database = newValue.map(AnyString.init) }
     }
 
+    private var _pdt_database: AnyString?
+    /**
+     * Database name (same as database)
+     */
+    public var pdt_database: String? {
+        get { _pdt_database?.value }
+        set { _pdt_database = newValue.map(AnyString.init) }
+    }
+
     private var _schema: AnyString?
     /**
      * Schema name
@@ -26038,6 +26433,15 @@ public struct WriteDBConnectionOverride: SDKModel {
     public var schema: String? {
         get { _schema?.value }
         set { _schema = newValue.map(AnyString.init) }
+    }
+
+    private var _pdt_schema: AnyString?
+    /**
+     * Schema name (same as schema)
+     */
+    public var pdt_schema: String? {
+        get { _pdt_schema?.value }
+        set { _pdt_schema = newValue.map(AnyString.init) }
     }
 
     private var _jdbc_additional_params: AnyString?
@@ -26049,6 +26453,15 @@ public struct WriteDBConnectionOverride: SDKModel {
         set { _jdbc_additional_params = newValue.map(AnyString.init) }
     }
 
+    private var _pdt_jdbc_additional_params: AnyString?
+    /**
+     * Additional params to add to JDBC connection string (same as jdbc_additional_params)
+     */
+    public var pdt_jdbc_additional_params: String? {
+        get { _pdt_jdbc_additional_params?.value }
+        set { _pdt_jdbc_additional_params = newValue.map(AnyString.init) }
+    }
+
     private var _after_connect_statements: AnyString?
     /**
      * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature
@@ -26058,18 +26471,37 @@ public struct WriteDBConnectionOverride: SDKModel {
         set { _after_connect_statements = newValue.map(AnyString.init) }
     }
 
-    public init(context: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, schema: String? = nil, jdbc_additional_params: String? = nil, after_connect_statements: String? = nil) {
+    private var _pdt_after_connect_statements: AnyString?
+    /**
+     * SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature (same as after_connect_statements)
+     */
+    public var pdt_after_connect_statements: String? {
+        get { _pdt_after_connect_statements?.value }
+        set { _pdt_after_connect_statements = newValue.map(AnyString.init) }
+    }
+
+    public init(context: String? = nil, host: String? = nil, pdt_host: String? = nil, port: String? = nil, pdt_port: String? = nil, username: String? = nil, pdt_username: String? = nil, password: String? = nil, pdt_password: String? = nil, certificate: String? = nil, pdt_certificate: String? = nil, file_type: String? = nil, pdt_file_type: String? = nil, database: String? = nil, pdt_database: String? = nil, schema: String? = nil, pdt_schema: String? = nil, jdbc_additional_params: String? = nil, pdt_jdbc_additional_params: String? = nil, after_connect_statements: String? = nil, pdt_after_connect_statements: String? = nil) {
         self._context = context.map(AnyString.init)
         self._host = host.map(AnyString.init)
+        self._pdt_host = pdt_host.map(AnyString.init)
         self._port = port.map(AnyString.init)
+        self._pdt_port = pdt_port.map(AnyString.init)
         self._username = username.map(AnyString.init)
+        self._pdt_username = pdt_username.map(AnyString.init)
         self._password = password.map(AnyString.init)
+        self._pdt_password = pdt_password.map(AnyString.init)
         self._certificate = certificate.map(AnyString.init)
+        self._pdt_certificate = pdt_certificate.map(AnyString.init)
         self._file_type = file_type.map(AnyString.init)
+        self._pdt_file_type = pdt_file_type.map(AnyString.init)
         self._database = database.map(AnyString.init)
+        self._pdt_database = pdt_database.map(AnyString.init)
         self._schema = schema.map(AnyString.init)
+        self._pdt_schema = pdt_schema.map(AnyString.init)
         self._jdbc_additional_params = jdbc_additional_params.map(AnyString.init)
+        self._pdt_jdbc_additional_params = pdt_jdbc_additional_params.map(AnyString.init)
         self._after_connect_statements = after_connect_statements.map(AnyString.init)
+        self._pdt_after_connect_statements = pdt_after_connect_statements.map(AnyString.init)
     }
 
 }
@@ -28928,16 +29360,16 @@ public struct WriteSetting: SDKModel {
         set { _dashboard_auto_refresh_minimum_interval = newValue.map(AnyString.init) }
     }
 
-    private var _managed_certificate_uri: AnyString?
+    private var _managed_certificate_uri: [AnyString]?
     /**
-     * URI pointing to the location of a private root certificate in Secret Manager
+     * Array of URIs pointing to the location of a root certificate in Secret Manager
      */
-    public var managed_certificate_uri: String? {
-        get { _managed_certificate_uri?.value }
-        set { _managed_certificate_uri = newValue.map(AnyString.init) }
+    public var managed_certificate_uri: [String]? {
+        get { if let v = _managed_certificate_uri { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _managed_certificate_uri = v.map { AnyString.init($0) } } else { _managed_certificate_uri = nil } }
     }
 
-    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_config: WriteEmbedConfig? = nil, dashboard_auto_refresh_restriction: Bool? = nil, dashboard_auto_refresh_minimum_interval: String? = nil, managed_certificate_uri: String? = nil) {
+    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_config: WriteEmbedConfig? = nil, dashboard_auto_refresh_restriction: Bool? = nil, dashboard_auto_refresh_minimum_interval: String? = nil, managed_certificate_uri: [String]? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
@@ -28957,7 +29389,7 @@ public struct WriteSetting: SDKModel {
         self.embed_config = embed_config
         self.dashboard_auto_refresh_restriction = dashboard_auto_refresh_restriction
         self._dashboard_auto_refresh_minimum_interval = dashboard_auto_refresh_minimum_interval.map(AnyString.init)
-        self._managed_certificate_uri = managed_certificate_uri.map(AnyString.init)
+        if let v = managed_certificate_uri { _managed_certificate_uri = v.map { AnyString.init($0) } } else { _managed_certificate_uri = nil }
     }
 
 }
@@ -29155,7 +29587,7 @@ public struct WriteTheme: SDKModel {
 
 /**
  * Dynamic writeable type for User removes:
- * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, url
+ * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, url
  */
 public struct WriteUser: SDKModel {
 

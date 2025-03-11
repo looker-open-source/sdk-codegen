@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 343 API models: 259 Spec, 0 Request, 62 Write, 22 Enum
+/// 344 API models: 260 Spec, 0 Request, 62 Write, 22 Enum
 
 #nullable enable
 using System;
@@ -1658,8 +1658,10 @@ public class DBConnection : SdkModel
   public Snippet[]? snippets { get; set; } = null;
   /// <summary>True if PDTs are enabled on this connection (read-only)</summary>
   public bool? pdts_enabled { get; set; } = null;
-  /// <summary>JDBC driver version name</summary>
-  public string? named_driver_version { get; set; } = null;
+  /// <summary>Requested JDBC driver version name</summary>
+  public string? named_driver_version_requested { get; set; } = null;
+  /// <summary>Resolved JDBC driver version (read-only)</summary>
+  public string? named_driver_version_actual { get; set; } = null;
   /// <summary>Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.</summary>
   public string? host { get; set; } = null;
   /// <summary>Port number on server. If the connection is over an SSH tunnel, then the local port associated with the SSH tunnel.</summary>
@@ -1788,26 +1790,46 @@ public class DBConnectionOverride : SdkModel
   public string? context { get; set; } = null;
   /// <summary>Host name/address of server</summary>
   public string? host { get; set; } = null;
+  /// <summary>Host name/address of server (same as host)</summary>
+  public string? pdt_host { get; set; } = null;
   /// <summary>Port number on server</summary>
   public string? port { get; set; } = null;
+  /// <summary>Port number on server (same as port)</summary>
+  public string? pdt_port { get; set; } = null;
   /// <summary>Username for server authentication</summary>
   public string? username { get; set; } = null;
+  /// <summary>Username for server authentication (same as username)</summary>
+  public string? pdt_username { get; set; } = null;
   /// <summary>(Write-Only) Password for server authentication</summary>
   public string? password { get; set; } = null;
+  /// <summary>(Write-Only) Password for server authentication (same as password)</summary>
+  public string? pdt_password { get; set; } = null;
   /// <summary>Whether or not the password is overridden in this context (read-only)</summary>
   public bool? has_password { get; set; } = null;
   /// <summary>(Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).</summary>
   public string? certificate { get; set; } = null;
+  /// <summary>(Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect) (same as certificate).</summary>
+  public string? pdt_certificate { get; set; } = null;
   /// <summary>(Write-Only) Certificate keyfile type - .json or .p12</summary>
   public string? file_type { get; set; } = null;
+  /// <summary>(Write-Only) Certificate keyfile type - .json or .p12 (same as file_type)</summary>
+  public string? pdt_file_type { get; set; } = null;
   /// <summary>Database name</summary>
   public string? database { get; set; } = null;
+  /// <summary>Database name (same as database)</summary>
+  public string? pdt_database { get; set; } = null;
   /// <summary>Schema name</summary>
   public string? schema { get; set; } = null;
+  /// <summary>Schema name (same as schema)</summary>
+  public string? pdt_schema { get; set; } = null;
   /// <summary>Additional params to add to JDBC connection string</summary>
   public string? jdbc_additional_params { get; set; } = null;
+  /// <summary>Additional params to add to JDBC connection string (same as jdbc_additional_params)</summary>
+  public string? pdt_jdbc_additional_params { get; set; } = null;
   /// <summary>SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature</summary>
   public string? after_connect_statements { get; set; } = null;
+  /// <summary>SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature (same as after_connect_statements)</summary>
+  public string? pdt_after_connect_statements { get; set; } = null;
 }
 
 public class DBConnectionTestResult : SdkModel
@@ -1923,6 +1945,10 @@ public class DialectInfo : SdkModel
   public string? label_for_schema_equivalent { get; set; } = null;
   /// <summary>The name of the dialect (read-only)</summary>
   public string? name { get; set; } = null;
+  /// <summary>The name of the driver used for this dialect (read-only)</summary>
+  public string? supported_driver_name { get; set; } = null;
+  /// <summary>Array of supported drivers for a given dialect (read-only)</summary>
+  public string[]? supported_driver_versions { get; set; } = null;
   public DialectInfoOptions? supported_options { get; set; }
 }
 
@@ -4436,6 +4462,45 @@ public class RenderTask : SdkModel
   public long? width { get; set; } = null;
 }
 
+public class Report : SdkModel
+{
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
+  public StringDictionary<bool>? can { get; set; } = null;
+  /// <summary>ID of the report</summary>
+  public string? id { get; set; } = null;
+  /// <summary>Title of the report</summary>
+  public string? title { get; set; } = null;
+  /// <summary>User Id of the owner of the report</summary>
+  public string? user_id { get; set; } = null;
+  /// <summary>Created at (read-only)</summary>
+  public DateTime? created_at { get; set; } = null;
+  /// <summary>Modified at (read-only)</summary>
+  public DateTime? updated_at { get; set; } = null;
+  /// <summary>Last viewed at (read-only)</summary>
+  public DateTime? last_viewed_at { get; set; } = null;
+  /// <summary>Is favorite report</summary>
+  public bool? favorite { get; set; } = null;
+  /// <summary>Favorite count (read-only)</summary>
+  public long? favorite_count { get; set; } = null;
+  /// <summary>View count (read-only)</summary>
+  public long? view_count { get; set; } = null;
+  public FolderBase? folder { get; set; }
+  /// <summary>Id of the folder where the report is stored</summary>
+  public string? folder_id { get; set; } = null;
+  /// <summary>Relative URL of the report (read-only)</summary>
+  public string? url { get; set; } = null;
+  /// <summary>Name of User that created the Studio Report. (read-only)</summary>
+  public string? user_name { get; set; } = null;
+  /// <summary>Deleted at (read-only)</summary>
+  public DateTime? deleted_at { get; set; } = null;
+  /// <summary>Last Accessed at (read-only)</summary>
+  public DateTime? last_accessed_at { get; set; } = null;
+  /// <summary>User Id of the deleter of the report (read-only)</summary>
+  public string? deleter_user_id { get; set; } = null;
+  /// <summary>Name of User that deleted the Report. (read-only)</summary>
+  public string? deleter_user_name { get; set; } = null;
+}
+
 public class RepositoryCredential : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
@@ -5033,8 +5098,8 @@ public class Setting : SdkModel
   public bool? dashboard_auto_refresh_restriction { get; set; } = null;
   /// <summary>Minimum time interval for dashboard element automatic refresh. Examples: (30 seconds, 1 minute)</summary>
   public string? dashboard_auto_refresh_minimum_interval { get; set; } = null;
-  /// <summary>URI pointing to the location of a private root certificate in Secret Manager</summary>
-  public string? managed_certificate_uri { get; set; } = null;
+  /// <summary>Array of URIs pointing to the location of a root certificate in Secret Manager</summary>
+  public string[]? managed_certificate_uri { get; set; } = null;
 }
 
 public class SmtpNodeStatus : SdkModel
@@ -5536,6 +5601,8 @@ public class User : SdkModel
   public bool? allow_roles_from_normal_groups { get; set; } = null;
   /// <summary>(Embed only) ID of user's group folder based on the external_group_id optionally specified during embed user login (read-only)</summary>
   public string? embed_group_folder_id { get; set; } = null;
+  /// <summary>User is an IAM Admin - only available in Looker (Google Cloud core) (read-only)</summary>
+  public bool? is_iam_admin { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
   public string? url { get; set; } = null;
 }
@@ -6229,13 +6296,13 @@ public class WriteDatagroup : SdkModel
 }
 
 /// Dynamic writeable type for DBConnection removes:
-/// can, dialect, snippets, pdts_enabled, uses_oauth, uses_instance_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, p4sa_name
+/// can, dialect, snippets, pdts_enabled, named_driver_version_actual, uses_oauth, uses_instance_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, p4sa_name
 public class WriteDBConnection : SdkModel
 {
   /// <summary>Name of the connection. Also used as the unique identifier</summary>
   public string? name { get; set; } = null;
-  /// <summary>JDBC driver version name</summary>
-  public string? named_driver_version { get; set; } = null;
+  /// <summary>Requested JDBC driver version name</summary>
+  public string? named_driver_version_requested { get; set; } = null;
   /// <summary>Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.</summary>
   public string? host { get; set; } = null;
   /// <summary>Port number on server. If the connection is over an SSH tunnel, then the local port associated with the SSH tunnel.</summary>
@@ -6335,24 +6402,44 @@ public class WriteDBConnectionOverride : SdkModel
   public string? context { get; set; } = null;
   /// <summary>Host name/address of server</summary>
   public string? host { get; set; } = null;
+  /// <summary>Host name/address of server (same as host)</summary>
+  public string? pdt_host { get; set; } = null;
   /// <summary>Port number on server</summary>
   public string? port { get; set; } = null;
+  /// <summary>Port number on server (same as port)</summary>
+  public string? pdt_port { get; set; } = null;
   /// <summary>Username for server authentication</summary>
   public string? username { get; set; } = null;
+  /// <summary>Username for server authentication (same as username)</summary>
+  public string? pdt_username { get; set; } = null;
   /// <summary>(Write-Only) Password for server authentication</summary>
   public string? password { get; set; } = null;
+  /// <summary>(Write-Only) Password for server authentication (same as password)</summary>
+  public string? pdt_password { get; set; } = null;
   /// <summary>(Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).</summary>
   public string? certificate { get; set; } = null;
+  /// <summary>(Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect) (same as certificate).</summary>
+  public string? pdt_certificate { get; set; } = null;
   /// <summary>(Write-Only) Certificate keyfile type - .json or .p12</summary>
   public string? file_type { get; set; } = null;
+  /// <summary>(Write-Only) Certificate keyfile type - .json or .p12 (same as file_type)</summary>
+  public string? pdt_file_type { get; set; } = null;
   /// <summary>Database name</summary>
   public string? database { get; set; } = null;
+  /// <summary>Database name (same as database)</summary>
+  public string? pdt_database { get; set; } = null;
   /// <summary>Schema name</summary>
   public string? schema { get; set; } = null;
+  /// <summary>Schema name (same as schema)</summary>
+  public string? pdt_schema { get; set; } = null;
   /// <summary>Additional params to add to JDBC connection string</summary>
   public string? jdbc_additional_params { get; set; } = null;
+  /// <summary>Additional params to add to JDBC connection string (same as jdbc_additional_params)</summary>
+  public string? pdt_jdbc_additional_params { get; set; } = null;
   /// <summary>SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature</summary>
   public string? after_connect_statements { get; set; } = null;
+  /// <summary>SQL statements (semicolon separated) to issue after connecting to the database. Requires `custom_after_connect_statements` license feature (same as after_connect_statements)</summary>
+  public string? pdt_after_connect_statements { get; set; } = null;
 }
 
 /// Dynamic writeable type for EmbedConfig removes:
@@ -7097,8 +7184,8 @@ public class WriteSetting : SdkModel
   public bool? dashboard_auto_refresh_restriction { get; set; } = null;
   /// <summary>Minimum time interval for dashboard element automatic refresh. Examples: (30 seconds, 1 minute)</summary>
   public string? dashboard_auto_refresh_minimum_interval { get; set; } = null;
-  /// <summary>URI pointing to the location of a private root certificate in Secret Manager</summary>
-  public string? managed_certificate_uri { get; set; } = null;
+  /// <summary>Array of URIs pointing to the location of a root certificate in Secret Manager</summary>
+  public string[]? managed_certificate_uri { get; set; } = null;
 }
 
 /// Dynamic writeable type for SqlInterfaceQueryCreate removes:
@@ -7153,7 +7240,7 @@ public class WriteTheme : SdkModel
 }
 
 /// Dynamic writeable type for User removes:
-/// can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, url
+/// can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, url
 public class WriteUser : SdkModel
 {
   /// <summary>
