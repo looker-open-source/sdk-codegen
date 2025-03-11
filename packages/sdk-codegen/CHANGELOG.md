@@ -53,6 +53,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * devDependencies
     * @looker/sdk-codegen-utils bumped from 21.0.19 to 21.0.20
 
+## [21.9.10](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.9.9...sdk-codegen-v21.9.10) (2025-03-11)
+
+
+### Bug Fixes
+
+* add new generators  for the TypeScript SDK ([#1563](https://github.com/looker-open-source/sdk-codegen/issues/1563)) ([86ab782](https://github.com/looker-open-source/sdk-codegen/commit/86ab7820c4ca095be20e219c5bd19ef3bfc3f030))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from 21.6.3 to 21.6.4
+  * devDependencies
+    * @looker/sdk-codegen-utils bumped from 21.0.20 to 21.0.21
+
 ## [21.9.2](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.9.1...sdk-codegen-v21.9.2) (2024-09-14)
 
 

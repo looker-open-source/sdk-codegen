@@ -1,6 +1,6 @@
 {
   "name": "@looker/embed-components",
-  "version": "25.2.0",
+  "version": "25.4.0",
   "description": "Looker Embed Components",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
@@ -35,7 +35,7 @@
   "homepage": "https://github.com/looker-open-source/sdk-codegen/tree/master/packages/embed-components",
   "devDependencies": {
     "redux-saga-tester": "^1.0.874",
-    "@looker/sdk-node": "25.2.0",
+    "@looker/sdk-node": "25.4.0",
     "@testing-library/react": "12.1.5",
     "@testing-library/jest-dom": "5.16.5",
     "@looker/components-test-utils": "^1.5.27",
@@ -45,10 +45,10 @@
   },
   "dependencies": {
     "@looker/components": "^5.0.3",
-    "@looker/embed-services": "25.2.0",
+    "@looker/embed-services": "25.4.0",
     "@looker/redux": "^0.0.1",
-    "@looker/sdk": "25.2.0",
-    "@looker/sdk-rtl": "21.6.3",
+    "@looker/sdk": "25.4.0",
+    "@looker/sdk-rtl": "21.6.4",
     "@reduxjs/toolkit": "^1.9.3",
     "@styled-icons/material-outlined": "^10.47.0",
     "react": "^17.0.2",

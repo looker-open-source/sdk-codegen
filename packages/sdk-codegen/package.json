@@ -1,6 +1,6 @@
 {
   "name": "@looker/sdk-codegen",
-  "version": "21.9.9",
+  "version": "21.9.10",
   "description": "Looker SDK Codegen core",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
@@ -35,7 +35,7 @@
     "watch": "yarn lerna exec --scope @looker/sdk-codegen --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "dependencies": {
-    "@looker/sdk-rtl": "21.6.3",
+    "@looker/sdk-rtl": "21.6.4",
     "blueimp-md5": "2.18.0",
     "openapi3-ts": "2.0.2"
   },
@@ -43,6 +43,6 @@
   "devDependencies": {
     "lodash": "4.17.21",
     "@types/blueimp-md5": "2.18.2",
-    "@looker/sdk-codegen-utils": "21.0.20"
+    "@looker/sdk-codegen-utils": "21.0.21"
   }
 }

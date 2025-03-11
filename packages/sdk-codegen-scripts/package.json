@@ -1,6 +1,6 @@
 {
   "name": "@looker/sdk-codegen-scripts",
-  "version": "21.5.30",
+  "version": "21.5.31",
   "description": "Looker SDK Codegen scripts",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -27,11 +27,11 @@
     "watch:cjs": "yarn lerna exec --scope @looker/sdk-codegen-scripts --stream 'BABEL_ENV=build_cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "dependencies": {
-    "@looker/sdk": "25.2.0",
-    "@looker/sdk-codegen": "21.9.9",
-    "@looker/sdk-codegen-utils": "21.0.20",
-    "@looker/sdk-node": "25.2.0",
-    "@looker/sdk-rtl": "21.6.3",
+    "@looker/sdk": "25.4.0",
+    "@looker/sdk-codegen": "21.9.10",
+    "@looker/sdk-codegen-utils": "21.0.21",
+    "@looker/sdk-node": "25.4.0",
+    "@looker/sdk-rtl": "21.6.4",
     "config": "^3.3.1",
     "cross-env": "^7.0.2"
   },

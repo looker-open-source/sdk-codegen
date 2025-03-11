@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [21.6.4](https://github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.6.3...sdk-rtl-v21.6.4) (2025-03-11)
+
+
+### Bug Fixes
+
+* add new generators  for the TypeScript SDK ([#1563](https://github.com/looker-open-source/sdk-codegen/issues/1563)) ([86ab782](https://github.com/looker-open-source/sdk-codegen/commit/86ab7820c4ca095be20e219c5bd19ef3bfc3f030))
+
 ## [21.6.3](https://github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.6.2...sdk-rtl-v21.6.3) (2024-09-14)
 
 
