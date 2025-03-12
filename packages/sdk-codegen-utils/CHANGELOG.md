@@ -49,6 +49,22 @@
     * @looker/sdk bumped from 25.0.1 to 25.2.0
     * @looker/sdk-node bumped from 25.0.1 to 25.2.0
 
+## [21.0.21](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-utils-v21.0.20...sdk-codegen-utils-v21.0.21) (2025-03-11)
+
+
+### Bug Fixes
+
+* add new generators  for the TypeScript SDK ([#1563](https://github.com/looker-open-source/sdk-codegen/issues/1563)) ([86ab782](https://github.com/looker-open-source/sdk-codegen/commit/86ab7820c4ca095be20e219c5bd19ef3bfc3f030))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-rtl bumped from 21.6.3 to 21.6.4
+    * @looker/sdk bumped from 25.2.0 to 25.4.0
+    * @looker/sdk-node bumped from 25.2.0 to 25.4.0
+
 ## [21.0.13](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-utils-v21.0.12...sdk-codegen-utils-v21.0.13) (2024-09-14)
 
 

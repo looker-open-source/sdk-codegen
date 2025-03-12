@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [25.4.0](https://github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v25.2.0...looker_sdk-v25.4.0) (2025-03-11)
+
+
+### Features
+
+* generate SDKs for Looker 25.4 ([#1570](https://github.com/looker-open-source/sdk-codegen/issues/1570)) ([27a4192](https://github.com/looker-open-source/sdk-codegen/commit/27a4192f05db3126684d21477bb72367cfd9c792))
+
+
+### Bug Fixes
+
+* Object of type MergeQuerySourceQuery is not JSON serializable ([#1538](https://github.com/looker-open-source/sdk-codegen/issues/1538)) ([100e3c9](https://github.com/looker-open-source/sdk-codegen/commit/100e3c9fca5f70cbe728e11513a13c89fe6550a6))
+
 ## [25.2.0](https://github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v25.0.1...looker_sdk-v25.2.0) (2025-02-07)
 
 
