@@ -25,7 +25,7 @@
  */
 
 /**
- * 344 API models: 260 Spec, 0 Request, 62 Write, 22 Enum
+ * 353 API models: 269 Spec, 0 Request, 62 Write, 22 Enum
  */
 
 
@@ -1637,6 +1637,340 @@ public enum Category: String, Codable {
     case filter = "filter"
     case measure = "measure"
     case dimension = "dimension"
+}
+
+public struct CIChangeRequest: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _change_request_number = "change_request_number"
+        case _change_request_url = "change_request_url"
+        case _change_request_name = "change_request_name"
+        case _change_request_commits_url = "change_request_commits_url"
+    }
+    private var _change_request_number: AnyInt?
+    /**
+     * Change request number (read-only)
+     */
+    public var change_request_number: Int64? {
+        get { _change_request_number?.value }
+        set { _change_request_number = newValue.map(AnyInt.init) }
+    }
+
+    private var _change_request_url: AnyString?
+    /**
+     * Change request url (read-only)
+     */
+    public var change_request_url: String? {
+        get { _change_request_url?.value }
+        set { _change_request_url = newValue.map(AnyString.init) }
+    }
+
+    private var _change_request_name: AnyString?
+    /**
+     * Change request name (read-only)
+     */
+    public var change_request_name: String? {
+        get { _change_request_name?.value }
+        set { _change_request_name = newValue.map(AnyString.init) }
+    }
+
+    private var _change_request_commits_url: AnyString?
+    /**
+     * Change request commits url (read-only)
+     */
+    public var change_request_commits_url: String? {
+        get { _change_request_commits_url?.value }
+        set { _change_request_commits_url = newValue.map(AnyString.init) }
+    }
+
+    public init(change_request_number: Int64? = nil, change_request_url: String? = nil, change_request_name: String? = nil, change_request_commits_url: String? = nil) {
+        self._change_request_number = change_request_number.map(AnyInt.init)
+        self._change_request_url = change_request_url.map(AnyString.init)
+        self._change_request_name = change_request_name.map(AnyString.init)
+        self._change_request_commits_url = change_request_commits_url.map(AnyString.init)
+    }
+
+}
+
+public struct CIGitState: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _branch = "branch"
+        case _repository = "repository"
+        case _commit_ref = "commit_ref"
+        case _target = "target"
+    }
+    private var _branch: AnyString?
+    /**
+     * Git branch for run (read-only)
+     */
+    public var branch: String? {
+        get { _branch?.value }
+        set { _branch = newValue.map(AnyString.init) }
+    }
+
+    private var _repository: AnyString?
+    /**
+     * Git repository for run (read-only)
+     */
+    public var repository: String? {
+        get { _repository?.value }
+        set { _repository = newValue.map(AnyString.init) }
+    }
+
+    private var _commit_ref: AnyString?
+    /**
+     * Git commit for run (read-only)
+     */
+    public var commit_ref: String? {
+        get { _commit_ref?.value }
+        set { _commit_ref = newValue.map(AnyString.init) }
+    }
+
+    private var _target: AnyString?
+    /**
+     * Run start time. (read-only)
+     */
+    public var target: String? {
+        get { _target?.value }
+        set { _target = newValue.map(AnyString.init) }
+    }
+
+    public init(branch: String? = nil, repository: String? = nil, commit_ref: String? = nil, target: String? = nil) {
+        self._branch = branch.map(AnyString.init)
+        self._repository = repository.map(AnyString.init)
+        self._commit_ref = commit_ref.map(AnyString.init)
+        self._target = target.map(AnyString.init)
+    }
+
+}
+
+public struct CIRun: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _run_id = "run_id"
+        case created_at
+        case started_at
+        case finished_at
+        case _status_url = "status_url"
+        case _status = "status"
+        case _git_service = "git_service"
+        case git_state
+        case result
+        case schedule
+        case _target_branch = "target_branch"
+        case _title = "title"
+        case _trigger = "trigger"
+        case change_request
+        case _suite_id = "suite_id"
+        case _username = "username"
+    }
+    private var _run_id: AnyString?
+    /**
+     * Run ID (read-only)
+     */
+    public var run_id: String? {
+        get { _run_id?.value }
+        set { _run_id = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Run created time. (read-only)
+     */
+    public var created_at: Date?
+
+    /**
+     * Run start time. (read-only)
+     */
+    public var started_at: Date?
+
+    /**
+     * Run completed time. (read-only)
+     */
+    public var finished_at: Date?
+
+    private var _status_url: AnyString?
+    /**
+     * Run status url (read-only)
+     */
+    public var status_url: String? {
+        get { _status_url?.value }
+        set { _status_url = newValue.map(AnyString.init) }
+    }
+
+    private var _status: AnyString?
+    /**
+     * Run status. (read-only)
+     */
+    public var status: String? {
+        get { _status?.value }
+        set { _status = newValue.map(AnyString.init) }
+    }
+
+    private var _git_service: AnyString?
+    /**
+     * Git service for run (read-only)
+     */
+    public var git_service: String? {
+        get { _git_service?.value }
+        set { _git_service = newValue.map(AnyString.init) }
+    }
+
+    public var git_state: CIGitState?
+
+    /**
+     * Run results (read-only)
+     */
+    public var result: [CIRunResult]?
+
+    public var schedule: CIScheduleTrigger?
+
+    private var _target_branch: AnyString?
+    /**
+     * Target branch for run (read-only)
+     */
+    public var target_branch: String? {
+        get { _target_branch?.value }
+        set { _target_branch = newValue.map(AnyString.init) }
+    }
+
+    private var _title: AnyString?
+    /**
+     * Suite title (read-only)
+     */
+    public var title: String? {
+        get { _title?.value }
+        set { _title = newValue.map(AnyString.init) }
+    }
+
+    private var _trigger: AnyString?
+    /**
+     * Trigger for run (read-only)
+     */
+    public var trigger: String? {
+        get { _trigger?.value }
+        set { _trigger = newValue.map(AnyString.init) }
+    }
+
+    public var change_request: CIChangeRequest?
+
+    private var _suite_id: AnyString?
+    /**
+     * The Id of the suite used (read-only)
+     */
+    public var suite_id: String? {
+        get { _suite_id?.value }
+        set { _suite_id = newValue.map(AnyString.init) }
+    }
+
+    private var _username: AnyString?
+    /**
+     * User who triggered the run (read-only)
+     */
+    public var username: String? {
+        get { _username?.value }
+        set { _username = newValue.map(AnyString.init) }
+    }
+
+    public init(run_id: String? = nil, created_at: Date? = nil, started_at: Date? = nil, finished_at: Date? = nil, status_url: String? = nil, status: String? = nil, git_service: String? = nil, git_state: CIGitState? = nil, result: [CIRunResult]? = nil, schedule: CIScheduleTrigger? = nil, target_branch: String? = nil, title: String? = nil, trigger: String? = nil, change_request: CIChangeRequest? = nil, suite_id: String? = nil, username: String? = nil) {
+        self._run_id = run_id.map(AnyString.init)
+        self.created_at = created_at
+        self.started_at = started_at
+        self.finished_at = finished_at
+        self._status_url = status_url.map(AnyString.init)
+        self._status = status.map(AnyString.init)
+        self._git_service = git_service.map(AnyString.init)
+        self.git_state = git_state
+        self.result = result
+        self.schedule = schedule
+        self._target_branch = target_branch.map(AnyString.init)
+        self._title = title.map(AnyString.init)
+        self._trigger = trigger.map(AnyString.init)
+        self.change_request = change_request
+        self._suite_id = suite_id.map(AnyString.init)
+        self._username = username.map(AnyString.init)
+    }
+
+}
+
+public struct CIRunResult: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _status = "status"
+        case _validator = "validator"
+    }
+    private var _status: AnyString?
+    /**
+     * Run result status (read-only)
+     */
+    public var status: String? {
+        get { _status?.value }
+        set { _status = newValue.map(AnyString.init) }
+    }
+
+    private var _validator: AnyString?
+    /**
+     * Run result validator (read-only)
+     */
+    public var validator: String? {
+        get { _validator?.value }
+        set { _validator = newValue.map(AnyString.init) }
+    }
+
+    public init(status: String? = nil, validator: String? = nil) {
+        self._status = status.map(AnyString.init)
+        self._validator = validator.map(AnyString.init)
+    }
+
+}
+
+public struct CIScheduleTrigger: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case enabled
+        case _day = "day"
+        case _hour = "hour"
+        case _frequency = "frequency"
+    }
+    /**
+     * Whether schedule is active (read-only)
+     */
+    public var enabled: Bool?
+
+    private var _day: AnyString?
+    /**
+     * Day of week (0 = Sunday, 6 = Saturday) (read-only)
+     */
+    public var day: String? {
+        get { _day?.value }
+        set { _day = newValue.map(AnyString.init) }
+    }
+
+    private var _hour: AnyString?
+    /**
+     * Hour of the day (24 hour format) (read-only)
+     */
+    public var hour: String? {
+        get { _hour?.value }
+        set { _hour = newValue.map(AnyString.init) }
+    }
+
+    private var _frequency: AnyString?
+    /**
+     * How often the schedule is configured to run (read-only)
+     */
+    public var frequency: String? {
+        get { _frequency?.value }
+        set { _frequency = newValue.map(AnyString.init) }
+    }
+
+    public init(enabled: Bool? = nil, day: String? = nil, hour: String? = nil, frequency: String? = nil) {
+        self.enabled = enabled
+        self._day = day.map(AnyString.init)
+        self._hour = hour.map(AnyString.init)
+        self._frequency = frequency.map(AnyString.init)
+    }
+
 }
 
 public struct ColorCollection: SDKModel {
@@ -3572,6 +3906,112 @@ public struct CostEstimate: SDKModel {
         self.cache_hit = cache_hit
         self._cost_unit = cost_unit.map(AnyString.init)
         self._message = message.map(AnyString.init)
+    }
+
+}
+
+public struct CreateCIRunRequest: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _suite_id = "suite_id"
+        case _branch = "branch"
+        case _target = "target"
+        case _commit = "commit"
+        case _user_attributes = "user_attributes"
+        case _webhooks = "webhooks"
+    }
+    private var _suite_id: AnyString?
+    /**
+     * Run ID
+     */
+    public var suite_id: String? {
+        get { _suite_id?.value }
+        set { _suite_id = newValue.map(AnyString.init) }
+    }
+
+    private var _branch: AnyString?
+    /**
+     * The branch to test. Omit to test production.
+     */
+    public var branch: String? {
+        get { _branch?.value }
+        set { _branch = newValue.map(AnyString.init) }
+    }
+
+    private var _target: AnyString?
+    /**
+     * Suite name
+     */
+    public var target: String? {
+        get { _target?.value }
+        set { _target = newValue.map(AnyString.init) }
+    }
+
+    private var _commit: AnyString?
+    /**
+     * The commit to test. Omit to test production.
+     */
+    public var commit: String? {
+        get { _commit?.value }
+        set { _commit = newValue.map(AnyString.init) }
+    }
+
+    private var _user_attributes: [AnyString]?
+    /**
+     * User attributes to set for run
+     */
+    public var user_attributes: [String]? {
+        get { if let v = _user_attributes { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _user_attributes = v.map { AnyString.init($0) } } else { _user_attributes = nil } }
+    }
+
+    private var _webhooks: [AnyString]?
+    /**
+     * Webhooks to trigger when run completes.
+     */
+    public var webhooks: [String]? {
+        get { if let v = _webhooks { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _webhooks = v.map { AnyString.init($0) } } else { _webhooks = nil } }
+    }
+
+    public init(suite_id: String? = nil, branch: String? = nil, target: String? = nil, commit: String? = nil, user_attributes: [String]? = nil, webhooks: [String]? = nil) {
+        self._suite_id = suite_id.map(AnyString.init)
+        self._branch = branch.map(AnyString.init)
+        self._target = target.map(AnyString.init)
+        self._commit = commit.map(AnyString.init)
+        if let v = user_attributes { _user_attributes = v.map { AnyString.init($0) } } else { _user_attributes = nil }
+        if let v = webhooks { _webhooks = v.map { AnyString.init($0) } } else { _webhooks = nil }
+    }
+
+}
+
+public struct CreateCIRunResponse: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _run_id = "run_id"
+        case _status = "status"
+    }
+    private var _run_id: AnyString?
+    /**
+     * Run ID (read-only)
+     */
+    public var run_id: String? {
+        get { _run_id?.value }
+        set { _run_id = newValue.map(AnyString.init) }
+    }
+
+    private var _status: AnyString?
+    /**
+     * Run status (read-only)
+     */
+    public var status: String? {
+        get { _status?.value }
+        set { _status = newValue.map(AnyString.init) }
+    }
+
+    public init(run_id: String? = nil, status: String? = nil) {
+        self._run_id = run_id.map(AnyString.init)
+        self._status = status.map(AnyString.init)
     }
 
 }
@@ -7002,6 +7442,7 @@ public struct DBConnection: SDKModel {
         case _username = "username"
         case _password = "password"
         case uses_oauth
+        case uses_key_pair_auth
         case uses_instance_oauth
         case _certificate = "certificate"
         case _file_type = "file_type"
@@ -7138,6 +7579,11 @@ public struct DBConnection: SDKModel {
     public var uses_oauth: Bool?
 
     /**
+     * Whether the connection uses key-pair for authentication.
+     */
+    public var uses_key_pair_auth: Bool?
+
+    /**
      * Whether the integration uses the oauth instance account. (read-only)
      */
     public var uses_instance_oauth: Bool?
@@ -7153,7 +7599,7 @@ public struct DBConnection: SDKModel {
 
     private var _file_type: AnyString?
     /**
-     * (Write-Only) Certificate keyfile type - .json or .p12
+     * (Write-Only) Certificate keyfile type - .json, .p8 or .p12
      */
     public var file_type: String? {
         get { _file_type?.value }
@@ -7495,7 +7941,7 @@ public struct DBConnection: SDKModel {
      */
     public var query_holding_disabled: Bool?
 
-    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, named_driver_version_requested: String? = nil, named_driver_version_actual: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, uses_oauth: Bool? = nil, uses_instance_oauth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, tmp_db_host: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, supports_data_studio_link: Bool? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, default_bq_connection: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil, p4sa_name: String? = nil, query_holding_disabled: Bool? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, named_driver_version_requested: String? = nil, named_driver_version_actual: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, uses_oauth: Bool? = nil, uses_key_pair_auth: Bool? = nil, uses_instance_oauth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, tmp_db_host: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, supports_data_studio_link: Bool? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, default_bq_connection: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil, p4sa_name: String? = nil, query_holding_disabled: Bool? = nil) {
         self.can = can
         self._name = name.map(AnyString.init)
         self.dialect = dialect
@@ -7508,6 +7954,7 @@ public struct DBConnection: SDKModel {
         self._username = username.map(AnyString.init)
         self._password = password.map(AnyString.init)
         self.uses_oauth = uses_oauth
+        self.uses_key_pair_auth = uses_key_pair_auth
         self.uses_instance_oauth = uses_instance_oauth
         self._certificate = certificate.map(AnyString.init)
         self._file_type = file_type.map(AnyString.init)
@@ -8143,6 +8590,37 @@ public struct Dialect: SDKModel {
 
 }
 
+public struct DialectDriverVersion: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _name = "name"
+        case _display_name = "display_name"
+    }
+    private var _name: AnyString?
+    /**
+     * Name to be passed to the backend (read-only)
+     */
+    public var name: String? {
+        get { _name?.value }
+        set { _name = newValue.map(AnyString.init) }
+    }
+
+    private var _display_name: AnyString?
+    /**
+     * Name to be displayed in the frontend. (read-only)
+     */
+    public var display_name: String? {
+        get { _display_name?.value }
+        set { _display_name = newValue.map(AnyString.init) }
+    }
+
+    public init(name: String? = nil, display_name: String? = nil) {
+        self._name = name.map(AnyString.init)
+        self._display_name = display_name.map(AnyString.init)
+    }
+
+}
+
 public struct DialectInfo: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -8155,7 +8633,7 @@ public struct DialectInfo: SDKModel {
         case _label_for_schema_equivalent = "label_for_schema_equivalent"
         case _name = "name"
         case _supported_driver_name = "supported_driver_name"
-        case _supported_driver_versions = "supported_driver_versions"
+        case supported_driver_versions
         case supported_options
     }
     /**
@@ -8231,18 +8709,14 @@ public struct DialectInfo: SDKModel {
         set { _supported_driver_name = newValue.map(AnyString.init) }
     }
 
-    private var _supported_driver_versions: [AnyString]?
     /**
      * Array of supported drivers for a given dialect (read-only)
      */
-    public var supported_driver_versions: [String]? {
-        get { if let v = _supported_driver_versions { return v.map { $0.value } } else { return nil } }
-        set { if let v = newValue { _supported_driver_versions = v.map { AnyString.init($0) } } else { _supported_driver_versions = nil } }
-    }
+    public var supported_driver_versions: [DialectDriverVersion]?
 
     public var supported_options: DialectInfoOptions?
 
-    public init(can: StringDictionary<Bool>? = nil, default_max_connections: String? = nil, default_port: String? = nil, installed: Bool? = nil, label: String? = nil, label_for_database_equivalent: String? = nil, label_for_schema_equivalent: String? = nil, name: String? = nil, supported_driver_name: String? = nil, supported_driver_versions: [String]? = nil, supported_options: DialectInfoOptions? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, default_max_connections: String? = nil, default_port: String? = nil, installed: Bool? = nil, label: String? = nil, label_for_database_equivalent: String? = nil, label_for_schema_equivalent: String? = nil, name: String? = nil, supported_driver_name: String? = nil, supported_driver_versions: [DialectDriverVersion]? = nil, supported_options: DialectInfoOptions? = nil) {
         self.can = can
         self._default_max_connections = default_max_connections.map(AnyString.init)
         self._default_port = default_port.map(AnyString.init)
@@ -8252,7 +8726,7 @@ public struct DialectInfo: SDKModel {
         self._label_for_schema_equivalent = label_for_schema_equivalent.map(AnyString.init)
         self._name = name.map(AnyString.init)
         self._supported_driver_name = supported_driver_name.map(AnyString.init)
-        if let v = supported_driver_versions { _supported_driver_versions = v.map { AnyString.init($0) } } else { _supported_driver_versions = nil }
+        self.supported_driver_versions = supported_driver_versions
         self.supported_options = supported_options
     }
 
@@ -17579,6 +18053,15 @@ public struct Project: SDKModel {
 
 }
 
+public struct ProjectCIRun: SDKModel {
+    public var run: CIRun?
+
+    public init(run: CIRun? = nil) {
+        self.run = run
+    }
+
+}
+
 public struct ProjectError: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -18678,6 +19161,7 @@ public struct Report: SDKModel {
         case last_accessed_at
         case _deleter_user_id = "deleter_user_id"
         case _deleter_user_name = "deleter_user_name"
+        case _schedule_count = "schedule_count"
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -18806,7 +19290,16 @@ public struct Report: SDKModel {
         set { _deleter_user_name = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, title: String? = nil, user_id: String? = nil, created_at: Date? = nil, updated_at: Date? = nil, last_viewed_at: Date? = nil, favorite: Bool? = nil, favorite_count: Int64? = nil, view_count: Int64? = nil, folder: FolderBase? = nil, folder_id: String? = nil, url: String? = nil, user_name: String? = nil, deleted_at: Date? = nil, last_accessed_at: Date? = nil, deleter_user_id: String? = nil, deleter_user_name: String? = nil) {
+    private var _schedule_count: AnyInt?
+    /**
+     * Count of schedules on the report. (read-only)
+     */
+    public var schedule_count: Int64? {
+        get { _schedule_count?.value }
+        set { _schedule_count = newValue.map(AnyInt.init) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, title: String? = nil, user_id: String? = nil, created_at: Date? = nil, updated_at: Date? = nil, last_viewed_at: Date? = nil, favorite: Bool? = nil, favorite_count: Int64? = nil, view_count: Int64? = nil, folder: FolderBase? = nil, folder_id: String? = nil, url: String? = nil, user_name: String? = nil, deleted_at: Date? = nil, last_accessed_at: Date? = nil, deleter_user_id: String? = nil, deleter_user_name: String? = nil, schedule_count: Int64? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
         self._title = title.map(AnyString.init)
@@ -18825,6 +19318,7 @@ public struct Report: SDKModel {
         self.last_accessed_at = last_accessed_at
         self._deleter_user_id = deleter_user_id.map(AnyString.init)
         self._deleter_user_name = deleter_user_name.map(AnyString.init)
+        self._schedule_count = schedule_count.map(AnyInt.init)
     }
 
 }
@@ -25826,6 +26320,7 @@ public struct WriteDBConnection: SDKModel {
         case _port = "port"
         case _username = "username"
         case _password = "password"
+        case uses_key_pair_auth
         case _certificate = "certificate"
         case _file_type = "file_type"
         case _database = "database"
@@ -25920,6 +26415,11 @@ public struct WriteDBConnection: SDKModel {
         set { _password = newValue.map(AnyString.init) }
     }
 
+    /**
+     * Whether the connection uses key-pair for authentication.
+     */
+    public var uses_key_pair_auth: Bool?
+
     private var _certificate: AnyString?
     /**
      * (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
@@ -25931,7 +26431,7 @@ public struct WriteDBConnection: SDKModel {
 
     private var _file_type: AnyString?
     /**
-     * (Write-Only) Certificate keyfile type - .json or .p12
+     * (Write-Only) Certificate keyfile type - .json, .p8 or .p12
      */
     public var file_type: String? {
         get { _file_type?.value }
@@ -26212,13 +26712,14 @@ public struct WriteDBConnection: SDKModel {
      */
     public var query_holding_disabled: Bool?
 
-    public init(name: String? = nil, named_driver_version_requested: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, tmp_db_host: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: WriteDBConnectionOverride? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil, query_holding_disabled: Bool? = nil) {
+    public init(name: String? = nil, named_driver_version_requested: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, uses_key_pair_auth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, tmp_db_host: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: WriteDBConnectionOverride? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil, query_holding_disabled: Bool? = nil) {
         self._name = name.map(AnyString.init)
         self._named_driver_version_requested = named_driver_version_requested.map(AnyString.init)
         self._host = host.map(AnyString.init)
         self._port = port.map(AnyString.init)
         self._username = username.map(AnyString.init)
         self._password = password.map(AnyString.init)
+        self.uses_key_pair_auth = uses_key_pair_auth
         self._certificate = certificate.map(AnyString.init)
         self._file_type = file_type.map(AnyString.init)
         self._database = database.map(AnyString.init)

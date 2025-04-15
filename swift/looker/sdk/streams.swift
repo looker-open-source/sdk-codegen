@@ -25,7 +25,7 @@
  */
 
 /**
- * 469 API methods
+ * 471 API methods
  */
 
 
@@ -828,9 +828,6 @@ open class LookerSDKStream: APIMethods {
      * Protect this signed URL as you would an access token or password credentials - do not write
      * it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
      * encrypted transport.
-     *
-     *
-     * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
      *
      * POST /embed/token_url/me -> EmbedUrlResponse
      */
@@ -8046,6 +8043,59 @@ open class LookerSDKStream: APIMethods {
         let path_project_id = encodeParam(project_id)
         let result: SDKResponse<Data, SDKError> = self.post("/projects/\(path_project_id)/tag", 
             ["commit_sha": commit_sha, "tag_name": tag_name, "tag_message": tag_message], try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Fetches a CI Run.
+     *
+     * GET /projects/{project_id}/ci/runs/{run_id} -> ProjectCIRun
+     */
+    public func get_ci_run(
+        /**
+         * @param {String} project_id Project Id
+         */
+        _ project_id: String,
+        /**
+         * @param {String} run_id Run Id
+         */
+        _ run_id: String,
+        /**
+         * @param {String} fields Requested fields
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let path_project_id = encodeParam(project_id)
+        let path_run_id = encodeParam(run_id)
+        let result: SDKResponse<Data, SDKError> = self.get("/projects/\(path_project_id)/ci/runs/\(path_run_id)", 
+            ["fields": fields], nil, options)
+        return result
+    }
+
+    /**
+     * ### Creates a CI Run.
+     *
+     * POST /projects/{project_id}/ci/run -> CreateCIRunResponse
+     */
+    public func create_ci_run(
+        /**
+         * @param {String} project_id Project Id
+         */
+        _ project_id: String,
+        /**
+         * @param {CreateCIRunRequest} body
+         */
+        _ body: CreateCIRunRequest,
+        /**
+         * @param {String} fields Requested fields
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let path_project_id = encodeParam(project_id)
+        let result: SDKResponse<Data, SDKError> = self.post("/projects/\(path_project_id)/ci/run", 
+            ["fields": fields], try! self.encode(body), options)
         return result
     }
 
