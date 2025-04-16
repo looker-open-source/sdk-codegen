@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 469 API methods
+/// 471 API methods
 
 #nullable enable
 using System;
@@ -732,9 +732,6 @@ namespace Looker.SDK.API40
   /// Protect this signed URL as you would an access token or password credentials - do not write
   /// it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
   /// encrypted transport.
-  ///
-  ///
-  /// **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
   ///
   /// POST /embed/token_url/me -> EmbedUrlResponse
   ///
@@ -6866,6 +6863,46 @@ namespace Looker.SDK.API40
       { "commit_sha", commit_sha },
       { "tag_name", tag_name },
       { "tag_message", tag_message }},body,options);
+  }
+
+  /// ### Fetches a CI Run.
+  ///
+  /// GET /projects/{project_id}/ci/runs/{run_id} -> ProjectCIRun
+  ///
+  /// <returns><c>ProjectCIRun</c> CI Run (application/json)</returns>
+  ///
+  /// <param name="project_id">Project Id</param>
+  /// <param name="run_id">Run Id</param>
+  /// <param name="fields">Requested fields</param>
+  public async Task<SdkResponse<ProjectCIRun, Exception>> get_ci_run(
+    string project_id,
+    string run_id,
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+      project_id = SdkUtils.EncodeParam(project_id);
+      run_id = SdkUtils.EncodeParam(run_id);
+    return await AuthRequest<ProjectCIRun, Exception>(HttpMethod.Get, $"/projects/{project_id}/ci/runs/{run_id}", new Values {
+      { "fields", fields }},null,options);
+  }
+
+  /// ### Creates a CI Run.
+  ///
+  /// POST /projects/{project_id}/ci/run -> CreateCIRunResponse
+  ///
+  /// <returns><c>CreateCIRunResponse</c> CI Run (application/json)</returns>
+  ///
+  /// <param name="project_id">Project Id</param>
+  /// <param name="fields">Requested fields</param>
+  public async Task<SdkResponse<CreateCIRunResponse, Exception>> create_ci_run(
+    string project_id,
+    CreateCIRunRequest body,
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+      project_id = SdkUtils.EncodeParam(project_id);
+    return await AuthRequest<CreateCIRunResponse, Exception>(HttpMethod.Post, $"/projects/{project_id}/ci/run", new Values {
+      { "fields", fields }},body,options);
   }
 
   /// ### Configure Repository Credential for a remote dependency

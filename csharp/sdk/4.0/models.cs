@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 344 API models: 260 Spec, 0 Request, 62 Write, 22 Enum
+/// 353 API models: 269 Spec, 0 Request, 62 Write, 22 Enum
 
 #nullable enable
 using System;
@@ -420,6 +420,83 @@ public enum Category
   measure,
   [EnumMember(Value = "dimension")]
   dimension
+}
+
+public class CIChangeRequest : SdkModel
+{
+  /// <summary>Change request number (read-only)</summary>
+  public long? change_request_number { get; set; } = null;
+  /// <summary>Change request url (read-only)</summary>
+  public string? change_request_url { get; set; } = null;
+  /// <summary>Change request name (read-only)</summary>
+  public string? change_request_name { get; set; } = null;
+  /// <summary>Change request commits url (read-only)</summary>
+  public string? change_request_commits_url { get; set; } = null;
+}
+
+public class CIGitState : SdkModel
+{
+  /// <summary>Git branch for run (read-only)</summary>
+  public string? branch { get; set; } = null;
+  /// <summary>Git repository for run (read-only)</summary>
+  public string? repository { get; set; } = null;
+  /// <summary>Git commit for run (read-only)</summary>
+  public string? commit_ref { get; set; } = null;
+  /// <summary>Run start time. (read-only)</summary>
+  public string? target { get; set; } = null;
+}
+
+public class CIRun : SdkModel
+{
+  /// <summary>Run ID (read-only)</summary>
+  public string? run_id { get; set; } = null;
+  /// <summary>Run created time. (read-only)</summary>
+  public DateTime? created_at { get; set; } = null;
+  /// <summary>Run start time. (read-only)</summary>
+  public DateTime? started_at { get; set; } = null;
+  /// <summary>Run completed time. (read-only)</summary>
+  public DateTime? finished_at { get; set; } = null;
+  /// <summary>Run status url (read-only)</summary>
+  public string? status_url { get; set; } = null;
+  /// <summary>Run status. (read-only)</summary>
+  public string? status { get; set; } = null;
+  /// <summary>Git service for run (read-only)</summary>
+  public string? git_service { get; set; } = null;
+  public CIGitState? git_state { get; set; }
+  /// <summary>Run results (read-only)</summary>
+  public CIRunResult[]? result { get; set; } = null;
+  public CIScheduleTrigger? schedule { get; set; }
+  /// <summary>Target branch for run (read-only)</summary>
+  public string? target_branch { get; set; } = null;
+  /// <summary>Suite title (read-only)</summary>
+  public string? title { get; set; } = null;
+  /// <summary>Trigger for run (read-only)</summary>
+  public string? trigger { get; set; } = null;
+  public CIChangeRequest? change_request { get; set; }
+  /// <summary>The Id of the suite used (read-only)</summary>
+  public string? suite_id { get; set; } = null;
+  /// <summary>User who triggered the run (read-only)</summary>
+  public string? username { get; set; } = null;
+}
+
+public class CIRunResult : SdkModel
+{
+  /// <summary>Run result status (read-only)</summary>
+  public string? status { get; set; } = null;
+  /// <summary>Run result validator (read-only)</summary>
+  public string? validator { get; set; } = null;
+}
+
+public class CIScheduleTrigger : SdkModel
+{
+  /// <summary>Whether schedule is active (read-only)</summary>
+  public bool? enabled { get; set; } = null;
+  /// <summary>Day of week (0 = Sunday, 6 = Saturday) (read-only)</summary>
+  public string? day { get; set; } = null;
+  /// <summary>Hour of the day (24 hour format) (read-only)</summary>
+  public string? hour { get; set; } = null;
+  /// <summary>How often the schedule is configured to run (read-only)</summary>
+  public string? frequency { get; set; } = null;
 }
 
 public class ColorCollection : SdkModel
@@ -879,6 +956,30 @@ public class CostEstimate : SdkModel
   public string? cost_unit { get; set; } = null;
   /// <summary>Human-friendly message (read-only)</summary>
   public string? message { get; set; } = null;
+}
+
+public class CreateCIRunRequest : SdkModel
+{
+  /// <summary>Run ID</summary>
+  public string? suite_id { get; set; } = null;
+  /// <summary>The branch to test. Omit to test production.</summary>
+  public string? branch { get; set; } = null;
+  /// <summary>Suite name</summary>
+  public string? target { get; set; } = null;
+  /// <summary>The commit to test. Omit to test production.</summary>
+  public string? commit { get; set; } = null;
+  /// <summary>User attributes to set for run</summary>
+  public string[]? user_attributes { get; set; } = null;
+  /// <summary>Webhooks to trigger when run completes.</summary>
+  public string[]? webhooks { get; set; } = null;
+}
+
+public class CreateCIRunResponse : SdkModel
+{
+  /// <summary>Run ID (read-only)</summary>
+  public string? run_id { get; set; } = null;
+  /// <summary>Run status (read-only)</summary>
+  public string? status { get; set; } = null;
 }
 
 /// WARNING: no writeable properties found for POST, PUT, or PATCH
@@ -1672,11 +1773,13 @@ public class DBConnection : SdkModel
   public string? password { get; set; } = null;
   /// <summary>Whether the connection uses OAuth for authentication. (read-only)</summary>
   public bool? uses_oauth { get; set; } = null;
+  /// <summary>Whether the connection uses key-pair for authentication.</summary>
+  public bool? uses_key_pair_auth { get; set; } = null;
   /// <summary>Whether the integration uses the oauth instance account. (read-only)</summary>
   public bool? uses_instance_oauth { get; set; } = null;
   /// <summary>(Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).</summary>
   public string? certificate { get; set; } = null;
-  /// <summary>(Write-Only) Certificate keyfile type - .json or .p12</summary>
+  /// <summary>(Write-Only) Certificate keyfile type - .json, .p8 or .p12</summary>
   public string? file_type { get; set; } = null;
   /// <summary>Database name</summary>
   public string? database { get; set; } = null;
@@ -1927,6 +2030,14 @@ public class Dialect : SdkModel
   public bool? has_ssl_support { get; set; } = null;
 }
 
+public class DialectDriverVersion : SdkModel
+{
+  /// <summary>Name to be passed to the backend (read-only)</summary>
+  public string? name { get; set; } = null;
+  /// <summary>Name to be displayed in the frontend. (read-only)</summary>
+  public string? display_name { get; set; } = null;
+}
+
 public class DialectInfo : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
@@ -1948,7 +2059,7 @@ public class DialectInfo : SdkModel
   /// <summary>The name of the driver used for this dialect (read-only)</summary>
   public string? supported_driver_name { get; set; } = null;
   /// <summary>Array of supported drivers for a given dialect (read-only)</summary>
-  public string[]? supported_driver_versions { get; set; } = null;
+  public DialectDriverVersion[]? supported_driver_versions { get; set; } = null;
   public DialectInfoOptions? supported_options { get; set; }
 }
 
@@ -4213,6 +4324,11 @@ public class Project : SdkModel
   public string? dependency_status { get; set; } = null;
 }
 
+public class ProjectCIRun : SdkModel
+{
+  public CIRun? run { get; set; }
+}
+
 public class ProjectError : SdkModel
 {
   /// <summary>A stable token that uniquely identifies this class of error, ignoring parameter values. Error message text may vary due to parameters or localization, but error codes do not. For example, a "File not found" error will have the same error code regardless of the filename in question or the user's display language (read-only)</summary>
@@ -4499,6 +4615,8 @@ public class Report : SdkModel
   public string? deleter_user_id { get; set; } = null;
   /// <summary>Name of User that deleted the Report. (read-only)</summary>
   public string? deleter_user_name { get; set; } = null;
+  /// <summary>Count of schedules on the report. (read-only)</summary>
+  public long? schedule_count { get; set; } = null;
 }
 
 public class RepositoryCredential : SdkModel
@@ -6311,9 +6429,11 @@ public class WriteDBConnection : SdkModel
   public string? username { get; set; } = null;
   /// <summary>(Write-Only) Password for server authentication</summary>
   public string? password { get; set; } = null;
+  /// <summary>Whether the connection uses key-pair for authentication.</summary>
+  public bool? uses_key_pair_auth { get; set; } = null;
   /// <summary>(Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).</summary>
   public string? certificate { get; set; } = null;
-  /// <summary>(Write-Only) Certificate keyfile type - .json or .p12</summary>
+  /// <summary>(Write-Only) Certificate keyfile type - .json, .p8 or .p12</summary>
   public string? file_type { get; set; } = null;
   /// <summary>Database name</summary>
   public string? database { get; set; } = null;
