@@ -1,5 +1,12 @@
 # Changelog
 
+## [25.6.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v25.4.0...sdk-codegen-all-v25.6.0) (2025-05-05)
+
+
+### Features
+
+* generate SDKs for Looker 25.6 ([#1574](https://github.com/looker-open-source/sdk-codegen/issues/1574)) ([417db6a](https://github.com/looker-open-source/sdk-codegen/commit/417db6a32efbf61c1fe17a50ed48448229eea2bf))
+
 ## [25.4.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v25.2.0...sdk-codegen-all-v25.4.0) (2025-03-11)
 
 
