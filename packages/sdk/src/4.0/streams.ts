@@ -25,7 +25,7 @@
  */
 
 /**
- * 469 API methods
+ * 471 API methods
  */
 
 import type {
@@ -66,6 +66,8 @@ import type {
   IContentValidation,
   IContentView,
   ICostEstimate,
+  ICreateCIRunRequest,
+  ICreateCIRunResponse,
   ICreateCostEstimate,
   ICreateCredentialsApi3,
   ICreateEmbedUserRequest,
@@ -152,6 +154,7 @@ import type {
   IPermission,
   IPermissionSet,
   IProject,
+  IProjectCIRun,
   IProjectFile,
   IProjectValidation,
   IProjectValidationCache,
@@ -1253,9 +1256,6 @@ export class Looker40SDKStream extends APIMethods {
    * Protect this signed URL as you would an access token or password credentials - do not write
    * it to disk, do not pass it to a third party, and only pass it through a secure HTTPS
    * encrypted transport.
-   *
-   *
-   * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
    *
    * POST /embed/token_url/me -> IEmbedUrlResponse
    *
@@ -9938,6 +9938,67 @@ export class Looker40SDKStream extends APIMethods {
         tag_message: request.tag_message,
       },
       request.body,
+      options
+    );
+  }
+
+  /**
+   * ### Fetches a CI Run.
+   *
+   * GET /projects/{project_id}/ci/runs/{run_id} -> IProjectCIRun
+   *
+   * @param callback streaming output function
+   * @param project_id Project Id
+   * @param run_id Run Id
+   * @param fields Requested fields
+   * @param options one-time API call overrides
+   *
+   */
+  async get_ci_run(
+    callback: (response: Response) => Promise<IProjectCIRun>,
+    project_id: string,
+    run_id: string,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    project_id = encodeParam(project_id);
+    run_id = encodeParam(run_id);
+    return this.authStream<IProjectCIRun>(
+      callback,
+      'GET',
+      `/projects/${project_id}/ci/runs/${run_id}`,
+      { fields },
+      null,
+      options
+    );
+  }
+
+  /**
+   * ### Creates a CI Run.
+   *
+   * POST /projects/{project_id}/ci/run -> ICreateCIRunResponse
+   *
+   * @param callback streaming output function
+   * @param project_id Project Id
+   * @param body Partial<ICreateCIRunRequest>
+   * @param fields Requested fields
+   * @param options one-time API call overrides
+   *
+   */
+  async create_ci_run(
+    callback: (response: Response) => Promise<ICreateCIRunResponse>,
+    project_id: string,
+    body: Partial<ICreateCIRunRequest>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    project_id = encodeParam(project_id);
+    return this.authStream<ICreateCIRunResponse>(
+      callback,
+      'POST',
+      `/projects/${project_id}/ci/run`,
+      { fields },
+      body,
       options
     );
   }

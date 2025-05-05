@@ -25,7 +25,7 @@
  */
 
 /**
- * 415 API models: 260 Spec, 71 Request, 62 Write, 22 Enum
+ * 424 API models: 269 Spec, 71 Request, 62 Write, 22 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl';
@@ -667,6 +667,132 @@ export enum Category {
   filter = 'filter',
   measure = 'measure',
   dimension = 'dimension',
+}
+
+export interface ICIChangeRequest {
+  /**
+   * Change request number (read-only)
+   */
+  change_request_number?: number | null;
+  /**
+   * Change request url (read-only)
+   */
+  change_request_url?: string | null;
+  /**
+   * Change request name (read-only)
+   */
+  change_request_name?: string | null;
+  /**
+   * Change request commits url (read-only)
+   */
+  change_request_commits_url?: string | null;
+}
+
+export interface ICIGitState {
+  /**
+   * Git branch for run (read-only)
+   */
+  branch?: string | null;
+  /**
+   * Git repository for run (read-only)
+   */
+  repository?: string | null;
+  /**
+   * Git commit for run (read-only)
+   */
+  commit_ref?: string | null;
+  /**
+   * Run start time. (read-only)
+   */
+  target?: string | null;
+}
+
+export interface ICIRun {
+  /**
+   * Run ID (read-only)
+   */
+  run_id?: string;
+  /**
+   * Run created time. (read-only)
+   */
+  created_at?: Date;
+  /**
+   * Run start time. (read-only)
+   */
+  started_at?: Date | null;
+  /**
+   * Run completed time. (read-only)
+   */
+  finished_at?: Date | null;
+  /**
+   * Run status url (read-only)
+   */
+  status_url?: string;
+  /**
+   * Run status. (read-only)
+   */
+  status?: string | null;
+  /**
+   * Git service for run (read-only)
+   */
+  git_service?: string | null;
+  git_state?: ICIGitState;
+  /**
+   * Run results (read-only)
+   */
+  result?: ICIRunResult[] | null;
+  schedule?: ICIScheduleTrigger;
+  /**
+   * Target branch for run (read-only)
+   */
+  target_branch?: string | null;
+  /**
+   * Suite title (read-only)
+   */
+  title?: string | null;
+  /**
+   * Trigger for run (read-only)
+   */
+  trigger?: string | null;
+  change_request?: ICIChangeRequest;
+  /**
+   * The Id of the suite used (read-only)
+   */
+  suite_id?: string;
+  /**
+   * User who triggered the run (read-only)
+   */
+  username?: string | null;
+}
+
+export interface ICIRunResult {
+  /**
+   * Run result status (read-only)
+   */
+  status?: string;
+  /**
+   * Run result validator (read-only)
+   */
+  validator?: string;
+}
+
+export interface ICIScheduleTrigger {
+  /**
+   * Whether schedule is active (read-only)
+   */
+  enabled?: boolean;
+  /**
+   * Day of week (0 = Sunday, 6 = Saturday) (read-only)
+   */
+  day?: string;
+  /**
+   * Hour of the day (24 hour format) (read-only)
+   */
+  hour?: string;
+  /**
+   * How often the schedule is configured to run (read-only)
+   */
+  frequency?: string | null;
 }
 
 export interface IColorCollection {
@@ -1424,6 +1550,44 @@ export interface ICostEstimate {
    * Human-friendly message (read-only)
    */
   message?: string;
+}
+
+export interface ICreateCIRunRequest {
+  /**
+   * Run ID
+   */
+  suite_id?: string;
+  /**
+   * The branch to test. Omit to test production.
+   */
+  branch?: string | null;
+  /**
+   * Suite name
+   */
+  target?: string;
+  /**
+   * The commit to test. Omit to test production.
+   */
+  commit?: string | null;
+  /**
+   * User attributes to set for run
+   */
+  user_attributes?: string[] | null;
+  /**
+   * Webhooks to trigger when run completes.
+   */
+  webhooks?: string[] | null;
+}
+
+export interface ICreateCIRunResponse {
+  /**
+   * Run ID (read-only)
+   */
+  run_id?: string;
+  /**
+   * Run status (read-only)
+   */
+  status?: string;
 }
 
 /**
@@ -2808,6 +2972,10 @@ export interface IDBConnection {
    */
   uses_oauth?: boolean;
   /**
+   * Whether the connection uses key-pair for authentication.
+   */
+  uses_key_pair_auth?: boolean;
+  /**
    * Whether the integration uses the oauth instance account. (read-only)
    */
   uses_instance_oauth?: boolean;
@@ -2816,7 +2984,7 @@ export interface IDBConnection {
    */
   certificate?: string | null;
   /**
-   * (Write-Only) Certificate keyfile type - .json or .p12
+   * (Write-Only) Certificate keyfile type - .json, .p8 or .p12
    */
   file_type?: string | null;
   /**
@@ -3247,6 +3415,17 @@ export interface IDialect {
   has_ssl_support?: boolean;
 }
 
+export interface IDialectDriverVersion {
+  /**
+   * Name to be passed to the backend (read-only)
+   */
+  name?: string | null;
+  /**
+   * Name to be displayed in the frontend. (read-only)
+   */
+  display_name?: string | null;
+}
+
 export interface IDialectInfo {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -3287,7 +3466,7 @@ export interface IDialectInfo {
   /**
    * Array of supported drivers for a given dialect (read-only)
    */
-  supported_driver_versions?: string[] | null;
+  supported_driver_versions?: IDialectDriverVersion[] | null;
   supported_options?: IDialectInfoOptions;
 }
 
@@ -7169,6 +7348,10 @@ export interface IProject {
   dependency_status?: string | null;
 }
 
+export interface IProjectCIRun {
+  run?: ICIRun;
+}
+
 export interface IProjectError {
   /**
    * A stable token that uniquely identifies this class of error, ignoring parameter values. Error message text may vary due to parameters or localization, but error codes do not. For example, a "File not found" error will have the same error code regardless of the filename in question or the user's display language (read-only)
@@ -7676,6 +7859,10 @@ export interface IReport {
    * Name of User that deleted the Report. (read-only)
    */
   deleter_user_name?: string | null;
+  /**
+   * Count of schedules on the report. (read-only)
+   */
+  schedule_count?: number | null;
 }
 
 export interface IRepositoryCredential {
@@ -13106,11 +13293,15 @@ export interface IWriteDBConnection {
    */
   password?: string | null;
   /**
+   * Whether the connection uses key-pair for authentication.
+   */
+  uses_key_pair_auth?: boolean;
+  /**
    * (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
    */
   certificate?: string | null;
   /**
-   * (Write-Only) Certificate keyfile type - .json or .p12
+   * (Write-Only) Certificate keyfile type - .json, .p8 or .p12
    */
   file_type?: string | null;
   /**
