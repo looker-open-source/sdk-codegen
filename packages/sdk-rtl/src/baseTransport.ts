@@ -173,7 +173,7 @@ export abstract class BaseTransport implements ITransport {
     let signaller;
     if (AbortSignal.timeout) {
       const ms = sdkTimeout(options) * 1000;
-      let signaller = AbortSignal.timeout(ms);
+      signaller = AbortSignal.timeout(ms);
       if ('signal' in options && options.signal) {
         // AbortSignal.any may not be available, tolerate its absence
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -189,11 +189,11 @@ export abstract class BaseTransport implements ITransport {
           );
           console.debug({ AbortSignal });
         }
-      } else {
-        console.debug(
-          'AbortSignal.timeout is not defined. Timeout will use default behavior'
-        );
       }
+    } else {
+      console.debug(
+        'AbortSignal.timeout is not defined. Timeout will use default behavior'
+      );
     }
 
     let props: IRequestProps = {
