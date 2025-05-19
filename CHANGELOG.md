@@ -5,6 +5,8 @@
 
 ### Features
 
+* Note that the method signature for `sync_lookml_dashboard` has changed.
+
 * generate SDKs for Looker 25.8 ([#1584](https://github.com/looker-open-source/sdk-codegen/issues/1584)) ([1283c4c](https://github.com/looker-open-source/sdk-codegen/commit/1283c4cfb90b5e294b10b801356a246d8b1d2364))
 
 ## [25.6.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v25.4.0...sdk-codegen-all-v25.6.0) (2025-05-05)
