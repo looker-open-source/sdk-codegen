@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 353 API models: 269 Spec, 0 Request, 62 Write, 22 Enum
+/// 373 API models: 287 Spec, 0 Request, 62 Write, 24 Enum
 
 #nullable enable
 using System;
@@ -279,6 +279,64 @@ public class ArtifactUsage : SdkModel
   public long usage { get; set; }
 }
 
+public class AssertValidatorErrorItem : SdkModel
+{
+  public AssertValidatorTestError? assert_error { get; set; }
+  public GenericError? generic_error { get; set; }
+}
+
+public class AssertValidatorResult : SdkModel
+{
+  /// <summary>Name of the validator (assert) (read-only)</summary>
+  public string? name { get; set; } = null;
+  /// <summary>Status of the validation (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)</summary>
+  public string? status { get; set; } = null;
+  /// <summary>Results of the validation (read-only)</summary>
+  public AssertValidatorTestedExplore[]? results { get; set; } = null;
+}
+
+public class AssertValidatorTestedExplore : SdkModel
+{
+  /// <summary>Total number of failed data tests (read-only)</summary>
+  public long? error_count { get; set; } = null;
+  /// <summary>Details of data tests that failed validation (read-only)</summary>
+  public AssertValidatorErrorItem[]? errors { get; set; } = null;
+  /// <summary>Total number of successful data tests (read-only)</summary>
+  public string? success_count { get; set; } = null;
+  /// <summary>Details of data tests that passed validation (read-only)</summary>
+  public AssertValidatorTestSuccess[]? successes { get; set; } = null;
+}
+
+public class AssertValidatorTestError : SdkModel
+{
+  /// <summary>LookML model that contains the data test (read-only)</summary>
+  public string? model { get; set; } = null;
+  /// <summary>LookML Explore that is used as the explore_source for the data test (read-only)</summary>
+  public string? explore { get; set; } = null;
+  /// <summary>Name of the data test (read-only)</summary>
+  public string? test_name { get; set; } = null;
+  /// <summary>URL to the Explore (read-only)</summary>
+  public string? explore_url { get; set; } = null;
+  /// <summary>URL to the LookML file where the data test is defined (read-only)</summary>
+  public string? lookml_url { get; set; } = null;
+  /// <summary>Message returned by the data test (read-only)</summary>
+  public string? message { get; set; } = null;
+}
+
+public class AssertValidatorTestSuccess : SdkModel
+{
+  /// <summary>LookML model that contains the data test (read-only)</summary>
+  public string? model { get; set; } = null;
+  /// <summary>LookML Explore that is used as the explore_source for the data test (read-only)</summary>
+  public string? explore { get; set; } = null;
+  /// <summary>Name of the data test (read-only)</summary>
+  public string? test_name { get; set; } = null;
+  /// <summary>URL to the Explore (read-only)</summary>
+  public string? explore_url { get; set; } = null;
+  /// <summary>URL to the LookML file where the data test is defined (read-only)</summary>
+  public string? lookml_url { get; set; } = null;
+}
+
 public class BackupConfiguration : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
@@ -424,78 +482,82 @@ public enum Category
 
 public class CIChangeRequest : SdkModel
 {
-  /// <summary>Change request number (read-only)</summary>
+  /// <summary>Numeric identifier of the change request (read-only)</summary>
   public long? change_request_number { get; set; } = null;
-  /// <summary>Change request url (read-only)</summary>
+  /// <summary>URL of the change request (read-only)</summary>
   public string? change_request_url { get; set; } = null;
-  /// <summary>Change request name (read-only)</summary>
+  /// <summary>Name of the change request (read-only)</summary>
   public string? change_request_name { get; set; } = null;
-  /// <summary>Change request commits url (read-only)</summary>
+  /// <summary>For PR-triggered CI runs, the URL to the change request commit that triggered the run. (read-only)</summary>
   public string? change_request_commits_url { get; set; } = null;
 }
 
 public class CIGitState : SdkModel
 {
-  /// <summary>Git branch for run (read-only)</summary>
+  /// <summary>Git branch that the CI run validates (read-only)</summary>
   public string? branch { get; set; } = null;
-  /// <summary>Git repository for run (read-only)</summary>
+  /// <summary>Git repository that contains the Git branch being validated (read-only)</summary>
   public string? repository { get; set; } = null;
-  /// <summary>Git commit for run (read-only)</summary>
+  /// <summary>Git commit that the CI run validates (read-only)</summary>
   public string? commit_ref { get; set; } = null;
-  /// <summary>Run start time. (read-only)</summary>
+  /// <summary>For incremental runs, the Git branch that the CI run compares against during validation (read-only)</summary>
   public string? target { get; set; } = null;
 }
 
 public class CIRun : SdkModel
 {
-  /// <summary>Run ID (read-only)</summary>
+  /// <summary>ID of the CI run (read-only)</summary>
   public string? run_id { get; set; } = null;
-  /// <summary>Run created time. (read-only)</summary>
+  /// <summary>Time and date that the CI run was initiated (read-only)</summary>
   public DateTime? created_at { get; set; } = null;
-  /// <summary>Run start time. (read-only)</summary>
+  /// <summary>Time and date that the CI run began executing (read-only)</summary>
   public DateTime? started_at { get; set; } = null;
-  /// <summary>Run completed time. (read-only)</summary>
+  /// <summary>Time and date that the CI run completed (read-only)</summary>
   public DateTime? finished_at { get; set; } = null;
-  /// <summary>Run status url (read-only)</summary>
+  /// <summary>Git provider URL where you can view the commit status. This is the status URL that you specify when you create a CI suite (read-only)</summary>
   public string? status_url { get; set; } = null;
-  /// <summary>Run status. (read-only)</summary>
+  /// <summary>Status of the CI run (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)</summary>
   public string? status { get; set; } = null;
-  /// <summary>Git service for run (read-only)</summary>
+  /// <summary>Git service for CI run (e.g. GitHub) (read-only)</summary>
   public string? git_service { get; set; } = null;
   public CIGitState? git_state { get; set; }
-  /// <summary>Run results (read-only)</summary>
-  public CIRunResult[]? result { get; set; } = null;
+  public CIRunResult? result { get; set; }
   public CIScheduleTrigger? schedule { get; set; }
-  /// <summary>Target branch for run (read-only)</summary>
+  /// <summary>Git branch that the CI run compares against during validation, used for incremental runs (read-only)</summary>
   public string? target_branch { get; set; } = null;
-  /// <summary>Suite title (read-only)</summary>
+  /// <summary>Name of the CI suite (read-only)</summary>
   public string? title { get; set; } = null;
-  /// <summary>Trigger for run (read-only)</summary>
+  /// <summary>Trigger for CI run (unknown, manual, schedule, change_request) (read-only)</summary>
   public string? trigger { get; set; } = null;
   public CIChangeRequest? change_request { get; set; }
-  /// <summary>The Id of the suite used (read-only)</summary>
+  /// <summary>ID of the CI suite (read-only)</summary>
   public string? suite_id { get; set; } = null;
-  /// <summary>User who triggered the run (read-only)</summary>
+  /// <summary>Username of the user who triggered the CI run, if the CI run was manually triggered (read-only)</summary>
   public string? username { get; set; } = null;
 }
 
 public class CIRunResult : SdkModel
 {
-  /// <summary>Run result status (read-only)</summary>
-  public string? status { get; set; } = null;
-  /// <summary>Run result validator (read-only)</summary>
-  public string? validator { get; set; } = null;
+  public SqlValidatorResult? sql_result { get; set; }
+  public GenericError? sql_error { get; set; }
+  public AssertValidatorResult? assert_result { get; set; }
+  public GenericError? assert_error { get; set; }
+  public ContentValidatorResult? content_result { get; set; }
+  public GenericError? content_error { get; set; }
+  public LookMLValidatorResult? lookml_result { get; set; }
+  public GenericError? lookml_error { get; set; }
+  public GenericError? generic_error { get; set; }
 }
 
 public class CIScheduleTrigger : SdkModel
 {
-  /// <summary>Whether schedule is active (read-only)</summary>
+  /// <summary>Whether the CI run schedule is active (read-only)</summary>
   public bool? enabled { get; set; } = null;
-  /// <summary>Day of week (0 = Sunday, 6 = Saturday) (read-only)</summary>
+  /// <summary>For scheduled runs, day of the week that the CI run is scheduled (read-only)</summary>
   public string? day { get; set; } = null;
-  /// <summary>Hour of the day (24 hour format) (read-only)</summary>
+  /// <summary>For schedules runs, the hour of the day (24 hour format) that the CI run is scheduled (read-only)</summary>
   public string? hour { get; set; } = null;
-  /// <summary>How often the schedule is configured to run (read-only)</summary>
+  /// <summary>For scheduled runs, how often the CI run is scheduled to run (hourly, daily, weekly) (read-only)</summary>
   public string? frequency { get; set; } = null;
 }
 
@@ -890,6 +952,38 @@ public class ContentValidationScheduledPlan : SdkModel
   public string? id { get; set; } = null;
 }
 
+public class ContentValidatorContentError : SdkModel
+{
+  /// <summary>A URI reference that identifies the problem type (read-only)</summary>
+  public string? type { get; set; } = null;
+  /// <summary>Overview of the error (read-only)</summary>
+  public string? title { get; set; } = null;
+  /// <summary>Detail of the error (read-only)</summary>
+  public string? detail { get; set; } = null;
+  /// <summary>The HTTP status code for the problem (read-only)</summary>
+  public string? status { get; set; } = null;
+  /// <summary>URI reference that identifies the specific occurrence of the problem (read-only)</summary>
+  public string? instance { get; set; } = null;
+  /// <summary>LookML model that contains the error (read-only)</summary>
+  public string? model { get; set; } = null;
+  /// <summary>LookML Explore that contains the error (read-only)</summary>
+  public string? explore { get; set; } = null;
+  /// <summary>LookML field that caused the error (read-only)</summary>
+  public string? field_name { get; set; } = null;
+  /// <summary>Type of the content (dashboard, look) (read-only)</summary>
+  public string? content_type { get; set; } = null;
+  /// <summary>Folder of the content (read-only)</summary>
+  public string? folder { get; set; } = null;
+  /// <summary>URL of the content (read-only)</summary>
+  public string? url { get; set; } = null;
+  /// <summary>Type of the tile (dashboard_element, dashboard_filter) (read-only)</summary>
+  public string? tile_type { get; set; } = null;
+  /// <summary>Title of the tile (read-only)</summary>
+  public string? tile_title { get; set; } = null;
+  /// <summary>Message returned by the content validator (read-only)</summary>
+  public string? message { get; set; } = null;
+}
+
 public class ContentValidatorError : SdkModel
 {
   public ContentValidationLook? look { get; set; }
@@ -904,6 +998,32 @@ public class ContentValidatorError : SdkModel
   public ContentValidationError[]? errors { get; set; } = null;
   /// <summary>An id unique to this piece of content for this validation run (read-only)</summary>
   public string? id { get; set; } = null;
+}
+
+public class ContentValidatorErrorItem : SdkModel
+{
+  public ContentValidatorContentError? content_error { get; set; }
+  public GenericError? generic_error { get; set; }
+}
+
+public class ContentValidatorResult : SdkModel
+{
+  /// <summary>Name of the validator (content) (read-only)</summary>
+  public string? name { get; set; } = null;
+  /// <summary>Whether the validation was incremental (read-only)</summary>
+  public bool? incremental { get; set; } = null;
+  /// <summary>Status of the validation (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)</summary>
+  public string? status { get; set; } = null;
+  /// <summary>Results of the content validation (read-only)</summary>
+  public ContentValidatorTestedExplore[]? result { get; set; } = null;
+}
+
+public class ContentValidatorTestedExplore : SdkModel
+{
+  /// <summary>Total number of failed content validations (read-only)</summary>
+  public long? error_count { get; set; } = null;
+  /// <summary>Details of the content that failed validation (read-only)</summary>
+  public ContentValidatorErrorItem[]? errors { get; set; } = null;
 }
 
 public class ContentView : SdkModel
@@ -960,25 +1080,19 @@ public class CostEstimate : SdkModel
 
 public class CreateCIRunRequest : SdkModel
 {
-  /// <summary>Run ID</summary>
+  /// <summary>ID of the CI suite</summary>
   public string? suite_id { get; set; } = null;
-  /// <summary>The branch to test. Omit to test production.</summary>
+  /// <summary>Branch that the CI run should validate. Omit to test production.</summary>
   public string? branch { get; set; } = null;
-  /// <summary>Suite name</summary>
-  public string? target { get; set; } = null;
-  /// <summary>The commit to test. Omit to test production.</summary>
+  /// <summary>Commit that the CI run should validate. Omit to test production.</summary>
   public string? commit { get; set; } = null;
-  /// <summary>User attributes to set for run</summary>
-  public string[]? user_attributes { get; set; } = null;
-  /// <summary>Webhooks to trigger when run completes.</summary>
-  public string[]? webhooks { get; set; } = null;
 }
 
 public class CreateCIRunResponse : SdkModel
 {
-  /// <summary>Run ID (read-only)</summary>
+  /// <summary>ID of the CI run (read-only)</summary>
   public string? run_id { get; set; } = null;
-  /// <summary>Run status (read-only)</summary>
+  /// <summary>Status of the CI run (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)</summary>
   public string? status { get; set; } = null;
 }
 
@@ -2030,7 +2144,7 @@ public class Dialect : SdkModel
   public bool? has_ssl_support { get; set; } = null;
 }
 
-public class DialectDriverVersion : SdkModel
+public class DialectDriverNamesVersion : SdkModel
 {
   /// <summary>Name to be passed to the backend (read-only)</summary>
   public string? name { get; set; } = null;
@@ -2046,6 +2160,10 @@ public class DialectInfo : SdkModel
   public string? default_max_connections { get; set; } = null;
   /// <summary>Default port number (read-only)</summary>
   public string? default_port { get; set; } = null;
+  /// <summary>Default number max queries (read-only)</summary>
+  public string? default_max_queries { get; set; } = null;
+  /// <summary>Default number max queries per user (read-only)</summary>
+  public string? default_max_queries_per_user { get; set; } = null;
   /// <summary>Is the supporting driver installed (read-only)</summary>
   public bool? installed { get; set; } = null;
   /// <summary>The human-readable label of the connection (read-only)</summary>
@@ -2059,7 +2177,7 @@ public class DialectInfo : SdkModel
   /// <summary>The name of the driver used for this dialect (read-only)</summary>
   public string? supported_driver_name { get; set; } = null;
   /// <summary>Array of supported drivers for a given dialect (read-only)</summary>
-  public DialectDriverVersion[]? supported_driver_versions { get; set; } = null;
+  public DialectDriverNamesVersion[]? supported_driver_versions { get; set; } = null;
   public DialectInfoOptions? supported_options { get; set; }
 }
 
@@ -2432,6 +2550,20 @@ public enum Format
   topojson,
   [EnumMember(Value = "vector_tile_region")]
   vector_tile_region
+}
+
+public class GenericError : SdkModel
+{
+  /// <summary>A URI reference that identifies the problem type (read-only)</summary>
+  public string? type { get; set; } = null;
+  /// <summary>Overview of the error (read-only)</summary>
+  public string? title { get; set; } = null;
+  /// <summary>Detail of the error (read-only)</summary>
+  public string? detail { get; set; } = null;
+  /// <summary>The HTTP status code for the problem (read-only)</summary>
+  public string? status { get; set; } = null;
+  /// <summary>URI reference that identifies the specific occurrence of the problem (read-only)</summary>
+  public string? instance { get; set; } = null;
 }
 
 public class GitBranch : SdkModel
@@ -2938,6 +3070,17 @@ public class JsonBiTableCalc : SdkModel
   public string value_format { get; set; } = "";
   /// <summary>If table calculation is a measure (read-only)</summary>
   public bool measure { get; set; }
+}
+
+/// The type of calculation for the period_over_period measure. Valid values are: "previous", "difference", "relative_change". (Enum defined in LookmlModelExploreFieldPeriodOverPeriodParams)
+public enum Kind
+{
+  [EnumMember(Value = "previous")]
+  previous,
+  [EnumMember(Value = "difference")]
+  difference,
+  [EnumMember(Value = "relative_change")]
+  relative_change
 }
 
 public class LDAPConfig : SdkModel
@@ -3483,6 +3626,7 @@ public class LookmlModelExploreField : SdkModel
   public bool? strict_value_format { get; set; } = null;
   /// <summary>Whether this field is a parameter. (read-only)</summary>
   public bool? parameter { get; set; } = null;
+  public LookmlModelExploreFieldPeriodOverPeriodParams? period_over_period_params { get; set; }
   /// <summary>Whether this field can be removed from a query. (read-only)</summary>
   public bool? permanent { get; set; } = null;
   /// <summary>Whether or not the field represents a primary key. (read-only)</summary>
@@ -3575,6 +3719,20 @@ public class LookmlModelExploreFieldMeasureFilters : SdkModel
   public string? field { get; set; } = null;
   /// <summary>Filter condition value (read-only)</summary>
   public string? condition { get; set; } = null;
+}
+
+public class LookmlModelExploreFieldPeriodOverPeriodParams : SdkModel
+{
+  /// <summary>Specifies the measure that will be calculated over the different periods. (read-only)</summary>
+  public string? based_on { get; set; } = null;
+  /// <summary>Specifies the time dimension that this measure will operate over. (read-only)</summary>
+  public string? based_on_time { get; set; } = null;
+  /// <summary>Specifies the time frame for the comparison. Valid values are: "year", "fiscal_year", "quarter", "fiscal_quarter", "month", "week", "date". (read-only)</summary>
+  [JsonConverter(typeof(StringEnumConverter))]
+  public Period? period { get; set; }
+  /// <summary>The type of calculation for the period_over_period measure. Valid values are: "previous", "difference", "relative_change". (read-only)</summary>
+  [JsonConverter(typeof(StringEnumConverter))]
+  public Kind? kind { get; set; }
 }
 
 public class LookmlModelExploreFieldset : SdkModel
@@ -3702,6 +3860,54 @@ public class LookmlTestResult : SdkModel
   public ProjectError[]? warnings { get; set; } = null;
   /// <summary>True if this test passsed without errors. (read-only)</summary>
   public bool? success { get; set; } = null;
+}
+
+public class LookMLValidatorError : SdkModel
+{
+  /// <summary>A URI reference that identifies the problem type (read-only)</summary>
+  public string? type { get; set; } = null;
+  /// <summary>Overview of the error (read-only)</summary>
+  public string? title { get; set; } = null;
+  /// <summary>Detail of the error (read-only)</summary>
+  public string? detail { get; set; } = null;
+  /// <summary>The HTTP status code for the problem (read-only)</summary>
+  public string? status { get; set; } = null;
+  /// <summary>URI reference that identifies the specific occurrence of the problem (read-only)</summary>
+  public string? instance { get; set; } = null;
+  /// <summary>LookML model that contains the error (read-only)</summary>
+  public string? model { get; set; } = null;
+  /// <summary>LookML Explore that contains the error (read-only)</summary>
+  public string? explore { get; set; } = null;
+  /// <summary>LookML field that caused the error (read-only)</summary>
+  public string? field_name { get; set; } = null;
+  /// <summary>Message returned by the LookML validator (read-only)</summary>
+  public string? message { get; set; } = null;
+  /// <summary>Severity of the error (warning, error, fatal, info, success) (read-only)</summary>
+  public string? severity { get; set; } = null;
+  /// <summary>Line number of the error in the LookML file (read-only)</summary>
+  public string? line_number { get; set; } = null;
+  /// <summary>URL to the LookML that caused the error (read-only)</summary>
+  public string? lookml_url { get; set; } = null;
+  /// <summary>IDE folder path to the LookML file that caused the error (read-only)</summary>
+  public string? file_path { get; set; } = null;
+}
+
+public class LookMLValidatorErrorItem : SdkModel
+{
+  public LookMLValidatorError? lookml_error { get; set; }
+  public GenericError? generic_error { get; set; }
+}
+
+public class LookMLValidatorResult : SdkModel
+{
+  /// <summary>Name of the validator (lookml) (read-only)</summary>
+  public string? name { get; set; } = null;
+  /// <summary>Status of the validation (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)</summary>
+  public string? status { get; set; } = null;
+  /// <summary>Total number of failed LookML validations (read-only)</summary>
+  public long? error_count { get; set; } = null;
+  /// <summary>Details of the LookML that failed validation (read-only)</summary>
+  public LookMLValidatorErrorItem[]? errors { get; set; } = null;
 }
 
 public class LookModel : SdkModel
@@ -4201,6 +4407,25 @@ public class PasswordConfig : SdkModel
   public bool? require_upperlower { get; set; } = null;
   /// <summary>Require at least one special character</summary>
   public bool? require_special { get; set; } = null;
+}
+
+/// Specifies the time frame for the comparison. Valid values are: "year", "fiscal_year", "quarter", "fiscal_quarter", "month", "week", "date". (Enum defined in LookmlModelExploreFieldPeriodOverPeriodParams)
+public enum Period
+{
+  [EnumMember(Value = "year")]
+  year,
+  [EnumMember(Value = "fiscal_year")]
+  fiscal_year,
+  [EnumMember(Value = "quarter")]
+  quarter,
+  [EnumMember(Value = "fiscal_quarter")]
+  fiscal_quarter,
+  [EnumMember(Value = "month")]
+  month,
+  [EnumMember(Value = "week")]
+  week,
+  [EnumMember(Value = "date")]
+  date
 }
 
 public class Permission : SdkModel
@@ -5339,6 +5564,68 @@ public class SqlQueryCreate : SdkModel
   public string? sql { get; set; } = null;
   /// <summary>Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.</summary>
   public StringDictionary<object>? vis_config { get; set; } = null;
+}
+
+public class SqlValidatorError : SdkModel
+{
+  /// <summary>A URI reference that identifies the problem type (read-only)</summary>
+  public string? type { get; set; } = null;
+  /// <summary>Overview of the error (read-only)</summary>
+  public string? title { get; set; } = null;
+  /// <summary>Detail of the error (read-only)</summary>
+  public string? detail { get; set; } = null;
+  /// <summary>The HTTP status code for the problem (read-only)</summary>
+  public string? status { get; set; } = null;
+  /// <summary>URI reference that identifies the specific occurrence of the problem (read-only)</summary>
+  public string? instance { get; set; } = null;
+  /// <summary>LookML model that contains the Explore that failed SQL validation (read-only)</summary>
+  public string? model { get; set; } = null;
+  /// <summary>LookML Explore that failed SQL validation (read-only)</summary>
+  public string? explore { get; set; } = null;
+  /// <summary>Message returned by the SQL validation (read-only)</summary>
+  public string? message { get; set; } = null;
+  /// <summary>URL to the Explore (read-only)</summary>
+  public string? explore_url { get; set; } = null;
+  /// <summary>URL to the LookML that caused the error (read-only)</summary>
+  public string? lookml_url { get; set; } = null;
+  /// <summary>LookML dimension that caused the error (read-only)</summary>
+  public string? dimension { get; set; } = null;
+  /// <summary>Line of the error in the LookML file (read-only)</summary>
+  public string? line_number { get; set; } = null;
+}
+
+public class SqlValidatorErrorItem : SdkModel
+{
+  public SqlValidatorError? sql_error { get; set; }
+  public GenericError? generic_error { get; set; }
+}
+
+public class SqlValidatorResult : SdkModel
+{
+  /// <summary>Name of the validator (sql) (read-only)</summary>
+  public string? name { get; set; } = null;
+  /// <summary>Whether the validation was incremental (read-only)</summary>
+  public bool? incremental { get; set; } = null;
+  /// <summary>Status of the validation (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)</summary>
+  public string? status { get; set; } = null;
+  /// <summary>The results of tested Explores (read-only)</summary>
+  public SqlValidatorTestedExplore[]? result { get; set; } = null;
+}
+
+public class SqlValidatorTestedExplore : SdkModel
+{
+  /// <summary>LookML model that was tested (read-only)</summary>
+  public string? model { get; set; } = null;
+  /// <summary>LookML Explore that was tested (read-only)</summary>
+  public string? explore { get; set; } = null;
+  /// <summary>Status of the validation (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)</summary>
+  public string? status { get; set; } = null;
+  /// <summary>Reason the validation was skipped (read-only)</summary>
+  public string? skip_reason { get; set; } = null;
+  /// <summary>Total number of failed validations (read-only)</summary>
+  public long? error_count { get; set; } = null;
+  /// <summary>Details of the LookML that failed SQL validation (read-only)</summary>
+  public SqlValidatorErrorItem[]? errors { get; set; } = null;
 }
 
 public class SshPublicKey : SdkModel

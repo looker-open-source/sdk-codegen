@@ -3810,27 +3810,31 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
      * Any UDD (a dashboard which exists in the Looker database rather than as a LookML file) which has a `lookml_link_id`
      * property value referring to a LookML dashboard's id (model::dashboardname) will be updated so that it matches the current state of the LookML dashboard.
      *
+     * If the dashboard_ids parameter is specified, only the dashboards with the specified ids will be updated.
+     *
      * For this operation to succeed the user must have permission to view the LookML dashboard, and only linked dashboards
      * that the user has permission to update will be synced.
      *
      * To **link** or **unlink** a UDD set the `lookml_link_id` property with [update_dashboard()](#!/Dashboard/update_dashboard)
      *
      * @param {String} lookml_dashboard_id Id of LookML dashboard, in the form 'model::dashboardname'
-     * @param {WriteDashboard} body
      * @param {Boolean} raw_locale If true, and this dashboard is localized, export it with the raw keys, not localized.
+     * @param {DelimArray<String>} dashboard_ids An array of UDD dashboard IDs to sync. If not specified, all UDD dashboards will be synced.
      *
      * PATCH /dashboards/{lookml_dashboard_id}/sync -> Array<Long>
      */
     @JvmOverloads fun sync_lookml_dashboard(
         lookml_dashboard_id: String,
-        body: WriteDashboard,
         raw_locale: Boolean? = null,
+        dashboard_ids: DelimArray<String>? = null,
     ): SDKResponse {
         val path_lookml_dashboard_id = encodeParam(lookml_dashboard_id)
         return this.patch<Array<Long>>(
             "/dashboards/${path_lookml_dashboard_id}/sync",
-            mapOf("raw_locale" to raw_locale),
-            body,
+            mapOf(
+                "raw_locale" to raw_locale,
+                "dashboard_ids" to dashboard_ids,
+            ),
         )
     }
 

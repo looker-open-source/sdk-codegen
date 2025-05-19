@@ -4879,6 +4879,8 @@ class Looker40SDK(api_methods.APIMethods):
     # Any UDD (a dashboard which exists in the Looker database rather than as a LookML file) which has a `lookml_link_id`
     # property value referring to a LookML dashboard's id (model::dashboardname) will be updated so that it matches the current state of the LookML dashboard.
     #
+    # If the dashboard_ids parameter is specified, only the dashboards with the specified ids will be updated.
+    #
     # For this operation to succeed the user must have permission to view the LookML dashboard, and only linked dashboards
     # that the user has permission to update will be synced.
     #
@@ -4889,9 +4891,10 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of LookML dashboard, in the form 'model::dashboardname'
         lookml_dashboard_id: str,
-        body: mdls.WriteDashboard,
         # If true, and this dashboard is localized, export it with the raw keys, not localized.
         raw_locale: Optional[bool] = None,
+        # An array of UDD dashboard IDs to sync. If not specified, all UDD dashboards will be synced.
+        dashboard_ids: Optional[mdls.DelimSequence[str]] = None,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[int]:
         """Sync LookML Dashboard"""
@@ -4901,8 +4904,7 @@ class Looker40SDK(api_methods.APIMethods):
             self.patch(
                 path=f"/dashboards/{lookml_dashboard_id}/sync",
                 structure=Sequence[int],
-                query_params={"raw_locale": raw_locale},
-                body=body,
+                query_params={"raw_locale": raw_locale, "dashboard_ids": dashboard_ids},
                 transport_options=transport_options,
             ),
         )
