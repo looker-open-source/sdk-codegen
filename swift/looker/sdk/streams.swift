@@ -4356,6 +4356,8 @@ open class LookerSDKStream: APIMethods {
      * Any UDD (a dashboard which exists in the Looker database rather than as a LookML file) which has a `lookml_link_id`
      * property value referring to a LookML dashboard's id (model::dashboardname) will be updated so that it matches the current state of the LookML dashboard.
      *
+     * If the dashboard_ids parameter is specified, only the dashboards with the specified ids will be updated.
+     *
      * For this operation to succeed the user must have permission to view the LookML dashboard, and only linked dashboards
      * that the user has permission to update will be synced.
      *
@@ -4369,18 +4371,18 @@ open class LookerSDKStream: APIMethods {
          */
         _ lookml_dashboard_id: String,
         /**
-         * @param {WriteDashboard} body
-         */
-        _ body: WriteDashboard,
-        /**
          * @param {Bool} raw_locale If true, and this dashboard is localized, export it with the raw keys, not localized.
          */
         raw_locale: Bool? = nil,
+        /**
+         * @param {DelimArray<String>} dashboard_ids An array of UDD dashboard IDs to sync. If not specified, all UDD dashboards will be synced.
+         */
+        dashboard_ids: DelimArray<String>? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let path_lookml_dashboard_id = encodeParam(lookml_dashboard_id)
         let result: SDKResponse<Data, SDKError> = self.patch("/dashboards/\(path_lookml_dashboard_id)/sync", 
-            ["raw_locale": raw_locale as Any?], try! self.encode(body), options)
+            ["raw_locale": raw_locale as Any?, "dashboard_ids": dashboard_ids as Any?], nil, options)
         return result
     }
 

@@ -234,6 +234,7 @@ import type {
   IRequestSearchUsers,
   IRequestSearchUsersNames,
   IRequestStartPdtBuild,
+  IRequestSyncLookmlDashboard,
   IRequestTagRef,
   IRequestUserAttributeUserValues,
   IRequestUserRoles,
@@ -5047,6 +5048,8 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    * Any UDD (a dashboard which exists in the Looker database rather than as a LookML file) which has a `lookml_link_id`
    * property value referring to a LookML dashboard's id (model::dashboardname) will be updated so that it matches the current state of the LookML dashboard.
    *
+   * If the dashboard_ids parameter is specified, only the dashboards with the specified ids will be updated.
+   *
    * For this operation to succeed the user must have permission to view the LookML dashboard, and only linked dashboards
    * that the user has permission to update will be synced.
    *
@@ -5054,23 +5057,19 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * PATCH /dashboards/{lookml_dashboard_id}/sync -> number[]
    *
-   * @param lookml_dashboard_id Id of LookML dashboard, in the form 'model::dashboardname'
-   * @param body Partial<IWriteDashboard>
-   * @param raw_locale If true, and this dashboard is localized, export it with the raw keys, not localized.
+   * @param request composed interface "Partial<IRequestSyncLookmlDashboard>" for complex method parameters
    * @param options one-time API call overrides
    *
    */
   async sync_lookml_dashboard(
-    lookml_dashboard_id: string,
-    body: Partial<IWriteDashboard>,
-    raw_locale?: boolean,
+    request: Partial<IRequestSyncLookmlDashboard>,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<number[], IError | IValidationError>> {
-    lookml_dashboard_id = encodeParam(lookml_dashboard_id);
+    request.lookml_dashboard_id = encodeParam(request.lookml_dashboard_id);
     return this.patch<number[], IError | IValidationError>(
-      `/dashboards/${lookml_dashboard_id}/sync`,
-      { raw_locale },
-      body,
+      `/dashboards/${request.lookml_dashboard_id}/sync`,
+      { raw_locale: request.raw_locale, dashboard_ids: request.dashboard_ids },
+      null,
       options
     );
   }

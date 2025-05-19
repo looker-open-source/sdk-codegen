@@ -24,5 +24,5 @@
 
  */
 
-export const sdkVersion = '25.6';
+export const sdkVersion = '25.8';
 export const environmentPrefix = 'LOOKERSDK';

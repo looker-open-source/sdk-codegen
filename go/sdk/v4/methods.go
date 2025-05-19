@@ -3049,20 +3049,19 @@ func (l *LookerSDK) ImportLookmlDashboard(
 // Any UDD (a dashboard which exists in the Looker database rather than as a LookML file) which has a `lookml_link_id`
 // property value referring to a LookML dashboard's id (model::dashboardname) will be updated so that it matches the current state of the LookML dashboard.
 //
+// If the dashboard_ids parameter is specified, only the dashboards with the specified ids will be updated.
+//
 // For this operation to succeed the user must have permission to view the LookML dashboard, and only linked dashboards
 // that the user has permission to update will be synced.
 //
 // To **link** or **unlink** a UDD set the `lookml_link_id` property with [update_dashboard()](#!/Dashboard/update_dashboard)
 //
 // PATCH /dashboards/{lookml_dashboard_id}/sync -> []int64
-func (l *LookerSDK) SyncLookmlDashboard(
-	lookmlDashboardId string,
-	body WriteDashboard,
-	rawLocale bool,
+func (l *LookerSDK) SyncLookmlDashboard(request RequestSyncLookmlDashboard,
 	options *rtl.ApiSettings) ([]int64, error) {
-	lookmlDashboardId = url.PathEscape(lookmlDashboardId)
+	request.LookmlDashboardId = url.PathEscape(request.LookmlDashboardId)
 	var result []int64
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/dashboards/%v/sync", lookmlDashboardId), map[string]interface{}{"raw_locale": rawLocale}, body, options)
+	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/dashboards/%v/sync", request.LookmlDashboardId), map[string]interface{}{"raw_locale": request.RawLocale, "dashboard_ids": request.DashboardIds}, nil, options)
 	return result, err
 
 }

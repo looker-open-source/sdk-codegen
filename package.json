@@ -345,6 +345,7 @@
     "parse-url": "^8.1.0"
   },
   "dependencies": {
+    "yarn": "^1.22.22",
     "yarn-deduplicate": "^6.0.2"
   }
 }
