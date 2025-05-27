@@ -82,7 +82,7 @@ class SDKError(Exception):
     documentation_url: {self.documentation_url}
     error_doc_url:     {self.error_doc_url}
     error details:
-    {sep.join(str(error) for error in self.errors)}
+    {sep.join(str(error_details) for error_details in self.errors)}
     """
 
 
