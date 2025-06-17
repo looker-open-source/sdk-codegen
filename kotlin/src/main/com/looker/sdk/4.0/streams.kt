@@ -6363,6 +6363,50 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     //region Project: Manage Projects
 
     /**
+     * ### Fetches a CI Run.
+     *
+     * @param {String} project_id Project Id
+     * @param {String} run_id Run Id
+     * @param {String} fields Requested fields
+     *
+     * GET /projects/{project_id}/ci/runs/{run_id} -> ByteArray
+     */
+    @JvmOverloads fun get_ci_run(
+        project_id: String,
+        run_id: String,
+        fields: String? = null,
+    ): SDKResponse {
+        val path_project_id = encodeParam(project_id)
+        val path_run_id = encodeParam(run_id)
+        return this.get<ByteArray>(
+            "/projects/${path_project_id}/ci/runs/${path_run_id}",
+            mapOf("fields" to fields),
+        )
+    }
+
+    /**
+     * ### Creates a CI Run.
+     *
+     * @param {String} project_id Project Id
+     * @param {CreateCIRunRequest} body
+     * @param {String} fields Requested fields
+     *
+     * POST /projects/{project_id}/ci/run -> ByteArray
+     */
+    @JvmOverloads fun create_ci_run(
+        project_id: String,
+        body: CreateCIRunRequest,
+        fields: String? = null,
+    ): SDKResponse {
+        val path_project_id = encodeParam(project_id)
+        return this.post<ByteArray>(
+            "/projects/${path_project_id}/ci/run",
+            mapOf("fields" to fields),
+            body,
+        )
+    }
+
+    /**
      * ### Generate Lockfile for All LookML Dependencies
      *
      *       Git must have been configured, must be in dev mode and deploy permission required
@@ -6876,9 +6920,6 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     /**
      * ### Get All Git Connection Tests
      *
-     * dev mode required.
-     *   - Call `update_session` to select the 'dev' workspace.
-     *
      * Returns a list of tests which can be run against a project's (or the dependency project for the provided remote_url) git connection. Call [Run Git Connection Test](#!/Project/run_git_connection_test) to execute each test in sequence.
      *
      * Tests are ordered by increasing specificity. Tests should be run in the order returned because later tests require functionality tested by tests earlier in the test list.
@@ -7012,50 +7053,6 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
                 "tag_name" to tag_name,
                 "tag_message" to tag_message,
             ),
-            body,
-        )
-    }
-
-    /**
-     * ### Fetches a CI Run.
-     *
-     * @param {String} project_id Project Id
-     * @param {String} run_id Run Id
-     * @param {String} fields Requested fields
-     *
-     * GET /projects/{project_id}/ci/runs/{run_id} -> ByteArray
-     */
-    @JvmOverloads fun get_ci_run(
-        project_id: String,
-        run_id: String,
-        fields: String? = null,
-    ): SDKResponse {
-        val path_project_id = encodeParam(project_id)
-        val path_run_id = encodeParam(run_id)
-        return this.get<ByteArray>(
-            "/projects/${path_project_id}/ci/runs/${path_run_id}",
-            mapOf("fields" to fields),
-        )
-    }
-
-    /**
-     * ### Creates a CI Run.
-     *
-     * @param {String} project_id Project Id
-     * @param {CreateCIRunRequest} body
-     * @param {String} fields Requested fields
-     *
-     * POST /projects/{project_id}/ci/run -> ByteArray
-     */
-    @JvmOverloads fun create_ci_run(
-        project_id: String,
-        body: CreateCIRunRequest,
-        fields: String? = null,
-    ): SDKResponse {
-        val path_project_id = encodeParam(project_id)
-        return this.post<ByteArray>(
-            "/projects/${path_project_id}/ci/run",
-            mapOf("fields" to fields),
             body,
         )
     }

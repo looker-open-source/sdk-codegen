@@ -7306,6 +7306,59 @@ open class LookerSDK: APIMethods {
     // MARK Project: Manage Projects
 
     /**
+     * ### Fetches a CI Run.
+     *
+     * GET /projects/{project_id}/ci/runs/{run_id} -> ProjectCIRun
+     */
+    public func get_ci_run(
+        /**
+         * @param {String} project_id Project Id
+         */
+        _ project_id: String,
+        /**
+         * @param {String} run_id Run Id
+         */
+        _ run_id: String,
+        /**
+         * @param {String} fields Requested fields
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<ProjectCIRun, SDKError> {
+        let path_project_id = encodeParam(project_id)
+        let path_run_id = encodeParam(run_id)
+        let result: SDKResponse<ProjectCIRun, SDKError> = self.get("/projects/\(path_project_id)/ci/runs/\(path_run_id)", 
+            ["fields": fields], nil, options)
+        return result
+    }
+
+    /**
+     * ### Creates a CI Run.
+     *
+     * POST /projects/{project_id}/ci/run -> CreateCIRunResponse
+     */
+    public func create_ci_run(
+        /**
+         * @param {String} project_id Project Id
+         */
+        _ project_id: String,
+        /**
+         * @param {CreateCIRunRequest} body
+         */
+        _ body: CreateCIRunRequest,
+        /**
+         * @param {String} fields Requested fields
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<CreateCIRunResponse, SDKError> {
+        let path_project_id = encodeParam(project_id)
+        let result: SDKResponse<CreateCIRunResponse, SDKError> = self.post("/projects/\(path_project_id)/ci/run", 
+            ["fields": fields], try! self.encode(body), options)
+        return result
+    }
+
+    /**
      * ### Generate Lockfile for All LookML Dependencies
      *
      *       Git must have been configured, must be in dev mode and deploy permission required
@@ -7893,9 +7946,6 @@ open class LookerSDK: APIMethods {
     /**
      * ### Get All Git Connection Tests
      *
-     * dev mode required.
-     *   - Call `update_session` to select the 'dev' workspace.
-     *
      * Returns a list of tests which can be run against a project's (or the dependency project for the provided remote_url) git connection. Call [Run Git Connection Test](#!/Project/run_git_connection_test) to execute each test in sequence.
      *
      * Tests are ordered by increasing specificity. Tests should be run in the order returned because later tests require functionality tested by tests earlier in the test list.
@@ -8047,59 +8097,6 @@ open class LookerSDK: APIMethods {
         let path_project_id = encodeParam(project_id)
         let result: SDKResponse<Project, SDKError> = self.post("/projects/\(path_project_id)/tag", 
             ["commit_sha": commit_sha, "tag_name": tag_name, "tag_message": tag_message], try! self.encode(body), options)
-        return result
-    }
-
-    /**
-     * ### Fetches a CI Run.
-     *
-     * GET /projects/{project_id}/ci/runs/{run_id} -> ProjectCIRun
-     */
-    public func get_ci_run(
-        /**
-         * @param {String} project_id Project Id
-         */
-        _ project_id: String,
-        /**
-         * @param {String} run_id Run Id
-         */
-        _ run_id: String,
-        /**
-         * @param {String} fields Requested fields
-         */
-        fields: String? = nil,
-        options: ITransportSettings? = nil
-    ) -> SDKResponse<ProjectCIRun, SDKError> {
-        let path_project_id = encodeParam(project_id)
-        let path_run_id = encodeParam(run_id)
-        let result: SDKResponse<ProjectCIRun, SDKError> = self.get("/projects/\(path_project_id)/ci/runs/\(path_run_id)", 
-            ["fields": fields], nil, options)
-        return result
-    }
-
-    /**
-     * ### Creates a CI Run.
-     *
-     * POST /projects/{project_id}/ci/run -> CreateCIRunResponse
-     */
-    public func create_ci_run(
-        /**
-         * @param {String} project_id Project Id
-         */
-        _ project_id: String,
-        /**
-         * @param {CreateCIRunRequest} body
-         */
-        _ body: CreateCIRunRequest,
-        /**
-         * @param {String} fields Requested fields
-         */
-        fields: String? = nil,
-        options: ITransportSettings? = nil
-    ) -> SDKResponse<CreateCIRunResponse, SDKError> {
-        let path_project_id = encodeParam(project_id)
-        let result: SDKResponse<CreateCIRunResponse, SDKError> = self.post("/projects/\(path_project_id)/ci/run", 
-            ["fields": fields], try! self.encode(body), options)
         return result
     }
 

@@ -7986,6 +7986,59 @@ class Looker40SDK(api_methods.APIMethods):
 
     # region Project: Manage Projects
 
+    # ### Fetches a CI Run.
+    #
+    # GET /projects/{project_id}/ci/runs/{run_id} -> mdls.ProjectCIRun
+    def get_ci_run(
+        self,
+        # Project Id
+        project_id: str,
+        # Run Id
+        run_id: str,
+        # Requested fields
+        fields: Optional[str] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
+    ) -> mdls.ProjectCIRun:
+        """Fetch Continuous Integration run"""
+        project_id = self.encode_path_param(project_id)
+        run_id = self.encode_path_param(run_id)
+        response = cast(
+            mdls.ProjectCIRun,
+            self.get(
+                path=f"/projects/{project_id}/ci/runs/{run_id}",
+                structure=mdls.ProjectCIRun,
+                query_params={"fields": fields},
+                transport_options=transport_options,
+            ),
+        )
+        return response
+
+    # ### Creates a CI Run.
+    #
+    # POST /projects/{project_id}/ci/run -> mdls.CreateCIRunResponse
+    def create_ci_run(
+        self,
+        # Project Id
+        project_id: str,
+        body: mdls.CreateCIRunRequest,
+        # Requested fields
+        fields: Optional[str] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
+    ) -> mdls.CreateCIRunResponse:
+        """Create a Continuous Integration run"""
+        project_id = self.encode_path_param(project_id)
+        response = cast(
+            mdls.CreateCIRunResponse,
+            self.post(
+                path=f"/projects/{project_id}/ci/run",
+                structure=mdls.CreateCIRunResponse,
+                query_params={"fields": fields},
+                body=body,
+                transport_options=transport_options,
+            ),
+        )
+        return response
+
     # ### Generate Lockfile for All LookML Dependencies
     #
     #       Git must have been configured, must be in dev mode and deploy permission required
@@ -8633,9 +8686,6 @@ class Looker40SDK(api_methods.APIMethods):
 
     # ### Get All Git Connection Tests
     #
-    # dev mode required.
-    #   - Call `update_session` to select the 'dev' workspace.
-    #
     # Returns a list of tests which can be run against a project's (or the dependency project for the provided remote_url) git connection. Call [Run Git Connection Test](#!/Project/run_git_connection_test) to execute each test in sequence.
     #
     # Tests are ordered by increasing specificity. Tests should be run in the order returned because later tests require functionality tested by tests earlier in the test list.
@@ -8788,59 +8838,6 @@ class Looker40SDK(api_methods.APIMethods):
                     "tag_name": tag_name,
                     "tag_message": tag_message,
                 },
-                body=body,
-                transport_options=transport_options,
-            ),
-        )
-        return response
-
-    # ### Fetches a CI Run.
-    #
-    # GET /projects/{project_id}/ci/runs/{run_id} -> mdls.ProjectCIRun
-    def get_ci_run(
-        self,
-        # Project Id
-        project_id: str,
-        # Run Id
-        run_id: str,
-        # Requested fields
-        fields: Optional[str] = None,
-        transport_options: Optional[transport.TransportOptions] = None,
-    ) -> mdls.ProjectCIRun:
-        """Fetch Continuous Integration run"""
-        project_id = self.encode_path_param(project_id)
-        run_id = self.encode_path_param(run_id)
-        response = cast(
-            mdls.ProjectCIRun,
-            self.get(
-                path=f"/projects/{project_id}/ci/runs/{run_id}",
-                structure=mdls.ProjectCIRun,
-                query_params={"fields": fields},
-                transport_options=transport_options,
-            ),
-        )
-        return response
-
-    # ### Creates a CI Run.
-    #
-    # POST /projects/{project_id}/ci/run -> mdls.CreateCIRunResponse
-    def create_ci_run(
-        self,
-        # Project Id
-        project_id: str,
-        body: mdls.CreateCIRunRequest,
-        # Requested fields
-        fields: Optional[str] = None,
-        transport_options: Optional[transport.TransportOptions] = None,
-    ) -> mdls.CreateCIRunResponse:
-        """Create a Continuous Integration run"""
-        project_id = self.encode_path_param(project_id)
-        response = cast(
-            mdls.CreateCIRunResponse,
-            self.post(
-                path=f"/projects/{project_id}/ci/run",
-                structure=mdls.CreateCIRunResponse,
-                query_params={"fields": fields},
                 body=body,
                 transport_options=transport_options,
             ),

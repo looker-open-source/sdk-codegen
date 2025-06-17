@@ -9033,6 +9033,67 @@ export class Looker40SDKStream extends APIMethods {
   //#region Project: Manage Projects
 
   /**
+   * ### Fetches a CI Run.
+   *
+   * GET /projects/{project_id}/ci/runs/{run_id} -> IProjectCIRun
+   *
+   * @param callback streaming output function
+   * @param project_id Project Id
+   * @param run_id Run Id
+   * @param fields Requested fields
+   * @param options one-time API call overrides
+   *
+   */
+  async get_ci_run(
+    callback: (response: Response) => Promise<IProjectCIRun>,
+    project_id: string,
+    run_id: string,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    project_id = encodeParam(project_id);
+    run_id = encodeParam(run_id);
+    return this.authStream<IProjectCIRun>(
+      callback,
+      'GET',
+      `/projects/${project_id}/ci/runs/${run_id}`,
+      { fields },
+      null,
+      options
+    );
+  }
+
+  /**
+   * ### Creates a CI Run.
+   *
+   * POST /projects/{project_id}/ci/run -> ICreateCIRunResponse
+   *
+   * @param callback streaming output function
+   * @param project_id Project Id
+   * @param body Partial<ICreateCIRunRequest>
+   * @param fields Requested fields
+   * @param options one-time API call overrides
+   *
+   */
+  async create_ci_run(
+    callback: (response: Response) => Promise<ICreateCIRunResponse>,
+    project_id: string,
+    body: Partial<ICreateCIRunRequest>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    project_id = encodeParam(project_id);
+    return this.authStream<ICreateCIRunResponse>(
+      callback,
+      'POST',
+      `/projects/${project_id}/ci/run`,
+      { fields },
+      body,
+      options
+    );
+  }
+
+  /**
    * ### Generate Lockfile for All LookML Dependencies
    *
    *       Git must have been configured, must be in dev mode and deploy permission required
@@ -9781,9 +9842,6 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### Get All Git Connection Tests
    *
-   * dev mode required.
-   *   - Call `update_session` to select the 'dev' workspace.
-   *
    * Returns a list of tests which can be run against a project's (or the dependency project for the provided remote_url) git connection. Call [Run Git Connection Test](#!/Project/run_git_connection_test) to execute each test in sequence.
    *
    * Tests are ordered by increasing specificity. Tests should be run in the order returned because later tests require functionality tested by tests earlier in the test list.
@@ -9937,67 +9995,6 @@ export class Looker40SDKStream extends APIMethods {
         tag_message: request.tag_message,
       },
       request.body,
-      options
-    );
-  }
-
-  /**
-   * ### Fetches a CI Run.
-   *
-   * GET /projects/{project_id}/ci/runs/{run_id} -> IProjectCIRun
-   *
-   * @param callback streaming output function
-   * @param project_id Project Id
-   * @param run_id Run Id
-   * @param fields Requested fields
-   * @param options one-time API call overrides
-   *
-   */
-  async get_ci_run(
-    callback: (response: Response) => Promise<IProjectCIRun>,
-    project_id: string,
-    run_id: string,
-    fields?: string,
-    options?: Partial<ITransportSettings>
-  ) {
-    project_id = encodeParam(project_id);
-    run_id = encodeParam(run_id);
-    return this.authStream<IProjectCIRun>(
-      callback,
-      'GET',
-      `/projects/${project_id}/ci/runs/${run_id}`,
-      { fields },
-      null,
-      options
-    );
-  }
-
-  /**
-   * ### Creates a CI Run.
-   *
-   * POST /projects/{project_id}/ci/run -> ICreateCIRunResponse
-   *
-   * @param callback streaming output function
-   * @param project_id Project Id
-   * @param body Partial<ICreateCIRunRequest>
-   * @param fields Requested fields
-   * @param options one-time API call overrides
-   *
-   */
-  async create_ci_run(
-    callback: (response: Response) => Promise<ICreateCIRunResponse>,
-    project_id: string,
-    body: Partial<ICreateCIRunRequest>,
-    fields?: string,
-    options?: Partial<ITransportSettings>
-  ) {
-    project_id = encodeParam(project_id);
-    return this.authStream<ICreateCIRunResponse>(
-      callback,
-      'POST',
-      `/projects/${project_id}/ci/run`,
-      { fields },
-      body,
       options
     );
   }

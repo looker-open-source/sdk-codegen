@@ -2053,6 +2053,7 @@ type LookmlModelExploreField struct {
 	SuggestExplore           *string                                        `json:"suggest_explore,omitempty"`             // The name of the explore to base suggest queries from.
 	Suggestable              *bool                                          `json:"suggestable,omitempty"`                 // Whether or not suggestions are possible for this field.
 	Suggestions              *[]string                                      `json:"suggestions,omitempty"`                 // If available, a list of suggestions for this field. For most fields, a suggest query is a more appropriate way to get an up-to-date list of suggestions. Or use enumerations to list all the possible values.
+	Synonyms                 *[]string                                      `json:"synonyms,omitempty"`                    // A list of string synonyms (words or phrases) that can be used to help large language models and app developers understand other ways that users may refer to a field.
 	Tags                     *[]string                                      `json:"tags,omitempty"`                        // An array of arbitrary string tags provided in the model for this field.
 	Type                     *string                                        `json:"type,omitempty"`                        // The LookML type of the field.
 	UserAttributeFilterTypes *[]UserAttributeFilterTypes                    `json:"user_attribute_filter_types,omitempty"` // An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode".
@@ -2093,6 +2094,7 @@ type LookmlModelExploreFieldPeriodOverPeriodParams struct {
 	BasedOnTime *string `json:"based_on_time,omitempty"` // Specifies the time dimension that this measure will operate over.
 	Period      *Period `json:"period,omitempty"`        // Specifies the time frame for the comparison. Valid values are: "year", "fiscal_year", "quarter", "fiscal_quarter", "month", "week", "date".
 	Kind        *Kind   `json:"kind,omitempty"`          // The type of calculation for the period_over_period measure. Valid values are: "previous", "difference", "relative_change".
+	ValueToDate *bool   `json:"value_to_date,omitempty"` // specifies whether to compare the current partially completed period to an equivalent part of the previous period, or to use the entire previous period.
 }
 
 type LookmlModelExploreFieldset struct {
