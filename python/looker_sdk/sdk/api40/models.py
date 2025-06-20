@@ -7997,6 +7997,7 @@ class LookmlModelExploreField(model.Model):
         suggest_explore: The name of the explore to base suggest queries from.
         suggestable: Whether or not suggestions are possible for this field.
         suggestions: If available, a list of suggestions for this field. For most fields, a suggest query is a more appropriate way to get an up-to-date list of suggestions. Or use enumerations to list all the possible values.
+        synonyms: A list of string synonyms (words or phrases) that can be used to help large language models and app developers understand other ways that users may refer to a field.
         tags: An array of arbitrary string tags provided in the model for this field.
         type: The LookML type of the field.
         user_attribute_filter_types: An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode".
@@ -8059,6 +8060,7 @@ class LookmlModelExploreField(model.Model):
     suggest_explore: Optional[str] = None
     suggestable: Optional[bool] = None
     suggestions: Optional[Sequence[str]] = None
+    synonyms: Optional[Sequence[str]] = None
     tags: Optional[Sequence[str]] = None
     type: Optional[str] = None
     user_attribute_filter_types: Optional[Sequence["UserAttributeFilterTypes"]] = None
@@ -8123,6 +8125,7 @@ class LookmlModelExploreField(model.Model):
         suggest_explore: Optional[str] = None,
         suggestable: Optional[bool] = None,
         suggestions: Optional[Sequence[str]] = None,
+        synonyms: Optional[Sequence[str]] = None,
         tags: Optional[Sequence[str]] = None,
         type: Optional[str] = None,
         user_attribute_filter_types: Optional[
@@ -8184,6 +8187,7 @@ class LookmlModelExploreField(model.Model):
         self.suggest_explore = suggest_explore
         self.suggestable = suggestable
         self.suggestions = suggestions
+        self.synonyms = synonyms
         self.tags = tags
         self.type = type
         self.user_attribute_filter_types = user_attribute_filter_types
@@ -8289,12 +8293,14 @@ class LookmlModelExploreFieldPeriodOverPeriodParams(model.Model):
         based_on_time: Specifies the time dimension that this measure will operate over.
         period: Specifies the time frame for the comparison. Valid values are: "year", "fiscal_year", "quarter", "fiscal_quarter", "month", "week", "date".
         kind: The type of calculation for the period_over_period measure. Valid values are: "previous", "difference", "relative_change".
+        value_to_date: specifies whether to compare the current partially completed period to an equivalent part of the previous period, or to use the entire previous period.
     """
 
     based_on: Optional[str] = None
     based_on_time: Optional[str] = None
     period: Optional["Period"] = None
     kind: Optional["Kind"] = None
+    value_to_date: Optional[bool] = None
 
     def __init__(
         self,
@@ -8302,12 +8308,14 @@ class LookmlModelExploreFieldPeriodOverPeriodParams(model.Model):
         based_on: Optional[str] = None,
         based_on_time: Optional[str] = None,
         period: Optional["Period"] = None,
-        kind: Optional["Kind"] = None
+        kind: Optional["Kind"] = None,
+        value_to_date: Optional[bool] = None
     ):
         self.based_on = based_on
         self.based_on_time = based_on_time
         self.period = period
         self.kind = kind
+        self.value_to_date = value_to_date
 
 
 @attr.s(auto_attribs=True, init=False)

@@ -3657,6 +3657,8 @@ public class LookmlModelExploreField : SdkModel
   public bool? suggestable { get; set; } = null;
   /// <summary>If available, a list of suggestions for this field. For most fields, a suggest query is a more appropriate way to get an up-to-date list of suggestions. Or use enumerations to list all the possible values. (read-only)</summary>
   public string[]? suggestions { get; set; } = null;
+  /// <summary>A list of string synonyms (words or phrases) that can be used to help large language models and app developers understand other ways that users may refer to a field. (read-only)</summary>
+  public string[]? synonyms { get; set; } = null;
   /// <summary>An array of arbitrary string tags provided in the model for this field. (read-only)</summary>
   public string[]? tags { get; set; } = null;
   /// <summary>The LookML type of the field. (read-only)</summary>
@@ -3733,6 +3735,8 @@ public class LookmlModelExploreFieldPeriodOverPeriodParams : SdkModel
   /// <summary>The type of calculation for the period_over_period measure. Valid values are: "previous", "difference", "relative_change". (read-only)</summary>
   [JsonConverter(typeof(StringEnumConverter))]
   public Kind? kind { get; set; }
+  /// <summary>specifies whether to compare the current partially completed period to an equivalent part of the previous period, or to use the entire previous period. (read-only)</summary>
+  public bool? value_to_date { get; set; } = null;
 }
 
 public class LookmlModelExploreFieldset : SdkModel

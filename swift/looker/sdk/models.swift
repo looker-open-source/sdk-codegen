@@ -14955,6 +14955,7 @@ public struct LookmlModelExploreField: SDKModel {
         case _suggest_explore = "suggest_explore"
         case suggestable
         case _suggestions = "suggestions"
+        case _synonyms = "synonyms"
         case _tags = "tags"
         case _type = "type"
         case user_attribute_filter_types
@@ -15281,6 +15282,15 @@ public struct LookmlModelExploreField: SDKModel {
         set { if let v = newValue { _suggestions = v.map { AnyString.init($0) } } else { _suggestions = nil } }
     }
 
+    private var _synonyms: [AnyString]?
+    /**
+     * A list of string synonyms (words or phrases) that can be used to help large language models and app developers understand other ways that users may refer to a field. (read-only)
+     */
+    public var synonyms: [String]? {
+        get { if let v = _synonyms { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _synonyms = v.map { AnyString.init($0) } } else { _synonyms = nil } }
+    }
+
     private var _tags: [AnyString]?
     /**
      * An array of arbitrary string tags provided in the model for this field. (read-only)
@@ -15359,7 +15369,7 @@ public struct LookmlModelExploreField: SDKModel {
         set { _original_view = newValue.map(AnyString.init) }
     }
 
-    public init(align: Align? = nil, can_filter: Bool? = nil, category: Category? = nil, default_filter_value: String? = nil, description: String? = nil, dimension_group: String? = nil, drill_fields: [String]? = nil, enumerations: [LookmlModelExploreFieldEnumeration]? = nil, error: String? = nil, field_group_label: String? = nil, field_group_variant: String? = nil, fill_style: FillStyle? = nil, fiscal_month_offset: Int64? = nil, has_allowed_values: Bool? = nil, has_drills_metadata: Bool? = nil, hidden: Bool? = nil, is_filter: Bool? = nil, is_fiscal: Bool? = nil, is_numeric: Bool? = nil, is_timeframe: Bool? = nil, can_time_filter: Bool? = nil, time_interval: LookmlModelExploreFieldTimeInterval? = nil, label: String? = nil, label_from_parameter: String? = nil, label_short: String? = nil, lookml_link: String? = nil, links: [LookmlFieldLink]? = nil, map_layer: LookmlModelExploreFieldMapLayer? = nil, measure: Bool? = nil, name: String? = nil, strict_value_format: Bool? = nil, parameter: Bool? = nil, period_over_period_params: LookmlModelExploreFieldPeriodOverPeriodParams? = nil, permanent: Bool? = nil, primary_key: Bool? = nil, project_name: String? = nil, requires_refresh_on_sort: Bool? = nil, scope: String? = nil, sortable: Bool? = nil, source_file: String? = nil, source_file_path: String? = nil, sql: String? = nil, sql_case: [LookmlModelExploreFieldSqlCase]? = nil, filters: [LookmlModelExploreFieldMeasureFilters]? = nil, suggest_dimension: String? = nil, suggest_explore: String? = nil, suggestable: Bool? = nil, suggestions: [String]? = nil, tags: [String]? = nil, type: String? = nil, user_attribute_filter_types: [UserAttributeFilterTypes]? = nil, value_format: String? = nil, view: String? = nil, view_label: String? = nil, `dynamic`: Bool? = nil, week_start_day: WeekStartDay? = nil, times_used: Int64? = nil, original_view: String? = nil) {
+    public init(align: Align? = nil, can_filter: Bool? = nil, category: Category? = nil, default_filter_value: String? = nil, description: String? = nil, dimension_group: String? = nil, drill_fields: [String]? = nil, enumerations: [LookmlModelExploreFieldEnumeration]? = nil, error: String? = nil, field_group_label: String? = nil, field_group_variant: String? = nil, fill_style: FillStyle? = nil, fiscal_month_offset: Int64? = nil, has_allowed_values: Bool? = nil, has_drills_metadata: Bool? = nil, hidden: Bool? = nil, is_filter: Bool? = nil, is_fiscal: Bool? = nil, is_numeric: Bool? = nil, is_timeframe: Bool? = nil, can_time_filter: Bool? = nil, time_interval: LookmlModelExploreFieldTimeInterval? = nil, label: String? = nil, label_from_parameter: String? = nil, label_short: String? = nil, lookml_link: String? = nil, links: [LookmlFieldLink]? = nil, map_layer: LookmlModelExploreFieldMapLayer? = nil, measure: Bool? = nil, name: String? = nil, strict_value_format: Bool? = nil, parameter: Bool? = nil, period_over_period_params: LookmlModelExploreFieldPeriodOverPeriodParams? = nil, permanent: Bool? = nil, primary_key: Bool? = nil, project_name: String? = nil, requires_refresh_on_sort: Bool? = nil, scope: String? = nil, sortable: Bool? = nil, source_file: String? = nil, source_file_path: String? = nil, sql: String? = nil, sql_case: [LookmlModelExploreFieldSqlCase]? = nil, filters: [LookmlModelExploreFieldMeasureFilters]? = nil, suggest_dimension: String? = nil, suggest_explore: String? = nil, suggestable: Bool? = nil, suggestions: [String]? = nil, synonyms: [String]? = nil, tags: [String]? = nil, type: String? = nil, user_attribute_filter_types: [UserAttributeFilterTypes]? = nil, value_format: String? = nil, view: String? = nil, view_label: String? = nil, `dynamic`: Bool? = nil, week_start_day: WeekStartDay? = nil, times_used: Int64? = nil, original_view: String? = nil) {
         self.align = align
         self.can_filter = can_filter
         self.category = category
@@ -15408,6 +15418,7 @@ public struct LookmlModelExploreField: SDKModel {
         self._suggest_explore = suggest_explore.map(AnyString.init)
         self.suggestable = suggestable
         if let v = suggestions { _suggestions = v.map { AnyString.init($0) } } else { _suggestions = nil }
+        if let v = synonyms { _synonyms = v.map { AnyString.init($0) } } else { _synonyms = nil }
         if let v = tags { _tags = v.map { AnyString.init($0) } } else { _tags = nil }
         self._type = type.map(AnyString.init)
         self.user_attribute_filter_types = user_attribute_filter_types
@@ -15602,6 +15613,7 @@ public struct LookmlModelExploreFieldPeriodOverPeriodParams: SDKModel {
         case _based_on_time = "based_on_time"
         case period
         case kind
+        case value_to_date
     }
     private var _based_on: AnyString?
     /**
@@ -15631,11 +15643,17 @@ public struct LookmlModelExploreFieldPeriodOverPeriodParams: SDKModel {
      */
     public var kind: Kind?
 
-    public init(based_on: String? = nil, based_on_time: String? = nil, period: Period? = nil, kind: Kind? = nil) {
+    /**
+     * specifies whether to compare the current partially completed period to an equivalent part of the previous period, or to use the entire previous period. (read-only)
+     */
+    public var value_to_date: Bool?
+
+    public init(based_on: String? = nil, based_on_time: String? = nil, period: Period? = nil, kind: Kind? = nil, value_to_date: Bool? = nil) {
         self._based_on = based_on.map(AnyString.init)
         self._based_on_time = based_on_time.map(AnyString.init)
         self.period = period
         self.kind = kind
+        self.value_to_date = value_to_date
     }
 
 }

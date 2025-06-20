@@ -4746,6 +4746,37 @@ func (l *LookerSDK) ConnectionCostEstimate(
 
 // region Project: Manage Projects
 
+// ### Fetches a CI Run.
+//
+// GET /projects/{project_id}/ci/runs/{run_id} -> ProjectCIRun
+func (l *LookerSDK) GetCiRun(
+	projectId string,
+	runId string,
+	fields string,
+	options *rtl.ApiSettings) (ProjectCIRun, error) {
+	projectId = url.PathEscape(projectId)
+	runId = url.PathEscape(runId)
+	var result ProjectCIRun
+	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/ci/runs/%v", projectId, runId), map[string]interface{}{"fields": fields}, nil, options)
+	return result, err
+
+}
+
+// ### Creates a CI Run.
+//
+// POST /projects/{project_id}/ci/run -> CreateCIRunResponse
+func (l *LookerSDK) CreateCiRun(
+	projectId string,
+	body CreateCIRunRequest,
+	fields string,
+	options *rtl.ApiSettings) (CreateCIRunResponse, error) {
+	projectId = url.PathEscape(projectId)
+	var result CreateCIRunResponse
+	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/projects/%v/ci/run", projectId), map[string]interface{}{"fields": fields}, body, options)
+	return result, err
+
+}
+
 // ### Generate Lockfile for All LookML Dependencies
 //
 //	Git must have been configured, must be in dev mode and deploy permission required
@@ -5181,9 +5212,6 @@ func (l *LookerSDK) ProjectFile(
 
 // ### Get All Git Connection Tests
 //
-// dev mode required.
-//   - Call `update_session` to select the 'dev' workspace.
-//
 // Returns a list of tests which can be run against a project's (or the dependency project for the provided remote_url) git connection. Call [Run Git Connection Test](#!/Project/run_git_connection_test) to execute each test in sequence.
 //
 // Tests are ordered by increasing specificity. Tests should be run in the order returned because later tests require functionality tested by tests earlier in the test list.
@@ -5261,37 +5289,6 @@ func (l *LookerSDK) TagRef(request RequestTagRef,
 	request.ProjectId = url.PathEscape(request.ProjectId)
 	var result Project
 	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/projects/%v/tag", request.ProjectId), map[string]interface{}{"commit_sha": request.CommitSha, "tag_name": request.TagName, "tag_message": request.TagMessage}, request.Body, options)
-	return result, err
-
-}
-
-// ### Fetches a CI Run.
-//
-// GET /projects/{project_id}/ci/runs/{run_id} -> ProjectCIRun
-func (l *LookerSDK) GetCiRun(
-	projectId string,
-	runId string,
-	fields string,
-	options *rtl.ApiSettings) (ProjectCIRun, error) {
-	projectId = url.PathEscape(projectId)
-	runId = url.PathEscape(runId)
-	var result ProjectCIRun
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/ci/runs/%v", projectId, runId), map[string]interface{}{"fields": fields}, nil, options)
-	return result, err
-
-}
-
-// ### Creates a CI Run.
-//
-// POST /projects/{project_id}/ci/run -> CreateCIRunResponse
-func (l *LookerSDK) CreateCiRun(
-	projectId string,
-	body CreateCIRunRequest,
-	fields string,
-	options *rtl.ApiSettings) (CreateCIRunResponse, error) {
-	projectId = url.PathEscape(projectId)
-	var result CreateCIRunResponse
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/projects/%v/ci/run", projectId), map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }

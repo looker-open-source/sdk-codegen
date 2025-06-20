@@ -6206,6 +6206,10 @@ export interface ILookmlModelExploreField {
    */
   suggestions?: string[] | null;
   /**
+   * A list of string synonyms (words or phrases) that can be used to help large language models and app developers understand other ways that users may refer to a field. (read-only)
+   */
+  synonyms?: string[] | null;
+  /**
    * An array of arbitrary string tags provided in the model for this field. (read-only)
    */
   tags?: string[];
@@ -6329,6 +6333,10 @@ export interface ILookmlModelExploreFieldPeriodOverPeriodParams {
    * The type of calculation for the period_over_period measure. Valid values are: "previous", "difference", "relative_change". (read-only)
    */
   kind?: Kind;
+  /**
+   * specifies whether to compare the current partially completed period to an equivalent part of the previous period, or to use the entire previous period. (read-only)
+   */
+  value_to_date?: boolean;
 }
 
 export interface ILookmlModelExploreFieldset {

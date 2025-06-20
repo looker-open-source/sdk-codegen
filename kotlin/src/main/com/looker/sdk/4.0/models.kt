@@ -3816,6 +3816,7 @@ data class LookmlModelExploreError(
  * @property suggest_explore The name of the explore to base suggest queries from. (read-only)
  * @property suggestable Whether or not suggestions are possible for this field. (read-only)
  * @property suggestions If available, a list of suggestions for this field. For most fields, a suggest query is a more appropriate way to get an up-to-date list of suggestions. Or use enumerations to list all the possible values. (read-only)
+ * @property synonyms A list of string synonyms (words or phrases) that can be used to help large language models and app developers understand other ways that users may refer to a field. (read-only)
  * @property tags An array of arbitrary string tags provided in the model for this field. (read-only)
  * @property type The LookML type of the field. (read-only)
  * @property user_attribute_filter_types An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode". (read-only)
@@ -3876,6 +3877,7 @@ data class LookmlModelExploreField(
     var suggest_explore: String? = null,
     var suggestable: Boolean? = null,
     var suggestions: Array<String>? = null,
+    var synonyms: Array<String>? = null,
     var tags: Array<String>? = null,
     var type: String? = null,
     var user_attribute_filter_types: Array<UserAttributeFilterTypes>? = null,
@@ -3936,12 +3938,14 @@ data class LookmlModelExploreFieldMeasureFilters(
  * @property based_on_time Specifies the time dimension that this measure will operate over. (read-only)
  * @property period Specifies the time frame for the comparison. Valid values are: "year", "fiscal_year", "quarter", "fiscal_quarter", "month", "week", "date". (read-only)
  * @property kind The type of calculation for the period_over_period measure. Valid values are: "previous", "difference", "relative_change". (read-only)
+ * @property value_to_date specifies whether to compare the current partially completed period to an equivalent part of the previous period, or to use the entire previous period. (read-only)
  */
 data class LookmlModelExploreFieldPeriodOverPeriodParams(
     var based_on: String? = null,
     var based_on_time: String? = null,
     var period: Period? = null,
     var kind: Kind? = null,
+    var value_to_date: Boolean? = null,
 ) : Serializable
 
 /**
