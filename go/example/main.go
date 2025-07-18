@@ -48,7 +48,7 @@ func printAboutMe(sdk *v4.LookerSDK) {
 		fmt.Printf("Error getting myself %v\n", err)
 	}
 	if len(users) != 1 {
-		fmt.Printf("Found %d users with my email expected 1\n")
+		fmt.Printf("Found %d users with my email expected 1\n", len(users))
 	}
 }
 
