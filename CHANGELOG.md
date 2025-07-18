@@ -1,5 +1,12 @@
 # Changelog
 
+## [25.10.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v25.10.0...sdk-codegen-all-v25.10.1) (2025-07-18)
+
+
+### Bug Fixes
+
+* fixed bug in go example ([#1595](https://github.com/looker-open-source/sdk-codegen/issues/1595)) ([6e45409](https://github.com/looker-open-source/sdk-codegen/commit/6e454098089a27053f4b26d376fdff8716de6929))
+
 ## [25.10.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v25.8.0...sdk-codegen-all-v25.10.0) (2025-06-20)
 
 
