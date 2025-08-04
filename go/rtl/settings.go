@@ -2,16 +2,20 @@ package rtl
 
 import (
 	"fmt"
-	"gopkg.in/ini.v1"
 	"os"
 	"strconv"
 	"strings"
+
+	"gopkg.in/ini.v1"
 )
 
 var defaultSectionName string = "Looker"
 
 type ApiSettings struct {
 	BaseUrl      string `ini:"base_url"`
+	AuthUrl      string `ini:"auth_url"`
+	RedirectPort int64  `ini:"redirect_port"`
+	RedirectPath string `ini:"redirect_path"`
 	VerifySsl    bool   `ini:"verify_ssl"`
 	Timeout      int32  `ini:"timeout"`
 	AgentTag     string `ini:"agent_tag"`
@@ -23,9 +27,11 @@ type ApiSettings struct {
 }
 
 var defaultSettings ApiSettings = ApiSettings{
-	VerifySsl:  true,
-	ApiVersion: "4.0",
-	Timeout:    120,
+	VerifySsl:    true,
+	ApiVersion:   "4.0",
+	Timeout:      120,
+	RedirectPort: 8080,
+	RedirectPath: "/callback",
 }
 
 func NewSettingsFromFile(file string, section *string) (ApiSettings, error) {
@@ -70,6 +76,18 @@ func NewSettingsFromEnv() (ApiSettings, error) {
 	}
 	if v, present := os.LookupEnv(clientSecretEnvKey); present {
 		settings.ClientSecret = v
+	}
+	if v, present := os.LookupEnv(authUrlEnvKey); present {
+		settings.AuthUrl = v
+	}
+	if v, present := os.LookupEnv(redirectPortEnvKey); present {
+		redirectPort, err := strconv.ParseInt(v, 10, 64)
+		if err == nil {
+			settings.RedirectPort = int64(redirectPort)
+		}
+	}
+	if v, present := os.LookupEnv(redirectPathEnvKey); present {
+		settings.RedirectPath = v
 	}
 
 	return settings, nil
