@@ -93,7 +93,7 @@ func NewAuthSessionWithTransport(config ApiSettings, transport http.RoundTripper
 	}
 }
 
-func NewPkceAuthSession(config ApiSettings) *AuthSession {
+func NewPkceAuthSession(config ApiSettings) (*AuthSession, error) {
 	transport := &http.Transport{
 		TLSClientConfig: &tls.Config{
 			InsecureSkipVerify: !config.VerifySsl,
@@ -104,7 +104,7 @@ func NewPkceAuthSession(config ApiSettings) *AuthSession {
 }
 
 // The transport parameter may override your VerifySSL setting
-func NewPkceAuthSessionWithTransport(config ApiSettings, transport http.RoundTripper) *AuthSession {
+func NewPkceAuthSessionWithTransport(config ApiSettings, transport http.RoundTripper) (*AuthSession, error) {
 	// This transport (Roundtripper) sets
 	// the "x-looker-appid" Header on requests
 	appIdHeaderTransport := &transportWithHeaders{
@@ -124,17 +124,20 @@ func NewPkceAuthSessionWithTransport(config ApiSettings, transport http.RoundTri
 
 	verifier, challenge, err := generatePKCEPair()
 	if err != nil {
-		log.Fatalf("Failed to generate PKCE pair: %v", err)
+		return nil, fmt.Errorf("failed to generate PKCE pair: %w", err)
 	}
 
 	state, err := generateSecureRandomString(32)
+	if err != nil {
+		return nil, fmt.Errorf("failed to generate a secure random string: %w", err)
+	}
 	authURL := oauthConfig.AuthCodeURL(state, oauth2.AccessTypeOffline,
 		oauth2.SetAuthURLParam("code_challenge", challenge),
 		oauth2.SetAuthURLParam("code_challenge_method", "S256"))
 
 	authCode, err := startLocalServerAndWaitForCode(authURL, config.RedirectPort, config.RedirectPath)
 	if err != nil {
-		log.Fatalf("Authorization failed: %v", err)
+		return nil, fmt.Errorf("authorization failed: %w", err)
 	}
 
 	ctx := context.WithValue(
@@ -147,7 +150,7 @@ func NewPkceAuthSessionWithTransport(config ApiSettings, transport http.RoundTri
 	token, err := oauthConfig.Exchange(ctx, authCode,
 		oauth2.SetAuthURLParam("code_verifier", verifier))
 	if err != nil {
-		log.Fatalf("Failed to exchange token: %v", err)
+		return nil, fmt.Errorf("token exchange failed: %w", err)
 	}
 
 	// Make use of oauth2 transport to handle token management
@@ -160,7 +163,7 @@ func NewPkceAuthSessionWithTransport(config ApiSettings, transport http.RoundTri
 	return &AuthSession{
 		Config: config,
 		Client: http.Client{Transport: oauthTransport},
-	}
+	}, nil
 }
 
 func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars map[string]interface{}, body interface{}, options *ApiSettings) error {
@@ -361,7 +364,9 @@ func startLocalServerAndWaitForCode(authURL string, redirectPort int64, redirect
 		}
 	}()
 
-	openBrowser(authURL)
+	if err := openBrowser(authURL); err != nil {
+		fmt.Fprintf(os.Stderr, "Unable to open browser: please go to %s", authURL)
+	}
 
 	select {
 	case code := <-codeChan:
@@ -382,7 +387,7 @@ func generateSecureRandomString(length int) (string, error) {
 	return base64.URLEncoding.EncodeToString(b), nil
 }
 
-func openBrowser(url string) {
+func openBrowser(url string) error {
 	var err error
 	switch runtime.GOOS {
 	case "linux":
@@ -394,7 +399,5 @@ func openBrowser(url string) {
 	default:
 		err = fmt.Errorf("unsupported platform")
 	}
-	if err != nil {
-		log.Printf("Failed to open browser: %v", err)
-	}
+	return err
 }

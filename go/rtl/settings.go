@@ -32,6 +32,8 @@ var defaultSettings ApiSettings = ApiSettings{
 	Timeout:      120,
 	RedirectPort: 8080,
 	RedirectPath: "/callback",
+	BaseUrl:      "",
+	AuthUrl:      "",
 }
 
 func NewSettingsFromFile(file string, section *string) (ApiSettings, error) {
@@ -40,15 +42,19 @@ func NewSettingsFromFile(file string, section *string) (ApiSettings, error) {
 	}
 
 	// Default values
-	s := defaultSettings
+	settings := defaultSettings
 
 	cfg, err := ini.Load(file)
 	if err != nil {
-		return s, fmt.Errorf("error reading ini file: %w", err)
+		return settings, fmt.Errorf("error reading ini file: %w", err)
 	}
 
-	err = cfg.Section(*section).MapTo(&s)
-	return s, err
+	err = cfg.Section(*section).MapTo(&settings)
+	if settings.AuthUrl == "" && settings.BaseUrl != "" {
+		settings.AuthUrl = settings.BaseUrl + "/auth"
+	}
+
+	return settings, err
 
 }
 
@@ -88,6 +94,10 @@ func NewSettingsFromEnv() (ApiSettings, error) {
 	}
 	if v, present := os.LookupEnv(redirectPathEnvKey); present {
 		settings.RedirectPath = v
+	}
+
+	if settings.AuthUrl == "" && settings.BaseUrl != "" {
+		settings.AuthUrl = settings.BaseUrl + "/auth"
 	}
 
 	return settings, nil
