@@ -25,6 +25,9 @@ func TestNewSettingsFromFile(t *testing.T) {
 			},
 			want: ApiSettings{
 				BaseUrl:      "BaseUrlValue",
+				AuthUrl:      "BaseUrlValue/auth",
+				RedirectPort: 8080,
+				RedirectPath: "/callback",
 				VerifySsl:    false,
 				Timeout:      160,
 				AgentTag:     "AgentTagValue",
@@ -114,6 +117,9 @@ func TestNewSettingsFromEnv(t *testing.T) {
 			},
 			want: ApiSettings{
 				BaseUrl:      "url",
+				AuthUrl:      "url/auth",
+				RedirectPort: 8080,
+				RedirectPath: "/callback",
 				ApiVersion:   "5.0",
 				VerifySsl:    false,
 				Timeout:      360,
@@ -130,6 +136,9 @@ func TestNewSettingsFromEnv(t *testing.T) {
 			},
 			want: ApiSettings{
 				BaseUrl:      "url",
+				AuthUrl:      "url/auth",
+				RedirectPort: 8080,
+				RedirectPath: "/callback",
 				ApiVersion:   "4.0",
 				VerifySsl:    true,
 				Timeout:      120,

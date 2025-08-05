@@ -65,7 +65,11 @@ func main() {
 	check(err)
 
 	// New instance of LookerSDK
-	sdk := v4.NewLookerSDK(rtl.NewAuthSession(cfg))
+	authSession := rtl.NewAuthSession(cfg)
+	if cfg.ClientSecret == "" {
+		authSession, _ = rtl.NewPkceAuthSession(cfg)
+	}
+	sdk := v4.NewLookerSDK(authSession)
 
 	printAllProjects(sdk)
 

@@ -3,13 +3,19 @@ package rtl
 import (
 	"bytes"
 	"context"
+	"crypto/rand"
+	"crypto/sha256"
 	"crypto/tls"
+	"encoding/base64"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
 	"os"
+	"os/exec"
 	"reflect"
+	"runtime"
 	"time"
 
 	"golang.org/x/oauth2"
@@ -85,6 +91,79 @@ func NewAuthSessionWithTransport(config ApiSettings, transport http.RoundTripper
 		Config: config,
 		Client: http.Client{Transport: oauthTransport},
 	}
+}
+
+func NewPkceAuthSession(config ApiSettings) (*AuthSession, error) {
+	transport := &http.Transport{
+		TLSClientConfig: &tls.Config{
+			InsecureSkipVerify: !config.VerifySsl,
+		},
+	}
+
+	return NewPkceAuthSessionWithTransport(config, transport)
+}
+
+// The transport parameter may override your VerifySSL setting
+func NewPkceAuthSessionWithTransport(config ApiSettings, transport http.RoundTripper) (*AuthSession, error) {
+	// This transport (Roundtripper) sets
+	// the "x-looker-appid" Header on requests
+	appIdHeaderTransport := &transportWithHeaders{
+		Base: transport,
+	}
+
+	oauthConfig := &oauth2.Config{
+		ClientID:     config.ClientId,
+		ClientSecret: "", // Public client, no secret
+		Scopes:       []string{"cors_api"},
+		Endpoint: oauth2.Endpoint{
+			AuthURL:  config.AuthUrl,
+			TokenURL: config.BaseUrl + "/api/token",
+		},
+		RedirectURL: fmt.Sprintf("http://localhost:%d%s", config.RedirectPort, config.RedirectPath),
+	}
+
+	verifier, challenge, err := generatePKCEPair()
+	if err != nil {
+		return nil, fmt.Errorf("failed to generate PKCE pair: %w", err)
+	}
+
+	state, err := generateSecureRandomString(32)
+	if err != nil {
+		return nil, fmt.Errorf("failed to generate a secure random string: %w", err)
+	}
+	authURL := oauthConfig.AuthCodeURL(state, oauth2.AccessTypeOffline,
+		oauth2.SetAuthURLParam("code_challenge", challenge),
+		oauth2.SetAuthURLParam("code_challenge_method", "S256"))
+
+	authCode, err := startLocalServerAndWaitForCode(authURL, config.RedirectPort, config.RedirectPath)
+	if err != nil {
+		return nil, fmt.Errorf("authorization failed: %w", err)
+	}
+
+	ctx := context.WithValue(
+		context.Background(),
+		oauth2.HTTPClient,
+		// Will set "x-looker-appid" Header on TokenURL requests
+		&http.Client{Transport: appIdHeaderTransport},
+	)
+
+	token, err := oauthConfig.Exchange(ctx, authCode,
+		oauth2.SetAuthURLParam("code_verifier", verifier))
+	if err != nil {
+		return nil, fmt.Errorf("token exchange failed: %w", err)
+	}
+
+	// Make use of oauth2 transport to handle token management
+	oauthTransport := &oauth2.Transport{
+		Source: oauthConfig.TokenSource(ctx, token),
+		// Will set "x-looker-appid" Header on all other requests
+		Base: appIdHeaderTransport,
+	}
+
+	return &AuthSession{
+		Config: config,
+		Client: http.Client{Transport: oauthTransport},
+	}, nil
 }
 
 func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars map[string]interface{}, body interface{}, options *ApiSettings) error {
@@ -236,4 +315,89 @@ func setQuery(u *url.URL, pars map[string]interface{}) {
 		}
 	}
 	u.RawQuery = q.Encode()
+}
+
+func generatePKCEPair() (string, string, error) {
+	verifierBytes := make([]byte, 96)
+	_, err := rand.Read(verifierBytes)
+	if err != nil {
+		return "", "", err
+	}
+	verifier := base64.RawURLEncoding.EncodeToString(verifierBytes)
+	hasher := sha256.New()
+	hasher.Write([]byte(verifier))
+	challenge := base64.RawURLEncoding.EncodeToString(hasher.Sum(nil))
+	return verifier, challenge, nil
+}
+
+// --- Local HTTP Server for Redirect ---
+func startLocalServerAndWaitForCode(authURL string, redirectPort int64, redirectPath string) (string, error) {
+	codeChan := make(chan string)
+	errChan := make(chan error)
+
+	mux := http.NewServeMux()
+	server := &http.Server{Addr: fmt.Sprintf(":%d", redirectPort), Handler: mux}
+
+	mux.HandleFunc(redirectPath, func(w http.ResponseWriter, r *http.Request) {
+		code := r.URL.Query().Get("code")
+		if code == "" {
+			errMsg := "authorization failed: no code received"
+			http.Error(w, errMsg, http.StatusBadRequest)
+			errChan <- fmt.Errorf(errMsg)
+			return
+		}
+		fmt.Fprintf(w, "Authorization successful! You can close this tab.")
+		codeChan <- code
+		go func() {
+			time.Sleep(1 * time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+			defer cancel()
+			if err := server.Shutdown(ctx); err != nil {
+				log.Printf("HTTP server Shutdown error: %v", err)
+			}
+		}()
+	})
+
+	go func() {
+		if err := server.ListenAndServe(); err != http.ErrServerClosed {
+			errChan <- err
+		}
+	}()
+
+	if err := openBrowser(authURL); err != nil {
+		fmt.Fprintf(os.Stderr, "Unable to open browser: please go to %s", authURL)
+	}
+
+	select {
+	case code := <-codeChan:
+		return code, nil
+	case err := <-errChan:
+		return "", err
+	case <-time.After(5 * time.Minute):
+		return "", fmt.Errorf("timed out waiting for authorization code")
+	}
+}
+
+func generateSecureRandomString(length int) (string, error) {
+	b := make([]byte, length)
+	_, err := rand.Read(b)
+	if err != nil {
+		return "", err
+	}
+	return base64.URLEncoding.EncodeToString(b), nil
+}
+
+func openBrowser(url string) error {
+	var err error
+	switch runtime.GOOS {
+	case "linux":
+		err = exec.Command("xdg-open", url).Start()
+	case "windows":
+		err = exec.Command("rundll32", "url.dll,FileProtocolHandler", url).Start()
+	case "darwin":
+		err = exec.Command("open", url).Start()
+	default:
+		err = fmt.Errorf("unsupported platform")
+	}
+	return err
 }
