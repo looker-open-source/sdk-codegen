@@ -25,7 +25,7 @@
  */
 
 /**
- * 445 API models: 287 Spec, 72 Request, 62 Write, 24 Enum
+ * 446 API models: 287 Spec, 72 Request, 63 Write, 24 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl';
@@ -1075,6 +1075,14 @@ export interface IContentMeta {
    */
   folder_id?: string | null;
   /**
+   * Id of associated board when content_type is "board" (read-only)
+   */
+  homepage_id?: string | null;
+  /**
+   * Id of associated agent when content_type is "agent" (read-only)
+   */
+  agent_id?: string | null;
+  /**
    * Content Type ("dashboard", "look", or "folder") (read-only)
    */
   content_type?: string | null;
@@ -1795,6 +1803,10 @@ export interface ICreateCredentialsApi3 {
    */
   type?: string | null;
   /**
+   * User defined purpose for this credential.
+   */
+  purpose?: string | null;
+  /**
    * API key client_secret (read-only)
    */
   client_secret?: string | null;
@@ -1969,6 +1981,10 @@ export interface ICredentialsApi3 {
    * Short name for the type of this kind of credential (read-only)
    */
   type?: string | null;
+  /**
+   * User defined purpose for this credential.
+   */
+  purpose?: string | null;
   /**
    * Link to get this item (read-only)
    */
@@ -3148,6 +3164,10 @@ export interface IDBConnection {
    * Whether the integration uses the oauth instance account. (read-only)
    */
   uses_instance_oauth?: boolean;
+  /**
+   * Whether the connection uses service authentication certificate. (read-only)
+   */
+  uses_service_auth?: boolean;
   /**
    * (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
    */
@@ -9596,6 +9616,10 @@ export interface IRequestSearchContentFavorites {
    */
   board_id?: string | null;
   /**
+   * If true, and board_id is provided, returns the content favorites for all items on the board. If false, returns the content favorite for the board itself.
+   */
+  include_board_items?: boolean | null;
+  /**
    * Number of results to return. (used with offset)
    */
   limit?: number | null;
@@ -10543,6 +10567,10 @@ export interface IRequestSearchUsers {
    * Search for users who are direct members of this group
    */
   group_id?: string | null;
+  /**
+   * Search for users who can manage API3 credentials
+   */
+  can_manage_api3_creds?: boolean | null;
 }
 
 /**
@@ -12581,9 +12609,13 @@ export interface IUser {
    */
   embed_group_folder_id?: string | null;
   /**
-   * User is an IAM Admin - only available in Looker (Google Cloud core) (read-only)
+   * User is an IAM Admin - only available in Looker (Google Cloud core). The is_iam_admin is not returned by default. Please explicitly request this attribute if needed via the fields query param. Note: Including the optional is_iam_admin attribute can increase API latency. For best performance, use this attribute only when filtering for users with the 'Admin via IAM' role. When using this filter, always paginate your results with the offset and limit fields to optimize response time. (read-only)
    */
   is_iam_admin?: boolean;
+  /**
+   * Indicates if the user can manage API3 credentials
+   */
+  can_manage_api3_creds?: boolean;
   /**
    * Link to get this item (read-only)
    */
@@ -13248,7 +13280,7 @@ export interface IWriteContentFavorite {
 
 /**
  * Dynamic writeable type for ContentMeta removes:
- * can, id, name, parent_id, dashboard_id, look_id, folder_id, content_type, inheriting_id, slug
+ * can, id, name, parent_id, dashboard_id, look_id, folder_id, homepage_id, agent_id, content_type, inheriting_id, slug
  */
 export interface IWriteContentMeta {
   /**
@@ -13345,6 +13377,17 @@ export interface IWriteCreateQueryTask {
    * Id of dashboard associated with query.
    */
   dashboard_id?: string | null;
+}
+
+/**
+ * Dynamic writeable type for CredentialsApi3 removes:
+ * can, id, client_id, created_at, is_disabled, type, url
+ */
+export interface IWriteCredentialsApi3 {
+  /**
+   * User defined purpose for this credential.
+   */
+  purpose?: string | null;
 }
 
 /**
@@ -13714,7 +13757,7 @@ export interface IWriteDatagroup {
 
 /**
  * Dynamic writeable type for DBConnection removes:
- * can, dialect, snippets, pdts_enabled, named_driver_version_actual, uses_oauth, uses_instance_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, p4sa_name
+ * can, dialect, snippets, pdts_enabled, named_driver_version_actual, uses_oauth, uses_instance_oauth, uses_service_auth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, p4sa_name
  */
 export interface IWriteDBConnection {
   /**
@@ -15401,6 +15444,10 @@ export interface IWriteUser {
    * Per user dictionary of undocumented state information owned by the Looker UI.
    */
   ui_state?: IDictionary<string> | null;
+  /**
+   * Indicates if the user can manage API3 credentials
+   */
+  can_manage_api3_creds?: boolean;
 }
 
 /**
