@@ -261,7 +261,7 @@ export class GoGen extends CodeGen {
     return (
       `` +
       resultDef +
-      `${indent}err := l.session.Do(${resultPointer}, "${this.capitalize(
+      `${indent}err := l.AuthSession.Do(${resultPointer}, "${this.capitalize(
         method.httpMethod.toUpperCase()
       )}", "${this.apiPath}", ${this.httpPath(method.endpoint, request)}` +
       `${args ? ', ' + args : ''})` +
@@ -361,9 +361,10 @@ package ${this.packageName}
 
 import (
     "fmt"
-    "github.com/looker-open-source/sdk-codegen/go/rtl"
     "net/url"
     "time"
+
+    "github.com/looker-open-source/sdk-codegen/go/rtl"
 )
 
 type AuthSessionDoer interface {
@@ -371,19 +372,13 @@ type AuthSessionDoer interface {
 }
 
 type LookerSDK struct {
-  session AuthSessionDoer
+  AuthSession AuthSessionDoer
 }
 
 func NewLookerSDK(session AuthSessionDoer) *LookerSDK {
   return &LookerSDK{
-    session: session,
+    AuthSession: session,
   }
-}
-
-// GetSession returns the underlying AuthSessionDoer object.
-// This is primarily for access to undocumented API endpoints.
-func (l *LookerSDK) GetSession() AuthSessionDoer {
-  return l.session
 }
 `;
   }
