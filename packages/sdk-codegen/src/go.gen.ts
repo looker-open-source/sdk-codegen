@@ -366,18 +366,22 @@ import (
     "time"
 )
 
-type authSessionDoer interface {
+type AuthSessionDoer interface {
   Do(result interface{}, method, ver, path string, reqPars map[string]interface{}, body interface{}, options *rtl.ApiSettings) error
 }
 
 type LookerSDK struct {
-  session authSessionDoer
+  session AuthSessionDoer
 }
 
-func NewLookerSDK(session authSessionDoer) *LookerSDK {
+func NewLookerSDK(session AuthSessionDoer) *LookerSDK {
   return &LookerSDK{
     session: session,
   }
+}
+
+func (l *LookerSDK) GetSession() AuthSessionDoer {
+  return l.session
 }
 `;
   }
