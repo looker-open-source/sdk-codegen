@@ -380,6 +380,8 @@ func NewLookerSDK(session AuthSessionDoer) *LookerSDK {
   }
 }
 
+// GetSession returns the underlying AuthSessionDoer object.
+// This is primarily for access to undocumented API endpoints.
 func (l *LookerSDK) GetSession() AuthSessionDoer {
   return l.session
 }
