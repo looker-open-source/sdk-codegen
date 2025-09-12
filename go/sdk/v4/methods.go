@@ -35,22 +35,23 @@ package v4
 
 import (
 	"fmt"
-	"github.com/looker-open-source/sdk-codegen/go/rtl"
 	"net/url"
 	"time"
+
+	"github.com/looker-open-source/sdk-codegen/go/rtl"
 )
 
-type authSessionDoer interface {
+type AuthSessionDoer interface {
 	Do(result interface{}, method, ver, path string, reqPars map[string]interface{}, body interface{}, options *rtl.ApiSettings) error
 }
 
 type LookerSDK struct {
-	session authSessionDoer
+	AuthSession AuthSessionDoer
 }
 
-func NewLookerSDK(session authSessionDoer) *LookerSDK {
+func NewLookerSDK(session AuthSessionDoer) *LookerSDK {
 	return &LookerSDK{
-		session: session,
+		AuthSession: session,
 	}
 }
 
@@ -63,7 +64,7 @@ func (l *LookerSDK) FollowAlert(
 	alertId string,
 	options *rtl.ApiSettings) error {
 	alertId = url.PathEscape(alertId)
-	err := l.session.Do(nil, "POST", "/4.0", fmt.Sprintf("/alerts/%v/follow", alertId), nil, nil, options)
+	err := l.AuthSession.Do(nil, "POST", "/4.0", fmt.Sprintf("/alerts/%v/follow", alertId), nil, nil, options)
 	return err
 
 }
@@ -75,7 +76,7 @@ func (l *LookerSDK) UnfollowAlert(
 	alertId string,
 	options *rtl.ApiSettings) error {
 	alertId = url.PathEscape(alertId)
-	err := l.session.Do(nil, "DELETE", "/4.0", fmt.Sprintf("/alerts/%v/follow", alertId), nil, nil, options)
+	err := l.AuthSession.Do(nil, "DELETE", "/4.0", fmt.Sprintf("/alerts/%v/follow", alertId), nil, nil, options)
 	return err
 
 }
@@ -86,7 +87,7 @@ func (l *LookerSDK) UnfollowAlert(
 func (l *LookerSDK) SearchAlerts(request RequestSearchAlerts,
 	options *rtl.ApiSettings) ([]Alert, error) {
 	var result []Alert
-	err := l.session.Do(&result, "GET", "/4.0", "/alerts/search", map[string]interface{}{"limit": request.Limit, "offset": request.Offset, "group_by": request.GroupBy, "fields": request.Fields, "disabled": request.Disabled, "frequency": request.Frequency, "condition_met": request.ConditionMet, "last_run_start": request.LastRunStart, "last_run_end": request.LastRunEnd, "all_owners": request.AllOwners}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/alerts/search", map[string]interface{}{"limit": request.Limit, "offset": request.Offset, "group_by": request.GroupBy, "fields": request.Fields, "disabled": request.Disabled, "frequency": request.Frequency, "condition_met": request.ConditionMet, "last_run_start": request.LastRunStart, "last_run_end": request.LastRunEnd, "all_owners": request.AllOwners}, nil, options)
 	return result, err
 
 }
@@ -99,7 +100,7 @@ func (l *LookerSDK) GetAlert(
 	options *rtl.ApiSettings) (Alert, error) {
 	alertId = url.PathEscape(alertId)
 	var result Alert
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/alerts/%v", alertId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/alerts/%v", alertId), nil, nil, options)
 	return result, err
 
 }
@@ -115,7 +116,7 @@ func (l *LookerSDK) UpdateAlert(
 	options *rtl.ApiSettings) (Alert, error) {
 	alertId = url.PathEscape(alertId)
 	var result Alert
-	err := l.session.Do(&result, "PUT", "/4.0", fmt.Sprintf("/alerts/%v", alertId), nil, body, options)
+	err := l.AuthSession.Do(&result, "PUT", "/4.0", fmt.Sprintf("/alerts/%v", alertId), nil, body, options)
 	return result, err
 
 }
@@ -131,7 +132,7 @@ func (l *LookerSDK) UpdateAlertField(
 	options *rtl.ApiSettings) (Alert, error) {
 	alertId = url.PathEscape(alertId)
 	var result Alert
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/alerts/%v", alertId), nil, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/alerts/%v", alertId), nil, body, options)
 	return result, err
 
 }
@@ -143,7 +144,7 @@ func (l *LookerSDK) DeleteAlert(
 	alertId string,
 	options *rtl.ApiSettings) error {
 	alertId = url.PathEscape(alertId)
-	err := l.session.Do(nil, "DELETE", "/4.0", fmt.Sprintf("/alerts/%v", alertId), nil, nil, options)
+	err := l.AuthSession.Do(nil, "DELETE", "/4.0", fmt.Sprintf("/alerts/%v", alertId), nil, nil, options)
 	return err
 
 }
@@ -191,7 +192,7 @@ func (l *LookerSDK) CreateAlert(
 	body WriteAlert,
 	options *rtl.ApiSettings) (Alert, error) {
 	var result Alert
-	err := l.session.Do(&result, "POST", "/4.0", "/alerts", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/alerts", nil, body, options)
 	return result, err
 
 }
@@ -204,7 +205,7 @@ func (l *LookerSDK) EnqueueAlert(
 	force bool,
 	options *rtl.ApiSettings) error {
 	alertId = url.PathEscape(alertId)
-	err := l.session.Do(nil, "POST", "/4.0", fmt.Sprintf("/alerts/%v/enqueue", alertId), map[string]interface{}{"force": force}, nil, options)
+	err := l.AuthSession.Do(nil, "POST", "/4.0", fmt.Sprintf("/alerts/%v/enqueue", alertId), map[string]interface{}{"force": force}, nil, options)
 	return err
 
 }
@@ -217,7 +218,7 @@ func (l *LookerSDK) EnqueueAlert(
 func (l *LookerSDK) AlertNotifications(request RequestAlertNotifications,
 	options *rtl.ApiSettings) ([]AlertNotifications, error) {
 	var result []AlertNotifications
-	err := l.session.Do(&result, "GET", "/4.0", "/alert_notifications", map[string]interface{}{"limit": request.Limit, "offset": request.Offset}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/alert_notifications", map[string]interface{}{"limit": request.Limit, "offset": request.Offset}, nil, options)
 	return result, err
 
 }
@@ -232,7 +233,7 @@ func (l *LookerSDK) ReadAlertNotification(
 	options *rtl.ApiSettings) (AlertNotifications, error) {
 	alertNotificationId = url.PathEscape(alertNotificationId)
 	var result AlertNotifications
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/alert_notifications/%v", alertNotificationId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/alert_notifications/%v", alertNotificationId), nil, nil, options)
 	return result, err
 
 }
@@ -274,7 +275,7 @@ func (l *LookerSDK) ReadAlertNotification(
 func (l *LookerSDK) Login(request RequestLogin,
 	options *rtl.ApiSettings) (AccessToken, error) {
 	var result AccessToken
-	err := l.session.Do(&result, "POST", "/4.0", "/login", map[string]interface{}{"client_id": request.ClientId, "client_secret": request.ClientSecret}, nil, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/login", map[string]interface{}{"client_id": request.ClientId, "client_secret": request.ClientSecret}, nil, options)
 	return result, err
 
 }
@@ -305,7 +306,7 @@ func (l *LookerSDK) LoginUser(
 	options *rtl.ApiSettings) (AccessToken, error) {
 	userId = url.PathEscape(userId)
 	var result AccessToken
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/login/%v", userId), map[string]interface{}{"associative": associative}, nil, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/login/%v", userId), map[string]interface{}{"associative": associative}, nil, options)
 	return result, err
 
 }
@@ -316,7 +317,7 @@ func (l *LookerSDK) LoginUser(
 func (l *LookerSDK) Logout(
 	options *rtl.ApiSettings) (string, error) {
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", "/logout", nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", "/logout", nil, nil, options)
 	return result, err
 
 }
@@ -334,7 +335,7 @@ func (l *LookerSDK) ArtifactUsage(
 	fields string,
 	options *rtl.ApiSettings) (ArtifactUsage, error) {
 	var result ArtifactUsage
-	err := l.session.Do(&result, "GET", "/4.0", "/artifact/usage", map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/artifact/usage", map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -347,7 +348,7 @@ func (l *LookerSDK) ArtifactUsage(
 func (l *LookerSDK) ArtifactNamespaces(request RequestArtifactNamespaces,
 	options *rtl.ApiSettings) ([]ArtifactNamespace, error) {
 	var result []ArtifactNamespace
-	err := l.session.Do(&result, "GET", "/4.0", "/artifact/namespaces", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/artifact/namespaces", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset}, nil, options)
 	return result, err
 
 }
@@ -365,7 +366,7 @@ func (l *LookerSDK) ArtifactValue(
 	options *rtl.ApiSettings) (string, error) {
 	namespace = url.PathEscape(namespace)
 	var result string
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/artifact/%v/value", namespace), map[string]interface{}{"key": key}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/artifact/%v/value", namespace), map[string]interface{}{"key": key}, nil, options)
 	return result, err
 
 }
@@ -379,7 +380,7 @@ func (l *LookerSDK) PurgeArtifacts(
 	namespace string,
 	options *rtl.ApiSettings) error {
 	namespace = url.PathEscape(namespace)
-	err := l.session.Do(nil, "DELETE", "/4.0", fmt.Sprintf("/artifact/%v/purge", namespace), nil, nil, options)
+	err := l.AuthSession.Do(nil, "DELETE", "/4.0", fmt.Sprintf("/artifact/%v/purge", namespace), nil, nil, options)
 	return err
 
 }
@@ -407,7 +408,7 @@ func (l *LookerSDK) SearchArtifacts(request RequestSearchArtifacts,
 	options *rtl.ApiSettings) ([]Artifact, error) {
 	request.Namespace = url.PathEscape(request.Namespace)
 	var result []Artifact
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/artifact/%v/search", request.Namespace), map[string]interface{}{"fields": request.Fields, "key": request.Key, "user_ids": request.UserIds, "min_size": request.MinSize, "max_size": request.MaxSize, "limit": request.Limit, "offset": request.Offset, "tally": request.Tally}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/artifact/%v/search", request.Namespace), map[string]interface{}{"fields": request.Fields, "key": request.Key, "user_ids": request.UserIds, "min_size": request.MinSize, "max_size": request.MaxSize, "limit": request.Limit, "offset": request.Offset, "tally": request.Tally}, nil, options)
 	return result, err
 
 }
@@ -423,7 +424,7 @@ func (l *LookerSDK) Artifact(request RequestArtifact,
 	options *rtl.ApiSettings) ([]Artifact, error) {
 	request.Namespace = url.PathEscape(request.Namespace)
 	var result []Artifact
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/artifact/%v", request.Namespace), map[string]interface{}{"key": request.Key, "fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "tally": request.Tally}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/artifact/%v", request.Namespace), map[string]interface{}{"key": request.Key, "fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "tally": request.Tally}, nil, options)
 	return result, err
 
 }
@@ -440,7 +441,7 @@ func (l *LookerSDK) DeleteArtifact(
 	key string,
 	options *rtl.ApiSettings) error {
 	namespace = url.PathEscape(namespace)
-	err := l.session.Do(nil, "DELETE", "/4.0", fmt.Sprintf("/artifact/%v", namespace), map[string]interface{}{"key": key}, nil, options)
+	err := l.AuthSession.Do(nil, "DELETE", "/4.0", fmt.Sprintf("/artifact/%v", namespace), map[string]interface{}{"key": key}, nil, options)
 	return err
 
 }
@@ -482,7 +483,7 @@ func (l *LookerSDK) UpdateArtifacts(
 	options *rtl.ApiSettings) ([]Artifact, error) {
 	namespace = url.PathEscape(namespace)
 	var result []Artifact
-	err := l.session.Do(&result, "PUT", "/4.0", fmt.Sprintf("/artifacts/%v", namespace), map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "PUT", "/4.0", fmt.Sprintf("/artifacts/%v", namespace), map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -502,7 +503,7 @@ func (l *LookerSDK) CreateEmbedSecret(
 	body WriteEmbedSecret,
 	options *rtl.ApiSettings) (EmbedSecret, error) {
 	var result EmbedSecret
-	err := l.session.Do(&result, "POST", "/4.0", "/embed_config/secrets", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/embed_config/secrets", nil, body, options)
 	return result, err
 
 }
@@ -517,7 +518,7 @@ func (l *LookerSDK) DeleteEmbedSecret(
 	options *rtl.ApiSettings) (string, error) {
 	embedSecretId = url.PathEscape(embedSecretId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/embed_config/secrets/%v", embedSecretId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/embed_config/secrets/%v", embedSecretId), nil, nil, options)
 	return result, err
 
 }
@@ -571,7 +572,7 @@ func (l *LookerSDK) CreateSsoEmbedUrl(
 	body EmbedSsoParams,
 	options *rtl.ApiSettings) (EmbedUrlResponse, error) {
 	var result EmbedUrlResponse
-	err := l.session.Do(&result, "POST", "/4.0", "/embed/sso_url", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/embed/sso_url", nil, body, options)
 	return result, err
 
 }
@@ -607,7 +608,7 @@ func (l *LookerSDK) CreateEmbedUrlAsMe(
 	body EmbedParams,
 	options *rtl.ApiSettings) (EmbedUrlResponse, error) {
 	var result EmbedUrlResponse
-	err := l.session.Do(&result, "POST", "/4.0", "/embed/token_url/me", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/embed/token_url/me", nil, body, options)
 	return result, err
 
 }
@@ -619,7 +620,7 @@ func (l *LookerSDK) ValidateEmbedUrl(
 	url string,
 	options *rtl.ApiSettings) (EmbedUrlResponse, error) {
 	var result EmbedUrlResponse
-	err := l.session.Do(&result, "GET", "/4.0", "/embed/sso/validate", map[string]interface{}{"url": url}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/embed/sso/validate", map[string]interface{}{"url": url}, nil, options)
 	return result, err
 
 }
@@ -662,7 +663,7 @@ func (l *LookerSDK) AcquireEmbedCookielessSession(
 	body EmbedCookielessSessionAcquire,
 	options *rtl.ApiSettings) (EmbedCookielessSessionAcquireResponse, error) {
 	var result EmbedCookielessSessionAcquireResponse
-	err := l.session.Do(&result, "POST", "/4.0", "/embed/cookieless_session/acquire", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/embed/cookieless_session/acquire", nil, body, options)
 	return result, err
 
 }
@@ -681,7 +682,7 @@ func (l *LookerSDK) DeleteEmbedCookielessSession(
 	options *rtl.ApiSettings) (string, error) {
 	sessionReferenceToken = url.PathEscape(sessionReferenceToken)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/embed/cookieless_session/%v", sessionReferenceToken), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/embed/cookieless_session/%v", sessionReferenceToken), nil, nil, options)
 	return result, err
 
 }
@@ -708,7 +709,7 @@ func (l *LookerSDK) GenerateTokensForCookielessSession(
 	body EmbedCookielessSessionGenerateTokens,
 	options *rtl.ApiSettings) (EmbedCookielessSessionGenerateTokensResponse, error) {
 	var result EmbedCookielessSessionGenerateTokensResponse
-	err := l.session.Do(&result, "PUT", "/4.0", "/embed/cookieless_session/generate_tokens", nil, body, options)
+	err := l.AuthSession.Do(&result, "PUT", "/4.0", "/embed/cookieless_session/generate_tokens", nil, body, options)
 	return result, err
 
 }
@@ -736,7 +737,7 @@ func (l *LookerSDK) GenerateTokensForCookielessSession(
 func (l *LookerSDK) LdapConfig(
 	options *rtl.ApiSettings) (LDAPConfig, error) {
 	var result LDAPConfig
-	err := l.session.Do(&result, "GET", "/4.0", "/ldap_config", nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/ldap_config", nil, nil, options)
 	return result, err
 
 }
@@ -760,7 +761,7 @@ func (l *LookerSDK) UpdateLdapConfig(
 	body WriteLDAPConfig,
 	options *rtl.ApiSettings) (LDAPConfig, error) {
 	var result LDAPConfig
-	err := l.session.Do(&result, "PATCH", "/4.0", "/ldap_config", nil, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", "/ldap_config", nil, body, options)
 	return result, err
 
 }
@@ -793,7 +794,7 @@ func (l *LookerSDK) TestLdapConfigConnection(
 	body WriteLDAPConfig,
 	options *rtl.ApiSettings) (LDAPConfigTestResult, error) {
 	var result LDAPConfigTestResult
-	err := l.session.Do(&result, "PUT", "/4.0", "/ldap_config/test_connection", nil, body, options)
+	err := l.AuthSession.Do(&result, "PUT", "/4.0", "/ldap_config/test_connection", nil, body, options)
 	return result, err
 
 }
@@ -828,7 +829,7 @@ func (l *LookerSDK) TestLdapConfigAuth(
 	body WriteLDAPConfig,
 	options *rtl.ApiSettings) (LDAPConfigTestResult, error) {
 	var result LDAPConfigTestResult
-	err := l.session.Do(&result, "PUT", "/4.0", "/ldap_config/test_auth", nil, body, options)
+	err := l.AuthSession.Do(&result, "PUT", "/4.0", "/ldap_config/test_auth", nil, body, options)
 	return result, err
 
 }
@@ -850,7 +851,7 @@ func (l *LookerSDK) TestLdapConfigUserInfo(
 	body WriteLDAPConfig,
 	options *rtl.ApiSettings) (LDAPConfigTestResult, error) {
 	var result LDAPConfigTestResult
-	err := l.session.Do(&result, "PUT", "/4.0", "/ldap_config/test_user_info", nil, body, options)
+	err := l.AuthSession.Do(&result, "PUT", "/4.0", "/ldap_config/test_user_info", nil, body, options)
 	return result, err
 
 }
@@ -872,7 +873,7 @@ func (l *LookerSDK) TestLdapConfigUserAuth(
 	body WriteLDAPConfig,
 	options *rtl.ApiSettings) (LDAPConfigTestResult, error) {
 	var result LDAPConfigTestResult
-	err := l.session.Do(&result, "PUT", "/4.0", "/ldap_config/test_user_auth", nil, body, options)
+	err := l.AuthSession.Do(&result, "PUT", "/4.0", "/ldap_config/test_user_auth", nil, body, options)
 	return result, err
 
 }
@@ -885,7 +886,7 @@ func (l *LookerSDK) RegisterMobileDevice(
 	body WriteMobileToken,
 	options *rtl.ApiSettings) (MobileToken, error) {
 	var result MobileToken
-	err := l.session.Do(&result, "POST", "/4.0", "/mobile/device", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/mobile/device", nil, body, options)
 	return result, err
 
 }
@@ -898,7 +899,7 @@ func (l *LookerSDK) UpdateMobileDeviceRegistration(
 	options *rtl.ApiSettings) (MobileToken, error) {
 	deviceId = url.PathEscape(deviceId)
 	var result MobileToken
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/mobile/device/%v", deviceId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/mobile/device/%v", deviceId), nil, nil, options)
 	return result, err
 
 }
@@ -910,7 +911,7 @@ func (l *LookerSDK) DeregisterMobileDevice(
 	deviceId string,
 	options *rtl.ApiSettings) error {
 	deviceId = url.PathEscape(deviceId)
-	err := l.session.Do(nil, "DELETE", "/4.0", fmt.Sprintf("/mobile/device/%v", deviceId), nil, nil, options)
+	err := l.AuthSession.Do(nil, "DELETE", "/4.0", fmt.Sprintf("/mobile/device/%v", deviceId), nil, nil, options)
 	return err
 
 }
@@ -928,7 +929,7 @@ func (l *LookerSDK) AllOauthClientApps(
 	fields string,
 	options *rtl.ApiSettings) ([]OauthClientApp, error) {
 	var result []OauthClientApp
-	err := l.session.Do(&result, "GET", "/4.0", "/oauth_client_apps", map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/oauth_client_apps", map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -944,7 +945,7 @@ func (l *LookerSDK) OauthClientApp(
 	options *rtl.ApiSettings) (OauthClientApp, error) {
 	clientGuid = url.PathEscape(clientGuid)
 	var result OauthClientApp
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/oauth_client_apps/%v", clientGuid), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/oauth_client_apps/%v", clientGuid), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -964,7 +965,7 @@ func (l *LookerSDK) RegisterOauthClientApp(
 	options *rtl.ApiSettings) (OauthClientApp, error) {
 	clientGuid = url.PathEscape(clientGuid)
 	var result OauthClientApp
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/oauth_client_apps/%v", clientGuid), map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/oauth_client_apps/%v", clientGuid), map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -981,7 +982,7 @@ func (l *LookerSDK) UpdateOauthClientApp(
 	options *rtl.ApiSettings) (OauthClientApp, error) {
 	clientGuid = url.PathEscape(clientGuid)
 	var result OauthClientApp
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/oauth_client_apps/%v", clientGuid), map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/oauth_client_apps/%v", clientGuid), map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -1002,7 +1003,7 @@ func (l *LookerSDK) DeleteOauthClientApp(
 	options *rtl.ApiSettings) (string, error) {
 	clientGuid = url.PathEscape(clientGuid)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/oauth_client_apps/%v", clientGuid), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/oauth_client_apps/%v", clientGuid), nil, nil, options)
 	return result, err
 
 }
@@ -1018,7 +1019,7 @@ func (l *LookerSDK) InvalidateTokens(
 	options *rtl.ApiSettings) (string, error) {
 	clientGuid = url.PathEscape(clientGuid)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/oauth_client_apps/%v/tokens", clientGuid), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/oauth_client_apps/%v/tokens", clientGuid), nil, nil, options)
 	return result, err
 
 }
@@ -1040,7 +1041,7 @@ func (l *LookerSDK) ActivateAppUser(
 	clientGuid = url.PathEscape(clientGuid)
 	userId = url.PathEscape(userId)
 	var result string
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/oauth_client_apps/%v/users/%v", clientGuid, userId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/oauth_client_apps/%v/users/%v", clientGuid, userId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -1065,7 +1066,7 @@ func (l *LookerSDK) DeactivateAppUser(
 	clientGuid = url.PathEscape(clientGuid)
 	userId = url.PathEscape(userId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/oauth_client_apps/%v/users/%v", clientGuid, userId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/oauth_client_apps/%v/users/%v", clientGuid, userId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -1089,7 +1090,7 @@ func (l *LookerSDK) DeactivateAppUser(
 func (l *LookerSDK) OidcConfig(
 	options *rtl.ApiSettings) (OIDCConfig, error) {
 	var result OIDCConfig
-	err := l.session.Do(&result, "GET", "/4.0", "/oidc_config", nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/oidc_config", nil, nil, options)
 	return result, err
 
 }
@@ -1111,7 +1112,7 @@ func (l *LookerSDK) UpdateOidcConfig(
 	body WriteOIDCConfig,
 	options *rtl.ApiSettings) (OIDCConfig, error) {
 	var result OIDCConfig
-	err := l.session.Do(&result, "PATCH", "/4.0", "/oidc_config", nil, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", "/oidc_config", nil, body, options)
 	return result, err
 
 }
@@ -1126,7 +1127,7 @@ func (l *LookerSDK) OidcTestConfig(
 	options *rtl.ApiSettings) (OIDCConfig, error) {
 	testSlug = url.PathEscape(testSlug)
 	var result OIDCConfig
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/oidc_test_configs/%v", testSlug), nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/oidc_test_configs/%v", testSlug), nil, nil, options)
 	return result, err
 
 }
@@ -1141,7 +1142,7 @@ func (l *LookerSDK) DeleteOidcTestConfig(
 	options *rtl.ApiSettings) (string, error) {
 	testSlug = url.PathEscape(testSlug)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/oidc_test_configs/%v", testSlug), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/oidc_test_configs/%v", testSlug), nil, nil, options)
 	return result, err
 
 }
@@ -1155,7 +1156,7 @@ func (l *LookerSDK) CreateOidcTestConfig(
 	body WriteOIDCConfig,
 	options *rtl.ApiSettings) (OIDCConfig, error) {
 	var result OIDCConfig
-	err := l.session.Do(&result, "POST", "/4.0", "/oidc_test_configs", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/oidc_test_configs", nil, body, options)
 	return result, err
 
 }
@@ -1168,7 +1169,7 @@ func (l *LookerSDK) CreateOidcTestConfig(
 func (l *LookerSDK) PasswordConfig(
 	options *rtl.ApiSettings) (PasswordConfig, error) {
 	var result PasswordConfig
-	err := l.session.Do(&result, "GET", "/4.0", "/password_config", nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/password_config", nil, nil, options)
 	return result, err
 
 }
@@ -1182,7 +1183,7 @@ func (l *LookerSDK) UpdatePasswordConfig(
 	body WritePasswordConfig,
 	options *rtl.ApiSettings) (PasswordConfig, error) {
 	var result PasswordConfig
-	err := l.session.Do(&result, "PATCH", "/4.0", "/password_config", nil, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", "/password_config", nil, body, options)
 	return result, err
 
 }
@@ -1195,7 +1196,7 @@ func (l *LookerSDK) UpdatePasswordConfig(
 func (l *LookerSDK) ForcePasswordResetAtNextLoginForAllUsers(
 	options *rtl.ApiSettings) (string, error) {
 	var result string
-	err := l.session.Do(&result, "PUT", "/4.0", "/password_config/force_password_reset_at_next_login_for_all_users", nil, nil, options)
+	err := l.AuthSession.Do(&result, "PUT", "/4.0", "/password_config/force_password_reset_at_next_login_for_all_users", nil, nil, options)
 	return result, err
 
 }
@@ -1219,7 +1220,7 @@ func (l *LookerSDK) ForcePasswordResetAtNextLoginForAllUsers(
 func (l *LookerSDK) SamlConfig(
 	options *rtl.ApiSettings) (SamlConfig, error) {
 	var result SamlConfig
-	err := l.session.Do(&result, "GET", "/4.0", "/saml_config", nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/saml_config", nil, nil, options)
 	return result, err
 
 }
@@ -1241,7 +1242,7 @@ func (l *LookerSDK) UpdateSamlConfig(
 	body WriteSamlConfig,
 	options *rtl.ApiSettings) (SamlConfig, error) {
 	var result SamlConfig
-	err := l.session.Do(&result, "PATCH", "/4.0", "/saml_config", nil, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", "/saml_config", nil, body, options)
 	return result, err
 
 }
@@ -1256,7 +1257,7 @@ func (l *LookerSDK) SamlTestConfig(
 	options *rtl.ApiSettings) (SamlConfig, error) {
 	testSlug = url.PathEscape(testSlug)
 	var result SamlConfig
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/saml_test_configs/%v", testSlug), nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/saml_test_configs/%v", testSlug), nil, nil, options)
 	return result, err
 
 }
@@ -1271,7 +1272,7 @@ func (l *LookerSDK) DeleteSamlTestConfig(
 	options *rtl.ApiSettings) (string, error) {
 	testSlug = url.PathEscape(testSlug)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/saml_test_configs/%v", testSlug), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/saml_test_configs/%v", testSlug), nil, nil, options)
 	return result, err
 
 }
@@ -1285,7 +1286,7 @@ func (l *LookerSDK) CreateSamlTestConfig(
 	body WriteSamlConfig,
 	options *rtl.ApiSettings) (SamlConfig, error) {
 	var result SamlConfig
-	err := l.session.Do(&result, "POST", "/4.0", "/saml_test_configs", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/saml_test_configs", nil, body, options)
 	return result, err
 
 }
@@ -1299,7 +1300,7 @@ func (l *LookerSDK) ParseSamlIdpMetadata(
 	body string,
 	options *rtl.ApiSettings) (SamlMetadataParseResult, error) {
 	var result SamlMetadataParseResult
-	err := l.session.Do(&result, "POST", "/4.0", "/parse_saml_idp_metadata", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/parse_saml_idp_metadata", nil, body, options)
 	return result, err
 
 }
@@ -1315,7 +1316,7 @@ func (l *LookerSDK) FetchAndParseSamlIdpMetadata(
 	body string,
 	options *rtl.ApiSettings) (SamlMetadataParseResult, error) {
 	var result SamlMetadataParseResult
-	err := l.session.Do(&result, "POST", "/4.0", "/fetch_and_parse_saml_idp_metadata", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/fetch_and_parse_saml_idp_metadata", nil, body, options)
 	return result, err
 
 }
@@ -1326,7 +1327,7 @@ func (l *LookerSDK) FetchAndParseSamlIdpMetadata(
 func (l *LookerSDK) SessionConfig(
 	options *rtl.ApiSettings) (SessionConfig, error) {
 	var result SessionConfig
-	err := l.session.Do(&result, "GET", "/4.0", "/session_config", nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/session_config", nil, nil, options)
 	return result, err
 
 }
@@ -1338,7 +1339,7 @@ func (l *LookerSDK) UpdateSessionConfig(
 	body WriteSessionConfig,
 	options *rtl.ApiSettings) (SessionConfig, error) {
 	var result SessionConfig
-	err := l.session.Do(&result, "PATCH", "/4.0", "/session_config", nil, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", "/session_config", nil, body, options)
 	return result, err
 
 }
@@ -1354,7 +1355,7 @@ func (l *LookerSDK) GetSupportAccessAllowlistEntries(
 	fields string,
 	options *rtl.ApiSettings) ([]SupportAccessAllowlistEntry, error) {
 	var result []SupportAccessAllowlistEntry
-	err := l.session.Do(&result, "GET", "/4.0", "/support_access/allowlist", map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/support_access/allowlist", map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -1370,7 +1371,7 @@ func (l *LookerSDK) AddSupportAccessAllowlistEntries(
 	body SupportAccessAddEntries,
 	options *rtl.ApiSettings) ([]SupportAccessAllowlistEntry, error) {
 	var result []SupportAccessAllowlistEntry
-	err := l.session.Do(&result, "POST", "/4.0", "/support_access/allowlist", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/support_access/allowlist", nil, body, options)
 	return result, err
 
 }
@@ -1387,7 +1388,7 @@ func (l *LookerSDK) DeleteSupportAccessAllowlistEntry(
 	options *rtl.ApiSettings) (string, error) {
 	entryId = url.PathEscape(entryId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/support_access/allowlist/%v", entryId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/support_access/allowlist/%v", entryId), nil, nil, options)
 	return result, err
 
 }
@@ -1403,7 +1404,7 @@ func (l *LookerSDK) EnableSupportAccess(
 	body SupportAccessEnable,
 	options *rtl.ApiSettings) (SupportAccessStatus, error) {
 	var result SupportAccessStatus
-	err := l.session.Do(&result, "PUT", "/4.0", "/support_access/enable", nil, body, options)
+	err := l.AuthSession.Do(&result, "PUT", "/4.0", "/support_access/enable", nil, body, options)
 	return result, err
 
 }
@@ -1418,7 +1419,7 @@ func (l *LookerSDK) EnableSupportAccess(
 func (l *LookerSDK) DisableSupportAccess(
 	options *rtl.ApiSettings) (SupportAccessStatus, error) {
 	var result SupportAccessStatus
-	err := l.session.Do(&result, "PUT", "/4.0", "/support_access/disable", nil, nil, options)
+	err := l.AuthSession.Do(&result, "PUT", "/4.0", "/support_access/disable", nil, nil, options)
 	return result, err
 
 }
@@ -1433,7 +1434,7 @@ func (l *LookerSDK) DisableSupportAccess(
 func (l *LookerSDK) SupportAccessStatus(
 	options *rtl.ApiSettings) (SupportAccessStatus, error) {
 	var result SupportAccessStatus
-	err := l.session.Do(&result, "GET", "/4.0", "/support_access/status", nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/support_access/status", nil, nil, options)
 	return result, err
 
 }
@@ -1445,7 +1446,7 @@ func (l *LookerSDK) AllUserLoginLockouts(
 	fields string,
 	options *rtl.ApiSettings) ([]UserLoginLockout, error) {
 	var result []UserLoginLockout
-	err := l.session.Do(&result, "GET", "/4.0", "/user_login_lockouts", map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/user_login_lockouts", map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -1456,7 +1457,7 @@ func (l *LookerSDK) AllUserLoginLockouts(
 func (l *LookerSDK) SearchUserLoginLockouts(request RequestSearchUserLoginLockouts,
 	options *rtl.ApiSettings) ([]UserLoginLockout, error) {
 	var result []UserLoginLockout
-	err := l.session.Do(&result, "GET", "/4.0", "/user_login_lockouts/search", map[string]interface{}{"fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "auth_type": request.AuthType, "full_name": request.FullName, "email": request.Email, "remote_id": request.RemoteId, "filter_or": request.FilterOr}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/user_login_lockouts/search", map[string]interface{}{"fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "auth_type": request.AuthType, "full_name": request.FullName, "email": request.Email, "remote_id": request.RemoteId, "filter_or": request.FilterOr}, nil, options)
 	return result, err
 
 }
@@ -1469,7 +1470,7 @@ func (l *LookerSDK) DeleteUserLoginLockout(
 	options *rtl.ApiSettings) (string, error) {
 	key = url.PathEscape(key)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/user_login_lockout/%v", key), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/user_login_lockout/%v", key), nil, nil, options)
 	return result, err
 
 }
@@ -1485,7 +1486,7 @@ func (l *LookerSDK) AllBoards(
 	fields string,
 	options *rtl.ApiSettings) ([]Board, error) {
 	var result []Board
-	err := l.session.Do(&result, "GET", "/4.0", "/boards", map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/boards", map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -1498,7 +1499,7 @@ func (l *LookerSDK) CreateBoard(
 	fields string,
 	options *rtl.ApiSettings) (Board, error) {
 	var result Board
-	err := l.session.Do(&result, "POST", "/4.0", "/boards", map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/boards", map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -1530,7 +1531,7 @@ func (l *LookerSDK) CreateBoard(
 func (l *LookerSDK) SearchBoards(request RequestSearchBoards,
 	options *rtl.ApiSettings) ([]Board, error) {
 	var result []Board
-	err := l.session.Do(&result, "GET", "/4.0", "/boards/search", map[string]interface{}{"title": request.Title, "created_at": request.CreatedAt, "first_name": request.FirstName, "last_name": request.LastName, "fields": request.Fields, "favorited": request.Favorited, "creator_id": request.CreatorId, "sorts": request.Sorts, "page": request.Page, "per_page": request.PerPage, "offset": request.Offset, "limit": request.Limit, "filter_or": request.FilterOr, "permission": request.Permission}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/boards/search", map[string]interface{}{"title": request.Title, "created_at": request.CreatedAt, "first_name": request.FirstName, "last_name": request.LastName, "fields": request.Fields, "favorited": request.Favorited, "creator_id": request.CreatorId, "sorts": request.Sorts, "page": request.Page, "per_page": request.PerPage, "offset": request.Offset, "limit": request.Limit, "filter_or": request.FilterOr, "permission": request.Permission}, nil, options)
 	return result, err
 
 }
@@ -1544,7 +1545,7 @@ func (l *LookerSDK) Board(
 	options *rtl.ApiSettings) (Board, error) {
 	boardId = url.PathEscape(boardId)
 	var result Board
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/boards/%v", boardId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/boards/%v", boardId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -1559,7 +1560,7 @@ func (l *LookerSDK) UpdateBoard(
 	options *rtl.ApiSettings) (Board, error) {
 	boardId = url.PathEscape(boardId)
 	var result Board
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/boards/%v", boardId), map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/boards/%v", boardId), map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -1572,7 +1573,7 @@ func (l *LookerSDK) DeleteBoard(
 	options *rtl.ApiSettings) (string, error) {
 	boardId = url.PathEscape(boardId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/boards/%v", boardId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/boards/%v", boardId), nil, nil, options)
 	return result, err
 
 }
@@ -1583,7 +1584,7 @@ func (l *LookerSDK) DeleteBoard(
 func (l *LookerSDK) AllBoardItems(request RequestAllBoardItems,
 	options *rtl.ApiSettings) ([]BoardItem, error) {
 	var result []BoardItem
-	err := l.session.Do(&result, "GET", "/4.0", "/board_items", map[string]interface{}{"fields": request.Fields, "sorts": request.Sorts, "board_section_id": request.BoardSectionId}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/board_items", map[string]interface{}{"fields": request.Fields, "sorts": request.Sorts, "board_section_id": request.BoardSectionId}, nil, options)
 	return result, err
 
 }
@@ -1596,7 +1597,7 @@ func (l *LookerSDK) CreateBoardItem(
 	fields string,
 	options *rtl.ApiSettings) (BoardItem, error) {
 	var result BoardItem
-	err := l.session.Do(&result, "POST", "/4.0", "/board_items", map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/board_items", map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -1610,7 +1611,7 @@ func (l *LookerSDK) BoardItem(
 	options *rtl.ApiSettings) (BoardItem, error) {
 	boardItemId = url.PathEscape(boardItemId)
 	var result BoardItem
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/board_items/%v", boardItemId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/board_items/%v", boardItemId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -1625,7 +1626,7 @@ func (l *LookerSDK) UpdateBoardItem(
 	options *rtl.ApiSettings) (BoardItem, error) {
 	boardItemId = url.PathEscape(boardItemId)
 	var result BoardItem
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/board_items/%v", boardItemId), map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/board_items/%v", boardItemId), map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -1638,7 +1639,7 @@ func (l *LookerSDK) DeleteBoardItem(
 	options *rtl.ApiSettings) (string, error) {
 	boardItemId = url.PathEscape(boardItemId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/board_items/%v", boardItemId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/board_items/%v", boardItemId), nil, nil, options)
 	return result, err
 
 }
@@ -1649,7 +1650,7 @@ func (l *LookerSDK) DeleteBoardItem(
 func (l *LookerSDK) AllBoardSections(request RequestAllBoardSections,
 	options *rtl.ApiSettings) ([]BoardSection, error) {
 	var result []BoardSection
-	err := l.session.Do(&result, "GET", "/4.0", "/board_sections", map[string]interface{}{"fields": request.Fields, "sorts": request.Sorts}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/board_sections", map[string]interface{}{"fields": request.Fields, "sorts": request.Sorts}, nil, options)
 	return result, err
 
 }
@@ -1662,7 +1663,7 @@ func (l *LookerSDK) CreateBoardSection(
 	fields string,
 	options *rtl.ApiSettings) (BoardSection, error) {
 	var result BoardSection
-	err := l.session.Do(&result, "POST", "/4.0", "/board_sections", map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/board_sections", map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -1676,7 +1677,7 @@ func (l *LookerSDK) BoardSection(
 	options *rtl.ApiSettings) (BoardSection, error) {
 	boardSectionId = url.PathEscape(boardSectionId)
 	var result BoardSection
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/board_sections/%v", boardSectionId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/board_sections/%v", boardSectionId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -1691,7 +1692,7 @@ func (l *LookerSDK) UpdateBoardSection(
 	options *rtl.ApiSettings) (BoardSection, error) {
 	boardSectionId = url.PathEscape(boardSectionId)
 	var result BoardSection
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/board_sections/%v", boardSectionId), map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/board_sections/%v", boardSectionId), map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -1704,7 +1705,7 @@ func (l *LookerSDK) DeleteBoardSection(
 	options *rtl.ApiSettings) (string, error) {
 	boardSectionId = url.PathEscape(boardSectionId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/board_sections/%v", boardSectionId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/board_sections/%v", boardSectionId), nil, nil, options)
 	return result, err
 
 }
@@ -1727,7 +1728,7 @@ func (l *LookerSDK) AllColorCollections(
 	fields string,
 	options *rtl.ApiSettings) ([]ColorCollection, error) {
 	var result []ColorCollection
-	err := l.session.Do(&result, "GET", "/4.0", "/color_collections", map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/color_collections", map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -1747,7 +1748,7 @@ func (l *LookerSDK) CreateColorCollection(
 	body WriteColorCollection,
 	options *rtl.ApiSettings) (ColorCollection, error) {
 	var result ColorCollection
-	err := l.session.Do(&result, "POST", "/4.0", "/color_collections", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/color_collections", nil, body, options)
 	return result, err
 
 }
@@ -1764,7 +1765,7 @@ func (l *LookerSDK) ColorCollectionsCustom(
 	fields string,
 	options *rtl.ApiSettings) ([]ColorCollection, error) {
 	var result []ColorCollection
-	err := l.session.Do(&result, "GET", "/4.0", "/color_collections/custom", map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/color_collections/custom", map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -1781,7 +1782,7 @@ func (l *LookerSDK) ColorCollectionsStandard(
 	fields string,
 	options *rtl.ApiSettings) ([]ColorCollection, error) {
 	var result []ColorCollection
-	err := l.session.Do(&result, "GET", "/4.0", "/color_collections/standard", map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/color_collections/standard", map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -1796,7 +1797,7 @@ func (l *LookerSDK) ColorCollectionsStandard(
 func (l *LookerSDK) DefaultColorCollection(
 	options *rtl.ApiSettings) (ColorCollection, error) {
 	var result ColorCollection
-	err := l.session.Do(&result, "GET", "/4.0", "/color_collections/default", nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/color_collections/default", nil, nil, options)
 	return result, err
 
 }
@@ -1811,7 +1812,7 @@ func (l *LookerSDK) SetDefaultColorCollection(
 	collectionId string,
 	options *rtl.ApiSettings) (ColorCollection, error) {
 	var result ColorCollection
-	err := l.session.Do(&result, "PUT", "/4.0", "/color_collections/default", map[string]interface{}{"collection_id": collectionId}, nil, options)
+	err := l.AuthSession.Do(&result, "PUT", "/4.0", "/color_collections/default", map[string]interface{}{"collection_id": collectionId}, nil, options)
 	return result, err
 
 }
@@ -1834,7 +1835,7 @@ func (l *LookerSDK) ColorCollection(
 	options *rtl.ApiSettings) (ColorCollection, error) {
 	collectionId = url.PathEscape(collectionId)
 	var result ColorCollection
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/color_collections/%v", collectionId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/color_collections/%v", collectionId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -1849,7 +1850,7 @@ func (l *LookerSDK) UpdateColorCollection(
 	options *rtl.ApiSettings) (ColorCollection, error) {
 	collectionId = url.PathEscape(collectionId)
 	var result ColorCollection
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/color_collections/%v", collectionId), nil, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/color_collections/%v", collectionId), nil, body, options)
 	return result, err
 
 }
@@ -1869,7 +1870,7 @@ func (l *LookerSDK) DeleteColorCollection(
 	options *rtl.ApiSettings) (string, error) {
 	collectionId = url.PathEscape(collectionId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/color_collections/%v", collectionId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/color_collections/%v", collectionId), nil, nil, options)
 	return result, err
 
 }
@@ -1884,7 +1885,7 @@ func (l *LookerSDK) DeleteColorCollection(
 func (l *LookerSDK) CloudStorageConfiguration(
 	options *rtl.ApiSettings) (BackupConfiguration, error) {
 	var result BackupConfiguration
-	err := l.session.Do(&result, "GET", "/4.0", "/cloud_storage", nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/cloud_storage", nil, nil, options)
 	return result, err
 
 }
@@ -1896,7 +1897,7 @@ func (l *LookerSDK) UpdateCloudStorageConfiguration(
 	body WriteBackupConfiguration,
 	options *rtl.ApiSettings) (BackupConfiguration, error) {
 	var result BackupConfiguration
-	err := l.session.Do(&result, "PATCH", "/4.0", "/cloud_storage", nil, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", "/cloud_storage", nil, body, options)
 	return result, err
 
 }
@@ -1909,7 +1910,7 @@ func (l *LookerSDK) UpdateCloudStorageConfiguration(
 func (l *LookerSDK) CustomWelcomeEmail(
 	options *rtl.ApiSettings) (CustomWelcomeEmail, error) {
 	var result CustomWelcomeEmail
-	err := l.session.Do(&result, "GET", "/4.0", "/custom_welcome_email", nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/custom_welcome_email", nil, nil, options)
 	return result, err
 
 }
@@ -1924,7 +1925,7 @@ func (l *LookerSDK) UpdateCustomWelcomeEmail(
 	sendTestWelcomeEmail bool,
 	options *rtl.ApiSettings) (CustomWelcomeEmail, error) {
 	var result CustomWelcomeEmail
-	err := l.session.Do(&result, "PATCH", "/4.0", "/custom_welcome_email", map[string]interface{}{"send_test_welcome_email": sendTestWelcomeEmail}, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", "/custom_welcome_email", map[string]interface{}{"send_test_welcome_email": sendTestWelcomeEmail}, body, options)
 	return result, err
 
 }
@@ -1936,7 +1937,7 @@ func (l *LookerSDK) UpdateCustomWelcomeEmailTest(
 	body WelcomeEmailTest,
 	options *rtl.ApiSettings) (WelcomeEmailTest, error) {
 	var result WelcomeEmailTest
-	err := l.session.Do(&result, "PUT", "/4.0", "/custom_welcome_email_test", nil, body, options)
+	err := l.AuthSession.Do(&result, "PUT", "/4.0", "/custom_welcome_email_test", nil, body, options)
 	return result, err
 
 }
@@ -1947,7 +1948,7 @@ func (l *LookerSDK) UpdateCustomWelcomeEmailTest(
 func (l *LookerSDK) DigestEmailsEnabled(
 	options *rtl.ApiSettings) (DigestEmails, error) {
 	var result DigestEmails
-	err := l.session.Do(&result, "GET", "/4.0", "/digest_emails_enabled", nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/digest_emails_enabled", nil, nil, options)
 	return result, err
 
 }
@@ -1959,7 +1960,7 @@ func (l *LookerSDK) UpdateDigestEmailsEnabled(
 	body DigestEmails,
 	options *rtl.ApiSettings) (DigestEmails, error) {
 	var result DigestEmails
-	err := l.session.Do(&result, "PATCH", "/4.0", "/digest_emails_enabled", nil, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", "/digest_emails_enabled", nil, body, options)
 	return result, err
 
 }
@@ -1972,7 +1973,7 @@ func (l *LookerSDK) UpdateDigestEmailsEnabled(
 func (l *LookerSDK) CreateDigestEmailSend(
 	options *rtl.ApiSettings) (DigestEmailSend, error) {
 	var result DigestEmailSend
-	err := l.session.Do(&result, "POST", "/4.0", "/digest_email_send", nil, nil, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/digest_email_send", nil, nil, options)
 	return result, err
 
 }
@@ -1987,7 +1988,7 @@ func (l *LookerSDK) CreateDigestEmailSend(
 func (l *LookerSDK) PublicEgressIpAddresses(
 	options *rtl.ApiSettings) (EgressIpAddresses, error) {
 	var result EgressIpAddresses
-	err := l.session.Do(&result, "GET", "/4.0", "/public_egress_ip_addresses", nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/public_egress_ip_addresses", nil, nil, options)
 	return result, err
 
 }
@@ -1998,7 +1999,7 @@ func (l *LookerSDK) PublicEgressIpAddresses(
 func (l *LookerSDK) InternalHelpResourcesContent(
 	options *rtl.ApiSettings) (InternalHelpResourcesContent, error) {
 	var result InternalHelpResourcesContent
-	err := l.session.Do(&result, "GET", "/4.0", "/internal_help_resources_content", nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/internal_help_resources_content", nil, nil, options)
 	return result, err
 
 }
@@ -2010,7 +2011,7 @@ func (l *LookerSDK) UpdateInternalHelpResourcesContent(
 	body WriteInternalHelpResourcesContent,
 	options *rtl.ApiSettings) (InternalHelpResourcesContent, error) {
 	var result InternalHelpResourcesContent
-	err := l.session.Do(&result, "PATCH", "/4.0", "/internal_help_resources_content", nil, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", "/internal_help_resources_content", nil, body, options)
 	return result, err
 
 }
@@ -2021,7 +2022,7 @@ func (l *LookerSDK) UpdateInternalHelpResourcesContent(
 func (l *LookerSDK) InternalHelpResources(
 	options *rtl.ApiSettings) (InternalHelpResources, error) {
 	var result InternalHelpResources
-	err := l.session.Do(&result, "GET", "/4.0", "/internal_help_resources_enabled", nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/internal_help_resources_enabled", nil, nil, options)
 	return result, err
 
 }
@@ -2033,7 +2034,7 @@ func (l *LookerSDK) UpdateInternalHelpResources(
 	body WriteInternalHelpResources,
 	options *rtl.ApiSettings) (InternalHelpResources, error) {
 	var result InternalHelpResources
-	err := l.session.Do(&result, "PATCH", "/4.0", "/internal_help_resources", nil, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", "/internal_help_resources", nil, body, options)
 	return result, err
 
 }
@@ -2046,7 +2047,7 @@ func (l *LookerSDK) UpdateInternalHelpResources(
 func (l *LookerSDK) AllLegacyFeatures(
 	options *rtl.ApiSettings) ([]LegacyFeature, error) {
 	var result []LegacyFeature
-	err := l.session.Do(&result, "GET", "/4.0", "/legacy_features", nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/legacy_features", nil, nil, options)
 	return result, err
 
 }
@@ -2061,7 +2062,7 @@ func (l *LookerSDK) LegacyFeature(
 	options *rtl.ApiSettings) (LegacyFeature, error) {
 	legacyFeatureId = url.PathEscape(legacyFeatureId)
 	var result LegacyFeature
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/legacy_features/%v", legacyFeatureId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/legacy_features/%v", legacyFeatureId), nil, nil, options)
 	return result, err
 
 }
@@ -2077,7 +2078,7 @@ func (l *LookerSDK) UpdateLegacyFeature(
 	options *rtl.ApiSettings) (LegacyFeature, error) {
 	legacyFeatureId = url.PathEscape(legacyFeatureId)
 	var result LegacyFeature
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/legacy_features/%v", legacyFeatureId), nil, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/legacy_features/%v", legacyFeatureId), nil, body, options)
 	return result, err
 
 }
@@ -2088,7 +2089,7 @@ func (l *LookerSDK) UpdateLegacyFeature(
 func (l *LookerSDK) AllLocales(
 	options *rtl.ApiSettings) ([]Locale, error) {
 	var result []Locale
-	err := l.session.Do(&result, "GET", "/4.0", "/locales", nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/locales", nil, nil, options)
 	return result, err
 
 }
@@ -2099,7 +2100,7 @@ func (l *LookerSDK) AllLocales(
 func (l *LookerSDK) MobileSettings(
 	options *rtl.ApiSettings) (MobileSettings, error) {
 	var result MobileSettings
-	err := l.session.Do(&result, "GET", "/4.0", "/mobile/settings", nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/mobile/settings", nil, nil, options)
 	return result, err
 
 }
@@ -2135,7 +2136,7 @@ func (l *LookerSDK) GetSetting(
 	fields string,
 	options *rtl.ApiSettings) (Setting, error) {
 	var result Setting
-	err := l.session.Do(&result, "GET", "/4.0", "/setting", map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/setting", map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -2176,7 +2177,7 @@ func (l *LookerSDK) SetSetting(
 	fields string,
 	options *rtl.ApiSettings) (Setting, error) {
 	var result Setting
-	err := l.session.Do(&result, "PATCH", "/4.0", "/setting", map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", "/setting", map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -2190,7 +2191,7 @@ func (l *LookerSDK) SetSetting(
 func (l *LookerSDK) SetSmtpSettings(
 	body SmtpSettings,
 	options *rtl.ApiSettings) error {
-	err := l.session.Do(nil, "POST", "/4.0", "/smtp_settings", nil, body, options)
+	err := l.AuthSession.Do(nil, "POST", "/4.0", "/smtp_settings", nil, body, options)
 	return err
 
 }
@@ -2202,7 +2203,7 @@ func (l *LookerSDK) SmtpStatus(
 	fields string,
 	options *rtl.ApiSettings) (SmtpStatus, error) {
 	var result SmtpStatus
-	err := l.session.Do(&result, "GET", "/4.0", "/smtp_status", map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/smtp_status", map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -2213,7 +2214,7 @@ func (l *LookerSDK) SmtpStatus(
 func (l *LookerSDK) AllTimezones(
 	options *rtl.ApiSettings) ([]Timezone, error) {
 	var result []Timezone
-	err := l.session.Do(&result, "GET", "/4.0", "/timezones", nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/timezones", nil, nil, options)
 	return result, err
 
 }
@@ -2225,7 +2226,7 @@ func (l *LookerSDK) Versions(
 	fields string,
 	options *rtl.ApiSettings) (ApiVersion, error) {
 	var result ApiVersion
-	err := l.session.Do(&result, "GET", "/4.0", "/versions", map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/versions", map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -2242,7 +2243,7 @@ func (l *LookerSDK) ApiSpec(
 	apiVersion = url.PathEscape(apiVersion)
 	specification = url.PathEscape(specification)
 	var result interface{}
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/api_spec/%v/%v", apiVersion, specification), nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/api_spec/%v/%v", apiVersion, specification), nil, nil, options)
 	return result, err
 
 }
@@ -2260,7 +2261,7 @@ func (l *LookerSDK) WhitelabelConfiguration(
 	fields string,
 	options *rtl.ApiSettings) (WhitelabelConfiguration, error) {
 	var result WhitelabelConfiguration
-	err := l.session.Do(&result, "GET", "/4.0", "/whitelabel_configuration", map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/whitelabel_configuration", map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -2276,7 +2277,7 @@ func (l *LookerSDK) UpdateWhitelabelConfiguration(
 	body WriteWhitelabelConfiguration,
 	options *rtl.ApiSettings) (WhitelabelConfiguration, error) {
 	var result WhitelabelConfiguration
-	err := l.session.Do(&result, "PUT", "/4.0", "/whitelabel_configuration", nil, body, options)
+	err := l.AuthSession.Do(&result, "PUT", "/4.0", "/whitelabel_configuration", nil, body, options)
 	return result, err
 
 }
@@ -2292,7 +2293,7 @@ func (l *LookerSDK) AllConnections(
 	fields string,
 	options *rtl.ApiSettings) ([]DBConnection, error) {
 	var result []DBConnection
-	err := l.session.Do(&result, "GET", "/4.0", "/connections", map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/connections", map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -2304,7 +2305,7 @@ func (l *LookerSDK) CreateConnection(
 	body WriteDBConnection,
 	options *rtl.ApiSettings) (DBConnection, error) {
 	var result DBConnection
-	err := l.session.Do(&result, "POST", "/4.0", "/connections", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/connections", nil, body, options)
 	return result, err
 
 }
@@ -2318,7 +2319,7 @@ func (l *LookerSDK) Connection(
 	options *rtl.ApiSettings) (DBConnection, error) {
 	connectionName = url.PathEscape(connectionName)
 	var result DBConnection
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/connections/%v", connectionName), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/connections/%v", connectionName), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -2332,7 +2333,7 @@ func (l *LookerSDK) UpdateConnection(
 	options *rtl.ApiSettings) (DBConnection, error) {
 	connectionName = url.PathEscape(connectionName)
 	var result DBConnection
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/connections/%v", connectionName), nil, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/connections/%v", connectionName), nil, body, options)
 	return result, err
 
 }
@@ -2345,7 +2346,7 @@ func (l *LookerSDK) DeleteConnection(
 	options *rtl.ApiSettings) (string, error) {
 	connectionName = url.PathEscape(connectionName)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/connections/%v", connectionName), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/connections/%v", connectionName), nil, nil, options)
 	return result, err
 
 }
@@ -2360,7 +2361,7 @@ func (l *LookerSDK) DeleteConnectionOverride(
 	connectionName = url.PathEscape(connectionName)
 	overrideContext = url.PathEscape(overrideContext)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/connections/%v/connection_override/%v", connectionName, overrideContext), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/connections/%v/connection_override/%v", connectionName, overrideContext), nil, nil, options)
 	return result, err
 
 }
@@ -2381,7 +2382,7 @@ func (l *LookerSDK) TestConnection(
 	options *rtl.ApiSettings) ([]DBConnectionTestResult, error) {
 	connectionName = url.PathEscape(connectionName)
 	var result []DBConnectionTestResult
-	err := l.session.Do(&result, "PUT", "/4.0", fmt.Sprintf("/connections/%v/test", connectionName), map[string]interface{}{"tests": tests}, nil, options)
+	err := l.AuthSession.Do(&result, "PUT", "/4.0", fmt.Sprintf("/connections/%v/test", connectionName), map[string]interface{}{"tests": tests}, nil, options)
 	return result, err
 
 }
@@ -2401,7 +2402,7 @@ func (l *LookerSDK) TestConnectionConfig(
 	tests rtl.DelimString,
 	options *rtl.ApiSettings) ([]DBConnectionTestResult, error) {
 	var result []DBConnectionTestResult
-	err := l.session.Do(&result, "PUT", "/4.0", "/connections/test", map[string]interface{}{"tests": tests}, body, options)
+	err := l.AuthSession.Do(&result, "PUT", "/4.0", "/connections/test", map[string]interface{}{"tests": tests}, body, options)
 	return result, err
 
 }
@@ -2413,7 +2414,7 @@ func (l *LookerSDK) AllDialectInfos(
 	fields string,
 	options *rtl.ApiSettings) ([]DialectInfo, error) {
 	var result []DialectInfo
-	err := l.session.Do(&result, "GET", "/4.0", "/dialect_info", map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/dialect_info", map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -2426,7 +2427,7 @@ func (l *LookerSDK) AllDialectInfos(
 func (l *LookerSDK) AllExternalOauthApplications(request RequestAllExternalOauthApplications,
 	options *rtl.ApiSettings) ([]ExternalOauthApplication, error) {
 	var result []ExternalOauthApplication
-	err := l.session.Do(&result, "GET", "/4.0", "/external_oauth_applications", map[string]interface{}{"name": request.Name, "client_id": request.ClientId}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/external_oauth_applications", map[string]interface{}{"name": request.Name, "client_id": request.ClientId}, nil, options)
 	return result, err
 
 }
@@ -2440,7 +2441,7 @@ func (l *LookerSDK) CreateExternalOauthApplication(
 	body WriteExternalOauthApplication,
 	options *rtl.ApiSettings) (ExternalOauthApplication, error) {
 	var result ExternalOauthApplication
-	err := l.session.Do(&result, "POST", "/4.0", "/external_oauth_applications", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/external_oauth_applications", nil, body, options)
 	return result, err
 
 }
@@ -2456,7 +2457,7 @@ func (l *LookerSDK) UpdateExternalOauthApplication(
 	options *rtl.ApiSettings) (ExternalOauthApplication, error) {
 	clientId = url.PathEscape(clientId)
 	var result ExternalOauthApplication
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/external_oauth_applications/%v", clientId), nil, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/external_oauth_applications/%v", clientId), nil, body, options)
 	return result, err
 
 }
@@ -2468,7 +2469,7 @@ func (l *LookerSDK) CreateOauthApplicationUserState(
 	body CreateOAuthApplicationUserStateRequest,
 	options *rtl.ApiSettings) (CreateOAuthApplicationUserStateResponse, error) {
 	var result CreateOAuthApplicationUserStateResponse
-	err := l.session.Do(&result, "POST", "/4.0", "/external_oauth_applications/user_state", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/external_oauth_applications/user_state", nil, body, options)
 	return result, err
 
 }
@@ -2480,7 +2481,7 @@ func (l *LookerSDK) AllSshServers(
 	fields string,
 	options *rtl.ApiSettings) ([]SshServer, error) {
 	var result []SshServer
-	err := l.session.Do(&result, "GET", "/4.0", "/ssh_servers", map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/ssh_servers", map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -2492,7 +2493,7 @@ func (l *LookerSDK) CreateSshServer(
 	body WriteSshServer,
 	options *rtl.ApiSettings) (SshServer, error) {
 	var result SshServer
-	err := l.session.Do(&result, "POST", "/4.0", "/ssh_servers", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/ssh_servers", nil, body, options)
 	return result, err
 
 }
@@ -2505,7 +2506,7 @@ func (l *LookerSDK) SshServer(
 	options *rtl.ApiSettings) (SshServer, error) {
 	sshServerId = url.PathEscape(sshServerId)
 	var result SshServer
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/ssh_server/%v", sshServerId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/ssh_server/%v", sshServerId), nil, nil, options)
 	return result, err
 
 }
@@ -2519,7 +2520,7 @@ func (l *LookerSDK) UpdateSshServer(
 	options *rtl.ApiSettings) (SshServer, error) {
 	sshServerId = url.PathEscape(sshServerId)
 	var result SshServer
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/ssh_server/%v", sshServerId), nil, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/ssh_server/%v", sshServerId), nil, body, options)
 	return result, err
 
 }
@@ -2532,7 +2533,7 @@ func (l *LookerSDK) DeleteSshServer(
 	options *rtl.ApiSettings) (string, error) {
 	sshServerId = url.PathEscape(sshServerId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/ssh_server/%v", sshServerId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/ssh_server/%v", sshServerId), nil, nil, options)
 	return result, err
 
 }
@@ -2545,7 +2546,7 @@ func (l *LookerSDK) TestSshServer(
 	options *rtl.ApiSettings) (SshServer, error) {
 	sshServerId = url.PathEscape(sshServerId)
 	var result SshServer
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/ssh_server/%v/test", sshServerId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/ssh_server/%v/test", sshServerId), nil, nil, options)
 	return result, err
 
 }
@@ -2557,7 +2558,7 @@ func (l *LookerSDK) AllSshTunnels(
 	fields string,
 	options *rtl.ApiSettings) ([]SshTunnel, error) {
 	var result []SshTunnel
-	err := l.session.Do(&result, "GET", "/4.0", "/ssh_tunnels", map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/ssh_tunnels", map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -2569,7 +2570,7 @@ func (l *LookerSDK) CreateSshTunnel(
 	body WriteSshTunnel,
 	options *rtl.ApiSettings) (SshTunnel, error) {
 	var result SshTunnel
-	err := l.session.Do(&result, "POST", "/4.0", "/ssh_tunnels", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/ssh_tunnels", nil, body, options)
 	return result, err
 
 }
@@ -2582,7 +2583,7 @@ func (l *LookerSDK) SshTunnel(
 	options *rtl.ApiSettings) (SshTunnel, error) {
 	sshTunnelId = url.PathEscape(sshTunnelId)
 	var result SshTunnel
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/ssh_tunnel/%v", sshTunnelId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/ssh_tunnel/%v", sshTunnelId), nil, nil, options)
 	return result, err
 
 }
@@ -2596,7 +2597,7 @@ func (l *LookerSDK) UpdateSshTunnel(
 	options *rtl.ApiSettings) (SshTunnel, error) {
 	sshTunnelId = url.PathEscape(sshTunnelId)
 	var result SshTunnel
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/ssh_tunnel/%v", sshTunnelId), nil, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/ssh_tunnel/%v", sshTunnelId), nil, body, options)
 	return result, err
 
 }
@@ -2609,7 +2610,7 @@ func (l *LookerSDK) DeleteSshTunnel(
 	options *rtl.ApiSettings) (string, error) {
 	sshTunnelId = url.PathEscape(sshTunnelId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/ssh_tunnel/%v", sshTunnelId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/ssh_tunnel/%v", sshTunnelId), nil, nil, options)
 	return result, err
 
 }
@@ -2622,7 +2623,7 @@ func (l *LookerSDK) TestSshTunnel(
 	options *rtl.ApiSettings) (SshTunnel, error) {
 	sshTunnelId = url.PathEscape(sshTunnelId)
 	var result SshTunnel
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/ssh_tunnel/%v/test", sshTunnelId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/ssh_tunnel/%v/test", sshTunnelId), nil, nil, options)
 	return result, err
 
 }
@@ -2635,7 +2636,7 @@ func (l *LookerSDK) TestSshTunnel(
 func (l *LookerSDK) SshPublicKey(
 	options *rtl.ApiSettings) (SshPublicKey, error) {
 	var result SshPublicKey
-	err := l.session.Do(&result, "GET", "/4.0", "/ssh_public_key", nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/ssh_public_key", nil, nil, options)
 	return result, err
 
 }
@@ -2671,7 +2672,7 @@ func (l *LookerSDK) SshPublicKey(
 func (l *LookerSDK) SearchContentFavorites(request RequestSearchContentFavorites,
 	options *rtl.ApiSettings) ([]ContentFavorite, error) {
 	var result []ContentFavorite
-	err := l.session.Do(&result, "GET", "/4.0", "/content_favorite/search", map[string]interface{}{"id": request.Id, "user_id": request.UserId, "content_metadata_id": request.ContentMetadataId, "dashboard_id": request.DashboardId, "look_id": request.LookId, "board_id": request.BoardId, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "fields": request.Fields, "filter_or": request.FilterOr}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/content_favorite/search", map[string]interface{}{"id": request.Id, "user_id": request.UserId, "content_metadata_id": request.ContentMetadataId, "dashboard_id": request.DashboardId, "look_id": request.LookId, "board_id": request.BoardId, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "fields": request.Fields, "filter_or": request.FilterOr}, nil, options)
 	return result, err
 
 }
@@ -2685,7 +2686,7 @@ func (l *LookerSDK) ContentFavorite(
 	options *rtl.ApiSettings) (ContentFavorite, error) {
 	contentFavoriteId = url.PathEscape(contentFavoriteId)
 	var result ContentFavorite
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/content_favorite/%v", contentFavoriteId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/content_favorite/%v", contentFavoriteId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -2698,7 +2699,7 @@ func (l *LookerSDK) DeleteContentFavorite(
 	options *rtl.ApiSettings) (string, error) {
 	contentFavoriteId = url.PathEscape(contentFavoriteId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/content_favorite/%v", contentFavoriteId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/content_favorite/%v", contentFavoriteId), nil, nil, options)
 	return result, err
 
 }
@@ -2710,7 +2711,7 @@ func (l *LookerSDK) CreateContentFavorite(
 	body WriteContentFavorite,
 	options *rtl.ApiSettings) (ContentFavorite, error) {
 	var result ContentFavorite
-	err := l.session.Do(&result, "POST", "/4.0", "/content_favorite", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/content_favorite", nil, body, options)
 	return result, err
 
 }
@@ -2723,7 +2724,7 @@ func (l *LookerSDK) AllContentMetadatas(
 	fields string,
 	options *rtl.ApiSettings) ([]ContentMeta, error) {
 	var result []ContentMeta
-	err := l.session.Do(&result, "GET", "/4.0", "/content_metadata", map[string]interface{}{"parent_id": parentId, "fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/content_metadata", map[string]interface{}{"parent_id": parentId, "fields": fields}, nil, options)
 	return result, err
 
 }
@@ -2737,7 +2738,7 @@ func (l *LookerSDK) ContentMetadata(
 	options *rtl.ApiSettings) (ContentMeta, error) {
 	contentMetadataId = url.PathEscape(contentMetadataId)
 	var result ContentMeta
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/content_metadata/%v", contentMetadataId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/content_metadata/%v", contentMetadataId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -2751,7 +2752,7 @@ func (l *LookerSDK) UpdateContentMetadata(
 	options *rtl.ApiSettings) (ContentMeta, error) {
 	contentMetadataId = url.PathEscape(contentMetadataId)
 	var result ContentMeta
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/content_metadata/%v", contentMetadataId), nil, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/content_metadata/%v", contentMetadataId), nil, body, options)
 	return result, err
 
 }
@@ -2764,7 +2765,7 @@ func (l *LookerSDK) AllContentMetadataAccesses(
 	fields string,
 	options *rtl.ApiSettings) ([]ContentMetaGroupUser, error) {
 	var result []ContentMetaGroupUser
-	err := l.session.Do(&result, "GET", "/4.0", "/content_metadata_access", map[string]interface{}{"content_metadata_id": contentMetadataId, "fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/content_metadata_access", map[string]interface{}{"content_metadata_id": contentMetadataId, "fields": fields}, nil, options)
 	return result, err
 
 }
@@ -2777,7 +2778,7 @@ func (l *LookerSDK) CreateContentMetadataAccess(
 	sendBoardsNotificationEmail bool,
 	options *rtl.ApiSettings) (ContentMetaGroupUser, error) {
 	var result ContentMetaGroupUser
-	err := l.session.Do(&result, "POST", "/4.0", "/content_metadata_access", map[string]interface{}{"send_boards_notification_email": sendBoardsNotificationEmail}, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/content_metadata_access", map[string]interface{}{"send_boards_notification_email": sendBoardsNotificationEmail}, body, options)
 	return result, err
 
 }
@@ -2791,7 +2792,7 @@ func (l *LookerSDK) UpdateContentMetadataAccess(
 	options *rtl.ApiSettings) (ContentMetaGroupUser, error) {
 	contentMetadataAccessId = url.PathEscape(contentMetadataAccessId)
 	var result ContentMetaGroupUser
-	err := l.session.Do(&result, "PUT", "/4.0", fmt.Sprintf("/content_metadata_access/%v", contentMetadataAccessId), nil, body, options)
+	err := l.AuthSession.Do(&result, "PUT", "/4.0", fmt.Sprintf("/content_metadata_access/%v", contentMetadataAccessId), nil, body, options)
 	return result, err
 
 }
@@ -2804,7 +2805,7 @@ func (l *LookerSDK) DeleteContentMetadataAccess(
 	options *rtl.ApiSettings) (string, error) {
 	contentMetadataAccessId = url.PathEscape(contentMetadataAccessId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/content_metadata_access/%v", contentMetadataAccessId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/content_metadata_access/%v", contentMetadataAccessId), nil, nil, options)
 	return result, err
 
 }
@@ -2824,7 +2825,7 @@ func (l *LookerSDK) SearchContent(request RequestSearchContent,
 	options *rtl.ApiSettings) ([]ContentSearch, error) {
 	request.Terms = url.PathEscape(request.Terms)
 	var result []ContentSearch
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/content/%v", request.Terms), map[string]interface{}{"fields": request.Fields, "types": request.Types, "limit": request.Limit, "offset": request.Offset, "page": request.Page, "per_page": request.PerPage}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/content/%v", request.Terms), map[string]interface{}{"fields": request.Fields, "types": request.Types, "limit": request.Limit, "offset": request.Offset, "page": request.Page, "per_page": request.PerPage}, nil, options)
 	return result, err
 
 }
@@ -2838,7 +2839,7 @@ func (l *LookerSDK) SearchContent(request RequestSearchContent,
 func (l *LookerSDK) ContentSummary(request RequestContentSummary,
 	options *rtl.ApiSettings) ([]ContentSummary, error) {
 	var result []ContentSummary
-	err := l.session.Do(&result, "GET", "/4.0", "/content_summary", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "target_group_id": request.TargetGroupId, "target_user_id": request.TargetUserId, "target_content_type": request.TargetContentType, "sorts": request.Sorts}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/content_summary", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "target_group_id": request.TargetGroupId, "target_user_id": request.TargetUserId, "target_content_type": request.TargetContentType, "sorts": request.Sorts}, nil, options)
 	return result, err
 
 }
@@ -2856,7 +2857,7 @@ func (l *LookerSDK) ContentThumbnail(request RequestContentThumbnail,
 	request.Type = url.PathEscape(request.Type)
 	request.ResourceId = url.PathEscape(request.ResourceId)
 	var result string
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/content_thumbnail/%v/%v", request.Type, request.ResourceId), map[string]interface{}{"reload": request.Reload, "theme": request.Theme, "format": request.Format, "width": request.Width, "height": request.Height}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/content_thumbnail/%v/%v", request.Type, request.ResourceId), map[string]interface{}{"reload": request.Reload, "theme": request.Theme, "format": request.Format, "width": request.Width, "height": request.Height}, nil, options)
 	return result, err
 
 }
@@ -2870,7 +2871,7 @@ func (l *LookerSDK) ContentThumbnail(request RequestContentThumbnail,
 func (l *LookerSDK) ContentValidation(request RequestContentValidation,
 	options *rtl.ApiSettings) (ContentValidation, error) {
 	var result ContentValidation
-	err := l.session.Do(&result, "GET", "/4.0", "/content_validation", map[string]interface{}{"fields": request.Fields, "project_names": request.ProjectNames, "space_ids": request.SpaceIds}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/content_validation", map[string]interface{}{"fields": request.Fields, "project_names": request.ProjectNames, "space_ids": request.SpaceIds}, nil, options)
 	return result, err
 
 }
@@ -2902,7 +2903,7 @@ func (l *LookerSDK) ContentValidation(request RequestContentValidation,
 func (l *LookerSDK) SearchContentViews(request RequestSearchContentViews,
 	options *rtl.ApiSettings) ([]ContentView, error) {
 	var result []ContentView
-	err := l.session.Do(&result, "GET", "/4.0", "/content_view/search", map[string]interface{}{"view_count": request.ViewCount, "group_id": request.GroupId, "look_id": request.LookId, "dashboard_id": request.DashboardId, "content_metadata_id": request.ContentMetadataId, "start_of_week_date": request.StartOfWeekDate, "all_time": request.AllTime, "user_id": request.UserId, "fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "filter_or": request.FilterOr}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/content_view/search", map[string]interface{}{"view_count": request.ViewCount, "group_id": request.GroupId, "look_id": request.LookId, "dashboard_id": request.DashboardId, "content_metadata_id": request.ContentMetadataId, "start_of_week_date": request.StartOfWeekDate, "all_time": request.AllTime, "user_id": request.UserId, "fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "filter_or": request.FilterOr}, nil, options)
 	return result, err
 
 }
@@ -2925,7 +2926,7 @@ func (l *LookerSDK) VectorThumbnail(
 	type0 = url.PathEscape(type0)
 	resourceId = url.PathEscape(resourceId)
 	var result string
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/vector_thumbnail/%v/%v", type0, resourceId), map[string]interface{}{"reload": reload}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/vector_thumbnail/%v/%v", type0, resourceId), map[string]interface{}{"reload": reload}, nil, options)
 	return result, err
 
 }
@@ -2947,7 +2948,7 @@ func (l *LookerSDK) AllDashboards(
 	fields string,
 	options *rtl.ApiSettings) ([]DashboardBase, error) {
 	var result []DashboardBase
-	err := l.session.Do(&result, "GET", "/4.0", "/dashboards", map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/dashboards", map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -2972,7 +2973,7 @@ func (l *LookerSDK) CreateDashboard(
 	body WriteDashboard,
 	options *rtl.ApiSettings) (Dashboard, error) {
 	var result Dashboard
-	err := l.session.Do(&result, "POST", "/4.0", "/dashboards", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/dashboards", nil, body, options)
 	return result, err
 
 }
@@ -3011,7 +3012,7 @@ func (l *LookerSDK) CreateDashboard(
 func (l *LookerSDK) SearchDashboards(request RequestSearchDashboards,
 	options *rtl.ApiSettings) ([]Dashboard, error) {
 	var result []Dashboard
-	err := l.session.Do(&result, "GET", "/4.0", "/dashboards/search", map[string]interface{}{"id": request.Id, "slug": request.Slug, "title": request.Title, "description": request.Description, "content_favorite_id": request.ContentFavoriteId, "folder_id": request.FolderId, "deleted": request.Deleted, "user_id": request.UserId, "view_count": request.ViewCount, "content_metadata_id": request.ContentMetadataId, "curate": request.Curate, "last_viewed_at": request.LastViewedAt, "fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "filter_or": request.FilterOr, "not_owned_by": request.NotOwnedBy}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/dashboards/search", map[string]interface{}{"id": request.Id, "slug": request.Slug, "title": request.Title, "description": request.Description, "content_favorite_id": request.ContentFavoriteId, "folder_id": request.FolderId, "deleted": request.Deleted, "user_id": request.UserId, "view_count": request.ViewCount, "content_metadata_id": request.ContentMetadataId, "curate": request.Curate, "last_viewed_at": request.LastViewedAt, "fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "filter_or": request.FilterOr, "not_owned_by": request.NotOwnedBy}, nil, options)
 	return result, err
 
 }
@@ -3039,7 +3040,7 @@ func (l *LookerSDK) ImportLookmlDashboard(
 	lookmlDashboardId = url.PathEscape(lookmlDashboardId)
 	spaceId = url.PathEscape(spaceId)
 	var result Dashboard
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/dashboards/%v/import/%v", lookmlDashboardId, spaceId), map[string]interface{}{"raw_locale": rawLocale}, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/dashboards/%v/import/%v", lookmlDashboardId, spaceId), map[string]interface{}{"raw_locale": rawLocale}, body, options)
 	return result, err
 
 }
@@ -3061,7 +3062,7 @@ func (l *LookerSDK) SyncLookmlDashboard(request RequestSyncLookmlDashboard,
 	options *rtl.ApiSettings) ([]int64, error) {
 	request.LookmlDashboardId = url.PathEscape(request.LookmlDashboardId)
 	var result []int64
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/dashboards/%v/sync", request.LookmlDashboardId), map[string]interface{}{"raw_locale": request.RawLocale, "dashboard_ids": request.DashboardIds}, nil, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/dashboards/%v/sync", request.LookmlDashboardId), map[string]interface{}{"raw_locale": request.RawLocale, "dashboard_ids": request.DashboardIds}, nil, options)
 	return result, err
 
 }
@@ -3081,7 +3082,7 @@ func (l *LookerSDK) Dashboard(
 	options *rtl.ApiSettings) (Dashboard, error) {
 	dashboardId = url.PathEscape(dashboardId)
 	var result Dashboard
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/dashboards/%v", dashboardId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/dashboards/%v", dashboardId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -3104,7 +3105,7 @@ func (l *LookerSDK) UpdateDashboard(
 	options *rtl.ApiSettings) (Dashboard, error) {
 	dashboardId = url.PathEscape(dashboardId)
 	var result Dashboard
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/dashboards/%v", dashboardId), nil, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/dashboards/%v", dashboardId), nil, body, options)
 	return result, err
 
 }
@@ -3123,7 +3124,7 @@ func (l *LookerSDK) DeleteDashboard(
 	options *rtl.ApiSettings) (string, error) {
 	dashboardId = url.PathEscape(dashboardId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/dashboards/%v", dashboardId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/dashboards/%v", dashboardId), nil, nil, options)
 	return result, err
 
 }
@@ -3138,7 +3139,7 @@ func (l *LookerSDK) DashboardAggregateTableLookml(
 	options *rtl.ApiSettings) (DashboardAggregateTableLookml, error) {
 	dashboardId = url.PathEscape(dashboardId)
 	var result DashboardAggregateTableLookml
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/dashboards/aggregate_table_lookml/%v", dashboardId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/dashboards/aggregate_table_lookml/%v", dashboardId), nil, nil, options)
 	return result, err
 
 }
@@ -3153,7 +3154,7 @@ func (l *LookerSDK) DashboardLookml(
 	options *rtl.ApiSettings) (DashboardLookml, error) {
 	dashboardId = url.PathEscape(dashboardId)
 	var result DashboardLookml
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/dashboards/lookml/%v", dashboardId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/dashboards/lookml/%v", dashboardId), nil, nil, options)
 	return result, err
 
 }
@@ -3172,7 +3173,7 @@ func (l *LookerSDK) MoveDashboard(
 	options *rtl.ApiSettings) (Dashboard, error) {
 	dashboardId = url.PathEscape(dashboardId)
 	var result Dashboard
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/dashboards/%v/move", dashboardId), map[string]interface{}{"folder_id": folderId}, nil, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/dashboards/%v/move", dashboardId), map[string]interface{}{"folder_id": folderId}, nil, options)
 	return result, err
 
 }
@@ -3198,7 +3199,7 @@ func (l *LookerSDK) ImportDashboardFromLookml(
 	body WriteDashboardLookml,
 	options *rtl.ApiSettings) (Dashboard, error) {
 	var result Dashboard
-	err := l.session.Do(&result, "POST", "/4.0", "/dashboards/lookml", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/dashboards/lookml", nil, body, options)
 	return result, err
 
 }
@@ -3210,7 +3211,7 @@ func (l *LookerSDK) CreateDashboardFromLookml(
 	body WriteDashboardLookml,
 	options *rtl.ApiSettings) (Dashboard, error) {
 	var result Dashboard
-	err := l.session.Do(&result, "POST", "/4.0", "/dashboards/from_lookml", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/dashboards/from_lookml", nil, body, options)
 	return result, err
 
 }
@@ -3233,7 +3234,7 @@ func (l *LookerSDK) CopyDashboard(
 	options *rtl.ApiSettings) (Dashboard, error) {
 	dashboardId = url.PathEscape(dashboardId)
 	var result Dashboard
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/dashboards/%v/copy", dashboardId), map[string]interface{}{"folder_id": folderId}, nil, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/dashboards/%v/copy", dashboardId), map[string]interface{}{"folder_id": folderId}, nil, options)
 	return result, err
 
 }
@@ -3267,7 +3268,7 @@ func (l *LookerSDK) CopyDashboard(
 func (l *LookerSDK) SearchDashboardElements(request RequestSearchDashboardElements,
 	options *rtl.ApiSettings) ([]DashboardElement, error) {
 	var result []DashboardElement
-	err := l.session.Do(&result, "GET", "/4.0", "/dashboard_elements/search", map[string]interface{}{"dashboard_id": request.DashboardId, "look_id": request.LookId, "title": request.Title, "deleted": request.Deleted, "fields": request.Fields, "filter_or": request.FilterOr, "sorts": request.Sorts}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/dashboard_elements/search", map[string]interface{}{"dashboard_id": request.DashboardId, "look_id": request.LookId, "title": request.Title, "deleted": request.Deleted, "fields": request.Fields, "filter_or": request.FilterOr, "sorts": request.Sorts}, nil, options)
 	return result, err
 
 }
@@ -3281,7 +3282,7 @@ func (l *LookerSDK) DashboardElement(
 	options *rtl.ApiSettings) (DashboardElement, error) {
 	dashboardElementId = url.PathEscape(dashboardElementId)
 	var result DashboardElement
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/dashboard_elements/%v", dashboardElementId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/dashboard_elements/%v", dashboardElementId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -3296,7 +3297,7 @@ func (l *LookerSDK) UpdateDashboardElement(
 	options *rtl.ApiSettings) (DashboardElement, error) {
 	dashboardElementId = url.PathEscape(dashboardElementId)
 	var result DashboardElement
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/dashboard_elements/%v", dashboardElementId), map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/dashboard_elements/%v", dashboardElementId), map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -3309,7 +3310,7 @@ func (l *LookerSDK) DeleteDashboardElement(
 	options *rtl.ApiSettings) (string, error) {
 	dashboardElementId = url.PathEscape(dashboardElementId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/dashboard_elements/%v", dashboardElementId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/dashboard_elements/%v", dashboardElementId), nil, nil, options)
 	return result, err
 
 }
@@ -3323,7 +3324,7 @@ func (l *LookerSDK) DashboardDashboardElements(
 	options *rtl.ApiSettings) ([]DashboardElement, error) {
 	dashboardId = url.PathEscape(dashboardId)
 	var result []DashboardElement
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/dashboards/%v/dashboard_elements", dashboardId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/dashboards/%v/dashboard_elements", dashboardId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -3334,7 +3335,7 @@ func (l *LookerSDK) DashboardDashboardElements(
 func (l *LookerSDK) CreateDashboardElement(request RequestCreateDashboardElement,
 	options *rtl.ApiSettings) (DashboardElement, error) {
 	var result DashboardElement
-	err := l.session.Do(&result, "POST", "/4.0", "/dashboard_elements", map[string]interface{}{"fields": request.Fields, "apply_filters": request.ApplyFilters}, request.Body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/dashboard_elements", map[string]interface{}{"fields": request.Fields, "apply_filters": request.ApplyFilters}, request.Body, options)
 	return result, err
 
 }
@@ -3348,7 +3349,7 @@ func (l *LookerSDK) DashboardFilter(
 	options *rtl.ApiSettings) (DashboardFilter, error) {
 	dashboardFilterId = url.PathEscape(dashboardFilterId)
 	var result DashboardFilter
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/dashboard_filters/%v", dashboardFilterId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/dashboard_filters/%v", dashboardFilterId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -3363,7 +3364,7 @@ func (l *LookerSDK) UpdateDashboardFilter(
 	options *rtl.ApiSettings) (DashboardFilter, error) {
 	dashboardFilterId = url.PathEscape(dashboardFilterId)
 	var result DashboardFilter
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/dashboard_filters/%v", dashboardFilterId), map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/dashboard_filters/%v", dashboardFilterId), map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -3376,7 +3377,7 @@ func (l *LookerSDK) DeleteDashboardFilter(
 	options *rtl.ApiSettings) (string, error) {
 	dashboardFilterId = url.PathEscape(dashboardFilterId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/dashboard_filters/%v", dashboardFilterId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/dashboard_filters/%v", dashboardFilterId), nil, nil, options)
 	return result, err
 
 }
@@ -3390,7 +3391,7 @@ func (l *LookerSDK) DashboardDashboardFilters(
 	options *rtl.ApiSettings) ([]DashboardFilter, error) {
 	dashboardId = url.PathEscape(dashboardId)
 	var result []DashboardFilter
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/dashboards/%v/dashboard_filters", dashboardId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/dashboards/%v/dashboard_filters", dashboardId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -3403,7 +3404,7 @@ func (l *LookerSDK) CreateDashboardFilter(
 	fields string,
 	options *rtl.ApiSettings) (DashboardFilter, error) {
 	var result DashboardFilter
-	err := l.session.Do(&result, "POST", "/4.0", "/dashboard_filters", map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/dashboard_filters", map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -3417,7 +3418,7 @@ func (l *LookerSDK) DashboardLayoutComponent(
 	options *rtl.ApiSettings) (DashboardLayoutComponent, error) {
 	dashboardLayoutComponentId = url.PathEscape(dashboardLayoutComponentId)
 	var result DashboardLayoutComponent
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/dashboard_layout_components/%v", dashboardLayoutComponentId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/dashboard_layout_components/%v", dashboardLayoutComponentId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -3432,7 +3433,7 @@ func (l *LookerSDK) UpdateDashboardLayoutComponent(
 	options *rtl.ApiSettings) (DashboardLayoutComponent, error) {
 	dashboardLayoutComponentId = url.PathEscape(dashboardLayoutComponentId)
 	var result DashboardLayoutComponent
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/dashboard_layout_components/%v", dashboardLayoutComponentId), map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/dashboard_layout_components/%v", dashboardLayoutComponentId), map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -3446,7 +3447,7 @@ func (l *LookerSDK) DashboardLayoutDashboardLayoutComponents(
 	options *rtl.ApiSettings) ([]DashboardLayoutComponent, error) {
 	dashboardLayoutId = url.PathEscape(dashboardLayoutId)
 	var result []DashboardLayoutComponent
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/dashboard_layouts/%v/dashboard_layout_components", dashboardLayoutId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/dashboard_layouts/%v/dashboard_layout_components", dashboardLayoutId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -3460,7 +3461,7 @@ func (l *LookerSDK) DashboardLayout(
 	options *rtl.ApiSettings) (DashboardLayout, error) {
 	dashboardLayoutId = url.PathEscape(dashboardLayoutId)
 	var result DashboardLayout
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/dashboard_layouts/%v", dashboardLayoutId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/dashboard_layouts/%v", dashboardLayoutId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -3475,7 +3476,7 @@ func (l *LookerSDK) UpdateDashboardLayout(
 	options *rtl.ApiSettings) (DashboardLayout, error) {
 	dashboardLayoutId = url.PathEscape(dashboardLayoutId)
 	var result DashboardLayout
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/dashboard_layouts/%v", dashboardLayoutId), map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/dashboard_layouts/%v", dashboardLayoutId), map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -3488,7 +3489,7 @@ func (l *LookerSDK) DeleteDashboardLayout(
 	options *rtl.ApiSettings) (string, error) {
 	dashboardLayoutId = url.PathEscape(dashboardLayoutId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/dashboard_layouts/%v", dashboardLayoutId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/dashboard_layouts/%v", dashboardLayoutId), nil, nil, options)
 	return result, err
 
 }
@@ -3502,7 +3503,7 @@ func (l *LookerSDK) DashboardDashboardLayouts(
 	options *rtl.ApiSettings) ([]DashboardLayout, error) {
 	dashboardId = url.PathEscape(dashboardId)
 	var result []DashboardLayout
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/dashboards/%v/dashboard_layouts", dashboardId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/dashboards/%v/dashboard_layouts", dashboardId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -3515,7 +3516,7 @@ func (l *LookerSDK) CreateDashboardLayout(
 	fields string,
 	options *rtl.ApiSettings) (DashboardLayout, error) {
 	var result DashboardLayout
-	err := l.session.Do(&result, "POST", "/4.0", "/dashboard_layouts", map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/dashboard_layouts", map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -3531,7 +3532,7 @@ func (l *LookerSDK) PerformDataAction(
 	body DataActionRequest,
 	options *rtl.ApiSettings) (DataActionResponse, error) {
 	var result DataActionResponse
-	err := l.session.Do(&result, "POST", "/4.0", "/data_actions", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/data_actions", nil, body, options)
 	return result, err
 
 }
@@ -3543,7 +3544,7 @@ func (l *LookerSDK) FetchRemoteDataActionForm(
 	body map[string]interface{},
 	options *rtl.ApiSettings) (DataActionForm, error) {
 	var result DataActionForm
-	err := l.session.Do(&result, "POST", "/4.0", "/data_actions/form", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/data_actions/form", nil, body, options)
 	return result, err
 
 }
@@ -3558,7 +3559,7 @@ func (l *LookerSDK) FetchRemoteDataActionForm(
 func (l *LookerSDK) AllDatagroups(
 	options *rtl.ApiSettings) ([]Datagroup, error) {
 	var result []Datagroup
-	err := l.session.Do(&result, "GET", "/4.0", "/datagroups", nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/datagroups", nil, nil, options)
 	return result, err
 
 }
@@ -3571,7 +3572,7 @@ func (l *LookerSDK) Datagroup(
 	options *rtl.ApiSettings) (Datagroup, error) {
 	datagroupId = url.PathEscape(datagroupId)
 	var result Datagroup
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/datagroups/%v", datagroupId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/datagroups/%v", datagroupId), nil, nil, options)
 	return result, err
 
 }
@@ -3585,7 +3586,7 @@ func (l *LookerSDK) UpdateDatagroup(
 	options *rtl.ApiSettings) (Datagroup, error) {
 	datagroupId = url.PathEscape(datagroupId)
 	var result Datagroup
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/datagroups/%v", datagroupId), nil, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/datagroups/%v", datagroupId), nil, body, options)
 	return result, err
 
 }
@@ -3601,7 +3602,7 @@ func (l *LookerSDK) GraphDerivedTablesForModel(request RequestGraphDerivedTables
 	options *rtl.ApiSettings) (DependencyGraph, error) {
 	request.Model = url.PathEscape(request.Model)
 	var result DependencyGraph
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/derived_table/graph/model/%v", request.Model), map[string]interface{}{"format": request.Format, "color": request.Color}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/derived_table/graph/model/%v", request.Model), map[string]interface{}{"format": request.Format, "color": request.Color}, nil, options)
 	return result, err
 
 }
@@ -3613,7 +3614,7 @@ func (l *LookerSDK) GraphDerivedTablesForView(request RequestGraphDerivedTablesF
 	options *rtl.ApiSettings) (DependencyGraph, error) {
 	request.View = url.PathEscape(request.View)
 	var result DependencyGraph
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/derived_table/graph/view/%v", request.View), map[string]interface{}{"models": request.Models, "workspace": request.Workspace}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/derived_table/graph/view/%v", request.View), map[string]interface{}{"models": request.Models, "workspace": request.Workspace}, nil, options)
 	return result, err
 
 }
@@ -3626,7 +3627,7 @@ func (l *LookerSDK) StartPdtBuild(request RequestStartPdtBuild,
 	request.ModelName = url.PathEscape(request.ModelName)
 	request.ViewName = url.PathEscape(request.ViewName)
 	var result MaterializePDT
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/derived_table/%v/%v/start", request.ModelName, request.ViewName), map[string]interface{}{"force_rebuild": request.ForceRebuild, "force_full_incremental": request.ForceFullIncremental, "workspace": request.Workspace, "source": request.Source}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/derived_table/%v/%v/start", request.ModelName, request.ViewName), map[string]interface{}{"force_rebuild": request.ForceRebuild, "force_full_incremental": request.ForceFullIncremental, "workspace": request.Workspace, "source": request.Source}, nil, options)
 	return result, err
 
 }
@@ -3639,7 +3640,7 @@ func (l *LookerSDK) CheckPdtBuild(
 	options *rtl.ApiSettings) (MaterializePDT, error) {
 	materializationId = url.PathEscape(materializationId)
 	var result MaterializePDT
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/derived_table/%v/status", materializationId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/derived_table/%v/status", materializationId), nil, nil, options)
 	return result, err
 
 }
@@ -3653,7 +3654,7 @@ func (l *LookerSDK) StopPdtBuild(
 	options *rtl.ApiSettings) (MaterializePDT, error) {
 	materializationId = url.PathEscape(materializationId)
 	var result MaterializePDT
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/derived_table/%v/stop", materializationId), map[string]interface{}{"source": source}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/derived_table/%v/stop", materializationId), map[string]interface{}{"source": source}, nil, options)
 	return result, err
 
 }
@@ -3668,7 +3669,7 @@ func (l *LookerSDK) StopPdtBuild(
 func (l *LookerSDK) SearchFolders(request RequestSearchFolders,
 	options *rtl.ApiSettings) ([]Folder, error) {
 	var result []Folder
-	err := l.session.Do(&result, "GET", "/4.0", "/folders/search", map[string]interface{}{"fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "name": request.Name, "id": request.Id, "parent_id": request.ParentId, "creator_id": request.CreatorId, "filter_or": request.FilterOr, "is_shared_root": request.IsSharedRoot, "is_users_root": request.IsUsersRoot}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/folders/search", map[string]interface{}{"fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "name": request.Name, "id": request.Id, "parent_id": request.ParentId, "creator_id": request.CreatorId, "filter_or": request.FilterOr, "is_shared_root": request.IsSharedRoot, "is_users_root": request.IsUsersRoot}, nil, options)
 	return result, err
 
 }
@@ -3682,7 +3683,7 @@ func (l *LookerSDK) Folder(
 	options *rtl.ApiSettings) (Folder, error) {
 	folderId = url.PathEscape(folderId)
 	var result Folder
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/folders/%v", folderId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/folders/%v", folderId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -3696,7 +3697,7 @@ func (l *LookerSDK) UpdateFolder(
 	options *rtl.ApiSettings) (Folder, error) {
 	folderId = url.PathEscape(folderId)
 	var result Folder
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/folders/%v", folderId), nil, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/folders/%v", folderId), nil, body, options)
 	return result, err
 
 }
@@ -3710,7 +3711,7 @@ func (l *LookerSDK) DeleteFolder(
 	options *rtl.ApiSettings) (string, error) {
 	folderId = url.PathEscape(folderId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/folders/%v", folderId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/folders/%v", folderId), nil, nil, options)
 	return result, err
 
 }
@@ -3724,7 +3725,7 @@ func (l *LookerSDK) AllFolders(
 	fields string,
 	options *rtl.ApiSettings) ([]FolderBase, error) {
 	var result []FolderBase
-	err := l.session.Do(&result, "GET", "/4.0", "/folders", map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/folders", map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -3739,7 +3740,7 @@ func (l *LookerSDK) CreateFolder(
 	body CreateFolder,
 	options *rtl.ApiSettings) (Folder, error) {
 	var result Folder
-	err := l.session.Do(&result, "POST", "/4.0", "/folders", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/folders", nil, body, options)
 	return result, err
 
 }
@@ -3751,7 +3752,7 @@ func (l *LookerSDK) FolderChildren(request RequestFolderChildren,
 	options *rtl.ApiSettings) ([]Folder, error) {
 	request.FolderId = url.PathEscape(request.FolderId)
 	var result []Folder
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/folders/%v/children", request.FolderId), map[string]interface{}{"fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/folders/%v/children", request.FolderId), map[string]interface{}{"fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts}, nil, options)
 	return result, err
 
 }
@@ -3763,7 +3764,7 @@ func (l *LookerSDK) FolderChildrenSearch(request RequestFolderChildrenSearch,
 	options *rtl.ApiSettings) ([]Folder, error) {
 	request.FolderId = url.PathEscape(request.FolderId)
 	var result []Folder
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/folders/%v/children/search", request.FolderId), map[string]interface{}{"fields": request.Fields, "sorts": request.Sorts, "name": request.Name}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/folders/%v/children/search", request.FolderId), map[string]interface{}{"fields": request.Fields, "sorts": request.Sorts, "name": request.Name}, nil, options)
 	return result, err
 
 }
@@ -3777,7 +3778,7 @@ func (l *LookerSDK) FolderParent(
 	options *rtl.ApiSettings) (Folder, error) {
 	folderId = url.PathEscape(folderId)
 	var result Folder
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/folders/%v/parent", folderId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/folders/%v/parent", folderId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -3791,7 +3792,7 @@ func (l *LookerSDK) FolderAncestors(
 	options *rtl.ApiSettings) ([]Folder, error) {
 	folderId = url.PathEscape(folderId)
 	var result []Folder
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/folders/%v/ancestors", folderId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/folders/%v/ancestors", folderId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -3806,7 +3807,7 @@ func (l *LookerSDK) FolderLooks(
 	options *rtl.ApiSettings) ([]LookWithQuery, error) {
 	folderId = url.PathEscape(folderId)
 	var result []LookWithQuery
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/folders/%v/looks", folderId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/folders/%v/looks", folderId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -3820,7 +3821,7 @@ func (l *LookerSDK) FolderDashboards(
 	options *rtl.ApiSettings) ([]Dashboard, error) {
 	folderId = url.PathEscape(folderId)
 	var result []Dashboard
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/folders/%v/dashboards", folderId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/folders/%v/dashboards", folderId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -3835,7 +3836,7 @@ func (l *LookerSDK) FolderDashboards(
 func (l *LookerSDK) AllGroups(request RequestAllGroups,
 	options *rtl.ApiSettings) ([]Group, error) {
 	var result []Group
-	err := l.session.Do(&result, "GET", "/4.0", "/groups", map[string]interface{}{"fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "ids": request.Ids, "content_metadata_id": request.ContentMetadataId, "can_add_to_content_metadata": request.CanAddToContentMetadata}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/groups", map[string]interface{}{"fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "ids": request.Ids, "content_metadata_id": request.ContentMetadataId, "can_add_to_content_metadata": request.CanAddToContentMetadata}, nil, options)
 	return result, err
 
 }
@@ -3848,7 +3849,7 @@ func (l *LookerSDK) CreateGroup(
 	fields string,
 	options *rtl.ApiSettings) (Group, error) {
 	var result Group
-	err := l.session.Do(&result, "POST", "/4.0", "/groups", map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/groups", map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -3882,7 +3883,7 @@ func (l *LookerSDK) CreateGroup(
 func (l *LookerSDK) SearchGroups(request RequestSearchGroups,
 	options *rtl.ApiSettings) ([]Group, error) {
 	var result []Group
-	err := l.session.Do(&result, "GET", "/4.0", "/groups/search", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "filter_or": request.FilterOr, "id": request.Id, "name": request.Name, "external_group_id": request.ExternalGroupId, "externally_managed": request.ExternallyManaged, "externally_orphaned": request.ExternallyOrphaned}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/groups/search", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "filter_or": request.FilterOr, "id": request.Id, "name": request.Name, "external_group_id": request.ExternalGroupId, "externally_managed": request.ExternallyManaged, "externally_orphaned": request.ExternallyOrphaned}, nil, options)
 	return result, err
 
 }
@@ -3916,7 +3917,7 @@ func (l *LookerSDK) SearchGroups(request RequestSearchGroups,
 func (l *LookerSDK) SearchGroupsWithRoles(request RequestSearchGroupsWithRoles,
 	options *rtl.ApiSettings) ([]GroupSearch, error) {
 	var result []GroupSearch
-	err := l.session.Do(&result, "GET", "/4.0", "/groups/search/with_roles", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "filter_or": request.FilterOr, "id": request.Id, "name": request.Name, "external_group_id": request.ExternalGroupId, "externally_managed": request.ExternallyManaged, "externally_orphaned": request.ExternallyOrphaned}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/groups/search/with_roles", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "filter_or": request.FilterOr, "id": request.Id, "name": request.Name, "external_group_id": request.ExternalGroupId, "externally_managed": request.ExternallyManaged, "externally_orphaned": request.ExternallyOrphaned}, nil, options)
 	return result, err
 
 }
@@ -3951,7 +3952,7 @@ func (l *LookerSDK) SearchGroupsWithRoles(request RequestSearchGroupsWithRoles,
 func (l *LookerSDK) SearchGroupsWithHierarchy(request RequestSearchGroupsWithHierarchy,
 	options *rtl.ApiSettings) ([]GroupHierarchy, error) {
 	var result []GroupHierarchy
-	err := l.session.Do(&result, "GET", "/4.0", "/groups/search/with_hierarchy", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "filter_or": request.FilterOr, "id": request.Id, "name": request.Name, "external_group_id": request.ExternalGroupId, "externally_managed": request.ExternallyManaged, "externally_orphaned": request.ExternallyOrphaned}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/groups/search/with_hierarchy", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "filter_or": request.FilterOr, "id": request.Id, "name": request.Name, "external_group_id": request.ExternalGroupId, "externally_managed": request.ExternallyManaged, "externally_orphaned": request.ExternallyOrphaned}, nil, options)
 	return result, err
 
 }
@@ -3965,7 +3966,7 @@ func (l *LookerSDK) Group(
 	options *rtl.ApiSettings) (Group, error) {
 	groupId = url.PathEscape(groupId)
 	var result Group
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/groups/%v", groupId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/groups/%v", groupId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -3980,7 +3981,7 @@ func (l *LookerSDK) UpdateGroup(
 	options *rtl.ApiSettings) (Group, error) {
 	groupId = url.PathEscape(groupId)
 	var result Group
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/groups/%v", groupId), map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/groups/%v", groupId), map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -3993,7 +3994,7 @@ func (l *LookerSDK) DeleteGroup(
 	options *rtl.ApiSettings) (string, error) {
 	groupId = url.PathEscape(groupId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/groups/%v", groupId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/groups/%v", groupId), nil, nil, options)
 	return result, err
 
 }
@@ -4007,7 +4008,7 @@ func (l *LookerSDK) AllGroupGroups(
 	options *rtl.ApiSettings) ([]Group, error) {
 	groupId = url.PathEscape(groupId)
 	var result []Group
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/groups/%v/groups", groupId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/groups/%v/groups", groupId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -4021,7 +4022,7 @@ func (l *LookerSDK) AddGroupGroup(
 	options *rtl.ApiSettings) (Group, error) {
 	groupId = url.PathEscape(groupId)
 	var result Group
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/groups/%v/groups", groupId), nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/groups/%v/groups", groupId), nil, body, options)
 	return result, err
 
 }
@@ -4033,7 +4034,7 @@ func (l *LookerSDK) AllGroupUsers(request RequestAllGroupUsers,
 	options *rtl.ApiSettings) ([]User, error) {
 	request.GroupId = url.PathEscape(request.GroupId)
 	var result []User
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/groups/%v/users", request.GroupId), map[string]interface{}{"fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/groups/%v/users", request.GroupId), map[string]interface{}{"fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts}, nil, options)
 	return result, err
 
 }
@@ -4047,7 +4048,7 @@ func (l *LookerSDK) AddGroupUser(
 	options *rtl.ApiSettings) (User, error) {
 	groupId = url.PathEscape(groupId)
 	var result User
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/groups/%v/users", groupId), nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/groups/%v/users", groupId), nil, body, options)
 	return result, err
 
 }
@@ -4061,7 +4062,7 @@ func (l *LookerSDK) DeleteGroupUser(
 	options *rtl.ApiSettings) error {
 	groupId = url.PathEscape(groupId)
 	userId = url.PathEscape(userId)
-	err := l.session.Do(nil, "DELETE", "/4.0", fmt.Sprintf("/groups/%v/users/%v", groupId, userId), nil, nil, options)
+	err := l.AuthSession.Do(nil, "DELETE", "/4.0", fmt.Sprintf("/groups/%v/users/%v", groupId, userId), nil, nil, options)
 	return err
 
 }
@@ -4075,7 +4076,7 @@ func (l *LookerSDK) DeleteGroupFromGroup(
 	options *rtl.ApiSettings) error {
 	groupId = url.PathEscape(groupId)
 	deletingGroupId = url.PathEscape(deletingGroupId)
-	err := l.session.Do(nil, "DELETE", "/4.0", fmt.Sprintf("/groups/%v/groups/%v", groupId, deletingGroupId), nil, nil, options)
+	err := l.AuthSession.Do(nil, "DELETE", "/4.0", fmt.Sprintf("/groups/%v/groups/%v", groupId, deletingGroupId), nil, nil, options)
 	return err
 
 }
@@ -4093,7 +4094,7 @@ func (l *LookerSDK) UpdateUserAttributeGroupValue(
 	groupId = url.PathEscape(groupId)
 	userAttributeId = url.PathEscape(userAttributeId)
 	var result UserAttributeGroupValue
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/groups/%v/attribute_values/%v", groupId, userAttributeId), nil, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/groups/%v/attribute_values/%v", groupId, userAttributeId), nil, body, options)
 	return result, err
 
 }
@@ -4107,7 +4108,7 @@ func (l *LookerSDK) DeleteUserAttributeGroupValue(
 	options *rtl.ApiSettings) error {
 	groupId = url.PathEscape(groupId)
 	userAttributeId = url.PathEscape(userAttributeId)
-	err := l.session.Do(nil, "DELETE", "/4.0", fmt.Sprintf("/groups/%v/attribute_values/%v", groupId, userAttributeId), nil, nil, options)
+	err := l.AuthSession.Do(nil, "DELETE", "/4.0", fmt.Sprintf("/groups/%v/attribute_values/%v", groupId, userAttributeId), nil, nil, options)
 	return err
 
 }
@@ -4123,7 +4124,7 @@ func (l *LookerSDK) AllPrimaryHomepageSections(
 	fields string,
 	options *rtl.ApiSettings) ([]HomepageSection, error) {
 	var result []HomepageSection
-	err := l.session.Do(&result, "GET", "/4.0", "/primary_homepage_sections", map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/primary_homepage_sections", map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -4139,7 +4140,7 @@ func (l *LookerSDK) AllIntegrationHubs(
 	fields string,
 	options *rtl.ApiSettings) ([]IntegrationHub, error) {
 	var result []IntegrationHub
-	err := l.session.Do(&result, "GET", "/4.0", "/integration_hubs", map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/integration_hubs", map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -4154,7 +4155,7 @@ func (l *LookerSDK) CreateIntegrationHub(
 	fields string,
 	options *rtl.ApiSettings) (IntegrationHub, error) {
 	var result IntegrationHub
-	err := l.session.Do(&result, "POST", "/4.0", "/integration_hubs", map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/integration_hubs", map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -4168,7 +4169,7 @@ func (l *LookerSDK) IntegrationHub(
 	options *rtl.ApiSettings) (IntegrationHub, error) {
 	integrationHubId = url.PathEscape(integrationHubId)
 	var result IntegrationHub
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/integration_hubs/%v", integrationHubId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/integration_hubs/%v", integrationHubId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -4185,7 +4186,7 @@ func (l *LookerSDK) UpdateIntegrationHub(
 	options *rtl.ApiSettings) (IntegrationHub, error) {
 	integrationHubId = url.PathEscape(integrationHubId)
 	var result IntegrationHub
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/integration_hubs/%v", integrationHubId), map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/integration_hubs/%v", integrationHubId), map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -4198,7 +4199,7 @@ func (l *LookerSDK) DeleteIntegrationHub(
 	options *rtl.ApiSettings) (string, error) {
 	integrationHubId = url.PathEscape(integrationHubId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/integration_hubs/%v", integrationHubId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/integration_hubs/%v", integrationHubId), nil, nil, options)
 	return result, err
 
 }
@@ -4211,7 +4212,7 @@ func (l *LookerSDK) AcceptIntegrationHubLegalAgreement(
 	options *rtl.ApiSettings) (IntegrationHub, error) {
 	integrationHubId = url.PathEscape(integrationHubId)
 	var result IntegrationHub
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/integration_hubs/%v/accept_legal_agreement", integrationHubId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/integration_hubs/%v/accept_legal_agreement", integrationHubId), nil, nil, options)
 	return result, err
 
 }
@@ -4222,7 +4223,7 @@ func (l *LookerSDK) AcceptIntegrationHubLegalAgreement(
 func (l *LookerSDK) AllIntegrations(request RequestAllIntegrations,
 	options *rtl.ApiSettings) ([]Integration, error) {
 	var result []Integration
-	err := l.session.Do(&result, "GET", "/4.0", "/integrations", map[string]interface{}{"fields": request.Fields, "integration_hub_id": request.IntegrationHubId}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/integrations", map[string]interface{}{"fields": request.Fields, "integration_hub_id": request.IntegrationHubId}, nil, options)
 	return result, err
 
 }
@@ -4236,7 +4237,7 @@ func (l *LookerSDK) Integration(
 	options *rtl.ApiSettings) (Integration, error) {
 	integrationId = url.PathEscape(integrationId)
 	var result Integration
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/integrations/%v", integrationId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/integrations/%v", integrationId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -4251,7 +4252,7 @@ func (l *LookerSDK) UpdateIntegration(
 	options *rtl.ApiSettings) (Integration, error) {
 	integrationId = url.PathEscape(integrationId)
 	var result Integration
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/integrations/%v", integrationId), map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/integrations/%v", integrationId), map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -4265,7 +4266,7 @@ func (l *LookerSDK) FetchIntegrationForm(
 	options *rtl.ApiSettings) (DataActionForm, error) {
 	integrationId = url.PathEscape(integrationId)
 	var result DataActionForm
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/integrations/%v/form", integrationId), nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/integrations/%v/form", integrationId), nil, body, options)
 	return result, err
 
 }
@@ -4278,7 +4279,7 @@ func (l *LookerSDK) TestIntegration(
 	options *rtl.ApiSettings) (IntegrationTestResult, error) {
 	integrationId = url.PathEscape(integrationId)
 	var result IntegrationTestResult
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/integrations/%v/test", integrationId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/integrations/%v/test", integrationId), nil, nil, options)
 	return result, err
 
 }
@@ -4300,7 +4301,7 @@ func (l *LookerSDK) AllLooks(
 	fields string,
 	options *rtl.ApiSettings) ([]Look, error) {
 	var result []Look
-	err := l.session.Do(&result, "GET", "/4.0", "/looks", map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/looks", map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -4319,7 +4320,7 @@ func (l *LookerSDK) CreateLook(
 	fields string,
 	options *rtl.ApiSettings) (LookWithQuery, error) {
 	var result LookWithQuery
-	err := l.session.Do(&result, "POST", "/4.0", "/looks", map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/looks", map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -4355,7 +4356,7 @@ func (l *LookerSDK) CreateLook(
 func (l *LookerSDK) SearchLooks(request RequestSearchLooks,
 	options *rtl.ApiSettings) ([]Look, error) {
 	var result []Look
-	err := l.session.Do(&result, "GET", "/4.0", "/looks/search", map[string]interface{}{"id": request.Id, "title": request.Title, "description": request.Description, "content_favorite_id": request.ContentFavoriteId, "folder_id": request.FolderId, "user_id": request.UserId, "view_count": request.ViewCount, "deleted": request.Deleted, "query_id": request.QueryId, "curate": request.Curate, "last_viewed_at": request.LastViewedAt, "fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "filter_or": request.FilterOr}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/looks/search", map[string]interface{}{"id": request.Id, "title": request.Title, "description": request.Description, "content_favorite_id": request.ContentFavoriteId, "folder_id": request.FolderId, "user_id": request.UserId, "view_count": request.ViewCount, "deleted": request.Deleted, "query_id": request.QueryId, "curate": request.Curate, "last_viewed_at": request.LastViewedAt, "fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "filter_or": request.FilterOr}, nil, options)
 	return result, err
 
 }
@@ -4371,7 +4372,7 @@ func (l *LookerSDK) Look(
 	options *rtl.ApiSettings) (LookWithQuery, error) {
 	lookId = url.PathEscape(lookId)
 	var result LookWithQuery
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/looks/%v", lookId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/looks/%v", lookId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -4405,7 +4406,7 @@ func (l *LookerSDK) UpdateLook(
 	options *rtl.ApiSettings) (LookWithQuery, error) {
 	lookId = url.PathEscape(lookId)
 	var result LookWithQuery
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/looks/%v", lookId), map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/looks/%v", lookId), map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -4424,7 +4425,7 @@ func (l *LookerSDK) DeleteLook(
 	options *rtl.ApiSettings) (string, error) {
 	lookId = url.PathEscape(lookId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/looks/%v", lookId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/looks/%v", lookId), nil, nil, options)
 	return result, err
 
 }
@@ -4457,7 +4458,7 @@ func (l *LookerSDK) RunLook(request RequestRunLook,
 	request.LookId = url.PathEscape(request.LookId)
 	request.ResultFormat = url.PathEscape(request.ResultFormat)
 	var result string
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/looks/%v/run/%v", request.LookId, request.ResultFormat), map[string]interface{}{"limit": request.Limit, "apply_formatting": request.ApplyFormatting, "apply_vis": request.ApplyVis, "cache": request.Cache, "image_width": request.ImageWidth, "image_height": request.ImageHeight, "generate_drill_links": request.GenerateDrillLinks, "force_production": request.ForceProduction, "cache_only": request.CacheOnly, "path_prefix": request.PathPrefix, "rebuild_pdts": request.RebuildPdts, "server_table_calcs": request.ServerTableCalcs}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/looks/%v/run/%v", request.LookId, request.ResultFormat), map[string]interface{}{"limit": request.Limit, "apply_formatting": request.ApplyFormatting, "apply_vis": request.ApplyVis, "cache": request.Cache, "image_width": request.ImageWidth, "image_height": request.ImageHeight, "generate_drill_links": request.GenerateDrillLinks, "force_production": request.ForceProduction, "cache_only": request.CacheOnly, "path_prefix": request.PathPrefix, "rebuild_pdts": request.RebuildPdts, "server_table_calcs": request.ServerTableCalcs}, nil, options)
 	return result, err
 
 }
@@ -4477,7 +4478,7 @@ func (l *LookerSDK) CopyLook(
 	options *rtl.ApiSettings) (LookWithQuery, error) {
 	lookId = url.PathEscape(lookId)
 	var result LookWithQuery
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/looks/%v/copy", lookId), map[string]interface{}{"folder_id": folderId}, nil, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/looks/%v/copy", lookId), map[string]interface{}{"folder_id": folderId}, nil, options)
 	return result, err
 
 }
@@ -4496,7 +4497,7 @@ func (l *LookerSDK) MoveLook(
 	options *rtl.ApiSettings) (LookWithQuery, error) {
 	lookId = url.PathEscape(lookId)
 	var result LookWithQuery
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/looks/%v/move", lookId), map[string]interface{}{"folder_id": folderId}, nil, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/looks/%v/move", lookId), map[string]interface{}{"folder_id": folderId}, nil, options)
 	return result, err
 
 }
@@ -4511,7 +4512,7 @@ func (l *LookerSDK) MoveLook(
 func (l *LookerSDK) AllLookmlModels(request RequestAllLookmlModels,
 	options *rtl.ApiSettings) ([]LookmlModel, error) {
 	var result []LookmlModel
-	err := l.session.Do(&result, "GET", "/4.0", "/lookml_models", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "exclude_empty": request.ExcludeEmpty, "exclude_hidden": request.ExcludeHidden, "include_internal": request.IncludeInternal}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/lookml_models", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "exclude_empty": request.ExcludeEmpty, "exclude_hidden": request.ExcludeHidden, "include_internal": request.IncludeInternal}, nil, options)
 	return result, err
 
 }
@@ -4523,7 +4524,7 @@ func (l *LookerSDK) CreateLookmlModel(
 	body WriteLookmlModel,
 	options *rtl.ApiSettings) (LookmlModel, error) {
 	var result LookmlModel
-	err := l.session.Do(&result, "POST", "/4.0", "/lookml_models", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/lookml_models", nil, body, options)
 	return result, err
 
 }
@@ -4537,7 +4538,7 @@ func (l *LookerSDK) LookmlModel(
 	options *rtl.ApiSettings) (LookmlModel, error) {
 	lookmlModelName = url.PathEscape(lookmlModelName)
 	var result LookmlModel
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/lookml_models/%v", lookmlModelName), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/lookml_models/%v", lookmlModelName), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -4551,7 +4552,7 @@ func (l *LookerSDK) UpdateLookmlModel(
 	options *rtl.ApiSettings) (LookmlModel, error) {
 	lookmlModelName = url.PathEscape(lookmlModelName)
 	var result LookmlModel
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/lookml_models/%v", lookmlModelName), nil, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/lookml_models/%v", lookmlModelName), nil, body, options)
 	return result, err
 
 }
@@ -4564,7 +4565,7 @@ func (l *LookerSDK) DeleteLookmlModel(
 	options *rtl.ApiSettings) (string, error) {
 	lookmlModelName = url.PathEscape(lookmlModelName)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/lookml_models/%v", lookmlModelName), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/lookml_models/%v", lookmlModelName), nil, nil, options)
 	return result, err
 
 }
@@ -4577,7 +4578,7 @@ func (l *LookerSDK) LookmlModelExplore(request RequestLookmlModelExplore,
 	request.LookmlModelName = url.PathEscape(request.LookmlModelName)
 	request.ExploreName = url.PathEscape(request.ExploreName)
 	var result LookmlModelExplore
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/lookml_models/%v/explores/%v", request.LookmlModelName, request.ExploreName), map[string]interface{}{"fields": request.Fields, "add_drills_metadata": request.AddDrillsMetadata}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/lookml_models/%v/explores/%v", request.LookmlModelName, request.ExploreName), map[string]interface{}{"fields": request.Fields, "add_drills_metadata": request.AddDrillsMetadata}, nil, options)
 	return result, err
 
 }
@@ -4613,7 +4614,7 @@ func (l *LookerSDK) ModelFieldnameSuggestions(request RequestModelFieldnameSugge
 	request.ViewName = url.PathEscape(request.ViewName)
 	request.FieldName = url.PathEscape(request.FieldName)
 	var result ModelFieldSuggestions
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/models/%v/views/%v/fields/%v/suggestions", request.ModelName, request.ViewName, request.FieldName), map[string]interface{}{"term": request.Term, "filters": request.Filters}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/models/%v/views/%v/fields/%v/suggestions", request.ModelName, request.ViewName, request.FieldName), map[string]interface{}{"term": request.Term, "filters": request.Filters}, nil, options)
 	return result, err
 
 }
@@ -4626,7 +4627,7 @@ func (l *LookerSDK) GetModel(
 	options *rtl.ApiSettings) (Model, error) {
 	modelName = url.PathEscape(modelName)
 	var result Model
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/models/%v", modelName), nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/models/%v", modelName), nil, nil, options)
 	return result, err
 
 }
@@ -4647,7 +4648,7 @@ func (l *LookerSDK) ConnectionDatabases(
 	options *rtl.ApiSettings) ([]string, error) {
 	connectionName = url.PathEscape(connectionName)
 	var result []string
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/connections/%v/databases", connectionName), nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/connections/%v/databases", connectionName), nil, nil, options)
 	return result, err
 
 }
@@ -4663,7 +4664,7 @@ func (l *LookerSDK) ConnectionFeatures(
 	options *rtl.ApiSettings) (ConnectionFeatures, error) {
 	connectionName = url.PathEscape(connectionName)
 	var result ConnectionFeatures
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/connections/%v/features", connectionName), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/connections/%v/features", connectionName), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -4675,7 +4676,7 @@ func (l *LookerSDK) ConnectionSchemas(request RequestConnectionSchemas,
 	options *rtl.ApiSettings) ([]Schema, error) {
 	request.ConnectionName = url.PathEscape(request.ConnectionName)
 	var result []Schema
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/connections/%v/schemas", request.ConnectionName), map[string]interface{}{"database": request.Database, "cache": request.Cache, "fields": request.Fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/connections/%v/schemas", request.ConnectionName), map[string]interface{}{"database": request.Database, "cache": request.Cache, "fields": request.Fields}, nil, options)
 	return result, err
 
 }
@@ -4692,7 +4693,7 @@ func (l *LookerSDK) ConnectionTables(request RequestConnectionTables,
 	options *rtl.ApiSettings) ([]SchemaTables, error) {
 	request.ConnectionName = url.PathEscape(request.ConnectionName)
 	var result []SchemaTables
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/connections/%v/tables", request.ConnectionName), map[string]interface{}{"database": request.Database, "schema_name": request.SchemaName, "cache": request.Cache, "fields": request.Fields, "table_filter": request.TableFilter, "table_limit": request.TableLimit}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/connections/%v/tables", request.ConnectionName), map[string]interface{}{"database": request.Database, "schema_name": request.SchemaName, "cache": request.Cache, "fields": request.Fields, "table_filter": request.TableFilter, "table_limit": request.TableLimit}, nil, options)
 	return result, err
 
 }
@@ -4704,7 +4705,7 @@ func (l *LookerSDK) ConnectionColumns(request RequestConnectionColumns,
 	options *rtl.ApiSettings) ([]SchemaColumns, error) {
 	request.ConnectionName = url.PathEscape(request.ConnectionName)
 	var result []SchemaColumns
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/connections/%v/columns", request.ConnectionName), map[string]interface{}{"database": request.Database, "schema_name": request.SchemaName, "cache": request.Cache, "table_limit": request.TableLimit, "table_names": request.TableNames, "fields": request.Fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/connections/%v/columns", request.ConnectionName), map[string]interface{}{"database": request.Database, "schema_name": request.SchemaName, "cache": request.Cache, "table_limit": request.TableLimit, "table_names": request.TableNames, "fields": request.Fields}, nil, options)
 	return result, err
 
 }
@@ -4718,7 +4719,7 @@ func (l *LookerSDK) ConnectionSearchColumns(request RequestConnectionSearchColum
 	options *rtl.ApiSettings) ([]ColumnSearch, error) {
 	request.ConnectionName = url.PathEscape(request.ConnectionName)
 	var result []ColumnSearch
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/connections/%v/search_columns", request.ConnectionName), map[string]interface{}{"column_name": request.ColumnName, "fields": request.Fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/connections/%v/search_columns", request.ConnectionName), map[string]interface{}{"column_name": request.ColumnName, "fields": request.Fields}, nil, options)
 	return result, err
 
 }
@@ -4737,7 +4738,7 @@ func (l *LookerSDK) ConnectionCostEstimate(
 	options *rtl.ApiSettings) (CostEstimate, error) {
 	connectionName = url.PathEscape(connectionName)
 	var result CostEstimate
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/connections/%v/cost_estimate", connectionName), map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/connections/%v/cost_estimate", connectionName), map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -4757,7 +4758,7 @@ func (l *LookerSDK) GetCiRun(
 	projectId = url.PathEscape(projectId)
 	runId = url.PathEscape(runId)
 	var result ProjectCIRun
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/ci/runs/%v", projectId, runId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/ci/runs/%v", projectId, runId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -4772,7 +4773,7 @@ func (l *LookerSDK) CreateCiRun(
 	options *rtl.ApiSettings) (CreateCIRunResponse, error) {
 	projectId = url.PathEscape(projectId)
 	var result CreateCIRunResponse
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/projects/%v/ci/run", projectId), map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/projects/%v/ci/run", projectId), map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -4792,7 +4793,7 @@ func (l *LookerSDK) LockAll(
 	options *rtl.ApiSettings) (string, error) {
 	projectId = url.PathEscape(projectId)
 	var result string
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/projects/%v/manifest/lock_all", projectId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/projects/%v/manifest/lock_all", projectId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -4807,7 +4808,7 @@ func (l *LookerSDK) AllGitBranches(
 	options *rtl.ApiSettings) ([]GitBranch, error) {
 	projectId = url.PathEscape(projectId)
 	var result []GitBranch
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/git_branches", projectId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/git_branches", projectId), nil, nil, options)
 	return result, err
 
 }
@@ -4822,7 +4823,7 @@ func (l *LookerSDK) GitBranch(
 	options *rtl.ApiSettings) (GitBranch, error) {
 	projectId = url.PathEscape(projectId)
 	var result GitBranch
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/git_branch", projectId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/git_branch", projectId), nil, nil, options)
 	return result, err
 
 }
@@ -4845,7 +4846,7 @@ func (l *LookerSDK) UpdateGitBranch(
 	options *rtl.ApiSettings) (GitBranch, error) {
 	projectId = url.PathEscape(projectId)
 	var result GitBranch
-	err := l.session.Do(&result, "PUT", "/4.0", fmt.Sprintf("/projects/%v/git_branch", projectId), nil, body, options)
+	err := l.AuthSession.Do(&result, "PUT", "/4.0", fmt.Sprintf("/projects/%v/git_branch", projectId), nil, body, options)
 	return result, err
 
 }
@@ -4867,7 +4868,7 @@ func (l *LookerSDK) CreateGitBranch(
 	options *rtl.ApiSettings) (GitBranch, error) {
 	projectId = url.PathEscape(projectId)
 	var result GitBranch
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/projects/%v/git_branch", projectId), nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/projects/%v/git_branch", projectId), nil, body, options)
 	return result, err
 
 }
@@ -4884,7 +4885,7 @@ func (l *LookerSDK) FindGitBranch(
 	projectId = url.PathEscape(projectId)
 	branchName = url.PathEscape(branchName)
 	var result GitBranch
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/git_branch/%v", projectId, branchName), nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/git_branch/%v", projectId, branchName), nil, nil, options)
 	return result, err
 
 }
@@ -4901,7 +4902,7 @@ func (l *LookerSDK) DeleteGitBranch(
 	projectId = url.PathEscape(projectId)
 	branchName = url.PathEscape(branchName)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/projects/%v/git_branch/%v", projectId, branchName), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/projects/%v/git_branch/%v", projectId, branchName), nil, nil, options)
 	return result, err
 
 }
@@ -4921,7 +4922,7 @@ func (l *LookerSDK) DeployRefToProduction(request RequestDeployRefToProduction,
 	options *rtl.ApiSettings) (string, error) {
 	request.ProjectId = url.PathEscape(request.ProjectId)
 	var result string
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/projects/%v/deploy_ref_to_production", request.ProjectId), map[string]interface{}{"branch": request.Branch, "ref": request.Ref}, nil, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/projects/%v/deploy_ref_to_production", request.ProjectId), map[string]interface{}{"branch": request.Branch, "ref": request.Ref}, nil, options)
 	return result, err
 
 }
@@ -4945,7 +4946,7 @@ func (l *LookerSDK) DeployToProduction(
 	options *rtl.ApiSettings) (string, error) {
 	projectId = url.PathEscape(projectId)
 	var result string
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/projects/%v/deploy_to_production", projectId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/projects/%v/deploy_to_production", projectId), nil, nil, options)
 	return result, err
 
 }
@@ -4960,7 +4961,7 @@ func (l *LookerSDK) ResetProjectToProduction(
 	options *rtl.ApiSettings) (string, error) {
 	projectId = url.PathEscape(projectId)
 	var result string
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/projects/%v/reset_to_production", projectId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/projects/%v/reset_to_production", projectId), nil, nil, options)
 	return result, err
 
 }
@@ -4975,7 +4976,7 @@ func (l *LookerSDK) ResetProjectToRemote(
 	options *rtl.ApiSettings) (string, error) {
 	projectId = url.PathEscape(projectId)
 	var result string
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/projects/%v/reset_to_remote", projectId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/projects/%v/reset_to_remote", projectId), nil, nil, options)
 	return result, err
 
 }
@@ -4989,7 +4990,7 @@ func (l *LookerSDK) AllProjects(
 	fields string,
 	options *rtl.ApiSettings) ([]Project, error) {
 	var result []Project
-	err := l.session.Do(&result, "GET", "/4.0", "/projects", map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/projects", map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -5007,7 +5008,7 @@ func (l *LookerSDK) CreateProject(
 	body WriteProject,
 	options *rtl.ApiSettings) (Project, error) {
 	var result Project
-	err := l.session.Do(&result, "POST", "/4.0", "/projects", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/projects", nil, body, options)
 	return result, err
 
 }
@@ -5023,7 +5024,7 @@ func (l *LookerSDK) Project(
 	options *rtl.ApiSettings) (Project, error) {
 	projectId = url.PathEscape(projectId)
 	var result Project
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v", projectId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v", projectId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -5058,7 +5059,7 @@ func (l *LookerSDK) UpdateProject(
 	options *rtl.ApiSettings) (Project, error) {
 	projectId = url.PathEscape(projectId)
 	var result Project
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/projects/%v", projectId), map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/projects/%v", projectId), map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -5073,7 +5074,7 @@ func (l *LookerSDK) Manifest(
 	options *rtl.ApiSettings) (Manifest, error) {
 	projectId = url.PathEscape(projectId)
 	var result Manifest
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/manifest", projectId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/manifest", projectId), nil, nil, options)
 	return result, err
 
 }
@@ -5088,7 +5089,7 @@ func (l *LookerSDK) GitDeployKey(
 	options *rtl.ApiSettings) (string, error) {
 	projectId = url.PathEscape(projectId)
 	var result string
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/git/deploy_key", projectId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/git/deploy_key", projectId), nil, nil, options)
 	return result, err
 
 }
@@ -5109,7 +5110,7 @@ func (l *LookerSDK) CreateGitDeployKey(
 	options *rtl.ApiSettings) (string, error) {
 	projectId = url.PathEscape(projectId)
 	var result string
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/projects/%v/git/deploy_key", projectId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/projects/%v/git/deploy_key", projectId), nil, nil, options)
 	return result, err
 
 }
@@ -5134,7 +5135,7 @@ func (l *LookerSDK) ProjectValidationResults(
 	options *rtl.ApiSettings) (ProjectValidationCache, error) {
 	projectId = url.PathEscape(projectId)
 	var result ProjectValidationCache
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/validate", projectId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/validate", projectId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -5156,7 +5157,7 @@ func (l *LookerSDK) ValidateProject(
 	options *rtl.ApiSettings) (ProjectValidation, error) {
 	projectId = url.PathEscape(projectId)
 	var result ProjectValidation
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/projects/%v/validate", projectId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/projects/%v/validate", projectId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -5172,7 +5173,7 @@ func (l *LookerSDK) ProjectWorkspace(
 	options *rtl.ApiSettings) (ProjectWorkspace, error) {
 	projectId = url.PathEscape(projectId)
 	var result ProjectWorkspace
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/current_workspace", projectId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/current_workspace", projectId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -5188,7 +5189,7 @@ func (l *LookerSDK) AllProjectFiles(
 	options *rtl.ApiSettings) ([]ProjectFile, error) {
 	projectId = url.PathEscape(projectId)
 	var result []ProjectFile
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/files", projectId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/files", projectId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -5205,7 +5206,7 @@ func (l *LookerSDK) ProjectFile(
 	options *rtl.ApiSettings) (ProjectFile, error) {
 	projectId = url.PathEscape(projectId)
 	var result ProjectFile
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/files/file", projectId), map[string]interface{}{"file_id": fileId, "fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/files/file", projectId), map[string]interface{}{"file_id": fileId, "fields": fields}, nil, options)
 	return result, err
 
 }
@@ -5225,7 +5226,7 @@ func (l *LookerSDK) AllGitConnectionTests(
 	options *rtl.ApiSettings) ([]GitConnectionTest, error) {
 	projectId = url.PathEscape(projectId)
 	var result []GitConnectionTest
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/git_connection_tests", projectId), map[string]interface{}{"remote_url": remoteUrl}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/git_connection_tests", projectId), map[string]interface{}{"remote_url": remoteUrl}, nil, options)
 	return result, err
 
 }
@@ -5244,7 +5245,7 @@ func (l *LookerSDK) RunGitConnectionTest(request RequestRunGitConnectionTest,
 	request.ProjectId = url.PathEscape(request.ProjectId)
 	request.TestId = url.PathEscape(request.TestId)
 	var result GitConnectionTestResult
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/git_connection_tests/%v", request.ProjectId, request.TestId), map[string]interface{}{"remote_url": request.RemoteUrl, "use_production": request.UseProduction}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/git_connection_tests/%v", request.ProjectId, request.TestId), map[string]interface{}{"remote_url": request.RemoteUrl, "use_production": request.UseProduction}, nil, options)
 	return result, err
 
 }
@@ -5262,7 +5263,7 @@ func (l *LookerSDK) AllLookmlTests(
 	options *rtl.ApiSettings) ([]LookmlTest, error) {
 	projectId = url.PathEscape(projectId)
 	var result []LookmlTest
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/lookml_tests", projectId), map[string]interface{}{"file_id": fileId}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/lookml_tests", projectId), map[string]interface{}{"file_id": fileId}, nil, options)
 	return result, err
 
 }
@@ -5276,7 +5277,7 @@ func (l *LookerSDK) RunLookmlTest(request RequestRunLookmlTest,
 	options *rtl.ApiSettings) ([]LookmlTestResult, error) {
 	request.ProjectId = url.PathEscape(request.ProjectId)
 	var result []LookmlTestResult
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/lookml_tests/run", request.ProjectId), map[string]interface{}{"file_id": request.FileId, "test": request.Test, "model": request.Model}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/lookml_tests/run", request.ProjectId), map[string]interface{}{"file_id": request.FileId, "test": request.Test, "model": request.Model}, nil, options)
 	return result, err
 
 }
@@ -5288,7 +5289,7 @@ func (l *LookerSDK) TagRef(request RequestTagRef,
 	options *rtl.ApiSettings) (Project, error) {
 	request.ProjectId = url.PathEscape(request.ProjectId)
 	var result Project
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/projects/%v/tag", request.ProjectId), map[string]interface{}{"commit_sha": request.CommitSha, "tag_name": request.TagName, "tag_message": request.TagMessage}, request.Body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/projects/%v/tag", request.ProjectId), map[string]interface{}{"commit_sha": request.CommitSha, "tag_name": request.TagName, "tag_message": request.TagMessage}, request.Body, options)
 	return result, err
 
 }
@@ -5309,7 +5310,7 @@ func (l *LookerSDK) UpdateRepositoryCredential(
 	rootProjectId = url.PathEscape(rootProjectId)
 	credentialId = url.PathEscape(credentialId)
 	var result RepositoryCredential
-	err := l.session.Do(&result, "PUT", "/4.0", fmt.Sprintf("/projects/%v/credential/%v", rootProjectId, credentialId), nil, body, options)
+	err := l.AuthSession.Do(&result, "PUT", "/4.0", fmt.Sprintf("/projects/%v/credential/%v", rootProjectId, credentialId), nil, body, options)
 	return result, err
 
 }
@@ -5329,7 +5330,7 @@ func (l *LookerSDK) DeleteRepositoryCredential(
 	rootProjectId = url.PathEscape(rootProjectId)
 	credentialId = url.PathEscape(credentialId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/projects/%v/credential/%v", rootProjectId, credentialId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/projects/%v/credential/%v", rootProjectId, credentialId), nil, nil, options)
 	return result, err
 
 }
@@ -5344,7 +5345,7 @@ func (l *LookerSDK) GetAllRepositoryCredentials(
 	options *rtl.ApiSettings) ([]RepositoryCredential, error) {
 	rootProjectId = url.PathEscape(rootProjectId)
 	var result []RepositoryCredential
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/credentials", rootProjectId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/credentials", rootProjectId), nil, nil, options)
 	return result, err
 
 }
@@ -5364,7 +5365,7 @@ func (l *LookerSDK) GetAllRepositoryCredentials(
 func (l *LookerSDK) CreateQueryTask(request RequestCreateQueryTask,
 	options *rtl.ApiSettings) (QueryTask, error) {
 	var result QueryTask
-	err := l.session.Do(&result, "POST", "/4.0", "/query_tasks", map[string]interface{}{"limit": request.Limit, "apply_formatting": request.ApplyFormatting, "apply_vis": request.ApplyVis, "cache": request.Cache, "generate_drill_links": request.GenerateDrillLinks, "force_production": request.ForceProduction, "cache_only": request.CacheOnly, "path_prefix": request.PathPrefix, "rebuild_pdts": request.RebuildPdts, "server_table_calcs": request.ServerTableCalcs, "fields": request.Fields}, request.Body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/query_tasks", map[string]interface{}{"limit": request.Limit, "apply_formatting": request.ApplyFormatting, "apply_vis": request.ApplyVis, "cache": request.Cache, "generate_drill_links": request.GenerateDrillLinks, "force_production": request.ForceProduction, "cache_only": request.CacheOnly, "path_prefix": request.PathPrefix, "rebuild_pdts": request.RebuildPdts, "server_table_calcs": request.ServerTableCalcs, "fields": request.Fields}, request.Body, options)
 	return result, err
 
 }
@@ -5382,7 +5383,7 @@ func (l *LookerSDK) QueryTaskMultiResults(
 	queryTaskIds rtl.DelimString,
 	options *rtl.ApiSettings) (map[string]interface{}, error) {
 	var result map[string]interface{}
-	err := l.session.Do(&result, "GET", "/4.0", "/query_tasks/multi_results", map[string]interface{}{"query_task_ids": queryTaskIds}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/query_tasks/multi_results", map[string]interface{}{"query_task_ids": queryTaskIds}, nil, options)
 	return result, err
 
 }
@@ -5402,7 +5403,7 @@ func (l *LookerSDK) QueryTask(
 	options *rtl.ApiSettings) (QueryTask, error) {
 	queryTaskId = url.PathEscape(queryTaskId)
 	var result QueryTask
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/query_tasks/%v", queryTaskId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/query_tasks/%v", queryTaskId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -5437,7 +5438,7 @@ func (l *LookerSDK) QueryTaskResults(
 	options *rtl.ApiSettings) (string, error) {
 	queryTaskId = url.PathEscape(queryTaskId)
 	var result string
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/query_tasks/%v/results", queryTaskId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/query_tasks/%v/results", queryTaskId), nil, nil, options)
 	return result, err
 
 }
@@ -5467,7 +5468,7 @@ func (l *LookerSDK) Query(
 	options *rtl.ApiSettings) (Query, error) {
 	queryId = url.PathEscape(queryId)
 	var result Query
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/queries/%v", queryId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/queries/%v", queryId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -5497,7 +5498,7 @@ func (l *LookerSDK) QueryForSlug(
 	options *rtl.ApiSettings) (Query, error) {
 	slug = url.PathEscape(slug)
 	var result Query
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/queries/slug/%v", slug), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/queries/slug/%v", slug), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -5517,7 +5518,7 @@ func (l *LookerSDK) CreateQuery(
 	fields string,
 	options *rtl.ApiSettings) (Query, error) {
 	var result Query
-	err := l.session.Do(&result, "POST", "/4.0", "/queries", map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/queries", map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -5553,7 +5554,7 @@ func (l *LookerSDK) RunQuery(request RequestRunQuery,
 	request.QueryId = url.PathEscape(request.QueryId)
 	request.ResultFormat = url.PathEscape(request.ResultFormat)
 	var result string
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/queries/%v/run/%v", request.QueryId, request.ResultFormat), map[string]interface{}{"limit": request.Limit, "apply_formatting": request.ApplyFormatting, "apply_vis": request.ApplyVis, "cache": request.Cache, "image_width": request.ImageWidth, "image_height": request.ImageHeight, "generate_drill_links": request.GenerateDrillLinks, "force_production": request.ForceProduction, "cache_only": request.CacheOnly, "path_prefix": request.PathPrefix, "rebuild_pdts": request.RebuildPdts, "server_table_calcs": request.ServerTableCalcs, "source": request.Source, "enable_oauth_error_response": request.EnableOauthErrorResponse}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/queries/%v/run/%v", request.QueryId, request.ResultFormat), map[string]interface{}{"limit": request.Limit, "apply_formatting": request.ApplyFormatting, "apply_vis": request.ApplyVis, "cache": request.Cache, "image_width": request.ImageWidth, "image_height": request.ImageHeight, "generate_drill_links": request.GenerateDrillLinks, "force_production": request.ForceProduction, "cache_only": request.CacheOnly, "path_prefix": request.PathPrefix, "rebuild_pdts": request.RebuildPdts, "server_table_calcs": request.ServerTableCalcs, "source": request.Source, "enable_oauth_error_response": request.EnableOauthErrorResponse}, nil, options)
 	return result, err
 
 }
@@ -5621,7 +5622,7 @@ func (l *LookerSDK) RunInlineQuery(request RequestRunInlineQuery,
 	options *rtl.ApiSettings) (string, error) {
 	request.ResultFormat = url.PathEscape(request.ResultFormat)
 	var result string
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/queries/run/%v", request.ResultFormat), map[string]interface{}{"limit": request.Limit, "apply_formatting": request.ApplyFormatting, "apply_vis": request.ApplyVis, "cache": request.Cache, "image_width": request.ImageWidth, "image_height": request.ImageHeight, "generate_drill_links": request.GenerateDrillLinks, "force_production": request.ForceProduction, "cache_only": request.CacheOnly, "path_prefix": request.PathPrefix, "rebuild_pdts": request.RebuildPdts, "server_table_calcs": request.ServerTableCalcs, "enable_oauth_error_response": request.EnableOauthErrorResponse}, request.Body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/queries/run/%v", request.ResultFormat), map[string]interface{}{"limit": request.Limit, "apply_formatting": request.ApplyFormatting, "apply_vis": request.ApplyVis, "cache": request.Cache, "image_width": request.ImageWidth, "image_height": request.ImageHeight, "generate_drill_links": request.GenerateDrillLinks, "force_production": request.ForceProduction, "cache_only": request.CacheOnly, "path_prefix": request.PathPrefix, "rebuild_pdts": request.RebuildPdts, "server_table_calcs": request.ServerTableCalcs, "enable_oauth_error_response": request.EnableOauthErrorResponse}, request.Body, options)
 	return result, err
 
 }
@@ -5694,7 +5695,7 @@ func (l *LookerSDK) RunUrlEncodedQuery(
 	viewName = url.PathEscape(viewName)
 	resultFormat = url.PathEscape(resultFormat)
 	var result string
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/queries/models/%v/views/%v/run/%v", modelName, viewName, resultFormat), nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/queries/models/%v/views/%v/run/%v", modelName, viewName, resultFormat), nil, nil, options)
 	return result, err
 
 }
@@ -5710,7 +5711,7 @@ func (l *LookerSDK) MergeQuery(
 	options *rtl.ApiSettings) (MergeQuery, error) {
 	mergeQueryId = url.PathEscape(mergeQueryId)
 	var result MergeQuery
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/merge_queries/%v", mergeQueryId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/merge_queries/%v", mergeQueryId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -5739,7 +5740,7 @@ func (l *LookerSDK) CreateMergeQuery(
 	fields string,
 	options *rtl.ApiSettings) (MergeQuery, error) {
 	var result MergeQuery
-	err := l.session.Do(&result, "POST", "/4.0", "/merge_queries", map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/merge_queries", map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -5750,7 +5751,7 @@ func (l *LookerSDK) CreateMergeQuery(
 func (l *LookerSDK) AllRunningQueries(
 	options *rtl.ApiSettings) ([]RunningQueries, error) {
 	var result []RunningQueries
-	err := l.session.Do(&result, "GET", "/4.0", "/running_queries", nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/running_queries", nil, nil, options)
 	return result, err
 
 }
@@ -5763,7 +5764,7 @@ func (l *LookerSDK) KillQuery(
 	options *rtl.ApiSettings) (string, error) {
 	queryTaskId = url.PathEscape(queryTaskId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/running_queries/%v", queryTaskId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/running_queries/%v", queryTaskId), nil, nil, options)
 	return result, err
 
 }
@@ -5777,7 +5778,7 @@ func (l *LookerSDK) CreateSqlQuery(
 	body SqlQueryCreate,
 	options *rtl.ApiSettings) (SqlQuery, error) {
 	var result SqlQuery
-	err := l.session.Do(&result, "POST", "/4.0", "/sql_queries", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/sql_queries", nil, body, options)
 	return result, err
 
 }
@@ -5790,7 +5791,7 @@ func (l *LookerSDK) SqlQuery(
 	options *rtl.ApiSettings) (SqlQuery, error) {
 	slug = url.PathEscape(slug)
 	var result SqlQuery
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/sql_queries/%v", slug), nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/sql_queries/%v", slug), nil, nil, options)
 	return result, err
 
 }
@@ -5806,7 +5807,7 @@ func (l *LookerSDK) RunSqlQuery(
 	slug = url.PathEscape(slug)
 	resultFormat = url.PathEscape(resultFormat)
 	var result string
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/sql_queries/%v/run/%v", slug, resultFormat), map[string]interface{}{"download": download}, nil, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/sql_queries/%v/run/%v", slug, resultFormat), map[string]interface{}{"download": download}, nil, options)
 	return result, err
 
 }
@@ -5832,7 +5833,7 @@ func (l *LookerSDK) CreateLookRenderTask(
 	lookId = url.PathEscape(lookId)
 	resultFormat = url.PathEscape(resultFormat)
 	var result RenderTask
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/render_tasks/looks/%v/%v", lookId, resultFormat), map[string]interface{}{"width": width, "height": height, "fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/render_tasks/looks/%v/%v", lookId, resultFormat), map[string]interface{}{"width": width, "height": height, "fields": fields}, nil, options)
 	return result, err
 
 }
@@ -5854,7 +5855,7 @@ func (l *LookerSDK) CreateQueryRenderTask(
 	queryId = url.PathEscape(queryId)
 	resultFormat = url.PathEscape(resultFormat)
 	var result RenderTask
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/render_tasks/queries/%v/%v", queryId, resultFormat), map[string]interface{}{"width": width, "height": height, "fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/render_tasks/queries/%v/%v", queryId, resultFormat), map[string]interface{}{"width": width, "height": height, "fields": fields}, nil, options)
 	return result, err
 
 }
@@ -5871,7 +5872,7 @@ func (l *LookerSDK) CreateDashboardRenderTask(request RequestCreateDashboardRend
 	request.DashboardId = url.PathEscape(request.DashboardId)
 	request.ResultFormat = url.PathEscape(request.ResultFormat)
 	var result RenderTask
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/render_tasks/dashboards/%v/%v", request.DashboardId, request.ResultFormat), map[string]interface{}{"width": request.Width, "height": request.Height, "fields": request.Fields, "pdf_paper_size": request.PdfPaperSize, "pdf_landscape": request.PdfLandscape, "long_tables": request.LongTables, "theme": request.Theme}, request.Body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/render_tasks/dashboards/%v/%v", request.DashboardId, request.ResultFormat), map[string]interface{}{"width": request.Width, "height": request.Height, "fields": request.Fields, "pdf_paper_size": request.PdfPaperSize, "pdf_landscape": request.PdfLandscape, "long_tables": request.LongTables, "theme": request.Theme}, request.Body, options)
 	return result, err
 
 }
@@ -5889,7 +5890,7 @@ func (l *LookerSDK) RenderTask(
 	options *rtl.ApiSettings) (RenderTask, error) {
 	renderTaskId = url.PathEscape(renderTaskId)
 	var result RenderTask
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/render_tasks/%v", renderTaskId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/render_tasks/%v", renderTaskId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -5920,7 +5921,7 @@ func (l *LookerSDK) RenderTaskResults(
 	options *rtl.ApiSettings) (string, error) {
 	renderTaskId = url.PathEscape(renderTaskId)
 	var result string
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/render_tasks/%v/results", renderTaskId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/render_tasks/%v/results", renderTaskId), nil, nil, options)
 	return result, err
 
 }
@@ -5942,7 +5943,7 @@ func (l *LookerSDK) CreateDashboardElementRenderTask(
 	dashboardElementId = url.PathEscape(dashboardElementId)
 	resultFormat = url.PathEscape(resultFormat)
 	var result RenderTask
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/render_tasks/dashboard_elements/%v/%v", dashboardElementId, resultFormat), map[string]interface{}{"width": width, "height": height, "fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/render_tasks/dashboard_elements/%v/%v", dashboardElementId, resultFormat), map[string]interface{}{"width": width, "height": height, "fields": fields}, nil, options)
 	return result, err
 
 }
@@ -5980,7 +5981,7 @@ func (l *LookerSDK) CreateDashboardElementRenderTask(
 func (l *LookerSDK) SearchReports(request RequestSearchReports,
 	options *rtl.ApiSettings) ([]Report, error) {
 	var result []Report
-	err := l.session.Do(&result, "GET", "/4.0", "/reports/search", map[string]interface{}{"folder_id": request.FolderId, "favorite": request.Favorite, "recent": request.Recent, "id": request.Id, "title": request.Title, "sorts": request.Sorts, "limit": request.Limit, "fields": request.Fields, "next_page_token": request.NextPageToken}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/reports/search", map[string]interface{}{"folder_id": request.FolderId, "favorite": request.Favorite, "recent": request.Recent, "id": request.Id, "title": request.Title, "sorts": request.Sorts, "limit": request.Limit, "fields": request.Fields, "next_page_token": request.NextPageToken}, nil, options)
 	return result, err
 
 }
@@ -6016,7 +6017,7 @@ func (l *LookerSDK) SearchReports(request RequestSearchReports,
 func (l *LookerSDK) SearchModelSets(request RequestSearchModelSets,
 	options *rtl.ApiSettings) ([]ModelSet, error) {
 	var result []ModelSet
-	err := l.session.Do(&result, "GET", "/4.0", "/model_sets/search", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "id": request.Id, "name": request.Name, "all_access": request.AllAccess, "built_in": request.BuiltIn, "filter_or": request.FilterOr}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/model_sets/search", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "id": request.Id, "name": request.Name, "all_access": request.AllAccess, "built_in": request.BuiltIn, "filter_or": request.FilterOr}, nil, options)
 	return result, err
 
 }
@@ -6030,7 +6031,7 @@ func (l *LookerSDK) ModelSet(
 	options *rtl.ApiSettings) (ModelSet, error) {
 	modelSetId = url.PathEscape(modelSetId)
 	var result ModelSet
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/model_sets/%v", modelSetId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/model_sets/%v", modelSetId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -6044,7 +6045,7 @@ func (l *LookerSDK) UpdateModelSet(
 	options *rtl.ApiSettings) (ModelSet, error) {
 	modelSetId = url.PathEscape(modelSetId)
 	var result ModelSet
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/model_sets/%v", modelSetId), nil, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/model_sets/%v", modelSetId), nil, body, options)
 	return result, err
 
 }
@@ -6057,7 +6058,7 @@ func (l *LookerSDK) DeleteModelSet(
 	options *rtl.ApiSettings) (string, error) {
 	modelSetId = url.PathEscape(modelSetId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/model_sets/%v", modelSetId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/model_sets/%v", modelSetId), nil, nil, options)
 	return result, err
 
 }
@@ -6069,7 +6070,7 @@ func (l *LookerSDK) AllModelSets(
 	fields string,
 	options *rtl.ApiSettings) ([]ModelSet, error) {
 	var result []ModelSet
-	err := l.session.Do(&result, "GET", "/4.0", "/model_sets", map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/model_sets", map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -6081,7 +6082,7 @@ func (l *LookerSDK) CreateModelSet(
 	body WriteModelSet,
 	options *rtl.ApiSettings) (ModelSet, error) {
 	var result ModelSet
-	err := l.session.Do(&result, "POST", "/4.0", "/model_sets", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/model_sets", nil, body, options)
 	return result, err
 
 }
@@ -6092,7 +6093,7 @@ func (l *LookerSDK) CreateModelSet(
 func (l *LookerSDK) AllPermissions(
 	options *rtl.ApiSettings) ([]Permission, error) {
 	var result []Permission
-	err := l.session.Do(&result, "GET", "/4.0", "/permissions", nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/permissions", nil, nil, options)
 	return result, err
 
 }
@@ -6124,7 +6125,7 @@ func (l *LookerSDK) AllPermissions(
 func (l *LookerSDK) SearchPermissionSets(request RequestSearchPermissionSets,
 	options *rtl.ApiSettings) ([]PermissionSet, error) {
 	var result []PermissionSet
-	err := l.session.Do(&result, "GET", "/4.0", "/permission_sets/search", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "id": request.Id, "name": request.Name, "all_access": request.AllAccess, "built_in": request.BuiltIn, "filter_or": request.FilterOr}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/permission_sets/search", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "id": request.Id, "name": request.Name, "all_access": request.AllAccess, "built_in": request.BuiltIn, "filter_or": request.FilterOr}, nil, options)
 	return result, err
 
 }
@@ -6138,7 +6139,7 @@ func (l *LookerSDK) PermissionSet(
 	options *rtl.ApiSettings) (PermissionSet, error) {
 	permissionSetId = url.PathEscape(permissionSetId)
 	var result PermissionSet
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/permission_sets/%v", permissionSetId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/permission_sets/%v", permissionSetId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -6153,7 +6154,7 @@ func (l *LookerSDK) UpdatePermissionSet(
 	options *rtl.ApiSettings) (PermissionSet, error) {
 	permissionSetId = url.PathEscape(permissionSetId)
 	var result PermissionSet
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/permission_sets/%v", permissionSetId), nil, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/permission_sets/%v", permissionSetId), nil, body, options)
 	return result, err
 
 }
@@ -6166,7 +6167,7 @@ func (l *LookerSDK) DeletePermissionSet(
 	options *rtl.ApiSettings) (string, error) {
 	permissionSetId = url.PathEscape(permissionSetId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/permission_sets/%v", permissionSetId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/permission_sets/%v", permissionSetId), nil, nil, options)
 	return result, err
 
 }
@@ -6178,7 +6179,7 @@ func (l *LookerSDK) AllPermissionSets(
 	fields string,
 	options *rtl.ApiSettings) ([]PermissionSet, error) {
 	var result []PermissionSet
-	err := l.session.Do(&result, "GET", "/4.0", "/permission_sets", map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/permission_sets", map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -6191,7 +6192,7 @@ func (l *LookerSDK) CreatePermissionSet(
 	body WritePermissionSet,
 	options *rtl.ApiSettings) (PermissionSet, error) {
 	var result PermissionSet
-	err := l.session.Do(&result, "POST", "/4.0", "/permission_sets", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/permission_sets", nil, body, options)
 	return result, err
 
 }
@@ -6202,7 +6203,7 @@ func (l *LookerSDK) CreatePermissionSet(
 func (l *LookerSDK) AllRoles(request RequestAllRoles,
 	options *rtl.ApiSettings) ([]Role, error) {
 	var result []Role
-	err := l.session.Do(&result, "GET", "/4.0", "/roles", map[string]interface{}{"fields": request.Fields, "ids": request.Ids}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/roles", map[string]interface{}{"fields": request.Fields, "ids": request.Ids}, nil, options)
 	return result, err
 
 }
@@ -6214,7 +6215,7 @@ func (l *LookerSDK) CreateRole(
 	body WriteRole,
 	options *rtl.ApiSettings) (Role, error) {
 	var result Role
-	err := l.session.Do(&result, "POST", "/4.0", "/roles", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/roles", nil, body, options)
 	return result, err
 
 }
@@ -6248,7 +6249,7 @@ func (l *LookerSDK) CreateRole(
 func (l *LookerSDK) SearchRoles(request RequestSearchRoles,
 	options *rtl.ApiSettings) ([]Role, error) {
 	var result []Role
-	err := l.session.Do(&result, "GET", "/4.0", "/roles/search", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "id": request.Id, "name": request.Name, "built_in": request.BuiltIn, "filter_or": request.FilterOr, "is_support_role": request.IsSupportRole}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/roles/search", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "id": request.Id, "name": request.Name, "built_in": request.BuiltIn, "filter_or": request.FilterOr, "is_support_role": request.IsSupportRole}, nil, options)
 	return result, err
 
 }
@@ -6283,7 +6284,7 @@ func (l *LookerSDK) SearchRoles(request RequestSearchRoles,
 func (l *LookerSDK) SearchRolesWithUserCount(request RequestSearchRolesWithUserCount,
 	options *rtl.ApiSettings) ([]RoleSearch, error) {
 	var result []RoleSearch
-	err := l.session.Do(&result, "GET", "/4.0", "/roles/search/with_user_count", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "id": request.Id, "name": request.Name, "built_in": request.BuiltIn, "filter_or": request.FilterOr}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/roles/search/with_user_count", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "id": request.Id, "name": request.Name, "built_in": request.BuiltIn, "filter_or": request.FilterOr}, nil, options)
 	return result, err
 
 }
@@ -6296,7 +6297,7 @@ func (l *LookerSDK) Role(
 	options *rtl.ApiSettings) (Role, error) {
 	roleId = url.PathEscape(roleId)
 	var result Role
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/roles/%v", roleId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/roles/%v", roleId), nil, nil, options)
 	return result, err
 
 }
@@ -6310,7 +6311,7 @@ func (l *LookerSDK) UpdateRole(
 	options *rtl.ApiSettings) (Role, error) {
 	roleId = url.PathEscape(roleId)
 	var result Role
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/roles/%v", roleId), nil, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/roles/%v", roleId), nil, body, options)
 	return result, err
 
 }
@@ -6323,7 +6324,7 @@ func (l *LookerSDK) DeleteRole(
 	options *rtl.ApiSettings) (string, error) {
 	roleId = url.PathEscape(roleId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/roles/%v", roleId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/roles/%v", roleId), nil, nil, options)
 	return result, err
 
 }
@@ -6337,7 +6338,7 @@ func (l *LookerSDK) RoleGroups(
 	options *rtl.ApiSettings) ([]Group, error) {
 	roleId = url.PathEscape(roleId)
 	var result []Group
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/roles/%v/groups", roleId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/roles/%v/groups", roleId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -6353,7 +6354,7 @@ func (l *LookerSDK) SetRoleGroups(
 	options *rtl.ApiSettings) ([]Group, error) {
 	roleId = url.PathEscape(roleId)
 	var result []Group
-	err := l.session.Do(&result, "PUT", "/4.0", fmt.Sprintf("/roles/%v/groups", roleId), nil, body, options)
+	err := l.AuthSession.Do(&result, "PUT", "/4.0", fmt.Sprintf("/roles/%v/groups", roleId), nil, body, options)
 	return result, err
 
 }
@@ -6365,7 +6366,7 @@ func (l *LookerSDK) RoleUsers(request RequestRoleUsers,
 	options *rtl.ApiSettings) ([]User, error) {
 	request.RoleId = url.PathEscape(request.RoleId)
 	var result []User
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/roles/%v/users", request.RoleId), map[string]interface{}{"fields": request.Fields, "direct_association_only": request.DirectAssociationOnly}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/roles/%v/users", request.RoleId), map[string]interface{}{"fields": request.Fields, "direct_association_only": request.DirectAssociationOnly}, nil, options)
 	return result, err
 
 }
@@ -6379,7 +6380,7 @@ func (l *LookerSDK) SetRoleUsers(
 	options *rtl.ApiSettings) ([]User, error) {
 	roleId = url.PathEscape(roleId)
 	var result []User
-	err := l.session.Do(&result, "PUT", "/4.0", fmt.Sprintf("/roles/%v/users", roleId), nil, body, options)
+	err := l.AuthSession.Do(&result, "PUT", "/4.0", fmt.Sprintf("/roles/%v/users", roleId), nil, body, options)
 	return result, err
 
 }
@@ -6399,7 +6400,7 @@ func (l *LookerSDK) ScheduledPlansForSpace(
 	options *rtl.ApiSettings) ([]ScheduledPlan, error) {
 	spaceId = url.PathEscape(spaceId)
 	var result []ScheduledPlan
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/scheduled_plans/space/%v", spaceId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/scheduled_plans/space/%v", spaceId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -6415,7 +6416,7 @@ func (l *LookerSDK) ScheduledPlan(
 	options *rtl.ApiSettings) (ScheduledPlan, error) {
 	scheduledPlanId = url.PathEscape(scheduledPlanId)
 	var result ScheduledPlan
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/scheduled_plans/%v", scheduledPlanId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/scheduled_plans/%v", scheduledPlanId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -6469,7 +6470,7 @@ func (l *LookerSDK) UpdateScheduledPlan(
 	options *rtl.ApiSettings) (ScheduledPlan, error) {
 	scheduledPlanId = url.PathEscape(scheduledPlanId)
 	var result ScheduledPlan
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/scheduled_plans/%v", scheduledPlanId), nil, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/scheduled_plans/%v", scheduledPlanId), nil, body, options)
 	return result, err
 
 }
@@ -6486,7 +6487,7 @@ func (l *LookerSDK) DeleteScheduledPlan(
 	options *rtl.ApiSettings) (string, error) {
 	scheduledPlanId = url.PathEscape(scheduledPlanId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/scheduled_plans/%v", scheduledPlanId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/scheduled_plans/%v", scheduledPlanId), nil, nil, options)
 	return result, err
 
 }
@@ -6505,7 +6506,7 @@ func (l *LookerSDK) DeleteScheduledPlan(
 func (l *LookerSDK) AllScheduledPlans(request RequestAllScheduledPlans,
 	options *rtl.ApiSettings) ([]ScheduledPlan, error) {
 	var result []ScheduledPlan
-	err := l.session.Do(&result, "GET", "/4.0", "/scheduled_plans", map[string]interface{}{"user_id": request.UserId, "fields": request.Fields, "all_users": request.AllUsers}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/scheduled_plans", map[string]interface{}{"user_id": request.UserId, "fields": request.Fields, "all_users": request.AllUsers}, nil, options)
 	return result, err
 
 }
@@ -6573,7 +6574,7 @@ func (l *LookerSDK) CreateScheduledPlan(
 	body WriteScheduledPlan,
 	options *rtl.ApiSettings) (ScheduledPlan, error) {
 	var result ScheduledPlan
-	err := l.session.Do(&result, "POST", "/4.0", "/scheduled_plans", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/scheduled_plans", nil, body, options)
 	return result, err
 
 }
@@ -6620,7 +6621,7 @@ func (l *LookerSDK) ScheduledPlanRunOnce(
 	body WriteScheduledPlan,
 	options *rtl.ApiSettings) (ScheduledPlan, error) {
 	var result ScheduledPlan
-	err := l.session.Do(&result, "POST", "/4.0", "/scheduled_plans/run_once", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/scheduled_plans/run_once", nil, body, options)
 	return result, err
 
 }
@@ -6639,7 +6640,7 @@ func (l *LookerSDK) ScheduledPlanRunOnce(
 func (l *LookerSDK) SearchScheduledPlans(request RequestSearchScheduledPlans,
 	options *rtl.ApiSettings) ([]ScheduledPlan, error) {
 	var result []ScheduledPlan
-	err := l.session.Do(&result, "GET", "/4.0", "/scheduled_plans/search", map[string]interface{}{"user_id": request.UserId, "fields": request.Fields, "all_users": request.AllUsers, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "name": request.Name, "user_first_name": request.UserFirstName, "user_last_name": request.UserLastName, "dashboard_id": request.DashboardId, "look_id": request.LookId, "lookml_dashboard_id": request.LookmlDashboardId, "recipient": request.Recipient, "destination_type": request.DestinationType, "delivery_format": request.DeliveryFormat, "filter_or": request.FilterOr}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/scheduled_plans/search", map[string]interface{}{"user_id": request.UserId, "fields": request.Fields, "all_users": request.AllUsers, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "name": request.Name, "user_first_name": request.UserFirstName, "user_last_name": request.UserLastName, "dashboard_id": request.DashboardId, "look_id": request.LookId, "lookml_dashboard_id": request.LookmlDashboardId, "recipient": request.Recipient, "destination_type": request.DestinationType, "delivery_format": request.DeliveryFormat, "filter_or": request.FilterOr}, nil, options)
 	return result, err
 
 }
@@ -6659,7 +6660,7 @@ func (l *LookerSDK) ScheduledPlansForLook(request RequestScheduledPlansForLook,
 	options *rtl.ApiSettings) ([]ScheduledPlan, error) {
 	request.LookId = url.PathEscape(request.LookId)
 	var result []ScheduledPlan
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/scheduled_plans/look/%v", request.LookId), map[string]interface{}{"user_id": request.UserId, "fields": request.Fields, "all_users": request.AllUsers}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/scheduled_plans/look/%v", request.LookId), map[string]interface{}{"user_id": request.UserId, "fields": request.Fields, "all_users": request.AllUsers}, nil, options)
 	return result, err
 
 }
@@ -6679,7 +6680,7 @@ func (l *LookerSDK) ScheduledPlansForDashboard(request RequestScheduledPlansForD
 	options *rtl.ApiSettings) ([]ScheduledPlan, error) {
 	request.DashboardId = url.PathEscape(request.DashboardId)
 	var result []ScheduledPlan
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/scheduled_plans/dashboard/%v", request.DashboardId), map[string]interface{}{"user_id": request.UserId, "all_users": request.AllUsers, "fields": request.Fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/scheduled_plans/dashboard/%v", request.DashboardId), map[string]interface{}{"user_id": request.UserId, "all_users": request.AllUsers, "fields": request.Fields}, nil, options)
 	return result, err
 
 }
@@ -6699,7 +6700,7 @@ func (l *LookerSDK) ScheduledPlansForLookmlDashboard(request RequestScheduledPla
 	options *rtl.ApiSettings) ([]ScheduledPlan, error) {
 	request.LookmlDashboardId = url.PathEscape(request.LookmlDashboardId)
 	var result []ScheduledPlan
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/scheduled_plans/lookml_dashboard/%v", request.LookmlDashboardId), map[string]interface{}{"user_id": request.UserId, "fields": request.Fields, "all_users": request.AllUsers}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/scheduled_plans/lookml_dashboard/%v", request.LookmlDashboardId), map[string]interface{}{"user_id": request.UserId, "fields": request.Fields, "all_users": request.AllUsers}, nil, options)
 	return result, err
 
 }
@@ -6756,7 +6757,7 @@ func (l *LookerSDK) ScheduledPlanRunOnceById(
 	options *rtl.ApiSettings) (ScheduledPlan, error) {
 	scheduledPlanId = url.PathEscape(scheduledPlanId)
 	var result ScheduledPlan
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/scheduled_plans/%v/run_once", scheduledPlanId), nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/scheduled_plans/%v/run_once", scheduledPlanId), nil, body, options)
 	return result, err
 
 }
@@ -6773,7 +6774,7 @@ func (l *LookerSDK) ScheduledPlanRunOnceById(
 func (l *LookerSDK) Session(
 	options *rtl.ApiSettings) (ApiSession, error) {
 	var result ApiSession
-	err := l.session.Do(&result, "GET", "/4.0", "/session", nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/session", nil, nil, options)
 	return result, err
 
 }
@@ -6804,7 +6805,7 @@ func (l *LookerSDK) UpdateSession(
 	body WriteApiSession,
 	options *rtl.ApiSettings) (ApiSession, error) {
 	var result ApiSession
-	err := l.session.Do(&result, "PATCH", "/4.0", "/session", nil, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", "/session", nil, body, options)
 	return result, err
 
 }
@@ -6820,7 +6821,7 @@ func (l *LookerSDK) SqlInterfaceMetadata(
 	avaticaRequest string,
 	options *rtl.ApiSettings) (SqlInterfaceQueryMetadata, error) {
 	var result SqlInterfaceQueryMetadata
-	err := l.session.Do(&result, "GET", "/4.0", "/sql_interface_queries/metadata", map[string]interface{}{"avatica_request": avaticaRequest}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/sql_interface_queries/metadata", map[string]interface{}{"avatica_request": avaticaRequest}, nil, options)
 	return result, err
 
 }
@@ -6844,7 +6845,7 @@ func (l *LookerSDK) RunSqlInterfaceQuery(
 	options *rtl.ApiSettings) (JsonBi, error) {
 	resultFormat = url.PathEscape(resultFormat)
 	var result JsonBi
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/sql_interface_queries/%v/run/%v", queryId, resultFormat), nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/sql_interface_queries/%v/run/%v", queryId, resultFormat), nil, nil, options)
 	return result, err
 
 }
@@ -6863,7 +6864,7 @@ func (l *LookerSDK) CreateSqlInterfaceQuery(
 	body WriteSqlInterfaceQueryCreate,
 	options *rtl.ApiSettings) (SqlInterfaceQuery, error) {
 	var result SqlInterfaceQuery
-	err := l.session.Do(&result, "POST", "/4.0", "/sql_interface_queries", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/sql_interface_queries", nil, body, options)
 	return result, err
 
 }
@@ -6885,7 +6886,7 @@ func (l *LookerSDK) AllThemes(
 	fields string,
 	options *rtl.ApiSettings) ([]Theme, error) {
 	var result []Theme
-	err := l.session.Do(&result, "GET", "/4.0", "/themes", map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/themes", map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -6911,7 +6912,7 @@ func (l *LookerSDK) CreateTheme(
 	body WriteTheme,
 	options *rtl.ApiSettings) (Theme, error) {
 	var result Theme
-	err := l.session.Do(&result, "POST", "/4.0", "/themes", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/themes", nil, body, options)
 	return result, err
 
 }
@@ -6958,7 +6959,7 @@ func (l *LookerSDK) CreateTheme(
 func (l *LookerSDK) SearchThemes(request RequestSearchThemes,
 	options *rtl.ApiSettings) ([]Theme, error) {
 	var result []Theme
-	err := l.session.Do(&result, "GET", "/4.0", "/themes/search", map[string]interface{}{"id": request.Id, "name": request.Name, "begin_at": request.BeginAt, "end_at": request.EndAt, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "fields": request.Fields, "filter_or": request.FilterOr}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/themes/search", map[string]interface{}{"id": request.Id, "name": request.Name, "begin_at": request.BeginAt, "end_at": request.EndAt, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "fields": request.Fields, "filter_or": request.FilterOr}, nil, options)
 	return result, err
 
 }
@@ -6976,7 +6977,7 @@ func (l *LookerSDK) DefaultTheme(
 	ts time.Time,
 	options *rtl.ApiSettings) (Theme, error) {
 	var result Theme
-	err := l.session.Do(&result, "GET", "/4.0", "/themes/default", map[string]interface{}{"ts": ts}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/themes/default", map[string]interface{}{"ts": ts}, nil, options)
 	return result, err
 
 }
@@ -6998,7 +6999,7 @@ func (l *LookerSDK) SetDefaultTheme(
 	name string,
 	options *rtl.ApiSettings) (Theme, error) {
 	var result Theme
-	err := l.session.Do(&result, "PUT", "/4.0", "/themes/default", map[string]interface{}{"name": name}, nil, options)
+	err := l.AuthSession.Do(&result, "PUT", "/4.0", "/themes/default", map[string]interface{}{"name": name}, nil, options)
 	return result, err
 
 }
@@ -7017,7 +7018,7 @@ func (l *LookerSDK) SetDefaultTheme(
 func (l *LookerSDK) ActiveThemes(request RequestActiveThemes,
 	options *rtl.ApiSettings) ([]Theme, error) {
 	var result []Theme
-	err := l.session.Do(&result, "GET", "/4.0", "/themes/active", map[string]interface{}{"name": request.Name, "ts": request.Ts, "fields": request.Fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/themes/active", map[string]interface{}{"name": request.Name, "ts": request.Ts, "fields": request.Fields}, nil, options)
 	return result, err
 
 }
@@ -7035,7 +7036,7 @@ func (l *LookerSDK) ThemeOrDefault(
 	ts time.Time,
 	options *rtl.ApiSettings) (Theme, error) {
 	var result Theme
-	err := l.session.Do(&result, "GET", "/4.0", "/themes/theme_or_default", map[string]interface{}{"name": name, "ts": ts}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/themes/theme_or_default", map[string]interface{}{"name": name, "ts": ts}, nil, options)
 	return result, err
 
 }
@@ -7053,7 +7054,7 @@ func (l *LookerSDK) ValidateTheme(
 	body WriteTheme,
 	options *rtl.ApiSettings) (ValidationError, error) {
 	var result ValidationError
-	err := l.session.Do(&result, "POST", "/4.0", "/themes/validate", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/themes/validate", nil, body, options)
 	return result, err
 
 }
@@ -7071,7 +7072,7 @@ func (l *LookerSDK) Theme(
 	options *rtl.ApiSettings) (Theme, error) {
 	themeId = url.PathEscape(themeId)
 	var result Theme
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/themes/%v", themeId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/themes/%v", themeId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -7087,7 +7088,7 @@ func (l *LookerSDK) UpdateTheme(
 	options *rtl.ApiSettings) (Theme, error) {
 	themeId = url.PathEscape(themeId)
 	var result Theme
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/themes/%v", themeId), nil, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/themes/%v", themeId), nil, body, options)
 	return result, err
 
 }
@@ -7108,7 +7109,7 @@ func (l *LookerSDK) DeleteTheme(
 	options *rtl.ApiSettings) (string, error) {
 	themeId = url.PathEscape(themeId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/themes/%v", themeId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/themes/%v", themeId), nil, nil, options)
 	return result, err
 
 }
@@ -7148,7 +7149,7 @@ func (l *LookerSDK) DeleteTheme(
 func (l *LookerSDK) SearchCredentialsEmail(request RequestSearchCredentialsEmail,
 	options *rtl.ApiSettings) ([]CredentialsEmailSearch, error) {
 	var result []CredentialsEmailSearch
-	err := l.session.Do(&result, "GET", "/4.0", "/credentials_email/search", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "id": request.Id, "email": request.Email, "emails": request.Emails, "filter_or": request.FilterOr}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/credentials_email/search", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "id": request.Id, "email": request.Email, "emails": request.Emails, "filter_or": request.FilterOr}, nil, options)
 	return result, err
 
 }
@@ -7160,7 +7161,7 @@ func (l *LookerSDK) Me(
 	fields string,
 	options *rtl.ApiSettings) (User, error) {
 	var result User
-	err := l.session.Do(&result, "GET", "/4.0", "/user", map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/user", map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -7171,7 +7172,7 @@ func (l *LookerSDK) Me(
 func (l *LookerSDK) AllUsers(request RequestAllUsers,
 	options *rtl.ApiSettings) ([]User, error) {
 	var result []User
-	err := l.session.Do(&result, "GET", "/4.0", "/users", map[string]interface{}{"fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "ids": request.Ids}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/users", map[string]interface{}{"fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "ids": request.Ids}, nil, options)
 	return result, err
 
 }
@@ -7184,7 +7185,7 @@ func (l *LookerSDK) CreateUser(
 	fields string,
 	options *rtl.ApiSettings) (User, error) {
 	var result User
-	err := l.session.Do(&result, "POST", "/4.0", "/users", map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/users", map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -7223,7 +7224,7 @@ func (l *LookerSDK) CreateUser(
 func (l *LookerSDK) SearchUsers(request RequestSearchUsers,
 	options *rtl.ApiSettings) ([]User, error) {
 	var result []User
-	err := l.session.Do(&result, "GET", "/4.0", "/users/search", map[string]interface{}{"fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "id": request.Id, "first_name": request.FirstName, "last_name": request.LastName, "verified_looker_employee": request.VerifiedLookerEmployee, "embed_user": request.EmbedUser, "email": request.Email, "is_disabled": request.IsDisabled, "filter_or": request.FilterOr, "content_metadata_id": request.ContentMetadataId, "group_id": request.GroupId}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/users/search", map[string]interface{}{"fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "id": request.Id, "first_name": request.FirstName, "last_name": request.LastName, "verified_looker_employee": request.VerifiedLookerEmployee, "embed_user": request.EmbedUser, "email": request.Email, "is_disabled": request.IsDisabled, "filter_or": request.FilterOr, "content_metadata_id": request.ContentMetadataId, "group_id": request.GroupId}, nil, options)
 	return result, err
 
 }
@@ -7240,7 +7241,7 @@ func (l *LookerSDK) SearchUsersNames(request RequestSearchUsersNames,
 	options *rtl.ApiSettings) ([]User, error) {
 	request.Pattern = url.PathEscape(request.Pattern)
 	var result []User
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/search/names/%v", request.Pattern), map[string]interface{}{"fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "id": request.Id, "first_name": request.FirstName, "last_name": request.LastName, "verified_looker_employee": request.VerifiedLookerEmployee, "email": request.Email, "is_disabled": request.IsDisabled}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/search/names/%v", request.Pattern), map[string]interface{}{"fields": request.Fields, "page": request.Page, "per_page": request.PerPage, "limit": request.Limit, "offset": request.Offset, "sorts": request.Sorts, "id": request.Id, "first_name": request.FirstName, "last_name": request.LastName, "verified_looker_employee": request.VerifiedLookerEmployee, "email": request.Email, "is_disabled": request.IsDisabled}, nil, options)
 	return result, err
 
 }
@@ -7258,7 +7259,7 @@ func (l *LookerSDK) User(
 	options *rtl.ApiSettings) (User, error) {
 	userId = url.PathEscape(userId)
 	var result User
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v", userId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v", userId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -7273,7 +7274,7 @@ func (l *LookerSDK) UpdateUser(
 	options *rtl.ApiSettings) (User, error) {
 	userId = url.PathEscape(userId)
 	var result User
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/users/%v", userId), map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/users/%v", userId), map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -7288,7 +7289,7 @@ func (l *LookerSDK) DeleteUser(
 	options *rtl.ApiSettings) (string, error) {
 	userId = url.PathEscape(userId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v", userId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v", userId), nil, nil, options)
 	return result, err
 
 }
@@ -7333,7 +7334,7 @@ func (l *LookerSDK) UserForCredential(
 	credentialType = url.PathEscape(credentialType)
 	credentialId = url.PathEscape(credentialId)
 	var result User
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/credential/%v/%v", credentialType, credentialId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/credential/%v/%v", credentialType, credentialId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -7349,7 +7350,7 @@ func (l *LookerSDK) UserCredentialsEmail(
 	options *rtl.ApiSettings) (CredentialsEmail, error) {
 	userId = url.PathEscape(userId)
 	var result CredentialsEmail
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_email", userId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_email", userId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -7366,7 +7367,7 @@ func (l *LookerSDK) CreateUserCredentialsEmail(
 	options *rtl.ApiSettings) (CredentialsEmail, error) {
 	userId = url.PathEscape(userId)
 	var result CredentialsEmail
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/users/%v/credentials_email", userId), map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/users/%v/credentials_email", userId), map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -7383,7 +7384,7 @@ func (l *LookerSDK) UpdateUserCredentialsEmail(
 	options *rtl.ApiSettings) (CredentialsEmail, error) {
 	userId = url.PathEscape(userId)
 	var result CredentialsEmail
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/users/%v/credentials_email", userId), map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/users/%v/credentials_email", userId), map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -7398,7 +7399,7 @@ func (l *LookerSDK) DeleteUserCredentialsEmail(
 	options *rtl.ApiSettings) (string, error) {
 	userId = url.PathEscape(userId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v/credentials_email", userId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v/credentials_email", userId), nil, nil, options)
 	return result, err
 
 }
@@ -7414,7 +7415,7 @@ func (l *LookerSDK) UserCredentialsTotp(
 	options *rtl.ApiSettings) (CredentialsTotp, error) {
 	userId = url.PathEscape(userId)
 	var result CredentialsTotp
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_totp", userId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_totp", userId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -7431,7 +7432,7 @@ func (l *LookerSDK) CreateUserCredentialsTotp(
 	options *rtl.ApiSettings) (CredentialsTotp, error) {
 	userId = url.PathEscape(userId)
 	var result CredentialsTotp
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/users/%v/credentials_totp", userId), map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/users/%v/credentials_totp", userId), map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -7446,7 +7447,7 @@ func (l *LookerSDK) DeleteUserCredentialsTotp(
 	options *rtl.ApiSettings) (string, error) {
 	userId = url.PathEscape(userId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v/credentials_totp", userId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v/credentials_totp", userId), nil, nil, options)
 	return result, err
 
 }
@@ -7462,7 +7463,7 @@ func (l *LookerSDK) UserCredentialsLdap(
 	options *rtl.ApiSettings) (CredentialsLDAP, error) {
 	userId = url.PathEscape(userId)
 	var result CredentialsLDAP
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_ldap", userId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_ldap", userId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -7477,7 +7478,7 @@ func (l *LookerSDK) DeleteUserCredentialsLdap(
 	options *rtl.ApiSettings) (string, error) {
 	userId = url.PathEscape(userId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v/credentials_ldap", userId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v/credentials_ldap", userId), nil, nil, options)
 	return result, err
 
 }
@@ -7493,7 +7494,7 @@ func (l *LookerSDK) UserCredentialsGoogle(
 	options *rtl.ApiSettings) (CredentialsGoogle, error) {
 	userId = url.PathEscape(userId)
 	var result CredentialsGoogle
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_google", userId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_google", userId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -7508,7 +7509,7 @@ func (l *LookerSDK) DeleteUserCredentialsGoogle(
 	options *rtl.ApiSettings) (string, error) {
 	userId = url.PathEscape(userId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v/credentials_google", userId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v/credentials_google", userId), nil, nil, options)
 	return result, err
 
 }
@@ -7524,7 +7525,7 @@ func (l *LookerSDK) UserCredentialsSaml(
 	options *rtl.ApiSettings) (CredentialsSaml, error) {
 	userId = url.PathEscape(userId)
 	var result CredentialsSaml
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_saml", userId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_saml", userId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -7539,7 +7540,7 @@ func (l *LookerSDK) DeleteUserCredentialsSaml(
 	options *rtl.ApiSettings) (string, error) {
 	userId = url.PathEscape(userId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v/credentials_saml", userId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v/credentials_saml", userId), nil, nil, options)
 	return result, err
 
 }
@@ -7555,7 +7556,7 @@ func (l *LookerSDK) UserCredentialsOidc(
 	options *rtl.ApiSettings) (CredentialsOIDC, error) {
 	userId = url.PathEscape(userId)
 	var result CredentialsOIDC
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_oidc", userId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_oidc", userId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -7570,7 +7571,7 @@ func (l *LookerSDK) DeleteUserCredentialsOidc(
 	options *rtl.ApiSettings) (string, error) {
 	userId = url.PathEscape(userId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v/credentials_oidc", userId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v/credentials_oidc", userId), nil, nil, options)
 	return result, err
 
 }
@@ -7588,7 +7589,7 @@ func (l *LookerSDK) UserCredentialsApi3(
 	userId = url.PathEscape(userId)
 	credentialsApi3Id = url.PathEscape(credentialsApi3Id)
 	var result CredentialsApi3
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_api3/%v", userId, credentialsApi3Id), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_api3/%v", userId, credentialsApi3Id), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -7605,7 +7606,7 @@ func (l *LookerSDK) DeleteUserCredentialsApi3(
 	userId = url.PathEscape(userId)
 	credentialsApi3Id = url.PathEscape(credentialsApi3Id)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v/credentials_api3/%v", userId, credentialsApi3Id), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v/credentials_api3/%v", userId, credentialsApi3Id), nil, nil, options)
 	return result, err
 
 }
@@ -7621,7 +7622,7 @@ func (l *LookerSDK) AllUserCredentialsApi3s(
 	options *rtl.ApiSettings) ([]CredentialsApi3, error) {
 	userId = url.PathEscape(userId)
 	var result []CredentialsApi3
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_api3", userId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_api3", userId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -7637,7 +7638,7 @@ func (l *LookerSDK) CreateUserCredentialsApi3(
 	options *rtl.ApiSettings) (CreateCredentialsApi3, error) {
 	userId = url.PathEscape(userId)
 	var result CreateCredentialsApi3
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/users/%v/credentials_api3", userId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/users/%v/credentials_api3", userId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -7655,7 +7656,7 @@ func (l *LookerSDK) UserCredentialsEmbed(
 	userId = url.PathEscape(userId)
 	credentialsEmbedId = url.PathEscape(credentialsEmbedId)
 	var result CredentialsEmbed
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_embed/%v", userId, credentialsEmbedId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_embed/%v", userId, credentialsEmbedId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -7672,7 +7673,7 @@ func (l *LookerSDK) DeleteUserCredentialsEmbed(
 	userId = url.PathEscape(userId)
 	credentialsEmbedId = url.PathEscape(credentialsEmbedId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v/credentials_embed/%v", userId, credentialsEmbedId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v/credentials_embed/%v", userId, credentialsEmbedId), nil, nil, options)
 	return result, err
 
 }
@@ -7688,7 +7689,7 @@ func (l *LookerSDK) AllUserCredentialsEmbeds(
 	options *rtl.ApiSettings) ([]CredentialsEmbed, error) {
 	userId = url.PathEscape(userId)
 	var result []CredentialsEmbed
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_embed", userId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_embed", userId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -7704,7 +7705,7 @@ func (l *LookerSDK) UserCredentialsLookerOpenid(
 	options *rtl.ApiSettings) (CredentialsLookerOpenid, error) {
 	userId = url.PathEscape(userId)
 	var result CredentialsLookerOpenid
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_looker_openid", userId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/credentials_looker_openid", userId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -7719,7 +7720,7 @@ func (l *LookerSDK) DeleteUserCredentialsLookerOpenid(
 	options *rtl.ApiSettings) (string, error) {
 	userId = url.PathEscape(userId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v/credentials_looker_openid", userId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v/credentials_looker_openid", userId), nil, nil, options)
 	return result, err
 
 }
@@ -7737,7 +7738,7 @@ func (l *LookerSDK) UserSession(
 	userId = url.PathEscape(userId)
 	sessionId = url.PathEscape(sessionId)
 	var result Session
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/sessions/%v", userId, sessionId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/sessions/%v", userId, sessionId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -7754,7 +7755,7 @@ func (l *LookerSDK) DeleteUserSession(
 	userId = url.PathEscape(userId)
 	sessionId = url.PathEscape(sessionId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v/sessions/%v", userId, sessionId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/users/%v/sessions/%v", userId, sessionId), nil, nil, options)
 	return result, err
 
 }
@@ -7770,7 +7771,7 @@ func (l *LookerSDK) AllUserSessions(
 	options *rtl.ApiSettings) ([]Session, error) {
 	userId = url.PathEscape(userId)
 	var result []Session
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/sessions", userId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/sessions", userId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -7792,7 +7793,7 @@ func (l *LookerSDK) CreateUserCredentialsEmailPasswordReset(request RequestCreat
 	options *rtl.ApiSettings) (CredentialsEmail, error) {
 	request.UserId = url.PathEscape(request.UserId)
 	var result CredentialsEmail
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/users/%v/credentials_email/password_reset", request.UserId), map[string]interface{}{"expires": request.Expires, "fields": request.Fields}, nil, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/users/%v/credentials_email/password_reset", request.UserId), map[string]interface{}{"expires": request.Expires, "fields": request.Fields}, nil, options)
 	return result, err
 
 }
@@ -7804,7 +7805,7 @@ func (l *LookerSDK) UserRoles(request RequestUserRoles,
 	options *rtl.ApiSettings) ([]Role, error) {
 	request.UserId = url.PathEscape(request.UserId)
 	var result []Role
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/roles", request.UserId), map[string]interface{}{"fields": request.Fields, "direct_association_only": request.DirectAssociationOnly}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/roles", request.UserId), map[string]interface{}{"fields": request.Fields, "direct_association_only": request.DirectAssociationOnly}, nil, options)
 	return result, err
 
 }
@@ -7819,7 +7820,7 @@ func (l *LookerSDK) SetUserRoles(
 	options *rtl.ApiSettings) ([]Role, error) {
 	userId = url.PathEscape(userId)
 	var result []Role
-	err := l.session.Do(&result, "PUT", "/4.0", fmt.Sprintf("/users/%v/roles", userId), map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "PUT", "/4.0", fmt.Sprintf("/users/%v/roles", userId), map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -7846,7 +7847,7 @@ func (l *LookerSDK) UserAttributeUserValues(request RequestUserAttributeUserValu
 	options *rtl.ApiSettings) ([]UserAttributeWithValue, error) {
 	request.UserId = url.PathEscape(request.UserId)
 	var result []UserAttributeWithValue
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/attribute_values", request.UserId), map[string]interface{}{"fields": request.Fields, "user_attribute_ids": request.UserAttributeIds, "all_values": request.AllValues, "include_unset": request.IncludeUnset}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/users/%v/attribute_values", request.UserId), map[string]interface{}{"fields": request.Fields, "user_attribute_ids": request.UserAttributeIds, "all_values": request.AllValues, "include_unset": request.IncludeUnset}, nil, options)
 	return result, err
 
 }
@@ -7864,7 +7865,7 @@ func (l *LookerSDK) SetUserAttributeUserValue(
 	userId = url.PathEscape(userId)
 	userAttributeId = url.PathEscape(userAttributeId)
 	var result UserAttributeWithValue
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/users/%v/attribute_values/%v", userId, userAttributeId), nil, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/users/%v/attribute_values/%v", userId, userAttributeId), nil, body, options)
 	return result, err
 
 }
@@ -7883,7 +7884,7 @@ func (l *LookerSDK) DeleteUserAttributeUserValue(
 	options *rtl.ApiSettings) error {
 	userId = url.PathEscape(userId)
 	userAttributeId = url.PathEscape(userAttributeId)
-	err := l.session.Do(nil, "DELETE", "/4.0", fmt.Sprintf("/users/%v/attribute_values/%v", userId, userAttributeId), nil, nil, options)
+	err := l.AuthSession.Do(nil, "DELETE", "/4.0", fmt.Sprintf("/users/%v/attribute_values/%v", userId, userAttributeId), nil, nil, options)
 	return err
 
 }
@@ -7905,7 +7906,7 @@ func (l *LookerSDK) SendUserCredentialsEmailPasswordReset(
 	options *rtl.ApiSettings) (CredentialsEmail, error) {
 	userId = url.PathEscape(userId)
 	var result CredentialsEmail
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/users/%v/credentials_email/send_password_reset", userId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/users/%v/credentials_email/send_password_reset", userId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -7928,7 +7929,7 @@ func (l *LookerSDK) WipeoutUserEmails(
 	options *rtl.ApiSettings) (User, error) {
 	userId = url.PathEscape(userId)
 	var result User
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/users/%v/update_emails", userId), map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/users/%v/update_emails", userId), map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -7942,7 +7943,7 @@ func (l *LookerSDK) CreateEmbedUser(
 	body CreateEmbedUserRequest,
 	options *rtl.ApiSettings) (UserPublic, error) {
 	var result UserPublic
-	err := l.session.Do(&result, "POST", "/4.0", "/users/embed_user", nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/users/embed_user", nil, body, options)
 	return result, err
 
 }
@@ -7957,7 +7958,7 @@ func (l *LookerSDK) CreateEmbedUser(
 func (l *LookerSDK) AllUserAttributes(request RequestAllUserAttributes,
 	options *rtl.ApiSettings) ([]UserAttribute, error) {
 	var result []UserAttribute
-	err := l.session.Do(&result, "GET", "/4.0", "/user_attributes", map[string]interface{}{"fields": request.Fields, "sorts": request.Sorts}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/user_attributes", map[string]interface{}{"fields": request.Fields, "sorts": request.Sorts}, nil, options)
 	return result, err
 
 }
@@ -7979,7 +7980,7 @@ func (l *LookerSDK) CreateUserAttribute(
 	fields string,
 	options *rtl.ApiSettings) (UserAttribute, error) {
 	var result UserAttribute
-	err := l.session.Do(&result, "POST", "/4.0", "/user_attributes", map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/user_attributes", map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -7993,7 +7994,7 @@ func (l *LookerSDK) UserAttribute(
 	options *rtl.ApiSettings) (UserAttribute, error) {
 	userAttributeId = url.PathEscape(userAttributeId)
 	var result UserAttribute
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/user_attributes/%v", userAttributeId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/user_attributes/%v", userAttributeId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -8008,7 +8009,7 @@ func (l *LookerSDK) UpdateUserAttribute(
 	options *rtl.ApiSettings) (UserAttribute, error) {
 	userAttributeId = url.PathEscape(userAttributeId)
 	var result UserAttribute
-	err := l.session.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/user_attributes/%v", userAttributeId), map[string]interface{}{"fields": fields}, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/user_attributes/%v", userAttributeId), map[string]interface{}{"fields": fields}, body, options)
 	return result, err
 
 }
@@ -8021,7 +8022,7 @@ func (l *LookerSDK) DeleteUserAttribute(
 	options *rtl.ApiSettings) (string, error) {
 	userAttributeId = url.PathEscape(userAttributeId)
 	var result string
-	err := l.session.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/user_attributes/%v", userAttributeId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "DELETE", "/4.0", fmt.Sprintf("/user_attributes/%v", userAttributeId), nil, nil, options)
 	return result, err
 
 }
@@ -8041,7 +8042,7 @@ func (l *LookerSDK) AllUserAttributeGroupValues(
 	options *rtl.ApiSettings) ([]UserAttributeGroupValue, error) {
 	userAttributeId = url.PathEscape(userAttributeId)
 	var result []UserAttributeGroupValue
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/user_attributes/%v/group_values", userAttributeId), map[string]interface{}{"fields": fields}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/user_attributes/%v/group_values", userAttributeId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
 }
@@ -8075,7 +8076,7 @@ func (l *LookerSDK) SetUserAttributeGroupValues(
 	options *rtl.ApiSettings) ([]UserAttributeGroupValue, error) {
 	userAttributeId = url.PathEscape(userAttributeId)
 	var result []UserAttributeGroupValue
-	err := l.session.Do(&result, "POST", "/4.0", fmt.Sprintf("/user_attributes/%v/group_values", userAttributeId), nil, body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/user_attributes/%v/group_values", userAttributeId), nil, body, options)
 	return result, err
 
 }
@@ -8092,7 +8093,7 @@ func (l *LookerSDK) SetUserAttributeGroupValues(
 func (l *LookerSDK) AllWorkspaces(
 	options *rtl.ApiSettings) ([]Workspace, error) {
 	var result []Workspace
-	err := l.session.Do(&result, "GET", "/4.0", "/workspaces", nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/workspaces", nil, nil, options)
 	return result, err
 
 }
@@ -8133,7 +8134,7 @@ func (l *LookerSDK) Workspace(
 	options *rtl.ApiSettings) (Workspace, error) {
 	workspaceId = url.PathEscape(workspaceId)
 	var result Workspace
-	err := l.session.Do(&result, "GET", "/4.0", fmt.Sprintf("/workspaces/%v", workspaceId), nil, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/workspaces/%v", workspaceId), nil, nil, options)
 	return result, err
 
 }

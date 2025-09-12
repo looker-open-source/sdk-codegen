@@ -83,7 +83,7 @@ func (l *LookerSDK) OldLogin(
   oldCred string,
   options *rtl.ApiSettings) (AccessToken, error) {
   var result AccessToken
-  err := l.session.Do(&result, "GET", "", "/old_login", map[string]interface{}{"old_cred": oldCred}, nil, options)
+  err := l.AuthSession.Do(&result, "GET", "", "/old_login", map[string]interface{}{"old_cred": oldCred}, nil, options)
   return result, err
 
 }`;
