@@ -25,7 +25,7 @@
  */
 
 /**
- * 471 API methods
+ * 472 API methods
  */
 
 import type {
@@ -154,8 +154,8 @@ import type {
   IPermission,
   IPermissionSet,
   IProject,
-  IProjectCIRun,
   IProjectFile,
+  IProjectRun,
   IProjectValidation,
   IProjectValidationCache,
   IProjectWorkspace,
@@ -286,6 +286,7 @@ import type {
   IWriteContentFavorite,
   IWriteContentMeta,
   IWriteCreateDashboardFilter,
+  IWriteCredentialsApi3,
   IWriteCredentialsEmail,
   IWriteDashboard,
   IWriteDashboardElement,
@@ -5037,6 +5038,7 @@ export class Looker40SDKStream extends APIMethods {
         dashboard_id: request.dashboard_id,
         look_id: request.look_id,
         board_id: request.board_id,
+        include_board_items: request.include_board_items,
         limit: request.limit,
         offset: request.offset,
         sorts: request.sorts,
@@ -9035,7 +9037,7 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### Fetches a CI Run.
    *
-   * GET /projects/{project_id}/ci/runs/{run_id} -> IProjectCIRun
+   * GET /projects/{project_id}/ci/runs/{run_id} -> IProjectRun
    *
    * @param callback streaming output function
    * @param project_id Project Id
@@ -9045,7 +9047,7 @@ export class Looker40SDKStream extends APIMethods {
    *
    */
   async get_ci_run(
-    callback: (response: Response) => Promise<IProjectCIRun>,
+    callback: (response: Response) => Promise<IProjectRun>,
     project_id: string,
     run_id: string,
     fields?: string,
@@ -9053,7 +9055,7 @@ export class Looker40SDKStream extends APIMethods {
   ) {
     project_id = encodeParam(project_id);
     run_id = encodeParam(run_id);
-    return this.authStream<IProjectCIRun>(
+    return this.authStream<IProjectRun>(
       callback,
       'GET',
       `/projects/${project_id}/ci/runs/${run_id}`,
@@ -13276,6 +13278,7 @@ export class Looker40SDKStream extends APIMethods {
         filter_or: request.filter_or,
         content_metadata_id: request.content_metadata_id,
         group_id: request.group_id,
+        can_manage_api3_creds: request.can_manage_api3_creds,
       },
       null,
       options
@@ -13949,6 +13952,41 @@ export class Looker40SDKStream extends APIMethods {
       `/users/${user_id}/credentials_api3/${credentials_api3_id}`,
       { fields },
       null,
+      options
+    );
+  }
+
+  /**
+   * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * PATCH /users/{user_id}/credentials_api3/{credentials_api3_id} -> ICredentialsApi3
+   *
+   * @param callback streaming output function
+   * @param user_id Id of user
+   * @param credentials_api3_id Id of API Credential
+   * @param body Partial<IWriteCredentialsApi3>
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  async update_user_credentials_api3(
+    callback: (response: Response) => Promise<ICredentialsApi3>,
+    user_id: string,
+    credentials_api3_id: string,
+    body: Partial<IWriteCredentialsApi3>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    user_id = encodeParam(user_id);
+    credentials_api3_id = encodeParam(credentials_api3_id);
+    return this.authStream<ICredentialsApi3>(
+      callback,
+      'PATCH',
+      `/users/${user_id}/credentials_api3/${credentials_api3_id}`,
+      { fields },
+      body,
       options
     );
   }

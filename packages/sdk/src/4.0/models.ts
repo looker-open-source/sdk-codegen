@@ -25,7 +25,7 @@
  */
 
 /**
- * 445 API models: 287 Spec, 72 Request, 62 Write, 24 Enum
+ * 446 API models: 287 Spec, 72 Request, 63 Write, 24 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl';
@@ -796,61 +796,6 @@ export interface ICIGitState {
   target?: string | null;
 }
 
-export interface ICIRun {
-  /**
-   * ID of the CI run (read-only)
-   */
-  run_id?: string;
-  /**
-   * Time and date that the CI run was initiated (read-only)
-   */
-  created_at?: Date;
-  /**
-   * Time and date that the CI run began executing (read-only)
-   */
-  started_at?: Date | null;
-  /**
-   * Time and date that the CI run completed (read-only)
-   */
-  finished_at?: Date | null;
-  /**
-   * Git provider URL where you can view the commit status. This is the status URL that you specify when you create a CI suite (read-only)
-   */
-  status_url?: string | null;
-  /**
-   * Status of the CI run (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)
-   */
-  status?: string;
-  /**
-   * Git service for CI run (e.g. GitHub) (read-only)
-   */
-  git_service?: string | null;
-  git_state?: ICIGitState;
-  result?: ICIRunResult;
-  schedule?: ICIScheduleTrigger;
-  /**
-   * Git branch that the CI run compares against during validation, used for incremental runs (read-only)
-   */
-  target_branch?: string | null;
-  /**
-   * Name of the CI suite (read-only)
-   */
-  title?: string;
-  /**
-   * Trigger for CI run (unknown, manual, schedule, change_request) (read-only)
-   */
-  trigger?: string;
-  change_request?: ICIChangeRequest;
-  /**
-   * ID of the CI suite (read-only)
-   */
-  suite_id?: string;
-  /**
-   * Username of the user who triggered the CI run, if the CI run was manually triggered (read-only)
-   */
-  username?: string | null;
-}
-
 export interface ICIRunResult {
   sql_result?: ISqlValidatorResult;
   sql_error?: IGenericError;
@@ -1043,6 +988,11 @@ export interface IContentFavorite {
    * Id of a board (read-only)
    */
   board_id?: string | null;
+  /**
+   * Id of a lookml dashboard (read-only)
+   */
+  lookml_dashboard_id?: string | null;
+  lookml_dashboard?: IDashboardBase;
 }
 
 export interface IContentMeta {
@@ -1074,6 +1024,14 @@ export interface IContentMeta {
    * Id of associated folder when content_type is "space" (read-only)
    */
   folder_id?: string | null;
+  /**
+   * Id of associated board when content_type is "board" (read-only)
+   */
+  homepage_id?: string | null;
+  /**
+   * Id of associated agent when content_type is "agent" (read-only)
+   */
+  agent_id?: string | null;
   /**
    * Content Type ("dashboard", "look", or "folder") (read-only)
    */
@@ -1795,6 +1753,10 @@ export interface ICreateCredentialsApi3 {
    */
   type?: string | null;
   /**
+   * User defined purpose for this credential.
+   */
+  purpose?: string | null;
+  /**
    * API key client_secret (read-only)
    */
   client_secret?: string | null;
@@ -1969,6 +1931,10 @@ export interface ICredentialsApi3 {
    * Short name for the type of this kind of credential (read-only)
    */
   type?: string | null;
+  /**
+   * User defined purpose for this credential.
+   */
+  purpose?: string | null;
   /**
    * Link to get this item (read-only)
    */
@@ -3148,6 +3114,10 @@ export interface IDBConnection {
    * Whether the integration uses the oauth instance account. (read-only)
    */
   uses_instance_oauth?: boolean;
+  /**
+   * Whether the connection uses service authentication certificate. (read-only)
+   */
+  uses_service_auth?: boolean;
   /**
    * (Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).
    */
@@ -5028,7 +4998,7 @@ export interface IJsonBiField {
   /**
    * Explore name (read-only)
    */
-  view: string;
+  view: string | null;
   /**
    * Which dimension group created this dimension (read-only)
    */
@@ -7677,10 +7647,6 @@ export interface IProject {
   dependency_status?: string | null;
 }
 
-export interface IProjectCIRun {
-  run?: ICIRun;
-}
-
 export interface IProjectError {
   /**
    * A stable token that uniquely identifies this class of error, ignoring parameter values. Error message text may vary due to parameters or localization, but error codes do not. For example, a "File not found" error will have the same error code regardless of the filename in question or the user's display language (read-only)
@@ -7766,6 +7732,10 @@ export interface IProjectFile {
    */
   editable?: boolean;
   git_status?: IGitStatus;
+}
+
+export interface IProjectRun {
+  run?: IRun;
 }
 
 export interface IProjectValidation {
@@ -9576,25 +9546,29 @@ export interface IRequestSearchContentFavorites {
    */
   id?: string | null;
   /**
-   * Match user id(s).To create a list of multiple ids, use commas as separators
+   * Match user id(s). To create a list of multiple ids, use commas as separators
    */
   user_id?: string | null;
   /**
-   * Match content metadata id(s).To create a list of multiple ids, use commas as separators
+   * Match content metadata id(s). To create a list of multiple ids, use commas as separators
    */
   content_metadata_id?: string | null;
   /**
-   * Match dashboard id(s).To create a list of multiple ids, use commas as separators
+   * Match dashboard id(s). To create a list of multiple ids, use commas as separators
    */
   dashboard_id?: string | null;
   /**
-   * Match look id(s).To create a list of multiple ids, use commas as separators
+   * Match look id(s). To create a list of multiple ids, use commas as separators
    */
   look_id?: string | null;
   /**
-   * Match board id(s).To create a list of multiple ids, use commas as separators
+   * Match board id(s). To create a list of multiple ids, use commas as separators
    */
   board_id?: string | null;
+  /**
+   * If true, and board_id is provided, returns the content favorites for all items on the board. If false, returns the content favorite for the board itself.
+   */
+  include_board_items?: boolean | null;
   /**
    * Number of results to return. (used with offset)
    */
@@ -10543,6 +10517,10 @@ export interface IRequestSearchUsers {
    * Search for users who are direct members of this group
    */
   group_id?: string | null;
+  /**
+   * Search for users who can manage API3 credentials
+   */
+  can_manage_api3_creds?: boolean | null;
 }
 
 /**
@@ -10742,15 +10720,15 @@ export enum ResultFormat {
 
 export interface IResultMakerFilterables {
   /**
-   * The model this filterable comes from (used for field suggestions). (read-only)
+   * The model this filterable comes from (used for field suggestions).
    */
   model?: string | null;
   /**
-   * The view this filterable comes from (used for field suggestions). (read-only)
+   * The view this filterable comes from (used for field suggestions).
    */
   view?: string | null;
   /**
-   * The name of the filterable thing (Query or Merged Results). (read-only)
+   * The name of the filterable thing (Query or Merged Results).
    */
   name?: string | null;
   /**
@@ -10776,23 +10754,23 @@ export interface IResultMakerWithIdVisConfigAndDynamicFields {
    */
   id?: string;
   /**
-   * JSON string of dynamic field information. (read-only)
+   * JSON string of dynamic field information.
    */
   dynamic_fields?: string | null;
   /**
-   * array of items that can be filtered and information about them. (read-only)
+   * array of items that can be filtered and information about them.
    */
   filterables?: IResultMakerFilterables[] | null;
   /**
-   * Sorts of the constituent Look, Query, or Merge Query (read-only)
+   * Sorts of the constituent Look, Query, or Merge Query
    */
   sorts?: string[] | null;
   /**
-   * ID of merge result if this is a merge_result. (read-only)
+   * ID of merge result if this is a merge_result.
    */
   merge_result_id?: string | null;
   /**
-   * Total of the constituent Look, Query, or Merge Query (read-only)
+   * Total of the constituent Look, Query, or Merge Query
    */
   total?: boolean;
   /**
@@ -10800,12 +10778,12 @@ export interface IResultMakerWithIdVisConfigAndDynamicFields {
    */
   query_id?: string | null;
   /**
-   * ID of SQL Query if this is a SQL Runner Query (read-only)
+   * ID of SQL Query if this is a SQL Runner Query
    */
   sql_query_id?: string | null;
   query?: IQuery;
   /**
-   * Vis config of the constituent Query, or Merge Query. (read-only)
+   * Vis config of the constituent Query, or Merge Query.
    */
   vis_config?: IDictionary<any> | null;
 }
@@ -10878,6 +10856,61 @@ export interface IRoleSearch {
    * Link to get list of users with this role (read-only)
    */
   users_url?: string | null;
+}
+
+export interface IRun {
+  /**
+   * ID of the CI run (read-only)
+   */
+  run_id?: string;
+  /**
+   * Time and date that the CI run was initiated (read-only)
+   */
+  created_at?: Date;
+  /**
+   * Time and date that the CI run began executing (read-only)
+   */
+  started_at?: Date | null;
+  /**
+   * Time and date that the CI run completed (read-only)
+   */
+  finished_at?: Date | null;
+  /**
+   * Git provider URL where you can view the commit status. This is the status URL that you specify when you create a CI suite (read-only)
+   */
+  status_url?: string | null;
+  /**
+   * Status of the CI run (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)
+   */
+  status?: string;
+  /**
+   * Git service for CI run (e.g. GitHub) (read-only)
+   */
+  git_service?: string | null;
+  git_state?: ICIGitState;
+  result?: ICIRunResult;
+  schedule?: ICIScheduleTrigger;
+  /**
+   * Git branch that the CI run compares against during validation, used for incremental runs (read-only)
+   */
+  target_branch?: string | null;
+  /**
+   * Name of the CI suite (read-only)
+   */
+  title?: string;
+  /**
+   * Trigger for CI run (unknown, manual, schedule, change_request) (read-only)
+   */
+  trigger?: string;
+  change_request?: ICIChangeRequest;
+  /**
+   * ID of the CI suite (read-only)
+   */
+  suite_id?: string;
+  /**
+   * Username of the user who triggered the CI run, if the CI run was manually triggered (read-only)
+   */
+  username?: string | null;
 }
 
 export interface IRunningQueries {
@@ -12581,9 +12614,13 @@ export interface IUser {
    */
   embed_group_folder_id?: string | null;
   /**
-   * User is an IAM Admin - only available in Looker (Google Cloud core) (read-only)
+   * User is an IAM Admin - only available in Looker (Google Cloud core). The is_iam_admin is not returned by default. Please explicitly request this attribute if needed via the fields query param. Note: Including the optional is_iam_admin attribute can increase API latency. For best performance, use this attribute only when filtering for users with the 'Admin via IAM' role. When using this filter, always paginate your results with the offset and limit fields to optimize response time. (read-only)
    */
   is_iam_admin?: boolean;
+  /**
+   * Indicates if the user can manage API3 credentials
+   */
+  can_manage_api3_creds?: boolean;
   /**
    * Link to get this item (read-only)
    */
@@ -13223,7 +13260,7 @@ export interface IWriteColorCollection {
 
 /**
  * Dynamic writeable type for ContentFavorite removes:
- * id, look_id, dashboard_id, board_id
+ * id, look_id, dashboard_id, board_id, lookml_dashboard_id
  */
 export interface IWriteContentFavorite {
   /**
@@ -13244,11 +13281,16 @@ export interface IWriteContentFavorite {
    * can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
    */
   dashboard?: IWriteDashboardBase | null;
+  /**
+   * Dynamic writeable type for DashboardBase removes:
+   * can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
+   */
+  lookml_dashboard?: IWriteDashboardBase | null;
 }
 
 /**
  * Dynamic writeable type for ContentMeta removes:
- * can, id, name, parent_id, dashboard_id, look_id, folder_id, content_type, inheriting_id, slug
+ * can, id, name, parent_id, dashboard_id, look_id, folder_id, homepage_id, agent_id, content_type, inheriting_id, slug
  */
 export interface IWriteContentMeta {
   /**
@@ -13345,6 +13387,17 @@ export interface IWriteCreateQueryTask {
    * Id of dashboard associated with query.
    */
   dashboard_id?: string | null;
+}
+
+/**
+ * Dynamic writeable type for CredentialsApi3 removes:
+ * can, id, client_id, created_at, is_disabled, type, url
+ */
+export interface IWriteCredentialsApi3 {
+  /**
+   * User defined purpose for this credential.
+   */
+  purpose?: string | null;
 }
 
 /**
@@ -13532,7 +13585,7 @@ export interface IWriteDashboardElement {
   refresh_interval?: string | null;
   /**
    * Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
-   * id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
+   * id, query_id
    */
   result_maker?: IWriteResultMakerWithIdVisConfigAndDynamicFields | null;
   /**
@@ -13714,7 +13767,7 @@ export interface IWriteDatagroup {
 
 /**
  * Dynamic writeable type for DBConnection removes:
- * can, dialect, snippets, pdts_enabled, named_driver_version_actual, uses_oauth, uses_instance_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, p4sa_name
+ * can, dialect, snippets, pdts_enabled, named_driver_version_actual, uses_oauth, uses_instance_oauth, uses_service_auth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, p4sa_name
  */
 export interface IWriteDBConnection {
   /**
@@ -14903,14 +14956,42 @@ export interface IWriteRepositoryCredential {
 
 /**
  * Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
- * id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
+ * id, query_id
  */
 export interface IWriteResultMakerWithIdVisConfigAndDynamicFields {
+  /**
+   * JSON string of dynamic field information.
+   */
+  dynamic_fields?: string | null;
+  /**
+   * array of items that can be filtered and information about them.
+   */
+  filterables?: IResultMakerFilterables[] | null;
+  /**
+   * Sorts of the constituent Look, Query, or Merge Query
+   */
+  sorts?: string[] | null;
+  /**
+   * ID of merge result if this is a merge_result.
+   */
+  merge_result_id?: string | null;
+  /**
+   * Total of the constituent Look, Query, or Merge Query
+   */
+  total?: boolean;
+  /**
+   * ID of SQL Query if this is a SQL Runner Query
+   */
+  sql_query_id?: string | null;
   /**
    * Dynamic writeable type for Query removes:
    * can, id, slug, share_url, expanded_share_url, url, has_table_calculations
    */
   query?: IWriteQuery | null;
+  /**
+   * Vis config of the constituent Query, or Merge Query.
+   */
+  vis_config?: IDictionary<any> | null;
 }
 
 /**
@@ -15401,6 +15482,10 @@ export interface IWriteUser {
    * Per user dictionary of undocumented state information owned by the Looker UI.
    */
   ui_state?: IDictionary<string> | null;
+  /**
+   * Indicates if the user can manage API3 credentials
+   */
+  can_manage_api3_creds?: boolean;
 }
 
 /**

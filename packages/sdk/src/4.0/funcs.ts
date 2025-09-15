@@ -25,7 +25,7 @@
  */
 
 /**
- * 471 API methods
+ * 472 API methods
  */
 
 import type {
@@ -158,8 +158,8 @@ import type {
   IPermission,
   IPermissionSet,
   IProject,
-  IProjectCIRun,
   IProjectFile,
+  IProjectRun,
   IProjectValidation,
   IProjectValidationCache,
   IProjectWorkspace,
@@ -290,6 +290,7 @@ import type {
   IWriteContentFavorite,
   IWriteContentMeta,
   IWriteCreateDashboardFilter,
+  IWriteCredentialsApi3,
   IWriteCredentialsEmail,
   IWriteDashboard,
   IWriteDashboardElement,
@@ -4190,8 +4191,10 @@ export const test_connection_config = async (
   body: Partial<IWriteDBConnection>,
   tests?: DelimArray<string>,
   options?: Partial<ITransportSettings>
-): Promise<SDKResponse<IDBConnectionTestResult[], IError>> => {
-  return sdk.put<IDBConnectionTestResult[], IError>(
+): Promise<
+  SDKResponse<IDBConnectionTestResult[], IError | IValidationError>
+> => {
+  return sdk.put<IDBConnectionTestResult[], IError | IValidationError>(
     '/connections/test',
     { tests },
     body,
@@ -4685,6 +4688,7 @@ export const search_content_favorites = async (
       dashboard_id: request.dashboard_id,
       look_id: request.look_id,
       board_id: request.board_id,
+      include_board_items: request.include_board_items,
       limit: request.limit,
       offset: request.offset,
       sorts: request.sorts,
@@ -8408,7 +8412,7 @@ export const connection_cost_estimate = async (
 /**
  * ### Fetches a CI Run.
  *
- * GET /projects/{project_id}/ci/runs/{run_id} -> IProjectCIRun
+ * GET /projects/{project_id}/ci/runs/{run_id} -> IProjectRun
  *
  * @param sdk IAPIMethods implementation
  * @param project_id Project Id
@@ -8423,10 +8427,10 @@ export const get_ci_run = async (
   run_id: string,
   fields?: string,
   options?: Partial<ITransportSettings>
-): Promise<SDKResponse<IProjectCIRun, IError>> => {
+): Promise<SDKResponse<IProjectRun, IError>> => {
   project_id = encodeParam(project_id);
   run_id = encodeParam(run_id);
-  return sdk.get<IProjectCIRun, IError>(
+  return sdk.get<IProjectRun, IError>(
     `/projects/${project_id}/ci/runs/${run_id}`,
     { fields },
     null,
@@ -12370,6 +12374,7 @@ export const search_users = async (
       filter_or: request.filter_or,
       content_metadata_id: request.content_metadata_id,
       group_id: request.group_id,
+      can_manage_api3_creds: request.can_manage_api3_creds,
     },
     null,
     options
@@ -12991,6 +12996,39 @@ export const user_credentials_api3 = async (
     `/users/${user_id}/credentials_api3/${credentials_api3_id}`,
     { fields },
     null,
+    options
+  );
+};
+
+/**
+ * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ *
+ * PATCH /users/{user_id}/credentials_api3/{credentials_api3_id} -> ICredentialsApi3
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id Id of user
+ * @param credentials_api3_id Id of API Credential
+ * @param body Partial<IWriteCredentialsApi3>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
+ */
+export const update_user_credentials_api3 = async (
+  sdk: IAPIMethods,
+  user_id: string,
+  credentials_api3_id: string,
+  body: Partial<IWriteCredentialsApi3>,
+  fields?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<ICredentialsApi3, IError | IValidationError>> => {
+  user_id = encodeParam(user_id);
+  credentials_api3_id = encodeParam(credentials_api3_id);
+  return sdk.patch<ICredentialsApi3, IError | IValidationError>(
+    `/users/${user_id}/credentials_api3/${credentials_api3_id}`,
+    { fields },
+    body,
     options
   );
 };

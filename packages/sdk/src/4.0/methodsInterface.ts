@@ -25,7 +25,7 @@
  */
 
 /**
- * 471 API methods
+ * 472 API methods
  */
 
 import type {
@@ -153,8 +153,8 @@ import type {
   IPermission,
   IPermissionSet,
   IProject,
-  IProjectCIRun,
   IProjectFile,
+  IProjectRun,
   IProjectValidation,
   IProjectValidationCache,
   IProjectWorkspace,
@@ -285,6 +285,7 @@ import type {
   IWriteContentFavorite,
   IWriteContentMeta,
   IWriteCreateDashboardFilter,
+  IWriteCredentialsApi3,
   IWriteCredentialsEmail,
   IWriteDashboard,
   IWriteDashboardElement,
@@ -2933,7 +2934,7 @@ export interface ILooker40SDK extends IAPIMethods {
     body: Partial<IWriteDBConnection>,
     tests?: DelimArray<string>,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IDBConnectionTestResult[], IError>>;
+  ): Promise<SDKResponse<IDBConnectionTestResult[], IError | IValidationError>>;
 
   /**
    * ### Get information about all dialects.
@@ -5571,7 +5572,7 @@ export interface ILooker40SDK extends IAPIMethods {
   /**
    * ### Fetches a CI Run.
    *
-   * GET /projects/{project_id}/ci/runs/{run_id} -> IProjectCIRun
+   * GET /projects/{project_id}/ci/runs/{run_id} -> IProjectRun
    *
    * @param project_id Project Id
    * @param run_id Run Id
@@ -5584,7 +5585,7 @@ export interface ILooker40SDK extends IAPIMethods {
     run_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IProjectCIRun, IError>>;
+  ): Promise<SDKResponse<IProjectRun, IError>>;
 
   /**
    * ### Creates a CI Run.
@@ -8695,6 +8696,28 @@ export interface ILooker40SDK extends IAPIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ICredentialsApi3, IError>>;
+
+  /**
+   * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * PATCH /users/{user_id}/credentials_api3/{credentials_api3_id} -> ICredentialsApi3
+   *
+   * @param user_id Id of user
+   * @param credentials_api3_id Id of API Credential
+   * @param body Partial<IWriteCredentialsApi3>
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  update_user_credentials_api3(
+    user_id: string,
+    credentials_api3_id: string,
+    body: Partial<IWriteCredentialsApi3>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ICredentialsApi3, IError | IValidationError>>;
 
   /**
    * ### API login information for the specified user. This is for the newer API keys that can be added for any user.

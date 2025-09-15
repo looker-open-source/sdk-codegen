@@ -25,7 +25,7 @@
  */
 
 /**
- * 471 API methods
+ * 472 API methods
  */
 
 
@@ -3598,25 +3598,29 @@ open class LookerSDK: APIMethods {
          */
         id: String? = nil,
         /**
-         * @param {String} user_id Match user id(s).To create a list of multiple ids, use commas as separators
+         * @param {String} user_id Match user id(s). To create a list of multiple ids, use commas as separators
          */
         user_id: String? = nil,
         /**
-         * @param {String} content_metadata_id Match content metadata id(s).To create a list of multiple ids, use commas as separators
+         * @param {String} content_metadata_id Match content metadata id(s). To create a list of multiple ids, use commas as separators
          */
         content_metadata_id: String? = nil,
         /**
-         * @param {String} dashboard_id Match dashboard id(s).To create a list of multiple ids, use commas as separators
+         * @param {String} dashboard_id Match dashboard id(s). To create a list of multiple ids, use commas as separators
          */
         dashboard_id: String? = nil,
         /**
-         * @param {String} look_id Match look id(s).To create a list of multiple ids, use commas as separators
+         * @param {String} look_id Match look id(s). To create a list of multiple ids, use commas as separators
          */
         look_id: String? = nil,
         /**
-         * @param {String} board_id Match board id(s).To create a list of multiple ids, use commas as separators
+         * @param {String} board_id Match board id(s). To create a list of multiple ids, use commas as separators
          */
         board_id: String? = nil,
+        /**
+         * @param {Bool} include_board_items If true, and board_id is provided, returns the content favorites for all items on the board. If false, returns the content favorite for the board itself.
+         */
+        include_board_items: Bool? = nil,
         /**
          * @param {Int64} limit Number of results to return. (used with offset)
          */
@@ -3640,7 +3644,7 @@ open class LookerSDK: APIMethods {
         options: ITransportSettings? = nil
     ) -> SDKResponse<[ContentFavorite], SDKError> {
         let result: SDKResponse<[ContentFavorite], SDKError> = self.get("/content_favorite/search", 
-            ["id": id, "user_id": user_id, "content_metadata_id": content_metadata_id, "dashboard_id": dashboard_id, "look_id": look_id, "board_id": board_id, "limit": limit, "offset": offset, "sorts": sorts, "fields": fields, "filter_or": filter_or as Any?], nil, options)
+            ["id": id, "user_id": user_id, "content_metadata_id": content_metadata_id, "dashboard_id": dashboard_id, "look_id": look_id, "board_id": board_id, "include_board_items": include_board_items as Any?, "limit": limit, "offset": offset, "sorts": sorts, "fields": fields, "filter_or": filter_or as Any?], nil, options)
         return result
     }
 
@@ -7308,7 +7312,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Fetches a CI Run.
      *
-     * GET /projects/{project_id}/ci/runs/{run_id} -> ProjectCIRun
+     * GET /projects/{project_id}/ci/runs/{run_id} -> ProjectRun
      */
     public func get_ci_run(
         /**
@@ -7324,10 +7328,10 @@ open class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<ProjectCIRun, SDKError> {
+    ) -> SDKResponse<ProjectRun, SDKError> {
         let path_project_id = encodeParam(project_id)
         let path_run_id = encodeParam(run_id)
-        let result: SDKResponse<ProjectCIRun, SDKError> = self.get("/projects/\(path_project_id)/ci/runs/\(path_run_id)", 
+        let result: SDKResponse<ProjectRun, SDKError> = self.get("/projects/\(path_project_id)/ci/runs/\(path_run_id)", 
             ["fields": fields], nil, options)
         return result
     }
@@ -11188,10 +11192,14 @@ open class LookerSDK: APIMethods {
          * @param {String} group_id Search for users who are direct members of this group
          */
         group_id: String? = nil,
+        /**
+         * @param {Bool} can_manage_api3_creds Search for users who can manage API3 credentials
+         */
+        can_manage_api3_creds: Bool? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<[User], SDKError> {
         let result: SDKResponse<[User], SDKError> = self.get("/users/search", 
-            ["fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "first_name": first_name, "last_name": last_name, "verified_looker_employee": verified_looker_employee as Any?, "embed_user": embed_user as Any?, "email": email, "is_disabled": is_disabled as Any?, "filter_or": filter_or as Any?, "content_metadata_id": content_metadata_id, "group_id": group_id], nil, options)
+            ["fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "first_name": first_name, "last_name": last_name, "verified_looker_employee": verified_looker_employee as Any?, "embed_user": embed_user as Any?, "email": email, "is_disabled": is_disabled as Any?, "filter_or": filter_or as Any?, "content_metadata_id": content_metadata_id, "group_id": group_id, "can_manage_api3_creds": can_manage_api3_creds as Any?], nil, options)
         return result
     }
 
@@ -11761,6 +11769,39 @@ open class LookerSDK: APIMethods {
         let path_credentials_api3_id = encodeParam(credentials_api3_id)
         let result: SDKResponse<CredentialsApi3, SDKError> = self.get("/users/\(path_user_id)/credentials_api3/\(path_credentials_api3_id)", 
             ["fields": fields], nil, options)
+        return result
+    }
+
+    /**
+     * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
+     *
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
+     * PATCH /users/{user_id}/credentials_api3/{credentials_api3_id} -> CredentialsApi3
+     */
+    public func update_user_credentials_api3(
+        /**
+         * @param {String} user_id Id of user
+         */
+        _ user_id: String,
+        /**
+         * @param {String} credentials_api3_id Id of API Credential
+         */
+        _ credentials_api3_id: String,
+        /**
+         * @param {WriteCredentialsApi3} body
+         */
+        _ body: WriteCredentialsApi3,
+        /**
+         * @param {String} fields Requested fields.
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<CredentialsApi3, SDKError> {
+        let path_user_id = encodeParam(user_id)
+        let path_credentials_api3_id = encodeParam(credentials_api3_id)
+        let result: SDKResponse<CredentialsApi3, SDKError> = self.patch("/users/\(path_user_id)/credentials_api3/\(path_credentials_api3_id)", 
+            ["fields": fields], try! self.encode(body), options)
         return result
     }
 
