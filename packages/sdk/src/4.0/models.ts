@@ -5048,7 +5048,7 @@ export interface IJsonBiField {
   /**
    * Explore name (read-only)
    */
-  view: string;
+  view: string | null;
   /**
    * Which dimension group created this dimension (read-only)
    */
