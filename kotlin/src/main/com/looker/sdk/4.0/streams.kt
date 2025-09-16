@@ -3139,11 +3139,11 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * Boolean search params accept only "true" and "false" as values.
      *
      * @param {String} id Match content favorite id(s)
-     * @param {String} user_id Match user id(s).To create a list of multiple ids, use commas as separators
-     * @param {String} content_metadata_id Match content metadata id(s).To create a list of multiple ids, use commas as separators
-     * @param {String} dashboard_id Match dashboard id(s).To create a list of multiple ids, use commas as separators
-     * @param {String} look_id Match look id(s).To create a list of multiple ids, use commas as separators
-     * @param {String} board_id Match board id(s).To create a list of multiple ids, use commas as separators
+     * @param {String} user_id Match user id(s). To create a list of multiple ids, use commas as separators
+     * @param {String} content_metadata_id Match content metadata id(s). To create a list of multiple ids, use commas as separators
+     * @param {String} dashboard_id Match dashboard id(s). To create a list of multiple ids, use commas as separators
+     * @param {String} look_id Match look id(s). To create a list of multiple ids, use commas as separators
+     * @param {String} board_id Match board id(s). To create a list of multiple ids, use commas as separators
      * @param {Boolean} include_board_items If true, and board_id is provided, returns the content favorites for all items on the board. If false, returns the content favorite for the board itself.
      * @param {Long} limit Number of results to return. (used with offset)
      * @param {Long} offset Number of results to skip before returning any. (used with limit)

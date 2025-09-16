@@ -796,61 +796,6 @@ export interface ICIGitState {
   target?: string | null;
 }
 
-export interface ICIRun {
-  /**
-   * ID of the CI run (read-only)
-   */
-  run_id?: string;
-  /**
-   * Time and date that the CI run was initiated (read-only)
-   */
-  created_at?: Date;
-  /**
-   * Time and date that the CI run began executing (read-only)
-   */
-  started_at?: Date | null;
-  /**
-   * Time and date that the CI run completed (read-only)
-   */
-  finished_at?: Date | null;
-  /**
-   * Git provider URL where you can view the commit status. This is the status URL that you specify when you create a CI suite (read-only)
-   */
-  status_url?: string | null;
-  /**
-   * Status of the CI run (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)
-   */
-  status?: string;
-  /**
-   * Git service for CI run (e.g. GitHub) (read-only)
-   */
-  git_service?: string | null;
-  git_state?: ICIGitState;
-  result?: ICIRunResult;
-  schedule?: ICIScheduleTrigger;
-  /**
-   * Git branch that the CI run compares against during validation, used for incremental runs (read-only)
-   */
-  target_branch?: string | null;
-  /**
-   * Name of the CI suite (read-only)
-   */
-  title?: string;
-  /**
-   * Trigger for CI run (unknown, manual, schedule, change_request) (read-only)
-   */
-  trigger?: string;
-  change_request?: ICIChangeRequest;
-  /**
-   * ID of the CI suite (read-only)
-   */
-  suite_id?: string;
-  /**
-   * Username of the user who triggered the CI run, if the CI run was manually triggered (read-only)
-   */
-  username?: string | null;
-}
-
 export interface ICIRunResult {
   sql_result?: ISqlValidatorResult;
   sql_error?: IGenericError;
@@ -1043,6 +988,11 @@ export interface IContentFavorite {
    * Id of a board (read-only)
    */
   board_id?: string | null;
+  /**
+   * Id of a lookml dashboard (read-only)
+   */
+  lookml_dashboard_id?: string | null;
+  lookml_dashboard?: IDashboardBase;
 }
 
 export interface IContentMeta {
@@ -7697,10 +7647,6 @@ export interface IProject {
   dependency_status?: string | null;
 }
 
-export interface IProjectCIRun {
-  run?: ICIRun;
-}
-
 export interface IProjectError {
   /**
    * A stable token that uniquely identifies this class of error, ignoring parameter values. Error message text may vary due to parameters or localization, but error codes do not. For example, a "File not found" error will have the same error code regardless of the filename in question or the user's display language (read-only)
@@ -7786,6 +7732,10 @@ export interface IProjectFile {
    */
   editable?: boolean;
   git_status?: IGitStatus;
+}
+
+export interface IProjectRun {
+  run?: IRun;
 }
 
 export interface IProjectValidation {
@@ -9596,23 +9546,23 @@ export interface IRequestSearchContentFavorites {
    */
   id?: string | null;
   /**
-   * Match user id(s).To create a list of multiple ids, use commas as separators
+   * Match user id(s). To create a list of multiple ids, use commas as separators
    */
   user_id?: string | null;
   /**
-   * Match content metadata id(s).To create a list of multiple ids, use commas as separators
+   * Match content metadata id(s). To create a list of multiple ids, use commas as separators
    */
   content_metadata_id?: string | null;
   /**
-   * Match dashboard id(s).To create a list of multiple ids, use commas as separators
+   * Match dashboard id(s). To create a list of multiple ids, use commas as separators
    */
   dashboard_id?: string | null;
   /**
-   * Match look id(s).To create a list of multiple ids, use commas as separators
+   * Match look id(s). To create a list of multiple ids, use commas as separators
    */
   look_id?: string | null;
   /**
-   * Match board id(s).To create a list of multiple ids, use commas as separators
+   * Match board id(s). To create a list of multiple ids, use commas as separators
    */
   board_id?: string | null;
   /**
@@ -10770,15 +10720,15 @@ export enum ResultFormat {
 
 export interface IResultMakerFilterables {
   /**
-   * The model this filterable comes from (used for field suggestions). (read-only)
+   * The model this filterable comes from (used for field suggestions).
    */
   model?: string | null;
   /**
-   * The view this filterable comes from (used for field suggestions). (read-only)
+   * The view this filterable comes from (used for field suggestions).
    */
   view?: string | null;
   /**
-   * The name of the filterable thing (Query or Merged Results). (read-only)
+   * The name of the filterable thing (Query or Merged Results).
    */
   name?: string | null;
   /**
@@ -10804,23 +10754,23 @@ export interface IResultMakerWithIdVisConfigAndDynamicFields {
    */
   id?: string;
   /**
-   * JSON string of dynamic field information. (read-only)
+   * JSON string of dynamic field information.
    */
   dynamic_fields?: string | null;
   /**
-   * array of items that can be filtered and information about them. (read-only)
+   * array of items that can be filtered and information about them.
    */
   filterables?: IResultMakerFilterables[] | null;
   /**
-   * Sorts of the constituent Look, Query, or Merge Query (read-only)
+   * Sorts of the constituent Look, Query, or Merge Query
    */
   sorts?: string[] | null;
   /**
-   * ID of merge result if this is a merge_result. (read-only)
+   * ID of merge result if this is a merge_result.
    */
   merge_result_id?: string | null;
   /**
-   * Total of the constituent Look, Query, or Merge Query (read-only)
+   * Total of the constituent Look, Query, or Merge Query
    */
   total?: boolean;
   /**
@@ -10828,12 +10778,12 @@ export interface IResultMakerWithIdVisConfigAndDynamicFields {
    */
   query_id?: string | null;
   /**
-   * ID of SQL Query if this is a SQL Runner Query (read-only)
+   * ID of SQL Query if this is a SQL Runner Query
    */
   sql_query_id?: string | null;
   query?: IQuery;
   /**
-   * Vis config of the constituent Query, or Merge Query. (read-only)
+   * Vis config of the constituent Query, or Merge Query.
    */
   vis_config?: IDictionary<any> | null;
 }
@@ -10906,6 +10856,61 @@ export interface IRoleSearch {
    * Link to get list of users with this role (read-only)
    */
   users_url?: string | null;
+}
+
+export interface IRun {
+  /**
+   * ID of the CI run (read-only)
+   */
+  run_id?: string;
+  /**
+   * Time and date that the CI run was initiated (read-only)
+   */
+  created_at?: Date;
+  /**
+   * Time and date that the CI run began executing (read-only)
+   */
+  started_at?: Date | null;
+  /**
+   * Time and date that the CI run completed (read-only)
+   */
+  finished_at?: Date | null;
+  /**
+   * Git provider URL where you can view the commit status. This is the status URL that you specify when you create a CI suite (read-only)
+   */
+  status_url?: string | null;
+  /**
+   * Status of the CI run (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)
+   */
+  status?: string;
+  /**
+   * Git service for CI run (e.g. GitHub) (read-only)
+   */
+  git_service?: string | null;
+  git_state?: ICIGitState;
+  result?: ICIRunResult;
+  schedule?: ICIScheduleTrigger;
+  /**
+   * Git branch that the CI run compares against during validation, used for incremental runs (read-only)
+   */
+  target_branch?: string | null;
+  /**
+   * Name of the CI suite (read-only)
+   */
+  title?: string;
+  /**
+   * Trigger for CI run (unknown, manual, schedule, change_request) (read-only)
+   */
+  trigger?: string;
+  change_request?: ICIChangeRequest;
+  /**
+   * ID of the CI suite (read-only)
+   */
+  suite_id?: string;
+  /**
+   * Username of the user who triggered the CI run, if the CI run was manually triggered (read-only)
+   */
+  username?: string | null;
 }
 
 export interface IRunningQueries {
@@ -13255,7 +13260,7 @@ export interface IWriteColorCollection {
 
 /**
  * Dynamic writeable type for ContentFavorite removes:
- * id, look_id, dashboard_id, board_id
+ * id, look_id, dashboard_id, board_id, lookml_dashboard_id
  */
 export interface IWriteContentFavorite {
   /**
@@ -13276,6 +13281,11 @@ export interface IWriteContentFavorite {
    * can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
    */
   dashboard?: IWriteDashboardBase | null;
+  /**
+   * Dynamic writeable type for DashboardBase removes:
+   * can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
+   */
+  lookml_dashboard?: IWriteDashboardBase | null;
 }
 
 /**
@@ -13575,7 +13585,7 @@ export interface IWriteDashboardElement {
   refresh_interval?: string | null;
   /**
    * Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
-   * id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
+   * id, query_id
    */
   result_maker?: IWriteResultMakerWithIdVisConfigAndDynamicFields | null;
   /**
@@ -14946,14 +14956,42 @@ export interface IWriteRepositoryCredential {
 
 /**
  * Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
- * id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
+ * id, query_id
  */
 export interface IWriteResultMakerWithIdVisConfigAndDynamicFields {
+  /**
+   * JSON string of dynamic field information.
+   */
+  dynamic_fields?: string | null;
+  /**
+   * array of items that can be filtered and information about them.
+   */
+  filterables?: IResultMakerFilterables[] | null;
+  /**
+   * Sorts of the constituent Look, Query, or Merge Query
+   */
+  sorts?: string[] | null;
+  /**
+   * ID of merge result if this is a merge_result.
+   */
+  merge_result_id?: string | null;
+  /**
+   * Total of the constituent Look, Query, or Merge Query
+   */
+  total?: boolean;
+  /**
+   * ID of SQL Query if this is a SQL Runner Query
+   */
+  sql_query_id?: string | null;
   /**
    * Dynamic writeable type for Query removes:
    * can, id, slug, share_url, expanded_share_url, url, has_table_calculations
    */
   query?: IWriteQuery | null;
+  /**
+   * Vis config of the constituent Query, or Merge Query.
+   */
+  vis_config?: IDictionary<any> | null;
 }
 
 /**

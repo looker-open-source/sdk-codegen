@@ -1121,83 +1121,6 @@ class CIGitState(model.Model):
 
 
 @attr.s(auto_attribs=True, init=False)
-class CIRun(model.Model):
-    """
-    Attributes:
-        run_id: ID of the CI run
-        created_at: Time and date that the CI run was initiated
-        started_at: Time and date that the CI run began executing
-        finished_at: Time and date that the CI run completed
-        status_url: Git provider URL where you can view the commit status. This is the status URL that you specify when you create a CI suite
-        status: Status of the CI run (unknown, failed, passed, skipped, errored, cancelled, queued, running)
-        git_service: Git service for CI run (e.g. GitHub)
-        git_state:
-        result:
-        schedule:
-        target_branch: Git branch that the CI run compares against during validation, used for incremental runs
-        title: Name of the CI suite
-        trigger: Trigger for CI run (unknown, manual, schedule, change_request)
-        change_request:
-        suite_id: ID of the CI suite
-        username: Username of the user who triggered the CI run, if the CI run was manually triggered
-    """
-
-    run_id: Optional[str] = None
-    created_at: Optional[datetime.datetime] = None
-    started_at: Optional[datetime.datetime] = None
-    finished_at: Optional[datetime.datetime] = None
-    status_url: Optional[str] = None
-    status: Optional[str] = None
-    git_service: Optional[str] = None
-    git_state: Optional["CIGitState"] = None
-    result: Optional["CIRunResult"] = None
-    schedule: Optional["CIScheduleTrigger"] = None
-    target_branch: Optional[str] = None
-    title: Optional[str] = None
-    trigger: Optional[str] = None
-    change_request: Optional["CIChangeRequest"] = None
-    suite_id: Optional[str] = None
-    username: Optional[str] = None
-
-    def __init__(
-        self,
-        *,
-        run_id: Optional[str] = None,
-        created_at: Optional[datetime.datetime] = None,
-        started_at: Optional[datetime.datetime] = None,
-        finished_at: Optional[datetime.datetime] = None,
-        status_url: Optional[str] = None,
-        status: Optional[str] = None,
-        git_service: Optional[str] = None,
-        git_state: Optional["CIGitState"] = None,
-        result: Optional["CIRunResult"] = None,
-        schedule: Optional["CIScheduleTrigger"] = None,
-        target_branch: Optional[str] = None,
-        title: Optional[str] = None,
-        trigger: Optional[str] = None,
-        change_request: Optional["CIChangeRequest"] = None,
-        suite_id: Optional[str] = None,
-        username: Optional[str] = None
-    ):
-        self.run_id = run_id
-        self.created_at = created_at
-        self.started_at = started_at
-        self.finished_at = finished_at
-        self.status_url = status_url
-        self.status = status
-        self.git_service = git_service
-        self.git_state = git_state
-        self.result = result
-        self.schedule = schedule
-        self.target_branch = target_branch
-        self.title = title
-        self.trigger = trigger
-        self.change_request = change_request
-        self.suite_id = suite_id
-        self.username = username
-
-
-@attr.s(auto_attribs=True, init=False)
 class CIRunResult(model.Model):
     """
     Attributes:
@@ -1463,6 +1386,8 @@ class ContentFavorite(model.Model):
         look:
         dashboard:
         board_id: Id of a board
+        lookml_dashboard_id: Id of a lookml dashboard
+        lookml_dashboard:
     """
 
     id: Optional[str] = None
@@ -1473,6 +1398,8 @@ class ContentFavorite(model.Model):
     look: Optional["LookBasic"] = None
     dashboard: Optional["DashboardBase"] = None
     board_id: Optional[str] = None
+    lookml_dashboard_id: Optional[str] = None
+    lookml_dashboard: Optional["DashboardBase"] = None
 
     def __init__(
         self,
@@ -1484,7 +1411,9 @@ class ContentFavorite(model.Model):
         dashboard_id: Optional[str] = None,
         look: Optional["LookBasic"] = None,
         dashboard: Optional["DashboardBase"] = None,
-        board_id: Optional[str] = None
+        board_id: Optional[str] = None,
+        lookml_dashboard_id: Optional[str] = None,
+        lookml_dashboard: Optional["DashboardBase"] = None
     ):
         self.id = id
         self.user_id = user_id
@@ -1494,6 +1423,8 @@ class ContentFavorite(model.Model):
         self.look = look
         self.dashboard = dashboard
         self.board_id = board_id
+        self.lookml_dashboard_id = lookml_dashboard_id
+        self.lookml_dashboard = lookml_dashboard
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -10118,19 +10049,6 @@ class Project(model.Model):
 
 
 @attr.s(auto_attribs=True, init=False)
-class ProjectCIRun(model.Model):
-    """
-    Attributes:
-        run:
-    """
-
-    run: Optional["CIRun"] = None
-
-    def __init__(self, *, run: Optional["CIRun"] = None):
-        self.run = run
-
-
-@attr.s(auto_attribs=True, init=False)
 class ProjectError(model.Model):
     """
     Attributes:
@@ -10238,6 +10156,19 @@ class ProjectFile(model.Model):
         self.mime_type = mime_type
         self.editable = editable
         self.git_status = git_status
+
+
+@attr.s(auto_attribs=True, init=False)
+class ProjectRun(model.Model):
+    """
+    Attributes:
+        run:
+    """
+
+    run: Optional["Run"] = None
+
+    def __init__(self, *, run: Optional["Run"] = None):
+        self.run = run
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -11026,6 +10957,83 @@ class RoleSearch(model.Model):
         self.user_count = user_count
         self.url = url
         self.users_url = users_url
+
+
+@attr.s(auto_attribs=True, init=False)
+class Run(model.Model):
+    """
+    Attributes:
+        run_id: ID of the CI run
+        created_at: Time and date that the CI run was initiated
+        started_at: Time and date that the CI run began executing
+        finished_at: Time and date that the CI run completed
+        status_url: Git provider URL where you can view the commit status. This is the status URL that you specify when you create a CI suite
+        status: Status of the CI run (unknown, failed, passed, skipped, errored, cancelled, queued, running)
+        git_service: Git service for CI run (e.g. GitHub)
+        git_state:
+        result:
+        schedule:
+        target_branch: Git branch that the CI run compares against during validation, used for incremental runs
+        title: Name of the CI suite
+        trigger: Trigger for CI run (unknown, manual, schedule, change_request)
+        change_request:
+        suite_id: ID of the CI suite
+        username: Username of the user who triggered the CI run, if the CI run was manually triggered
+    """
+
+    run_id: Optional[str] = None
+    created_at: Optional[datetime.datetime] = None
+    started_at: Optional[datetime.datetime] = None
+    finished_at: Optional[datetime.datetime] = None
+    status_url: Optional[str] = None
+    status: Optional[str] = None
+    git_service: Optional[str] = None
+    git_state: Optional["CIGitState"] = None
+    result: Optional["CIRunResult"] = None
+    schedule: Optional["CIScheduleTrigger"] = None
+    target_branch: Optional[str] = None
+    title: Optional[str] = None
+    trigger: Optional[str] = None
+    change_request: Optional["CIChangeRequest"] = None
+    suite_id: Optional[str] = None
+    username: Optional[str] = None
+
+    def __init__(
+        self,
+        *,
+        run_id: Optional[str] = None,
+        created_at: Optional[datetime.datetime] = None,
+        started_at: Optional[datetime.datetime] = None,
+        finished_at: Optional[datetime.datetime] = None,
+        status_url: Optional[str] = None,
+        status: Optional[str] = None,
+        git_service: Optional[str] = None,
+        git_state: Optional["CIGitState"] = None,
+        result: Optional["CIRunResult"] = None,
+        schedule: Optional["CIScheduleTrigger"] = None,
+        target_branch: Optional[str] = None,
+        title: Optional[str] = None,
+        trigger: Optional[str] = None,
+        change_request: Optional["CIChangeRequest"] = None,
+        suite_id: Optional[str] = None,
+        username: Optional[str] = None
+    ):
+        self.run_id = run_id
+        self.created_at = created_at
+        self.started_at = started_at
+        self.finished_at = finished_at
+        self.status_url = status_url
+        self.status = status
+        self.git_service = git_service
+        self.git_state = git_state
+        self.result = result
+        self.schedule = schedule
+        self.target_branch = target_branch
+        self.title = title
+        self.trigger = trigger
+        self.change_request = change_request
+        self.suite_id = suite_id
+        self.username = username
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -14113,7 +14121,7 @@ class WriteColorCollection(model.Model):
 class WriteContentFavorite(model.Model):
     """
         Dynamic writeable type for ContentFavorite removes:
-    id, look_id, dashboard_id, board_id
+    id, look_id, dashboard_id, board_id, lookml_dashboard_id
 
         Attributes:
             user_id: User Id which owns this ContentFavorite
@@ -14122,12 +14130,15 @@ class WriteContentFavorite(model.Model):
     can, content_metadata_id, id, title
             dashboard: Dynamic writeable type for DashboardBase removes:
     can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
+            lookml_dashboard: Dynamic writeable type for DashboardBase removes:
+    can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
     """
 
     user_id: Optional[str] = None
     content_metadata_id: Optional[str] = None
     look: Optional["WriteLookBasic"] = None
     dashboard: Optional["WriteDashboardBase"] = None
+    lookml_dashboard: Optional["WriteDashboardBase"] = None
 
     def __init__(
         self,
@@ -14135,12 +14146,14 @@ class WriteContentFavorite(model.Model):
         user_id: Optional[str] = None,
         content_metadata_id: Optional[str] = None,
         look: Optional["WriteLookBasic"] = None,
-        dashboard: Optional["WriteDashboardBase"] = None
+        dashboard: Optional["WriteDashboardBase"] = None,
+        lookml_dashboard: Optional["WriteDashboardBase"] = None
     ):
         self.user_id = user_id
         self.content_metadata_id = content_metadata_id
         self.look = look
         self.dashboard = dashboard
+        self.lookml_dashboard = lookml_dashboard
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -14472,7 +14485,7 @@ class WriteDashboardElement(model.Model):
             query_id: Id Of Query
             refresh_interval: Refresh Interval
             result_maker: Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
-    id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
+    id, query_id
             result_maker_id: ID of the ResultMakerLookup entry.
             subtitle_text: Text tile subtitle text
             title: Title of dashboard element
@@ -16150,17 +16163,49 @@ class WriteRepositoryCredential(model.Model):
 class WriteResultMakerWithIdVisConfigAndDynamicFields(model.Model):
     """
         Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
-    id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
+    id, query_id
 
         Attributes:
+            dynamic_fields: JSON string of dynamic field information.
+            filterables: array of items that can be filtered and information about them.
+            sorts: Sorts of the constituent Look, Query, or Merge Query
+            merge_result_id: ID of merge result if this is a merge_result.
+            total: Total of the constituent Look, Query, or Merge Query
+            sql_query_id: ID of SQL Query if this is a SQL Runner Query
             query: Dynamic writeable type for Query removes:
     can, id, slug, share_url, expanded_share_url, url, has_table_calculations
+            vis_config: Vis config of the constituent Query, or Merge Query.
     """
 
+    dynamic_fields: Optional[str] = None
+    filterables: Optional[Sequence["ResultMakerFilterables"]] = None
+    sorts: Optional[Sequence[str]] = None
+    merge_result_id: Optional[str] = None
+    total: Optional[bool] = None
+    sql_query_id: Optional[str] = None
     query: Optional["WriteQuery"] = None
+    vis_config: Optional[MutableMapping[str, Any]] = None
 
-    def __init__(self, *, query: Optional["WriteQuery"] = None):
+    def __init__(
+        self,
+        *,
+        dynamic_fields: Optional[str] = None,
+        filterables: Optional[Sequence["ResultMakerFilterables"]] = None,
+        sorts: Optional[Sequence[str]] = None,
+        merge_result_id: Optional[str] = None,
+        total: Optional[bool] = None,
+        sql_query_id: Optional[str] = None,
+        query: Optional["WriteQuery"] = None,
+        vis_config: Optional[MutableMapping[str, Any]] = None
+    ):
+        self.dynamic_fields = dynamic_fields
+        self.filterables = filterables
+        self.sorts = sorts
+        self.merge_result_id = merge_result_id
+        self.total = total
+        self.sql_query_id = sql_query_id
         self.query = query
+        self.vis_config = vis_config
 
 
 @attr.s(auto_attribs=True, init=False)

@@ -153,8 +153,8 @@ import type {
   IPermission,
   IPermissionSet,
   IProject,
-  IProjectCIRun,
   IProjectFile,
+  IProjectRun,
   IProjectValidation,
   IProjectValidationCache,
   IProjectWorkspace,
@@ -5572,7 +5572,7 @@ export interface ILooker40SDK extends IAPIMethods {
   /**
    * ### Fetches a CI Run.
    *
-   * GET /projects/{project_id}/ci/runs/{run_id} -> IProjectCIRun
+   * GET /projects/{project_id}/ci/runs/{run_id} -> IProjectRun
    *
    * @param project_id Project Id
    * @param run_id Run Id
@@ -5585,7 +5585,7 @@ export interface ILooker40SDK extends IAPIMethods {
     run_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IProjectCIRun, IError>>;
+  ): Promise<SDKResponse<IProjectRun, IError>>;
 
   /**
    * ### Creates a CI Run.

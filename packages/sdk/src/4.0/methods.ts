@@ -156,8 +156,8 @@ import type {
   IPermission,
   IPermissionSet,
   IProject,
-  IProjectCIRun,
   IProjectFile,
+  IProjectRun,
   IProjectValidation,
   IProjectValidationCache,
   IProjectWorkspace,
@@ -7905,7 +7905,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   /**
    * ### Fetches a CI Run.
    *
-   * GET /projects/{project_id}/ci/runs/{run_id} -> IProjectCIRun
+   * GET /projects/{project_id}/ci/runs/{run_id} -> IProjectRun
    *
    * @param project_id Project Id
    * @param run_id Run Id
@@ -7918,10 +7918,10 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
     run_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IProjectCIRun, IError>> {
+  ): Promise<SDKResponse<IProjectRun, IError>> {
     project_id = encodeParam(project_id);
     run_id = encodeParam(run_id);
-    return this.get<IProjectCIRun, IError>(
+    return this.get<IProjectRun, IError>(
       `/projects/${project_id}/ci/runs/${run_id}`,
       { fields },
       null,

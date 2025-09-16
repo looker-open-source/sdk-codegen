@@ -3596,23 +3596,23 @@ open class LookerSDKStream: APIMethods {
          */
         id: String? = nil,
         /**
-         * @param {String} user_id Match user id(s).To create a list of multiple ids, use commas as separators
+         * @param {String} user_id Match user id(s). To create a list of multiple ids, use commas as separators
          */
         user_id: String? = nil,
         /**
-         * @param {String} content_metadata_id Match content metadata id(s).To create a list of multiple ids, use commas as separators
+         * @param {String} content_metadata_id Match content metadata id(s). To create a list of multiple ids, use commas as separators
          */
         content_metadata_id: String? = nil,
         /**
-         * @param {String} dashboard_id Match dashboard id(s).To create a list of multiple ids, use commas as separators
+         * @param {String} dashboard_id Match dashboard id(s). To create a list of multiple ids, use commas as separators
          */
         dashboard_id: String? = nil,
         /**
-         * @param {String} look_id Match look id(s).To create a list of multiple ids, use commas as separators
+         * @param {String} look_id Match look id(s). To create a list of multiple ids, use commas as separators
          */
         look_id: String? = nil,
         /**
-         * @param {String} board_id Match board id(s).To create a list of multiple ids, use commas as separators
+         * @param {String} board_id Match board id(s). To create a list of multiple ids, use commas as separators
          */
         board_id: String? = nil,
         /**
@@ -7310,7 +7310,7 @@ open class LookerSDKStream: APIMethods {
     /**
      * ### Fetches a CI Run.
      *
-     * GET /projects/{project_id}/ci/runs/{run_id} -> ProjectCIRun
+     * GET /projects/{project_id}/ci/runs/{run_id} -> ProjectRun
      */
     public func get_ci_run(
         /**

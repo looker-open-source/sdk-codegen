@@ -154,8 +154,8 @@ import type {
   IPermission,
   IPermissionSet,
   IProject,
-  IProjectCIRun,
   IProjectFile,
+  IProjectRun,
   IProjectValidation,
   IProjectValidationCache,
   IProjectWorkspace,
@@ -9037,7 +9037,7 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### Fetches a CI Run.
    *
-   * GET /projects/{project_id}/ci/runs/{run_id} -> IProjectCIRun
+   * GET /projects/{project_id}/ci/runs/{run_id} -> IProjectRun
    *
    * @param callback streaming output function
    * @param project_id Project Id
@@ -9047,7 +9047,7 @@ export class Looker40SDKStream extends APIMethods {
    *
    */
   async get_ci_run(
-    callback: (response: Response) => Promise<IProjectCIRun>,
+    callback: (response: Response) => Promise<IProjectRun>,
     project_id: string,
     run_id: string,
     fields?: string,
@@ -9055,7 +9055,7 @@ export class Looker40SDKStream extends APIMethods {
   ) {
     project_id = encodeParam(project_id);
     run_id = encodeParam(run_id);
-    return this.authStream<IProjectCIRun>(
+    return this.authStream<IProjectRun>(
       callback,
       'GET',
       `/projects/${project_id}/ci/runs/${run_id}`,
