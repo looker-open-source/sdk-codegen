@@ -538,16 +538,16 @@ def test_deserialize_single() -> None:
         model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
         enum2=Enum2.entry2,
         model_no_refs2=ModelNoRefs2(name2="model_no_refs2_name"),
-        list_enum1=(Enum1.entry1,),
-        list_model_no_refs1=(ModelNoRefs1(name1="model_no_refs1_name"),),
+        list_enum1=[Enum1.entry1],
+        list_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
         opt_enum1=Enum1.entry1,
         opt_model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
-        list_opt_model_no_refs1=(ModelNoRefs1(name1="model_no_refs1_name"),),
+        list_opt_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
         id=1,
         name="25",
         datetime_field=DATETIME_VALUE,
         class_="model-name",
-        finally_=(1, 2, 3),
+        finally_=[1, 2, 3],
     )
 
 
@@ -558,24 +558,24 @@ def test_deserialize_list():
     models = sr.deserialize(
         data=json.dumps(data), structure=Sequence[Model], converter=converter
     )
-    assert models == (
+    assert models == [
         Model(
             enum1=Enum1.entry1,
             model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
             enum2=Enum2.entry2,
             model_no_refs2=ModelNoRefs2(name2="model_no_refs2_name"),
-            list_enum1=(Enum1.entry1,),
-            list_model_no_refs1=(ModelNoRefs1(name1="model_no_refs1_name"),),
+            list_enum1=[Enum1.entry1],
+            list_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
             opt_enum1=Enum1.entry1,
             opt_model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
-            list_opt_model_no_refs1=(ModelNoRefs1(name1="model_no_refs1_name"),),
+            list_opt_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
             id=1,
             name="my-name",
             datetime_field=DATETIME_VALUE,
             class_="model-name",
-            finally_=(1, 2, 3),
+            finally_=[1, 2, 3],
         ),
-    )
+    ]
 
 
 def test_deserialize_partial():
@@ -590,16 +590,16 @@ def test_deserialize_partial():
         model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
         enum2=Enum2.entry2,
         model_no_refs2=ModelNoRefs2(name2="model_no_refs2_name"),
-        list_enum1=(Enum1.entry1,),
-        list_model_no_refs1=(ModelNoRefs1(name1="model_no_refs1_name"),),
+        list_enum1=[Enum1.entry1],
+        list_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
         opt_enum1=None,
         opt_model_no_refs1=None,
-        list_opt_model_no_refs1=(ModelNoRefs1(name1="model_no_refs1_name"),),
+        list_opt_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
         id=None,
         name="my-name",
         datetime_field=DATETIME_VALUE,
         class_="model-name",
-        finally_=(1, 2, 3),
+        finally_=[1, 2, 3],
     )
 
 
@@ -617,16 +617,16 @@ def test_deserialize_with_null():
         model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
         enum2=Enum2.entry2,
         model_no_refs2=ModelNoRefs2(name2="model_no_refs2_name"),
-        list_enum1=(Enum1.entry1,),
-        list_model_no_refs1=(ModelNoRefs1(name1="model_no_refs1_name"),),
+        list_enum1=[Enum1.entry1],
+        list_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
         opt_enum1=None,
         opt_model_no_refs1=None,
-        list_opt_model_no_refs1=(ModelNoRefs1(name1="model_no_refs1_name"),),
+        list_opt_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
         id=None,
         name="my-name",
         datetime_field=DATETIME_VALUE,
         class_="model-name",
-        finally_=(1, 2, 3),
+        finally_=[1, 2, 3],
     )
 
 
@@ -753,16 +753,16 @@ def test_safe_enum_deserialization():
         model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
         enum2=Enum2.invalid_api_enum_value,
         model_no_refs2=ModelNoRefs2(name2="model_no_refs2_name"),
-        list_enum1=(Enum1.entry1,),
-        list_model_no_refs1=(ModelNoRefs1(name1="model_no_refs1_name"),),
+        list_enum1=[Enum1.entry1],
+        list_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
         opt_enum1=Enum1.entry1,
         opt_model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
-        list_opt_model_no_refs1=(ModelNoRefs1(name1="model_no_refs1_name"),),
+        list_opt_model_no_refs1=[ModelNoRefs1(name1="model_no_refs1_name")],
         id=1,
         name="my-name",
         datetime_field=DATETIME_VALUE,
         class_="model-name",
-        finally_=(1, 2, 3),
+        finally_=[1, 2, 3],
     )
     assert (
         sr.deserialize(data=json.dumps(data), structure=Model, converter=converter)
