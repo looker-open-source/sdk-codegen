@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 471 API methods
+/// 472 API methods
 
 #nullable enable
 using System;
@@ -3149,6 +3149,7 @@ namespace Looker.SDK.API40
   /// <param name="dashboard_id">Match dashboard id(s).To create a list of multiple ids, use commas as separators</param>
   /// <param name="look_id">Match look id(s).To create a list of multiple ids, use commas as separators</param>
   /// <param name="board_id">Match board id(s).To create a list of multiple ids, use commas as separators</param>
+  /// <param name="include_board_items">If true, and board_id is provided, returns the content favorites for all items on the board. If false, returns the content favorite for the board itself.</param>
   /// <param name="limit">Number of results to return. (used with offset)</param>
   /// <param name="offset">Number of results to skip before returning any. (used with limit)</param>
   /// <param name="sorts">Fields to sort by.</param>
@@ -3161,6 +3162,7 @@ namespace Looker.SDK.API40
     string? dashboard_id = null,
     string? look_id = null,
     string? board_id = null,
+    bool? include_board_items = null,
     long? limit = null,
     long? offset = null,
     string? sorts = null,
@@ -3175,6 +3177,7 @@ namespace Looker.SDK.API40
       { "dashboard_id", dashboard_id },
       { "look_id", look_id },
       { "board_id", board_id },
+      { "include_board_items", include_board_items },
       { "limit", limit },
       { "offset", offset },
       { "sorts", sorts },
@@ -9559,6 +9562,7 @@ namespace Looker.SDK.API40
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
   /// <param name="content_metadata_id">Search for users who have access to this content_metadata item</param>
   /// <param name="group_id">Search for users who are direct members of this group</param>
+  /// <param name="can_manage_api3_creds">Search for users who can manage API3 credentials</param>
   public async Task<SdkResponse<User[], Exception>> search_users(
     string? fields = null,
     long? page = null,
@@ -9576,6 +9580,7 @@ namespace Looker.SDK.API40
     bool? filter_or = null,
     string? content_metadata_id = null,
     string? group_id = null,
+    bool? can_manage_api3_creds = null,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<User[], Exception>(HttpMethod.Get, "/users/search", new Values {
@@ -9594,7 +9599,8 @@ namespace Looker.SDK.API40
       { "is_disabled", is_disabled },
       { "filter_or", filter_or },
       { "content_metadata_id", content_metadata_id },
-      { "group_id", group_id }},null,options);
+      { "group_id", group_id },
+      { "can_manage_api3_creds", can_manage_api3_creds }},null,options);
   }
 
   /// ### Search for user accounts by name
@@ -10067,6 +10073,30 @@ namespace Looker.SDK.API40
       credentials_api3_id = SdkUtils.EncodeParam(credentials_api3_id);
     return await AuthRequest<CredentialsApi3, Exception>(HttpMethod.Get, $"/users/{user_id}/credentials_api3/{credentials_api3_id}", new Values {
       { "fields", fields }},null,options);
+  }
+
+  /// ### API login information for the specified user. This is for the newer API keys that can be added for any user.
+  ///
+  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
+  /// PATCH /users/{user_id}/credentials_api3/{credentials_api3_id} -> CredentialsApi3
+  ///
+  /// <returns><c>CredentialsApi3</c> API Credential (application/json)</returns>
+  ///
+  /// <param name="user_id">Id of user</param>
+  /// <param name="credentials_api3_id">Id of API Credential</param>
+  /// <param name="fields">Requested fields.</param>
+  public async Task<SdkResponse<CredentialsApi3, Exception>> update_user_credentials_api3(
+    string user_id,
+    string credentials_api3_id,
+    WriteCredentialsApi3 body,
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+      user_id = SdkUtils.EncodeParam(user_id);
+      credentials_api3_id = SdkUtils.EncodeParam(credentials_api3_id);
+    return await AuthRequest<CredentialsApi3, Exception>(HttpMethod.Patch, $"/users/{user_id}/credentials_api3/{credentials_api3_id}", new Values {
+      { "fields", fields }},body,options);
   }
 
   /// ### API login information for the specified user. This is for the newer API keys that can be added for any user.

@@ -25,7 +25,7 @@
  */
 
 /**
- * 373 API models: 287 Spec, 0 Request, 62 Write, 24 Enum
+ * 374 API models: 287 Spec, 0 Request, 63 Write, 24 Enum
  */
 
 
@@ -2574,6 +2574,8 @@ public struct ContentMeta: SDKModel {
         case _dashboard_id = "dashboard_id"
         case _look_id = "look_id"
         case _folder_id = "folder_id"
+        case _homepage_id = "homepage_id"
+        case _agent_id = "agent_id"
         case _content_type = "content_type"
         case inherits
         case _inheriting_id = "inheriting_id"
@@ -2638,6 +2640,24 @@ public struct ContentMeta: SDKModel {
         set { _folder_id = newValue.map(AnyString.init) }
     }
 
+    private var _homepage_id: AnyString?
+    /**
+     * Id of associated board when content_type is "board" (read-only)
+     */
+    public var homepage_id: String? {
+        get { _homepage_id?.value }
+        set { _homepage_id = newValue.map(AnyString.init) }
+    }
+
+    private var _agent_id: AnyString?
+    /**
+     * Id of associated agent when content_type is "agent" (read-only)
+     */
+    public var agent_id: String? {
+        get { _agent_id?.value }
+        set { _agent_id = newValue.map(AnyString.init) }
+    }
+
     private var _content_type: AnyString?
     /**
      * Content Type ("dashboard", "look", or "folder") (read-only)
@@ -2670,7 +2690,7 @@ public struct ContentMeta: SDKModel {
         set { _slug = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, parent_id: String? = nil, dashboard_id: String? = nil, look_id: String? = nil, folder_id: String? = nil, content_type: String? = nil, inherits: Bool? = nil, inheriting_id: String? = nil, slug: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, parent_id: String? = nil, dashboard_id: String? = nil, look_id: String? = nil, folder_id: String? = nil, homepage_id: String? = nil, agent_id: String? = nil, content_type: String? = nil, inherits: Bool? = nil, inheriting_id: String? = nil, slug: String? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
         self._name = name.map(AnyString.init)
@@ -2678,6 +2698,8 @@ public struct ContentMeta: SDKModel {
         self._dashboard_id = dashboard_id.map(AnyString.init)
         self._look_id = look_id.map(AnyString.init)
         self._folder_id = folder_id.map(AnyString.init)
+        self._homepage_id = homepage_id.map(AnyString.init)
+        self._agent_id = agent_id.map(AnyString.init)
         self._content_type = content_type.map(AnyString.init)
         self.inherits = inherits
         self._inheriting_id = inheriting_id.map(AnyString.init)
@@ -4495,6 +4517,7 @@ public struct CreateCredentialsApi3: SDKModel {
         case _created_at = "created_at"
         case is_disabled
         case _type = "type"
+        case _purpose = "purpose"
         case _client_secret = "client_secret"
         case _url = "url"
     }
@@ -4544,6 +4567,15 @@ public struct CreateCredentialsApi3: SDKModel {
         set { _type = newValue.map(AnyString.init) }
     }
 
+    private var _purpose: AnyString?
+    /**
+     * User defined purpose for this credential.
+     */
+    public var purpose: String? {
+        get { _purpose?.value }
+        set { _purpose = newValue.map(AnyString.init) }
+    }
+
     private var _client_secret: AnyString?
     /**
      * API key client_secret (read-only)
@@ -4562,13 +4594,14 @@ public struct CreateCredentialsApi3: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, client_id: String? = nil, created_at: String? = nil, is_disabled: Bool? = nil, type: String? = nil, client_secret: String? = nil, url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, client_id: String? = nil, created_at: String? = nil, is_disabled: Bool? = nil, type: String? = nil, purpose: String? = nil, client_secret: String? = nil, url: String? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
         self._client_id = client_id.map(AnyString.init)
         self._created_at = created_at.map(AnyString.init)
         self.is_disabled = is_disabled
         self._type = type.map(AnyString.init)
+        self._purpose = purpose.map(AnyString.init)
         self._client_secret = client_secret.map(AnyString.init)
         self._url = url.map(AnyString.init)
     }
@@ -4999,6 +5032,7 @@ public struct CredentialsApi3: SDKModel {
         case _created_at = "created_at"
         case is_disabled
         case _type = "type"
+        case _purpose = "purpose"
         case _url = "url"
     }
     /**
@@ -5047,6 +5081,15 @@ public struct CredentialsApi3: SDKModel {
         set { _type = newValue.map(AnyString.init) }
     }
 
+    private var _purpose: AnyString?
+    /**
+     * User defined purpose for this credential.
+     */
+    public var purpose: String? {
+        get { _purpose?.value }
+        set { _purpose = newValue.map(AnyString.init) }
+    }
+
     private var _url: AnyString?
     /**
      * Link to get this item (read-only)
@@ -5056,13 +5099,14 @@ public struct CredentialsApi3: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, client_id: String? = nil, created_at: String? = nil, is_disabled: Bool? = nil, type: String? = nil, url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, client_id: String? = nil, created_at: String? = nil, is_disabled: Bool? = nil, type: String? = nil, purpose: String? = nil, url: String? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
         self._client_id = client_id.map(AnyString.init)
         self._created_at = created_at.map(AnyString.init)
         self.is_disabled = is_disabled
         self._type = type.map(AnyString.init)
+        self._purpose = purpose.map(AnyString.init)
         self._url = url.map(AnyString.init)
     }
 
@@ -7891,6 +7935,7 @@ public struct DBConnection: SDKModel {
         case uses_oauth
         case uses_key_pair_auth
         case uses_instance_oauth
+        case uses_service_auth
         case _certificate = "certificate"
         case _file_type = "file_type"
         case _database = "database"
@@ -8034,6 +8079,11 @@ public struct DBConnection: SDKModel {
      * Whether the integration uses the oauth instance account. (read-only)
      */
     public var uses_instance_oauth: Bool?
+
+    /**
+     * Whether the connection uses service authentication certificate. (read-only)
+     */
+    public var uses_service_auth: Bool?
 
     private var _certificate: AnyString?
     /**
@@ -8388,7 +8438,7 @@ public struct DBConnection: SDKModel {
      */
     public var query_holding_disabled: Bool?
 
-    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, named_driver_version_requested: String? = nil, named_driver_version_actual: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, uses_oauth: Bool? = nil, uses_key_pair_auth: Bool? = nil, uses_instance_oauth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, tmp_db_host: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, supports_data_studio_link: Bool? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, default_bq_connection: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil, p4sa_name: String? = nil, query_holding_disabled: Bool? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, named_driver_version_requested: String? = nil, named_driver_version_actual: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, uses_oauth: Bool? = nil, uses_key_pair_auth: Bool? = nil, uses_instance_oauth: Bool? = nil, uses_service_auth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, tmp_db_host: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, supports_data_studio_link: Bool? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, default_bq_connection: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil, p4sa_name: String? = nil, query_holding_disabled: Bool? = nil) {
         self.can = can
         self._name = name.map(AnyString.init)
         self.dialect = dialect
@@ -8403,6 +8453,7 @@ public struct DBConnection: SDKModel {
         self.uses_oauth = uses_oauth
         self.uses_key_pair_auth = uses_key_pair_auth
         self.uses_instance_oauth = uses_instance_oauth
+        self.uses_service_auth = uses_service_auth
         self._certificate = certificate.map(AnyString.init)
         self._file_type = file_type.map(AnyString.init)
         self._database = database.map(AnyString.init)
@@ -24501,6 +24552,7 @@ public struct User: SDKModel {
         case allow_roles_from_normal_groups
         case _embed_group_folder_id = "embed_group_folder_id"
         case is_iam_admin
+        case can_manage_api3_creds
         case _url = "url"
     }
     /**
@@ -24718,9 +24770,14 @@ public struct User: SDKModel {
     }
 
     /**
-     * User is an IAM Admin - only available in Looker (Google Cloud core) (read-only)
+     * User is an IAM Admin - only available in Looker (Google Cloud core). The is_iam_admin is not returned by default. Please explicitly request this attribute if needed via the fields query param. Note: Including the optional is_iam_admin attribute can increase API latency. For best performance, use this attribute only when filtering for users with the 'Admin via IAM' role. When using this filter, always paginate your results with the offset and limit fields to optimize response time. (read-only)
      */
     public var is_iam_admin: Bool?
+
+    /**
+     * Indicates if the user can manage API3 credentials
+     */
+    public var can_manage_api3_creds: Bool?
 
     private var _url: AnyString?
     /**
@@ -24731,7 +24788,7 @@ public struct User: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, avatar_url: String? = nil, avatar_url_without_sizing: String? = nil, credentials_api3: [CredentialsApi3]? = nil, credentials_email: CredentialsEmail? = nil, credentials_embed: [CredentialsEmbed]? = nil, credentials_google: CredentialsGoogle? = nil, credentials_ldap: CredentialsLDAP? = nil, credentials_looker_openid: CredentialsLookerOpenid? = nil, credentials_oidc: CredentialsOIDC? = nil, credentials_saml: CredentialsSaml? = nil, credentials_totp: CredentialsTotp? = nil, display_name: String? = nil, email: String? = nil, embed_group_space_id: String? = nil, first_name: String? = nil, group_ids: [String]? = nil, home_folder_id: String? = nil, id: String? = nil, is_disabled: Bool? = nil, last_name: String? = nil, locale: String? = nil, looker_versions: [String]? = nil, models_dir_validated: Bool? = nil, personal_folder_id: String? = nil, presumed_looker_employee: Bool? = nil, role_ids: [String]? = nil, sessions: [Session]? = nil, ui_state: StringDictionary<AnyCodable>? = nil, verified_looker_employee: Bool? = nil, roles_externally_managed: Bool? = nil, allow_direct_roles: Bool? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, embed_group_folder_id: String? = nil, is_iam_admin: Bool? = nil, url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, avatar_url: String? = nil, avatar_url_without_sizing: String? = nil, credentials_api3: [CredentialsApi3]? = nil, credentials_email: CredentialsEmail? = nil, credentials_embed: [CredentialsEmbed]? = nil, credentials_google: CredentialsGoogle? = nil, credentials_ldap: CredentialsLDAP? = nil, credentials_looker_openid: CredentialsLookerOpenid? = nil, credentials_oidc: CredentialsOIDC? = nil, credentials_saml: CredentialsSaml? = nil, credentials_totp: CredentialsTotp? = nil, display_name: String? = nil, email: String? = nil, embed_group_space_id: String? = nil, first_name: String? = nil, group_ids: [String]? = nil, home_folder_id: String? = nil, id: String? = nil, is_disabled: Bool? = nil, last_name: String? = nil, locale: String? = nil, looker_versions: [String]? = nil, models_dir_validated: Bool? = nil, personal_folder_id: String? = nil, presumed_looker_employee: Bool? = nil, role_ids: [String]? = nil, sessions: [Session]? = nil, ui_state: StringDictionary<AnyCodable>? = nil, verified_looker_employee: Bool? = nil, roles_externally_managed: Bool? = nil, allow_direct_roles: Bool? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, embed_group_folder_id: String? = nil, is_iam_admin: Bool? = nil, can_manage_api3_creds: Bool? = nil, url: String? = nil) {
         self.can = can
         self._avatar_url = avatar_url.map(AnyString.init)
         self._avatar_url_without_sizing = avatar_url_without_sizing.map(AnyString.init)
@@ -24768,6 +24825,7 @@ public struct User: SDKModel {
         self.allow_roles_from_normal_groups = allow_roles_from_normal_groups
         self._embed_group_folder_id = embed_group_folder_id.map(AnyString.init)
         self.is_iam_admin = is_iam_admin
+        self.can_manage_api3_creds = can_manage_api3_creds
         self._url = url.map(AnyString.init)
     }
 
@@ -26318,7 +26376,7 @@ public struct WriteContentFavorite: SDKModel {
 
 /**
  * Dynamic writeable type for ContentMeta removes:
- * can, id, name, parent_id, dashboard_id, look_id, folder_id, content_type, inheriting_id, slug
+ * can, id, name, parent_id, dashboard_id, look_id, folder_id, homepage_id, agent_id, content_type, inheriting_id, slug
  */
 public struct WriteContentMeta: SDKModel {
     /**
@@ -26551,6 +26609,30 @@ public struct WriteCreateQueryTask: SDKModel {
 
     public init(_ query_id: String, _ result_format: ResultFormat, source: String? = nil, deferred: Bool? = nil, look_id: String? = nil, dashboard_id: String? = nil) {
         self.init(query_id: query_id, result_format: result_format, source: source, deferred: deferred, look_id: look_id, dashboard_id: dashboard_id)
+    }
+
+}
+
+/**
+ * Dynamic writeable type for CredentialsApi3 removes:
+ * can, id, client_id, created_at, is_disabled, type, url
+ */
+public struct WriteCredentialsApi3: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _purpose = "purpose"
+    }
+    private var _purpose: AnyString?
+    /**
+     * User defined purpose for this credential.
+     */
+    public var purpose: String? {
+        get { _purpose?.value }
+        set { _purpose = newValue.map(AnyString.init) }
+    }
+
+    public init(purpose: String? = nil) {
+        self._purpose = purpose.map(AnyString.init)
     }
 
 }
@@ -27413,7 +27495,7 @@ public struct WriteDatagroup: SDKModel {
 
 /**
  * Dynamic writeable type for DBConnection removes:
- * can, dialect, snippets, pdts_enabled, named_driver_version_actual, uses_oauth, uses_instance_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, p4sa_name
+ * can, dialect, snippets, pdts_enabled, named_driver_version_actual, uses_oauth, uses_instance_oauth, uses_service_auth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, p4sa_name
  */
 public struct WriteDBConnection: SDKModel {
 
@@ -31205,6 +31287,7 @@ public struct WriteUser: SDKModel {
         case _locale = "locale"
         case models_dir_validated
         case ui_state
+        case can_manage_api3_creds
     }
     /**
      * Dynamic writeable type for CredentialsEmail removes:
@@ -31263,7 +31346,12 @@ public struct WriteUser: SDKModel {
      */
     public var ui_state: StringDictionary<AnyCodable>?
 
-    public init(credentials_email: WriteCredentialsEmail? = nil, first_name: String? = nil, home_folder_id: String? = nil, is_disabled: Bool? = nil, last_name: String? = nil, locale: String? = nil, models_dir_validated: Bool? = nil, ui_state: StringDictionary<AnyCodable>? = nil) {
+    /**
+     * Indicates if the user can manage API3 credentials
+     */
+    public var can_manage_api3_creds: Bool?
+
+    public init(credentials_email: WriteCredentialsEmail? = nil, first_name: String? = nil, home_folder_id: String? = nil, is_disabled: Bool? = nil, last_name: String? = nil, locale: String? = nil, models_dir_validated: Bool? = nil, ui_state: StringDictionary<AnyCodable>? = nil, can_manage_api3_creds: Bool? = nil) {
         self.credentials_email = credentials_email
         self._first_name = first_name.map(AnyString.init)
         self._home_folder_id = home_folder_id.map(AnyString.init)
@@ -31272,6 +31360,7 @@ public struct WriteUser: SDKModel {
         self._locale = locale.map(AnyString.init)
         self.models_dir_validated = models_dir_validated
         self.ui_state = ui_state
+        self.can_manage_api3_creds = can_manage_api3_creds
     }
 
 }

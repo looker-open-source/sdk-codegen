@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 373 API models: 287 Spec, 0 Request, 62 Write, 24 Enum
+/// 374 API models: 287 Spec, 0 Request, 63 Write, 24 Enum
 
 #nullable enable
 using System;
@@ -686,6 +686,10 @@ public class ContentMeta : SdkModel
   public string? look_id { get; set; } = null;
   /// <summary>Id of associated folder when content_type is "space" (read-only)</summary>
   public string? folder_id { get; set; } = null;
+  /// <summary>Id of associated board when content_type is "board" (read-only)</summary>
+  public string? homepage_id { get; set; } = null;
+  /// <summary>Id of associated agent when content_type is "agent" (read-only)</summary>
+  public string? agent_id { get; set; } = null;
   /// <summary>Content Type ("dashboard", "look", or "folder") (read-only)</summary>
   public string? content_type { get; set; } = null;
   /// <summary>Whether content inherits its access levels from parent</summary>
@@ -1117,6 +1121,8 @@ public class CreateCredentialsApi3 : SdkModel
   public bool? is_disabled { get; set; } = null;
   /// <summary>Short name for the type of this kind of credential (read-only)</summary>
   public string? type { get; set; } = null;
+  /// <summary>User defined purpose for this credential.</summary>
+  public string? purpose { get; set; } = null;
   /// <summary>API key client_secret (read-only)</summary>
   public string? client_secret { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
@@ -1229,6 +1235,8 @@ public class CredentialsApi3 : SdkModel
   public bool? is_disabled { get; set; } = null;
   /// <summary>Short name for the type of this kind of credential (read-only)</summary>
   public string? type { get; set; } = null;
+  /// <summary>User defined purpose for this credential.</summary>
+  public string? purpose { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
   public string? url { get; set; } = null;
 }
@@ -1891,6 +1899,8 @@ public class DBConnection : SdkModel
   public bool? uses_key_pair_auth { get; set; } = null;
   /// <summary>Whether the integration uses the oauth instance account. (read-only)</summary>
   public bool? uses_instance_oauth { get; set; } = null;
+  /// <summary>Whether the connection uses service authentication certificate. (read-only)</summary>
+  public bool? uses_service_auth { get; set; } = null;
   /// <summary>(Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).</summary>
   public string? certificate { get; set; } = null;
   /// <summary>(Write-Only) Certificate keyfile type - .json, .p8 or .p12</summary>
@@ -6010,8 +6020,10 @@ public class User : SdkModel
   public bool? allow_roles_from_normal_groups { get; set; } = null;
   /// <summary>(Embed only) ID of user's group folder based on the external_group_id optionally specified during embed user login (read-only)</summary>
   public string? embed_group_folder_id { get; set; } = null;
-  /// <summary>User is an IAM Admin - only available in Looker (Google Cloud core) (read-only)</summary>
+  /// <summary>User is an IAM Admin - only available in Looker (Google Cloud core). The is_iam_admin is not returned by default. Please explicitly request this attribute if needed via the fields query param. Note: Including the optional is_iam_admin attribute can increase API latency. For best performance, use this attribute only when filtering for users with the 'Admin via IAM' role. When using this filter, always paginate your results with the offset and limit fields to optimize response time. (read-only)</summary>
   public bool? is_iam_admin { get; set; } = null;
+  /// <summary>Indicates if the user can manage API3 credentials</summary>
+  public bool? can_manage_api3_creds { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
   public string? url { get; set; } = null;
 }
@@ -6428,7 +6440,7 @@ public class WriteContentFavorite : SdkModel
 }
 
 /// Dynamic writeable type for ContentMeta removes:
-/// can, id, name, parent_id, dashboard_id, look_id, folder_id, content_type, inheriting_id, slug
+/// can, id, name, parent_id, dashboard_id, look_id, folder_id, homepage_id, agent_id, content_type, inheriting_id, slug
 public class WriteContentMeta : SdkModel
 {
   /// <summary>Whether content inherits its access levels from parent</summary>
@@ -6484,6 +6496,14 @@ public class WriteCreateQueryTask : SdkModel
   public string? look_id { get; set; } = null;
   /// <summary>Id of dashboard associated with query.</summary>
   public string? dashboard_id { get; set; } = null;
+}
+
+/// Dynamic writeable type for CredentialsApi3 removes:
+/// can, id, client_id, created_at, is_disabled, type, url
+public class WriteCredentialsApi3 : SdkModel
+{
+  /// <summary>User defined purpose for this credential.</summary>
+  public string? purpose { get; set; } = null;
 }
 
 /// Dynamic writeable type for CredentialsEmail removes:
@@ -6705,7 +6725,7 @@ public class WriteDatagroup : SdkModel
 }
 
 /// Dynamic writeable type for DBConnection removes:
-/// can, dialect, snippets, pdts_enabled, named_driver_version_actual, uses_oauth, uses_instance_oauth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, p4sa_name
+/// can, dialect, snippets, pdts_enabled, named_driver_version_actual, uses_oauth, uses_instance_oauth, uses_service_auth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, p4sa_name
 public class WriteDBConnection : SdkModel
 {
   /// <summary>Name of the connection. Also used as the unique identifier</summary>
@@ -7673,6 +7693,8 @@ public class WriteUser : SdkModel
   public bool? models_dir_validated { get; set; } = null;
   /// <summary>Per user dictionary of undocumented state information owned by the Looker UI.</summary>
   public StringDictionary<string>? ui_state { get; set; } = null;
+  /// <summary>Indicates if the user can manage API3 credentials</summary>
+  public bool? can_manage_api3_creds { get; set; } = null;
 }
 
 /// Dynamic writeable type for UserAttribute removes:
