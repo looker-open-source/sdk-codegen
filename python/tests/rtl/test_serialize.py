@@ -558,7 +558,7 @@ def test_deserialize_list():
     models = sr.deserialize(
         data=json.dumps(data), structure=Sequence[Model], converter=converter
     )
-    assert models == [
+    assert models == (
         Model(
             enum1=Enum1.entry1,
             model_no_refs1=ModelNoRefs1(name1="model_no_refs1_name"),
@@ -575,7 +575,7 @@ def test_deserialize_list():
             class_="model-name",
             finally_=(1, 2, 3),
         ),
-    ]
+    )
 
 
 def test_deserialize_partial():
