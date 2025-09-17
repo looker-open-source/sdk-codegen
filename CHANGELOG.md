@@ -1,5 +1,19 @@
 # Changelog
 
+## [25.16.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v25.10.0...sdk-codegen-all-v25.16.0) (2025-09-17)
+
+
+### Features
+
+* generate SDKs for Looker 25.14 ([#1600](https://github.com/looker-open-source/sdk-codegen/issues/1600)) ([feff16e](https://github.com/looker-open-source/sdk-codegen/commit/feff16eca79224737f991fc903790473f163c28c))
+* generate SDKs for Looker 25.16 ([#1605](https://github.com/looker-open-source/sdk-codegen/issues/1605)) ([5792b41](https://github.com/looker-open-source/sdk-codegen/commit/5792b41311b75e1841561e53e13362f8f473bf3c))
+* **go:** Expose session object in Go SDK ([#1602](https://github.com/looker-open-source/sdk-codegen/issues/1602)) ([6afa715](https://github.com/looker-open-source/sdk-codegen/commit/6afa7158d6786994b7f2592e634c95f2723c7f8a))
+
+
+### Bug Fixes
+
+* fixed bug in go example ([#1595](https://github.com/looker-open-source/sdk-codegen/issues/1595)) ([6e45409](https://github.com/looker-open-source/sdk-codegen/commit/6e454098089a27053f4b26d376fdff8716de6929))
+
 ## [25.10.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v25.8.0...sdk-codegen-all-v25.10.0) (2025-06-20)
 
 
