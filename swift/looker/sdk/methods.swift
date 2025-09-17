@@ -3598,23 +3598,23 @@ open class LookerSDK: APIMethods {
          */
         id: String? = nil,
         /**
-         * @param {String} user_id Match user id(s).To create a list of multiple ids, use commas as separators
+         * @param {String} user_id Match user id(s). To create a list of multiple ids, use commas as separators
          */
         user_id: String? = nil,
         /**
-         * @param {String} content_metadata_id Match content metadata id(s).To create a list of multiple ids, use commas as separators
+         * @param {String} content_metadata_id Match content metadata id(s). To create a list of multiple ids, use commas as separators
          */
         content_metadata_id: String? = nil,
         /**
-         * @param {String} dashboard_id Match dashboard id(s).To create a list of multiple ids, use commas as separators
+         * @param {String} dashboard_id Match dashboard id(s). To create a list of multiple ids, use commas as separators
          */
         dashboard_id: String? = nil,
         /**
-         * @param {String} look_id Match look id(s).To create a list of multiple ids, use commas as separators
+         * @param {String} look_id Match look id(s). To create a list of multiple ids, use commas as separators
          */
         look_id: String? = nil,
         /**
-         * @param {String} board_id Match board id(s).To create a list of multiple ids, use commas as separators
+         * @param {String} board_id Match board id(s). To create a list of multiple ids, use commas as separators
          */
         board_id: String? = nil,
         /**
@@ -7312,7 +7312,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Fetches a CI Run.
      *
-     * GET /projects/{project_id}/ci/runs/{run_id} -> ProjectCIRun
+     * GET /projects/{project_id}/ci/runs/{run_id} -> ProjectRun
      */
     public func get_ci_run(
         /**
@@ -7328,10 +7328,10 @@ open class LookerSDK: APIMethods {
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<ProjectCIRun, SDKError> {
+    ) -> SDKResponse<ProjectRun, SDKError> {
         let path_project_id = encodeParam(project_id)
         let path_run_id = encodeParam(run_id)
-        let result: SDKResponse<ProjectCIRun, SDKError> = self.get("/projects/\(path_project_id)/ci/runs/\(path_run_id)", 
+        let result: SDKResponse<ProjectRun, SDKError> = self.get("/projects/\(path_project_id)/ci/runs/\(path_run_id)", 
             ["fields": fields], nil, options)
         return result
     }

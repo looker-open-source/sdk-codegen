@@ -4102,15 +4102,15 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Match content favorite id(s)
         id: Optional[str] = None,
-        # Match user id(s).To create a list of multiple ids, use commas as separators
+        # Match user id(s). To create a list of multiple ids, use commas as separators
         user_id: Optional[str] = None,
-        # Match content metadata id(s).To create a list of multiple ids, use commas as separators
+        # Match content metadata id(s). To create a list of multiple ids, use commas as separators
         content_metadata_id: Optional[str] = None,
-        # Match dashboard id(s).To create a list of multiple ids, use commas as separators
+        # Match dashboard id(s). To create a list of multiple ids, use commas as separators
         dashboard_id: Optional[str] = None,
-        # Match look id(s).To create a list of multiple ids, use commas as separators
+        # Match look id(s). To create a list of multiple ids, use commas as separators
         look_id: Optional[str] = None,
-        # Match board id(s).To create a list of multiple ids, use commas as separators
+        # Match board id(s). To create a list of multiple ids, use commas as separators
         board_id: Optional[str] = None,
         # If true, and board_id is provided, returns the content favorites for all items on the board. If false, returns the content favorite for the board itself.
         include_board_items: Optional[bool] = None,
@@ -7991,7 +7991,7 @@ class Looker40SDK(api_methods.APIMethods):
 
     # ### Fetches a CI Run.
     #
-    # GET /projects/{project_id}/ci/runs/{run_id} -> mdls.ProjectCIRun
+    # GET /projects/{project_id}/ci/runs/{run_id} -> mdls.ProjectRun
     def get_ci_run(
         self,
         # Project Id
@@ -8001,15 +8001,15 @@ class Looker40SDK(api_methods.APIMethods):
         # Requested fields
         fields: Optional[str] = None,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> mdls.ProjectCIRun:
+    ) -> mdls.ProjectRun:
         """Fetch Continuous Integration run"""
         project_id = self.encode_path_param(project_id)
         run_id = self.encode_path_param(run_id)
         response = cast(
-            mdls.ProjectCIRun,
+            mdls.ProjectRun,
             self.get(
                 path=f"/projects/{project_id}/ci/runs/{run_id}",
-                structure=mdls.ProjectCIRun,
+                structure=mdls.ProjectRun,
                 query_params={"fields": fields},
                 transport_options=transport_options,
             ),

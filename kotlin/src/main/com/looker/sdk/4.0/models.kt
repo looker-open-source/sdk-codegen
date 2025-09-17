@@ -527,43 +527,6 @@ data class CIGitState(
 ) : Serializable
 
 /**
- * @property run_id ID of the CI run (read-only)
- * @property created_at Time and date that the CI run was initiated (read-only)
- * @property started_at Time and date that the CI run began executing (read-only)
- * @property finished_at Time and date that the CI run completed (read-only)
- * @property status_url Git provider URL where you can view the commit status. This is the status URL that you specify when you create a CI suite (read-only)
- * @property status Status of the CI run (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)
- * @property git_service Git service for CI run (e.g. GitHub) (read-only)
- * @property git_state
- * @property result
- * @property schedule
- * @property target_branch Git branch that the CI run compares against during validation, used for incremental runs (read-only)
- * @property title Name of the CI suite (read-only)
- * @property trigger Trigger for CI run (unknown, manual, schedule, change_request) (read-only)
- * @property change_request
- * @property suite_id ID of the CI suite (read-only)
- * @property username Username of the user who triggered the CI run, if the CI run was manually triggered (read-only)
- */
-data class CIRun(
-    var run_id: String? = null,
-    var created_at: Date? = null,
-    var started_at: Date? = null,
-    var finished_at: Date? = null,
-    var status_url: String? = null,
-    var status: String? = null,
-    var git_service: String? = null,
-    var git_state: CIGitState? = null,
-    var result: CIRunResult? = null,
-    var schedule: CIScheduleTrigger? = null,
-    var target_branch: String? = null,
-    var title: String? = null,
-    var trigger: String? = null,
-    var change_request: CIChangeRequest? = null,
-    var suite_id: String? = null,
-    var username: String? = null,
-) : Serializable
-
-/**
  * @property sql_result
  * @property sql_error
  * @property assert_result
@@ -696,6 +659,8 @@ data class ConnectionFeatures(
  * @property look
  * @property dashboard
  * @property board_id Id of a board (read-only)
+ * @property lookml_dashboard_id Id of a lookml dashboard (read-only)
+ * @property lookml_dashboard
  */
 data class ContentFavorite(
     var id: String? = null,
@@ -706,6 +671,8 @@ data class ContentFavorite(
     var look: LookBasic? = null,
     var dashboard: DashboardBase? = null,
     var board_id: String? = null,
+    var lookml_dashboard_id: String? = null,
+    var lookml_dashboard: DashboardBase? = null,
 ) : Serializable
 
 /**
@@ -4805,13 +4772,6 @@ data class Project(
 ) : Serializable
 
 /**
- * @property run
- */
-data class ProjectCIRun(
-    var run: CIRun? = null,
-) : Serializable
-
-/**
  * @property code A stable token that uniquely identifies this class of error, ignoring parameter values. Error message text may vary due to parameters or localization, but error codes do not. For example, a "File not found" error will have the same error code regardless of the filename in question or the user's display language (read-only)
  * @property severity Severity: fatal, error, warning, info, success (read-only)
  * @property kind Error classification: syntax, deprecation, model_configuration, etc (read-only)
@@ -4861,6 +4821,13 @@ data class ProjectFile(
     var mime_type: String? = null,
     var editable: Boolean? = null,
     var git_status: GitStatus? = null,
+) : Serializable
+
+/**
+ * @property run
+ */
+data class ProjectRun(
+    var run: Run? = null,
 ) : Serializable
 
 /**
@@ -5151,9 +5118,9 @@ enum class ResultFormat : Serializable {
 }
 
 /**
- * @property model The model this filterable comes from (used for field suggestions). (read-only)
- * @property view The view this filterable comes from (used for field suggestions). (read-only)
- * @property name The name of the filterable thing (Query or Merged Results). (read-only)
+ * @property model The model this filterable comes from (used for field suggestions).
+ * @property view The view this filterable comes from (used for field suggestions).
+ * @property name The name of the filterable thing (Query or Merged Results).
  * @property listen array of dashboard_filter_name: and field: objects. (read-only)
  */
 data class ResultMakerFilterables(
@@ -5174,15 +5141,15 @@ data class ResultMakerFilterablesListen(
 
 /**
  * @property id Unique Id. (read-only)
- * @property dynamic_fields JSON string of dynamic field information. (read-only)
- * @property filterables array of items that can be filtered and information about them. (read-only)
- * @property sorts Sorts of the constituent Look, Query, or Merge Query (read-only)
- * @property merge_result_id ID of merge result if this is a merge_result. (read-only)
- * @property total Total of the constituent Look, Query, or Merge Query (read-only)
+ * @property dynamic_fields JSON string of dynamic field information.
+ * @property filterables array of items that can be filtered and information about them.
+ * @property sorts Sorts of the constituent Look, Query, or Merge Query
+ * @property merge_result_id ID of merge result if this is a merge_result.
+ * @property total Total of the constituent Look, Query, or Merge Query
  * @property query_id ID of query if this is a query. (read-only)
- * @property sql_query_id ID of SQL Query if this is a SQL Runner Query (read-only)
+ * @property sql_query_id ID of SQL Query if this is a SQL Runner Query
  * @property query
- * @property vis_config Vis config of the constituent Query, or Merge Query. (read-only)
+ * @property vis_config Vis config of the constituent Query, or Merge Query.
  */
 data class ResultMakerWithIdVisConfigAndDynamicFields(
     var id: String? = null,
@@ -5243,6 +5210,43 @@ data class RoleSearch(
     var user_count: Long? = null,
     var url: String? = null,
     var users_url: String? = null,
+) : Serializable
+
+/**
+ * @property run_id ID of the CI run (read-only)
+ * @property created_at Time and date that the CI run was initiated (read-only)
+ * @property started_at Time and date that the CI run began executing (read-only)
+ * @property finished_at Time and date that the CI run completed (read-only)
+ * @property status_url Git provider URL where you can view the commit status. This is the status URL that you specify when you create a CI suite (read-only)
+ * @property status Status of the CI run (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)
+ * @property git_service Git service for CI run (e.g. GitHub) (read-only)
+ * @property git_state
+ * @property result
+ * @property schedule
+ * @property target_branch Git branch that the CI run compares against during validation, used for incremental runs (read-only)
+ * @property title Name of the CI suite (read-only)
+ * @property trigger Trigger for CI run (unknown, manual, schedule, change_request) (read-only)
+ * @property change_request
+ * @property suite_id ID of the CI suite (read-only)
+ * @property username Username of the user who triggered the CI run, if the CI run was manually triggered (read-only)
+ */
+data class Run(
+    var run_id: String? = null,
+    var created_at: Date? = null,
+    var started_at: Date? = null,
+    var finished_at: Date? = null,
+    var status_url: String? = null,
+    var status: String? = null,
+    var git_service: String? = null,
+    var git_state: CIGitState? = null,
+    var result: CIRunResult? = null,
+    var schedule: CIScheduleTrigger? = null,
+    var target_branch: String? = null,
+    var title: String? = null,
+    var trigger: String? = null,
+    var change_request: CIChangeRequest? = null,
+    var suite_id: String? = null,
+    var username: String? = null,
 ) : Serializable
 
 /**
@@ -6726,7 +6730,7 @@ data class WriteColorCollection(
 
 /**
  * Dynamic writeable type for ContentFavorite removes:
- * id, look_id, dashboard_id, board_id
+ * id, look_id, dashboard_id, board_id, lookml_dashboard_id
  *
  * @property user_id User Id which owns this ContentFavorite
  * @property content_metadata_id Content Metadata Id associated with this ContentFavorite
@@ -6734,12 +6738,15 @@ data class WriteColorCollection(
  * can, content_metadata_id, id, title
  * @property dashboard Dynamic writeable type for DashboardBase removes:
  * can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
+ * @property lookml_dashboard Dynamic writeable type for DashboardBase removes:
+ * can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
  */
 data class WriteContentFavorite(
     var user_id: String? = null,
     var content_metadata_id: String? = null,
     var look: WriteLookBasic? = null,
     var dashboard: WriteDashboardBase? = null,
+    var lookml_dashboard: WriteDashboardBase? = null,
 ) : Serializable
 
 /**
@@ -6916,7 +6923,7 @@ data class WriteDashboardBase(
  * @property query_id Id Of Query
  * @property refresh_interval Refresh Interval
  * @property result_maker Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
- * id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
+ * id, query_id
  * @property result_maker_id ID of the ResultMakerLookup entry.
  * @property subtitle_text Text tile subtitle text
  * @property title Title of dashboard element
@@ -7770,13 +7777,27 @@ data class WriteRepositoryCredential(
 
 /**
  * Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
- * id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
+ * id, query_id
  *
+ * @property dynamic_fields JSON string of dynamic field information.
+ * @property filterables array of items that can be filtered and information about them.
+ * @property sorts Sorts of the constituent Look, Query, or Merge Query
+ * @property merge_result_id ID of merge result if this is a merge_result.
+ * @property total Total of the constituent Look, Query, or Merge Query
+ * @property sql_query_id ID of SQL Query if this is a SQL Runner Query
  * @property query Dynamic writeable type for Query removes:
  * can, id, slug, share_url, expanded_share_url, url, has_table_calculations
+ * @property vis_config Vis config of the constituent Query, or Merge Query.
  */
 data class WriteResultMakerWithIdVisConfigAndDynamicFields(
+    var dynamic_fields: String? = null,
+    var filterables: Array<ResultMakerFilterables>? = null,
+    var sorts: Array<String>? = null,
+    var merge_result_id: String? = null,
+    var total: Boolean? = null,
+    var sql_query_id: String? = null,
     var query: WriteQuery? = null,
+    var vis_config: Map<String, Any>? = null,
 ) : Serializable
 
 /**

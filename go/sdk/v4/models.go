@@ -299,25 +299,6 @@ type CIGitState struct {
 	Target     *string `json:"target,omitempty"`     // For incremental runs, the Git branch that the CI run compares against during validation
 }
 
-type CIRun struct {
-	RunId         *string            `json:"run_id,omitempty"`      // ID of the CI run
-	CreatedAt     *time.Time         `json:"created_at,omitempty"`  // Time and date that the CI run was initiated
-	StartedAt     *time.Time         `json:"started_at,omitempty"`  // Time and date that the CI run began executing
-	FinishedAt    *time.Time         `json:"finished_at,omitempty"` // Time and date that the CI run completed
-	StatusUrl     *string            `json:"status_url,omitempty"`  // Git provider URL where you can view the commit status. This is the status URL that you specify when you create a CI suite
-	Status        *string            `json:"status,omitempty"`      // Status of the CI run (unknown, failed, passed, skipped, errored, cancelled, queued, running)
-	GitService    *string            `json:"git_service,omitempty"` // Git service for CI run (e.g. GitHub)
-	GitState      *CIGitState        `json:"git_state,omitempty"`
-	Result        *CIRunResult       `json:"result,omitempty"`
-	Schedule      *CIScheduleTrigger `json:"schedule,omitempty"`
-	TargetBranch  *string            `json:"target_branch,omitempty"` // Git branch that the CI run compares against during validation, used for incremental runs
-	Title         *string            `json:"title,omitempty"`         // Name of the CI suite
-	Trigger       *string            `json:"trigger,omitempty"`       // Trigger for CI run (unknown, manual, schedule, change_request)
-	ChangeRequest *CIChangeRequest   `json:"change_request,omitempty"`
-	SuiteId       *string            `json:"suite_id,omitempty"` // ID of the CI suite
-	Username      *string            `json:"username,omitempty"` // Username of the user who triggered the CI run, if the CI run was manually triggered
-}
-
 type CIRunResult struct {
 	SqlResult     *SqlValidatorResult     `json:"sql_result,omitempty"`
 	SqlError      *GenericError           `json:"sql_error,omitempty"`
@@ -395,7 +376,9 @@ type ContentFavorite struct {
 	DashboardId       *string        `json:"dashboard_id,omitempty"`        // Id of a dashboard
 	Look              *LookBasic     `json:"look,omitempty"`
 	Dashboard         *DashboardBase `json:"dashboard,omitempty"`
-	BoardId           *string        `json:"board_id,omitempty"` // Id of a board
+	BoardId           *string        `json:"board_id,omitempty"`            // Id of a board
+	LookmlDashboardId *string        `json:"lookml_dashboard_id,omitempty"` // Id of a lookml dashboard
+	LookmlDashboard   *DashboardBase `json:"lookml_dashboard,omitempty"`
 }
 
 type ContentMeta struct {
@@ -2555,10 +2538,6 @@ type Project struct {
 	DependencyStatus               *string          `json:"dependency_status,omitempty"`                  // Status of dependencies in your manifest & lockfile
 }
 
-type ProjectCIRun struct {
-	Run *CIRun `json:"run,omitempty"`
-}
-
 type ProjectError struct {
 	Code             *string                 `json:"code,omitempty"`              // A stable token that uniquely identifies this class of error, ignoring parameter values. Error message text may vary due to parameters or localization, but error codes do not. For example, a "File not found" error will have the same error code regardless of the filename in question or the user's display language
 	Severity         *string                 `json:"severity,omitempty"`          // Severity: fatal, error, warning, info, success
@@ -2584,6 +2563,10 @@ type ProjectFile struct {
 	MimeType  *string          `json:"mime_type,omitempty"` // File mime type
 	Editable  *bool            `json:"editable,omitempty"`  // State of editability for the file.
 	GitStatus *GitStatus       `json:"git_status,omitempty"`
+}
+
+type ProjectRun struct {
+	Run *Run `json:"run,omitempty"`
 }
 
 type ProjectValidation struct {
@@ -3181,11 +3164,11 @@ type RequestSearchContent struct {
 // Dynamically generated request type for search_content_favorites
 type RequestSearchContentFavorites struct {
 	Id                *string `json:"id,omitempty"`                  // Match content favorite id(s)
-	UserId            *string `json:"user_id,omitempty"`             // Match user id(s).To create a list of multiple ids, use commas as separators
-	ContentMetadataId *string `json:"content_metadata_id,omitempty"` // Match content metadata id(s).To create a list of multiple ids, use commas as separators
-	DashboardId       *string `json:"dashboard_id,omitempty"`        // Match dashboard id(s).To create a list of multiple ids, use commas as separators
-	LookId            *string `json:"look_id,omitempty"`             // Match look id(s).To create a list of multiple ids, use commas as separators
-	BoardId           *string `json:"board_id,omitempty"`            // Match board id(s).To create a list of multiple ids, use commas as separators
+	UserId            *string `json:"user_id,omitempty"`             // Match user id(s). To create a list of multiple ids, use commas as separators
+	ContentMetadataId *string `json:"content_metadata_id,omitempty"` // Match content metadata id(s). To create a list of multiple ids, use commas as separators
+	DashboardId       *string `json:"dashboard_id,omitempty"`        // Match dashboard id(s). To create a list of multiple ids, use commas as separators
+	LookId            *string `json:"look_id,omitempty"`             // Match look id(s). To create a list of multiple ids, use commas as separators
+	BoardId           *string `json:"board_id,omitempty"`            // Match board id(s). To create a list of multiple ids, use commas as separators
 	IncludeBoardItems *bool   `json:"include_board_items,omitempty"` // If true, and board_id is provided, returns the content favorites for all items on the board. If false, returns the content favorite for the board itself.
 	Limit             *int64  `json:"limit,omitempty"`               // Number of results to return. (used with offset)
 	Offset            *int64  `json:"offset,omitempty"`              // Number of results to skip before returning any. (used with limit)
@@ -3595,6 +3578,25 @@ type RoleSearch struct {
 	UserCount       *int64           `json:"user_count,omitempty"`   // Count of users with this role
 	Url             *string          `json:"url,omitempty"`          // Link to get this item
 	UsersUrl        *string          `json:"users_url,omitempty"`    // Link to get list of users with this role
+}
+
+type Run struct {
+	RunId         *string            `json:"run_id,omitempty"`      // ID of the CI run
+	CreatedAt     *time.Time         `json:"created_at,omitempty"`  // Time and date that the CI run was initiated
+	StartedAt     *time.Time         `json:"started_at,omitempty"`  // Time and date that the CI run began executing
+	FinishedAt    *time.Time         `json:"finished_at,omitempty"` // Time and date that the CI run completed
+	StatusUrl     *string            `json:"status_url,omitempty"`  // Git provider URL where you can view the commit status. This is the status URL that you specify when you create a CI suite
+	Status        *string            `json:"status,omitempty"`      // Status of the CI run (unknown, failed, passed, skipped, errored, cancelled, queued, running)
+	GitService    *string            `json:"git_service,omitempty"` // Git service for CI run (e.g. GitHub)
+	GitState      *CIGitState        `json:"git_state,omitempty"`
+	Result        *CIRunResult       `json:"result,omitempty"`
+	Schedule      *CIScheduleTrigger `json:"schedule,omitempty"`
+	TargetBranch  *string            `json:"target_branch,omitempty"` // Git branch that the CI run compares against during validation, used for incremental runs
+	Title         *string            `json:"title,omitempty"`         // Name of the CI suite
+	Trigger       *string            `json:"trigger,omitempty"`       // Trigger for CI run (unknown, manual, schedule, change_request)
+	ChangeRequest *CIChangeRequest   `json:"change_request,omitempty"`
+	SuiteId       *string            `json:"suite_id,omitempty"` // ID of the CI suite
+	Username      *string            `json:"username,omitempty"` // Username of the user who triggered the CI run, if the CI run was manually triggered
 }
 
 type RunningQueries struct {
@@ -4394,13 +4396,15 @@ type WriteColorCollection struct {
 }
 
 // Dynamic writeable type for ContentFavorite removes:
-// id, look_id, dashboard_id, board_id
+// id, look_id, dashboard_id, board_id, lookml_dashboard_id
 type WriteContentFavorite struct {
 	UserId            *string         `json:"user_id,omitempty"`             // User Id which owns this ContentFavorite
 	ContentMetadataId *string         `json:"content_metadata_id,omitempty"` // Content Metadata Id associated with this ContentFavorite
 	Look              *WriteLookBasic `json:"look,omitempty"`                // Dynamic writeable type for LookBasic removes:
 	// can, content_metadata_id, id, title
 	Dashboard *WriteDashboardBase `json:"dashboard,omitempty"` // Dynamic writeable type for DashboardBase removes:
+	// can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
+	LookmlDashboard *WriteDashboardBase `json:"lookml_dashboard,omitempty"` // Dynamic writeable type for DashboardBase removes:
 	// can, content_favorite_id, content_metadata_id, description, hidden, id, model, query_timezone, readonly, refresh_interval, refresh_interval_to_i, title, user_id, slug, preferred_viewer
 }
 
@@ -4507,7 +4511,7 @@ type WriteDashboardElement struct {
 	QueryId         *string                                          `json:"query_id,omitempty"`         // Id Of Query
 	RefreshInterval *string                                          `json:"refresh_interval,omitempty"` // Refresh Interval
 	ResultMaker     *WriteResultMakerWithIdVisConfigAndDynamicFields `json:"result_maker,omitempty"`     // Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
-	// id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
+	// id, query_id
 	ResultMakerId   *string `json:"result_maker_id,omitempty"`   // ID of the ResultMakerLookup entry.
 	SubtitleText    *string `json:"subtitle_text,omitempty"`     // Text tile subtitle text
 	Title           *string `json:"title,omitempty"`             // Title of dashboard element
@@ -4963,10 +4967,17 @@ type WriteRepositoryCredential struct {
 }
 
 // Dynamic writeable type for ResultMakerWithIdVisConfigAndDynamicFields removes:
-// id, dynamic_fields, filterables, sorts, merge_result_id, total, query_id, sql_query_id, vis_config
+// id, query_id
 type WriteResultMakerWithIdVisConfigAndDynamicFields struct {
-	Query *WriteQuery `json:"query,omitempty"` // Dynamic writeable type for Query removes:
+	DynamicFields *string                   `json:"dynamic_fields,omitempty"`  // JSON string of dynamic field information.
+	Filterables   *[]ResultMakerFilterables `json:"filterables,omitempty"`     // array of items that can be filtered and information about them.
+	Sorts         *[]string                 `json:"sorts,omitempty"`           // Sorts of the constituent Look, Query, or Merge Query
+	MergeResultId *string                   `json:"merge_result_id,omitempty"` // ID of merge result if this is a merge_result.
+	Total         *bool                     `json:"total,omitempty"`           // Total of the constituent Look, Query, or Merge Query
+	SqlQueryId    *string                   `json:"sql_query_id,omitempty"`    // ID of SQL Query if this is a SQL Runner Query
+	Query         *WriteQuery               `json:"query,omitempty"`           // Dynamic writeable type for Query removes:
 	// can, id, slug, share_url, expanded_share_url, url, has_table_calculations
+	VisConfig *map[string]interface{} `json:"vis_config,omitempty"` // Vis config of the constituent Query, or Merge Query.
 }
 
 // Dynamic writeable type for Role removes:

@@ -3144,11 +3144,11 @@ namespace Looker.SDK.API40
   /// <returns><c>ContentFavorite[]</c> Favorite Content (application/json)</returns>
   ///
   /// <param name="id">Match content favorite id(s)</param>
-  /// <param name="user_id">Match user id(s).To create a list of multiple ids, use commas as separators</param>
-  /// <param name="content_metadata_id">Match content metadata id(s).To create a list of multiple ids, use commas as separators</param>
-  /// <param name="dashboard_id">Match dashboard id(s).To create a list of multiple ids, use commas as separators</param>
-  /// <param name="look_id">Match look id(s).To create a list of multiple ids, use commas as separators</param>
-  /// <param name="board_id">Match board id(s).To create a list of multiple ids, use commas as separators</param>
+  /// <param name="user_id">Match user id(s). To create a list of multiple ids, use commas as separators</param>
+  /// <param name="content_metadata_id">Match content metadata id(s). To create a list of multiple ids, use commas as separators</param>
+  /// <param name="dashboard_id">Match dashboard id(s). To create a list of multiple ids, use commas as separators</param>
+  /// <param name="look_id">Match look id(s). To create a list of multiple ids, use commas as separators</param>
+  /// <param name="board_id">Match board id(s). To create a list of multiple ids, use commas as separators</param>
   /// <param name="include_board_items">If true, and board_id is provided, returns the content favorites for all items on the board. If false, returns the content favorite for the board itself.</param>
   /// <param name="limit">Number of results to return. (used with offset)</param>
   /// <param name="offset">Number of results to skip before returning any. (used with limit)</param>
@@ -6218,14 +6218,14 @@ namespace Looker.SDK.API40
 
   /// ### Fetches a CI Run.
   ///
-  /// GET /projects/{project_id}/ci/runs/{run_id} -> ProjectCIRun
+  /// GET /projects/{project_id}/ci/runs/{run_id} -> ProjectRun
   ///
-  /// <returns><c>ProjectCIRun</c> CI Run (application/json)</returns>
+  /// <returns><c>ProjectRun</c> CI Run (application/json)</returns>
   ///
   /// <param name="project_id">Project Id</param>
   /// <param name="run_id">Run Id</param>
   /// <param name="fields">Requested fields</param>
-  public async Task<SdkResponse<ProjectCIRun, Exception>> get_ci_run(
+  public async Task<SdkResponse<ProjectRun, Exception>> get_ci_run(
     string project_id,
     string run_id,
     string? fields = null,
@@ -6233,7 +6233,7 @@ namespace Looker.SDK.API40
 {  
       project_id = SdkUtils.EncodeParam(project_id);
       run_id = SdkUtils.EncodeParam(run_id);
-    return await AuthRequest<ProjectCIRun, Exception>(HttpMethod.Get, $"/projects/{project_id}/ci/runs/{run_id}", new Values {
+    return await AuthRequest<ProjectRun, Exception>(HttpMethod.Get, $"/projects/{project_id}/ci/runs/{run_id}", new Values {
       { "fields", fields }},null,options);
   }
 

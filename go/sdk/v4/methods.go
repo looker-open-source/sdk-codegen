@@ -4749,15 +4749,15 @@ func (l *LookerSDK) ConnectionCostEstimate(
 
 // ### Fetches a CI Run.
 //
-// GET /projects/{project_id}/ci/runs/{run_id} -> ProjectCIRun
+// GET /projects/{project_id}/ci/runs/{run_id} -> ProjectRun
 func (l *LookerSDK) GetCiRun(
 	projectId string,
 	runId string,
 	fields string,
-	options *rtl.ApiSettings) (ProjectCIRun, error) {
+	options *rtl.ApiSettings) (ProjectRun, error) {
 	projectId = url.PathEscape(projectId)
 	runId = url.PathEscape(runId)
-	var result ProjectCIRun
+	var result ProjectRun
 	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/projects/%v/ci/runs/%v", projectId, runId), map[string]interface{}{"fields": fields}, nil, options)
 	return result, err
 
