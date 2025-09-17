@@ -71,6 +71,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * devDependencies
     * @looker/sdk-codegen-utils bumped from 21.0.23 to 21.0.24
 
+## [21.10.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.9.13...sdk-codegen-v21.10.0) (2025-09-17)
+
+
+### Features
+
+* **go:** Expose session object in Go SDK ([#1602](https://github.com/looker-open-source/sdk-codegen/issues/1602)) ([6afa715](https://github.com/looker-open-source/sdk-codegen/commit/6afa7158d6786994b7f2592e634c95f2723c7f8a))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen-utils bumped from 21.0.24 to 21.0.25
+
 ## [21.9.10](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.9.9...sdk-codegen-v21.9.10) (2025-03-11)
 
 
