@@ -67,8 +67,13 @@ func NewAuthSessionWithTransport(config ApiSettings, transport http.RoundTripper
 		AuthStyle:    oauth2.AuthStyleInParams,
 	}
 
+	bgCtx := context.Background()
+	if config.Context != nil {
+		bgCtx = config.Context
+	}
+
 	ctx := context.WithValue(
-		context.Background(),
+		bgCtx,
 		oauth2.HTTPClient,
 		// Will set "x-looker-appid" Header on TokenURL requests
 		&http.Client{Transport: appIdHeaderTransport},
@@ -123,8 +128,16 @@ func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars m
 		}
 	}
 
-	// create request context with timeout
-	var timeoutInSeconds int32 = 120 //seconds
+	parent := context.Background()
+	if s.Config.Context != nil {
+		parent = s.Config.Context
+	}
+	if options != nil && options.Context != nil {
+		parent = options.Context
+	}
+
+	// create request context with timeout from options or else config or else 120 seconds
+	var timeoutInSeconds int32 = 120
 	if s.Config.Timeout != 0 {
 		timeoutInSeconds = s.Config.Timeout
 	}
@@ -132,7 +145,7 @@ func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars m
 		timeoutInSeconds = options.Timeout
 	}
 
-	ctx, cncl := context.WithTimeout(context.Background(), time.Second*time.Duration(timeoutInSeconds))
+	ctx, cncl := context.WithTimeout(parent, time.Second*time.Duration(timeoutInSeconds))
 	defer cncl()
 
 	// create new request
