@@ -25,7 +25,7 @@
  */
 
 /**
- * 472 API methods
+ * 476 API methods
  */
 
 
@@ -387,7 +387,10 @@ open class LookerSDKStream: APIMethods {
      *
      * See 'login' for more detail on the access token and how to use it.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * In [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview) this call will be denied unless all of the following criteria are met:
+     *   1. The calling user is an [API-only Service Account](https://cloud.google.com/looker/docs/looker-core-user-management#creating_an_api-only_service_account) with the Admin role
+     *   2. The target user is an [Embed User type](https://cloud.google.com/looker/docs/r/single-sign-on-embedding)
+     * Regular user types can not be impersonated in [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). If your application needs to call the API for these users, use OAuth authentication instead.
      *
      * POST /login/{user_id} -> AccessToken
      */
@@ -4491,6 +4494,76 @@ open class LookerSDKStream: APIMethods {
     }
 
     /**
+     * ### Search LookML Dashboards
+     *
+     * Returns an array of **LookML Dashboard** objects that match the specified search criteria.
+     * Note, this only returns LookML Dashboards in production.
+     *
+     * If multiple search params are given and `filter_or` is FALSE or not specified,
+     * search params are combined in a logical AND operation.
+     * Only rows that match *all* search param criteria will be returned.
+     *
+     * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+     * Results will include rows that match **any** of the search criteria.
+     *
+     * String search params use case-insensitive matching.
+     * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+     * example="dan%" will match "danger" and "Danzig" but not "David"
+     * example="D_m%" will match "Damage" and "dump"
+     *
+     * Integer search params can accept a single value or a comma separated list of values. The multiple
+     * values will be combined under a logical OR operation - results will match at least one of
+     * the given values.
+     *
+     * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+     * or exclude (respectively) rows where the column is null.
+     *
+     * Boolean search params accept only "true" and "false" as values.
+     *
+     *
+     * The parameters `limit`, and `offset` are recommended for fetching results in page-size chunks.
+     *
+     * Get a **single LookML dashboard** by id with [dashboard_lookml()](#!/Dashboard/dashboard_lookml)
+     *
+     * GET /dashboards/lookml/search -> DashboardLookml
+     */
+    public func search_lookml_dashboards(
+        /**
+         * @param {String} folder_id Filter on a particular folder.
+         */
+        folder_id: String? = nil,
+        /**
+         * @param {String} title Match LookML Dashboard title.
+         */
+        title: String? = nil,
+        /**
+         * @param {String} content_favorite_id Filter on a content favorite id.
+         */
+        content_favorite_id: String? = nil,
+        /**
+         * @param {String} fields Requested fields.
+         */
+        fields: String? = nil,
+        /**
+         * @param {Int64} limit Number of results to return. (used with offset and takes priority over page and per_page)
+         */
+        limit: Int64? = nil,
+        /**
+         * @param {Int64} offset Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
+         */
+        offset: Int64? = nil,
+        /**
+         * @param {String} sorts One or more fields to sort by. Sortable fields: [:title, :id, :folder_id, :content_favorite_id, :content_metadata_id]
+         */
+        sorts: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/dashboards/lookml/search", 
+            ["folder_id": folder_id, "title": title, "content_favorite_id": content_favorite_id, "fields": fields, "limit": limit, "offset": offset, "sorts": sorts], nil, options)
+        return result
+    }
+
+    /**
      * ### Get lookml of a UDD
      *
      * Returns a JSON object that contains the dashboard id and the full lookml
@@ -6324,6 +6397,28 @@ open class LookerSDKStream: APIMethods {
     ) -> SDKResponse<Data, SDKError> {
         let path_integration_hub_id = encodeParam(integration_hub_id)
         let result: SDKResponse<Data, SDKError> = self.delete("/integration_hubs/\(path_integration_hub_id)", nil, nil, options)
+        return result
+    }
+
+    /**
+     * Checks to see if the user is able to connect to their integration hub
+     *
+     * GET /integration_hubs/{integration_hub_id}/health -> IntegrationHubHealthResult
+     */
+    public func get_integration_hub_health(
+        /**
+         * @param {String} integration_hub_id Id of integration_hub
+         */
+        _ integration_hub_id: String,
+        /**
+         * @param {String} fields Requested fields.
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let path_integration_hub_id = encodeParam(integration_hub_id)
+        let result: SDKResponse<Data, SDKError> = self.get("/integration_hubs/\(path_integration_hub_id)/health", 
+            ["fields": fields], nil, options)
         return result
     }
 
@@ -9580,10 +9675,14 @@ open class LookerSDKStream: APIMethods {
          * @param {DelimArray<String>} ids Optional list of ids to get specific roles.
          */
         ids: DelimArray<String>? = nil,
+        /**
+         * @param {Bool} get_all_support_roles Get all Looker support roles.
+         */
+        get_all_support_roles: Bool? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let result: SDKResponse<Data, SDKError> = self.get("/roles", 
-            ["fields": fields, "ids": ids as Any?], nil, options)
+            ["fields": fields, "ids": ids as Any?, "get_all_support_roles": get_all_support_roles as Any?], nil, options)
         return result
     }
 
@@ -9664,14 +9763,10 @@ open class LookerSDKStream: APIMethods {
          * @param {Bool} filter_or Combine given search criteria in a boolean OR expression.
          */
         filter_or: Bool? = nil,
-        /**
-         * @param {Bool} is_support_role Search for Looker support roles.
-         */
-        is_support_role: Bool? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let result: SDKResponse<Data, SDKError> = self.get("/roles/search", 
-            ["fields": fields, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "name": name, "built_in": built_in as Any?, "filter_or": filter_or as Any?, "is_support_role": is_support_role as Any?], nil, options)
+            ["fields": fields, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "name": name, "built_in": built_in as Any?, "filter_or": filter_or as Any?], nil, options)
         return result
     }
 
@@ -11163,7 +11258,7 @@ open class LookerSDKStream: APIMethods {
          */
         last_name: String? = nil,
         /**
-         * @param {Bool} verified_looker_employee Search for user accounts associated with Looker employees
+         * @param {Bool} verified_looker_employee Search for user accounts associated with Looker employees. Availability of this filter is limited to users with permission to view complete user details.
          */
         verified_looker_employee: Bool? = nil,
         /**
@@ -11171,11 +11266,11 @@ open class LookerSDKStream: APIMethods {
          */
         embed_user: Bool? = nil,
         /**
-         * @param {String} email Search for the user with this email address
+         * @param {String} email Search for the user with this email address. Availability of this filter is limited to users with permission to view complete user details.
          */
         email: String? = nil,
         /**
-         * @param {Bool} is_disabled Search for disabled user accounts
+         * @param {Bool} is_disabled Search for disabled user accounts. Availability of this filter is limited to users with permission to view complete user details.
          */
         is_disabled: Bool? = nil,
         /**
@@ -11191,13 +11286,17 @@ open class LookerSDKStream: APIMethods {
          */
         group_id: String? = nil,
         /**
-         * @param {Bool} can_manage_api3_creds Search for users who can manage API3 credentials
+         * @param {Bool} can_manage_api3_creds Search for users who can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). Availability of this filter is limited to users with permission to view complete user details. This is an experimental feature and may not yet be available on your instance.
          */
         can_manage_api3_creds: Bool? = nil,
+        /**
+         * @param {Bool} is_service_account Search for service account users. Send true to get only service accounts, or false to get all other types of users. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). Availability of this filter is limited to users with permission to view complete user details. This is an experimental feature and may not yet be available on your instance.
+         */
+        is_service_account: Bool? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let result: SDKResponse<Data, SDKError> = self.get("/users/search", 
-            ["fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "first_name": first_name, "last_name": last_name, "verified_looker_employee": verified_looker_employee as Any?, "embed_user": embed_user as Any?, "email": email, "is_disabled": is_disabled as Any?, "filter_or": filter_or as Any?, "content_metadata_id": content_metadata_id, "group_id": group_id, "can_manage_api3_creds": can_manage_api3_creds as Any?], nil, options)
+            ["fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "first_name": first_name, "last_name": last_name, "verified_looker_employee": verified_looker_employee as Any?, "embed_user": embed_user as Any?, "email": email, "is_disabled": is_disabled as Any?, "filter_or": filter_or as Any?, "content_metadata_id": content_metadata_id, "group_id": group_id, "can_manage_api3_creds": can_manage_api3_creds as Any?, "is_service_account": is_service_account as Any?], nil, options)
         return result
     }
 
@@ -12343,6 +12442,59 @@ open class LookerSDKStream: APIMethods {
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let result: SDKResponse<Data, SDKError> = self.post("/users/embed_user", nil, try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Create a service account with the specified information. This action is restricted to Looker admins.
+     *
+     * Calls to this endpoint may only be available for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
+     * POST /users/service_accounts -> ServiceAccount
+     */
+    public func create_service_account(
+        /**
+         * @param {WriteServiceAccount} body
+         */
+        _ body: WriteServiceAccount,
+        /**
+         * @param {String} fields Requested fields.
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/users/service_accounts", 
+            ["fields": fields], try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Update information for a specific service account. This action is restricted to Looker admins.
+     *
+     * This endpoint is exclusively for updating service accounts. To update a regular user, please use the `PATCH /api/3.x/users/:user_id` endpoint instead.
+     *
+     * Calls to this endpoint may only be available for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     *
+     * PATCH /users/service_accounts/{user_id} -> ServiceAccount
+     */
+    public func update_service_account(
+        /**
+         * @param {String} user_id Id of service account
+         */
+        _ user_id: String,
+        /**
+         * @param {WriteServiceAccount} body
+         */
+        _ body: WriteServiceAccount,
+        /**
+         * @param {String} fields Requested fields.
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let path_user_id = encodeParam(user_id)
+        let result: SDKResponse<Data, SDKError> = self.patch("/users/service_accounts/\(path_user_id)", 
+            ["fields": fields], try! self.encode(body), options)
         return result
     }
 
