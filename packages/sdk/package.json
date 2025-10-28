@@ -1,6 +1,6 @@
 {
   "name": "@looker/sdk",
-  "version": "25.16.0",
+  "version": "25.18.0",
   "description": "Looker SDK",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
