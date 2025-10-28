@@ -25,7 +25,7 @@
  */
 
 /**
- * 472 API methods
+ * 476 API methods
  */
 
 import type {
@@ -126,6 +126,7 @@ import type {
   IHomepageSection,
   IIntegration,
   IIntegrationHub,
+  IIntegrationHubHealthResult,
   IIntegrationTestResult,
   IInternalHelpResources,
   IInternalHelpResourcesContent,
@@ -220,6 +221,7 @@ import type {
   IRequestSearchGroups,
   IRequestSearchGroupsWithHierarchy,
   IRequestSearchGroupsWithRoles,
+  IRequestSearchLookmlDashboards,
   IRequestSearchLooks,
   IRequestSearchModelSets,
   IRequestSearchPermissionSets,
@@ -245,6 +247,7 @@ import type {
   ISchema,
   ISchemaColumns,
   ISchemaTables,
+  IServiceAccount,
   ISession,
   ISessionConfig,
   ISetting,
@@ -321,6 +324,7 @@ import type {
   IWriteRole,
   IWriteSamlConfig,
   IWriteScheduledPlan,
+  IWriteServiceAccount,
   IWriteSessionConfig,
   IWriteSetting,
   IWriteSqlInterfaceQueryCreate,
@@ -761,7 +765,10 @@ export class Looker40SDKStream extends APIMethods {
    *
    * See 'login' for more detail on the access token and how to use it.
    *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   * In [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview) this call will be denied unless all of the following criteria are met:
+   *   1. The calling user is an [API-only Service Account](https://cloud.google.com/looker/docs/looker-core-user-management#creating_an_api-only_service_account) with the Admin role
+   *   2. The target user is an [Embed User type](https://cloud.google.com/looker/docs/r/single-sign-on-embedding)
+   * Regular user types can not be impersonated in [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). If your application needs to call the API for these users, use OAuth authentication instead.
    *
    * POST /login/{user_id} -> IAccessToken
    *
@@ -5926,6 +5933,68 @@ export class Looker40SDKStream extends APIMethods {
   }
 
   /**
+   * ### Search LookML Dashboards
+   *
+   * Returns an array of **LookML Dashboard** objects that match the specified search criteria.
+   * Note, this only returns LookML Dashboards in production.
+   *
+   * If multiple search params are given and `filter_or` is FALSE or not specified,
+   * search params are combined in a logical AND operation.
+   * Only rows that match *all* search param criteria will be returned.
+   *
+   * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+   * Results will include rows that match **any** of the search criteria.
+   *
+   * String search params use case-insensitive matching.
+   * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+   * example="dan%" will match "danger" and "Danzig" but not "David"
+   * example="D_m%" will match "Damage" and "dump"
+   *
+   * Integer search params can accept a single value or a comma separated list of values. The multiple
+   * values will be combined under a logical OR operation - results will match at least one of
+   * the given values.
+   *
+   * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+   * or exclude (respectively) rows where the column is null.
+   *
+   * Boolean search params accept only "true" and "false" as values.
+   *
+   *
+   * The parameters `limit`, and `offset` are recommended for fetching results in page-size chunks.
+   *
+   * Get a **single LookML dashboard** by id with [dashboard_lookml()](#!/Dashboard/dashboard_lookml)
+   *
+   * GET /dashboards/lookml/search -> IDashboardLookml
+   *
+   * @param callback streaming output function
+   * @param request composed interface "IRequestSearchLookmlDashboards" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  async search_lookml_dashboards(
+    callback: (response: Response) => Promise<IDashboardLookml>,
+    request: IRequestSearchLookmlDashboards,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<IDashboardLookml>(
+      callback,
+      'GET',
+      '/dashboards/lookml/search',
+      {
+        folder_id: request.folder_id,
+        title: request.title,
+        content_favorite_id: request.content_favorite_id,
+        fields: request.fields,
+        limit: request.limit,
+        offset: request.offset,
+        sorts: request.sorts,
+      },
+      null,
+      options
+    );
+  }
+
+  /**
    * ### Get lookml of a UDD
    *
    * Returns a JSON object that contains the dashboard id and the full lookml
@@ -8006,6 +8075,34 @@ export class Looker40SDKStream extends APIMethods {
       'DELETE',
       `/integration_hubs/${integration_hub_id}`,
       null,
+      null,
+      options
+    );
+  }
+
+  /**
+   * Checks to see if the user is able to connect to their integration hub
+   *
+   * GET /integration_hubs/{integration_hub_id}/health -> IIntegrationHubHealthResult
+   *
+   * @param callback streaming output function
+   * @param integration_hub_id Id of integration_hub
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  async get_integration_hub_health(
+    callback: (response: Response) => Promise<IIntegrationHubHealthResult>,
+    integration_hub_id: string,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    integration_hub_id = encodeParam(integration_hub_id);
+    return this.authStream<IIntegrationHubHealthResult>(
+      callback,
+      'GET',
+      `/integration_hubs/${integration_hub_id}/health`,
+      { fields },
       null,
       options
     );
@@ -11555,7 +11652,11 @@ export class Looker40SDKStream extends APIMethods {
       callback,
       'GET',
       '/roles',
-      { fields: request.fields, ids: request.ids },
+      {
+        fields: request.fields,
+        ids: request.ids,
+        get_all_support_roles: request.get_all_support_roles,
+      },
       null,
       options
     );
@@ -11637,7 +11738,6 @@ export class Looker40SDKStream extends APIMethods {
         name: request.name,
         built_in: request.built_in,
         filter_or: request.filter_or,
-        is_support_role: request.is_support_role,
       },
       null,
       options
@@ -13279,6 +13379,7 @@ export class Looker40SDKStream extends APIMethods {
         content_metadata_id: request.content_metadata_id,
         group_id: request.group_id,
         can_manage_api3_creds: request.can_manage_api3_creds,
+        is_service_account: request.is_service_account,
       },
       null,
       options
@@ -14632,6 +14733,69 @@ export class Looker40SDKStream extends APIMethods {
       'POST',
       '/users/embed_user',
       null,
+      body,
+      options
+    );
+  }
+
+  /**
+   * ### Create a service account with the specified information. This action is restricted to Looker admins.
+   *
+   * Calls to this endpoint may only be available for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * POST /users/service_accounts -> IServiceAccount
+   *
+   * @param callback streaming output function
+   * @param body Partial<IWriteServiceAccount>
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  async create_service_account(
+    callback: (response: Response) => Promise<IServiceAccount>,
+    body: Partial<IWriteServiceAccount>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<IServiceAccount>(
+      callback,
+      'POST',
+      '/users/service_accounts',
+      { fields },
+      body,
+      options
+    );
+  }
+
+  /**
+   * ### Update information for a specific service account. This action is restricted to Looker admins.
+   *
+   * This endpoint is exclusively for updating service accounts. To update a regular user, please use the `PATCH /api/3.x/users/:user_id` endpoint instead.
+   *
+   * Calls to this endpoint may only be available for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * PATCH /users/service_accounts/{user_id} -> IServiceAccount
+   *
+   * @param callback streaming output function
+   * @param user_id Id of service account
+   * @param body Partial<IWriteServiceAccount>
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  async update_service_account(
+    callback: (response: Response) => Promise<IServiceAccount>,
+    user_id: string,
+    body: Partial<IWriteServiceAccount>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    user_id = encodeParam(user_id);
+    return this.authStream<IServiceAccount>(
+      callback,
+      'PATCH',
+      `/users/service_accounts/${user_id}`,
+      { fields },
       body,
       options
     );

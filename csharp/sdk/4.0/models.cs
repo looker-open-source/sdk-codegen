@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 374 API models: 287 Spec, 0 Request, 63 Write, 24 Enum
+/// 377 API models: 289 Spec, 0 Request, 64 Write, 24 Enum
 
 #nullable enable
 using System;
@@ -842,6 +842,8 @@ public class ContentValidationDashboardElement : SdkModel
   public string? rich_content_json { get; set; } = null;
   /// <summary>Extension ID</summary>
   public string? extension_id { get; set; } = null;
+  /// <summary>Custom ARIA description text</summary>
+  public string? aria_description { get; set; } = null;
 }
 
 public class ContentValidationDashboardFilter : SdkModel
@@ -1651,6 +1653,8 @@ public class DashboardElement : SdkModel
   public string? subtitle_text_as_html { get; set; } = null;
   /// <summary>Extension ID</summary>
   public string? extension_id { get; set; } = null;
+  /// <summary>Custom ARIA description text</summary>
+  public string? aria_description { get; set; } = null;
 }
 
 public class DashboardFilter : SdkModel
@@ -1711,6 +1715,12 @@ public class DashboardLayout : SdkModel
   public string? dashboard_title { get; set; } = null;
   /// <summary>Components (read-only)</summary>
   public DashboardLayoutComponent[]? dashboard_layout_components { get; set; } = null;
+  /// <summary>Label</summary>
+  public string? label { get; set; } = null;
+  /// <summary>Description</summary>
+  public string? description { get; set; } = null;
+  /// <summary>Order</summary>
+  public long? order { get; set; } = null;
 }
 
 public class DashboardLayoutComponent : SdkModel
@@ -2881,6 +2891,14 @@ public class IntegrationHub : SdkModel
   public string? legal_agreement_text { get; set; } = null;
 }
 
+public class IntegrationHubHealthResult : SdkModel
+{
+  /// <summary>Whether or not the health check was successful (read-only)</summary>
+  public bool? success { get; set; } = null;
+  /// <summary>A message representing the results of the health check. (read-only)</summary>
+  public string? message { get; set; } = null;
+}
+
 public class IntegrationParam : SdkModel
 {
   /// <summary>Name of the parameter.</summary>
@@ -3648,6 +3666,8 @@ public class LookmlModelExploreField : SdkModel
   public UserAttributeFilterTypes[]? user_attribute_filter_types { get; set; } = null;
   /// <summary>If specified, the LookML value format string for formatting values of this field. (read-only)</summary>
   public string? value_format { get; set; } = null;
+  /// <summary>If specified, the name of the value format, as defined in the LookML model. (read-only)</summary>
+  public string? value_format_name { get; set; } = null;
   /// <summary>The name of the view this field belongs to. (read-only)</summary>
   public string? view { get; set; } = null;
   /// <summary>The human-readable label of the view the field belongs to. (read-only)</summary>
@@ -5363,6 +5383,30 @@ public enum SecretType
   JWT
 }
 
+public class ServiceAccount : SdkModel
+{
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
+  public StringDictionary<bool>? can { get; set; } = null;
+  /// <summary>Unique Id of the service account (read-only)</summary>
+  public string? id { get; set; } = null;
+  /// <summary>Display name of the service account.</summary>
+  public string? service_account_name { get; set; } = null;
+  /// <summary>Indicates whether this user is a service account (read-only)</summary>
+  public bool? is_service_account { get; set; } = null;
+  /// <summary>Indicates if the service account is disabled</summary>
+  public bool? is_disabled { get; set; } = null;
+  /// <summary>Array of ids of the groups associated with this service account (read-only)</summary>
+  public string[]? group_ids { get; set; } = null;
+  /// <summary>Array of ids of the roles associated with this service account (read-only)</summary>
+  public string[]? role_ids { get; set; } = null;
+  /// <summary>API3 credentials for the service account (read-only)</summary>
+  public CredentialsApi3[]? credentials_api3 { get; set; } = null;
+  /// <summary>Service account creation timestamp (read-only)</summary>
+  public DateTime? created_at { get; set; } = null;
+  /// <summary>Link to get this item (read-only)</summary>
+  public string? url { get; set; } = null;
+}
+
 public class Session : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
@@ -5489,6 +5533,16 @@ public class SmtpSettings : SdkModel
   /// <summary>TLS version selected Valid values are: "TLSv1_1", "SSLv23", "TLSv1_2".</summary>
   [JsonConverter(typeof(StringEnumConverter))]
   public SslVersion? ssl_version { get; set; }
+  /// <summary>Auth Type</summary>
+  public string? auth_type { get; set; } = null;
+  /// <summary>The OAuth Client ID</summary>
+  public string? client_id { get; set; } = null;
+  /// <summary>The OAuth Client Secret</summary>
+  public string? client_secret { get; set; } = null;
+  /// <summary>The OAuth Token Endpoint</summary>
+  public string? token_endpoint { get; set; } = null;
+  /// <summary>The OAuth Scopes</summary>
+  public string? scopes { get; set; } = null;
   /// <summary>Whether to enable built-in Looker SMTP</summary>
   public bool? default_smtp { get; set; } = null;
 }
@@ -6023,10 +6077,14 @@ public class User : SdkModel
   public bool? allow_roles_from_normal_groups { get; set; } = null;
   /// <summary>(Embed only) ID of user's group folder based on the external_group_id optionally specified during embed user login (read-only)</summary>
   public string? embed_group_folder_id { get; set; } = null;
-  /// <summary>User is an IAM Admin - only available in Looker (Google Cloud core). The is_iam_admin is not returned by default. Please explicitly request this attribute if needed via the fields query param. Note: Including the optional is_iam_admin attribute can increase API latency. For best performance, use this attribute only when filtering for users with the 'Admin via IAM' role. When using this filter, always paginate your results with the offset and limit fields to optimize response time. (read-only)</summary>
+  /// <summary>User is an IAM Admin. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). The is_iam_admin is not returned by default. Please explicitly request this attribute if needed via the fields query param. Note: Including the optional is_iam_admin attribute can increase API latency. For best performance, use this attribute only when filtering for users with the 'Admin via IAM' role. When using this filter, always paginate your results with the offset and limit fields to optimize response time. (read-only)</summary>
   public bool? is_iam_admin { get; set; } = null;
-  /// <summary>Indicates if the user can manage API3 credentials</summary>
+  /// <summary>Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.</summary>
   public bool? can_manage_api3_creds { get; set; } = null;
+  /// <summary>Indicates if this user is a service account. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance. (read-only)</summary>
+  public bool? is_service_account { get; set; } = null;
+  /// <summary>The display name of the service account. This field is omitted for non service account users. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance. (read-only)</summary>
+  public string? service_account_name { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
   public string? url { get; set; } = null;
 }
@@ -6646,6 +6704,8 @@ public class WriteDashboardElement : SdkModel
   public string? rich_content_json { get; set; } = null;
   /// <summary>Extension ID</summary>
   public string? extension_id { get; set; } = null;
+  /// <summary>Custom ARIA description text</summary>
+  public string? aria_description { get; set; } = null;
 }
 
 /// Dynamic writeable type for DashboardFilter removes:
@@ -6692,6 +6752,12 @@ public class WriteDashboardLayout : SdkModel
   public long? column_width { get; set; } = null;
   /// <summary>Width</summary>
   public long? width { get; set; } = null;
+  /// <summary>Label</summary>
+  public string? label { get; set; } = null;
+  /// <summary>Description</summary>
+  public string? description { get; set; } = null;
+  /// <summary>Order</summary>
+  public long? order { get; set; } = null;
 }
 
 /// Dynamic writeable type for DashboardLayoutComponent removes:
@@ -7575,6 +7641,16 @@ public class WriteScheduledPlan : SdkModel
   public string? query_id { get; set; } = null;
 }
 
+/// Dynamic writeable type for ServiceAccount removes:
+/// can, id, is_service_account, group_ids, role_ids, credentials_api3, created_at, url
+public class WriteServiceAccount : SdkModel
+{
+  /// <summary>Display name of the service account.</summary>
+  public string? service_account_name { get; set; } = null;
+  /// <summary>Indicates if the service account is disabled</summary>
+  public bool? is_disabled { get; set; } = null;
+}
+
 /// Dynamic writeable type for SessionConfig removes:
 /// can
 public class WriteSessionConfig : SdkModel
@@ -7693,7 +7769,7 @@ public class WriteTheme : SdkModel
 }
 
 /// Dynamic writeable type for User removes:
-/// can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, url
+/// can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, is_service_account, service_account_name, url
 public class WriteUser : SdkModel
 {
   /// <summary>
@@ -7715,7 +7791,7 @@ public class WriteUser : SdkModel
   public bool? models_dir_validated { get; set; } = null;
   /// <summary>Per user dictionary of undocumented state information owned by the Looker UI.</summary>
   public StringDictionary<string>? ui_state { get; set; } = null;
-  /// <summary>Indicates if the user can manage API3 credentials</summary>
+  /// <summary>Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.</summary>
   public bool? can_manage_api3_creds { get; set; } = null;
 }
 

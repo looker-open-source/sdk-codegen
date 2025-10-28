@@ -25,7 +25,7 @@
  */
 
 /**
- * 374 API models: 287 Spec, 0 Request, 63 Write, 24 Enum
+ * 377 API models: 289 Spec, 0 Request, 64 Write, 24 Enum
  */
 
 
@@ -3215,6 +3215,7 @@ public struct ContentValidationDashboardElement: SDKModel {
         case _type = "type"
         case _rich_content_json = "rich_content_json"
         case _extension_id = "extension_id"
+        case _aria_description = "aria_description"
     }
     private var _body_text: AnyString?
     /**
@@ -3356,7 +3357,16 @@ public struct ContentValidationDashboardElement: SDKModel {
         set { _extension_id = newValue.map(AnyString.init) }
     }
 
-    public init(body_text: String? = nil, dashboard_id: String? = nil, id: String? = nil, look_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, note_text_as_html: String? = nil, query_id: String? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil, rich_content_json: String? = nil, extension_id: String? = nil) {
+    private var _aria_description: AnyString?
+    /**
+     * Custom ARIA description text
+     */
+    public var aria_description: String? {
+        get { _aria_description?.value }
+        set { _aria_description = newValue.map(AnyString.init) }
+    }
+
+    public init(body_text: String? = nil, dashboard_id: String? = nil, id: String? = nil, look_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, note_text_as_html: String? = nil, query_id: String? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil, rich_content_json: String? = nil, extension_id: String? = nil, aria_description: String? = nil) {
         self._body_text = body_text.map(AnyString.init)
         self._dashboard_id = dashboard_id.map(AnyString.init)
         self._id = id.map(AnyString.init)
@@ -3373,6 +3383,7 @@ public struct ContentValidationDashboardElement: SDKModel {
         self._type = type.map(AnyString.init)
         self._rich_content_json = rich_content_json.map(AnyString.init)
         self._extension_id = extension_id.map(AnyString.init)
+        self._aria_description = aria_description.map(AnyString.init)
     }
 
 }
@@ -6717,6 +6728,7 @@ public struct DashboardElement: SDKModel {
         case _title_text_as_html = "title_text_as_html"
         case _subtitle_text_as_html = "subtitle_text_as_html"
         case _extension_id = "extension_id"
+        case _aria_description = "aria_description"
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -6959,7 +6971,16 @@ public struct DashboardElement: SDKModel {
         set { _extension_id = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, body_text: String? = nil, body_text_as_html: String? = nil, dashboard_id: String? = nil, edit_uri: String? = nil, id: String? = nil, look: LookWithQuery? = nil, look_id: String? = nil, lookml_link_id: String? = nil, merge_result_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, note_text_as_html: String? = nil, query: Query? = nil, query_id: String? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, result_maker: ResultMakerWithIdVisConfigAndDynamicFields? = nil, result_maker_id: String? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil, alert_count: Int64? = nil, rich_content_json: String? = nil, title_text_as_html: String? = nil, subtitle_text_as_html: String? = nil, extension_id: String? = nil) {
+    private var _aria_description: AnyString?
+    /**
+     * Custom ARIA description text
+     */
+    public var aria_description: String? {
+        get { _aria_description?.value }
+        set { _aria_description = newValue.map(AnyString.init) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, body_text: String? = nil, body_text_as_html: String? = nil, dashboard_id: String? = nil, edit_uri: String? = nil, id: String? = nil, look: LookWithQuery? = nil, look_id: String? = nil, lookml_link_id: String? = nil, merge_result_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, note_text_as_html: String? = nil, query: Query? = nil, query_id: String? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, result_maker: ResultMakerWithIdVisConfigAndDynamicFields? = nil, result_maker_id: String? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil, alert_count: Int64? = nil, rich_content_json: String? = nil, title_text_as_html: String? = nil, subtitle_text_as_html: String? = nil, extension_id: String? = nil, aria_description: String? = nil) {
         self.can = can
         self._body_text = body_text.map(AnyString.init)
         self._body_text_as_html = body_text_as_html.map(AnyString.init)
@@ -6990,6 +7011,7 @@ public struct DashboardElement: SDKModel {
         self._title_text_as_html = title_text_as_html.map(AnyString.init)
         self._subtitle_text_as_html = subtitle_text_as_html.map(AnyString.init)
         self._extension_id = extension_id.map(AnyString.init)
+        self._aria_description = aria_description.map(AnyString.init)
     }
 
 }
@@ -7172,6 +7194,9 @@ public struct DashboardLayout: SDKModel {
         case deleted
         case _dashboard_title = "dashboard_title"
         case dashboard_layout_components
+        case _label = "label"
+        case _description = "description"
+        case _order = "order"
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -7247,7 +7272,34 @@ public struct DashboardLayout: SDKModel {
      */
     public var dashboard_layout_components: [DashboardLayoutComponent]?
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, dashboard_id: String? = nil, type: String? = nil, active: Bool? = nil, column_width: Int64? = nil, width: Int64? = nil, deleted: Bool? = nil, dashboard_title: String? = nil, dashboard_layout_components: [DashboardLayoutComponent]? = nil) {
+    private var _label: AnyString?
+    /**
+     * Label
+     */
+    public var label: String? {
+        get { _label?.value }
+        set { _label = newValue.map(AnyString.init) }
+    }
+
+    private var _description: AnyString?
+    /**
+     * Description
+     */
+    public var description: String? {
+        get { _description?.value }
+        set { _description = newValue.map(AnyString.init) }
+    }
+
+    private var _order: AnyInt?
+    /**
+     * Order
+     */
+    public var order: Int64? {
+        get { _order?.value }
+        set { _order = newValue.map(AnyInt.init) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, dashboard_id: String? = nil, type: String? = nil, active: Bool? = nil, column_width: Int64? = nil, width: Int64? = nil, deleted: Bool? = nil, dashboard_title: String? = nil, dashboard_layout_components: [DashboardLayoutComponent]? = nil, label: String? = nil, description: String? = nil, order: Int64? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
         self._dashboard_id = dashboard_id.map(AnyString.init)
@@ -7258,6 +7310,9 @@ public struct DashboardLayout: SDKModel {
         self.deleted = deleted
         self._dashboard_title = dashboard_title.map(AnyString.init)
         self.dashboard_layout_components = dashboard_layout_components
+        self._label = label.map(AnyString.init)
+        self._description = description.map(AnyString.init)
+        self._order = order.map(AnyInt.init)
     }
 
 }
@@ -12059,6 +12114,33 @@ public struct IntegrationHub: SDKModel {
 
 }
 
+public struct IntegrationHubHealthResult: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case success
+        case _message = "message"
+    }
+    /**
+     * Whether or not the health check was successful (read-only)
+     */
+    public var success: Bool?
+
+    private var _message: AnyString?
+    /**
+     * A message representing the results of the health check. (read-only)
+     */
+    public var message: String? {
+        get { _message?.value }
+        set { _message = newValue.map(AnyString.init) }
+    }
+
+    public init(success: Bool? = nil, message: String? = nil) {
+        self.success = success
+        self._message = message.map(AnyString.init)
+    }
+
+}
+
 public struct IntegrationParam: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -14881,6 +14963,7 @@ public struct LookmlModelExploreField: SDKModel {
         case _type = "type"
         case user_attribute_filter_types
         case _value_format = "value_format"
+        case _value_format_name = "value_format_name"
         case _view = "view"
         case _view_label = "view_label"
         case `dynamic`
@@ -15244,6 +15327,15 @@ public struct LookmlModelExploreField: SDKModel {
         set { _value_format = newValue.map(AnyString.init) }
     }
 
+    private var _value_format_name: AnyString?
+    /**
+     * If specified, the name of the value format, as defined in the LookML model. (read-only)
+     */
+    public var value_format_name: String? {
+        get { _value_format_name?.value }
+        set { _value_format_name = newValue.map(AnyString.init) }
+    }
+
     private var _view: AnyString?
     /**
      * The name of the view this field belongs to. (read-only)
@@ -15290,7 +15382,7 @@ public struct LookmlModelExploreField: SDKModel {
         set { _original_view = newValue.map(AnyString.init) }
     }
 
-    public init(align: Align? = nil, can_filter: Bool? = nil, category: Category? = nil, default_filter_value: String? = nil, description: String? = nil, dimension_group: String? = nil, drill_fields: [String]? = nil, enumerations: [LookmlModelExploreFieldEnumeration]? = nil, error: String? = nil, field_group_label: String? = nil, field_group_variant: String? = nil, fill_style: FillStyle? = nil, fiscal_month_offset: Int64? = nil, has_allowed_values: Bool? = nil, has_drills_metadata: Bool? = nil, hidden: Bool? = nil, is_filter: Bool? = nil, is_fiscal: Bool? = nil, is_numeric: Bool? = nil, is_timeframe: Bool? = nil, can_time_filter: Bool? = nil, time_interval: LookmlModelExploreFieldTimeInterval? = nil, label: String? = nil, label_from_parameter: String? = nil, label_short: String? = nil, lookml_link: String? = nil, links: [LookmlFieldLink]? = nil, map_layer: LookmlModelExploreFieldMapLayer? = nil, measure: Bool? = nil, name: String? = nil, strict_value_format: Bool? = nil, parameter: Bool? = nil, period_over_period_params: LookmlModelExploreFieldPeriodOverPeriodParams? = nil, permanent: Bool? = nil, primary_key: Bool? = nil, project_name: String? = nil, requires_refresh_on_sort: Bool? = nil, scope: String? = nil, sortable: Bool? = nil, source_file: String? = nil, source_file_path: String? = nil, sql: String? = nil, sql_case: [LookmlModelExploreFieldSqlCase]? = nil, filters: [LookmlModelExploreFieldMeasureFilters]? = nil, suggest_dimension: String? = nil, suggest_explore: String? = nil, suggestable: Bool? = nil, suggestions: [String]? = nil, synonyms: [String]? = nil, tags: [String]? = nil, type: String? = nil, user_attribute_filter_types: [UserAttributeFilterTypes]? = nil, value_format: String? = nil, view: String? = nil, view_label: String? = nil, `dynamic`: Bool? = nil, week_start_day: WeekStartDay? = nil, times_used: Int64? = nil, original_view: String? = nil) {
+    public init(align: Align? = nil, can_filter: Bool? = nil, category: Category? = nil, default_filter_value: String? = nil, description: String? = nil, dimension_group: String? = nil, drill_fields: [String]? = nil, enumerations: [LookmlModelExploreFieldEnumeration]? = nil, error: String? = nil, field_group_label: String? = nil, field_group_variant: String? = nil, fill_style: FillStyle? = nil, fiscal_month_offset: Int64? = nil, has_allowed_values: Bool? = nil, has_drills_metadata: Bool? = nil, hidden: Bool? = nil, is_filter: Bool? = nil, is_fiscal: Bool? = nil, is_numeric: Bool? = nil, is_timeframe: Bool? = nil, can_time_filter: Bool? = nil, time_interval: LookmlModelExploreFieldTimeInterval? = nil, label: String? = nil, label_from_parameter: String? = nil, label_short: String? = nil, lookml_link: String? = nil, links: [LookmlFieldLink]? = nil, map_layer: LookmlModelExploreFieldMapLayer? = nil, measure: Bool? = nil, name: String? = nil, strict_value_format: Bool? = nil, parameter: Bool? = nil, period_over_period_params: LookmlModelExploreFieldPeriodOverPeriodParams? = nil, permanent: Bool? = nil, primary_key: Bool? = nil, project_name: String? = nil, requires_refresh_on_sort: Bool? = nil, scope: String? = nil, sortable: Bool? = nil, source_file: String? = nil, source_file_path: String? = nil, sql: String? = nil, sql_case: [LookmlModelExploreFieldSqlCase]? = nil, filters: [LookmlModelExploreFieldMeasureFilters]? = nil, suggest_dimension: String? = nil, suggest_explore: String? = nil, suggestable: Bool? = nil, suggestions: [String]? = nil, synonyms: [String]? = nil, tags: [String]? = nil, type: String? = nil, user_attribute_filter_types: [UserAttributeFilterTypes]? = nil, value_format: String? = nil, value_format_name: String? = nil, view: String? = nil, view_label: String? = nil, `dynamic`: Bool? = nil, week_start_day: WeekStartDay? = nil, times_used: Int64? = nil, original_view: String? = nil) {
         self.align = align
         self.can_filter = can_filter
         self.category = category
@@ -15344,6 +15436,7 @@ public struct LookmlModelExploreField: SDKModel {
         self._type = type.map(AnyString.init)
         self.user_attribute_filter_types = user_attribute_filter_types
         self._value_format = value_format.map(AnyString.init)
+        self._value_format_name = value_format_name.map(AnyString.init)
         self._view = view.map(AnyString.init)
         self._view_label = view_label.map(AnyString.init)
         self.`dynamic` = `dynamic`
@@ -22285,6 +22378,105 @@ public enum SecretType: String, Codable {
     case JWT = "JWT"
 }
 
+public struct ServiceAccount: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _id = "id"
+        case _service_account_name = "service_account_name"
+        case is_service_account
+        case is_disabled
+        case _group_ids = "group_ids"
+        case _role_ids = "role_ids"
+        case credentials_api3
+        case created_at
+        case _url = "url"
+    }
+    /**
+     * Operations the current user is able to perform on this object (read-only)
+     */
+    public var can: StringDictionary<Bool>?
+
+    private var _id: AnyString?
+    /**
+     * Unique Id of the service account (read-only)
+     */
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
+    private var _service_account_name: AnyString?
+    /**
+     * Display name of the service account.
+     */
+    public var service_account_name: String? {
+        get { _service_account_name?.value }
+        set { _service_account_name = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Indicates whether this user is a service account (read-only)
+     */
+    public var is_service_account: Bool?
+
+    /**
+     * Indicates if the service account is disabled
+     */
+    public var is_disabled: Bool?
+
+    private var _group_ids: [AnyString]?
+    /**
+     * Array of ids of the groups associated with this service account (read-only)
+     */
+    public var group_ids: [String]? {
+        get { if let v = _group_ids { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _group_ids = v.map { AnyString.init($0) } } else { _group_ids = nil } }
+    }
+
+    private var _role_ids: [AnyString]?
+    /**
+     * Array of ids of the roles associated with this service account (read-only)
+     */
+    public var role_ids: [String]? {
+        get { if let v = _role_ids { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _role_ids = v.map { AnyString.init($0) } } else { _role_ids = nil } }
+    }
+
+    /**
+     * API3 credentials for the service account (read-only)
+     */
+    public var credentials_api3: [CredentialsApi3]?
+
+    /**
+     * Service account creation timestamp (read-only)
+     */
+    public var created_at: Date?
+
+    private var _url: AnyString?
+    /**
+     * Link to get this item (read-only)
+     */
+    public var url: String? {
+        get { _url?.value }
+        set { _url = newValue.map(AnyString.init) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, service_account_name: String? = nil, is_service_account: Bool? = nil, is_disabled: Bool? = nil, group_ids: [String]? = nil, role_ids: [String]? = nil, credentials_api3: [CredentialsApi3]? = nil, created_at: Date? = nil, url: String? = nil) {
+        self.can = can
+        self._id = id.map(AnyString.init)
+        self._service_account_name = service_account_name.map(AnyString.init)
+        self.is_service_account = is_service_account
+        self.is_disabled = is_disabled
+        if let v = group_ids { _group_ids = v.map { AnyString.init($0) } } else { _group_ids = nil }
+        if let v = role_ids { _role_ids = v.map { AnyString.init($0) } } else { _role_ids = nil }
+        self.credentials_api3 = credentials_api3
+        self.created_at = created_at
+        self._url = url.map(AnyString.init)
+    }
+
+}
+
 public struct Session: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -22755,6 +22947,11 @@ public struct SmtpSettings: SDKModel {
         case _port = "port"
         case enable_starttls_auto
         case ssl_version
+        case _auth_type = "auth_type"
+        case _client_id = "client_id"
+        case _client_secret = "client_secret"
+        case _token_endpoint = "token_endpoint"
+        case _scopes = "scopes"
         case default_smtp
     }
     private var _address: AnyString?
@@ -22812,12 +23009,57 @@ public struct SmtpSettings: SDKModel {
      */
     public var ssl_version: SslVersion?
 
+    private var _auth_type: AnyString?
+    /**
+     * Auth Type
+     */
+    public var auth_type: String? {
+        get { _auth_type?.value }
+        set { _auth_type = newValue.map(AnyString.init) }
+    }
+
+    private var _client_id: AnyString?
+    /**
+     * The OAuth Client ID
+     */
+    public var client_id: String? {
+        get { _client_id?.value }
+        set { _client_id = newValue.map(AnyString.init) }
+    }
+
+    private var _client_secret: AnyString?
+    /**
+     * The OAuth Client Secret
+     */
+    public var client_secret: String? {
+        get { _client_secret?.value }
+        set { _client_secret = newValue.map(AnyString.init) }
+    }
+
+    private var _token_endpoint: AnyString?
+    /**
+     * The OAuth Token Endpoint
+     */
+    public var token_endpoint: String? {
+        get { _token_endpoint?.value }
+        set { _token_endpoint = newValue.map(AnyString.init) }
+    }
+
+    private var _scopes: AnyString?
+    /**
+     * The OAuth Scopes
+     */
+    public var scopes: String? {
+        get { _scopes?.value }
+        set { _scopes = newValue.map(AnyString.init) }
+    }
+
     /**
      * Whether to enable built-in Looker SMTP
      */
     public var default_smtp: Bool?
 
-    public init(address: String? = nil, from: String? = nil, user_name: String? = nil, password: String? = nil, port: Int64? = nil, enable_starttls_auto: Bool? = nil, ssl_version: SslVersion? = nil, default_smtp: Bool? = nil) {
+    public init(address: String? = nil, from: String? = nil, user_name: String? = nil, password: String? = nil, port: Int64? = nil, enable_starttls_auto: Bool? = nil, ssl_version: SslVersion? = nil, auth_type: String? = nil, client_id: String? = nil, client_secret: String? = nil, token_endpoint: String? = nil, scopes: String? = nil, default_smtp: Bool? = nil) {
         self._address = address.map(AnyString.init)
         self._from = from.map(AnyString.init)
         self._user_name = user_name.map(AnyString.init)
@@ -22825,6 +23067,11 @@ public struct SmtpSettings: SDKModel {
         self._port = port.map(AnyInt.init)
         self.enable_starttls_auto = enable_starttls_auto
         self.ssl_version = ssl_version
+        self._auth_type = auth_type.map(AnyString.init)
+        self._client_id = client_id.map(AnyString.init)
+        self._client_secret = client_secret.map(AnyString.init)
+        self._token_endpoint = token_endpoint.map(AnyString.init)
+        self._scopes = scopes.map(AnyString.init)
         self.default_smtp = default_smtp
     }
 
@@ -24568,6 +24815,8 @@ public struct User: SDKModel {
         case _embed_group_folder_id = "embed_group_folder_id"
         case is_iam_admin
         case can_manage_api3_creds
+        case is_service_account
+        case _service_account_name = "service_account_name"
         case _url = "url"
     }
     /**
@@ -24785,14 +25034,28 @@ public struct User: SDKModel {
     }
 
     /**
-     * User is an IAM Admin - only available in Looker (Google Cloud core). The is_iam_admin is not returned by default. Please explicitly request this attribute if needed via the fields query param. Note: Including the optional is_iam_admin attribute can increase API latency. For best performance, use this attribute only when filtering for users with the 'Admin via IAM' role. When using this filter, always paginate your results with the offset and limit fields to optimize response time. (read-only)
+     * User is an IAM Admin. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). The is_iam_admin is not returned by default. Please explicitly request this attribute if needed via the fields query param. Note: Including the optional is_iam_admin attribute can increase API latency. For best performance, use this attribute only when filtering for users with the 'Admin via IAM' role. When using this filter, always paginate your results with the offset and limit fields to optimize response time. (read-only)
      */
     public var is_iam_admin: Bool?
 
     /**
-     * Indicates if the user can manage API3 credentials
+     * Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.
      */
     public var can_manage_api3_creds: Bool?
+
+    /**
+     * Indicates if this user is a service account. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance. (read-only)
+     */
+    public var is_service_account: Bool?
+
+    private var _service_account_name: AnyString?
+    /**
+     * The display name of the service account. This field is omitted for non service account users. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance. (read-only)
+     */
+    public var service_account_name: String? {
+        get { _service_account_name?.value }
+        set { _service_account_name = newValue.map(AnyString.init) }
+    }
 
     private var _url: AnyString?
     /**
@@ -24803,7 +25066,7 @@ public struct User: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, avatar_url: String? = nil, avatar_url_without_sizing: String? = nil, credentials_api3: [CredentialsApi3]? = nil, credentials_email: CredentialsEmail? = nil, credentials_embed: [CredentialsEmbed]? = nil, credentials_google: CredentialsGoogle? = nil, credentials_ldap: CredentialsLDAP? = nil, credentials_looker_openid: CredentialsLookerOpenid? = nil, credentials_oidc: CredentialsOIDC? = nil, credentials_saml: CredentialsSaml? = nil, credentials_totp: CredentialsTotp? = nil, display_name: String? = nil, email: String? = nil, embed_group_space_id: String? = nil, first_name: String? = nil, group_ids: [String]? = nil, home_folder_id: String? = nil, id: String? = nil, is_disabled: Bool? = nil, last_name: String? = nil, locale: String? = nil, looker_versions: [String]? = nil, models_dir_validated: Bool? = nil, personal_folder_id: String? = nil, presumed_looker_employee: Bool? = nil, role_ids: [String]? = nil, sessions: [Session]? = nil, ui_state: StringDictionary<AnyCodable>? = nil, verified_looker_employee: Bool? = nil, roles_externally_managed: Bool? = nil, allow_direct_roles: Bool? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, embed_group_folder_id: String? = nil, is_iam_admin: Bool? = nil, can_manage_api3_creds: Bool? = nil, url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, avatar_url: String? = nil, avatar_url_without_sizing: String? = nil, credentials_api3: [CredentialsApi3]? = nil, credentials_email: CredentialsEmail? = nil, credentials_embed: [CredentialsEmbed]? = nil, credentials_google: CredentialsGoogle? = nil, credentials_ldap: CredentialsLDAP? = nil, credentials_looker_openid: CredentialsLookerOpenid? = nil, credentials_oidc: CredentialsOIDC? = nil, credentials_saml: CredentialsSaml? = nil, credentials_totp: CredentialsTotp? = nil, display_name: String? = nil, email: String? = nil, embed_group_space_id: String? = nil, first_name: String? = nil, group_ids: [String]? = nil, home_folder_id: String? = nil, id: String? = nil, is_disabled: Bool? = nil, last_name: String? = nil, locale: String? = nil, looker_versions: [String]? = nil, models_dir_validated: Bool? = nil, personal_folder_id: String? = nil, presumed_looker_employee: Bool? = nil, role_ids: [String]? = nil, sessions: [Session]? = nil, ui_state: StringDictionary<AnyCodable>? = nil, verified_looker_employee: Bool? = nil, roles_externally_managed: Bool? = nil, allow_direct_roles: Bool? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, embed_group_folder_id: String? = nil, is_iam_admin: Bool? = nil, can_manage_api3_creds: Bool? = nil, is_service_account: Bool? = nil, service_account_name: String? = nil, url: String? = nil) {
         self.can = can
         self._avatar_url = avatar_url.map(AnyString.init)
         self._avatar_url_without_sizing = avatar_url_without_sizing.map(AnyString.init)
@@ -24841,6 +25104,8 @@ public struct User: SDKModel {
         self._embed_group_folder_id = embed_group_folder_id.map(AnyString.init)
         self.is_iam_admin = is_iam_admin
         self.can_manage_api3_creds = can_manage_api3_creds
+        self.is_service_account = is_service_account
+        self._service_account_name = service_account_name.map(AnyString.init)
         self._url = url.map(AnyString.init)
     }
 
@@ -26977,6 +27242,7 @@ public struct WriteDashboardElement: SDKModel {
         case _type = "type"
         case _rich_content_json = "rich_content_json"
         case _extension_id = "extension_id"
+        case _aria_description = "aria_description"
     }
     private var _body_text: AnyString?
     /**
@@ -27145,7 +27411,16 @@ public struct WriteDashboardElement: SDKModel {
         set { _extension_id = newValue.map(AnyString.init) }
     }
 
-    public init(body_text: String? = nil, dashboard_id: String? = nil, look: WriteLookWithQuery? = nil, look_id: String? = nil, merge_result_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, query: WriteQuery? = nil, query_id: String? = nil, refresh_interval: String? = nil, result_maker: WriteResultMakerWithIdVisConfigAndDynamicFields? = nil, result_maker_id: String? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil, rich_content_json: String? = nil, extension_id: String? = nil) {
+    private var _aria_description: AnyString?
+    /**
+     * Custom ARIA description text
+     */
+    public var aria_description: String? {
+        get { _aria_description?.value }
+        set { _aria_description = newValue.map(AnyString.init) }
+    }
+
+    public init(body_text: String? = nil, dashboard_id: String? = nil, look: WriteLookWithQuery? = nil, look_id: String? = nil, merge_result_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, query: WriteQuery? = nil, query_id: String? = nil, refresh_interval: String? = nil, result_maker: WriteResultMakerWithIdVisConfigAndDynamicFields? = nil, result_maker_id: String? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil, rich_content_json: String? = nil, extension_id: String? = nil, aria_description: String? = nil) {
         self._body_text = body_text.map(AnyString.init)
         self._dashboard_id = dashboard_id.map(AnyString.init)
         self.look = look
@@ -27166,6 +27441,7 @@ public struct WriteDashboardElement: SDKModel {
         self._type = type.map(AnyString.init)
         self._rich_content_json = rich_content_json.map(AnyString.init)
         self._extension_id = extension_id.map(AnyString.init)
+        self._aria_description = aria_description.map(AnyString.init)
     }
 
 }
@@ -27315,6 +27591,9 @@ public struct WriteDashboardLayout: SDKModel {
         case active
         case _column_width = "column_width"
         case _width = "width"
+        case _label = "label"
+        case _description = "description"
+        case _order = "order"
     }
     private var _dashboard_id: AnyString?
     /**
@@ -27357,12 +27636,42 @@ public struct WriteDashboardLayout: SDKModel {
         set { _width = newValue.map(AnyInt.init) }
     }
 
-    public init(dashboard_id: String? = nil, type: String? = nil, active: Bool? = nil, column_width: Int64? = nil, width: Int64? = nil) {
+    private var _label: AnyString?
+    /**
+     * Label
+     */
+    public var label: String? {
+        get { _label?.value }
+        set { _label = newValue.map(AnyString.init) }
+    }
+
+    private var _description: AnyString?
+    /**
+     * Description
+     */
+    public var description: String? {
+        get { _description?.value }
+        set { _description = newValue.map(AnyString.init) }
+    }
+
+    private var _order: AnyInt?
+    /**
+     * Order
+     */
+    public var order: Int64? {
+        get { _order?.value }
+        set { _order = newValue.map(AnyInt.init) }
+    }
+
+    public init(dashboard_id: String? = nil, type: String? = nil, active: Bool? = nil, column_width: Int64? = nil, width: Int64? = nil, label: String? = nil, description: String? = nil, order: Int64? = nil) {
         self._dashboard_id = dashboard_id.map(AnyString.init)
         self._type = type.map(AnyString.init)
         self.active = active
         self._column_width = column_width.map(AnyInt.init)
         self._width = width.map(AnyInt.init)
+        self._label = label.map(AnyString.init)
+        self._description = description.map(AnyString.init)
+        self._order = order.map(AnyInt.init)
     }
 
 }
@@ -30953,6 +31262,37 @@ public struct WriteScheduledPlan: SDKModel {
 }
 
 /**
+ * Dynamic writeable type for ServiceAccount removes:
+ * can, id, is_service_account, group_ids, role_ids, credentials_api3, created_at, url
+ */
+public struct WriteServiceAccount: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _service_account_name = "service_account_name"
+        case is_disabled
+    }
+    private var _service_account_name: AnyString?
+    /**
+     * Display name of the service account.
+     */
+    public var service_account_name: String? {
+        get { _service_account_name?.value }
+        set { _service_account_name = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Indicates if the service account is disabled
+     */
+    public var is_disabled: Bool?
+
+    public init(service_account_name: String? = nil, is_disabled: Bool? = nil) {
+        self._service_account_name = service_account_name.map(AnyString.init)
+        self.is_disabled = is_disabled
+    }
+
+}
+
+/**
  * Dynamic writeable type for SessionConfig removes:
  * can
  */
@@ -31366,7 +31706,7 @@ public struct WriteTheme: SDKModel {
 
 /**
  * Dynamic writeable type for User removes:
- * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, url
+ * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, is_service_account, service_account_name, url
  */
 public struct WriteUser: SDKModel {
 
@@ -31439,7 +31779,7 @@ public struct WriteUser: SDKModel {
     public var ui_state: StringDictionary<AnyCodable>?
 
     /**
-     * Indicates if the user can manage API3 credentials
+     * Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.
      */
     public var can_manage_api3_creds: Bool?
 
