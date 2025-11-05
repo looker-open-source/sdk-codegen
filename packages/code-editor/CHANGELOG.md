@@ -90,6 +90,12 @@
   * devDependencies
     * @looker/sdk-codegen bumped from 21.10.0 to 21.10.1
 
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen bumped from 21.10.1 to 21.10.2
+
 ## [0.1.39](https://github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.38...code-editor-v0.1.39) (2025-02-06)
 
 
