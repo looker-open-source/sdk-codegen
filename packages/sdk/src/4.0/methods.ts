@@ -7599,6 +7599,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
         exclude_empty: request.exclude_empty,
         exclude_hidden: request.exclude_hidden,
         include_internal: request.include_internal,
+        include_self_service: request.include_self_service,
       },
       null,
       options

@@ -6983,10 +6983,14 @@ open class LookerSDKStream: APIMethods {
          * @param {Bool} include_internal Whether or not to include built-in models such as System Activity (Defaults to false)
          */
         include_internal: Bool? = nil,
+        /**
+         * @param {Bool} include_self_service Whether or not to include self service models (Defaults to false)
+         */
+        include_self_service: Bool? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<Data, SDKError> {
         let result: SDKResponse<Data, SDKError> = self.get("/lookml_models", 
-            ["fields": fields, "limit": limit, "offset": offset, "exclude_empty": exclude_empty as Any?, "exclude_hidden": exclude_hidden as Any?, "include_internal": include_internal as Any?], nil, options)
+            ["fields": fields, "limit": limit, "offset": offset, "exclude_empty": exclude_empty as Any?, "exclude_hidden": exclude_hidden as Any?, "include_internal": include_internal as Any?, "include_self_service": include_self_service as Any?], nil, options)
         return result
     }
 

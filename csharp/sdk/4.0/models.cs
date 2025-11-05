@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 377 API models: 289 Spec, 0 Request, 64 Write, 24 Enum
+/// 380 API models: 290 Spec, 0 Request, 65 Write, 25 Enum
 
 #nullable enable
 using System;
@@ -179,6 +179,8 @@ public class AlertNotifications : SdkModel
   /// <summary>The time at which the alert query ran (read-only)</summary>
   public string? ran_at { get; set; } = null;
   public MobilePayload? alert { get; set; }
+  /// <summary>The type of notification, 'email' or 'slack' (read-only)</summary>
+  public string? notification_type { get; set; } = null;
 }
 
 public class AlertPatch : SdkModel
@@ -480,6 +482,28 @@ public enum Category
   dimension
 }
 
+public class Certification : SdkModel
+{
+  /// <summary>Certification status: "certified" or "revoked" Valid values are: "certified", "revoked".</summary>
+  [JsonConverter(typeof(StringEnumConverter))]
+  public CertificationStatus? certification_status { get; set; }
+  /// <summary>Display name of user who certified the content, derived from user_id (read-only)</summary>
+  public string? user_name { get; set; } = null;
+  /// <summary>Certification notes</summary>
+  public string? notes { get; set; } = null;
+  /// <summary>Timestamp of certification (read-only)</summary>
+  public DateTime? updated_at { get; set; } = null;
+}
+
+/// Certification status: "certified" or "revoked" Valid values are: "certified", "revoked". (Enum defined in Certification)
+public enum CertificationStatus
+{
+  [EnumMember(Value = "certified")]
+  certified,
+  [EnumMember(Value = "revoked")]
+  revoked
+}
+
 public class CIChangeRequest : SdkModel
 {
   /// <summary>Numeric identifier of the change request (read-only)</summary>
@@ -502,19 +526,6 @@ public class CIGitState : SdkModel
   public string? commit_ref { get; set; } = null;
   /// <summary>For incremental runs, the Git branch that the CI run compares against during validation (read-only)</summary>
   public string? target { get; set; } = null;
-}
-
-public class CIRunResult : SdkModel
-{
-  public SqlValidatorResult? sql_result { get; set; }
-  public GenericError? sql_error { get; set; }
-  public AssertValidatorResult? assert_result { get; set; }
-  public GenericError? assert_error { get; set; }
-  public ContentValidatorResult? content_result { get; set; }
-  public GenericError? content_error { get; set; }
-  public LookMLValidatorResult? lookml_result { get; set; }
-  public GenericError? lookml_error { get; set; }
-  public GenericError? generic_error { get; set; }
 }
 
 public class CIScheduleTrigger : SdkModel
@@ -753,6 +764,7 @@ public class ContentSummary : SdkModel
   public float? suggestion_score { get; set; } = null;
   /// <summary>The preferred route for viewing this content (ie: dashboards or dashboards-next) (read-only)</summary>
   public string? preferred_viewer { get; set; } = null;
+  public Certification? certification_metadata { get; set; }
 }
 
 public class ContentValidation : SdkModel
@@ -1467,6 +1479,7 @@ public class Dashboard : SdkModel
   public string? slug { get; set; } = null;
   /// <summary>The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)</summary>
   public string? preferred_viewer { get; set; } = null;
+  public Certification? certification_metadata { get; set; }
   /// <summary>Enables alerts to keep in sync with dashboard filter changes</summary>
   public bool? alert_sync_with_dashboard_filter_enabled { get; set; } = null;
   /// <summary>Background color</summary>
@@ -1592,6 +1605,7 @@ public class DashboardBase : SdkModel
   public string? slug { get; set; } = null;
   /// <summary>The preferred route for viewing this dashboard (ie: dashboards or dashboards-next) (read-only)</summary>
   public string? preferred_viewer { get; set; } = null;
+  public Certification? certification_metadata { get; set; }
 }
 
 public class DashboardElement : SdkModel
@@ -1604,6 +1618,8 @@ public class DashboardElement : SdkModel
   public string? body_text_as_html { get; set; } = null;
   /// <summary>Id of Dashboard</summary>
   public string? dashboard_id { get; set; } = null;
+  /// <summary>Id of Dashboard Layout</summary>
+  public string? dashboard_layout_id { get; set; } = null;
   /// <summary>Relative path of URI of LookML file to edit the dashboard element (LookML dashboard only). (read-only)</summary>
   public string? edit_uri { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
@@ -2445,6 +2461,8 @@ public class ExternalOauthApplication : SdkModel
   public string? tenant_id { get; set; } = null;
   /// <summary>The database dialect for this application.</summary>
   public string? dialect_name { get; set; } = null;
+  /// <summary>Whether this application supports bi-directional data access.</summary>
+  public bool? bi_directional_data_access { get; set; } = null;
   /// <summary>Creation time for this application (read-only)</summary>
   public DateTime? created_at { get; set; } = null;
 }
@@ -3337,6 +3355,7 @@ public class Look : SdkModel
   public string? title { get; set; } = null;
   /// <summary>User Id</summary>
   public string? user_id { get; set; } = null;
+  public Certification? certification_metadata { get; set; }
   /// <summary>Content Favorite Id (read-only)</summary>
   public string? content_favorite_id { get; set; } = null;
   /// <summary>Time that the Look was created. (read-only)</summary>
@@ -3401,6 +3420,7 @@ public class LookBasic : SdkModel
   public string? title { get; set; } = null;
   /// <summary>User Id</summary>
   public string? user_id { get; set; } = null;
+  public Certification? certification_metadata { get; set; }
 }
 
 public class LookmlFieldLink : SdkModel
@@ -3681,6 +3701,10 @@ public class LookmlModelExploreField : SdkModel
   public long? times_used { get; set; } = null;
   /// <summary>The name of the view this field is defined in. This will be different than "view" when the view has been joined via a different name using the "from" parameter. (read-only)</summary>
   public string? original_view { get; set; } = null;
+  /// <summary>The data_type for a date in lookml (read-only)</summary>
+  public string? datatype { get; set; } = null;
+  /// <summary>Whether time zones should be converted for datetime fields (read-only)</summary>
+  public bool? convert_tz { get; set; } = null;
 }
 
 public class LookmlModelExploreFieldEnumeration : SdkModel
@@ -3935,6 +3959,7 @@ public class LookWithDashboards : SdkModel
   public string? title { get; set; } = null;
   /// <summary>User Id</summary>
   public string? user_id { get; set; } = null;
+  public Certification? certification_metadata { get; set; }
   /// <summary>Content Favorite Id (read-only)</summary>
   public string? content_favorite_id { get; set; } = null;
   /// <summary>Time that the Look was created. (read-only)</summary>
@@ -4001,6 +4026,7 @@ public class LookWithQuery : SdkModel
   public string? title { get; set; } = null;
   /// <summary>User Id</summary>
   public string? user_id { get; set; } = null;
+  public Certification? certification_metadata { get; set; }
   /// <summary>Content Favorite Id (read-only)</summary>
   public string? content_favorite_id { get; set; } = null;
   /// <summary>Time that the Look was created. (read-only)</summary>
@@ -5002,7 +5028,7 @@ public class Run : SdkModel
   /// <summary>Git service for CI run (e.g. GitHub) (read-only)</summary>
   public string? git_service { get; set; } = null;
   public CIGitState? git_state { get; set; }
-  public CIRunResult? result { get; set; }
+  public RunResult? result { get; set; }
   public CIScheduleTrigger? schedule { get; set; }
   /// <summary>Git branch that the CI run compares against during validation, used for incremental runs (read-only)</summary>
   public string? target_branch { get; set; } = null;
@@ -5059,6 +5085,19 @@ public class RunningQueries : SdkModel
   public string? sql { get; set; } = null;
   /// <summary>SQL text of the SQL Interface query as run (read-only)</summary>
   public string? sql_interface_sql { get; set; } = null;
+}
+
+public class RunResult : SdkModel
+{
+  public SqlValidatorResult? sql_result { get; set; }
+  public GenericError? sql_error { get; set; }
+  public AssertValidatorResult? assert_result { get; set; }
+  public GenericError? assert_error { get; set; }
+  public ContentValidatorResult? content_result { get; set; }
+  public GenericError? content_error { get; set; }
+  public LookMLValidatorResult? lookml_result { get; set; }
+  public GenericError? lookml_error { get; set; }
+  public GenericError? generic_error { get; set; }
 }
 
 public class SamlConfig : SdkModel
@@ -6466,6 +6505,17 @@ public class WriteBoardSection : SdkModel
   public string? title { get; set; } = null;
 }
 
+/// Dynamic writeable type for Certification removes:
+/// user_name, updated_at
+public class WriteCertification : SdkModel
+{
+  /// <summary>Certification status: "certified" or "revoked" Valid values are: "certified", "revoked".</summary>
+  [JsonConverter(typeof(StringEnumConverter))]
+  public CertificationStatus? certification_status { get; set; }
+  /// <summary>Certification notes</summary>
+  public string? notes { get; set; } = null;
+}
+
 /// Dynamic writeable type for ColorCollection removes:
 /// id
 public class WriteColorCollection : SdkModel
@@ -6605,6 +6655,11 @@ public class WriteDashboard : SdkModel
   public string? slug { get; set; } = null;
   /// <summary>The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)</summary>
   public string? preferred_viewer { get; set; } = null;
+  /// <summary>
+  /// Dynamic writeable type for Certification removes:
+  /// user_name, updated_at
+  /// </summary>
+  public WriteCertification? certification_metadata { get; set; }
   /// <summary>Enables alerts to keep in sync with dashboard filter changes</summary>
   public bool? alert_sync_with_dashboard_filter_enabled { get; set; } = null;
   /// <summary>Background color</summary>
@@ -6649,6 +6704,11 @@ public class WriteDashboardBase : SdkModel
   /// id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
   /// </summary>
   public WriteFolderBase? folder { get; set; }
+  /// <summary>
+  /// Dynamic writeable type for Certification removes:
+  /// user_name, updated_at
+  /// </summary>
+  public WriteCertification? certification_metadata { get; set; }
 }
 
 /// Dynamic writeable type for DashboardElement removes:
@@ -6659,6 +6719,8 @@ public class WriteDashboardElement : SdkModel
   public string? body_text { get; set; } = null;
   /// <summary>Id of Dashboard</summary>
   public string? dashboard_id { get; set; } = null;
+  /// <summary>Id of Dashboard Layout</summary>
+  public string? dashboard_layout_id { get; set; } = null;
   /// <summary>
   /// Dynamic writeable type for LookWithQuery removes:
   /// can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, user_name, view_count, url
@@ -7002,6 +7064,8 @@ public class WriteExternalOauthApplication : SdkModel
   public string? tenant_id { get; set; } = null;
   /// <summary>The database dialect for this application.</summary>
   public string? dialect_name { get; set; } = null;
+  /// <summary>Whether this application supports bi-directional data access.</summary>
+  public bool? bi_directional_data_access { get; set; } = null;
 }
 
 /// Dynamic writeable type for FolderBase removes:
@@ -7162,6 +7226,11 @@ public class WriteLookBasic : SdkModel
 {
   /// <summary>User Id</summary>
   public string? user_id { get; set; } = null;
+  /// <summary>
+  /// Dynamic writeable type for Certification removes:
+  /// user_name, updated_at
+  /// </summary>
+  public WriteCertification? certification_metadata { get; set; }
 }
 
 /// Dynamic writeable type for LookmlModel removes:
@@ -7186,6 +7255,11 @@ public class WriteLookWithQuery : SdkModel
   public string? title { get; set; } = null;
   /// <summary>User Id</summary>
   public string? user_id { get; set; } = null;
+  /// <summary>
+  /// Dynamic writeable type for Certification removes:
+  /// user_name, updated_at
+  /// </summary>
+  public WriteCertification? certification_metadata { get; set; }
   /// <summary>Whether or not a look is 'soft' deleted.</summary>
   public bool? deleted { get; set; } = null;
   /// <summary>Description</summary>

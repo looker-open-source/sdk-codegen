@@ -4569,7 +4569,7 @@ func (l *LookerSDK) MoveLook(
 func (l *LookerSDK) AllLookmlModels(request RequestAllLookmlModels,
 	options *rtl.ApiSettings) ([]LookmlModel, error) {
 	var result []LookmlModel
-	err := l.AuthSession.Do(&result, "GET", "/4.0", "/lookml_models", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "exclude_empty": request.ExcludeEmpty, "exclude_hidden": request.ExcludeHidden, "include_internal": request.IncludeInternal}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", "/lookml_models", map[string]interface{}{"fields": request.Fields, "limit": request.Limit, "offset": request.Offset, "exclude_empty": request.ExcludeEmpty, "exclude_hidden": request.ExcludeHidden, "include_internal": request.IncludeInternal, "include_self_service": request.IncludeSelfService}, nil, options)
 	return result, err
 
 }

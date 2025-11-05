@@ -7637,6 +7637,8 @@ class Looker40SDK(api_methods.APIMethods):
         exclude_hidden: Optional[bool] = None,
         # Whether or not to include built-in models such as System Activity (Defaults to false)
         include_internal: Optional[bool] = None,
+        # Whether or not to include self service models (Defaults to false)
+        include_self_service: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> Sequence[mdls.LookmlModel]:
         """Get All LookML Models"""
@@ -7652,6 +7654,7 @@ class Looker40SDK(api_methods.APIMethods):
                     "exclude_empty": exclude_empty,
                     "exclude_hidden": exclude_hidden,
                     "include_internal": include_internal,
+                    "include_self_service": include_self_service,
                 },
                 transport_options=transport_options,
             ),
