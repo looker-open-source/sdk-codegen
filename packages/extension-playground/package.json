@@ -1,6 +1,6 @@
 {
   "name": "@looker/extension-playground",
-  "version": "1.0.36",
+  "version": "1.0.37",
   "description": "Extension Playground",
   "main": "dist/bundle.js",
   "sideEffects": false,
@@ -13,9 +13,9 @@
     "watch": "yarn lerna exec --scope @looker/extension-playground --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "dependencies": {
-    "@looker/extension-sdk": "25.18.0",
-    "@looker/extension-sdk-react": "25.18.0",
-    "@looker/sdk": "25.18.0",
+    "@looker/extension-sdk": "25.20.0",
+    "@looker/extension-sdk-react": "25.20.0",
+    "@looker/sdk": "25.20.0",
     "@looker/components": "^5.0.3",
     "@looker/icons": "^1.5.21",
     "@styled-icons/material": "^10.47.0",
