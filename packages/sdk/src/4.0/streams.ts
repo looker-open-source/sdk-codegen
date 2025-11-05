@@ -8681,6 +8681,7 @@ export class Looker40SDKStream extends APIMethods {
         exclude_empty: request.exclude_empty,
         exclude_hidden: request.exclude_hidden,
         include_internal: request.include_internal,
+        include_self_service: request.include_self_service,
       },
       null,
       options

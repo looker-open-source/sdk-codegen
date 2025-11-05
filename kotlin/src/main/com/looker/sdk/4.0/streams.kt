@@ -6070,6 +6070,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * @param {Boolean} exclude_empty Whether or not to exclude models with no explores from the response (Defaults to false)
      * @param {Boolean} exclude_hidden Whether or not to exclude hidden explores from the response (Defaults to false)
      * @param {Boolean} include_internal Whether or not to include built-in models such as System Activity (Defaults to false)
+     * @param {Boolean} include_self_service Whether or not to include self service models (Defaults to false)
      *
      * GET /lookml_models -> ByteArray
      */
@@ -6080,6 +6081,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         exclude_empty: Boolean? = null,
         exclude_hidden: Boolean? = null,
         include_internal: Boolean? = null,
+        include_self_service: Boolean? = null,
     ): SDKResponse {
         return this.get<ByteArray>(
             "/lookml_models",
@@ -6090,6 +6092,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
                 "exclude_empty" to exclude_empty,
                 "exclude_hidden" to exclude_hidden,
                 "include_internal" to include_internal,
+                "include_self_service" to include_self_service,
             ),
         )
     }

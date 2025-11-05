@@ -5943,6 +5943,7 @@ namespace Looker.SDK.API40
   /// <param name="exclude_empty">Whether or not to exclude models with no explores from the response (Defaults to false)</param>
   /// <param name="exclude_hidden">Whether or not to exclude hidden explores from the response (Defaults to false)</param>
   /// <param name="include_internal">Whether or not to include built-in models such as System Activity (Defaults to false)</param>
+  /// <param name="include_self_service">Whether or not to include self service models (Defaults to false)</param>
   public async Task<SdkResponse<LookmlModel[], Exception>> all_lookml_models(
     string? fields = null,
     long? limit = null,
@@ -5950,6 +5951,7 @@ namespace Looker.SDK.API40
     bool? exclude_empty = null,
     bool? exclude_hidden = null,
     bool? include_internal = null,
+    bool? include_self_service = null,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<LookmlModel[], Exception>(HttpMethod.Get, "/lookml_models", new Values {
@@ -5958,7 +5960,8 @@ namespace Looker.SDK.API40
       { "offset", offset },
       { "exclude_empty", exclude_empty },
       { "exclude_hidden", exclude_hidden },
-      { "include_internal", include_internal }},null,options);
+      { "include_internal", include_internal },
+      { "include_self_service", include_self_service }},null,options);
   }
 
   /// ### Create a lookml model using the specified configuration.

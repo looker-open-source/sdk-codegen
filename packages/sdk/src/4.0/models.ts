@@ -25,7 +25,7 @@
  */
 
 /**
- * 450 API models: 289 Spec, 73 Request, 64 Write, 24 Enum
+ * 453 API models: 290 Spec, 73 Request, 65 Write, 25 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl';
@@ -267,6 +267,10 @@ export interface IAlertNotifications {
    */
   ran_at?: string;
   alert?: IMobilePayload;
+  /**
+   * The type of notification, 'email' or 'slack' (read-only)
+   */
+  notification_type?: string | null;
 }
 
 export interface IAlertPatch {
@@ -758,6 +762,33 @@ export enum Category {
   dimension = 'dimension',
 }
 
+export interface ICertification {
+  /**
+   * Certification status: "certified" or "revoked" Valid values are: "certified", "revoked".
+   */
+  certification_status?: CertificationStatus;
+  /**
+   * Display name of user who certified the content, derived from user_id (read-only)
+   */
+  user_name?: string | null;
+  /**
+   * Certification notes
+   */
+  notes?: string | null;
+  /**
+   * Timestamp of certification (read-only)
+   */
+  updated_at?: Date;
+}
+
+/**
+ * Certification status: "certified" or "revoked" Valid values are: "certified", "revoked". (Enum defined in Certification)
+ */
+export enum CertificationStatus {
+  certified = 'certified',
+  revoked = 'revoked',
+}
+
 export interface ICIChangeRequest {
   /**
    * Numeric identifier of the change request (read-only)
@@ -794,18 +825,6 @@ export interface ICIGitState {
    * For incremental runs, the Git branch that the CI run compares against during validation (read-only)
    */
   target?: string | null;
-}
-
-export interface ICIRunResult {
-  sql_result?: ISqlValidatorResult;
-  sql_error?: IGenericError;
-  assert_result?: IAssertValidatorResult;
-  assert_error?: IGenericError;
-  content_result?: IContentValidatorResult;
-  content_error?: IGenericError;
-  lookml_result?: ILookMLValidatorResult;
-  lookml_error?: IGenericError;
-  generic_error?: IGenericError;
 }
 
 export interface ICIScheduleTrigger {
@@ -1200,6 +1219,7 @@ export interface IContentSummary {
    * The preferred route for viewing this content (ie: dashboards or dashboards-next) (read-only)
    */
   preferred_viewer?: string | null;
+  certification_metadata?: ICertification;
 }
 
 export interface IContentValidation {
@@ -2397,6 +2417,7 @@ export interface IDashboard {
    * The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
    */
   preferred_viewer?: string | null;
+  certification_metadata?: ICertification;
   /**
    * Enables alerts to keep in sync with dashboard filter changes
    */
@@ -2629,6 +2650,7 @@ export interface IDashboardBase {
    * The preferred route for viewing this dashboard (ie: dashboards or dashboards-next) (read-only)
    */
   preferred_viewer?: string | null;
+  certification_metadata?: ICertification;
 }
 
 export interface IDashboardElement {
@@ -2648,6 +2670,10 @@ export interface IDashboardElement {
    * Id of Dashboard
    */
   dashboard_id?: string | null;
+  /**
+   * Id of Dashboard Layout
+   */
+  dashboard_layout_id?: string | null;
   /**
    * Relative path of URI of LookML file to edit the dashboard element (LookML dashboard only). (read-only)
    */
@@ -4103,6 +4129,10 @@ export interface IExternalOauthApplication {
    * The database dialect for this application.
    */
   dialect_name?: string | null;
+  /**
+   * Whether this application supports bi-directional data access.
+   */
+  bi_directional_data_access?: boolean | null;
   /**
    * Creation time for this application (read-only)
    */
@@ -5630,6 +5660,7 @@ export interface ILook {
    * User Id
    */
   user_id?: string | null;
+  certification_metadata?: ICertification;
   /**
    * Content Favorite Id (read-only)
    */
@@ -5751,6 +5782,7 @@ export interface ILookBasic {
    * User Id
    */
   user_id?: string | null;
+  certification_metadata?: ICertification;
 }
 
 export interface ILookmlFieldLink {
@@ -6254,6 +6286,14 @@ export interface ILookmlModelExploreField {
    * The name of the view this field is defined in. This will be different than "view" when the view has been joined via a different name using the "from" parameter. (read-only)
    */
   original_view?: string;
+  /**
+   * The data_type for a date in lookml (read-only)
+   */
+  datatype?: string | null;
+  /**
+   * Whether time zones should be converted for datetime fields (read-only)
+   */
+  convert_tz?: boolean | null;
 }
 
 export interface ILookmlModelExploreFieldEnumeration {
@@ -6662,6 +6702,7 @@ export interface ILookWithDashboards {
    * User Id
    */
   user_id?: string | null;
+  certification_metadata?: ICertification;
   /**
    * Content Favorite Id (read-only)
    */
@@ -6787,6 +6828,7 @@ export interface ILookWithQuery {
    * User Id
    */
   user_id?: string | null;
+  certification_metadata?: ICertification;
   /**
    * Content Favorite Id (read-only)
    */
@@ -8430,6 +8472,10 @@ export interface IRequestAllLookmlModels {
    * Whether or not to include built-in models such as System Activity (Defaults to false)
    */
   include_internal?: boolean | null;
+  /**
+   * Whether or not to include self service models (Defaults to false)
+   */
+  include_self_service?: boolean | null;
 }
 
 /**
@@ -10961,7 +11007,7 @@ export interface IRun {
    */
   git_service?: string | null;
   git_state?: ICIGitState;
-  result?: ICIRunResult;
+  result?: IRunResult;
   schedule?: ICIScheduleTrigger;
   /**
    * Git branch that the CI run compares against during validation, used for incremental runs (read-only)
@@ -11063,6 +11109,18 @@ export interface IRunningQueries {
    * SQL text of the SQL Interface query as run (read-only)
    */
   sql_interface_sql?: string | null;
+}
+
+export interface IRunResult {
+  sql_result?: ISqlValidatorResult;
+  sql_error?: IGenericError;
+  assert_result?: IAssertValidatorResult;
+  assert_error?: IGenericError;
+  content_result?: IContentValidatorResult;
+  content_error?: IGenericError;
+  lookml_result?: ILookMLValidatorResult;
+  lookml_error?: IGenericError;
+  generic_error?: IGenericError;
 }
 
 export interface ISamlConfig {
@@ -13380,6 +13438,21 @@ export interface IWriteBoardSection {
 }
 
 /**
+ * Dynamic writeable type for Certification removes:
+ * user_name, updated_at
+ */
+export interface IWriteCertification {
+  /**
+   * Certification status: "certified" or "revoked" Valid values are: "certified", "revoked".
+   */
+  certification_status?: CertificationStatus | null;
+  /**
+   * Certification notes
+   */
+  notes?: string | null;
+}
+
+/**
  * Dynamic writeable type for ColorCollection removes:
  * id
  */
@@ -13598,6 +13671,11 @@ export interface IWriteDashboard {
    */
   preferred_viewer?: string | null;
   /**
+   * Dynamic writeable type for Certification removes:
+   * user_name, updated_at
+   */
+  certification_metadata?: IWriteCertification | null;
+  /**
    * Enables alerts to keep in sync with dashboard filter changes
    */
   alert_sync_with_dashboard_filter_enabled?: boolean;
@@ -13674,6 +13752,11 @@ export interface IWriteDashboardBase {
    * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
    */
   folder?: IWriteFolderBase | null;
+  /**
+   * Dynamic writeable type for Certification removes:
+   * user_name, updated_at
+   */
+  certification_metadata?: IWriteCertification | null;
 }
 
 /**
@@ -13689,6 +13772,10 @@ export interface IWriteDashboardElement {
    * Id of Dashboard
    */
   dashboard_id?: string | null;
+  /**
+   * Id of Dashboard Layout
+   */
+  dashboard_layout_id?: string | null;
   /**
    * Dynamic writeable type for LookWithQuery removes:
    * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, user_name, view_count, url
@@ -14303,6 +14390,10 @@ export interface IWriteExternalOauthApplication {
    * The database dialect for this application.
    */
   dialect_name?: string | null;
+  /**
+   * Whether this application supports bi-directional data access.
+   */
+  bi_directional_data_access?: boolean | null;
 }
 
 /**
@@ -14573,6 +14664,11 @@ export interface IWriteLookBasic {
    * User Id
    */
   user_id?: string | null;
+  /**
+   * Dynamic writeable type for Certification removes:
+   * user_name, updated_at
+   */
+  certification_metadata?: IWriteCertification | null;
 }
 
 /**
@@ -14611,6 +14707,11 @@ export interface IWriteLookWithQuery {
    * User Id
    */
   user_id?: string | null;
+  /**
+   * Dynamic writeable type for Certification removes:
+   * user_name, updated_at
+   */
+  certification_metadata?: IWriteCertification | null;
   /**
    * Whether or not a look is 'soft' deleted.
    */
