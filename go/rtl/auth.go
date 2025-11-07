@@ -39,6 +39,29 @@ func (t *transportWithHeaders) RoundTrip(req *http.Request) (*http.Response, err
 type AuthSession struct {
 	Config ApiSettings
 	Client http.Client
+	token  *oauth2.Token
+	source oauth2.TokenSource
+}
+
+func (s *AuthSession) IsActive() bool {
+	if s.token == nil {
+		return false
+	}
+	leeway := time.Second * 10
+	return s.token.Expiry.After(time.Now().Add(leeway))
+}
+
+func (s *AuthSession) Login() (*oauth2.Token, error) {
+	if s.IsActive() {
+		return s.token, nil
+	}
+
+	token, err := s.source.Token()
+	if err != nil {
+		return nil, err
+	}
+	s.token = token
+	return token, nil
 }
 
 func NewAuthSession(config ApiSettings) *AuthSession {
@@ -74,9 +97,11 @@ func NewAuthSessionWithTransport(config ApiSettings, transport http.RoundTripper
 		&http.Client{Transport: appIdHeaderTransport},
 	)
 
+	source := oauthConfig.TokenSource(ctx)
+
 	// Make use of oauth2 transport to handle token management
 	oauthTransport := &oauth2.Transport{
-		Source: oauthConfig.TokenSource(ctx),
+		Source: source,
 		// Will set "x-looker-appid" Header on all other requests
 		Base: appIdHeaderTransport,
 	}
@@ -84,11 +109,15 @@ func NewAuthSessionWithTransport(config ApiSettings, transport http.RoundTripper
 	return &AuthSession{
 		Config: config,
 		Client: http.Client{Transport: oauthTransport},
+		source: source,
 	}
 }
 
 func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars map[string]interface{}, body interface{}, options *ApiSettings) error {
-
+	_, err := s.Login()
+	if err != nil {
+		return err
+	}
 	// prepare URL
 	u := fmt.Sprintf("%s/api%s%s", s.Config.BaseUrl, ver, path)
 
