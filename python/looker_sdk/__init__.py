@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from typing import Optional
+from typing import Optional, Tuple
 
 from looker_sdk.rtl import api_settings
 from looker_sdk.rtl import requests_transport
@@ -31,6 +31,7 @@ from looker_sdk.sdk import constants
 # F401 - providing convenience shortcut for methods/models at top level
 from looker_sdk.sdk.api40 import methods as methods40
 from looker_sdk.sdk.api40 import models as models40  # noqa: F401
+from looker_sdk.sdk.api40 import streams as streams40
 
 API_SETTINGS_API_VERSION_DEPRECATED = "API_VERSION config value is no longer needed."
 
@@ -49,17 +50,28 @@ def init40(
     config_file: str = "looker.ini",
     section: Optional[str] = None,
     config_settings: Optional[api_settings.ApiSettings] = None,
-) -> methods40.Looker40SDK:
+) -> Tuple[methods40.Looker40SDK, streams40.Looker40SDKStream]:
     """Default dependency configuration"""
     settings = (
         _settings(config_file, section) if config_settings is None else config_settings
     )
     settings.is_configured()
     transport = requests_transport.RequestsTransport.configure(settings)
-    return methods40.Looker40SDK(
-        auth_session.AuthSession(settings, transport, serialize.deserialize40, "4.0"),
+    auth = auth_session.AuthSession(
+        settings, transport, serialize.deserialize40, "4.0"
+    )
+    sdk = methods40.Looker40SDK(
+        auth,
         serialize.deserialize40,
         serialize.serialize40,
         transport,
         "4.0",
     )
+    stream = streams40.Looker40SDKStream(
+        auth,
+        serialize.deserialize40,
+        serialize.serialize40,
+        transport,
+        "4.0",
+    )
+    return sdk, stream

@@ -271,6 +271,13 @@ export interface ICodeGen {
   useModelClassForTypes: boolean;
 
   /**
+   * Writes the generated source code to the specified file path
+   * @param filePath path of file to write
+   * @param content contents of file to write
+   */
+  writeFile(filePath: string, content: string): Promise<void>;
+
+  /**
    * Resets the generator for a new emission
    */
   reset(): void;
@@ -1215,6 +1222,12 @@ export abstract class CodeGen implements ICodeGen {
 
   fileName(base: string) {
     return `${this.codePath}${this.packagePath}/${base}${this.fileExtension}`;
+  }
+
+  async writeFile(filePath: string, content: string) {
+    // concrete implementation will be provided by the sdkGen runner
+    throw new Error(`writeFile not implemented. 
+Tried to write ${content} to ${filePath}`);
   }
 
   comment(indent: string, description: string) {

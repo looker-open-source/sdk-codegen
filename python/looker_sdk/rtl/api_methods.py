@@ -24,7 +24,7 @@
 """
 import datetime
 import json
-from typing import Any, MutableMapping, Optional, Sequence, Type, Union
+from typing import Any, Iterator, MutableMapping, Optional, Sequence, Type, Union
 import urllib.parse
 
 from looker_sdk import error
@@ -238,10 +238,25 @@ class APIMethods:
     ) -> TReturn:
         """DELETE method"""
         response = self.transport.request(
-            transport.HttpMethod.DELETE,
-            self._path(path),
-            body=None,
-            authenticator=self.auth.authenticate,
-            transport_options=transport_options,
-        )
-        return self._return(response, structure)
+                    return self._return(response, structure)
+            
+                def stream(
+                    self,
+                    method: transport.HttpMethod,
+                    path: str,
+                    query_params: Optional[TQueryParams] = None,
+                    body: TBody = None,
+                    transport_options: Optional[transport.TransportOptions] = None,
+                ) -> Iterator[bytes]:
+                    params = self._convert_query_params(query_params) if query_params else None
+                    serialized = self._get_serialized(body)
+                    return self.transport.stream(
+                        method,
+                        self._path(path),
+                        query_params=params,
+                        body=serialized,
+                        authenticator=self.auth.authenticate,
+                        transport_options=transport_options,
+                    )
+            
+            

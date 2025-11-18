@@ -51,6 +51,10 @@ export class PythonGen extends CodeGen {
   hashKeyQuote = '"';
   useModelClassForTypes = true;
 
+  isStreamed(method: IMethod) {
+    return method.responseIsBinary();
+  }
+
   endTypeStr = '';
 
   // keyword.kwlist
@@ -108,6 +112,17 @@ from ${this.packagePath}.rtl import api_methods
 from ${this.packagePath}.rtl import transport
 
 class ${this.packageName}(api_methods.APIMethods):
+`;
+
+  streamsPrologue = (_indent: string) => `
+# ${this.warnEditing()}
+from typing import Iterator, Optional
+
+from ${this.packagePath}.rtl import api_methods
+from ${this.packagePath}.rtl import transport
+from . import models as mdls
+
+class ${this.packageName}Stream(api_methods.APIMethods):
 `;
 
   methodsEpilogue = (_indent: string) =>
@@ -203,7 +218,9 @@ ${this.hooks.join('\n')}
   private methodReturnType(method: IMethod) {
     const type = this.typeMapMethods(method.type);
     let returnType = type.name;
-    if (method.responseIsBoth()) {
+    if (this.isStreamed(method)) {
+      returnType = 'Iterator[bytes]';
+    } else if (method.responseIsBoth()) {
       returnType = `Union[${returnType}, bytes]`;
     } else if (method.responseIsBinary()) {
       returnType = 'bytes';
@@ -384,14 +401,18 @@ ${this.hooks.join('\n')}
       args = this.argFill(args, `${currIndent}query_params=${queryParams}`);
     }
     let returnType = this.methodReturnType(method);
-    if (method.responseIsBoth()) {
+    if (this.isStreamed(method)) {
+      // streaming methods do not have a structure
+    } else if (method.responseIsBoth()) {
       // cattrs needs the python object Union[<rt>, bytes] in order
       // to properly deserialize the response. However, this argument
       // is passed as a value so we get a mypy error that the argument
       // has type "object" instead of TStructure. Hence the # type: ignore
       returnType += ',  # type: ignore';
+      args = this.argFill(args, `${currIndent}structure=${returnType}`);
+    } else {
+      args = this.argFill(args, `${currIndent}structure=${returnType}`);
     }
-    args = this.argFill(args, `${currIndent}structure=${returnType}`);
     let endpoint = `"${method.endpoint}"`;
     if (/\{\w+\}/.test(endpoint)) {
       // avoid flake8: f-string is missing placeholders
@@ -410,14 +431,27 @@ ${this.hooks.join('\n')}
         `${callerIndent}warnings.warn("login_user behavior changed significantly ` +
         `in 21.4.0. See https://git.io/JOtH1")\n`;
     }
-    const callOpener =
-      `${callerIndent}response = cast(\n` +
-      `${currIndent}${this.methodReturnType(method)},\n` +
-      `${currIndent}${this.it(method.httpMethod.toLowerCase())}(\n`;
+    const streamed = this.isStreamed(method);
+    const op = streamed ? 'stream' : `it('${method.httpMethod.toLowerCase()}')`;
+    const returnType = this.methodReturnType(method);
+    let cast = `${callerIndent}response = cast(${returnType}, self.${op}(\n`;
+    if (streamed) {
+      cast = `${callerIndent}response = self.${op}(\n`;
+    }
+    const callOpener = cast;
     const callArgs = `${this.httpArgs(currIndent, method)}\n`;
-    const callCloser = `${currIndent})\n${callerIndent})\n`;
+    const callCloser = `${currIndent}))\n`;
     const returnStmt = `${callerIndent}return response`;
     return deprecation + callOpener + callArgs + callCloser + returnStmt;
+  }
+
+  streamCall(callerIndent: string, method: IMethod): string {
+    const currIndent = this.bumper(callerIndent);
+    const callOpener = `${callerIndent}response = self.stream(\n${currIndent}${method.httpMethod},\n`;
+    const callArgs = `${this.httpArgs(currIndent, method)}\n`;
+    const callCloser = `${currIndent})\n`;
+    const returnStmt = `${callerIndent}return response`;
+    return callOpener + callArgs + callCloser + returnStmt;
   }
 
   encodePathParams(indent: string, method: IMethod) {
@@ -436,11 +470,14 @@ ${this.hooks.join('\n')}
   declareMethod(indent: string, method: IMethod) {
     const bump = this.bumper(indent);
 
+    const call = this.isStreamed(method)
+      ? this.streamCall(bump, method)
+      : this.httpCall(bump, method);
     return (
       this.methodSignature(indent, method) +
       this.summary(bump, method.summary) +
       this.encodePathParams(bump, method) +
-      this.httpCall(bump, method)
+      call
     );
   }
 
@@ -585,5 +622,34 @@ ${this.hooks.join('\n')}
 
   typeMapModels(type: IType) {
     return this.typeMap(type, 'models');
+  }
+
+  // this is a complete override of the CodeGen version of this method
+  async generateMethods(indent: string) {
+    const bump = this.bumper(indent);
+    const methods: string[] = [];
+    const streams: string[] = [];
+    let content: string;
+    Object.values(this.api.methods)
+      .sort((a, b) => a.name.localeCompare(b.name))
+      .forEach(method => {
+        const stream = this.isStreamed(method);
+        if (stream) {
+          streams.push(this.declareMethod(bump, method));
+        } else {
+          methods.push(this.declareMethod(bump, method));
+        }
+      });
+
+    content =
+      this.methodsPrologue(indent) +
+      methods.join('\n\n') +
+      this.methodsEpilogue(indent);
+    await this.writeFile(this.sdkFileName('methods'), content);
+
+    if (streams.length > 0) {
+      content = this.streamsPrologue(indent) + streams.join('\n\n');
+      await this.writeFile(this.sdkFileName('streams'), content);
+    }
   }
 }

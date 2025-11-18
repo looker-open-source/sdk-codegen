@@ -26,7 +26,7 @@ import abc
 import enum
 import re
 import sys
-from typing import Callable, Dict, MutableMapping, Optional
+from typing import Callable, Dict, Iterator, MutableMapping, Optional
 
 import attr
 
@@ -134,4 +134,18 @@ class Transport(abc.ABC):
         authenticator: TAuthenticator = None,
         transport_options: Optional[TransportOptions] = None,
     ) -> Response:
-        """Send API request."""
+        """Sends an HTTP request and returns the response.
+        """
+
+    @abc.abstractmethod
+    def stream(
+        self,
+        method: HttpMethod,
+        path: str,
+        query_params: Optional[MutableMapping[str, str]] = None,
+        body: Optional[bytes] = None,
+        authenticator: TAuthenticator = None,
+        transport_options: Optional[TransportOptions] = None,
+    ) -> Iterator[bytes]:
+        """Sends an HTTP request and returns a streaming response.
+        """

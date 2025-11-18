@@ -1,0 +1,10 @@
+{
+  "looker_release_version": "22.20",
+  "supported_versions": [
+    {
+      "version": "4.0",
+      "status": "stable",
+      "swagger_url": "file://test/swaggerRef.json"
+    }
+  ]
+}

@@ -24,7 +24,7 @@
 """
 
 import logging
-from typing import cast, Callable, Dict, MutableMapping, Optional
+from typing import cast, Callable, Dict, Iterator, MutableMapping, Optional
 
 import requests
 
@@ -99,6 +99,45 @@ class RequestsTransport(transport.Transport):
                 ret.encoding = encoding
 
         return ret
+
+    def stream(
+        self,
+        method: transport.HttpMethod,
+        path: str,
+        query_params: Optional[MutableMapping[str, str]] = None,
+        body: Optional[bytes] = None,
+        authenticator: transport.TAuthenticator = None,
+        transport_options: Optional[transport.TransportOptions] = None,
+    ) -> Iterator[bytes]:
+        headers = {}
+        timeout = self.settings.timeout
+        if authenticator:
+            headers.update(authenticator(transport_options or {}))
+        if transport_options:
+            if transport_options.get("headers"):
+                headers.update(transport_options["headers"])
+            if transport_options.get("timeout"):
+                timeout = transport_options["timeout"]
+        self.logger.info("%s(%s)", method.name, path)
+        try:
+            resp = self.session.request(
+                method.name,
+                path,
+                auth=NullAuth(),
+                params=query_params,
+                data=body,
+                headers=headers,
+                timeout=timeout,
+                stream=True,
+            )
+            resp.raise_for_status()
+            return resp.iter_content(chunk_size=8192)
+        except IOError as exc:
+            self.logger.error("Stream error: %s", exc)
+            raise
+        except requests.exceptions.RequestException as exc:
+            self.logger.error("Request error: %s", exc)
+            raise
 
 
 class NullAuth(requests.auth.AuthBase):
