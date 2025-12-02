@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"os"
 	"reflect"
+	"sync"
 	"time"
 
 	"golang.org/x/oauth2"
@@ -41,18 +42,36 @@ type AuthSession struct {
 	Client http.Client
 	token  *oauth2.Token
 	source oauth2.TokenSource
+	mu     sync.RWMutex
 }
 
+const tokenLeeway = 10 * time.Second
+
 func (s *AuthSession) IsActive() bool {
+	s.mu.RLock()
+	defer s.mu.RUnlock()
 	if s.token == nil {
 		return false
 	}
-	leeway := time.Second * 10
-	return s.token.Expiry.After(time.Now().Add(leeway))
+	return s.token.Expiry.After(time.Now().Add(tokenLeeway))
 }
 
 func (s *AuthSession) Login() (*oauth2.Token, error) {
-	if s.IsActive() {
+	// First, check with a read lock to avoid contention if the token is valid.
+	s.mu.RLock()
+	if s.token != nil && s.token.Expiry.After(time.Now().Add(tokenLeeway)) {
+		token := s.token
+		s.mu.RUnlock()
+		return token, nil
+	}
+	s.mu.RUnlock()
+
+	// If the token is invalid or nil, acquire a write lock to refresh it.
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	// Re-check after obtaining the write lock, in case another goroutine refreshed it.
+	if s.token != nil && s.token.Expiry.After(time.Now().Add(tokenLeeway)) {
 		return s.token, nil
 	}
 
