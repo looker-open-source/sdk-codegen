@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 472 API methods
+/// 476 API methods
 
 #nullable enable
 using System;
@@ -345,7 +345,10 @@ namespace Looker.SDK.API40
   ///
   /// See 'login' for more detail on the access token and how to use it.
   ///
-  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  /// In [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview) this call will be denied unless all of the following criteria are met:
+  ///   1. The calling user is an [API-only Service Account](https://cloud.google.com/looker/docs/looker-core-user-management#creating_an_api-only_service_account) with the Admin role
+  ///   2. The target user is an [Embed User type](https://cloud.google.com/looker/docs/r/single-sign-on-embedding)
+  /// Regular user types can not be impersonated in [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). If your application needs to call the API for these users, use OAuth authentication instead.
   ///
   /// POST /login/{user_id} -> AccessToken
   ///
@@ -3892,6 +3895,68 @@ namespace Looker.SDK.API40
     return await AuthRequest<DashboardAggregateTableLookml, Exception>(HttpMethod.Get, $"/dashboards/aggregate_table_lookml/{dashboard_id}", null,null,options);
   }
 
+  /// ### Search LookML Dashboards
+  ///
+  /// Returns an array of **LookML Dashboard** objects that match the specified search criteria.
+  /// Note, this only returns LookML Dashboards in production.
+  ///
+  /// If multiple search params are given and `filter_or` is FALSE or not specified,
+  /// search params are combined in a logical AND operation.
+  /// Only rows that match *all* search param criteria will be returned.
+  ///
+  /// If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+  /// Results will include rows that match **any** of the search criteria.
+  ///
+  /// String search params use case-insensitive matching.
+  /// String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+  /// example="dan%" will match "danger" and "Danzig" but not "David"
+  /// example="D_m%" will match "Damage" and "dump"
+  ///
+  /// Integer search params can accept a single value or a comma separated list of values. The multiple
+  /// values will be combined under a logical OR operation - results will match at least one of
+  /// the given values.
+  ///
+  /// Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+  /// or exclude (respectively) rows where the column is null.
+  ///
+  /// Boolean search params accept only "true" and "false" as values.
+  ///
+  ///
+  /// The parameters `limit`, and `offset` are recommended for fetching results in page-size chunks.
+  ///
+  /// Get a **single LookML dashboard** by id with [dashboard_lookml()](#!/Dashboard/dashboard_lookml)
+  ///
+  /// GET /dashboards/lookml/search -> DashboardLookml
+  ///
+  /// <returns><c>DashboardLookml</c> dashboards (application/json)</returns>
+  ///
+  /// <param name="folder_id">Filter on a particular folder.</param>
+  /// <param name="title">Match LookML Dashboard title.</param>
+  /// <param name="content_favorite_id">Filter on a content favorite id.</param>
+  /// <param name="fields">Requested fields.</param>
+  /// <param name="limit">Number of results to return. (used with offset and takes priority over page and per_page)</param>
+  /// <param name="offset">Number of results to skip before returning any. (used with limit and takes priority over page and per_page)</param>
+  /// <param name="sorts">One or more fields to sort by. Sortable fields: [:title, :id, :folder_id, :content_favorite_id, :content_metadata_id]</param>
+  public async Task<SdkResponse<DashboardLookml, Exception>> search_lookml_dashboards(
+    string? folder_id = null,
+    string? title = null,
+    string? content_favorite_id = null,
+    string? fields = null,
+    long? limit = null,
+    long? offset = null,
+    string? sorts = null,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<DashboardLookml, Exception>(HttpMethod.Get, "/dashboards/lookml/search", new Values {
+      { "folder_id", folder_id },
+      { "title", title },
+      { "content_favorite_id", content_favorite_id },
+      { "fields", fields },
+      { "limit", limit },
+      { "offset", offset },
+      { "sorts", sorts }},null,options);
+  }
+
   /// ### Get lookml of a UDD
   ///
   /// Returns a JSON object that contains the dashboard id and the full lookml
@@ -5399,6 +5464,24 @@ namespace Looker.SDK.API40
     return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/integration_hubs/{integration_hub_id}", null,null,options);
   }
 
+  /// Checks to see if the user is able to connect to their integration hub
+  ///
+  /// GET /integration_hubs/{integration_hub_id}/health -> IntegrationHubHealthResult
+  ///
+  /// <returns><c>IntegrationHubHealthResult</c> Health Result (application/json)</returns>
+  ///
+  /// <param name="integration_hub_id">Id of integration_hub</param>
+  /// <param name="fields">Requested fields.</param>
+  public async Task<SdkResponse<IntegrationHubHealthResult, Exception>> get_integration_hub_health(
+    string integration_hub_id,
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+      integration_hub_id = SdkUtils.EncodeParam(integration_hub_id);
+    return await AuthRequest<IntegrationHubHealthResult, Exception>(HttpMethod.Get, $"/integration_hubs/{integration_hub_id}/health", new Values {
+      { "fields", fields }},null,options);
+  }
+
   /// Accepts the legal agreement for a given integration hub. This only works for integration hubs that have legal_agreement_required set to true and legal_agreement_signed set to false.
   ///
   /// POST /integration_hubs/{integration_hub_id}/accept_legal_agreement -> IntegrationHub
@@ -5860,6 +5943,7 @@ namespace Looker.SDK.API40
   /// <param name="exclude_empty">Whether or not to exclude models with no explores from the response (Defaults to false)</param>
   /// <param name="exclude_hidden">Whether or not to exclude hidden explores from the response (Defaults to false)</param>
   /// <param name="include_internal">Whether or not to include built-in models such as System Activity (Defaults to false)</param>
+  /// <param name="include_self_service">Whether or not to include self service models (Defaults to false)</param>
   public async Task<SdkResponse<LookmlModel[], Exception>> all_lookml_models(
     string? fields = null,
     long? limit = null,
@@ -5867,6 +5951,7 @@ namespace Looker.SDK.API40
     bool? exclude_empty = null,
     bool? exclude_hidden = null,
     bool? include_internal = null,
+    bool? include_self_service = null,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<LookmlModel[], Exception>(HttpMethod.Get, "/lookml_models", new Values {
@@ -5875,7 +5960,8 @@ namespace Looker.SDK.API40
       { "offset", offset },
       { "exclude_empty", exclude_empty },
       { "exclude_hidden", exclude_hidden },
-      { "include_internal", include_internal }},null,options);
+      { "include_internal", include_internal },
+      { "include_self_service", include_self_service }},null,options);
   }
 
   /// ### Create a lookml model using the specified configuration.
@@ -8183,14 +8269,17 @@ namespace Looker.SDK.API40
   ///
   /// <param name="fields">Requested fields.</param>
   /// <param name="ids">Optional list of ids to get specific roles.</param>
+  /// <param name="get_all_support_roles">Get all Looker support roles.</param>
   public async Task<SdkResponse<Role[], Exception>> all_roles(
     string? fields = null,
     DelimArray<string>? ids = null,
+    bool? get_all_support_roles = null,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<Role[], Exception>(HttpMethod.Get, "/roles", new Values {
       { "fields", fields },
-      { "ids", ids }},null,options);
+      { "ids", ids },
+      { "get_all_support_roles", get_all_support_roles }},null,options);
   }
 
   /// ### Create a role with the specified information.
@@ -8243,7 +8332,6 @@ namespace Looker.SDK.API40
   /// <param name="name">Match role name.</param>
   /// <param name="built_in">Match roles by built_in status.</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression.</param>
-  /// <param name="is_support_role">Search for Looker support roles.</param>
   public async Task<SdkResponse<Role[], Exception>> search_roles(
     string? fields = null,
     long? limit = null,
@@ -8253,7 +8341,6 @@ namespace Looker.SDK.API40
     string? name = null,
     bool? built_in = null,
     bool? filter_or = null,
-    bool? is_support_role = null,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<Role[], Exception>(HttpMethod.Get, "/roles/search", new Values {
@@ -8264,8 +8351,7 @@ namespace Looker.SDK.API40
       { "id", id },
       { "name", name },
       { "built_in", built_in },
-      { "filter_or", filter_or },
-      { "is_support_role", is_support_role }},null,options);
+      { "filter_or", filter_or }},null,options);
   }
 
   /// ### Search roles include user count
@@ -9555,14 +9641,15 @@ namespace Looker.SDK.API40
   /// <param name="id">Match User Id.</param>
   /// <param name="first_name">Match First name.</param>
   /// <param name="last_name">Match Last name.</param>
-  /// <param name="verified_looker_employee">Search for user accounts associated with Looker employees</param>
+  /// <param name="verified_looker_employee">Search for user accounts associated with Looker employees. Availability of this filter is limited to users with permission to view complete user details.</param>
   /// <param name="embed_user">Search for only embed users</param>
-  /// <param name="email">Search for the user with this email address</param>
-  /// <param name="is_disabled">Search for disabled user accounts</param>
+  /// <param name="email">Search for the user with this email address. Availability of this filter is limited to users with permission to view complete user details.</param>
+  /// <param name="is_disabled">Search for disabled user accounts. Availability of this filter is limited to users with permission to view complete user details.</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
   /// <param name="content_metadata_id">Search for users who have access to this content_metadata item</param>
   /// <param name="group_id">Search for users who are direct members of this group</param>
-  /// <param name="can_manage_api3_creds">Search for users who can manage API3 credentials</param>
+  /// <param name="can_manage_api3_creds">Search for users who can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). Availability of this filter is limited to users with permission to view complete user details. This is an experimental feature and may not yet be available on your instance.</param>
+  /// <param name="is_service_account">Search for service account users. Send true to get only service accounts, or false to get all other types of users. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). Availability of this filter is limited to users with permission to view complete user details. This is an experimental feature and may not yet be available on your instance.</param>
   public async Task<SdkResponse<User[], Exception>> search_users(
     string? fields = null,
     long? page = null,
@@ -9581,6 +9668,7 @@ namespace Looker.SDK.API40
     string? content_metadata_id = null,
     string? group_id = null,
     bool? can_manage_api3_creds = null,
+    bool? is_service_account = null,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<User[], Exception>(HttpMethod.Get, "/users/search", new Values {
@@ -9600,7 +9688,8 @@ namespace Looker.SDK.API40
       { "filter_or", filter_or },
       { "content_metadata_id", content_metadata_id },
       { "group_id", group_id },
-      { "can_manage_api3_creds", can_manage_api3_creds }},null,options);
+      { "can_manage_api3_creds", can_manage_api3_creds },
+      { "is_service_account", is_service_account }},null,options);
   }
 
   /// ### Search for user accounts by name
@@ -10545,6 +10634,47 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
     return await AuthRequest<UserPublic, Exception>(HttpMethod.Post, "/users/embed_user", null,body,options);
+  }
+
+  /// ### Create a service account with the specified information. This action is restricted to Looker admins.
+  ///
+  /// Calls to this endpoint may only be available for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
+  /// POST /users/service_accounts -> ServiceAccount
+  ///
+  /// <returns><c>ServiceAccount</c> Created Service Account (application/json)</returns>
+  ///
+  /// <param name="fields">Requested fields.</param>
+  public async Task<SdkResponse<ServiceAccount, Exception>> create_service_account(
+    WriteServiceAccount body,
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<ServiceAccount, Exception>(HttpMethod.Post, "/users/service_accounts", new Values {
+      { "fields", fields }},body,options);
+  }
+
+  /// ### Update information for a specific service account. This action is restricted to Looker admins.
+  ///
+  /// This endpoint is exclusively for updating service accounts. To update a regular user, please use the `PATCH /api/3.x/users/:user_id` endpoint instead.
+  ///
+  /// Calls to this endpoint may only be available for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
+  /// PATCH /users/service_accounts/{user_id} -> ServiceAccount
+  ///
+  /// <returns><c>ServiceAccount</c> New state for specified service account. (application/json)</returns>
+  ///
+  /// <param name="user_id">Id of service account</param>
+  /// <param name="fields">Requested fields.</param>
+  public async Task<SdkResponse<ServiceAccount, Exception>> update_service_account(
+    string user_id,
+    WriteServiceAccount body,
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+      user_id = SdkUtils.EncodeParam(user_id);
+    return await AuthRequest<ServiceAccount, Exception>(HttpMethod.Patch, $"/users/service_accounts/{user_id}", new Values {
+      { "fields", fields }},body,options);
   }
 
   #endregion User: Manage Users

@@ -25,7 +25,7 @@
  */
 
 /**
- * 472 API methods
+ * 476 API methods
  */
 
 import type {
@@ -125,6 +125,7 @@ import type {
   IHomepageSection,
   IIntegration,
   IIntegrationHub,
+  IIntegrationHubHealthResult,
   IIntegrationTestResult,
   IInternalHelpResources,
   IInternalHelpResourcesContent,
@@ -219,6 +220,7 @@ import type {
   IRequestSearchGroups,
   IRequestSearchGroupsWithHierarchy,
   IRequestSearchGroupsWithRoles,
+  IRequestSearchLookmlDashboards,
   IRequestSearchLooks,
   IRequestSearchModelSets,
   IRequestSearchPermissionSets,
@@ -244,6 +246,7 @@ import type {
   ISchema,
   ISchemaColumns,
   ISchemaTables,
+  IServiceAccount,
   ISession,
   ISessionConfig,
   ISetting,
@@ -320,6 +323,7 @@ import type {
   IWriteRole,
   IWriteSamlConfig,
   IWriteScheduledPlan,
+  IWriteServiceAccount,
   IWriteSessionConfig,
   IWriteSetting,
   IWriteSqlInterfaceQueryCreate,
@@ -598,7 +602,10 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * See 'login' for more detail on the access token and how to use it.
    *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   * In [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview) this call will be denied unless all of the following criteria are met:
+   *   1. The calling user is an [API-only Service Account](https://cloud.google.com/looker/docs/looker-core-user-management#creating_an_api-only_service_account) with the Admin role
+   *   2. The target user is an [Embed User type](https://cloud.google.com/looker/docs/r/single-sign-on-embedding)
+   * Regular user types can not be impersonated in [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). If your application needs to call the API for these users, use OAuth authentication instead.
    *
    * POST /login/{user_id} -> IAccessToken
    *
@@ -3767,6 +3774,49 @@ export interface ILooker40SDK extends IAPIMethods {
   ): Promise<SDKResponse<IDashboardAggregateTableLookml, IError>>;
 
   /**
+   * ### Search LookML Dashboards
+   *
+   * Returns an array of **LookML Dashboard** objects that match the specified search criteria.
+   * Note, this only returns LookML Dashboards in production.
+   *
+   * If multiple search params are given and `filter_or` is FALSE or not specified,
+   * search params are combined in a logical AND operation.
+   * Only rows that match *all* search param criteria will be returned.
+   *
+   * If `filter_or` is TRUE, multiple search params are combined in a logical OR operation.
+   * Results will include rows that match **any** of the search criteria.
+   *
+   * String search params use case-insensitive matching.
+   * String search params can contain `%` and '_' as SQL LIKE pattern match wildcard expressions.
+   * example="dan%" will match "danger" and "Danzig" but not "David"
+   * example="D_m%" will match "Damage" and "dump"
+   *
+   * Integer search params can accept a single value or a comma separated list of values. The multiple
+   * values will be combined under a logical OR operation - results will match at least one of
+   * the given values.
+   *
+   * Most search params can accept "IS NULL" and "NOT NULL" as special expressions to match
+   * or exclude (respectively) rows where the column is null.
+   *
+   * Boolean search params accept only "true" and "false" as values.
+   *
+   *
+   * The parameters `limit`, and `offset` are recommended for fetching results in page-size chunks.
+   *
+   * Get a **single LookML dashboard** by id with [dashboard_lookml()](#!/Dashboard/dashboard_lookml)
+   *
+   * GET /dashboards/lookml/search -> IDashboardLookml
+   *
+   * @param request composed interface "IRequestSearchLookmlDashboards" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  search_lookml_dashboards(
+    request: IRequestSearchLookmlDashboards,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IDashboardLookml, IError>>;
+
+  /**
    * ### Get lookml of a UDD
    *
    * Returns a JSON object that contains the dashboard id and the full lookml
@@ -4966,6 +5016,24 @@ export interface ILooker40SDK extends IAPIMethods {
     integration_hub_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>;
+
+  /**
+   * Checks to see if the user is able to connect to their integration hub
+   *
+   * GET /integration_hubs/{integration_hub_id}/health -> IIntegrationHubHealthResult
+   *
+   * @param integration_hub_id Id of integration_hub
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  get_integration_hub_health(
+    integration_hub_id: string,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<
+    SDKResponse<IIntegrationHubHealthResult, IError | IValidationError>
+  >;
 
   /**
    * Accepts the legal agreement for a given integration hub. This only works for integration hubs that have legal_agreement_required set to true and legal_agreement_signed set to false.
@@ -9110,6 +9178,46 @@ export interface ILooker40SDK extends IAPIMethods {
     body: Partial<ICreateEmbedUserRequest>,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IUserPublic, IError>>;
+
+  /**
+   * ### Create a service account with the specified information. This action is restricted to Looker admins.
+   *
+   * Calls to this endpoint may only be available for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * POST /users/service_accounts -> IServiceAccount
+   *
+   * @param body Partial<IWriteServiceAccount>
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  create_service_account(
+    body: Partial<IWriteServiceAccount>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IServiceAccount, IError | IValidationError>>;
+
+  /**
+   * ### Update information for a specific service account. This action is restricted to Looker admins.
+   *
+   * This endpoint is exclusively for updating service accounts. To update a regular user, please use the `PATCH /api/3.x/users/:user_id` endpoint instead.
+   *
+   * Calls to this endpoint may only be available for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * PATCH /users/service_accounts/{user_id} -> IServiceAccount
+   *
+   * @param user_id Id of service account
+   * @param body Partial<IWriteServiceAccount>
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  update_service_account(
+    user_id: string,
+    body: Partial<IWriteServiceAccount>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IServiceAccount, IError | IValidationError>>;
 
   //#endregion User: Manage Users
 

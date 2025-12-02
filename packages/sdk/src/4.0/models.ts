@@ -25,7 +25,7 @@
  */
 
 /**
- * 446 API models: 287 Spec, 72 Request, 63 Write, 24 Enum
+ * 453 API models: 290 Spec, 73 Request, 65 Write, 25 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl';
@@ -267,6 +267,10 @@ export interface IAlertNotifications {
    */
   ran_at?: string;
   alert?: IMobilePayload;
+  /**
+   * The type of notification, 'email' or 'slack' (read-only)
+   */
+  notification_type?: string | null;
 }
 
 export interface IAlertPatch {
@@ -758,6 +762,33 @@ export enum Category {
   dimension = 'dimension',
 }
 
+export interface ICertification {
+  /**
+   * Certification status: "certified" or "revoked" Valid values are: "certified", "revoked".
+   */
+  certification_status?: CertificationStatus;
+  /**
+   * Display name of user who certified the content, derived from user_id (read-only)
+   */
+  user_name?: string | null;
+  /**
+   * Certification notes
+   */
+  notes?: string | null;
+  /**
+   * Timestamp of certification (read-only)
+   */
+  updated_at?: Date;
+}
+
+/**
+ * Certification status: "certified" or "revoked" Valid values are: "certified", "revoked". (Enum defined in Certification)
+ */
+export enum CertificationStatus {
+  certified = 'certified',
+  revoked = 'revoked',
+}
+
 export interface ICIChangeRequest {
   /**
    * Numeric identifier of the change request (read-only)
@@ -794,18 +825,6 @@ export interface ICIGitState {
    * For incremental runs, the Git branch that the CI run compares against during validation (read-only)
    */
   target?: string | null;
-}
-
-export interface ICIRunResult {
-  sql_result?: ISqlValidatorResult;
-  sql_error?: IGenericError;
-  assert_result?: IAssertValidatorResult;
-  assert_error?: IGenericError;
-  content_result?: IContentValidatorResult;
-  content_error?: IGenericError;
-  lookml_result?: ILookMLValidatorResult;
-  lookml_error?: IGenericError;
-  generic_error?: IGenericError;
 }
 
 export interface ICIScheduleTrigger {
@@ -1200,6 +1219,7 @@ export interface IContentSummary {
    * The preferred route for viewing this content (ie: dashboards or dashboards-next) (read-only)
    */
   preferred_viewer?: string | null;
+  certification_metadata?: ICertification;
 }
 
 export interface IContentValidation {
@@ -1357,6 +1377,10 @@ export interface IContentValidationDashboardElement {
    * Extension ID
    */
   extension_id?: string | null;
+  /**
+   * Custom ARIA description text
+   */
+  aria_description?: string | null;
 }
 
 export interface IContentValidationDashboardFilter {
@@ -2393,6 +2417,7 @@ export interface IDashboard {
    * The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
    */
   preferred_viewer?: string | null;
+  certification_metadata?: ICertification;
   /**
    * Enables alerts to keep in sync with dashboard filter changes
    */
@@ -2625,6 +2650,7 @@ export interface IDashboardBase {
    * The preferred route for viewing this dashboard (ie: dashboards or dashboards-next) (read-only)
    */
   preferred_viewer?: string | null;
+  certification_metadata?: ICertification;
 }
 
 export interface IDashboardElement {
@@ -2644,6 +2670,10 @@ export interface IDashboardElement {
    * Id of Dashboard
    */
   dashboard_id?: string | null;
+  /**
+   * Id of Dashboard Layout
+   */
+  dashboard_layout_id?: string | null;
   /**
    * Relative path of URI of LookML file to edit the dashboard element (LookML dashboard only). (read-only)
    */
@@ -2739,6 +2769,10 @@ export interface IDashboardElement {
    * Extension ID
    */
   extension_id?: string | null;
+  /**
+   * Custom ARIA description text
+   */
+  aria_description?: string | null;
 }
 
 export interface IDashboardFilter {
@@ -2849,6 +2883,18 @@ export interface IDashboardLayout {
    * Components (read-only)
    */
   dashboard_layout_components?: IDashboardLayoutComponent[] | null;
+  /**
+   * Label
+   */
+  label?: string | null;
+  /**
+   * Description
+   */
+  description?: string | null;
+  /**
+   * Order
+   */
+  order?: number | null;
 }
 
 export interface IDashboardLayoutComponent {
@@ -4084,6 +4130,10 @@ export interface IExternalOauthApplication {
    */
   dialect_name?: string | null;
   /**
+   * Whether this application supports bi-directional data access.
+   */
+  bi_directional_data_access?: boolean | null;
+  /**
    * Creation time for this application (read-only)
    */
   created_at?: Date;
@@ -4865,6 +4915,17 @@ export interface IIntegrationHub {
   legal_agreement_text?: string | null;
 }
 
+export interface IIntegrationHubHealthResult {
+  /**
+   * Whether or not the health check was successful (read-only)
+   */
+  success?: boolean;
+  /**
+   * A message representing the results of the health check. (read-only)
+   */
+  message?: string | null;
+}
+
 export interface IIntegrationParam {
   /**
    * Name of the parameter.
@@ -5599,6 +5660,7 @@ export interface ILook {
    * User Id
    */
   user_id?: string | null;
+  certification_metadata?: ICertification;
   /**
    * Content Favorite Id (read-only)
    */
@@ -5720,6 +5782,7 @@ export interface ILookBasic {
    * User Id
    */
   user_id?: string | null;
+  certification_metadata?: ICertification;
 }
 
 export interface ILookmlFieldLink {
@@ -6196,6 +6259,10 @@ export interface ILookmlModelExploreField {
    */
   value_format?: string | null;
   /**
+   * If specified, the name of the value format, as defined in the LookML model. (read-only)
+   */
+  value_format_name?: string | null;
+  /**
    * The name of the view this field belongs to. (read-only)
    */
   view?: string;
@@ -6219,6 +6286,14 @@ export interface ILookmlModelExploreField {
    * The name of the view this field is defined in. This will be different than "view" when the view has been joined via a different name using the "from" parameter. (read-only)
    */
   original_view?: string;
+  /**
+   * The data_type for a date in lookml (read-only)
+   */
+  datatype?: string | null;
+  /**
+   * Whether time zones should be converted for datetime fields (read-only)
+   */
+  convert_tz?: boolean | null;
 }
 
 export interface ILookmlModelExploreFieldEnumeration {
@@ -6627,6 +6702,7 @@ export interface ILookWithDashboards {
    * User Id
    */
   user_id?: string | null;
+  certification_metadata?: ICertification;
   /**
    * Content Favorite Id (read-only)
    */
@@ -6752,6 +6828,7 @@ export interface ILookWithQuery {
    * User Id
    */
   user_id?: string | null;
+  certification_metadata?: ICertification;
   /**
    * Content Favorite Id (read-only)
    */
@@ -8395,6 +8472,10 @@ export interface IRequestAllLookmlModels {
    * Whether or not to include built-in models such as System Activity (Defaults to false)
    */
   include_internal?: boolean | null;
+  /**
+   * Whether or not to include self service models (Defaults to false)
+   */
+  include_self_service?: boolean | null;
 }
 
 /**
@@ -8409,6 +8490,10 @@ export interface IRequestAllRoles {
    * Optional list of ids to get specific roles.
    */
   ids?: DelimArray<string> | null;
+  /**
+   * Get all Looker support roles.
+   */
+  get_all_support_roles?: boolean | null;
 }
 
 /**
@@ -10004,6 +10089,40 @@ export interface IRequestSearchGroupsWithRoles {
 }
 
 /**
+ * Dynamically generated request type for search_lookml_dashboards
+ */
+export interface IRequestSearchLookmlDashboards {
+  /**
+   * Filter on a particular folder.
+   */
+  folder_id?: string | null;
+  /**
+   * Match LookML Dashboard title.
+   */
+  title?: string | null;
+  /**
+   * Filter on a content favorite id.
+   */
+  content_favorite_id?: string | null;
+  /**
+   * Requested fields.
+   */
+  fields?: string | null;
+  /**
+   * Number of results to return. (used with offset and takes priority over page and per_page)
+   */
+  limit?: number | null;
+  /**
+   * Number of results to skip before returning any. (used with limit and takes priority over page and per_page)
+   */
+  offset?: number | null;
+  /**
+   * One or more fields to sort by. Sortable fields: [:title, :id, :folder_id, :content_favorite_id, :content_metadata_id]
+   */
+  sorts?: string | null;
+}
+
+/**
  * Dynamically generated request type for search_looks
  */
 export interface IRequestSearchLooks {
@@ -10243,10 +10362,6 @@ export interface IRequestSearchRoles {
    * Combine given search criteria in a boolean OR expression.
    */
   filter_or?: boolean | null;
-  /**
-   * Search for Looker support roles.
-   */
-  is_support_role?: boolean | null;
 }
 
 /**
@@ -10490,7 +10605,7 @@ export interface IRequestSearchUsers {
    */
   last_name?: string | null;
   /**
-   * Search for user accounts associated with Looker employees
+   * Search for user accounts associated with Looker employees. Availability of this filter is limited to users with permission to view complete user details.
    */
   verified_looker_employee?: boolean | null;
   /**
@@ -10498,11 +10613,11 @@ export interface IRequestSearchUsers {
    */
   embed_user?: boolean | null;
   /**
-   * Search for the user with this email address
+   * Search for the user with this email address. Availability of this filter is limited to users with permission to view complete user details.
    */
   email?: string | null;
   /**
-   * Search for disabled user accounts
+   * Search for disabled user accounts. Availability of this filter is limited to users with permission to view complete user details.
    */
   is_disabled?: boolean | null;
   /**
@@ -10518,9 +10633,13 @@ export interface IRequestSearchUsers {
    */
   group_id?: string | null;
   /**
-   * Search for users who can manage API3 credentials
+   * Search for users who can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). Availability of this filter is limited to users with permission to view complete user details. This is an experimental feature and may not yet be available on your instance.
    */
   can_manage_api3_creds?: boolean | null;
+  /**
+   * Search for service account users. Send true to get only service accounts, or false to get all other types of users. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). Availability of this filter is limited to users with permission to view complete user details. This is an experimental feature and may not yet be available on your instance.
+   */
+  is_service_account?: boolean | null;
 }
 
 /**
@@ -10888,7 +11007,7 @@ export interface IRun {
    */
   git_service?: string | null;
   git_state?: ICIGitState;
-  result?: ICIRunResult;
+  result?: IRunResult;
   schedule?: ICIScheduleTrigger;
   /**
    * Git branch that the CI run compares against during validation, used for incremental runs (read-only)
@@ -10990,6 +11109,18 @@ export interface IRunningQueries {
    * SQL text of the SQL Interface query as run (read-only)
    */
   sql_interface_sql?: string | null;
+}
+
+export interface IRunResult {
+  sql_result?: ISqlValidatorResult;
+  sql_error?: IGenericError;
+  assert_result?: IAssertValidatorResult;
+  assert_error?: IGenericError;
+  content_result?: IContentValidatorResult;
+  content_error?: IGenericError;
+  lookml_result?: ILookMLValidatorResult;
+  lookml_error?: IGenericError;
+  generic_error?: IGenericError;
 }
 
 export interface ISamlConfig {
@@ -11560,6 +11691,49 @@ export enum SecretType {
   JWT = 'JWT',
 }
 
+export interface IServiceAccount {
+  /**
+   * Operations the current user is able to perform on this object (read-only)
+   */
+  can?: IDictionary<boolean>;
+  /**
+   * Unique Id of the service account (read-only)
+   */
+  id?: string;
+  /**
+   * Display name of the service account.
+   */
+  service_account_name?: string;
+  /**
+   * Indicates whether this user is a service account (read-only)
+   */
+  is_service_account?: boolean;
+  /**
+   * Indicates if the service account is disabled
+   */
+  is_disabled?: boolean;
+  /**
+   * Array of ids of the groups associated with this service account (read-only)
+   */
+  group_ids?: string[] | null;
+  /**
+   * Array of ids of the roles associated with this service account (read-only)
+   */
+  role_ids?: string[] | null;
+  /**
+   * API3 credentials for the service account (read-only)
+   */
+  credentials_api3?: ICredentialsApi3[] | null;
+  /**
+   * Service account creation timestamp (read-only)
+   */
+  created_at?: Date | null;
+  /**
+   * Link to get this item (read-only)
+   */
+  url?: string | null;
+}
+
 export interface ISession {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -11765,11 +11939,11 @@ export interface ISmtpSettings {
   /**
    * User name
    */
-  user_name?: string;
+  user_name?: string | null;
   /**
    * Password
    */
-  password?: string;
+  password?: string | null;
   /**
    * SMTP Server's port
    */
@@ -11782,6 +11956,26 @@ export interface ISmtpSettings {
    * TLS version selected Valid values are: "TLSv1_1", "SSLv23", "TLSv1_2".
    */
   ssl_version?: SslVersion | null;
+  /**
+   * Auth Type
+   */
+  auth_type?: string | null;
+  /**
+   * The OAuth Client ID
+   */
+  client_id?: string | null;
+  /**
+   * The OAuth Client Secret
+   */
+  client_secret?: string | null;
+  /**
+   * The OAuth Token Endpoint
+   */
+  token_endpoint?: string | null;
+  /**
+   * The OAuth Scopes
+   */
+  scopes?: string | null;
   /**
    * Whether to enable built-in Looker SMTP
    */
@@ -12614,13 +12808,21 @@ export interface IUser {
    */
   embed_group_folder_id?: string | null;
   /**
-   * User is an IAM Admin - only available in Looker (Google Cloud core). The is_iam_admin is not returned by default. Please explicitly request this attribute if needed via the fields query param. Note: Including the optional is_iam_admin attribute can increase API latency. For best performance, use this attribute only when filtering for users with the 'Admin via IAM' role. When using this filter, always paginate your results with the offset and limit fields to optimize response time. (read-only)
+   * User is an IAM Admin. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). The is_iam_admin is not returned by default. Please explicitly request this attribute if needed via the fields query param. Note: Including the optional is_iam_admin attribute can increase API latency. For best performance, use this attribute only when filtering for users with the 'Admin via IAM' role. When using this filter, always paginate your results with the offset and limit fields to optimize response time. (read-only)
    */
   is_iam_admin?: boolean;
   /**
-   * Indicates if the user can manage API3 credentials
+   * Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.
    */
   can_manage_api3_creds?: boolean;
+  /**
+   * Indicates if this user is a service account. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance. (read-only)
+   */
+  is_service_account?: boolean;
+  /**
+   * The display name of the service account. This field is omitted for non service account users. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance. (read-only)
+   */
+  service_account_name?: string | null;
   /**
    * Link to get this item (read-only)
    */
@@ -13236,6 +13438,21 @@ export interface IWriteBoardSection {
 }
 
 /**
+ * Dynamic writeable type for Certification removes:
+ * user_name, updated_at
+ */
+export interface IWriteCertification {
+  /**
+   * Certification status: "certified" or "revoked" Valid values are: "certified", "revoked".
+   */
+  certification_status?: CertificationStatus | null;
+  /**
+   * Certification notes
+   */
+  notes?: string | null;
+}
+
+/**
  * Dynamic writeable type for ColorCollection removes:
  * id
  */
@@ -13454,6 +13671,11 @@ export interface IWriteDashboard {
    */
   preferred_viewer?: string | null;
   /**
+   * Dynamic writeable type for Certification removes:
+   * user_name, updated_at
+   */
+  certification_metadata?: IWriteCertification | null;
+  /**
    * Enables alerts to keep in sync with dashboard filter changes
    */
   alert_sync_with_dashboard_filter_enabled?: boolean;
@@ -13530,6 +13752,11 @@ export interface IWriteDashboardBase {
    * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
    */
   folder?: IWriteFolderBase | null;
+  /**
+   * Dynamic writeable type for Certification removes:
+   * user_name, updated_at
+   */
+  certification_metadata?: IWriteCertification | null;
 }
 
 /**
@@ -13545,6 +13772,10 @@ export interface IWriteDashboardElement {
    * Id of Dashboard
    */
   dashboard_id?: string | null;
+  /**
+   * Id of Dashboard Layout
+   */
+  dashboard_layout_id?: string | null;
   /**
    * Dynamic writeable type for LookWithQuery removes:
    * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, user_name, view_count, url
@@ -13620,6 +13851,10 @@ export interface IWriteDashboardElement {
    * Extension ID
    */
   extension_id?: string | null;
+  /**
+   * Custom ARIA description text
+   */
+  aria_description?: string | null;
 }
 
 /**
@@ -13702,6 +13937,18 @@ export interface IWriteDashboardLayout {
    * Width
    */
   width?: number | null;
+  /**
+   * Label
+   */
+  label?: string | null;
+  /**
+   * Description
+   */
+  description?: string | null;
+  /**
+   * Order
+   */
+  order?: number | null;
 }
 
 /**
@@ -14143,6 +14390,10 @@ export interface IWriteExternalOauthApplication {
    * The database dialect for this application.
    */
   dialect_name?: string | null;
+  /**
+   * Whether this application supports bi-directional data access.
+   */
+  bi_directional_data_access?: boolean | null;
 }
 
 /**
@@ -14413,6 +14664,11 @@ export interface IWriteLookBasic {
    * User Id
    */
   user_id?: string | null;
+  /**
+   * Dynamic writeable type for Certification removes:
+   * user_name, updated_at
+   */
+  certification_metadata?: IWriteCertification | null;
 }
 
 /**
@@ -14451,6 +14707,11 @@ export interface IWriteLookWithQuery {
    * User Id
    */
   user_id?: string | null;
+  /**
+   * Dynamic writeable type for Certification removes:
+   * user_name, updated_at
+   */
+  certification_metadata?: IWriteCertification | null;
   /**
    * Whether or not a look is 'soft' deleted.
    */
@@ -15254,6 +15515,21 @@ export interface IWriteScheduledPlan {
 }
 
 /**
+ * Dynamic writeable type for ServiceAccount removes:
+ * can, id, is_service_account, group_ids, role_ids, credentials_api3, created_at, url
+ */
+export interface IWriteServiceAccount {
+  /**
+   * Display name of the service account.
+   */
+  service_account_name?: string;
+  /**
+   * Indicates if the service account is disabled
+   */
+  is_disabled?: boolean;
+}
+
+/**
  * Dynamic writeable type for SessionConfig removes:
  * can
  */
@@ -15446,7 +15722,7 @@ export interface IWriteTheme {
 
 /**
  * Dynamic writeable type for User removes:
- * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, url
+ * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, is_service_account, service_account_name, url
  */
 export interface IWriteUser {
   /**
@@ -15483,7 +15759,7 @@ export interface IWriteUser {
    */
   ui_state?: IDictionary<string> | null;
   /**
-   * Indicates if the user can manage API3 credentials
+   * Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.
    */
   can_manage_api3_creds?: boolean;
 }
