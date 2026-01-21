@@ -27,7 +27,7 @@
     "@styled-icons/material": "^10.47.0",
     "@styled-icons/material-outlined": "^10.47.0",
     "@styled-icons/material-rounded": "^10.28.0",
-    "lodash": "4.17.21",
+    "lodash": "4.17.23",
     "path-browserify": "^1.0.1",
     "process": "^0.11.10",
     "react": "^17.0.2",
