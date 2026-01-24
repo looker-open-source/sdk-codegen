@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 476 API methods
+/// 478 API methods
 
 #nullable enable
 using System;
@@ -2910,6 +2910,23 @@ namespace Looker.SDK.API40
     return await AuthRequest<ExternalOauthApplication, Exception>(HttpMethod.Patch, $"/external_oauth_applications/{client_id}", null,body,options);
   }
 
+  /// ### Delete an OAuth Application.
+  ///
+  /// This is an OAuth Application which Looker uses to access external systems.
+  ///
+  /// DELETE /external_oauth_applications/{client_id} -> string
+  ///
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  ///
+  /// <param name="client_id">The client ID of the OAuth App to delete</param>
+  public async Task<SdkResponse<string, Exception>> delete_external_oauth_application(
+    string client_id,
+    ITransportSettings? options = null)
+{  
+      client_id = SdkUtils.EncodeParam(client_id);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/external_oauth_applications/{client_id}", null,null,options);
+  }
+
   /// ### Create OAuth User state.
   ///
   /// POST /external_oauth_applications/user_state -> CreateOAuthApplicationUserStateResponse
@@ -3152,6 +3169,7 @@ namespace Looker.SDK.API40
   /// <param name="dashboard_id">Match dashboard id(s). To create a list of multiple ids, use commas as separators</param>
   /// <param name="look_id">Match look id(s). To create a list of multiple ids, use commas as separators</param>
   /// <param name="board_id">Match board id(s). To create a list of multiple ids, use commas as separators</param>
+  /// <param name="lookml_dashboard_id">Match lookml dashboard id(s). To create a list of multiple ids, use commas as separators</param>
   /// <param name="include_board_items">If true, and board_id is provided, returns the content favorites for all items on the board. If false, returns the content favorite for the board itself.</param>
   /// <param name="limit">Number of results to return. (used with offset)</param>
   /// <param name="offset">Number of results to skip before returning any. (used with limit)</param>
@@ -3165,6 +3183,7 @@ namespace Looker.SDK.API40
     string? dashboard_id = null,
     string? look_id = null,
     string? board_id = null,
+    string? lookml_dashboard_id = null,
     bool? include_board_items = null,
     long? limit = null,
     long? offset = null,
@@ -3180,6 +3199,7 @@ namespace Looker.SDK.API40
       { "dashboard_id", dashboard_id },
       { "look_id", look_id },
       { "board_id", board_id },
+      { "lookml_dashboard_id", lookml_dashboard_id },
       { "include_board_items", include_board_items },
       { "limit", limit },
       { "offset", offset },
@@ -6665,6 +6685,10 @@ namespace Looker.SDK.API40
   /// metadata. The remote git repository MUST be configured with the Looker-generated deploy
   /// key for this project prior to setting the project's `git_remote_url`.
   ///
+  /// Note that Looker will validate the git connection when the `git_remote_url` is modified.
+  /// If Looker cannot connect to the remote repository (e.g. because the deploy key has not
+  /// been added), the update will fail with a 400 Bad Request error.
+  ///
   /// To set up a Looker project with a git repository residing on the Looker server (a 'bare' git repo):
   ///
   /// 1. Call `update_session` to select the 'dev' workspace.
@@ -9649,7 +9673,7 @@ namespace Looker.SDK.API40
   /// <param name="content_metadata_id">Search for users who have access to this content_metadata item</param>
   /// <param name="group_id">Search for users who are direct members of this group</param>
   /// <param name="can_manage_api3_creds">Search for users who can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). Availability of this filter is limited to users with permission to view complete user details. This is an experimental feature and may not yet be available on your instance.</param>
-  /// <param name="is_service_account">Search for service account users. Send true to get only service accounts, or false to get all other types of users. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). Availability of this filter is limited to users with permission to view complete user details. This is an experimental feature and may not yet be available on your instance.</param>
+  /// <param name="is_service_account">Search for service account users. Send true to get only service accounts, or false to get all other types of users. Availability of this filter is limited to users with permission to view complete user details.</param>
   public async Task<SdkResponse<User[], Exception>> search_users(
     string? fields = null,
     long? page = null,
@@ -9791,7 +9815,19 @@ namespace Looker.SDK.API40
 
   /// ### Delete the user with a specific id.
   ///
-  /// **DANGER** this will delete the user and all looks and other information owned by the user.
+  /// **This action cannot be undone.** If you want to keep the user's content, we recommend disabling their accounts instead of deleting them.
+  ///
+  /// Deletion will have the following impact:
+  /// * Their reports, Looks and dashboards will be moved to Trash.
+  /// * Any public URLs owned by them will no longer work.
+  /// * Schedules created by the users or that use their content will be deleted.
+  /// * Alerts will continue to run, but will not be visible or editable from the dashboard.
+  ///
+  /// The user cannot delete themselves.
+  /// The last administrator user cannot be deleted.
+  ///
+  /// Deleting Service Accounts via this endpoint is deprecated and can be blocked in future versions.
+  /// Please use the dedicated `delete_service_account` endpoint.
   ///
   /// DELETE /users/{user_id} -> string
   ///
@@ -9854,6 +9890,52 @@ namespace Looker.SDK.API40
       credential_id = SdkUtils.EncodeParam(credential_id);
     return await AuthRequest<User, Exception>(HttpMethod.Get, $"/users/credential/{credential_type}/{credential_id}", new Values {
       { "fields", fields }},null,options);
+  }
+
+  /// ### Update information for a specific service account. This action is restricted to Looker admins.
+  ///
+  /// This endpoint is exclusively for updating service accounts. To update a regular user, please use the `PATCH /api/3.x/users/:user_id` endpoint instead.
+  ///
+  /// PATCH /users/service_accounts/{user_id} -> ServiceAccount
+  ///
+  /// <returns><c>ServiceAccount</c> New state for specified service account. (application/json)</returns>
+  ///
+  /// <param name="user_id">Id of service account</param>
+  /// <param name="fields">Requested fields.</param>
+  public async Task<SdkResponse<ServiceAccount, Exception>> update_service_account(
+    string user_id,
+    WriteServiceAccount body,
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+      user_id = SdkUtils.EncodeParam(user_id);
+    return await AuthRequest<ServiceAccount, Exception>(HttpMethod.Patch, $"/users/service_accounts/{user_id}", new Values {
+      { "fields", fields }},body,options);
+  }
+
+  /// ### Delete the service account with a specific id.
+  ///
+  /// **This action cannot be undone.** If you want to keep the service account's content, we recommend disabling their accounts instead of deleting them.
+  ///
+  /// Deletion will have the following impact:
+  /// * Their reports, Looks and dashboards will be moved to Trash.
+  /// * Any public URLs owned by them will no longer work.
+  /// * Schedules created by the service account or that use their content will be deleted.
+  /// * Alerts will continue to run, but will not be visible or editable from the dashboard.
+  ///
+  /// The service account cannot delete itself.
+  ///
+  /// DELETE /users/service_accounts/{user_id} -> string
+  ///
+  /// <returns><c>string</c> Service Account successfully deleted. (application/json)</returns>
+  ///
+  /// <param name="user_id">Id of service account user</param>
+  public async Task<SdkResponse<string, Exception>> delete_service_account(
+    string user_id,
+    ITransportSettings? options = null)
+{  
+      user_id = SdkUtils.EncodeParam(user_id);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/users/service_accounts/{user_id}", null,null,options);
   }
 
   /// ### Email/password login information for the specified user.
@@ -10032,8 +10114,6 @@ namespace Looker.SDK.API40
 
   /// ### Google authentication login information for the specified user.
   ///
-  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
-  ///
   /// GET /users/{user_id}/credentials_google -> CredentialsGoogle
   ///
   /// <returns><c>CredentialsGoogle</c> Google Auth Credential (application/json)</returns>
@@ -10052,8 +10132,6 @@ namespace Looker.SDK.API40
 
   /// ### Google authentication login information for the specified user.
   ///
-  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
-  ///
   /// DELETE /users/{user_id}/credentials_google -> string
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
@@ -10068,8 +10146,6 @@ namespace Looker.SDK.API40
   }
 
   /// ### Saml authentication login information for the specified user.
-  ///
-  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///
   /// GET /users/{user_id}/credentials_saml -> CredentialsSaml
   ///
@@ -10089,8 +10165,6 @@ namespace Looker.SDK.API40
 
   /// ### Saml authentication login information for the specified user.
   ///
-  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
-  ///
   /// DELETE /users/{user_id}/credentials_saml -> string
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
@@ -10105,8 +10179,6 @@ namespace Looker.SDK.API40
   }
 
   /// ### OpenID Connect (OIDC) authentication login information for the specified user.
-  ///
-  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///
   /// GET /users/{user_id}/credentials_oidc -> CredentialsOIDC
   ///
@@ -10126,8 +10198,6 @@ namespace Looker.SDK.API40
 
   /// ### OpenID Connect (OIDC) authentication login information for the specified user.
   ///
-  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
-  ///
   /// DELETE /users/{user_id}/credentials_oidc -> string
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
@@ -10142,8 +10212,6 @@ namespace Looker.SDK.API40
   }
 
   /// ### API login information for the specified user. This is for the newer API keys that can be added for any user.
-  ///
-  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///
   /// GET /users/{user_id}/credentials_api3/{credentials_api3_id} -> CredentialsApi3
   ///
@@ -10165,8 +10233,6 @@ namespace Looker.SDK.API40
   }
 
   /// ### API login information for the specified user. This is for the newer API keys that can be added for any user.
-  ///
-  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///
   /// PATCH /users/{user_id}/credentials_api3/{credentials_api3_id} -> CredentialsApi3
   ///
@@ -10190,8 +10256,6 @@ namespace Looker.SDK.API40
 
   /// ### API login information for the specified user. This is for the newer API keys that can be added for any user.
   ///
-  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
-  ///
   /// DELETE /users/{user_id}/credentials_api3/{credentials_api3_id} -> string
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
@@ -10210,8 +10274,6 @@ namespace Looker.SDK.API40
 
   /// ### API login information for the specified user. This is for the newer API keys that can be added for any user.
   ///
-  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
-  ///
   /// GET /users/{user_id}/credentials_api3 -> CredentialsApi3[]
   ///
   /// <returns><c>CredentialsApi3[]</c> API Credential (application/json)</returns>
@@ -10229,8 +10291,6 @@ namespace Looker.SDK.API40
   }
 
   /// ### API login information for the specified user. This is for the newer API keys that can be added for any user.
-  ///
-  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///
   /// POST /users/{user_id}/credentials_api3 -> CreateCredentialsApi3
   ///
@@ -10350,8 +10410,6 @@ namespace Looker.SDK.API40
 
   /// ### Web login session for the specified user.
   ///
-  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
-  ///
   /// GET /users/{user_id}/sessions/{session_id} -> Session
   ///
   /// <returns><c>Session</c> Web Login Session (application/json)</returns>
@@ -10373,8 +10431,6 @@ namespace Looker.SDK.API40
 
   /// ### Web login session for the specified user.
   ///
-  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
-  ///
   /// DELETE /users/{user_id}/sessions/{session_id} -> string
   ///
   /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
@@ -10392,8 +10448,6 @@ namespace Looker.SDK.API40
   }
 
   /// ### Web login session for the specified user.
-  ///
-  /// Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
   ///
   /// GET /users/{user_id}/sessions -> Session[]
   ///
@@ -10638,8 +10692,6 @@ namespace Looker.SDK.API40
 
   /// ### Create a service account with the specified information. This action is restricted to Looker admins.
   ///
-  /// Calls to this endpoint may only be available for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
-  ///
   /// POST /users/service_accounts -> ServiceAccount
   ///
   /// <returns><c>ServiceAccount</c> Created Service Account (application/json)</returns>
@@ -10651,29 +10703,6 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
     return await AuthRequest<ServiceAccount, Exception>(HttpMethod.Post, "/users/service_accounts", new Values {
-      { "fields", fields }},body,options);
-  }
-
-  /// ### Update information for a specific service account. This action is restricted to Looker admins.
-  ///
-  /// This endpoint is exclusively for updating service accounts. To update a regular user, please use the `PATCH /api/3.x/users/:user_id` endpoint instead.
-  ///
-  /// Calls to this endpoint may only be available for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
-  ///
-  /// PATCH /users/service_accounts/{user_id} -> ServiceAccount
-  ///
-  /// <returns><c>ServiceAccount</c> New state for specified service account. (application/json)</returns>
-  ///
-  /// <param name="user_id">Id of service account</param>
-  /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<ServiceAccount, Exception>> update_service_account(
-    string user_id,
-    WriteServiceAccount body,
-    string? fields = null,
-    ITransportSettings? options = null)
-{  
-      user_id = SdkUtils.EncodeParam(user_id);
-    return await AuthRequest<ServiceAccount, Exception>(HttpMethod.Patch, $"/users/service_accounts/{user_id}", new Values {
       { "fields", fields }},body,options);
   }
 

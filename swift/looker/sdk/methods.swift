@@ -25,7 +25,7 @@
  */
 
 /**
- * 476 API methods
+ * 478 API methods
  */
 
 
@@ -3326,6 +3326,25 @@ open class LookerSDK: APIMethods {
     }
 
     /**
+     * ### Delete an OAuth Application.
+     *
+     * This is an OAuth Application which Looker uses to access external systems.
+     *
+     * DELETE /external_oauth_applications/{client_id} -> String
+     */
+    public func delete_external_oauth_application(
+        /**
+         * @param {String} client_id The client ID of the OAuth App to delete
+         */
+        _ client_id: String,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<String, SDKError> {
+        let path_client_id = encodeParam(client_id)
+        let result: SDKResponse<String, SDKError> = self.delete("/external_oauth_applications/\(path_client_id)", nil, nil, options)
+        return result
+    }
+
+    /**
      * ### Create OAuth User state.
      *
      * POST /external_oauth_applications/user_state -> CreateOAuthApplicationUserStateResponse
@@ -3621,6 +3640,10 @@ open class LookerSDK: APIMethods {
          */
         board_id: String? = nil,
         /**
+         * @param {String} lookml_dashboard_id Match lookml dashboard id(s). To create a list of multiple ids, use commas as separators
+         */
+        lookml_dashboard_id: String? = nil,
+        /**
          * @param {Bool} include_board_items If true, and board_id is provided, returns the content favorites for all items on the board. If false, returns the content favorite for the board itself.
          */
         include_board_items: Bool? = nil,
@@ -3647,7 +3670,7 @@ open class LookerSDK: APIMethods {
         options: ITransportSettings? = nil
     ) -> SDKResponse<[ContentFavorite], SDKError> {
         let result: SDKResponse<[ContentFavorite], SDKError> = self.get("/content_favorite/search", 
-            ["id": id, "user_id": user_id, "content_metadata_id": content_metadata_id, "dashboard_id": dashboard_id, "look_id": look_id, "board_id": board_id, "include_board_items": include_board_items as Any?, "limit": limit, "offset": offset, "sorts": sorts, "fields": fields, "filter_or": filter_or as Any?], nil, options)
+            ["id": id, "user_id": user_id, "content_metadata_id": content_metadata_id, "dashboard_id": dashboard_id, "look_id": look_id, "board_id": board_id, "lookml_dashboard_id": lookml_dashboard_id, "include_board_items": include_board_items as Any?, "limit": limit, "offset": offset, "sorts": sorts, "fields": fields, "filter_or": filter_or as Any?], nil, options)
         return result
     }
 
@@ -7816,6 +7839,10 @@ open class LookerSDK: APIMethods {
      * metadata. The remote git repository MUST be configured with the Looker-generated deploy
      * key for this project prior to setting the project's `git_remote_url`.
      *
+     * Note that Looker will validate the git connection when the `git_remote_url` is modified.
+     * If Looker cannot connect to the remote repository (e.g. because the deploy key has not
+     * been added), the update will fail with a 400 Bad Request error.
+     *
      * To set up a Looker project with a git repository residing on the Looker server (a 'bare' git repo):
      *
      * 1. Call `update_session` to select the 'dev' workspace.
@@ -11296,7 +11323,7 @@ open class LookerSDK: APIMethods {
          */
         can_manage_api3_creds: Bool? = nil,
         /**
-         * @param {Bool} is_service_account Search for service account users. Send true to get only service accounts, or false to get all other types of users. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). Availability of this filter is limited to users with permission to view complete user details. This is an experimental feature and may not yet be available on your instance.
+         * @param {Bool} is_service_account Search for service account users. Send true to get only service accounts, or false to get all other types of users. Availability of this filter is limited to users with permission to view complete user details.
          */
         is_service_account: Bool? = nil,
         options: ITransportSettings? = nil
@@ -11432,7 +11459,19 @@ open class LookerSDK: APIMethods {
     /**
      * ### Delete the user with a specific id.
      *
-     * **DANGER** this will delete the user and all looks and other information owned by the user.
+     * **This action cannot be undone.** If you want to keep the user's content, we recommend disabling their accounts instead of deleting them.
+     *
+     * Deletion will have the following impact:
+     * * Their reports, Looks and dashboards will be moved to Trash.
+     * * Any public URLs owned by them will no longer work.
+     * * Schedules created by the users or that use their content will be deleted.
+     * * Alerts will continue to run, but will not be visible or editable from the dashboard.
+     *
+     * The user cannot delete themselves.
+     * The last administrator user cannot be deleted.
+     *
+     * Deleting Service Accounts via this endpoint is deprecated and can be blocked in future versions.
+     * Please use the dedicated `delete_service_account` endpoint.
      *
      * DELETE /users/{user_id} -> String
      */
@@ -11501,6 +11540,61 @@ open class LookerSDK: APIMethods {
         let path_credential_id = encodeParam(credential_id)
         let result: SDKResponse<User, SDKError> = self.get("/users/credential/\(path_credential_type)/\(path_credential_id)", 
             ["fields": fields], nil, options)
+        return result
+    }
+
+    /**
+     * ### Update information for a specific service account. This action is restricted to Looker admins.
+     *
+     * This endpoint is exclusively for updating service accounts. To update a regular user, please use the `PATCH /api/3.x/users/:user_id` endpoint instead.
+     *
+     * PATCH /users/service_accounts/{user_id} -> ServiceAccount
+     */
+    public func update_service_account(
+        /**
+         * @param {String} user_id Id of service account
+         */
+        _ user_id: String,
+        /**
+         * @param {WriteServiceAccount} body
+         */
+        _ body: WriteServiceAccount,
+        /**
+         * @param {String} fields Requested fields.
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<ServiceAccount, SDKError> {
+        let path_user_id = encodeParam(user_id)
+        let result: SDKResponse<ServiceAccount, SDKError> = self.patch("/users/service_accounts/\(path_user_id)", 
+            ["fields": fields], try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Delete the service account with a specific id.
+     *
+     * **This action cannot be undone.** If you want to keep the service account's content, we recommend disabling their accounts instead of deleting them.
+     *
+     * Deletion will have the following impact:
+     * * Their reports, Looks and dashboards will be moved to Trash.
+     * * Any public URLs owned by them will no longer work.
+     * * Schedules created by the service account or that use their content will be deleted.
+     * * Alerts will continue to run, but will not be visible or editable from the dashboard.
+     *
+     * The service account cannot delete itself.
+     *
+     * DELETE /users/service_accounts/{user_id} -> String
+     */
+    public func delete_service_account(
+        /**
+         * @param {String} user_id Id of service account user
+         */
+        _ user_id: String,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<String, SDKError> {
+        let path_user_id = encodeParam(user_id)
+        let result: SDKResponse<String, SDKError> = self.delete("/users/service_accounts/\(path_user_id)", nil, nil, options)
         return result
     }
 
@@ -11720,8 +11814,6 @@ open class LookerSDK: APIMethods {
     /**
      * ### Google authentication login information for the specified user.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
-     *
      * GET /users/{user_id}/credentials_google -> CredentialsGoogle
      */
     public func user_credentials_google(
@@ -11744,8 +11836,6 @@ open class LookerSDK: APIMethods {
     /**
      * ### Google authentication login information for the specified user.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
-     *
      * DELETE /users/{user_id}/credentials_google -> String
      */
     public func delete_user_credentials_google(
@@ -11762,8 +11852,6 @@ open class LookerSDK: APIMethods {
 
     /**
      * ### Saml authentication login information for the specified user.
-     *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * GET /users/{user_id}/credentials_saml -> CredentialsSaml
      */
@@ -11787,8 +11875,6 @@ open class LookerSDK: APIMethods {
     /**
      * ### Saml authentication login information for the specified user.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
-     *
      * DELETE /users/{user_id}/credentials_saml -> String
      */
     public func delete_user_credentials_saml(
@@ -11805,8 +11891,6 @@ open class LookerSDK: APIMethods {
 
     /**
      * ### OpenID Connect (OIDC) authentication login information for the specified user.
-     *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * GET /users/{user_id}/credentials_oidc -> CredentialsOIDC
      */
@@ -11830,8 +11914,6 @@ open class LookerSDK: APIMethods {
     /**
      * ### OpenID Connect (OIDC) authentication login information for the specified user.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
-     *
      * DELETE /users/{user_id}/credentials_oidc -> String
      */
     public func delete_user_credentials_oidc(
@@ -11848,8 +11930,6 @@ open class LookerSDK: APIMethods {
 
     /**
      * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
-     *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * GET /users/{user_id}/credentials_api3/{credentials_api3_id} -> CredentialsApi3
      */
@@ -11877,8 +11957,6 @@ open class LookerSDK: APIMethods {
 
     /**
      * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
-     *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * PATCH /users/{user_id}/credentials_api3/{credentials_api3_id} -> CredentialsApi3
      */
@@ -11911,8 +11989,6 @@ open class LookerSDK: APIMethods {
     /**
      * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
-     *
      * DELETE /users/{user_id}/credentials_api3/{credentials_api3_id} -> String
      */
     public func delete_user_credentials_api3(
@@ -11935,8 +12011,6 @@ open class LookerSDK: APIMethods {
     /**
      * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
-     *
      * GET /users/{user_id}/credentials_api3 -> [CredentialsApi3]
      */
     public func all_user_credentials_api3s(
@@ -11958,8 +12032,6 @@ open class LookerSDK: APIMethods {
 
     /**
      * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
-     *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * POST /users/{user_id}/credentials_api3 -> CreateCredentialsApi3
      */
@@ -12103,8 +12175,6 @@ open class LookerSDK: APIMethods {
     /**
      * ### Web login session for the specified user.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
-     *
      * GET /users/{user_id}/sessions/{session_id} -> Session
      */
     public func user_session(
@@ -12132,8 +12202,6 @@ open class LookerSDK: APIMethods {
     /**
      * ### Web login session for the specified user.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
-     *
      * DELETE /users/{user_id}/sessions/{session_id} -> String
      */
     public func delete_user_session(
@@ -12155,8 +12223,6 @@ open class LookerSDK: APIMethods {
 
     /**
      * ### Web login session for the specified user.
-     *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * GET /users/{user_id}/sessions -> [Session]
      */
@@ -12454,8 +12520,6 @@ open class LookerSDK: APIMethods {
     /**
      * ### Create a service account with the specified information. This action is restricted to Looker admins.
      *
-     * Calls to this endpoint may only be available for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
-     *
      * POST /users/service_accounts -> ServiceAccount
      */
     public func create_service_account(
@@ -12470,36 +12534,6 @@ open class LookerSDK: APIMethods {
         options: ITransportSettings? = nil
     ) -> SDKResponse<ServiceAccount, SDKError> {
         let result: SDKResponse<ServiceAccount, SDKError> = self.post("/users/service_accounts", 
-            ["fields": fields], try! self.encode(body), options)
-        return result
-    }
-
-    /**
-     * ### Update information for a specific service account. This action is restricted to Looker admins.
-     *
-     * This endpoint is exclusively for updating service accounts. To update a regular user, please use the `PATCH /api/3.x/users/:user_id` endpoint instead.
-     *
-     * Calls to this endpoint may only be available for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
-     *
-     * PATCH /users/service_accounts/{user_id} -> ServiceAccount
-     */
-    public func update_service_account(
-        /**
-         * @param {String} user_id Id of service account
-         */
-        _ user_id: String,
-        /**
-         * @param {WriteServiceAccount} body
-         */
-        _ body: WriteServiceAccount,
-        /**
-         * @param {String} fields Requested fields.
-         */
-        fields: String? = nil,
-        options: ITransportSettings? = nil
-    ) -> SDKResponse<ServiceAccount, SDKError> {
-        let path_user_id = encodeParam(user_id)
-        let result: SDKResponse<ServiceAccount, SDKError> = self.patch("/users/service_accounts/\(path_user_id)", 
             ["fields": fields], try! self.encode(body), options)
         return result
     }
