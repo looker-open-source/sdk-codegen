@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 380 API models: 290 Spec, 0 Request, 65 Write, 25 Enum
+/// 381 API models: 291 Spec, 0 Request, 65 Write, 25 Enum
 
 #nullable enable
 using System;
@@ -722,6 +722,10 @@ public class ContentSearch : SdkModel
   public string? preferred_viewer { get; set; } = null;
   /// <summary>Name of the model the explore belongs to (read-only)</summary>
   public string? model { get; set; } = null;
+  /// <summary>Creator Id of the content (read-only)</summary>
+  public long? created_by_id { get; set; } = null;
+  /// <summary>Certification status of the content (read-only)</summary>
+  public string? certification_status { get; set; } = null;
 }
 
 public class ContentSummary : SdkModel
@@ -1545,6 +1549,8 @@ public class Dashboard : SdkModel
   public DashboardAppearance? appearance { get; set; }
   /// <summary>Relative URL of the dashboard (read-only)</summary>
   public string? url { get; set; } = null;
+  /// <summary>The layout granularity to apply to this dashboard (ie: default or granular)</summary>
+  public string? layout_granularity { get; set; } = null;
 }
 
 public class DashboardAggregateTableLookml : SdkModel
@@ -1765,6 +1771,14 @@ public class DashboardLayoutComponent : SdkModel
   public bool? element_title_hidden { get; set; } = null;
   /// <summary>Visualization type, extracted from a query's vis_config (read-only)</summary>
   public string? vis_type { get; set; } = null;
+  /// <summary>Row (granular layout)</summary>
+  public long? granular_row { get; set; } = null;
+  /// <summary>Column (granular layout)</summary>
+  public long? granular_column { get; set; } = null;
+  /// <summary>Width (granular layout)</summary>
+  public long? granular_width { get; set; } = null;
+  /// <summary>Height (granular layout)</summary>
+  public long? granular_height { get; set; } = null;
 }
 
 public class DashboardLookml : SdkModel
@@ -1890,6 +1904,8 @@ public class DBConnection : SdkModel
   public string? username { get; set; } = null;
   /// <summary>(Write-Only) Password for server authentication</summary>
   public string? password { get; set; } = null;
+  /// <summary>Whether or not the password is present (read-only)</summary>
+  public bool? has_password { get; set; } = null;
   /// <summary>Whether the connection uses OAuth for authentication. (read-only)</summary>
   public bool? uses_oauth { get; set; } = null;
   /// <summary>Whether the connection uses key-pair for authentication.</summary>
@@ -2206,6 +2222,8 @@ public class DialectInfoOptions : SdkModel
   public bool? host { get; set; } = null;
   /// <summary>Instance name is required (read-only)</summary>
   public bool? instance_name { get; set; } = null;
+  /// <summary>Has support for key pair authentication (read-only)</summary>
+  public bool? key_pair_authentication { get; set; } = null;
   /// <summary>Has max billing gigabytes support (read-only)</summary>
   public bool? max_billing_gigabytes { get; set; } = null;
   /// <summary>Has support for a service account (read-only)</summary>
@@ -4438,6 +4456,12 @@ public class PasswordConfig : SdkModel
   public bool? require_upperlower { get; set; } = null;
   /// <summary>Require at least one special character</summary>
   public bool? require_special { get; set; } = null;
+  /// <summary>Enable/Disable password expiration policy.</summary>
+  public bool? expiration_enabled { get; set; } = null;
+  /// <summary>Number of days before passwords expire. Must be between 30 and 365.</summary>
+  public long? expiration_duration_days { get; set; } = null;
+  /// <summary>The timestamp of when the password expiration policy was last enabled. (read-only)</summary>
+  public DateTime? policy_enabled_at { get; set; } = null;
 }
 
 /// Specifies the time frame for the comparison. Valid values are: "year", "fiscal_year", "quarter", "fiscal_quarter", "month", "week", "date". (Enum defined in LookmlModelExploreFieldPeriodOverPeriodParams)
@@ -4576,6 +4600,8 @@ public class Project : SdkModel
   public bool? allow_warnings { get; set; } = null;
   /// <summary>If true the project is an example project and cannot be modified (read-only)</summary>
   public bool? is_example { get; set; } = null;
+  /// <summary>If true the project has been pushed to production. (read-only)</summary>
+  public bool? has_production_counterpart { get; set; } = null;
   /// <summary>Status of dependencies in your manifest & lockfile</summary>
   public string? dependency_status { get; set; } = null;
 }
@@ -4983,6 +5009,8 @@ public class Role : SdkModel
   public ModelSet? model_set { get; set; }
   /// <summary>(Write-Only) Id of model set</summary>
   public string? model_set_id { get; set; } = null;
+  /// <summary>Is this a Looker internal role (read-only)</summary>
+  public bool? @internal { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
   public string? url { get; set; } = null;
   /// <summary>Link to get list of users with this role (read-only)</summary>
@@ -5003,6 +5031,8 @@ public class RoleSearch : SdkModel
   public ModelSet? model_set { get; set; }
   /// <summary>(Write-Only) Id of model set</summary>
   public string? model_set_id { get; set; } = null;
+  /// <summary>Is this a Looker internal role (read-only)</summary>
+  public bool? @internal { get; set; } = null;
   /// <summary>Count of users with this role (read-only)</summary>
   public long? user_count { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
@@ -5108,6 +5138,9 @@ public class SamlConfig : SdkModel
   public bool? enabled { get; set; } = null;
   /// <summary>Identity Provider Certificate (provided by IdP)</summary>
   public string? idp_cert { get; set; } = null;
+  public SamlIdpCertMulti? idp_cert_multi { get; set; }
+  /// <summary>Indicates whether this SAML configuration is set up to use multiple Identity Provider certificates (idp_cert_multi) or a single certificate (idp_cert). When true, idp_cert_multi is used; otherwise, idp_cert is used.</summary>
+  public bool? multi_certs_supported { get; set; } = null;
   /// <summary>Identity Provider Url (provided by IdP)</summary>
   public string? idp_url { get; set; } = null;
   /// <summary>Identity Provider Issuer (provided by IdP)</summary>
@@ -5202,6 +5235,12 @@ public class SamlGroupWrite : SdkModel
   public string? url { get; set; } = null;
 }
 
+public class SamlIdpCertMulti : SdkModel
+{
+  /// <summary>List of signing certificates. Values should be without pre-encapsulation and post-encapsulation boundaries</summary>
+  public string[]? signing { get; set; } = null;
+}
+
 public class SamlMetadataParseResult : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
@@ -5212,6 +5251,7 @@ public class SamlMetadataParseResult : SdkModel
   public string? idp_url { get; set; } = null;
   /// <summary>Identify Provider Certificate (read-only)</summary>
   public string? idp_cert { get; set; } = null;
+  public SamlIdpCertMulti? idp_cert_multi { get; set; }
 }
 
 public class SamlUserAttributeRead : SdkModel
@@ -5543,6 +5583,8 @@ public class Setting : SdkModel
   public string? dashboard_auto_refresh_minimum_interval { get; set; } = null;
   /// <summary>Array of URIs pointing to the location of a root certificate in Secret Manager</summary>
   public string[]? managed_certificate_uri { get; set; } = null;
+  /// <summary>Link to content certification documentation.</summary>
+  public string? content_certification_documentation_link { get; set; } = null;
 }
 
 public class SmtpNodeStatus : SdkModel
@@ -6120,9 +6162,9 @@ public class User : SdkModel
   public bool? is_iam_admin { get; set; } = null;
   /// <summary>Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.</summary>
   public bool? can_manage_api3_creds { get; set; } = null;
-  /// <summary>Indicates if this user is a service account. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance. (read-only)</summary>
+  /// <summary>Indicates if this user is a service account. (read-only)</summary>
   public bool? is_service_account { get; set; } = null;
-  /// <summary>The display name of the service account. This field is omitted for non service account users. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance. (read-only)</summary>
+  /// <summary>The display name of the service account. This field is omitted for non service account users. (read-only)</summary>
   public string? service_account_name { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
   public string? url { get; set; } = null;
@@ -6693,6 +6735,8 @@ public class WriteDashboard : SdkModel
   /// <summary>Title color</summary>
   public string? title_color { get; set; } = null;
   public DashboardAppearance? appearance { get; set; }
+  /// <summary>The layout granularity to apply to this dashboard (ie: default or granular)</summary>
+  public string? layout_granularity { get; set; } = null;
 }
 
 /// Dynamic writeable type for DashboardBase removes:
@@ -6838,6 +6882,14 @@ public class WriteDashboardLayoutComponent : SdkModel
   public long? width { get; set; } = null;
   /// <summary>Height</summary>
   public long? height { get; set; } = null;
+  /// <summary>Row (granular layout)</summary>
+  public long? granular_row { get; set; } = null;
+  /// <summary>Column (granular layout)</summary>
+  public long? granular_column { get; set; } = null;
+  /// <summary>Width (granular layout)</summary>
+  public long? granular_width { get; set; } = null;
+  /// <summary>Height (granular layout)</summary>
+  public long? granular_height { get; set; } = null;
 }
 
 /// Dynamic writeable type for DashboardLookml removes:
@@ -6861,7 +6913,7 @@ public class WriteDatagroup : SdkModel
 }
 
 /// Dynamic writeable type for DBConnection removes:
-/// can, dialect, snippets, pdts_enabled, named_driver_version_actual, uses_oauth, uses_instance_oauth, uses_service_auth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, p4sa_name
+/// can, dialect, snippets, pdts_enabled, named_driver_version_actual, has_password, uses_oauth, uses_instance_oauth, uses_service_auth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, p4sa_name
 public class WriteDBConnection : SdkModel
 {
   /// <summary>Name of the connection. Also used as the unique identifier</summary>
@@ -7395,7 +7447,7 @@ public class WriteOIDCConfig : SdkModel
 }
 
 /// Dynamic writeable type for PasswordConfig removes:
-/// can
+/// can, policy_enabled_at
 public class WritePasswordConfig : SdkModel
 {
   /// <summary>Minimum number of characters required for a new password.  Must be between 7 and 100</summary>
@@ -7406,6 +7458,10 @@ public class WritePasswordConfig : SdkModel
   public bool? require_upperlower { get; set; } = null;
   /// <summary>Require at least one special character</summary>
   public bool? require_special { get; set; } = null;
+  /// <summary>Enable/Disable password expiration policy.</summary>
+  public bool? expiration_enabled { get; set; } = null;
+  /// <summary>Number of days before passwords expire. Must be between 30 and 365.</summary>
+  public long? expiration_duration_days { get; set; } = null;
 }
 
 /// Dynamic writeable type for PermissionSet removes:
@@ -7450,7 +7506,7 @@ public class WritePrivatelabelConfiguration : SdkModel
 }
 
 /// Dynamic writeable type for Project removes:
-/// can, id, uses_git, is_example
+/// can, id, uses_git, is_example, has_production_counterpart
 public class WriteProject : SdkModel
 {
   /// <summary>Project display name</summary>
@@ -7574,7 +7630,7 @@ public class WriteResultMakerWithIdVisConfigAndDynamicFields : SdkModel
 }
 
 /// Dynamic writeable type for Role removes:
-/// can, id, url, users_url
+/// can, id, internal, url, users_url
 public class WriteRole : SdkModel
 {
   /// <summary>Name of Role</summary>
@@ -7603,6 +7659,9 @@ public class WriteSamlConfig : SdkModel
   public bool? enabled { get; set; } = null;
   /// <summary>Identity Provider Certificate (provided by IdP)</summary>
   public string? idp_cert { get; set; } = null;
+  public SamlIdpCertMulti? idp_cert_multi { get; set; }
+  /// <summary>Indicates whether this SAML configuration is set up to use multiple Identity Provider certificates (idp_cert_multi) or a single certificate (idp_cert). When true, idp_cert_multi is used; otherwise, idp_cert is used.</summary>
+  public bool? multi_certs_supported { get; set; } = null;
   /// <summary>Identity Provider Url (provided by IdP)</summary>
   public string? idp_url { get; set; } = null;
   /// <summary>Identity Provider Issuer (provided by IdP)</summary>
@@ -7789,6 +7848,8 @@ public class WriteSetting : SdkModel
   public string? dashboard_auto_refresh_minimum_interval { get; set; } = null;
   /// <summary>Array of URIs pointing to the location of a root certificate in Secret Manager</summary>
   public string[]? managed_certificate_uri { get; set; } = null;
+  /// <summary>Link to content certification documentation.</summary>
+  public string? content_certification_documentation_link { get; set; } = null;
 }
 
 /// Dynamic writeable type for SqlInterfaceQueryCreate removes:

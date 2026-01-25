@@ -25,7 +25,7 @@
  */
 
 /**
- * 380 API models: 290 Spec, 0 Request, 65 Write, 25 Enum
+ * 381 API models: 291 Spec, 0 Request, 65 Write, 25 Enum
  */
 
 
@@ -2692,6 +2692,8 @@ public struct ContentSearch: SDKModel {
         case _view_count = "view_count"
         case _preferred_viewer = "preferred_viewer"
         case _model = "model"
+        case _created_by_id = "created_by_id"
+        case _certification_status = "certification_status"
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -2779,7 +2781,25 @@ public struct ContentSearch: SDKModel {
         set { _model = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, content_id: String? = nil, type: String? = nil, title: String? = nil, description: String? = nil, folder_id: String? = nil, folder_name: String? = nil, view_count: Int64? = nil, preferred_viewer: String? = nil, model: String? = nil) {
+    private var _created_by_id: AnyInt?
+    /**
+     * Creator Id of the content (read-only)
+     */
+    public var created_by_id: Int64? {
+        get { _created_by_id?.value }
+        set { _created_by_id = newValue.map(AnyInt.init) }
+    }
+
+    private var _certification_status: AnyString?
+    /**
+     * Certification status of the content (read-only)
+     */
+    public var certification_status: String? {
+        get { _certification_status?.value }
+        set { _certification_status = newValue.map(AnyString.init) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, content_id: String? = nil, type: String? = nil, title: String? = nil, description: String? = nil, folder_id: String? = nil, folder_name: String? = nil, view_count: Int64? = nil, preferred_viewer: String? = nil, model: String? = nil, created_by_id: Int64? = nil, certification_status: String? = nil) {
         self.can = can
         self._content_id = content_id.map(AnyString.init)
         self._type = type.map(AnyString.init)
@@ -2790,6 +2810,8 @@ public struct ContentSearch: SDKModel {
         self._view_count = view_count.map(AnyInt.init)
         self._preferred_viewer = preferred_viewer.map(AnyString.init)
         self._model = model.map(AnyString.init)
+        self._created_by_id = created_by_id.map(AnyInt.init)
+        self._certification_status = certification_status.map(AnyString.init)
     }
 
 }
@@ -6060,6 +6082,7 @@ public struct Dashboard: SDKModel {
         case _view_count = "view_count"
         case appearance
         case _url = "url"
+        case _layout_granularity = "layout_granularity"
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -6407,7 +6430,16 @@ public struct Dashboard: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, content_favorite_id: String? = nil, content_metadata_id: String? = nil, description: String? = nil, hidden: Bool? = nil, id: String? = nil, model: LookModel? = nil, query_timezone: String? = nil, readonly: Bool? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, folder: FolderBase? = nil, title: String? = nil, user_id: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, certification_metadata: Certification? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, created_at: Date? = nil, crossfilter_enabled: Bool? = nil, dashboard_elements: [DashboardElement]? = nil, dashboard_filters: [DashboardFilter]? = nil, dashboard_layouts: [DashboardLayout]? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, edit_uri: String? = nil, enable_viz_full_screen: Bool? = nil, favorite_count: Int64? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, last_accessed_at: Date? = nil, last_viewed_at: Date? = nil, updated_at: Date? = nil, last_updater_id: String? = nil, last_updater_name: String? = nil, user_name: String? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, view_count: Int64? = nil, appearance: DashboardAppearance? = nil, url: String? = nil) {
+    private var _layout_granularity: AnyString?
+    /**
+     * The layout granularity to apply to this dashboard (ie: default or granular)
+     */
+    public var layout_granularity: String? {
+        get { _layout_granularity?.value }
+        set { _layout_granularity = newValue.map(AnyString.init) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, content_favorite_id: String? = nil, content_metadata_id: String? = nil, description: String? = nil, hidden: Bool? = nil, id: String? = nil, model: LookModel? = nil, query_timezone: String? = nil, readonly: Bool? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, folder: FolderBase? = nil, title: String? = nil, user_id: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, certification_metadata: Certification? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, created_at: Date? = nil, crossfilter_enabled: Bool? = nil, dashboard_elements: [DashboardElement]? = nil, dashboard_filters: [DashboardFilter]? = nil, dashboard_layouts: [DashboardLayout]? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, edit_uri: String? = nil, enable_viz_full_screen: Bool? = nil, favorite_count: Int64? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, last_accessed_at: Date? = nil, last_viewed_at: Date? = nil, updated_at: Date? = nil, last_updater_id: String? = nil, last_updater_name: String? = nil, user_name: String? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, view_count: Int64? = nil, appearance: DashboardAppearance? = nil, url: String? = nil, layout_granularity: String? = nil) {
         self.can = can
         self._content_favorite_id = content_favorite_id.map(AnyString.init)
         self._content_metadata_id = content_metadata_id.map(AnyString.init)
@@ -6458,6 +6490,7 @@ public struct Dashboard: SDKModel {
         self._view_count = view_count.map(AnyInt.init)
         self.appearance = appearance
         self._url = url.map(AnyString.init)
+        self._layout_granularity = layout_granularity.map(AnyString.init)
     }
 
 }
@@ -7386,6 +7419,10 @@ public struct DashboardLayoutComponent: SDKModel {
         case _element_title = "element_title"
         case element_title_hidden
         case _vis_type = "vis_type"
+        case _granular_row = "granular_row"
+        case _granular_column = "granular_column"
+        case _granular_width = "granular_width"
+        case _granular_height = "granular_height"
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -7483,7 +7520,43 @@ public struct DashboardLayoutComponent: SDKModel {
         set { _vis_type = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, dashboard_layout_id: String? = nil, dashboard_element_id: String? = nil, row: Int64? = nil, column: Int64? = nil, width: Int64? = nil, height: Int64? = nil, deleted: Bool? = nil, element_title: String? = nil, element_title_hidden: Bool? = nil, vis_type: String? = nil) {
+    private var _granular_row: AnyInt?
+    /**
+     * Row (granular layout)
+     */
+    public var granular_row: Int64? {
+        get { _granular_row?.value }
+        set { _granular_row = newValue.map(AnyInt.init) }
+    }
+
+    private var _granular_column: AnyInt?
+    /**
+     * Column (granular layout)
+     */
+    public var granular_column: Int64? {
+        get { _granular_column?.value }
+        set { _granular_column = newValue.map(AnyInt.init) }
+    }
+
+    private var _granular_width: AnyInt?
+    /**
+     * Width (granular layout)
+     */
+    public var granular_width: Int64? {
+        get { _granular_width?.value }
+        set { _granular_width = newValue.map(AnyInt.init) }
+    }
+
+    private var _granular_height: AnyInt?
+    /**
+     * Height (granular layout)
+     */
+    public var granular_height: Int64? {
+        get { _granular_height?.value }
+        set { _granular_height = newValue.map(AnyInt.init) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, dashboard_layout_id: String? = nil, dashboard_element_id: String? = nil, row: Int64? = nil, column: Int64? = nil, width: Int64? = nil, height: Int64? = nil, deleted: Bool? = nil, element_title: String? = nil, element_title_hidden: Bool? = nil, vis_type: String? = nil, granular_row: Int64? = nil, granular_column: Int64? = nil, granular_width: Int64? = nil, granular_height: Int64? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
         self._dashboard_layout_id = dashboard_layout_id.map(AnyString.init)
@@ -7496,6 +7569,10 @@ public struct DashboardLayoutComponent: SDKModel {
         self._element_title = element_title.map(AnyString.init)
         self.element_title_hidden = element_title_hidden
         self._vis_type = vis_type.map(AnyString.init)
+        self._granular_row = granular_row.map(AnyInt.init)
+        self._granular_column = granular_column.map(AnyInt.init)
+        self._granular_width = granular_width.map(AnyInt.init)
+        self._granular_height = granular_height.map(AnyInt.init)
     }
 
 }
@@ -7911,6 +7988,7 @@ public struct DBConnection: SDKModel {
         case _port = "port"
         case _username = "username"
         case _password = "password"
+        case has_password
         case uses_oauth
         case uses_key_pair_auth
         case uses_instance_oauth
@@ -8043,6 +8121,11 @@ public struct DBConnection: SDKModel {
         get { _password?.value }
         set { _password = newValue.map(AnyString.init) }
     }
+
+    /**
+     * Whether or not the password is present (read-only)
+     */
+    public var has_password: Bool?
 
     /**
      * Whether the connection uses OAuth for authentication. (read-only)
@@ -8417,7 +8500,7 @@ public struct DBConnection: SDKModel {
      */
     public var query_holding_disabled: Bool?
 
-    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, named_driver_version_requested: String? = nil, named_driver_version_actual: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, uses_oauth: Bool? = nil, uses_key_pair_auth: Bool? = nil, uses_instance_oauth: Bool? = nil, uses_service_auth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, tmp_db_host: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, supports_data_studio_link: Bool? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, default_bq_connection: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil, p4sa_name: String? = nil, query_holding_disabled: Bool? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, named_driver_version_requested: String? = nil, named_driver_version_actual: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, has_password: Bool? = nil, uses_oauth: Bool? = nil, uses_key_pair_auth: Bool? = nil, uses_instance_oauth: Bool? = nil, uses_service_auth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, tmp_db_host: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, supports_data_studio_link: Bool? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, default_bq_connection: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil, p4sa_name: String? = nil, query_holding_disabled: Bool? = nil) {
         self.can = can
         self._name = name.map(AnyString.init)
         self.dialect = dialect
@@ -8429,6 +8512,7 @@ public struct DBConnection: SDKModel {
         self._port = port.map(AnyString.init)
         self._username = username.map(AnyString.init)
         self._password = password.map(AnyString.init)
+        self.has_password = has_password
         self.uses_oauth = uses_oauth
         self.uses_key_pair_auth = uses_key_pair_auth
         self.uses_instance_oauth = uses_instance_oauth
@@ -9273,6 +9357,11 @@ public struct DialectInfoOptions: SDKModel {
     public var instance_name: Bool?
 
     /**
+     * Has support for key pair authentication (read-only)
+     */
+    public var key_pair_authentication: Bool?
+
+    /**
      * Has max billing gigabytes support (read-only)
      */
     public var max_billing_gigabytes: Bool?
@@ -9342,7 +9431,7 @@ public struct DialectInfoOptions: SDKModel {
      */
     public var supports_connection_pooling: Bool?
 
-    public init(additional_params: Bool? = nil, after_connect_statements: Bool? = nil, analytical_view_dataset: Bool? = nil, auth: Bool? = nil, cost_estimate: Bool? = nil, disable_context_comment: Bool? = nil, host: Bool? = nil, instance_name: Bool? = nil, max_billing_gigabytes: Bool? = nil, oauth_credentials: Bool? = nil, pdts_for_oauth: Bool? = nil, port: Bool? = nil, project_name: Bool? = nil, schema: Bool? = nil, service_account_credentials: Bool? = nil, ssl: Bool? = nil, timezone: Bool? = nil, tmp_table: Bool? = nil, tns: Bool? = nil, username: Bool? = nil, username_required: Bool? = nil, supports_connection_pooling: Bool? = nil) {
+    public init(additional_params: Bool? = nil, after_connect_statements: Bool? = nil, analytical_view_dataset: Bool? = nil, auth: Bool? = nil, cost_estimate: Bool? = nil, disable_context_comment: Bool? = nil, host: Bool? = nil, instance_name: Bool? = nil, key_pair_authentication: Bool? = nil, max_billing_gigabytes: Bool? = nil, oauth_credentials: Bool? = nil, pdts_for_oauth: Bool? = nil, port: Bool? = nil, project_name: Bool? = nil, schema: Bool? = nil, service_account_credentials: Bool? = nil, ssl: Bool? = nil, timezone: Bool? = nil, tmp_table: Bool? = nil, tns: Bool? = nil, username: Bool? = nil, username_required: Bool? = nil, supports_connection_pooling: Bool? = nil) {
         self.additional_params = additional_params
         self.after_connect_statements = after_connect_statements
         self.analytical_view_dataset = analytical_view_dataset
@@ -9351,6 +9440,7 @@ public struct DialectInfoOptions: SDKModel {
         self.disable_context_comment = disable_context_comment
         self.host = host
         self.instance_name = instance_name
+        self.key_pair_authentication = key_pair_authentication
         self.max_billing_gigabytes = max_billing_gigabytes
         self.oauth_credentials = oauth_credentials
         self.pdts_for_oauth = pdts_for_oauth
@@ -18467,6 +18557,9 @@ public struct PasswordConfig: SDKModel {
         case require_numeric
         case require_upperlower
         case require_special
+        case expiration_enabled
+        case _expiration_duration_days = "expiration_duration_days"
+        case policy_enabled_at
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -18497,12 +18590,34 @@ public struct PasswordConfig: SDKModel {
      */
     public var require_special: Bool?
 
-    public init(can: StringDictionary<Bool>? = nil, min_length: Int64? = nil, require_numeric: Bool? = nil, require_upperlower: Bool? = nil, require_special: Bool? = nil) {
+    /**
+     * Enable/Disable password expiration policy.
+     */
+    public var expiration_enabled: Bool?
+
+    private var _expiration_duration_days: AnyInt?
+    /**
+     * Number of days before passwords expire. Must be between 30 and 365.
+     */
+    public var expiration_duration_days: Int64? {
+        get { _expiration_duration_days?.value }
+        set { _expiration_duration_days = newValue.map(AnyInt.init) }
+    }
+
+    /**
+     * The timestamp of when the password expiration policy was last enabled. (read-only)
+     */
+    public var policy_enabled_at: Date?
+
+    public init(can: StringDictionary<Bool>? = nil, min_length: Int64? = nil, require_numeric: Bool? = nil, require_upperlower: Bool? = nil, require_special: Bool? = nil, expiration_enabled: Bool? = nil, expiration_duration_days: Int64? = nil, policy_enabled_at: Date? = nil) {
         self.can = can
         self._min_length = min_length.map(AnyInt.init)
         self.require_numeric = require_numeric
         self.require_upperlower = require_upperlower
         self.require_special = require_special
+        self.expiration_enabled = expiration_enabled
+        self._expiration_duration_days = expiration_duration_days.map(AnyInt.init)
+        self.policy_enabled_at = policy_enabled_at
     }
 
 }
@@ -18806,6 +18921,7 @@ public struct Project: SDKModel {
         case git_release_mgmt_enabled
         case allow_warnings
         case is_example
+        case has_production_counterpart
         case _dependency_status = "dependency_status"
     }
     /**
@@ -18961,6 +19077,11 @@ public struct Project: SDKModel {
      */
     public var is_example: Bool?
 
+    /**
+     * If true the project has been pushed to production. (read-only)
+     */
+    public var has_production_counterpart: Bool?
+
     private var _dependency_status: AnyString?
     /**
      * Status of dependencies in your manifest & lockfile
@@ -18970,7 +19091,7 @@ public struct Project: SDKModel {
         set { _dependency_status = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, uses_git: Bool? = nil, git_remote_url: String? = nil, git_username: String? = nil, git_password: String? = nil, git_production_branch_name: String? = nil, use_git_cookie_auth: Bool? = nil, git_username_user_attribute: String? = nil, git_password_user_attribute: String? = nil, git_service_name: String? = nil, git_application_server_http_port: Int64? = nil, git_application_server_http_scheme: String? = nil, deploy_secret: String? = nil, unset_deploy_secret: Bool? = nil, pull_request_mode: PullRequestMode? = nil, validation_required: Bool? = nil, git_release_mgmt_enabled: Bool? = nil, allow_warnings: Bool? = nil, is_example: Bool? = nil, dependency_status: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, uses_git: Bool? = nil, git_remote_url: String? = nil, git_username: String? = nil, git_password: String? = nil, git_production_branch_name: String? = nil, use_git_cookie_auth: Bool? = nil, git_username_user_attribute: String? = nil, git_password_user_attribute: String? = nil, git_service_name: String? = nil, git_application_server_http_port: Int64? = nil, git_application_server_http_scheme: String? = nil, deploy_secret: String? = nil, unset_deploy_secret: Bool? = nil, pull_request_mode: PullRequestMode? = nil, validation_required: Bool? = nil, git_release_mgmt_enabled: Bool? = nil, allow_warnings: Bool? = nil, is_example: Bool? = nil, has_production_counterpart: Bool? = nil, dependency_status: String? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
         self._name = name.map(AnyString.init)
@@ -18992,6 +19113,7 @@ public struct Project: SDKModel {
         self.git_release_mgmt_enabled = git_release_mgmt_enabled
         self.allow_warnings = allow_warnings
         self.is_example = is_example
+        self.has_production_counterpart = has_production_counterpart
         self._dependency_status = dependency_status.map(AnyString.init)
     }
 
@@ -20565,6 +20687,7 @@ public struct Role: SDKModel {
         case _permission_set_id = "permission_set_id"
         case model_set
         case _model_set_id = "model_set_id"
+        case `internal`
         case _url = "url"
         case _users_url = "users_url"
     }
@@ -20613,6 +20736,11 @@ public struct Role: SDKModel {
         set { _model_set_id = newValue.map(AnyString.init) }
     }
 
+    /**
+     * Is this a Looker internal role (read-only)
+     */
+    public var `internal`: Bool?
+
     private var _url: AnyString?
     /**
      * Link to get this item (read-only)
@@ -20631,7 +20759,7 @@ public struct Role: SDKModel {
         set { _users_url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, permission_set: PermissionSet? = nil, permission_set_id: String? = nil, model_set: ModelSet? = nil, model_set_id: String? = nil, url: String? = nil, users_url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, permission_set: PermissionSet? = nil, permission_set_id: String? = nil, model_set: ModelSet? = nil, model_set_id: String? = nil, `internal`: Bool? = nil, url: String? = nil, users_url: String? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
         self._name = name.map(AnyString.init)
@@ -20639,6 +20767,7 @@ public struct Role: SDKModel {
         self._permission_set_id = permission_set_id.map(AnyString.init)
         self.model_set = model_set
         self._model_set_id = model_set_id.map(AnyString.init)
+        self.`internal` = `internal`
         self._url = url.map(AnyString.init)
         self._users_url = users_url.map(AnyString.init)
     }
@@ -20655,6 +20784,7 @@ public struct RoleSearch: SDKModel {
         case _permission_set_id = "permission_set_id"
         case model_set
         case _model_set_id = "model_set_id"
+        case `internal`
         case _user_count = "user_count"
         case _url = "url"
         case _users_url = "users_url"
@@ -20704,6 +20834,11 @@ public struct RoleSearch: SDKModel {
         set { _model_set_id = newValue.map(AnyString.init) }
     }
 
+    /**
+     * Is this a Looker internal role (read-only)
+     */
+    public var `internal`: Bool?
+
     private var _user_count: AnyInt?
     /**
      * Count of users with this role (read-only)
@@ -20731,7 +20866,7 @@ public struct RoleSearch: SDKModel {
         set { _users_url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, permission_set: PermissionSet? = nil, permission_set_id: String? = nil, model_set: ModelSet? = nil, model_set_id: String? = nil, user_count: Int64? = nil, url: String? = nil, users_url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, permission_set: PermissionSet? = nil, permission_set_id: String? = nil, model_set: ModelSet? = nil, model_set_id: String? = nil, `internal`: Bool? = nil, user_count: Int64? = nil, url: String? = nil, users_url: String? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
         self._name = name.map(AnyString.init)
@@ -20739,6 +20874,7 @@ public struct RoleSearch: SDKModel {
         self._permission_set_id = permission_set_id.map(AnyString.init)
         self.model_set = model_set
         self._model_set_id = model_set_id.map(AnyString.init)
+        self.`internal` = `internal`
         self._user_count = user_count.map(AnyInt.init)
         self._url = url.map(AnyString.init)
         self._users_url = users_url.map(AnyString.init)
@@ -21145,6 +21281,8 @@ public struct SamlConfig: SDKModel {
         case can
         case enabled
         case _idp_cert = "idp_cert"
+        case idp_cert_multi
+        case multi_certs_supported
         case _idp_url = "idp_url"
         case _idp_issuer = "idp_issuer"
         case _idp_audience = "idp_audience"
@@ -21194,6 +21332,13 @@ public struct SamlConfig: SDKModel {
         get { _idp_cert?.value }
         set { _idp_cert = newValue.map(AnyString.init) }
     }
+
+    public var idp_cert_multi: SamlIdpCertMulti?
+
+    /**
+     * Indicates whether this SAML configuration is set up to use multiple Identity Provider certificates (idp_cert_multi) or a single certificate (idp_cert). When true, idp_cert_multi is used; otherwise, idp_cert is used.
+     */
+    public var multi_certs_supported: Bool?
 
     private var _idp_url: AnyString?
     /**
@@ -21413,10 +21558,12 @@ public struct SamlConfig: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, enabled: Bool? = nil, idp_cert: String? = nil, idp_url: String? = nil, idp_issuer: String? = nil, idp_audience: String? = nil, allowed_clock_drift: Int64? = nil, user_attribute_map_email: String? = nil, user_attribute_map_first_name: String? = nil, user_attribute_map_last_name: String? = nil, new_user_migration_types: String? = nil, alternate_email_login_allowed: Bool? = nil, test_slug: String? = nil, modified_at: String? = nil, modified_by: String? = nil, default_new_user_roles: [Role]? = nil, default_new_user_groups: [LkGroup]? = nil, default_new_user_role_ids: [String]? = nil, default_new_user_group_ids: [String]? = nil, set_roles_from_groups: Bool? = nil, groups_attribute: String? = nil, groups: [SamlGroupRead]? = nil, groups_with_role_ids: [SamlGroupWrite]? = nil, auth_requires_role: Bool? = nil, user_attributes: [SamlUserAttributeRead]? = nil, user_attributes_with_ids: [SamlUserAttributeWrite]? = nil, groups_finder_type: String? = nil, groups_member_value: String? = nil, bypass_login_page: Bool? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, allow_direct_roles: Bool? = nil, url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, enabled: Bool? = nil, idp_cert: String? = nil, idp_cert_multi: SamlIdpCertMulti? = nil, multi_certs_supported: Bool? = nil, idp_url: String? = nil, idp_issuer: String? = nil, idp_audience: String? = nil, allowed_clock_drift: Int64? = nil, user_attribute_map_email: String? = nil, user_attribute_map_first_name: String? = nil, user_attribute_map_last_name: String? = nil, new_user_migration_types: String? = nil, alternate_email_login_allowed: Bool? = nil, test_slug: String? = nil, modified_at: String? = nil, modified_by: String? = nil, default_new_user_roles: [Role]? = nil, default_new_user_groups: [LkGroup]? = nil, default_new_user_role_ids: [String]? = nil, default_new_user_group_ids: [String]? = nil, set_roles_from_groups: Bool? = nil, groups_attribute: String? = nil, groups: [SamlGroupRead]? = nil, groups_with_role_ids: [SamlGroupWrite]? = nil, auth_requires_role: Bool? = nil, user_attributes: [SamlUserAttributeRead]? = nil, user_attributes_with_ids: [SamlUserAttributeWrite]? = nil, groups_finder_type: String? = nil, groups_member_value: String? = nil, bypass_login_page: Bool? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, allow_direct_roles: Bool? = nil, url: String? = nil) {
         self.can = can
         self.enabled = enabled
         self._idp_cert = idp_cert.map(AnyString.init)
+        self.idp_cert_multi = idp_cert_multi
+        self.multi_certs_supported = multi_certs_supported
         self._idp_url = idp_url.map(AnyString.init)
         self._idp_issuer = idp_issuer.map(AnyString.init)
         self._idp_audience = idp_audience.map(AnyString.init)
@@ -21597,6 +21744,26 @@ public struct SamlGroupWrite: SDKModel {
 
 }
 
+public struct SamlIdpCertMulti: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _signing = "signing"
+    }
+    private var _signing: [AnyString]?
+    /**
+     * List of signing certificates. Values should be without pre-encapsulation and post-encapsulation boundaries
+     */
+    public var signing: [String]? {
+        get { if let v = _signing { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _signing = v.map { AnyString.init($0) } } else { _signing = nil } }
+    }
+
+    public init(signing: [String]? = nil) {
+        if let v = signing { _signing = v.map { AnyString.init($0) } } else { _signing = nil }
+    }
+
+}
+
 public struct SamlMetadataParseResult: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -21604,6 +21771,7 @@ public struct SamlMetadataParseResult: SDKModel {
         case _idp_issuer = "idp_issuer"
         case _idp_url = "idp_url"
         case _idp_cert = "idp_cert"
+        case idp_cert_multi
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -21637,11 +21805,14 @@ public struct SamlMetadataParseResult: SDKModel {
         set { _idp_cert = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, idp_issuer: String? = nil, idp_url: String? = nil, idp_cert: String? = nil) {
+    public var idp_cert_multi: SamlIdpCertMulti?
+
+    public init(can: StringDictionary<Bool>? = nil, idp_issuer: String? = nil, idp_url: String? = nil, idp_cert: String? = nil, idp_cert_multi: SamlIdpCertMulti? = nil) {
         self.can = can
         self._idp_issuer = idp_issuer.map(AnyString.init)
         self._idp_url = idp_url.map(AnyString.init)
         self._idp_cert = idp_cert.map(AnyString.init)
+        self.idp_cert_multi = idp_cert_multi
     }
 
 }
@@ -22858,6 +23029,7 @@ public struct Setting: SDKModel {
         case dashboard_auto_refresh_restriction
         case _dashboard_auto_refresh_minimum_interval = "dashboard_auto_refresh_minimum_interval"
         case _managed_certificate_uri = "managed_certificate_uri"
+        case _content_certification_documentation_link = "content_certification_documentation_link"
     }
     public var instance_config: InstanceConfig?
 
@@ -22997,7 +23169,16 @@ public struct Setting: SDKModel {
         set { if let v = newValue { _managed_certificate_uri = v.map { AnyString.init($0) } } else { _managed_certificate_uri = nil } }
     }
 
-    public init(instance_config: InstanceConfig? = nil, extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_site: String? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_enabled: Bool? = nil, embed_config: EmbedConfig? = nil, login_notification_enabled: Bool? = nil, login_notification_text: String? = nil, dashboard_auto_refresh_restriction: Bool? = nil, dashboard_auto_refresh_minimum_interval: String? = nil, managed_certificate_uri: [String]? = nil) {
+    private var _content_certification_documentation_link: AnyString?
+    /**
+     * Link to content certification documentation.
+     */
+    public var content_certification_documentation_link: String? {
+        get { _content_certification_documentation_link?.value }
+        set { _content_certification_documentation_link = newValue.map(AnyString.init) }
+    }
+
+    public init(instance_config: InstanceConfig? = nil, extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_site: String? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_enabled: Bool? = nil, embed_config: EmbedConfig? = nil, login_notification_enabled: Bool? = nil, login_notification_text: String? = nil, dashboard_auto_refresh_restriction: Bool? = nil, dashboard_auto_refresh_minimum_interval: String? = nil, managed_certificate_uri: [String]? = nil, content_certification_documentation_link: String? = nil) {
         self.instance_config = instance_config
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
@@ -23023,6 +23204,7 @@ public struct Setting: SDKModel {
         self.dashboard_auto_refresh_restriction = dashboard_auto_refresh_restriction
         self._dashboard_auto_refresh_minimum_interval = dashboard_auto_refresh_minimum_interval.map(AnyString.init)
         if let v = managed_certificate_uri { _managed_certificate_uri = v.map { AnyString.init($0) } } else { _managed_certificate_uri = nil }
+        self._content_certification_documentation_link = content_certification_documentation_link.map(AnyString.init)
     }
 
 }
@@ -25172,13 +25354,13 @@ public struct User: SDKModel {
     public var can_manage_api3_creds: Bool?
 
     /**
-     * Indicates if this user is a service account. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance. (read-only)
+     * Indicates if this user is a service account. (read-only)
      */
     public var is_service_account: Bool?
 
     private var _service_account_name: AnyString?
     /**
-     * The display name of the service account. This field is omitted for non service account users. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance. (read-only)
+     * The display name of the service account. This field is omitted for non service account users. (read-only)
      */
     public var service_account_name: String? {
         get { _service_account_name?.value }
@@ -27148,6 +27330,7 @@ public struct WriteDashboard: SDKModel {
         case _tile_text_color = "tile_text_color"
         case _title_color = "title_color"
         case appearance
+        case _layout_granularity = "layout_granularity"
     }
     private var _description: AnyString?
     /**
@@ -27334,7 +27517,16 @@ public struct WriteDashboard: SDKModel {
 
     public var appearance: DashboardAppearance?
 
-    public init(description: String? = nil, hidden: Bool? = nil, query_timezone: String? = nil, refresh_interval: String? = nil, folder: WriteFolderBase? = nil, title: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, certification_metadata: WriteCertification? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, crossfilter_enabled: Bool? = nil, deleted: Bool? = nil, enable_viz_full_screen: Bool? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, appearance: DashboardAppearance? = nil) {
+    private var _layout_granularity: AnyString?
+    /**
+     * The layout granularity to apply to this dashboard (ie: default or granular)
+     */
+    public var layout_granularity: String? {
+        get { _layout_granularity?.value }
+        set { _layout_granularity = newValue.map(AnyString.init) }
+    }
+
+    public init(description: String? = nil, hidden: Bool? = nil, query_timezone: String? = nil, refresh_interval: String? = nil, folder: WriteFolderBase? = nil, title: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, certification_metadata: WriteCertification? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, crossfilter_enabled: Bool? = nil, deleted: Bool? = nil, enable_viz_full_screen: Bool? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, appearance: DashboardAppearance? = nil, layout_granularity: String? = nil) {
         self._description = description.map(AnyString.init)
         self.hidden = hidden
         self._query_timezone = query_timezone.map(AnyString.init)
@@ -27361,6 +27553,7 @@ public struct WriteDashboard: SDKModel {
         self._tile_text_color = tile_text_color.map(AnyString.init)
         self._title_color = title_color.map(AnyString.init)
         self.appearance = appearance
+        self._layout_granularity = layout_granularity.map(AnyString.init)
     }
 
 }
@@ -27874,6 +28067,10 @@ public struct WriteDashboardLayoutComponent: SDKModel {
         case _column = "column"
         case _width = "width"
         case _height = "height"
+        case _granular_row = "granular_row"
+        case _granular_column = "granular_column"
+        case _granular_width = "granular_width"
+        case _granular_height = "granular_height"
     }
     private var _dashboard_layout_id: AnyString?
     /**
@@ -27929,13 +28126,53 @@ public struct WriteDashboardLayoutComponent: SDKModel {
         set { _height = newValue.map(AnyInt.init) }
     }
 
-    public init(dashboard_layout_id: String? = nil, dashboard_element_id: String? = nil, row: Int64? = nil, column: Int64? = nil, width: Int64? = nil, height: Int64? = nil) {
+    private var _granular_row: AnyInt?
+    /**
+     * Row (granular layout)
+     */
+    public var granular_row: Int64? {
+        get { _granular_row?.value }
+        set { _granular_row = newValue.map(AnyInt.init) }
+    }
+
+    private var _granular_column: AnyInt?
+    /**
+     * Column (granular layout)
+     */
+    public var granular_column: Int64? {
+        get { _granular_column?.value }
+        set { _granular_column = newValue.map(AnyInt.init) }
+    }
+
+    private var _granular_width: AnyInt?
+    /**
+     * Width (granular layout)
+     */
+    public var granular_width: Int64? {
+        get { _granular_width?.value }
+        set { _granular_width = newValue.map(AnyInt.init) }
+    }
+
+    private var _granular_height: AnyInt?
+    /**
+     * Height (granular layout)
+     */
+    public var granular_height: Int64? {
+        get { _granular_height?.value }
+        set { _granular_height = newValue.map(AnyInt.init) }
+    }
+
+    public init(dashboard_layout_id: String? = nil, dashboard_element_id: String? = nil, row: Int64? = nil, column: Int64? = nil, width: Int64? = nil, height: Int64? = nil, granular_row: Int64? = nil, granular_column: Int64? = nil, granular_width: Int64? = nil, granular_height: Int64? = nil) {
         self._dashboard_layout_id = dashboard_layout_id.map(AnyString.init)
         self._dashboard_element_id = dashboard_element_id.map(AnyString.init)
         self._row = row.map(AnyInt.init)
         self._column = column.map(AnyInt.init)
         self._width = width.map(AnyInt.init)
         self._height = height.map(AnyInt.init)
+        self._granular_row = granular_row.map(AnyInt.init)
+        self._granular_column = granular_column.map(AnyInt.init)
+        self._granular_width = granular_width.map(AnyInt.init)
+        self._granular_height = granular_height.map(AnyInt.init)
     }
 
 }
@@ -28012,7 +28249,7 @@ public struct WriteDatagroup: SDKModel {
 
 /**
  * Dynamic writeable type for DBConnection removes:
- * can, dialect, snippets, pdts_enabled, named_driver_version_actual, uses_oauth, uses_instance_oauth, uses_service_auth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, p4sa_name
+ * can, dialect, snippets, pdts_enabled, named_driver_version_actual, has_password, uses_oauth, uses_instance_oauth, uses_service_auth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, p4sa_name
  */
 public struct WriteDBConnection: SDKModel {
 
@@ -30159,7 +30396,7 @@ public struct WriteOIDCConfig: SDKModel {
 
 /**
  * Dynamic writeable type for PasswordConfig removes:
- * can
+ * can, policy_enabled_at
  */
 public struct WritePasswordConfig: SDKModel {
 
@@ -30168,6 +30405,8 @@ public struct WritePasswordConfig: SDKModel {
         case require_numeric
         case require_upperlower
         case require_special
+        case expiration_enabled
+        case _expiration_duration_days = "expiration_duration_days"
     }
     private var _min_length: AnyInt?
     /**
@@ -30193,11 +30432,27 @@ public struct WritePasswordConfig: SDKModel {
      */
     public var require_special: Bool?
 
-    public init(min_length: Int64? = nil, require_numeric: Bool? = nil, require_upperlower: Bool? = nil, require_special: Bool? = nil) {
+    /**
+     * Enable/Disable password expiration policy.
+     */
+    public var expiration_enabled: Bool?
+
+    private var _expiration_duration_days: AnyInt?
+    /**
+     * Number of days before passwords expire. Must be between 30 and 365.
+     */
+    public var expiration_duration_days: Int64? {
+        get { _expiration_duration_days?.value }
+        set { _expiration_duration_days = newValue.map(AnyInt.init) }
+    }
+
+    public init(min_length: Int64? = nil, require_numeric: Bool? = nil, require_upperlower: Bool? = nil, require_special: Bool? = nil, expiration_enabled: Bool? = nil, expiration_duration_days: Int64? = nil) {
         self._min_length = min_length.map(AnyInt.init)
         self.require_numeric = require_numeric
         self.require_upperlower = require_upperlower
         self.require_special = require_special
+        self.expiration_enabled = expiration_enabled
+        self._expiration_duration_days = expiration_duration_days.map(AnyInt.init)
     }
 
 }
@@ -30352,7 +30607,7 @@ public struct WritePrivatelabelConfiguration: SDKModel {
 
 /**
  * Dynamic writeable type for Project removes:
- * can, id, uses_git, is_example
+ * can, id, uses_git, is_example, has_production_counterpart
  */
 public struct WriteProject: SDKModel {
 
@@ -30881,7 +31136,7 @@ public struct WriteResultMakerWithIdVisConfigAndDynamicFields: SDKModel {
 
 /**
  * Dynamic writeable type for Role removes:
- * can, id, url, users_url
+ * can, id, internal, url, users_url
  */
 public struct WriteRole: SDKModel {
 
@@ -30950,6 +31205,8 @@ public struct WriteSamlConfig: SDKModel {
     private enum CodingKeys : String, CodingKey {
         case enabled
         case _idp_cert = "idp_cert"
+        case idp_cert_multi
+        case multi_certs_supported
         case _idp_url = "idp_url"
         case _idp_issuer = "idp_issuer"
         case _idp_audience = "idp_audience"
@@ -30986,6 +31243,13 @@ public struct WriteSamlConfig: SDKModel {
         get { _idp_cert?.value }
         set { _idp_cert = newValue.map(AnyString.init) }
     }
+
+    public var idp_cert_multi: SamlIdpCertMulti?
+
+    /**
+     * Indicates whether this SAML configuration is set up to use multiple Identity Provider certificates (idp_cert_multi) or a single certificate (idp_cert). When true, idp_cert_multi is used; otherwise, idp_cert is used.
+     */
+    public var multi_certs_supported: Bool?
 
     private var _idp_url: AnyString?
     /**
@@ -31149,9 +31413,11 @@ public struct WriteSamlConfig: SDKModel {
      */
     public var allow_direct_roles: Bool?
 
-    public init(enabled: Bool? = nil, idp_cert: String? = nil, idp_url: String? = nil, idp_issuer: String? = nil, idp_audience: String? = nil, allowed_clock_drift: Int64? = nil, user_attribute_map_email: String? = nil, user_attribute_map_first_name: String? = nil, user_attribute_map_last_name: String? = nil, new_user_migration_types: String? = nil, alternate_email_login_allowed: Bool? = nil, default_new_user_role_ids: [String]? = nil, default_new_user_group_ids: [String]? = nil, set_roles_from_groups: Bool? = nil, groups_attribute: String? = nil, groups_with_role_ids: [SamlGroupWrite]? = nil, auth_requires_role: Bool? = nil, user_attributes_with_ids: [SamlUserAttributeWrite]? = nil, groups_finder_type: String? = nil, groups_member_value: String? = nil, bypass_login_page: Bool? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, allow_direct_roles: Bool? = nil) {
+    public init(enabled: Bool? = nil, idp_cert: String? = nil, idp_cert_multi: SamlIdpCertMulti? = nil, multi_certs_supported: Bool? = nil, idp_url: String? = nil, idp_issuer: String? = nil, idp_audience: String? = nil, allowed_clock_drift: Int64? = nil, user_attribute_map_email: String? = nil, user_attribute_map_first_name: String? = nil, user_attribute_map_last_name: String? = nil, new_user_migration_types: String? = nil, alternate_email_login_allowed: Bool? = nil, default_new_user_role_ids: [String]? = nil, default_new_user_group_ids: [String]? = nil, set_roles_from_groups: Bool? = nil, groups_attribute: String? = nil, groups_with_role_ids: [SamlGroupWrite]? = nil, auth_requires_role: Bool? = nil, user_attributes_with_ids: [SamlUserAttributeWrite]? = nil, groups_finder_type: String? = nil, groups_member_value: String? = nil, bypass_login_page: Bool? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, allow_direct_roles: Bool? = nil) {
         self.enabled = enabled
         self._idp_cert = idp_cert.map(AnyString.init)
+        self.idp_cert_multi = idp_cert_multi
+        self.multi_certs_supported = multi_certs_supported
         self._idp_url = idp_url.map(AnyString.init)
         self._idp_issuer = idp_issuer.map(AnyString.init)
         self._idp_audience = idp_audience.map(AnyString.init)
@@ -31579,6 +31845,7 @@ public struct WriteSetting: SDKModel {
         case dashboard_auto_refresh_restriction
         case _dashboard_auto_refresh_minimum_interval = "dashboard_auto_refresh_minimum_interval"
         case _managed_certificate_uri = "managed_certificate_uri"
+        case _content_certification_documentation_link = "content_certification_documentation_link"
     }
     /**
      * Toggle extension framework on or off
@@ -31696,7 +31963,16 @@ public struct WriteSetting: SDKModel {
         set { if let v = newValue { _managed_certificate_uri = v.map { AnyString.init($0) } } else { _managed_certificate_uri = nil } }
     }
 
-    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_config: WriteEmbedConfig? = nil, dashboard_auto_refresh_restriction: Bool? = nil, dashboard_auto_refresh_minimum_interval: String? = nil, managed_certificate_uri: [String]? = nil) {
+    private var _content_certification_documentation_link: AnyString?
+    /**
+     * Link to content certification documentation.
+     */
+    public var content_certification_documentation_link: String? {
+        get { _content_certification_documentation_link?.value }
+        set { _content_certification_documentation_link = newValue.map(AnyString.init) }
+    }
+
+    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_config: WriteEmbedConfig? = nil, dashboard_auto_refresh_restriction: Bool? = nil, dashboard_auto_refresh_minimum_interval: String? = nil, managed_certificate_uri: [String]? = nil, content_certification_documentation_link: String? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
@@ -31717,6 +31993,7 @@ public struct WriteSetting: SDKModel {
         self.dashboard_auto_refresh_restriction = dashboard_auto_refresh_restriction
         self._dashboard_auto_refresh_minimum_interval = dashboard_auto_refresh_minimum_interval.map(AnyString.init)
         if let v = managed_certificate_uri { _managed_certificate_uri = v.map { AnyString.init($0) } } else { _managed_certificate_uri = nil }
+        self._content_certification_documentation_link = content_certification_documentation_link.map(AnyString.init)
     }
 
 }
