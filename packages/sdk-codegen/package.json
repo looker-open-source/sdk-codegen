@@ -41,7 +41,7 @@
   },
   "gitHead": "308cb8c61290837e71345a5ef6fb17be9285990e",
   "devDependencies": {
-    "lodash": "4.17.21",
+    "lodash": "4.17.23",
     "@types/blueimp-md5": "2.18.2",
     "@looker/sdk-codegen-utils": "21.0.28"
   }
