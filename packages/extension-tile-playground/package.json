@@ -1,6 +1,6 @@
 {
   "name": "@looker/extension-tile-playground",
-  "version": "1.1.24",
+  "version": "1.1.25",
   "description": "Extension Tile Playground",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
@@ -14,9 +14,9 @@
     "develop": "webpack serve --hot --allowed-hosts all --port 8080 --https --config webpack.dev.config.js"
   },
   "dependencies": {
-    "@looker/extension-sdk": "25.20.0",
-    "@looker/extension-sdk-react": "25.20.0",
-    "@looker/sdk": "25.20.0",
+    "@looker/extension-sdk": "26.0.0",
+    "@looker/extension-sdk-react": "26.0.0",
+    "@looker/sdk": "26.0.0",
     "@looker/components": "^5.0.3",
     "@looker/icons": "^1.5.21",
     "@styled-icons/material": "^10.47.0",

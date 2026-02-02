@@ -1,6 +1,6 @@
 {
   "name": "@looker/sdk-node",
-  "version": "25.20.0",
+  "version": "26.0.0",
   "description": "Looker SDK Runtime for Node Library",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
@@ -39,7 +39,7 @@
     "tsx": "4.19.0"
   },
   "dependencies": {
-    "@looker/sdk": "25.20.0",
+    "@looker/sdk": "26.0.0",
     "@looker/sdk-rtl": "21.6.4",
     "ini": "5.0.0"
   },
