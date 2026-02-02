@@ -25,7 +25,7 @@
  */
 
 /**
- * 476 API methods
+ * 478 API methods
  */
 
 import type {
@@ -3008,6 +3008,22 @@ export interface ILooker40SDK extends IAPIMethods {
   ): Promise<SDKResponse<IExternalOauthApplication, IError | IValidationError>>;
 
   /**
+   * ### Delete an OAuth Application.
+   *
+   * This is an OAuth Application which Looker uses to access external systems.
+   *
+   * DELETE /external_oauth_applications/{client_id} -> string
+   *
+   * @param client_id The client ID of the OAuth App to delete
+   * @param options one-time API call overrides
+   *
+   */
+  delete_external_oauth_application(
+    client_id: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string, IError>>;
+
+  /**
    * ### Create OAuth User state.
    *
    * POST /external_oauth_applications/user_state -> ICreateOAuthApplicationUserStateResponse
@@ -5962,6 +5978,10 @@ export interface ILooker40SDK extends IAPIMethods {
    * metadata. The remote git repository MUST be configured with the Looker-generated deploy
    * key for this project prior to setting the project's `git_remote_url`.
    *
+   * Note that Looker will validate the git connection when the `git_remote_url` is modified.
+   * If Looker cannot connect to the remote repository (e.g. because the deploy key has not
+   * been added), the update will fail with a 400 Bad Request error.
+   *
    * To set up a Looker project with a git repository residing on the Looker server (a 'bare' git repo):
    *
    * 1. Call `update_session` to select the 'dev' workspace.
@@ -8421,7 +8441,19 @@ export interface ILooker40SDK extends IAPIMethods {
   /**
    * ### Delete the user with a specific id.
    *
-   * **DANGER** this will delete the user and all looks and other information owned by the user.
+   * **This action cannot be undone.** If you want to keep the user's content, we recommend disabling their accounts instead of deleting them.
+   *
+   * Deletion will have the following impact:
+   * * Their reports, Looks and dashboards will be moved to Trash.
+   * * Any public URLs owned by them will no longer work.
+   * * Schedules created by the users or that use their content will be deleted.
+   * * Alerts will continue to run, but will not be visible or editable from the dashboard.
+   *
+   * The user cannot delete themselves.
+   * The last administrator user cannot be deleted.
+   *
+   * Deleting Service Accounts via this endpoint is deprecated and can be blocked in future versions.
+   * Please use the dedicated `delete_service_account` endpoint.
    *
    * DELETE /users/{user_id} -> string
    *
@@ -8480,6 +8512,50 @@ export interface ILooker40SDK extends IAPIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IUser, IError>>;
+
+  /**
+   * ### Update information for a specific service account. This action is restricted to Looker admins.
+   *
+   * This endpoint is exclusively for updating service accounts. To update a regular user, please use the `PATCH /api/3.x/users/:user_id` endpoint instead.
+   *
+   * PATCH /users/service_accounts/{user_id} -> IServiceAccount
+   *
+   * @param user_id Id of service account
+   * @param body Partial<IWriteServiceAccount>
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  update_service_account(
+    user_id: string,
+    body: Partial<IWriteServiceAccount>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IServiceAccount, IError | IValidationError>>;
+
+  /**
+   * ### Delete the service account with a specific id.
+   *
+   * **This action cannot be undone.** If you want to keep the service account's content, we recommend disabling their accounts instead of deleting them.
+   *
+   * Deletion will have the following impact:
+   * * Their reports, Looks and dashboards will be moved to Trash.
+   * * Any public URLs owned by them will no longer work.
+   * * Schedules created by the service account or that use their content will be deleted.
+   * * Alerts will continue to run, but will not be visible or editable from the dashboard.
+   *
+   * The service account cannot delete itself.
+   *
+   * DELETE /users/service_accounts/{user_id} -> string
+   *
+   * @param user_id Id of service account user
+   * @param options one-time API call overrides
+   *
+   */
+  delete_service_account(
+    user_id: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string, IError>>;
 
   /**
    * ### Email/password login information for the specified user.
@@ -8646,8 +8722,6 @@ export interface ILooker40SDK extends IAPIMethods {
   /**
    * ### Google authentication login information for the specified user.
    *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
-   *
    * GET /users/{user_id}/credentials_google -> ICredentialsGoogle
    *
    * @param user_id Id of user
@@ -8664,8 +8738,6 @@ export interface ILooker40SDK extends IAPIMethods {
   /**
    * ### Google authentication login information for the specified user.
    *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
-   *
    * DELETE /users/{user_id}/credentials_google -> string
    *
    * @param user_id Id of user
@@ -8679,8 +8751,6 @@ export interface ILooker40SDK extends IAPIMethods {
 
   /**
    * ### Saml authentication login information for the specified user.
-   *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * GET /users/{user_id}/credentials_saml -> ICredentialsSaml
    *
@@ -8698,8 +8768,6 @@ export interface ILooker40SDK extends IAPIMethods {
   /**
    * ### Saml authentication login information for the specified user.
    *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
-   *
    * DELETE /users/{user_id}/credentials_saml -> string
    *
    * @param user_id Id of user
@@ -8713,8 +8781,6 @@ export interface ILooker40SDK extends IAPIMethods {
 
   /**
    * ### OpenID Connect (OIDC) authentication login information for the specified user.
-   *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * GET /users/{user_id}/credentials_oidc -> ICredentialsOIDC
    *
@@ -8732,8 +8798,6 @@ export interface ILooker40SDK extends IAPIMethods {
   /**
    * ### OpenID Connect (OIDC) authentication login information for the specified user.
    *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
-   *
    * DELETE /users/{user_id}/credentials_oidc -> string
    *
    * @param user_id Id of user
@@ -8747,8 +8811,6 @@ export interface ILooker40SDK extends IAPIMethods {
 
   /**
    * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
-   *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * GET /users/{user_id}/credentials_api3/{credentials_api3_id} -> ICredentialsApi3
    *
@@ -8767,8 +8829,6 @@ export interface ILooker40SDK extends IAPIMethods {
 
   /**
    * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
-   *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * PATCH /users/{user_id}/credentials_api3/{credentials_api3_id} -> ICredentialsApi3
    *
@@ -8790,8 +8850,6 @@ export interface ILooker40SDK extends IAPIMethods {
   /**
    * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
    *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
-   *
    * DELETE /users/{user_id}/credentials_api3/{credentials_api3_id} -> string
    *
    * @param user_id Id of user
@@ -8808,8 +8866,6 @@ export interface ILooker40SDK extends IAPIMethods {
   /**
    * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
    *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
-   *
    * GET /users/{user_id}/credentials_api3 -> ICredentialsApi3[]
    *
    * @param user_id Id of user
@@ -8825,8 +8881,6 @@ export interface ILooker40SDK extends IAPIMethods {
 
   /**
    * ### API login information for the specified user. This is for the newer API keys that can be added for any user.
-   *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * POST /users/{user_id}/credentials_api3 -> ICreateCredentialsApi3
    *
@@ -8934,8 +8988,6 @@ export interface ILooker40SDK extends IAPIMethods {
   /**
    * ### Web login session for the specified user.
    *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
-   *
    * GET /users/{user_id}/sessions/{session_id} -> ISession
    *
    * @param user_id Id of user
@@ -8954,8 +9006,6 @@ export interface ILooker40SDK extends IAPIMethods {
   /**
    * ### Web login session for the specified user.
    *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
-   *
    * DELETE /users/{user_id}/sessions/{session_id} -> string
    *
    * @param user_id Id of user
@@ -8971,8 +9021,6 @@ export interface ILooker40SDK extends IAPIMethods {
 
   /**
    * ### Web login session for the specified user.
-   *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
    *
    * GET /users/{user_id}/sessions -> ISession[]
    *
@@ -9182,8 +9230,6 @@ export interface ILooker40SDK extends IAPIMethods {
   /**
    * ### Create a service account with the specified information. This action is restricted to Looker admins.
    *
-   * Calls to this endpoint may only be available for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
-   *
    * POST /users/service_accounts -> IServiceAccount
    *
    * @param body Partial<IWriteServiceAccount>
@@ -9192,28 +9238,6 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   create_service_account(
-    body: Partial<IWriteServiceAccount>,
-    fields?: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IServiceAccount, IError | IValidationError>>;
-
-  /**
-   * ### Update information for a specific service account. This action is restricted to Looker admins.
-   *
-   * This endpoint is exclusively for updating service accounts. To update a regular user, please use the `PATCH /api/3.x/users/:user_id` endpoint instead.
-   *
-   * Calls to this endpoint may only be available for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
-   *
-   * PATCH /users/service_accounts/{user_id} -> IServiceAccount
-   *
-   * @param user_id Id of service account
-   * @param body Partial<IWriteServiceAccount>
-   * @param fields Requested fields.
-   * @param options one-time API call overrides
-   *
-   */
-  update_service_account(
-    user_id: string,
     body: Partial<IWriteServiceAccount>,
     fields?: string,
     options?: Partial<ITransportSettings>

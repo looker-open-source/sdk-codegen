@@ -25,7 +25,7 @@
  */
 
 /**
- * 453 API models: 290 Spec, 73 Request, 65 Write, 25 Enum
+ * 454 API models: 291 Spec, 73 Request, 65 Write, 25 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl';
@@ -1140,6 +1140,14 @@ export interface IContentSearch {
    * Name of the model the explore belongs to (read-only)
    */
   model?: string | null;
+  /**
+   * Creator Id of the content (read-only)
+   */
+  created_by_id?: number | null;
+  /**
+   * Certification status of the content (read-only)
+   */
+  certification_status?: string | null;
 }
 
 export interface IContentSummary {
@@ -2547,6 +2555,10 @@ export interface IDashboard {
    * Relative URL of the dashboard (read-only)
    */
   url?: string | null;
+  /**
+   * The layout granularity to apply to this dashboard (ie: default or granular)
+   */
+  layout_granularity?: string | null;
 }
 
 export interface IDashboardAggregateTableLookml {
@@ -2946,6 +2958,22 @@ export interface IDashboardLayoutComponent {
    * Visualization type, extracted from a query's vis_config (read-only)
    */
   vis_type?: string | null;
+  /**
+   * Row (granular layout)
+   */
+  granular_row?: number | null;
+  /**
+   * Column (granular layout)
+   */
+  granular_column?: number | null;
+  /**
+   * Width (granular layout)
+   */
+  granular_width?: number | null;
+  /**
+   * Height (granular layout)
+   */
+  granular_height?: number | null;
 }
 
 export interface IDashboardLookml {
@@ -3148,6 +3176,10 @@ export interface IDBConnection {
    * (Write-Only) Password for server authentication
    */
   password?: string | null;
+  /**
+   * Whether or not the password is present (read-only)
+   */
+  has_password?: boolean;
   /**
    * Whether the connection uses OAuth for authentication. (read-only)
    */
@@ -3696,6 +3728,10 @@ export interface IDialectInfoOptions {
    * Instance name is required (read-only)
    */
   instance_name?: boolean;
+  /**
+   * Has support for key pair authentication (read-only)
+   */
+  key_pair_authentication?: boolean;
   /**
    * Has max billing gigabytes support (read-only)
    */
@@ -7500,6 +7536,18 @@ export interface IPasswordConfig {
    * Require at least one special character
    */
   require_special?: boolean;
+  /**
+   * Enable/Disable password expiration policy.
+   */
+  expiration_enabled?: boolean;
+  /**
+   * Number of days before passwords expire. Must be between 30 and 365.
+   */
+  expiration_duration_days?: number | null;
+  /**
+   * The timestamp of when the password expiration policy was last enabled. (read-only)
+   */
+  policy_enabled_at?: Date | null;
 }
 
 /**
@@ -7718,6 +7766,10 @@ export interface IProject {
    * If true the project is an example project and cannot be modified (read-only)
    */
   is_example?: boolean;
+  /**
+   * If true the project has been pushed to production. (read-only)
+   */
+  has_production_counterpart?: boolean;
   /**
    * Status of dependencies in your manifest & lockfile
    */
@@ -9651,6 +9703,10 @@ export interface IRequestSearchContentFavorites {
    */
   board_id?: string | null;
   /**
+   * Match lookml dashboard id(s). To create a list of multiple ids, use commas as separators
+   */
+  lookml_dashboard_id?: string | null;
+  /**
    * If true, and board_id is provided, returns the content favorites for all items on the board. If false, returns the content favorite for the board itself.
    */
   include_board_items?: boolean | null;
@@ -10637,7 +10693,7 @@ export interface IRequestSearchUsers {
    */
   can_manage_api3_creds?: boolean | null;
   /**
-   * Search for service account users. Send true to get only service accounts, or false to get all other types of users. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). Availability of this filter is limited to users with permission to view complete user details. This is an experimental feature and may not yet be available on your instance.
+   * Search for service account users. Send true to get only service accounts, or false to get all other types of users. Availability of this filter is limited to users with permission to view complete user details.
    */
   is_service_account?: boolean | null;
 }
@@ -10931,6 +10987,10 @@ export interface IRole {
    */
   model_set_id?: string | null;
   /**
+   * Is this a Looker internal role (read-only)
+   */
+  internal?: boolean;
+  /**
    * Link to get this item (read-only)
    */
   url?: string | null;
@@ -10963,6 +11023,10 @@ export interface IRoleSearch {
    * (Write-Only) Id of model set
    */
   model_set_id?: string | null;
+  /**
+   * Is this a Looker internal role (read-only)
+   */
+  internal?: boolean;
   /**
    * Count of users with this role (read-only)
    */
@@ -11136,6 +11200,11 @@ export interface ISamlConfig {
    * Identity Provider Certificate (provided by IdP)
    */
   idp_cert?: string | null;
+  idp_cert_multi?: ISamlIdpCertMulti;
+  /**
+   * Indicates whether this SAML configuration is set up to use multiple Identity Provider certificates (idp_cert_multi) or a single certificate (idp_cert). When true, idp_cert_multi is used; otherwise, idp_cert is used.
+   */
+  multi_certs_supported?: boolean | null;
   /**
    * Identity Provider Url (provided by IdP)
    */
@@ -11312,6 +11381,13 @@ export interface ISamlGroupWrite {
   url?: string | null;
 }
 
+export interface ISamlIdpCertMulti {
+  /**
+   * List of signing certificates. Values should be without pre-encapsulation and post-encapsulation boundaries
+   */
+  signing?: string[] | null;
+}
+
 export interface ISamlMetadataParseResult {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -11329,6 +11405,7 @@ export interface ISamlMetadataParseResult {
    * Identify Provider Certificate (read-only)
    */
   idp_cert?: string | null;
+  idp_cert_multi?: ISamlIdpCertMulti;
 }
 
 export interface ISamlUserAttributeRead {
@@ -11910,6 +11987,10 @@ export interface ISetting {
    * Array of URIs pointing to the location of a root certificate in Secret Manager
    */
   managed_certificate_uri?: string[] | null;
+  /**
+   * Link to content certification documentation.
+   */
+  content_certification_documentation_link?: string | null;
 }
 
 export interface ISmtpNodeStatus {
@@ -12816,11 +12897,11 @@ export interface IUser {
    */
   can_manage_api3_creds?: boolean;
   /**
-   * Indicates if this user is a service account. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance. (read-only)
+   * Indicates if this user is a service account. (read-only)
    */
   is_service_account?: boolean;
   /**
-   * The display name of the service account. This field is omitted for non service account users. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance. (read-only)
+   * The display name of the service account. This field is omitted for non service account users. (read-only)
    */
   service_account_name?: string | null;
   /**
@@ -13740,6 +13821,10 @@ export interface IWriteDashboard {
    */
   title_color?: string | null;
   appearance?: IDashboardAppearance | null;
+  /**
+   * The layout granularity to apply to this dashboard (ie: default or granular)
+   */
+  layout_granularity?: string | null;
 }
 
 /**
@@ -13980,6 +14065,22 @@ export interface IWriteDashboardLayoutComponent {
    * Height
    */
   height?: number | null;
+  /**
+   * Row (granular layout)
+   */
+  granular_row?: number | null;
+  /**
+   * Column (granular layout)
+   */
+  granular_column?: number | null;
+  /**
+   * Width (granular layout)
+   */
+  granular_width?: number | null;
+  /**
+   * Height (granular layout)
+   */
+  granular_height?: number | null;
 }
 
 /**
@@ -14014,7 +14115,7 @@ export interface IWriteDatagroup {
 
 /**
  * Dynamic writeable type for DBConnection removes:
- * can, dialect, snippets, pdts_enabled, named_driver_version_actual, uses_oauth, uses_instance_oauth, uses_service_auth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, p4sa_name
+ * can, dialect, snippets, pdts_enabled, named_driver_version_actual, has_password, uses_oauth, uses_instance_oauth, uses_service_auth, supports_data_studio_link, created_at, user_id, example, last_regen_at, last_reap_at, managed, default_bq_connection, p4sa_name
  */
 export interface IWriteDBConnection {
   /**
@@ -14942,7 +15043,7 @@ export interface IWriteOIDCConfig {
 
 /**
  * Dynamic writeable type for PasswordConfig removes:
- * can
+ * can, policy_enabled_at
  */
 export interface IWritePasswordConfig {
   /**
@@ -14961,6 +15062,14 @@ export interface IWritePasswordConfig {
    * Require at least one special character
    */
   require_special?: boolean;
+  /**
+   * Enable/Disable password expiration policy.
+   */
+  expiration_enabled?: boolean;
+  /**
+   * Number of days before passwords expire. Must be between 30 and 365.
+   */
+  expiration_duration_days?: number | null;
 }
 
 /**
@@ -15036,7 +15145,7 @@ export interface IWritePrivatelabelConfiguration {
 
 /**
  * Dynamic writeable type for Project removes:
- * can, id, uses_git, is_example
+ * can, id, uses_git, is_example, has_production_counterpart
  */
 export interface IWriteProject {
   /**
@@ -15257,7 +15366,7 @@ export interface IWriteResultMakerWithIdVisConfigAndDynamicFields {
 
 /**
  * Dynamic writeable type for Role removes:
- * can, id, url, users_url
+ * can, id, internal, url, users_url
  */
 export interface IWriteRole {
   /**
@@ -15297,6 +15406,11 @@ export interface IWriteSamlConfig {
    * Identity Provider Certificate (provided by IdP)
    */
   idp_cert?: string | null;
+  idp_cert_multi?: ISamlIdpCertMulti | null;
+  /**
+   * Indicates whether this SAML configuration is set up to use multiple Identity Provider certificates (idp_cert_multi) or a single certificate (idp_cert). When true, idp_cert_multi is used; otherwise, idp_cert is used.
+   */
+  multi_certs_supported?: boolean | null;
   /**
    * Identity Provider Url (provided by IdP)
    */
@@ -15637,6 +15751,10 @@ export interface IWriteSetting {
    * Array of URIs pointing to the location of a root certificate in Secret Manager
    */
   managed_certificate_uri?: string[] | null;
+  /**
+   * Link to content certification documentation.
+   */
+  content_certification_documentation_link?: string | null;
 }
 
 /**
