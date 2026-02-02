@@ -1,5 +1,13 @@
 # Changelog
 
+## [26.0.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v25.20.0...sdk-codegen-all-v26.0.0) (2026-02-02)
+
+
+### Features
+
+* generate SDKs for Looker 26.0 ([#1631](https://github.com/looker-open-source/sdk-codegen/issues/1631)) ([3b36a3c](https://github.com/looker-open-source/sdk-codegen/commit/3b36a3c7f6eb488b72993891b4ed05a99194f61e))
+* **go-sdk:** Automatically refresh expired authentication tokens ([#1608](https://github.com/looker-open-source/sdk-codegen/issues/1608)) ([935dae6](https://github.com/looker-open-source/sdk-codegen/commit/935dae6edeb47bdcad167f3b87167d1701182a24))
+
 ## [25.20.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v25.18.0...sdk-codegen-all-v25.20.0) (2025-11-05)
 
 
