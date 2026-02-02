@@ -36,7 +36,7 @@
     "@looker/sdk-node": "26.0.0",
     "@manypkg/find-root": "2.2.1",
     "@types/js-yaml": "4.0.9",
-    "lodash": "4.17.21",
+    "lodash": "4.17.23",
     "js-yaml": "4.1.0"
   }
 }

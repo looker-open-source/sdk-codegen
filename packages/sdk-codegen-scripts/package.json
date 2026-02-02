@@ -47,7 +47,7 @@
     "@types/prettier": "2.7.3",
     "prettier": "2.8.8",
     "swagger2openapi": "7.0.8",
-    "lodash": "4.17.21"
+    "lodash": "4.17.23"
   },
   "gitHead": "d16d6fd98594572f130dd0b7959d49a737de8722"
 }
