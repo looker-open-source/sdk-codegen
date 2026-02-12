@@ -237,9 +237,11 @@ class APIMethods:
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> TReturn:
         """DELETE method"""
+        params = self._convert_query_params(query_params) if query_params else None
         response = self.transport.request(
             transport.HttpMethod.DELETE,
             self._path(path),
+            query_params=params,
             body=None,
             authenticator=self.auth.authenticate,
             transport_options=transport_options,
