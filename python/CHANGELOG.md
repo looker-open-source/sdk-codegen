@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [26.2.0](https://github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v26.0.0...looker_sdk-v26.2.0) (2026-02-13)
+
+
+### Features
+
+* generate SDKs for Looker 26.2 ([#1637](https://github.com/looker-open-source/sdk-codegen/issues/1637)) ([e038925](https://github.com/looker-open-source/sdk-codegen/commit/e0389253b934998833bed8ade5f988312ef2d77b))
+
+
+### Bug Fixes
+
+* **PythonDeleteMethod:** Did not passthrough query_params ([#1635](https://github.com/looker-open-source/sdk-codegen/issues/1635)) ([6f39a54](https://github.com/looker-open-source/sdk-codegen/commit/6f39a540dbc5493e509881155e5b8f3cf8b60bd1))
+
 ## [26.0.0](https://github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v25.20.0...looker_sdk-v26.0.0) (2026-02-02)
 
 
