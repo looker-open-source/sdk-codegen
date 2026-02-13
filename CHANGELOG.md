@@ -1,5 +1,17 @@
 # Changelog
 
+## [26.2.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v26.0.0...sdk-codegen-all-v26.2.0) (2026-02-13)
+
+
+### Features
+
+* generate SDKs for Looker 26.2 ([#1637](https://github.com/looker-open-source/sdk-codegen/issues/1637)) ([e038925](https://github.com/looker-open-source/sdk-codegen/commit/e0389253b934998833bed8ade5f988312ef2d77b))
+
+
+### Bug Fixes
+
+* **PythonDeleteMethod:** Did not passthrough query_params ([#1635](https://github.com/looker-open-source/sdk-codegen/issues/1635)) ([6f39a54](https://github.com/looker-open-source/sdk-codegen/commit/6f39a540dbc5493e509881155e5b8f3cf8b60bd1))
+
 ## [26.0.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v25.20.0...sdk-codegen-all-v26.0.0) (2026-02-02)
 
 
