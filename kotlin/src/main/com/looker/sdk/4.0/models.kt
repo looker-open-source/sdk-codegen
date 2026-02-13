@@ -51,7 +51,7 @@ data class AccessToken(
 
 /**
  * @property applied_dashboard_filters Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
- * @property comparison_type This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+ * @property comparison_type This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
  * @property cron Vixie-Style crontab specification when to run. At minimum, it has to be longer than 15 minute intervals
  * @property custom_url_base Domain for the custom url selected by the alert creator from the admin defined domain allowlist
  * @property custom_url_params Parameters and path for the custom url defined by the alert creator
@@ -111,7 +111,7 @@ data class Alert(
 /**
  * @property filter_title Field Title. Refer to `DashboardFilter.title` in [DashboardFilter](#!/types/DashboardFilter). Example `Name`
  * @property field_name Field Name. Refer to `DashboardFilter.dimension` in [DashboardFilter](#!/types/DashboardFilter). Example `distribution_centers.name`
- * @property filter_value Field Value. [Filter Expressions](https://cloud.google.com/looker/docs/reference/filter-expressions). Example `Los Angeles CA`
+ * @property filter_value Field Value. [Filter Expressions](https://docs.cloud.google.com/looker/docs/reference/filter-expressions). Example `Los Angeles CA`
  * @property filter_description Human Readable Filter Description. This may be null or auto-generated. Example `is Los Angeles CA` (read-only)
  */
 data class AlertAppliedDashboardFilter(
@@ -145,7 +145,7 @@ data class AlertDestination(
 
 /**
  * @property title Field's title. Usually auto-generated to reflect field name and its filters
- * @property name Field's name. Has the format `<view>.<field>` Refer to [docs](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts) for more details
+ * @property name Field's name. Has the format `<view>.<field>` Refer to [docs](https://docs.cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts) for more details
  * @property filter (Optional / Advance Use) List of fields filter. This further restricts the alert to certain dashboard element's field values. This can be used on top of dashboard filters `applied_dashboard_filters`. To keep thing simple, it's suggested to just use dashboard filters. Example: `{ 'title': '12 Number on Hand', 'name': 'inventory_items.number_on_hand', 'filter': [{ 'field_name': 'inventory_items.id', 'field_value': 12, 'filter_value': null }] }`
  */
 data class AlertField(
@@ -156,8 +156,8 @@ data class AlertField(
 
 /**
  * @property field_name Field Name. Has format `<view>.<field>`
- * @property field_value Field Value. Depends on the type of field - numeric or string. For [location](https://cloud.google.com/looker/docs/reference/field-reference/dimension-type-reference#location) type, it's a list of floats. Example `[1.0, 56.0]`
- * @property filter_value Filter Value. Usually null except for [location](https://cloud.google.com/looker/docs/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`
+ * @property field_value Field Value. Depends on the type of field - numeric or string. For [location](https://docs.cloud.google.com/looker/docs/reference/field-reference/dimension-type-reference#location) type, it's a list of floats. Example `[1.0, 56.0]`
+ * @property filter_value Filter Value. Usually null except for [location](https://docs.cloud.google.com/looker/docs/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`
  */
 data class AlertFieldFilter(
     var field_name: String,
@@ -504,12 +504,14 @@ enum class Category : Serializable {
 
 /**
  * @property certification_status Certification status: "certified" or "revoked" Valid values are: "certified", "revoked".
+ * @property ui_status Indicates whether the underlying model is ungoverned (read-only)
  * @property user_name Display name of user who certified the content, derived from user_id (read-only)
  * @property notes Certification notes
  * @property updated_at Timestamp of certification (read-only)
  */
 data class Certification(
     var certification_status: CertificationStatus? = null,
+    var ui_status: String? = null,
     var user_name: String? = null,
     var notes: String? = null,
     var updated_at: Date? = null,
@@ -600,7 +602,7 @@ data class ColumnSearch(
 ) : Serializable
 
 /**
- * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY". (Enum defined in Alert)
+ * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY". (Enum defined in Alert)
  */
 enum class ComparisonType : Serializable {
     EQUAL_TO,
@@ -738,6 +740,7 @@ data class ContentMetaGroupUser(
  * @property model Name of the model the explore belongs to (read-only)
  * @property created_by_id Creator Id of the content (read-only)
  * @property certification_status Certification status of the content (read-only)
+ * @property parent_folder_name Name of the parent folder of the content (read-only)
  */
 data class ContentSearch(
     var can: Map<String, Boolean>? = null,
@@ -752,6 +755,7 @@ data class ContentSearch(
     var model: String? = null,
     var created_by_id: Long? = null,
     var certification_status: String? = null,
+    var parent_folder_name: String? = null,
 ) : Serializable
 
 /**
@@ -1581,7 +1585,7 @@ data class CustomWelcomeEmail(
  * @property user_name Name of User that created the dashboard. (read-only)
  * @property load_configuration configuration option that governs how dashboard loading will happen.
  * @property lookml_link_id Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
- * @property show_filters_bar Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://cloud.google.com/looker/docs/r/api/control-access)
+ * @property show_filters_bar Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.cloud.google.com/looker/docs/r/api/control-access)
  * @property show_title Show title
  * @property folder_id Id of folder
  * @property text_tile_text_color Color of text on text tiles
@@ -1590,8 +1594,9 @@ data class CustomWelcomeEmail(
  * @property title_color Title color
  * @property view_count Number of times viewed in the Looker web UI (read-only)
  * @property appearance
+ * @property usage_count Number of queries executed on this dashboard in the last N days (read-only)
+ * @property is_owner_disabled Is the owner disabled (read-only)
  * @property url Relative URL of the dashboard (read-only)
- * @property layout_granularity The layout granularity to apply to this dashboard (ie: default or granular)
  */
 data class Dashboard(
     var can: Map<String, Boolean>? = null,
@@ -1643,8 +1648,9 @@ data class Dashboard(
     var title_color: String? = null,
     var view_count: Long? = null,
     var appearance: DashboardAppearance? = null,
+    var usage_count: Long? = null,
+    var is_owner_disabled: Boolean? = null,
     var url: String? = null,
-    var layout_granularity: String? = null,
 ) : Serializable
 
 /**
@@ -1747,6 +1753,7 @@ data class DashboardBase(
  * @property subtitle_text_as_html Text tile subtitle text as Html (read-only)
  * @property extension_id Extension ID
  * @property aria_description Custom ARIA description text
+ * @property certification_metadata
  */
 data class DashboardElement(
     var can: Map<String, Boolean>? = null,
@@ -1781,6 +1788,7 @@ data class DashboardElement(
     var subtitle_text_as_html: String? = null,
     var extension_id: String? = null,
     var aria_description: String? = null,
+    var certification_metadata: Certification? = null,
 ) : Serializable
 
 /**
@@ -3578,6 +3586,8 @@ data class LocalizationSettings(
  * @property updated_at Time that the Look was updated. (read-only)
  * @property user_name Name of User that created the look. (read-only)
  * @property view_count Number of times viewed in the Looker web UI (read-only)
+ * @property usage_count Number of queries executed on this look in the last N days (read-only)
+ * @property is_owner_disabled Is the owner disabled (read-only)
  */
 data class Look(
     var can: Map<String, Boolean>? = null,
@@ -3612,6 +3622,8 @@ data class Look(
     var updated_at: Date? = null,
     var user_name: String? = null,
     var view_count: Long? = null,
+    var usage_count: Long? = null,
+    var is_owner_disabled: Boolean? = null,
 ) : Serializable
 
 /**
@@ -4212,6 +4224,8 @@ data class LookModel(
  * @property updated_at Time that the Look was updated. (read-only)
  * @property user_name Name of User that created the look. (read-only)
  * @property view_count Number of times viewed in the Looker web UI (read-only)
+ * @property usage_count Number of queries executed on this look in the last N days (read-only)
+ * @property is_owner_disabled Is the owner disabled (read-only)
  * @property dashboards Dashboards (read-only)
  */
 data class LookWithDashboards(
@@ -4247,6 +4261,8 @@ data class LookWithDashboards(
     var updated_at: Date? = null,
     var user_name: String? = null,
     var view_count: Long? = null,
+    var usage_count: Long? = null,
+    var is_owner_disabled: Boolean? = null,
     var dashboards: Array<DashboardBase>? = null,
 ) : Serializable
 
@@ -4283,6 +4299,8 @@ data class LookWithDashboards(
  * @property updated_at Time that the Look was updated. (read-only)
  * @property user_name Name of User that created the look. (read-only)
  * @property view_count Number of times viewed in the Looker web UI (read-only)
+ * @property usage_count Number of queries executed on this look in the last N days (read-only)
+ * @property is_owner_disabled Is the owner disabled (read-only)
  * @property query
  * @property url Url (read-only)
  */
@@ -4319,6 +4337,8 @@ data class LookWithQuery(
     var updated_at: Date? = null,
     var user_name: String? = null,
     var view_count: Long? = null,
+    var usage_count: Long? = null,
+    var is_owner_disabled: Boolean? = null,
     var query: Query? = null,
     var url: String? = null,
 ) : Serializable
@@ -4375,6 +4395,7 @@ data class MergeFields(
  * @property sorts Sorts
  * @property source_queries Source Queries defining the results to be merged.
  * @property total Total
+ * @property limit Limit
  * @property vis_config Visualization Config
  */
 data class MergeQuery(
@@ -4387,6 +4408,7 @@ data class MergeQuery(
     var sorts: Array<String>? = null,
     var source_queries: Array<MergeQuerySourceQuery>? = null,
     var total: Boolean? = null,
+    var limit: String? = null,
     var vis_config: Map<String, Any>? = null,
 ) : Serializable
 
@@ -4794,6 +4816,7 @@ data class PrivatelabelConfiguration(
  * @property id Project Id (read-only)
  * @property name Project display name
  * @property uses_git If true the project is configured with a git repository (read-only)
+ * @property is_git_dev_locked If true, the project git repository is locked. (read-only)
  * @property git_remote_url Git remote repository url
  * @property git_username Git username for HTTPS authentication. (For production only, if using user attributes.)
  * @property git_password (Write-Only) Git password for HTTPS authentication. (For production only, if using user attributes.)
@@ -4819,6 +4842,7 @@ data class Project(
     var id: String? = null,
     var name: String? = null,
     var uses_git: Boolean? = null,
+    var is_git_dev_locked: Boolean? = null,
     var git_remote_url: String? = null,
     var git_username: String? = null,
     var git_password: String? = null,
@@ -5838,7 +5862,7 @@ data class SessionConfig(
  * @property override_warnings (Write-Only) If warnings are preventing a host URL change, this parameter allows for overriding warnings to force update the setting. Does not directly change any Looker settings.
  * @property email_domain_allowlist An array of Email Domain Allowlist of type string for Scheduled Content
  * @property embed_cookieless_v2 (DEPRECATED) Use embed_config.embed_cookieless_v2 instead. If embed_config.embed_cookieless_v2 is specified, it overrides this value.
- * @property embed_enabled True if embedding is enabled https://cloud.google.com/looker/docs/r/looker-core-feature-embed, false otherwise (read-only)
+ * @property embed_enabled True if embedding is enabled https://docs.cloud.google.com/looker/docs/r/looker-core-feature-embed, false otherwise (read-only)
  * @property embed_config
  * @property login_notification_enabled Login notification enabled (read-only)
  * @property login_notification_text Login notification text (read-only)
@@ -5846,6 +5870,7 @@ data class SessionConfig(
  * @property dashboard_auto_refresh_minimum_interval Minimum time interval for dashboard element automatic refresh. Examples: (30 seconds, 1 minute)
  * @property managed_certificate_uri Array of URIs pointing to the location of a root certificate in Secret Manager
  * @property content_certification_documentation_link Link to content certification documentation.
+ * @property revoke_certification_on_edits Allow content certification to be revoked on edits.
  */
 data class Setting(
     var instance_config: InstanceConfig? = null,
@@ -5874,6 +5899,7 @@ data class Setting(
     var dashboard_auto_refresh_minimum_interval: String? = null,
     var managed_certificate_uri: Array<String>? = null,
     var content_certification_documentation_link: String? = null,
+    var revoke_certification_on_edits: Boolean? = null,
 ) : Serializable
 
 /**
@@ -6426,8 +6452,8 @@ data class UpdateFolder(
  * @property allow_normal_group_membership User can be a direct member of a normal Looker group. (read-only)
  * @property allow_roles_from_normal_groups User can inherit roles from a normal Looker group. (read-only)
  * @property embed_group_folder_id (Embed only) ID of user's group folder based on the external_group_id optionally specified during embed user login (read-only)
- * @property is_iam_admin User is an IAM Admin. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). The is_iam_admin is not returned by default. Please explicitly request this attribute if needed via the fields query param. Note: Including the optional is_iam_admin attribute can increase API latency. For best performance, use this attribute only when filtering for users with the 'Admin via IAM' role. When using this filter, always paginate your results with the offset and limit fields to optimize response time. (read-only)
- * @property can_manage_api3_creds Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.
+ * @property is_iam_admin User is an IAM Admin. This field may only be applicable for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview). The is_iam_admin is not returned by default. Please explicitly request this attribute if needed via the fields query param. Note: Including the optional is_iam_admin attribute can increase API latency. For best performance, use this attribute only when filtering for users with the 'Admin via IAM' role. When using this filter, always paginate your results with the offset and limit fields to optimize response time. (read-only)
+ * @property can_manage_api3_creds Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.
  * @property is_service_account Indicates if this user is a service account. (read-only)
  * @property service_account_name The display name of the service account. This field is omitted for non service account users. (read-only)
  * @property url Link to get this item (read-only)
@@ -6719,7 +6745,7 @@ data class Workspace(
  * followed, followable, id, investigative_content_title, owner_display_name
  *
  * @property applied_dashboard_filters Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`
- * @property comparison_type This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+ * @property comparison_type This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
  * @property cron Vixie-Style crontab specification when to run. At minimum, it has to be longer than 15 minute intervals
  * @property custom_url_base Domain for the custom url selected by the alert creator from the admin defined domain allowlist
  * @property custom_url_params Parameters and path for the custom url defined by the alert creator
@@ -6864,7 +6890,7 @@ data class WriteBoardSection(
 
 /**
  * Dynamic writeable type for Certification removes:
- * user_name, updated_at
+ * ui_status, user_name, updated_at
  *
  * @property certification_status Certification status: "certified" or "revoked" Valid values are: "certified", "revoked".
  * @property notes Certification notes
@@ -6999,7 +7025,7 @@ data class WriteCredentialsEmail(
 
 /**
  * Dynamic writeable type for Dashboard removes:
- * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, updated_at, last_updater_id, last_updater_name, user_name, view_count, url
+ * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, updated_at, last_updater_id, last_updater_name, user_name, view_count, usage_count, is_owner_disabled, url
  *
  * @property description Description
  * @property hidden Is Hidden
@@ -7011,7 +7037,7 @@ data class WriteCredentialsEmail(
  * @property slug Content Metadata Slug
  * @property preferred_viewer The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
  * @property certification_metadata Dynamic writeable type for Certification removes:
- * user_name, updated_at
+ * ui_status, user_name, updated_at
  * @property alert_sync_with_dashboard_filter_enabled Enables alerts to keep in sync with dashboard filter changes
  * @property background_color Background color
  * @property crossfilter_enabled Enables crossfiltering in dashboards - only available in dashboards-next (beta)
@@ -7021,7 +7047,7 @@ data class WriteCredentialsEmail(
  * @property filters_location_top Sets the default state of the filters location to top(true) or right(false)
  * @property load_configuration configuration option that governs how dashboard loading will happen.
  * @property lookml_link_id Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
- * @property show_filters_bar Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://cloud.google.com/looker/docs/r/api/control-access)
+ * @property show_filters_bar Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.cloud.google.com/looker/docs/r/api/control-access)
  * @property show_title Show title
  * @property folder_id Id of folder
  * @property text_tile_text_color Color of text on text tiles
@@ -7029,7 +7055,6 @@ data class WriteCredentialsEmail(
  * @property tile_text_color Tile text color
  * @property title_color Title color
  * @property appearance
- * @property layout_granularity The layout granularity to apply to this dashboard (ie: default or granular)
  */
 data class WriteDashboard(
     var description: String? = null,
@@ -7058,7 +7083,6 @@ data class WriteDashboard(
     var tile_text_color: String? = null,
     var title_color: String? = null,
     var appearance: DashboardAppearance? = null,
-    var layout_granularity: String? = null,
 ) : Serializable
 
 /**
@@ -7068,7 +7092,7 @@ data class WriteDashboard(
  * @property folder Dynamic writeable type for FolderBase removes:
  * id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
  * @property certification_metadata Dynamic writeable type for Certification removes:
- * user_name, updated_at
+ * ui_status, user_name, updated_at
  */
 data class WriteDashboardBase(
     var folder: WriteFolderBase? = null,
@@ -7083,7 +7107,7 @@ data class WriteDashboardBase(
  * @property dashboard_id Id of Dashboard
  * @property dashboard_layout_id Id of Dashboard Layout
  * @property look Dynamic writeable type for LookWithQuery removes:
- * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, user_name, view_count, url
+ * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, user_name, view_count, usage_count, is_owner_disabled, url
  * @property look_id Id Of Look
  * @property merge_result_id ID of merge result
  * @property note_display Note Display
@@ -7104,6 +7128,8 @@ data class WriteDashboardBase(
  * @property rich_content_json JSON with all the properties required for rich editor and buttons elements
  * @property extension_id Extension ID
  * @property aria_description Custom ARIA description text
+ * @property certification_metadata Dynamic writeable type for Certification removes:
+ * ui_status, user_name, updated_at
  */
 data class WriteDashboardElement(
     var body_text: String? = null,
@@ -7128,6 +7154,7 @@ data class WriteDashboardElement(
     var rich_content_json: String? = null,
     var extension_id: String? = null,
     var aria_description: String? = null,
+    var certification_metadata: WriteCertification? = null,
 ) : Serializable
 
 /**
@@ -7629,7 +7656,7 @@ data class WriteLegacyFeature(
  *
  * @property user_id User Id
  * @property certification_metadata Dynamic writeable type for Certification removes:
- * user_name, updated_at
+ * ui_status, user_name, updated_at
  */
 data class WriteLookBasic(
     var user_id: String? = null,
@@ -7654,12 +7681,12 @@ data class WriteLookmlModel(
 
 /**
  * Dynamic writeable type for LookWithQuery removes:
- * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, user_name, view_count, url
+ * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, user_name, view_count, usage_count, is_owner_disabled, url
  *
  * @property title Look Title
  * @property user_id User Id
  * @property certification_metadata Dynamic writeable type for Certification removes:
- * user_name, updated_at
+ * ui_status, user_name, updated_at
  * @property deleted Whether or not a look is 'soft' deleted.
  * @property description Description
  * @property is_run_on_load auto-run query when Look viewed
@@ -7695,6 +7722,7 @@ data class WriteLookWithQuery(
  * @property sorts Sorts
  * @property source_queries Source Queries defining the results to be merged.
  * @property total Total
+ * @property limit Limit
  * @property vis_config Visualization Config
  */
 data class WriteMergeQuery(
@@ -7704,6 +7732,7 @@ data class WriteMergeQuery(
     var sorts: Array<String>? = null,
     var source_queries: Array<MergeQuerySourceQuery>? = null,
     var total: Boolean? = null,
+    var limit: String? = null,
     var vis_config: Map<String, Any>? = null,
 ) : Serializable
 
@@ -7873,7 +7902,7 @@ data class WritePrivatelabelConfiguration(
 
 /**
  * Dynamic writeable type for Project removes:
- * can, id, uses_git, is_example, has_production_counterpart
+ * can, id, uses_git, is_git_dev_locked, is_example, has_production_counterpart
  *
  * @property name Project display name
  * @property git_remote_url Git remote repository url
@@ -8205,6 +8234,7 @@ data class WriteSessionConfig(
  * @property dashboard_auto_refresh_minimum_interval Minimum time interval for dashboard element automatic refresh. Examples: (30 seconds, 1 minute)
  * @property managed_certificate_uri Array of URIs pointing to the location of a root certificate in Secret Manager
  * @property content_certification_documentation_link Link to content certification documentation.
+ * @property revoke_certification_on_edits Allow content certification to be revoked on edits.
  */
 data class WriteSetting(
     var extension_framework_enabled: Boolean? = null,
@@ -8228,6 +8258,7 @@ data class WriteSetting(
     var dashboard_auto_refresh_minimum_interval: String? = null,
     var managed_certificate_uri: Array<String>? = null,
     var content_certification_documentation_link: String? = null,
+    var revoke_certification_on_edits: Boolean? = null,
 ) : Serializable
 
 /**
@@ -8303,7 +8334,7 @@ data class WriteTheme(
  * @property locale User's preferred locale. User locale takes precedence over Looker's system-wide default locale. Locale determines language of display strings and date and numeric formatting in API responses. Locale string must be a 2 letter language code or a combination of language code and region code: 'en' or 'en-US', for example.
  * @property models_dir_validated User's dev workspace has been checked for presence of applicable production projects
  * @property ui_state Per user dictionary of undocumented state information owned by the Looker UI.
- * @property can_manage_api3_creds Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.
+ * @property can_manage_api3_creds Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.
  */
 data class WriteUser(
     var credentials_email: WriteCredentialsEmail? = null,

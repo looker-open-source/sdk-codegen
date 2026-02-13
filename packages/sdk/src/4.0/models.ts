@@ -59,7 +59,7 @@ export interface IAlert {
    */
   applied_dashboard_filters?: IAlertAppliedDashboardFilter[] | null;
   /**
-   * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+   * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
    */
   comparison_type: ComparisonType;
   /**
@@ -168,7 +168,7 @@ export interface IAlertAppliedDashboardFilter {
    */
   field_name: string;
   /**
-   * Field Value. [Filter Expressions](https://cloud.google.com/looker/docs/reference/filter-expressions). Example `Los Angeles CA`
+   * Field Value. [Filter Expressions](https://docs.cloud.google.com/looker/docs/reference/filter-expressions). Example `Los Angeles CA`
    */
   filter_value: string;
   /**
@@ -213,7 +213,7 @@ export interface IAlertField {
    */
   title: string;
   /**
-   * Field's name. Has the format `<view>.<field>` Refer to [docs](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts) for more details
+   * Field's name. Has the format `<view>.<field>` Refer to [docs](https://docs.cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts) for more details
    */
   name: string;
   /**
@@ -228,11 +228,11 @@ export interface IAlertFieldFilter {
    */
   field_name: string;
   /**
-   * Field Value. Depends on the type of field - numeric or string. For [location](https://cloud.google.com/looker/docs/reference/field-reference/dimension-type-reference#location) type, it's a list of floats. Example `[1.0, 56.0]`
+   * Field Value. Depends on the type of field - numeric or string. For [location](https://docs.cloud.google.com/looker/docs/reference/field-reference/dimension-type-reference#location) type, it's a list of floats. Example `[1.0, 56.0]`
    */
   field_value: any;
   /**
-   * Filter Value. Usually null except for [location](https://cloud.google.com/looker/docs/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`
+   * Filter Value. Usually null except for [location](https://docs.cloud.google.com/looker/docs/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`
    */
   filter_value?: string | null;
 }
@@ -766,7 +766,11 @@ export interface ICertification {
   /**
    * Certification status: "certified" or "revoked" Valid values are: "certified", "revoked".
    */
-  certification_status?: CertificationStatus;
+  certification_status?: CertificationStatus | null;
+  /**
+   * Indicates whether the underlying model is ungoverned (read-only)
+   */
+  ui_status?: string | null;
   /**
    * Display name of user who certified the content, derived from user_id (read-only)
    */
@@ -778,7 +782,7 @@ export interface ICertification {
   /**
    * Timestamp of certification (read-only)
    */
-  updated_at?: Date;
+  updated_at?: Date | null;
 }
 
 /**
@@ -900,7 +904,7 @@ export interface IColumnSearch {
 }
 
 /**
- * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY". (Enum defined in Alert)
+ * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY". (Enum defined in Alert)
  */
 export enum ComparisonType {
   EQUAL_TO = 'EQUAL_TO',
@@ -1148,6 +1152,10 @@ export interface IContentSearch {
    * Certification status of the content (read-only)
    */
   certification_status?: string | null;
+  /**
+   * Name of the parent folder of the content (read-only)
+   */
+  parent_folder_name?: string | null;
 }
 
 export interface IContentSummary {
@@ -2519,7 +2527,7 @@ export interface IDashboard {
    */
   lookml_link_id?: string | null;
   /**
-   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://cloud.google.com/looker/docs/r/api/control-access)
+   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.cloud.google.com/looker/docs/r/api/control-access)
    */
   show_filters_bar?: boolean | null;
   /**
@@ -2552,13 +2560,17 @@ export interface IDashboard {
   view_count?: number | null;
   appearance?: IDashboardAppearance;
   /**
+   * Number of queries executed on this dashboard in the last N days (read-only)
+   */
+  usage_count?: number | null;
+  /**
+   * Is the owner disabled (read-only)
+   */
+  is_owner_disabled?: boolean;
+  /**
    * Relative URL of the dashboard (read-only)
    */
   url?: string | null;
-  /**
-   * The layout granularity to apply to this dashboard (ie: default or granular)
-   */
-  layout_granularity?: string | null;
 }
 
 export interface IDashboardAggregateTableLookml {
@@ -2785,6 +2797,7 @@ export interface IDashboardElement {
    * Custom ARIA description text
    */
   aria_description?: string | null;
+  certification_metadata?: ICertification;
 }
 
 export interface IDashboardFilter {
@@ -5795,6 +5808,14 @@ export interface ILook {
    * Number of times viewed in the Looker web UI (read-only)
    */
   view_count?: number | null;
+  /**
+   * Number of queries executed on this look in the last N days (read-only)
+   */
+  usage_count?: number | null;
+  /**
+   * Is the owner disabled (read-only)
+   */
+  is_owner_disabled?: boolean;
 }
 
 export interface ILookBasic {
@@ -6838,6 +6859,14 @@ export interface ILookWithDashboards {
    */
   view_count?: number | null;
   /**
+   * Number of queries executed on this look in the last N days (read-only)
+   */
+  usage_count?: number | null;
+  /**
+   * Is the owner disabled (read-only)
+   */
+  is_owner_disabled?: boolean;
+  /**
    * Dashboards (read-only)
    */
   dashboards?: IDashboardBase[] | null;
@@ -6963,6 +6992,14 @@ export interface ILookWithQuery {
    * Number of times viewed in the Looker web UI (read-only)
    */
   view_count?: number | null;
+  /**
+   * Number of queries executed on this look in the last N days (read-only)
+   */
+  usage_count?: number | null;
+  /**
+   * Is the owner disabled (read-only)
+   */
+  is_owner_disabled?: boolean;
   query?: IQuery;
   /**
    * Url (read-only)
@@ -7060,6 +7097,10 @@ export interface IMergeQuery {
    * Total
    */
   total?: boolean;
+  /**
+   * Limit
+   */
+  limit?: string | null;
   /**
    * Visualization Config
    */
@@ -7698,6 +7739,10 @@ export interface IProject {
    * If true the project is configured with a git repository (read-only)
    */
   uses_git?: boolean;
+  /**
+   * If true, the project git repository is locked. (read-only)
+   */
+  is_git_dev_locked?: boolean;
   /**
    * Git remote repository url
    */
@@ -9935,7 +9980,7 @@ export interface IRequestSearchDashboards {
    */
   offset?: number | null;
   /**
-   * One or more fields to sort by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :folder_id, :description, :view_count, :favorite_count, :slug, :content_favorite_id, :content_metadata_id, :deleted, :deleted_at, :last_viewed_at, :last_accessed_at]
+   * One or more fields to sort by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :folder_id, :description, :view_count, :favorite_count, :slug, :content_favorite_id, :content_metadata_id, :deleted, :deleted_at, :last_viewed_at, :last_accessed_at, :certification_status]
    */
   sorts?: string | null;
   /**
@@ -10173,7 +10218,7 @@ export interface IRequestSearchLookmlDashboards {
    */
   offset?: number | null;
   /**
-   * One or more fields to sort by. Sortable fields: [:title, :id, :folder_id, :content_favorite_id, :content_metadata_id]
+   * One or more fields to sort by. Sortable fields: [:title, :id, :folder_id, :content_favorite_id, :content_metadata_id, :certification_status]
    */
   sorts?: string | null;
 }
@@ -10247,7 +10292,7 @@ export interface IRequestSearchLooks {
    */
   offset?: number | null;
   /**
-   * One or more fields to sort results by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :folder_id, :description, :updated_at, :last_updater_id, :view_count, :favorite_count, :content_favorite_id, :deleted, :deleted_at, :last_viewed_at, :last_accessed_at, :query_id]
+   * One or more fields to sort results by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :folder_id, :description, :updated_at, :last_updater_id, :view_count, :favorite_count, :content_favorite_id, :deleted, :deleted_at, :last_viewed_at, :last_accessed_at, :query_id, :certification_status]
    */
   sorts?: string | null;
   /**
@@ -10661,6 +10706,10 @@ export interface IRequestSearchUsers {
    */
   last_name?: string | null;
   /**
+   * Match Full name (First Last).
+   */
+  full_name?: string | null;
+  /**
    * Search for user accounts associated with Looker employees. Availability of this filter is limited to users with permission to view complete user details.
    */
   verified_looker_employee?: boolean | null;
@@ -10689,7 +10738,7 @@ export interface IRequestSearchUsers {
    */
   group_id?: string | null;
   /**
-   * Search for users who can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). Availability of this filter is limited to users with permission to view complete user details. This is an experimental feature and may not yet be available on your instance.
+   * Search for users who can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview). Availability of this filter is limited to users with permission to view complete user details. This is an experimental feature and may not yet be available on your instance.
    */
   can_manage_api3_creds?: boolean | null;
   /**
@@ -11963,7 +12012,7 @@ export interface ISetting {
    */
   embed_cookieless_v2?: boolean;
   /**
-   * True if embedding is enabled https://cloud.google.com/looker/docs/r/looker-core-feature-embed, false otherwise (read-only)
+   * True if embedding is enabled https://docs.cloud.google.com/looker/docs/r/looker-core-feature-embed, false otherwise (read-only)
    */
   embed_enabled?: boolean;
   embed_config?: IEmbedConfig;
@@ -11991,6 +12040,10 @@ export interface ISetting {
    * Link to content certification documentation.
    */
   content_certification_documentation_link?: string | null;
+  /**
+   * Allow content certification to be revoked on edits.
+   */
+  revoke_certification_on_edits?: boolean;
 }
 
 export interface ISmtpNodeStatus {
@@ -12889,11 +12942,11 @@ export interface IUser {
    */
   embed_group_folder_id?: string | null;
   /**
-   * User is an IAM Admin. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). The is_iam_admin is not returned by default. Please explicitly request this attribute if needed via the fields query param. Note: Including the optional is_iam_admin attribute can increase API latency. For best performance, use this attribute only when filtering for users with the 'Admin via IAM' role. When using this filter, always paginate your results with the offset and limit fields to optimize response time. (read-only)
+   * User is an IAM Admin. This field may only be applicable for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview). The is_iam_admin is not returned by default. Please explicitly request this attribute if needed via the fields query param. Note: Including the optional is_iam_admin attribute can increase API latency. For best performance, use this attribute only when filtering for users with the 'Admin via IAM' role. When using this filter, always paginate your results with the offset and limit fields to optimize response time. (read-only)
    */
   is_iam_admin?: boolean;
   /**
-   * Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.
+   * Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.
    */
   can_manage_api3_creds?: boolean;
   /**
@@ -13292,7 +13345,7 @@ export interface IWriteAlert {
    */
   applied_dashboard_filters?: IAlertAppliedDashboardFilter[] | null;
   /**
-   * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+   * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
    */
   comparison_type: ComparisonType | null;
   /**
@@ -13520,7 +13573,7 @@ export interface IWriteBoardSection {
 
 /**
  * Dynamic writeable type for Certification removes:
- * user_name, updated_at
+ * ui_status, user_name, updated_at
  */
 export interface IWriteCertification {
   /**
@@ -13715,7 +13768,7 @@ export interface IWriteCredentialsEmail {
 
 /**
  * Dynamic writeable type for Dashboard removes:
- * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, updated_at, last_updater_id, last_updater_name, user_name, view_count, url
+ * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, updated_at, last_updater_id, last_updater_name, user_name, view_count, usage_count, is_owner_disabled, url
  */
 export interface IWriteDashboard {
   /**
@@ -13753,7 +13806,7 @@ export interface IWriteDashboard {
   preferred_viewer?: string | null;
   /**
    * Dynamic writeable type for Certification removes:
-   * user_name, updated_at
+   * ui_status, user_name, updated_at
    */
   certification_metadata?: IWriteCertification | null;
   /**
@@ -13793,7 +13846,7 @@ export interface IWriteDashboard {
    */
   lookml_link_id?: string | null;
   /**
-   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://cloud.google.com/looker/docs/r/api/control-access)
+   * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.cloud.google.com/looker/docs/r/api/control-access)
    */
   show_filters_bar?: boolean | null;
   /**
@@ -13821,10 +13874,6 @@ export interface IWriteDashboard {
    */
   title_color?: string | null;
   appearance?: IDashboardAppearance | null;
-  /**
-   * The layout granularity to apply to this dashboard (ie: default or granular)
-   */
-  layout_granularity?: string | null;
 }
 
 /**
@@ -13839,7 +13888,7 @@ export interface IWriteDashboardBase {
   folder?: IWriteFolderBase | null;
   /**
    * Dynamic writeable type for Certification removes:
-   * user_name, updated_at
+   * ui_status, user_name, updated_at
    */
   certification_metadata?: IWriteCertification | null;
 }
@@ -13863,7 +13912,7 @@ export interface IWriteDashboardElement {
   dashboard_layout_id?: string | null;
   /**
    * Dynamic writeable type for LookWithQuery removes:
-   * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, user_name, view_count, url
+   * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, user_name, view_count, usage_count, is_owner_disabled, url
    */
   look?: IWriteLookWithQuery | null;
   /**
@@ -13940,6 +13989,11 @@ export interface IWriteDashboardElement {
    * Custom ARIA description text
    */
   aria_description?: string | null;
+  /**
+   * Dynamic writeable type for Certification removes:
+   * ui_status, user_name, updated_at
+   */
+  certification_metadata?: IWriteCertification | null;
 }
 
 /**
@@ -14767,7 +14821,7 @@ export interface IWriteLookBasic {
   user_id?: string | null;
   /**
    * Dynamic writeable type for Certification removes:
-   * user_name, updated_at
+   * ui_status, user_name, updated_at
    */
   certification_metadata?: IWriteCertification | null;
 }
@@ -14797,7 +14851,7 @@ export interface IWriteLookmlModel {
 
 /**
  * Dynamic writeable type for LookWithQuery removes:
- * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, user_name, view_count, url
+ * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, user_name, view_count, usage_count, is_owner_disabled, url
  */
 export interface IWriteLookWithQuery {
   /**
@@ -14810,7 +14864,7 @@ export interface IWriteLookWithQuery {
   user_id?: string | null;
   /**
    * Dynamic writeable type for Certification removes:
-   * user_name, updated_at
+   * ui_status, user_name, updated_at
    */
   certification_metadata?: IWriteCertification | null;
   /**
@@ -14878,6 +14932,10 @@ export interface IWriteMergeQuery {
    * Total
    */
   total?: boolean;
+  /**
+   * Limit
+   */
+  limit?: string | null;
   /**
    * Visualization Config
    */
@@ -15145,7 +15203,7 @@ export interface IWritePrivatelabelConfiguration {
 
 /**
  * Dynamic writeable type for Project removes:
- * can, id, uses_git, is_example, has_production_counterpart
+ * can, id, uses_git, is_git_dev_locked, is_example, has_production_counterpart
  */
 export interface IWriteProject {
   /**
@@ -15755,6 +15813,10 @@ export interface IWriteSetting {
    * Link to content certification documentation.
    */
   content_certification_documentation_link?: string | null;
+  /**
+   * Allow content certification to be revoked on edits.
+   */
+  revoke_certification_on_edits?: boolean;
 }
 
 /**
@@ -15877,7 +15939,7 @@ export interface IWriteUser {
    */
   ui_state?: IDictionary<string> | null;
   /**
-   * Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.
+   * Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.
    */
   can_manage_api3_creds?: boolean;
 }

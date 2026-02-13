@@ -123,7 +123,7 @@ public struct Alert: SDKModel {
     public var applied_dashboard_filters: [AlertAppliedDashboardFilter]?
 
     /**
-     * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+     * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
      */
     public var comparison_type: ComparisonType
 
@@ -370,7 +370,7 @@ public struct AlertAppliedDashboardFilter: SDKModel {
 
     private var _filter_value: AnyString
     /**
-     * Field Value. [Filter Expressions](https://cloud.google.com/looker/docs/reference/filter-expressions). Example `Los Angeles CA`
+     * Field Value. [Filter Expressions](https://docs.cloud.google.com/looker/docs/reference/filter-expressions). Example `Los Angeles CA`
      */
     public var filter_value: String {
         get { _filter_value.value }
@@ -501,7 +501,7 @@ public struct AlertField: SDKModel {
 
     private var _name: AnyString
     /**
-     * Field's name. Has the format `<view>.<field>` Refer to [docs](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts) for more details
+     * Field's name. Has the format `<view>.<field>` Refer to [docs](https://docs.cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts) for more details
      */
     public var name: String {
         get { _name.value }
@@ -542,13 +542,13 @@ public struct AlertFieldFilter: SDKModel {
     }
 
     /**
-     * Field Value. Depends on the type of field - numeric or string. For [location](https://cloud.google.com/looker/docs/reference/field-reference/dimension-type-reference#location) type, it's a list of floats. Example `[1.0, 56.0]`
+     * Field Value. Depends on the type of field - numeric or string. For [location](https://docs.cloud.google.com/looker/docs/reference/field-reference/dimension-type-reference#location) type, it's a list of floats. Example `[1.0, 56.0]`
      */
     public var field_value: AnyCodable
 
     private var _filter_value: AnyString?
     /**
-     * Filter Value. Usually null except for [location](https://cloud.google.com/looker/docs/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`
+     * Filter Value. Usually null except for [location](https://docs.cloud.google.com/looker/docs/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`
      */
     public var filter_value: String? {
         get { _filter_value?.value }
@@ -1888,6 +1888,7 @@ public struct Certification: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
         case certification_status
+        case _ui_status = "ui_status"
         case _user_name = "user_name"
         case _notes = "notes"
         case updated_at
@@ -1896,6 +1897,15 @@ public struct Certification: SDKModel {
      * Certification status: "certified" or "revoked" Valid values are: "certified", "revoked".
      */
     public var certification_status: CertificationStatus?
+
+    private var _ui_status: AnyString?
+    /**
+     * Indicates whether the underlying model is ungoverned (read-only)
+     */
+    public var ui_status: String? {
+        get { _ui_status?.value }
+        set { _ui_status = newValue.map(AnyString.init) }
+    }
 
     private var _user_name: AnyString?
     /**
@@ -1920,8 +1930,9 @@ public struct Certification: SDKModel {
      */
     public var updated_at: Date?
 
-    public init(certification_status: CertificationStatus? = nil, user_name: String? = nil, notes: String? = nil, updated_at: Date? = nil) {
+    public init(certification_status: CertificationStatus? = nil, ui_status: String? = nil, user_name: String? = nil, notes: String? = nil, updated_at: Date? = nil) {
         self.certification_status = certification_status
+        self._ui_status = ui_status.map(AnyString.init)
         self._user_name = user_name.map(AnyString.init)
         self._notes = notes.map(AnyString.init)
         self.updated_at = updated_at
@@ -2229,7 +2240,7 @@ public struct ColumnSearch: SDKModel {
 }
 
 /**
- * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY". (Enum defined in Alert)
+ * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY". (Enum defined in Alert)
  */
 public enum ComparisonType: String, Codable {
     case EQUAL_TO = "EQUAL_TO"
@@ -2694,6 +2705,7 @@ public struct ContentSearch: SDKModel {
         case _model = "model"
         case _created_by_id = "created_by_id"
         case _certification_status = "certification_status"
+        case _parent_folder_name = "parent_folder_name"
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -2799,7 +2811,16 @@ public struct ContentSearch: SDKModel {
         set { _certification_status = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, content_id: String? = nil, type: String? = nil, title: String? = nil, description: String? = nil, folder_id: String? = nil, folder_name: String? = nil, view_count: Int64? = nil, preferred_viewer: String? = nil, model: String? = nil, created_by_id: Int64? = nil, certification_status: String? = nil) {
+    private var _parent_folder_name: AnyString?
+    /**
+     * Name of the parent folder of the content (read-only)
+     */
+    public var parent_folder_name: String? {
+        get { _parent_folder_name?.value }
+        set { _parent_folder_name = newValue.map(AnyString.init) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, content_id: String? = nil, type: String? = nil, title: String? = nil, description: String? = nil, folder_id: String? = nil, folder_name: String? = nil, view_count: Int64? = nil, preferred_viewer: String? = nil, model: String? = nil, created_by_id: Int64? = nil, certification_status: String? = nil, parent_folder_name: String? = nil) {
         self.can = can
         self._content_id = content_id.map(AnyString.init)
         self._type = type.map(AnyString.init)
@@ -2812,6 +2833,7 @@ public struct ContentSearch: SDKModel {
         self._model = model.map(AnyString.init)
         self._created_by_id = created_by_id.map(AnyInt.init)
         self._certification_status = certification_status.map(AnyString.init)
+        self._parent_folder_name = parent_folder_name.map(AnyString.init)
     }
 
 }
@@ -6081,8 +6103,9 @@ public struct Dashboard: SDKModel {
         case _title_color = "title_color"
         case _view_count = "view_count"
         case appearance
+        case _usage_count = "usage_count"
+        case is_owner_disabled
         case _url = "url"
-        case _layout_granularity = "layout_granularity"
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -6356,7 +6379,7 @@ public struct Dashboard: SDKModel {
     }
 
     /**
-     * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://cloud.google.com/looker/docs/r/api/control-access)
+     * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.cloud.google.com/looker/docs/r/api/control-access)
      */
     public var show_filters_bar: Bool?
 
@@ -6421,6 +6444,20 @@ public struct Dashboard: SDKModel {
 
     public var appearance: DashboardAppearance?
 
+    private var _usage_count: AnyInt?
+    /**
+     * Number of queries executed on this dashboard in the last N days (read-only)
+     */
+    public var usage_count: Int64? {
+        get { _usage_count?.value }
+        set { _usage_count = newValue.map(AnyInt.init) }
+    }
+
+    /**
+     * Is the owner disabled (read-only)
+     */
+    public var is_owner_disabled: Bool?
+
     private var _url: AnyString?
     /**
      * Relative URL of the dashboard (read-only)
@@ -6430,16 +6467,7 @@ public struct Dashboard: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    private var _layout_granularity: AnyString?
-    /**
-     * The layout granularity to apply to this dashboard (ie: default or granular)
-     */
-    public var layout_granularity: String? {
-        get { _layout_granularity?.value }
-        set { _layout_granularity = newValue.map(AnyString.init) }
-    }
-
-    public init(can: StringDictionary<Bool>? = nil, content_favorite_id: String? = nil, content_metadata_id: String? = nil, description: String? = nil, hidden: Bool? = nil, id: String? = nil, model: LookModel? = nil, query_timezone: String? = nil, readonly: Bool? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, folder: FolderBase? = nil, title: String? = nil, user_id: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, certification_metadata: Certification? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, created_at: Date? = nil, crossfilter_enabled: Bool? = nil, dashboard_elements: [DashboardElement]? = nil, dashboard_filters: [DashboardFilter]? = nil, dashboard_layouts: [DashboardLayout]? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, edit_uri: String? = nil, enable_viz_full_screen: Bool? = nil, favorite_count: Int64? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, last_accessed_at: Date? = nil, last_viewed_at: Date? = nil, updated_at: Date? = nil, last_updater_id: String? = nil, last_updater_name: String? = nil, user_name: String? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, view_count: Int64? = nil, appearance: DashboardAppearance? = nil, url: String? = nil, layout_granularity: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, content_favorite_id: String? = nil, content_metadata_id: String? = nil, description: String? = nil, hidden: Bool? = nil, id: String? = nil, model: LookModel? = nil, query_timezone: String? = nil, readonly: Bool? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, folder: FolderBase? = nil, title: String? = nil, user_id: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, certification_metadata: Certification? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, created_at: Date? = nil, crossfilter_enabled: Bool? = nil, dashboard_elements: [DashboardElement]? = nil, dashboard_filters: [DashboardFilter]? = nil, dashboard_layouts: [DashboardLayout]? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, edit_uri: String? = nil, enable_viz_full_screen: Bool? = nil, favorite_count: Int64? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, last_accessed_at: Date? = nil, last_viewed_at: Date? = nil, updated_at: Date? = nil, last_updater_id: String? = nil, last_updater_name: String? = nil, user_name: String? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, view_count: Int64? = nil, appearance: DashboardAppearance? = nil, usage_count: Int64? = nil, is_owner_disabled: Bool? = nil, url: String? = nil) {
         self.can = can
         self._content_favorite_id = content_favorite_id.map(AnyString.init)
         self._content_metadata_id = content_metadata_id.map(AnyString.init)
@@ -6489,8 +6517,9 @@ public struct Dashboard: SDKModel {
         self._title_color = title_color.map(AnyString.init)
         self._view_count = view_count.map(AnyInt.init)
         self.appearance = appearance
+        self._usage_count = usage_count.map(AnyInt.init)
+        self.is_owner_disabled = is_owner_disabled
         self._url = url.map(AnyString.init)
-        self._layout_granularity = layout_granularity.map(AnyString.init)
     }
 
 }
@@ -6806,6 +6835,7 @@ public struct DashboardElement: SDKModel {
         case _subtitle_text_as_html = "subtitle_text_as_html"
         case _extension_id = "extension_id"
         case _aria_description = "aria_description"
+        case certification_metadata
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -7066,7 +7096,9 @@ public struct DashboardElement: SDKModel {
         set { _aria_description = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, body_text: String? = nil, body_text_as_html: String? = nil, dashboard_id: String? = nil, dashboard_layout_id: String? = nil, edit_uri: String? = nil, id: String? = nil, look: LookWithQuery? = nil, look_id: String? = nil, lookml_link_id: String? = nil, merge_result_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, note_text_as_html: String? = nil, query: Query? = nil, query_id: String? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, result_maker: ResultMakerWithIdVisConfigAndDynamicFields? = nil, result_maker_id: String? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil, alert_count: Int64? = nil, rich_content_json: String? = nil, title_text_as_html: String? = nil, subtitle_text_as_html: String? = nil, extension_id: String? = nil, aria_description: String? = nil) {
+    public var certification_metadata: Certification?
+
+    public init(can: StringDictionary<Bool>? = nil, body_text: String? = nil, body_text_as_html: String? = nil, dashboard_id: String? = nil, dashboard_layout_id: String? = nil, edit_uri: String? = nil, id: String? = nil, look: LookWithQuery? = nil, look_id: String? = nil, lookml_link_id: String? = nil, merge_result_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, note_text_as_html: String? = nil, query: Query? = nil, query_id: String? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, result_maker: ResultMakerWithIdVisConfigAndDynamicFields? = nil, result_maker_id: String? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil, alert_count: Int64? = nil, rich_content_json: String? = nil, title_text_as_html: String? = nil, subtitle_text_as_html: String? = nil, extension_id: String? = nil, aria_description: String? = nil, certification_metadata: Certification? = nil) {
         self.can = can
         self._body_text = body_text.map(AnyString.init)
         self._body_text_as_html = body_text_as_html.map(AnyString.init)
@@ -7099,6 +7131,7 @@ public struct DashboardElement: SDKModel {
         self._subtitle_text_as_html = subtitle_text_as_html.map(AnyString.init)
         self._extension_id = extension_id.map(AnyString.init)
         self._aria_description = aria_description.map(AnyString.init)
+        self.certification_metadata = certification_metadata
     }
 
 }
@@ -14082,6 +14115,8 @@ public struct Look: SDKModel {
         case updated_at
         case _user_name = "user_name"
         case _view_count = "view_count"
+        case _usage_count = "usage_count"
+        case is_owner_disabled
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -14314,7 +14349,21 @@ public struct Look: SDKModel {
         set { _view_count = newValue.map(AnyInt.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, content_metadata_id: String? = nil, id: String? = nil, title: String? = nil, user_id: String? = nil, certification_metadata: Certification? = nil, content_favorite_id: String? = nil, created_at: Date? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, description: String? = nil, embed_url: String? = nil, excel_file_url: String? = nil, favorite_count: Int64? = nil, google_spreadsheet_formula: String? = nil, image_embed_url: String? = nil, is_run_on_load: Bool? = nil, last_accessed_at: Date? = nil, last_updater_id: String? = nil, last_viewed_at: Date? = nil, model: LookModel? = nil, `public`: Bool? = nil, public_slug: String? = nil, public_url: String? = nil, query_id: String? = nil, short_url: String? = nil, folder: FolderBase? = nil, folder_id: String? = nil, updated_at: Date? = nil, user_name: String? = nil, view_count: Int64? = nil) {
+    private var _usage_count: AnyInt?
+    /**
+     * Number of queries executed on this look in the last N days (read-only)
+     */
+    public var usage_count: Int64? {
+        get { _usage_count?.value }
+        set { _usage_count = newValue.map(AnyInt.init) }
+    }
+
+    /**
+     * Is the owner disabled (read-only)
+     */
+    public var is_owner_disabled: Bool?
+
+    public init(can: StringDictionary<Bool>? = nil, content_metadata_id: String? = nil, id: String? = nil, title: String? = nil, user_id: String? = nil, certification_metadata: Certification? = nil, content_favorite_id: String? = nil, created_at: Date? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, description: String? = nil, embed_url: String? = nil, excel_file_url: String? = nil, favorite_count: Int64? = nil, google_spreadsheet_formula: String? = nil, image_embed_url: String? = nil, is_run_on_load: Bool? = nil, last_accessed_at: Date? = nil, last_updater_id: String? = nil, last_viewed_at: Date? = nil, model: LookModel? = nil, `public`: Bool? = nil, public_slug: String? = nil, public_url: String? = nil, query_id: String? = nil, short_url: String? = nil, folder: FolderBase? = nil, folder_id: String? = nil, updated_at: Date? = nil, user_name: String? = nil, view_count: Int64? = nil, usage_count: Int64? = nil, is_owner_disabled: Bool? = nil) {
         self.can = can
         self._content_metadata_id = content_metadata_id.map(AnyString.init)
         self._id = id.map(AnyString.init)
@@ -14347,6 +14396,8 @@ public struct Look: SDKModel {
         self.updated_at = updated_at
         self._user_name = user_name.map(AnyString.init)
         self._view_count = view_count.map(AnyInt.init)
+        self._usage_count = usage_count.map(AnyInt.init)
+        self.is_owner_disabled = is_owner_disabled
     }
 
 }
@@ -16649,6 +16700,8 @@ public struct LookWithDashboards: SDKModel {
         case updated_at
         case _user_name = "user_name"
         case _view_count = "view_count"
+        case _usage_count = "usage_count"
+        case is_owner_disabled
         case dashboards
     }
     /**
@@ -16882,12 +16935,26 @@ public struct LookWithDashboards: SDKModel {
         set { _view_count = newValue.map(AnyInt.init) }
     }
 
+    private var _usage_count: AnyInt?
+    /**
+     * Number of queries executed on this look in the last N days (read-only)
+     */
+    public var usage_count: Int64? {
+        get { _usage_count?.value }
+        set { _usage_count = newValue.map(AnyInt.init) }
+    }
+
+    /**
+     * Is the owner disabled (read-only)
+     */
+    public var is_owner_disabled: Bool?
+
     /**
      * Dashboards (read-only)
      */
     public var dashboards: [DashboardBase]?
 
-    public init(can: StringDictionary<Bool>? = nil, content_metadata_id: String? = nil, id: String? = nil, title: String? = nil, user_id: String? = nil, certification_metadata: Certification? = nil, content_favorite_id: String? = nil, created_at: Date? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, description: String? = nil, embed_url: String? = nil, excel_file_url: String? = nil, favorite_count: Int64? = nil, google_spreadsheet_formula: String? = nil, image_embed_url: String? = nil, is_run_on_load: Bool? = nil, last_accessed_at: Date? = nil, last_updater_id: String? = nil, last_viewed_at: Date? = nil, model: LookModel? = nil, `public`: Bool? = nil, public_slug: String? = nil, public_url: String? = nil, query_id: String? = nil, short_url: String? = nil, folder: FolderBase? = nil, folder_id: String? = nil, updated_at: Date? = nil, user_name: String? = nil, view_count: Int64? = nil, dashboards: [DashboardBase]? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, content_metadata_id: String? = nil, id: String? = nil, title: String? = nil, user_id: String? = nil, certification_metadata: Certification? = nil, content_favorite_id: String? = nil, created_at: Date? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, description: String? = nil, embed_url: String? = nil, excel_file_url: String? = nil, favorite_count: Int64? = nil, google_spreadsheet_formula: String? = nil, image_embed_url: String? = nil, is_run_on_load: Bool? = nil, last_accessed_at: Date? = nil, last_updater_id: String? = nil, last_viewed_at: Date? = nil, model: LookModel? = nil, `public`: Bool? = nil, public_slug: String? = nil, public_url: String? = nil, query_id: String? = nil, short_url: String? = nil, folder: FolderBase? = nil, folder_id: String? = nil, updated_at: Date? = nil, user_name: String? = nil, view_count: Int64? = nil, usage_count: Int64? = nil, is_owner_disabled: Bool? = nil, dashboards: [DashboardBase]? = nil) {
         self.can = can
         self._content_metadata_id = content_metadata_id.map(AnyString.init)
         self._id = id.map(AnyString.init)
@@ -16920,6 +16987,8 @@ public struct LookWithDashboards: SDKModel {
         self.updated_at = updated_at
         self._user_name = user_name.map(AnyString.init)
         self._view_count = view_count.map(AnyInt.init)
+        self._usage_count = usage_count.map(AnyInt.init)
+        self.is_owner_disabled = is_owner_disabled
         self.dashboards = dashboards
     }
 
@@ -16960,6 +17029,8 @@ public struct LookWithQuery: SDKModel {
         case updated_at
         case _user_name = "user_name"
         case _view_count = "view_count"
+        case _usage_count = "usage_count"
+        case is_owner_disabled
         case query
         case _url = "url"
     }
@@ -17194,6 +17265,20 @@ public struct LookWithQuery: SDKModel {
         set { _view_count = newValue.map(AnyInt.init) }
     }
 
+    private var _usage_count: AnyInt?
+    /**
+     * Number of queries executed on this look in the last N days (read-only)
+     */
+    public var usage_count: Int64? {
+        get { _usage_count?.value }
+        set { _usage_count = newValue.map(AnyInt.init) }
+    }
+
+    /**
+     * Is the owner disabled (read-only)
+     */
+    public var is_owner_disabled: Bool?
+
     public var query: Query?
 
     private var _url: AnyString?
@@ -17205,7 +17290,7 @@ public struct LookWithQuery: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, content_metadata_id: String? = nil, id: String? = nil, title: String? = nil, user_id: String? = nil, certification_metadata: Certification? = nil, content_favorite_id: String? = nil, created_at: Date? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, description: String? = nil, embed_url: String? = nil, excel_file_url: String? = nil, favorite_count: Int64? = nil, google_spreadsheet_formula: String? = nil, image_embed_url: String? = nil, is_run_on_load: Bool? = nil, last_accessed_at: Date? = nil, last_updater_id: String? = nil, last_viewed_at: Date? = nil, model: LookModel? = nil, `public`: Bool? = nil, public_slug: String? = nil, public_url: String? = nil, query_id: String? = nil, short_url: String? = nil, folder: FolderBase? = nil, folder_id: String? = nil, updated_at: Date? = nil, user_name: String? = nil, view_count: Int64? = nil, query: Query? = nil, url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, content_metadata_id: String? = nil, id: String? = nil, title: String? = nil, user_id: String? = nil, certification_metadata: Certification? = nil, content_favorite_id: String? = nil, created_at: Date? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, description: String? = nil, embed_url: String? = nil, excel_file_url: String? = nil, favorite_count: Int64? = nil, google_spreadsheet_formula: String? = nil, image_embed_url: String? = nil, is_run_on_load: Bool? = nil, last_accessed_at: Date? = nil, last_updater_id: String? = nil, last_viewed_at: Date? = nil, model: LookModel? = nil, `public`: Bool? = nil, public_slug: String? = nil, public_url: String? = nil, query_id: String? = nil, short_url: String? = nil, folder: FolderBase? = nil, folder_id: String? = nil, updated_at: Date? = nil, user_name: String? = nil, view_count: Int64? = nil, usage_count: Int64? = nil, is_owner_disabled: Bool? = nil, query: Query? = nil, url: String? = nil) {
         self.can = can
         self._content_metadata_id = content_metadata_id.map(AnyString.init)
         self._id = id.map(AnyString.init)
@@ -17238,6 +17323,8 @@ public struct LookWithQuery: SDKModel {
         self.updated_at = updated_at
         self._user_name = user_name.map(AnyString.init)
         self._view_count = view_count.map(AnyInt.init)
+        self._usage_count = usage_count.map(AnyInt.init)
+        self.is_owner_disabled = is_owner_disabled
         self.query = query
         self._url = url.map(AnyString.init)
     }
@@ -17380,6 +17467,7 @@ public struct MergeQuery: SDKModel {
         case _sorts = "sorts"
         case source_queries
         case total
+        case _limit = "limit"
         case vis_config
     }
     /**
@@ -17451,12 +17539,21 @@ public struct MergeQuery: SDKModel {
      */
     public var total: Bool?
 
+    private var _limit: AnyString?
+    /**
+     * Limit
+     */
+    public var limit: String? {
+        get { _limit?.value }
+        set { _limit = newValue.map(AnyString.init) }
+    }
+
     /**
      * Visualization Config
      */
     public var vis_config: StringDictionary<AnyCodable>?
 
-    public init(can: StringDictionary<Bool>? = nil, column_limit: String? = nil, dynamic_fields: String? = nil, id: String? = nil, pivots: [String]? = nil, result_maker_id: String? = nil, sorts: [String]? = nil, source_queries: [MergeQuerySourceQuery]? = nil, total: Bool? = nil, vis_config: StringDictionary<AnyCodable>? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, column_limit: String? = nil, dynamic_fields: String? = nil, id: String? = nil, pivots: [String]? = nil, result_maker_id: String? = nil, sorts: [String]? = nil, source_queries: [MergeQuerySourceQuery]? = nil, total: Bool? = nil, limit: String? = nil, vis_config: StringDictionary<AnyCodable>? = nil) {
         self.can = can
         self._column_limit = column_limit.map(AnyString.init)
         self._dynamic_fields = dynamic_fields.map(AnyString.init)
@@ -17466,6 +17563,7 @@ public struct MergeQuery: SDKModel {
         if let v = sorts { _sorts = v.map { AnyString.init($0) } } else { _sorts = nil }
         self.source_queries = source_queries
         self.total = total
+        self._limit = limit.map(AnyString.init)
         self.vis_config = vis_config
     }
 
@@ -18904,6 +19002,7 @@ public struct Project: SDKModel {
         case _id = "id"
         case _name = "name"
         case uses_git
+        case is_git_dev_locked
         case _git_remote_url = "git_remote_url"
         case _git_username = "git_username"
         case _git_password = "git_password"
@@ -18951,6 +19050,11 @@ public struct Project: SDKModel {
      * If true the project is configured with a git repository (read-only)
      */
     public var uses_git: Bool?
+
+    /**
+     * If true, the project git repository is locked. (read-only)
+     */
+    public var is_git_dev_locked: Bool?
 
     private var _git_remote_url: AnyString?
     /**
@@ -19091,11 +19195,12 @@ public struct Project: SDKModel {
         set { _dependency_status = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, uses_git: Bool? = nil, git_remote_url: String? = nil, git_username: String? = nil, git_password: String? = nil, git_production_branch_name: String? = nil, use_git_cookie_auth: Bool? = nil, git_username_user_attribute: String? = nil, git_password_user_attribute: String? = nil, git_service_name: String? = nil, git_application_server_http_port: Int64? = nil, git_application_server_http_scheme: String? = nil, deploy_secret: String? = nil, unset_deploy_secret: Bool? = nil, pull_request_mode: PullRequestMode? = nil, validation_required: Bool? = nil, git_release_mgmt_enabled: Bool? = nil, allow_warnings: Bool? = nil, is_example: Bool? = nil, has_production_counterpart: Bool? = nil, dependency_status: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, uses_git: Bool? = nil, is_git_dev_locked: Bool? = nil, git_remote_url: String? = nil, git_username: String? = nil, git_password: String? = nil, git_production_branch_name: String? = nil, use_git_cookie_auth: Bool? = nil, git_username_user_attribute: String? = nil, git_password_user_attribute: String? = nil, git_service_name: String? = nil, git_application_server_http_port: Int64? = nil, git_application_server_http_scheme: String? = nil, deploy_secret: String? = nil, unset_deploy_secret: Bool? = nil, pull_request_mode: PullRequestMode? = nil, validation_required: Bool? = nil, git_release_mgmt_enabled: Bool? = nil, allow_warnings: Bool? = nil, is_example: Bool? = nil, has_production_counterpart: Bool? = nil, dependency_status: String? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
         self._name = name.map(AnyString.init)
         self.uses_git = uses_git
+        self.is_git_dev_locked = is_git_dev_locked
         self._git_remote_url = git_remote_url.map(AnyString.init)
         self._git_username = git_username.map(AnyString.init)
         self._git_password = git_password.map(AnyString.init)
@@ -23030,6 +23135,7 @@ public struct Setting: SDKModel {
         case _dashboard_auto_refresh_minimum_interval = "dashboard_auto_refresh_minimum_interval"
         case _managed_certificate_uri = "managed_certificate_uri"
         case _content_certification_documentation_link = "content_certification_documentation_link"
+        case revoke_certification_on_edits
     }
     public var instance_config: InstanceConfig?
 
@@ -23126,7 +23232,7 @@ public struct Setting: SDKModel {
     public var embed_cookieless_v2: Bool?
 
     /**
-     * True if embedding is enabled https://cloud.google.com/looker/docs/r/looker-core-feature-embed, false otherwise (read-only)
+     * True if embedding is enabled https://docs.cloud.google.com/looker/docs/r/looker-core-feature-embed, false otherwise (read-only)
      */
     public var embed_enabled: Bool?
 
@@ -23178,7 +23284,12 @@ public struct Setting: SDKModel {
         set { _content_certification_documentation_link = newValue.map(AnyString.init) }
     }
 
-    public init(instance_config: InstanceConfig? = nil, extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_site: String? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_enabled: Bool? = nil, embed_config: EmbedConfig? = nil, login_notification_enabled: Bool? = nil, login_notification_text: String? = nil, dashboard_auto_refresh_restriction: Bool? = nil, dashboard_auto_refresh_minimum_interval: String? = nil, managed_certificate_uri: [String]? = nil, content_certification_documentation_link: String? = nil) {
+    /**
+     * Allow content certification to be revoked on edits.
+     */
+    public var revoke_certification_on_edits: Bool?
+
+    public init(instance_config: InstanceConfig? = nil, extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_site: String? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_enabled: Bool? = nil, embed_config: EmbedConfig? = nil, login_notification_enabled: Bool? = nil, login_notification_text: String? = nil, dashboard_auto_refresh_restriction: Bool? = nil, dashboard_auto_refresh_minimum_interval: String? = nil, managed_certificate_uri: [String]? = nil, content_certification_documentation_link: String? = nil, revoke_certification_on_edits: Bool? = nil) {
         self.instance_config = instance_config
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
@@ -23205,6 +23316,7 @@ public struct Setting: SDKModel {
         self._dashboard_auto_refresh_minimum_interval = dashboard_auto_refresh_minimum_interval.map(AnyString.init)
         if let v = managed_certificate_uri { _managed_certificate_uri = v.map { AnyString.init($0) } } else { _managed_certificate_uri = nil }
         self._content_certification_documentation_link = content_certification_documentation_link.map(AnyString.init)
+        self.revoke_certification_on_edits = revoke_certification_on_edits
     }
 
 }
@@ -25344,12 +25456,12 @@ public struct User: SDKModel {
     }
 
     /**
-     * User is an IAM Admin. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). The is_iam_admin is not returned by default. Please explicitly request this attribute if needed via the fields query param. Note: Including the optional is_iam_admin attribute can increase API latency. For best performance, use this attribute only when filtering for users with the 'Admin via IAM' role. When using this filter, always paginate your results with the offset and limit fields to optimize response time. (read-only)
+     * User is an IAM Admin. This field may only be applicable for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview). The is_iam_admin is not returned by default. Please explicitly request this attribute if needed via the fields query param. Note: Including the optional is_iam_admin attribute can increase API latency. For best performance, use this attribute only when filtering for users with the 'Admin via IAM' role. When using this filter, always paginate your results with the offset and limit fields to optimize response time. (read-only)
      */
     public var is_iam_admin: Bool?
 
     /**
-     * Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.
+     * Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.
      */
     public var can_manage_api3_creds: Bool?
 
@@ -26342,7 +26454,7 @@ public struct WriteAlert: SDKModel {
     public var applied_dashboard_filters: [AlertAppliedDashboardFilter]?
 
     /**
-     * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+     * This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
      */
     public var comparison_type: ComparisonType
 
@@ -26870,7 +26982,7 @@ public struct WriteBoardSection: SDKModel {
 
 /**
  * Dynamic writeable type for Certification removes:
- * user_name, updated_at
+ * ui_status, user_name, updated_at
  */
 public struct WriteCertification: SDKModel {
 
@@ -27299,7 +27411,7 @@ public struct WriteCredentialsEmail: SDKModel {
 
 /**
  * Dynamic writeable type for Dashboard removes:
- * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, updated_at, last_updater_id, last_updater_name, user_name, view_count, url
+ * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, updated_at, last_updater_id, last_updater_name, user_name, view_count, usage_count, is_owner_disabled, url
  */
 public struct WriteDashboard: SDKModel {
 
@@ -27330,7 +27442,6 @@ public struct WriteDashboard: SDKModel {
         case _tile_text_color = "tile_text_color"
         case _title_color = "title_color"
         case appearance
-        case _layout_granularity = "layout_granularity"
     }
     private var _description: AnyString?
     /**
@@ -27399,7 +27510,7 @@ public struct WriteDashboard: SDKModel {
 
     /**
      * Dynamic writeable type for Certification removes:
-     * user_name, updated_at
+     * ui_status, user_name, updated_at
      */
     public var certification_metadata: WriteCertification?
 
@@ -27461,7 +27572,7 @@ public struct WriteDashboard: SDKModel {
     }
 
     /**
-     * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://cloud.google.com/looker/docs/r/api/control-access)
+     * Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.cloud.google.com/looker/docs/r/api/control-access)
      */
     public var show_filters_bar: Bool?
 
@@ -27517,16 +27628,7 @@ public struct WriteDashboard: SDKModel {
 
     public var appearance: DashboardAppearance?
 
-    private var _layout_granularity: AnyString?
-    /**
-     * The layout granularity to apply to this dashboard (ie: default or granular)
-     */
-    public var layout_granularity: String? {
-        get { _layout_granularity?.value }
-        set { _layout_granularity = newValue.map(AnyString.init) }
-    }
-
-    public init(description: String? = nil, hidden: Bool? = nil, query_timezone: String? = nil, refresh_interval: String? = nil, folder: WriteFolderBase? = nil, title: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, certification_metadata: WriteCertification? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, crossfilter_enabled: Bool? = nil, deleted: Bool? = nil, enable_viz_full_screen: Bool? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, appearance: DashboardAppearance? = nil, layout_granularity: String? = nil) {
+    public init(description: String? = nil, hidden: Bool? = nil, query_timezone: String? = nil, refresh_interval: String? = nil, folder: WriteFolderBase? = nil, title: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, certification_metadata: WriteCertification? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, crossfilter_enabled: Bool? = nil, deleted: Bool? = nil, enable_viz_full_screen: Bool? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, appearance: DashboardAppearance? = nil) {
         self._description = description.map(AnyString.init)
         self.hidden = hidden
         self._query_timezone = query_timezone.map(AnyString.init)
@@ -27553,7 +27655,6 @@ public struct WriteDashboard: SDKModel {
         self._tile_text_color = tile_text_color.map(AnyString.init)
         self._title_color = title_color.map(AnyString.init)
         self.appearance = appearance
-        self._layout_granularity = layout_granularity.map(AnyString.init)
     }
 
 }
@@ -27571,7 +27672,7 @@ public struct WriteDashboardBase: SDKModel {
 
     /**
      * Dynamic writeable type for Certification removes:
-     * user_name, updated_at
+     * ui_status, user_name, updated_at
      */
     public var certification_metadata: WriteCertification?
 
@@ -27611,6 +27712,7 @@ public struct WriteDashboardElement: SDKModel {
         case _rich_content_json = "rich_content_json"
         case _extension_id = "extension_id"
         case _aria_description = "aria_description"
+        case certification_metadata
     }
     private var _body_text: AnyString?
     /**
@@ -27641,7 +27743,7 @@ public struct WriteDashboardElement: SDKModel {
 
     /**
      * Dynamic writeable type for LookWithQuery removes:
-     * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, user_name, view_count, url
+     * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, user_name, view_count, usage_count, is_owner_disabled, url
      */
     public var look: WriteLookWithQuery?
 
@@ -27797,7 +27899,13 @@ public struct WriteDashboardElement: SDKModel {
         set { _aria_description = newValue.map(AnyString.init) }
     }
 
-    public init(body_text: String? = nil, dashboard_id: String? = nil, dashboard_layout_id: String? = nil, look: WriteLookWithQuery? = nil, look_id: String? = nil, merge_result_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, query: WriteQuery? = nil, query_id: String? = nil, refresh_interval: String? = nil, result_maker: WriteResultMakerWithIdVisConfigAndDynamicFields? = nil, result_maker_id: String? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil, rich_content_json: String? = nil, extension_id: String? = nil, aria_description: String? = nil) {
+    /**
+     * Dynamic writeable type for Certification removes:
+     * ui_status, user_name, updated_at
+     */
+    public var certification_metadata: WriteCertification?
+
+    public init(body_text: String? = nil, dashboard_id: String? = nil, dashboard_layout_id: String? = nil, look: WriteLookWithQuery? = nil, look_id: String? = nil, merge_result_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, query: WriteQuery? = nil, query_id: String? = nil, refresh_interval: String? = nil, result_maker: WriteResultMakerWithIdVisConfigAndDynamicFields? = nil, result_maker_id: String? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil, rich_content_json: String? = nil, extension_id: String? = nil, aria_description: String? = nil, certification_metadata: WriteCertification? = nil) {
         self._body_text = body_text.map(AnyString.init)
         self._dashboard_id = dashboard_id.map(AnyString.init)
         self._dashboard_layout_id = dashboard_layout_id.map(AnyString.init)
@@ -27820,6 +27928,7 @@ public struct WriteDashboardElement: SDKModel {
         self._rich_content_json = rich_content_json.map(AnyString.init)
         self._extension_id = extension_id.map(AnyString.init)
         self._aria_description = aria_description.map(AnyString.init)
+        self.certification_metadata = certification_metadata
     }
 
 }
@@ -29767,7 +29876,7 @@ public struct WriteLookBasic: SDKModel {
 
     /**
      * Dynamic writeable type for Certification removes:
-     * user_name, updated_at
+     * ui_status, user_name, updated_at
      */
     public var certification_metadata: WriteCertification?
 
@@ -29833,7 +29942,7 @@ public struct WriteLookmlModel: SDKModel {
 
 /**
  * Dynamic writeable type for LookWithQuery removes:
- * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, user_name, view_count, url
+ * can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, user_name, view_count, usage_count, is_owner_disabled, url
  */
 public struct WriteLookWithQuery: SDKModel {
 
@@ -29870,7 +29979,7 @@ public struct WriteLookWithQuery: SDKModel {
 
     /**
      * Dynamic writeable type for Certification removes:
-     * user_name, updated_at
+     * ui_status, user_name, updated_at
      */
     public var certification_metadata: WriteCertification?
 
@@ -29957,6 +30066,7 @@ public struct WriteMergeQuery: SDKModel {
         case _sorts = "sorts"
         case source_queries
         case total
+        case _limit = "limit"
         case vis_config
     }
     private var _column_limit: AnyString?
@@ -30005,18 +30115,28 @@ public struct WriteMergeQuery: SDKModel {
      */
     public var total: Bool?
 
+    private var _limit: AnyString?
+    /**
+     * Limit
+     */
+    public var limit: String? {
+        get { _limit?.value }
+        set { _limit = newValue.map(AnyString.init) }
+    }
+
     /**
      * Visualization Config
      */
     public var vis_config: StringDictionary<AnyCodable>?
 
-    public init(column_limit: String? = nil, dynamic_fields: String? = nil, pivots: [String]? = nil, sorts: [String]? = nil, source_queries: [MergeQuerySourceQuery]? = nil, total: Bool? = nil, vis_config: StringDictionary<AnyCodable>? = nil) {
+    public init(column_limit: String? = nil, dynamic_fields: String? = nil, pivots: [String]? = nil, sorts: [String]? = nil, source_queries: [MergeQuerySourceQuery]? = nil, total: Bool? = nil, limit: String? = nil, vis_config: StringDictionary<AnyCodable>? = nil) {
         self._column_limit = column_limit.map(AnyString.init)
         self._dynamic_fields = dynamic_fields.map(AnyString.init)
         if let v = pivots { _pivots = v.map { AnyString.init($0) } } else { _pivots = nil }
         if let v = sorts { _sorts = v.map { AnyString.init($0) } } else { _sorts = nil }
         self.source_queries = source_queries
         self.total = total
+        self._limit = limit.map(AnyString.init)
         self.vis_config = vis_config
     }
 
@@ -30607,7 +30727,7 @@ public struct WritePrivatelabelConfiguration: SDKModel {
 
 /**
  * Dynamic writeable type for Project removes:
- * can, id, uses_git, is_example, has_production_counterpart
+ * can, id, uses_git, is_git_dev_locked, is_example, has_production_counterpart
  */
 public struct WriteProject: SDKModel {
 
@@ -31846,6 +31966,7 @@ public struct WriteSetting: SDKModel {
         case _dashboard_auto_refresh_minimum_interval = "dashboard_auto_refresh_minimum_interval"
         case _managed_certificate_uri = "managed_certificate_uri"
         case _content_certification_documentation_link = "content_certification_documentation_link"
+        case revoke_certification_on_edits
     }
     /**
      * Toggle extension framework on or off
@@ -31972,7 +32093,12 @@ public struct WriteSetting: SDKModel {
         set { _content_certification_documentation_link = newValue.map(AnyString.init) }
     }
 
-    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_config: WriteEmbedConfig? = nil, dashboard_auto_refresh_restriction: Bool? = nil, dashboard_auto_refresh_minimum_interval: String? = nil, managed_certificate_uri: [String]? = nil, content_certification_documentation_link: String? = nil) {
+    /**
+     * Allow content certification to be revoked on edits.
+     */
+    public var revoke_certification_on_edits: Bool?
+
+    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_config: WriteEmbedConfig? = nil, dashboard_auto_refresh_restriction: Bool? = nil, dashboard_auto_refresh_minimum_interval: String? = nil, managed_certificate_uri: [String]? = nil, content_certification_documentation_link: String? = nil, revoke_certification_on_edits: Bool? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
@@ -31994,6 +32120,7 @@ public struct WriteSetting: SDKModel {
         self._dashboard_auto_refresh_minimum_interval = dashboard_auto_refresh_minimum_interval.map(AnyString.init)
         if let v = managed_certificate_uri { _managed_certificate_uri = v.map { AnyString.init($0) } } else { _managed_certificate_uri = nil }
         self._content_certification_documentation_link = content_certification_documentation_link.map(AnyString.init)
+        self.revoke_certification_on_edits = revoke_certification_on_edits
     }
 
 }
@@ -32264,7 +32391,7 @@ public struct WriteUser: SDKModel {
     public var ui_state: StringDictionary<AnyCodable>?
 
     /**
-     * Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.
+     * Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.
      */
     public var can_manage_api3_creds: Bool?
 

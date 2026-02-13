@@ -76,7 +76,7 @@ class AccessToken(model.Model):
 class Alert(model.Model):
     """
     Attributes:
-        comparison_type: This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+        comparison_type: This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
         cron: Vixie-Style crontab specification when to run. At minimum, it has to be longer than 15 minute intervals
         destinations: Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
         field:
@@ -230,7 +230,7 @@ class AlertAppliedDashboardFilter(model.Model):
     Attributes:
         filter_title: Field Title. Refer to `DashboardFilter.title` in [DashboardFilter](#!/types/DashboardFilter). Example `Name`
         field_name: Field Name. Refer to `DashboardFilter.dimension` in [DashboardFilter](#!/types/DashboardFilter). Example `distribution_centers.name`
-        filter_value: Field Value. [Filter Expressions](https://cloud.google.com/looker/docs/reference/filter-expressions). Example `Los Angeles CA`
+        filter_value: Field Value. [Filter Expressions](https://docs.cloud.google.com/looker/docs/reference/filter-expressions). Example `Los Angeles CA`
         filter_description: Human Readable Filter Description. This may be null or auto-generated. Example `is Los Angeles CA`
     """
 
@@ -314,7 +314,7 @@ class AlertField(model.Model):
     """
     Attributes:
         title: Field's title. Usually auto-generated to reflect field name and its filters
-        name: Field's name. Has the format `<view>.<field>` Refer to [docs](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts) for more details
+        name: Field's name. Has the format `<view>.<field>` Refer to [docs](https://docs.cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts) for more details
         filter: (Optional / Advance Use) List of fields filter. This further restricts the alert to certain dashboard element's field values. This can be used on top of dashboard filters `applied_dashboard_filters`. To keep thing simple, it's suggested to just use dashboard filters. Example: `{ 'title': '12 Number on Hand', 'name': 'inventory_items.number_on_hand', 'filter': [{ 'field_name': 'inventory_items.id', 'field_value': 12, 'filter_value': null }] }`
     """
 
@@ -339,8 +339,8 @@ class AlertFieldFilter(model.Model):
     """
     Attributes:
         field_name: Field Name. Has format `<view>.<field>`
-        field_value: Field Value. Depends on the type of field - numeric or string. For [location](https://cloud.google.com/looker/docs/reference/field-reference/dimension-type-reference#location) type, it's a list of floats. Example `[1.0, 56.0]`
-        filter_value: Filter Value. Usually null except for [location](https://cloud.google.com/looker/docs/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`
+        field_value: Field Value. Depends on the type of field - numeric or string. For [location](https://docs.cloud.google.com/looker/docs/reference/field-reference/dimension-type-reference#location) type, it's a list of floats. Example `[1.0, 56.0]`
+        filter_value: Filter Value. Usually null except for [location](https://docs.cloud.google.com/looker/docs/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`
     """
 
     field_name: str
@@ -1071,12 +1071,14 @@ class Certification(model.Model):
     """
     Attributes:
         certification_status: Certification status: "certified" or "revoked" Valid values are: "certified", "revoked".
+        ui_status: Indicates whether the underlying model is ungoverned
         user_name: Display name of user who certified the content, derived from user_id
         notes: Certification notes
         updated_at: Timestamp of certification
     """
 
     certification_status: Optional["CertificationStatus"] = None
+    ui_status: Optional[str] = None
     user_name: Optional[str] = None
     notes: Optional[str] = None
     updated_at: Optional[datetime.datetime] = None
@@ -1085,11 +1087,13 @@ class Certification(model.Model):
         self,
         *,
         certification_status: Optional["CertificationStatus"] = None,
+        ui_status: Optional[str] = None,
         user_name: Optional[str] = None,
         notes: Optional[str] = None,
         updated_at: Optional[datetime.datetime] = None
     ):
         self.certification_status = certification_status
+        self.ui_status = ui_status
         self.user_name = user_name
         self.notes = notes
         self.updated_at = updated_at
@@ -1277,7 +1281,7 @@ class ColumnSearch(model.Model):
 
 class ComparisonType(enum.Enum):
     """
-    This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY". (Enum defined in Alert)
+    This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY". (Enum defined in Alert)
 
     """
 
@@ -1546,6 +1550,7 @@ class ContentSearch(model.Model):
         model: Name of the model the explore belongs to
         created_by_id: Creator Id of the content
         certification_status: Certification status of the content
+        parent_folder_name: Name of the parent folder of the content
     """
 
     can: Optional[MutableMapping[str, bool]] = None
@@ -1560,6 +1565,7 @@ class ContentSearch(model.Model):
     model: Optional[str] = None
     created_by_id: Optional[int] = None
     certification_status: Optional[str] = None
+    parent_folder_name: Optional[str] = None
 
     def __init__(
         self,
@@ -1575,7 +1581,8 @@ class ContentSearch(model.Model):
         preferred_viewer: Optional[str] = None,
         model: Optional[str] = None,
         created_by_id: Optional[int] = None,
-        certification_status: Optional[str] = None
+        certification_status: Optional[str] = None,
+        parent_folder_name: Optional[str] = None
     ):
         self.can = can
         self.content_id = content_id
@@ -1589,6 +1596,7 @@ class ContentSearch(model.Model):
         self.model = model
         self.created_by_id = created_by_id
         self.certification_status = certification_status
+        self.parent_folder_name = parent_folder_name
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -3309,7 +3317,7 @@ class Dashboard(model.Model):
         user_name: Name of User that created the dashboard.
         load_configuration: configuration option that governs how dashboard loading will happen.
         lookml_link_id: Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
-        show_filters_bar: Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://cloud.google.com/looker/docs/r/api/control-access)
+        show_filters_bar: Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.cloud.google.com/looker/docs/r/api/control-access)
         show_title: Show title
         folder_id: Id of folder
         text_tile_text_color: Color of text on text tiles
@@ -3318,8 +3326,9 @@ class Dashboard(model.Model):
         title_color: Title color
         view_count: Number of times viewed in the Looker web UI
         appearance:
+        usage_count: Number of queries executed on this dashboard in the last N days
+        is_owner_disabled: Is the owner disabled
         url: Relative URL of the dashboard
-        layout_granularity: The layout granularity to apply to this dashboard (ie: default or granular)
     """
 
     can: Optional[MutableMapping[str, bool]] = None
@@ -3371,8 +3380,9 @@ class Dashboard(model.Model):
     title_color: Optional[str] = None
     view_count: Optional[int] = None
     appearance: Optional["DashboardAppearance"] = None
+    usage_count: Optional[int] = None
+    is_owner_disabled: Optional[bool] = None
     url: Optional[str] = None
-    layout_granularity: Optional[str] = None
 
     def __init__(
         self,
@@ -3426,8 +3436,9 @@ class Dashboard(model.Model):
         title_color: Optional[str] = None,
         view_count: Optional[int] = None,
         appearance: Optional["DashboardAppearance"] = None,
-        url: Optional[str] = None,
-        layout_granularity: Optional[str] = None
+        usage_count: Optional[int] = None,
+        is_owner_disabled: Optional[bool] = None,
+        url: Optional[str] = None
     ):
         self.can = can
         self.content_favorite_id = content_favorite_id
@@ -3480,8 +3491,9 @@ class Dashboard(model.Model):
         self.title_color = title_color
         self.view_count = view_count
         self.appearance = appearance
+        self.usage_count = usage_count
+        self.is_owner_disabled = is_owner_disabled
         self.url = url
-        self.layout_granularity = layout_granularity
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -3663,6 +3675,7 @@ class DashboardElement(model.Model):
         subtitle_text_as_html: Text tile subtitle text as Html
         extension_id: Extension ID
         aria_description: Custom ARIA description text
+        certification_metadata:
     """
 
     can: Optional[MutableMapping[str, bool]] = None
@@ -3697,6 +3710,7 @@ class DashboardElement(model.Model):
     subtitle_text_as_html: Optional[str] = None
     extension_id: Optional[str] = None
     aria_description: Optional[str] = None
+    certification_metadata: Optional["Certification"] = None
 
     def __init__(
         self,
@@ -3732,7 +3746,8 @@ class DashboardElement(model.Model):
         title_text_as_html: Optional[str] = None,
         subtitle_text_as_html: Optional[str] = None,
         extension_id: Optional[str] = None,
-        aria_description: Optional[str] = None
+        aria_description: Optional[str] = None,
+        certification_metadata: Optional["Certification"] = None
     ):
         self.can = can
         self.body_text = body_text
@@ -3766,6 +3781,7 @@ class DashboardElement(model.Model):
         self.subtitle_text_as_html = subtitle_text_as_html
         self.extension_id = extension_id
         self.aria_description = aria_description
+        self.certification_metadata = certification_metadata
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -7513,6 +7529,8 @@ class Look(model.Model):
         updated_at: Time that the Look was updated.
         user_name: Name of User that created the look.
         view_count: Number of times viewed in the Looker web UI
+        usage_count: Number of queries executed on this look in the last N days
+        is_owner_disabled: Is the owner disabled
     """
 
     can: Optional[MutableMapping[str, bool]] = None
@@ -7547,6 +7565,8 @@ class Look(model.Model):
     updated_at: Optional[datetime.datetime] = None
     user_name: Optional[str] = None
     view_count: Optional[int] = None
+    usage_count: Optional[int] = None
+    is_owner_disabled: Optional[bool] = None
 
     def __init__(
         self,
@@ -7582,7 +7602,9 @@ class Look(model.Model):
         folder_id: Optional[str] = None,
         updated_at: Optional[datetime.datetime] = None,
         user_name: Optional[str] = None,
-        view_count: Optional[int] = None
+        view_count: Optional[int] = None,
+        usage_count: Optional[int] = None,
+        is_owner_disabled: Optional[bool] = None
     ):
         self.can = can
         self.content_metadata_id = content_metadata_id
@@ -7616,6 +7638,8 @@ class Look(model.Model):
         self.updated_at = updated_at
         self.user_name = user_name
         self.view_count = view_count
+        self.usage_count = usage_count
+        self.is_owner_disabled = is_owner_disabled
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -8833,6 +8857,8 @@ class LookWithDashboards(model.Model):
         updated_at: Time that the Look was updated.
         user_name: Name of User that created the look.
         view_count: Number of times viewed in the Looker web UI
+        usage_count: Number of queries executed on this look in the last N days
+        is_owner_disabled: Is the owner disabled
         dashboards: Dashboards
     """
 
@@ -8868,6 +8894,8 @@ class LookWithDashboards(model.Model):
     updated_at: Optional[datetime.datetime] = None
     user_name: Optional[str] = None
     view_count: Optional[int] = None
+    usage_count: Optional[int] = None
+    is_owner_disabled: Optional[bool] = None
     dashboards: Optional[Sequence["DashboardBase"]] = None
 
     def __init__(
@@ -8905,6 +8933,8 @@ class LookWithDashboards(model.Model):
         updated_at: Optional[datetime.datetime] = None,
         user_name: Optional[str] = None,
         view_count: Optional[int] = None,
+        usage_count: Optional[int] = None,
+        is_owner_disabled: Optional[bool] = None,
         dashboards: Optional[Sequence["DashboardBase"]] = None
     ):
         self.can = can
@@ -8939,6 +8969,8 @@ class LookWithDashboards(model.Model):
         self.updated_at = updated_at
         self.user_name = user_name
         self.view_count = view_count
+        self.usage_count = usage_count
+        self.is_owner_disabled = is_owner_disabled
         self.dashboards = dashboards
 
 
@@ -8978,6 +9010,8 @@ class LookWithQuery(model.Model):
         updated_at: Time that the Look was updated.
         user_name: Name of User that created the look.
         view_count: Number of times viewed in the Looker web UI
+        usage_count: Number of queries executed on this look in the last N days
+        is_owner_disabled: Is the owner disabled
         query:
         url: Url
     """
@@ -9014,6 +9048,8 @@ class LookWithQuery(model.Model):
     updated_at: Optional[datetime.datetime] = None
     user_name: Optional[str] = None
     view_count: Optional[int] = None
+    usage_count: Optional[int] = None
+    is_owner_disabled: Optional[bool] = None
     query: Optional["Query"] = None
     url: Optional[str] = None
 
@@ -9052,6 +9088,8 @@ class LookWithQuery(model.Model):
         updated_at: Optional[datetime.datetime] = None,
         user_name: Optional[str] = None,
         view_count: Optional[int] = None,
+        usage_count: Optional[int] = None,
+        is_owner_disabled: Optional[bool] = None,
         query: Optional["Query"] = None,
         url: Optional[str] = None
     ):
@@ -9087,6 +9125,8 @@ class LookWithQuery(model.Model):
         self.updated_at = updated_at
         self.user_name = user_name
         self.view_count = view_count
+        self.usage_count = usage_count
+        self.is_owner_disabled = is_owner_disabled
         self.query = query
         self.url = url
 
@@ -9200,6 +9240,7 @@ class MergeQuery(model.Model):
         sorts: Sorts
         source_queries: Source Queries defining the results to be merged.
         total: Total
+        limit: Limit
         vis_config: Visualization Config
     """
 
@@ -9212,6 +9253,7 @@ class MergeQuery(model.Model):
     sorts: Optional[Sequence[str]] = None
     source_queries: Optional[Sequence["MergeQuerySourceQuery"]] = None
     total: Optional[bool] = None
+    limit: Optional[str] = None
     vis_config: Optional[MutableMapping[str, Any]] = None
 
     def __init__(
@@ -9226,6 +9268,7 @@ class MergeQuery(model.Model):
         sorts: Optional[Sequence[str]] = None,
         source_queries: Optional[Sequence["MergeQuerySourceQuery"]] = None,
         total: Optional[bool] = None,
+        limit: Optional[str] = None,
         vis_config: Optional[MutableMapping[str, Any]] = None
     ):
         self.can = can
@@ -9237,6 +9280,7 @@ class MergeQuery(model.Model):
         self.sorts = sorts
         self.source_queries = source_queries
         self.total = total
+        self.limit = limit
         self.vis_config = vis_config
 
 
@@ -10088,6 +10132,7 @@ class Project(model.Model):
         id: Project Id
         name: Project display name
         uses_git: If true the project is configured with a git repository
+        is_git_dev_locked: If true, the project git repository is locked.
         git_remote_url: Git remote repository url
         git_username: Git username for HTTPS authentication. (For production only, if using user attributes.)
         git_password: (Write-Only) Git password for HTTPS authentication. (For production only, if using user attributes.)
@@ -10113,6 +10158,7 @@ class Project(model.Model):
     id: Optional[str] = None
     name: Optional[str] = None
     uses_git: Optional[bool] = None
+    is_git_dev_locked: Optional[bool] = None
     git_remote_url: Optional[str] = None
     git_username: Optional[str] = None
     git_password: Optional[str] = None
@@ -10140,6 +10186,7 @@ class Project(model.Model):
         id: Optional[str] = None,
         name: Optional[str] = None,
         uses_git: Optional[bool] = None,
+        is_git_dev_locked: Optional[bool] = None,
         git_remote_url: Optional[str] = None,
         git_username: Optional[str] = None,
         git_password: Optional[str] = None,
@@ -10164,6 +10211,7 @@ class Project(model.Model):
         self.id = id
         self.name = name
         self.uses_git = uses_git
+        self.is_git_dev_locked = is_git_dev_locked
         self.git_remote_url = git_remote_url
         self.git_username = git_username
         self.git_password = git_password
@@ -12248,7 +12296,7 @@ class Setting(model.Model):
         override_warnings: (Write-Only) If warnings are preventing a host URL change, this parameter allows for overriding warnings to force update the setting. Does not directly change any Looker settings.
         email_domain_allowlist: An array of Email Domain Allowlist of type string for Scheduled Content
         embed_cookieless_v2: (DEPRECATED) Use embed_config.embed_cookieless_v2 instead. If embed_config.embed_cookieless_v2 is specified, it overrides this value.
-        embed_enabled: True if embedding is enabled https://cloud.google.com/looker/docs/r/looker-core-feature-embed, false otherwise
+        embed_enabled: True if embedding is enabled https://docs.cloud.google.com/looker/docs/r/looker-core-feature-embed, false otherwise
         embed_config:
         login_notification_enabled: Login notification enabled
         login_notification_text: Login notification text
@@ -12256,6 +12304,7 @@ class Setting(model.Model):
         dashboard_auto_refresh_minimum_interval: Minimum time interval for dashboard element automatic refresh. Examples: (30 seconds, 1 minute)
         managed_certificate_uri: Array of URIs pointing to the location of a root certificate in Secret Manager
         content_certification_documentation_link: Link to content certification documentation.
+        revoke_certification_on_edits: Allow content certification to be revoked on edits.
     """
 
     instance_config: Optional["InstanceConfig"] = None
@@ -12284,6 +12333,7 @@ class Setting(model.Model):
     dashboard_auto_refresh_minimum_interval: Optional[str] = None
     managed_certificate_uri: Optional[Sequence[str]] = None
     content_certification_documentation_link: Optional[str] = None
+    revoke_certification_on_edits: Optional[bool] = None
 
     def __init__(
         self,
@@ -12313,7 +12363,8 @@ class Setting(model.Model):
         dashboard_auto_refresh_restriction: Optional[bool] = None,
         dashboard_auto_refresh_minimum_interval: Optional[str] = None,
         managed_certificate_uri: Optional[Sequence[str]] = None,
-        content_certification_documentation_link: Optional[str] = None
+        content_certification_documentation_link: Optional[str] = None,
+        revoke_certification_on_edits: Optional[bool] = None
     ):
         self.instance_config = instance_config
         self.extension_framework_enabled = extension_framework_enabled
@@ -12345,6 +12396,7 @@ class Setting(model.Model):
         self.content_certification_documentation_link = (
             content_certification_documentation_link
         )
+        self.revoke_certification_on_edits = revoke_certification_on_edits
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -13448,8 +13500,8 @@ class User(model.Model):
         allow_normal_group_membership: User can be a direct member of a normal Looker group.
         allow_roles_from_normal_groups: User can inherit roles from a normal Looker group.
         embed_group_folder_id: (Embed only) ID of user's group folder based on the external_group_id optionally specified during embed user login
-        is_iam_admin: User is an IAM Admin. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). The is_iam_admin is not returned by default. Please explicitly request this attribute if needed via the fields query param. Note: Including the optional is_iam_admin attribute can increase API latency. For best performance, use this attribute only when filtering for users with the 'Admin via IAM' role. When using this filter, always paginate your results with the offset and limit fields to optimize response time.
-        can_manage_api3_creds: Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.
+        is_iam_admin: User is an IAM Admin. This field may only be applicable for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview). The is_iam_admin is not returned by default. Please explicitly request this attribute if needed via the fields query param. Note: Including the optional is_iam_admin attribute can increase API latency. For best performance, use this attribute only when filtering for users with the 'Admin via IAM' role. When using this filter, always paginate your results with the offset and limit fields to optimize response time.
+        can_manage_api3_creds: Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.
         is_service_account: Indicates if this user is a service account.
         service_account_name: The display name of the service account. This field is omitted for non service account users.
         url: Link to get this item
@@ -14080,7 +14132,7 @@ class WriteAlert(model.Model):
     followed, followable, id, investigative_content_title, owner_display_name
 
         Attributes:
-            comparison_type: This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
+            comparison_type: This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".
             cron: Vixie-Style crontab specification when to run. At minimum, it has to be longer than 15 minute intervals
             destinations: Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
             field:
@@ -14395,7 +14447,7 @@ class WriteBoardSection(model.Model):
 class WriteCertification(model.Model):
     """
         Dynamic writeable type for Certification removes:
-    user_name, updated_at
+    ui_status, user_name, updated_at
 
         Attributes:
             certification_status: Certification status: "certified" or "revoked" Valid values are: "certified", "revoked".
@@ -14662,7 +14714,7 @@ class WriteCredentialsEmail(model.Model):
 class WriteDashboard(model.Model):
     """
         Dynamic writeable type for Dashboard removes:
-    can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, updated_at, last_updater_id, last_updater_name, user_name, view_count, url
+    can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, updated_at, last_updater_id, last_updater_name, user_name, view_count, usage_count, is_owner_disabled, url
 
         Attributes:
             description: Description
@@ -14675,7 +14727,7 @@ class WriteDashboard(model.Model):
             slug: Content Metadata Slug
             preferred_viewer: The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)
             certification_metadata: Dynamic writeable type for Certification removes:
-    user_name, updated_at
+    ui_status, user_name, updated_at
             alert_sync_with_dashboard_filter_enabled: Enables alerts to keep in sync with dashboard filter changes
             background_color: Background color
             crossfilter_enabled: Enables crossfiltering in dashboards - only available in dashboards-next (beta)
@@ -14685,7 +14737,7 @@ class WriteDashboard(model.Model):
             filters_location_top: Sets the default state of the filters location to top(true) or right(false)
             load_configuration: configuration option that governs how dashboard loading will happen.
             lookml_link_id: Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.
-            show_filters_bar: Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://cloud.google.com/looker/docs/r/api/control-access)
+            show_filters_bar: Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.cloud.google.com/looker/docs/r/api/control-access)
             show_title: Show title
             folder_id: Id of folder
             text_tile_text_color: Color of text on text tiles
@@ -14693,7 +14745,6 @@ class WriteDashboard(model.Model):
             tile_text_color: Tile text color
             title_color: Title color
             appearance:
-            layout_granularity: The layout granularity to apply to this dashboard (ie: default or granular)
     """
 
     description: Optional[str] = None
@@ -14722,7 +14773,6 @@ class WriteDashboard(model.Model):
     tile_text_color: Optional[str] = None
     title_color: Optional[str] = None
     appearance: Optional["DashboardAppearance"] = None
-    layout_granularity: Optional[str] = None
 
     def __init__(
         self,
@@ -14752,8 +14802,7 @@ class WriteDashboard(model.Model):
         tile_background_color: Optional[str] = None,
         tile_text_color: Optional[str] = None,
         title_color: Optional[str] = None,
-        appearance: Optional["DashboardAppearance"] = None,
-        layout_granularity: Optional[str] = None
+        appearance: Optional["DashboardAppearance"] = None
     ):
         self.description = description
         self.hidden = hidden
@@ -14783,7 +14832,6 @@ class WriteDashboard(model.Model):
         self.tile_text_color = tile_text_color
         self.title_color = title_color
         self.appearance = appearance
-        self.layout_granularity = layout_granularity
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -14796,7 +14844,7 @@ class WriteDashboardBase(model.Model):
             folder: Dynamic writeable type for FolderBase removes:
     id, content_metadata_id, created_at, creator_id, child_count, external_id, is_embed, is_embed_shared_root, is_embed_users_root, is_personal, is_personal_descendant, is_shared_root, is_users_root, can
             certification_metadata: Dynamic writeable type for Certification removes:
-    user_name, updated_at
+    ui_status, user_name, updated_at
     """
 
     folder: Optional["WriteFolderBase"] = None
@@ -14823,7 +14871,7 @@ class WriteDashboardElement(model.Model):
             dashboard_id: Id of Dashboard
             dashboard_layout_id: Id of Dashboard Layout
             look: Dynamic writeable type for LookWithQuery removes:
-    can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, user_name, view_count, url
+    can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, user_name, view_count, usage_count, is_owner_disabled, url
             look_id: Id Of Look
             merge_result_id: ID of merge result
             note_display: Note Display
@@ -14844,6 +14892,8 @@ class WriteDashboardElement(model.Model):
             rich_content_json: JSON with all the properties required for rich editor and buttons elements
             extension_id: Extension ID
             aria_description: Custom ARIA description text
+            certification_metadata: Dynamic writeable type for Certification removes:
+    ui_status, user_name, updated_at
     """
 
     body_text: Optional[str] = None
@@ -14868,6 +14918,7 @@ class WriteDashboardElement(model.Model):
     rich_content_json: Optional[str] = None
     extension_id: Optional[str] = None
     aria_description: Optional[str] = None
+    certification_metadata: Optional["WriteCertification"] = None
 
     def __init__(
         self,
@@ -14895,7 +14946,8 @@ class WriteDashboardElement(model.Model):
         type: Optional[str] = None,
         rich_content_json: Optional[str] = None,
         extension_id: Optional[str] = None,
-        aria_description: Optional[str] = None
+        aria_description: Optional[str] = None,
+        certification_metadata: Optional["WriteCertification"] = None
     ):
         self.body_text = body_text
         self.dashboard_id = dashboard_id
@@ -14919,6 +14971,7 @@ class WriteDashboardElement(model.Model):
         self.rich_content_json = rich_content_json
         self.extension_id = extension_id
         self.aria_description = aria_description
+        self.certification_metadata = certification_metadata
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -15888,7 +15941,7 @@ class WriteLookBasic(model.Model):
         Attributes:
             user_id: User Id
             certification_metadata: Dynamic writeable type for Certification removes:
-    user_name, updated_at
+    ui_status, user_name, updated_at
     """
 
     user_id: Optional[str] = None
@@ -15940,13 +15993,13 @@ class WriteLookmlModel(model.Model):
 class WriteLookWithQuery(model.Model):
     """
         Dynamic writeable type for LookWithQuery removes:
-    can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, user_name, view_count, url
+    can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, user_name, view_count, usage_count, is_owner_disabled, url
 
         Attributes:
             title: Look Title
             user_id: User Id
             certification_metadata: Dynamic writeable type for Certification removes:
-    user_name, updated_at
+    ui_status, user_name, updated_at
             deleted: Whether or not a look is 'soft' deleted.
             description: Description
             is_run_on_load: auto-run query when Look viewed
@@ -16012,6 +16065,7 @@ class WriteMergeQuery(model.Model):
             sorts: Sorts
             source_queries: Source Queries defining the results to be merged.
             total: Total
+            limit: Limit
             vis_config: Visualization Config
     """
 
@@ -16021,6 +16075,7 @@ class WriteMergeQuery(model.Model):
     sorts: Optional[Sequence[str]] = None
     source_queries: Optional[Sequence["MergeQuerySourceQuery"]] = None
     total: Optional[bool] = None
+    limit: Optional[str] = None
     vis_config: Optional[MutableMapping[str, Any]] = None
 
     def __init__(
@@ -16032,6 +16087,7 @@ class WriteMergeQuery(model.Model):
         sorts: Optional[Sequence[str]] = None,
         source_queries: Optional[Sequence["MergeQuerySourceQuery"]] = None,
         total: Optional[bool] = None,
+        limit: Optional[str] = None,
         vis_config: Optional[MutableMapping[str, Any]] = None
     ):
         self.column_limit = column_limit
@@ -16040,6 +16096,7 @@ class WriteMergeQuery(model.Model):
         self.sorts = sorts
         self.source_queries = source_queries
         self.total = total
+        self.limit = limit
         self.vis_config = vis_config
 
 
@@ -16365,7 +16422,7 @@ class WritePrivatelabelConfiguration(model.Model):
 class WriteProject(model.Model):
     """
         Dynamic writeable type for Project removes:
-    can, id, uses_git, is_example, has_production_counterpart
+    can, id, uses_git, is_git_dev_locked, is_example, has_production_counterpart
 
         Attributes:
             name: Project display name
@@ -17004,6 +17061,7 @@ class WriteSetting(model.Model):
             dashboard_auto_refresh_minimum_interval: Minimum time interval for dashboard element automatic refresh. Examples: (30 seconds, 1 minute)
             managed_certificate_uri: Array of URIs pointing to the location of a root certificate in Secret Manager
             content_certification_documentation_link: Link to content certification documentation.
+            revoke_certification_on_edits: Allow content certification to be revoked on edits.
     """
 
     extension_framework_enabled: Optional[bool] = None
@@ -17027,6 +17085,7 @@ class WriteSetting(model.Model):
     dashboard_auto_refresh_minimum_interval: Optional[str] = None
     managed_certificate_uri: Optional[Sequence[str]] = None
     content_certification_documentation_link: Optional[str] = None
+    revoke_certification_on_edits: Optional[bool] = None
 
     def __init__(
         self,
@@ -17051,7 +17110,8 @@ class WriteSetting(model.Model):
         dashboard_auto_refresh_restriction: Optional[bool] = None,
         dashboard_auto_refresh_minimum_interval: Optional[str] = None,
         managed_certificate_uri: Optional[Sequence[str]] = None,
-        content_certification_documentation_link: Optional[str] = None
+        content_certification_documentation_link: Optional[str] = None,
+        revoke_certification_on_edits: Optional[bool] = None
     ):
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
@@ -17078,6 +17138,7 @@ class WriteSetting(model.Model):
         self.content_certification_documentation_link = (
             content_certification_documentation_link
         )
+        self.revoke_certification_on_edits = revoke_certification_on_edits
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -17211,7 +17272,7 @@ class WriteUser(model.Model):
             locale: User's preferred locale. User locale takes precedence over Looker's system-wide default locale. Locale determines language of display strings and date and numeric formatting in API responses. Locale string must be a 2 letter language code or a combination of language code and region code: 'en' or 'en-US', for example.
             models_dir_validated: User's dev workspace has been checked for presence of applicable production projects
             ui_state: Per user dictionary of undocumented state information owned by the Looker UI.
-            can_manage_api3_creds: Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.
+            can_manage_api3_creds: Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.
     """
 
     credentials_email: Optional["WriteCredentialsEmail"] = None
