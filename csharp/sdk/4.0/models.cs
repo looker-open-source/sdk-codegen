@@ -55,7 +55,7 @@ public class Alert : SdkModel
 {
   /// <summary>Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`</summary>
   public AlertAppliedDashboardFilter[]? applied_dashboard_filters { get; set; } = null;
-  /// <summary>This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".</summary>
+  /// <summary>This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".</summary>
   [JsonConverter(typeof(StringEnumConverter))]
   public ComparisonType comparison_type { get; set; }
   /// <summary>Vixie-Style crontab specification when to run. At minimum, it has to be longer than 15 minute intervals</summary>
@@ -115,7 +115,7 @@ public class AlertAppliedDashboardFilter : SdkModel
   public string filter_title { get; set; } = "";
   /// <summary>Field Name. Refer to `DashboardFilter.dimension` in [DashboardFilter](#!/types/DashboardFilter). Example `distribution_centers.name`</summary>
   public string field_name { get; set; } = "";
-  /// <summary>Field Value. [Filter Expressions](https://cloud.google.com/looker/docs/reference/filter-expressions). Example `Los Angeles CA`</summary>
+  /// <summary>Field Value. [Filter Expressions](https://docs.cloud.google.com/looker/docs/reference/filter-expressions). Example `Los Angeles CA`</summary>
   public string filter_value { get; set; } = "";
   /// <summary>Human Readable Filter Description. This may be null or auto-generated. Example `is Los Angeles CA` (read-only)</summary>
   public string? filter_description { get; set; } = null;
@@ -146,7 +146,7 @@ public class AlertField : SdkModel
 {
   /// <summary>Field's title. Usually auto-generated to reflect field name and its filters</summary>
   public string title { get; set; } = "";
-  /// <summary>Field's name. Has the format `<view>.<field>` Refer to [docs](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts) for more details</summary>
+  /// <summary>Field's name. Has the format `<view>.<field>` Refer to [docs](https://docs.cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts) for more details</summary>
   public string name { get; set; } = "";
   /// <summary>(Optional / Advance Use) List of fields filter. This further restricts the alert to certain dashboard element's field values. This can be used on top of dashboard filters `applied_dashboard_filters`. To keep thing simple, it's suggested to just use dashboard filters. Example: `{ 'title': '12 Number on Hand', 'name': 'inventory_items.number_on_hand', 'filter': [{ 'field_name': 'inventory_items.id', 'field_value': 12, 'filter_value': null }] }`</summary>
   public AlertFieldFilter[]? filter { get; set; } = null;
@@ -156,9 +156,9 @@ public class AlertFieldFilter : SdkModel
 {
   /// <summary>Field Name. Has format `<view>.<field>`</summary>
   public string field_name { get; set; } = "";
-  /// <summary>Field Value. Depends on the type of field - numeric or string. For [location](https://cloud.google.com/looker/docs/reference/field-reference/dimension-type-reference#location) type, it's a list of floats. Example `[1.0, 56.0]`</summary>
+  /// <summary>Field Value. Depends on the type of field - numeric or string. For [location](https://docs.cloud.google.com/looker/docs/reference/field-reference/dimension-type-reference#location) type, it's a list of floats. Example `[1.0, 56.0]`</summary>
   public object field_value { get; set; } = null;
-  /// <summary>Filter Value. Usually null except for [location](https://cloud.google.com/looker/docs/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`</summary>
+  /// <summary>Filter Value. Usually null except for [location](https://docs.cloud.google.com/looker/docs/reference/field-reference/dimension-type-reference#location) type. It'll be a string of lat,long ie `'1.0,56.0'`</summary>
   public string? filter_value { get; set; } = null;
 }
 
@@ -487,6 +487,8 @@ public class Certification : SdkModel
   /// <summary>Certification status: "certified" or "revoked" Valid values are: "certified", "revoked".</summary>
   [JsonConverter(typeof(StringEnumConverter))]
   public CertificationStatus? certification_status { get; set; }
+  /// <summary>Indicates whether the underlying model is ungoverned (read-only)</summary>
+  public string? ui_status { get; set; } = null;
   /// <summary>Display name of user who certified the content, derived from user_id (read-only)</summary>
   public string? user_name { get; set; } = null;
   /// <summary>Certification notes</summary>
@@ -574,7 +576,7 @@ public class ColumnSearch : SdkModel
   public string? data_type { get; set; } = null;
 }
 
-/// This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY". (Enum defined in Alert)
+/// This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY". (Enum defined in Alert)
 public enum ComparisonType
 {
   [EnumMember(Value = "EQUAL_TO")]
@@ -726,6 +728,8 @@ public class ContentSearch : SdkModel
   public long? created_by_id { get; set; } = null;
   /// <summary>Certification status of the content (read-only)</summary>
   public string? certification_status { get; set; } = null;
+  /// <summary>Name of the parent folder of the content (read-only)</summary>
+  public string? parent_folder_name { get; set; } = null;
 }
 
 public class ContentSummary : SdkModel
@@ -1530,7 +1534,7 @@ public class Dashboard : SdkModel
   public string? load_configuration { get; set; } = null;
   /// <summary>Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.</summary>
   public string? lookml_link_id { get; set; } = null;
-  /// <summary>Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://cloud.google.com/looker/docs/r/api/control-access)</summary>
+  /// <summary>Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.cloud.google.com/looker/docs/r/api/control-access)</summary>
   public bool? show_filters_bar { get; set; } = null;
   /// <summary>Show title</summary>
   public bool? show_title { get; set; } = null;
@@ -1547,10 +1551,12 @@ public class Dashboard : SdkModel
   /// <summary>Number of times viewed in the Looker web UI (read-only)</summary>
   public long? view_count { get; set; } = null;
   public DashboardAppearance? appearance { get; set; }
+  /// <summary>Number of queries executed on this dashboard in the last N days (read-only)</summary>
+  public long? usage_count { get; set; } = null;
+  /// <summary>Is the owner disabled (read-only)</summary>
+  public bool? is_owner_disabled { get; set; } = null;
   /// <summary>Relative URL of the dashboard (read-only)</summary>
   public string? url { get; set; } = null;
-  /// <summary>The layout granularity to apply to this dashboard (ie: default or granular)</summary>
-  public string? layout_granularity { get; set; } = null;
 }
 
 public class DashboardAggregateTableLookml : SdkModel
@@ -1677,6 +1683,7 @@ public class DashboardElement : SdkModel
   public string? extension_id { get; set; } = null;
   /// <summary>Custom ARIA description text</summary>
   public string? aria_description { get; set; } = null;
+  public Certification? certification_metadata { get; set; }
 }
 
 public class DashboardFilter : SdkModel
@@ -3424,6 +3431,10 @@ public class Look : SdkModel
   public string? user_name { get; set; } = null;
   /// <summary>Number of times viewed in the Looker web UI (read-only)</summary>
   public long? view_count { get; set; } = null;
+  /// <summary>Number of queries executed on this look in the last N days (read-only)</summary>
+  public long? usage_count { get; set; } = null;
+  /// <summary>Is the owner disabled (read-only)</summary>
+  public bool? is_owner_disabled { get; set; } = null;
 }
 
 public class LookBasic : SdkModel
@@ -4028,6 +4039,10 @@ public class LookWithDashboards : SdkModel
   public string? user_name { get; set; } = null;
   /// <summary>Number of times viewed in the Looker web UI (read-only)</summary>
   public long? view_count { get; set; } = null;
+  /// <summary>Number of queries executed on this look in the last N days (read-only)</summary>
+  public long? usage_count { get; set; } = null;
+  /// <summary>Is the owner disabled (read-only)</summary>
+  public bool? is_owner_disabled { get; set; } = null;
   /// <summary>Dashboards (read-only)</summary>
   public DashboardBase[]? dashboards { get; set; } = null;
 }
@@ -4095,6 +4110,10 @@ public class LookWithQuery : SdkModel
   public string? user_name { get; set; } = null;
   /// <summary>Number of times viewed in the Looker web UI (read-only)</summary>
   public long? view_count { get; set; } = null;
+  /// <summary>Number of queries executed on this look in the last N days (read-only)</summary>
+  public long? usage_count { get; set; } = null;
+  /// <summary>Is the owner disabled (read-only)</summary>
+  public bool? is_owner_disabled { get; set; } = null;
   public Query? query { get; set; }
   /// <summary>Url (read-only)</summary>
   public string? url { get; set; } = null;
@@ -4157,6 +4176,8 @@ public class MergeQuery : SdkModel
   public MergeQuerySourceQuery[]? source_queries { get; set; } = null;
   /// <summary>Total</summary>
   public bool? total { get; set; } = null;
+  /// <summary>Limit</summary>
+  public string? limit { get; set; } = null;
   /// <summary>Visualization Config</summary>
   public StringDictionary<string>? vis_config { get; set; } = null;
 }
@@ -4565,6 +4586,8 @@ public class Project : SdkModel
   public string? name { get; set; } = null;
   /// <summary>If true the project is configured with a git repository (read-only)</summary>
   public bool? uses_git { get; set; } = null;
+  /// <summary>If true, the project git repository is locked. (read-only)</summary>
+  public bool? is_git_dev_locked { get; set; } = null;
   /// <summary>Git remote repository url</summary>
   public string? git_remote_url { get; set; } = null;
   /// <summary>Git username for HTTPS authentication. (For production only, if using user attributes.)</summary>
@@ -5570,7 +5593,7 @@ public class Setting : SdkModel
   public string[]? email_domain_allowlist { get; set; } = null;
   /// <summary>(DEPRECATED) Use embed_config.embed_cookieless_v2 instead. If embed_config.embed_cookieless_v2 is specified, it overrides this value.</summary>
   public bool? embed_cookieless_v2 { get; set; } = null;
-  /// <summary>True if embedding is enabled https://cloud.google.com/looker/docs/r/looker-core-feature-embed, false otherwise (read-only)</summary>
+  /// <summary>True if embedding is enabled https://docs.cloud.google.com/looker/docs/r/looker-core-feature-embed, false otherwise (read-only)</summary>
   public bool? embed_enabled { get; set; } = null;
   public EmbedConfig? embed_config { get; set; }
   /// <summary>Login notification enabled (read-only)</summary>
@@ -5585,6 +5608,8 @@ public class Setting : SdkModel
   public string[]? managed_certificate_uri { get; set; } = null;
   /// <summary>Link to content certification documentation.</summary>
   public string? content_certification_documentation_link { get; set; } = null;
+  /// <summary>Allow content certification to be revoked on edits.</summary>
+  public bool? revoke_certification_on_edits { get; set; } = null;
 }
 
 public class SmtpNodeStatus : SdkModel
@@ -6158,9 +6183,9 @@ public class User : SdkModel
   public bool? allow_roles_from_normal_groups { get; set; } = null;
   /// <summary>(Embed only) ID of user's group folder based on the external_group_id optionally specified during embed user login (read-only)</summary>
   public string? embed_group_folder_id { get; set; } = null;
-  /// <summary>User is an IAM Admin. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). The is_iam_admin is not returned by default. Please explicitly request this attribute if needed via the fields query param. Note: Including the optional is_iam_admin attribute can increase API latency. For best performance, use this attribute only when filtering for users with the 'Admin via IAM' role. When using this filter, always paginate your results with the offset and limit fields to optimize response time. (read-only)</summary>
+  /// <summary>User is an IAM Admin. This field may only be applicable for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview). The is_iam_admin is not returned by default. Please explicitly request this attribute if needed via the fields query param. Note: Including the optional is_iam_admin attribute can increase API latency. For best performance, use this attribute only when filtering for users with the 'Admin via IAM' role. When using this filter, always paginate your results with the offset and limit fields to optimize response time. (read-only)</summary>
   public bool? is_iam_admin { get; set; } = null;
-  /// <summary>Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.</summary>
+  /// <summary>Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.</summary>
   public bool? can_manage_api3_creds { get; set; } = null;
   /// <summary>Indicates if this user is a service account. (read-only)</summary>
   public bool? is_service_account { get; set; } = null;
@@ -6417,7 +6442,7 @@ public class WriteAlert : SdkModel
 {
   /// <summary>Filters coming from the dashboard that are applied. Example `[{ "filter_title": "Name", "field_name": "distribution_centers.name", "filter_value": "Los Angeles CA" }]`</summary>
   public AlertAppliedDashboardFilter[]? applied_dashboard_filters { get; set; } = null;
-  /// <summary>This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".</summary>
+  /// <summary>This property informs the check what kind of comparison we are performing. Only certain condition types are valid for time series alerts. For details, refer to [Setting Alert Conditions](https://docs.cloud.google.com/looker/docs/sharing-and-publishing/creating-alerts#setting_alert_conditions) Valid values are: "EQUAL_TO", "GREATER_THAN", "GREATER_THAN_OR_EQUAL_TO", "LESS_THAN", "LESS_THAN_OR_EQUAL_TO", "INCREASES_BY", "DECREASES_BY", "CHANGES_BY".</summary>
   [JsonConverter(typeof(StringEnumConverter))]
   public ComparisonType comparison_type { get; set; }
   /// <summary>Vixie-Style crontab specification when to run. At minimum, it has to be longer than 15 minute intervals</summary>
@@ -6548,7 +6573,7 @@ public class WriteBoardSection : SdkModel
 }
 
 /// Dynamic writeable type for Certification removes:
-/// user_name, updated_at
+/// ui_status, user_name, updated_at
 public class WriteCertification : SdkModel
 {
   /// <summary>Certification status: "certified" or "revoked" Valid values are: "certified", "revoked".</summary>
@@ -6675,7 +6700,7 @@ public class WriteCredentialsEmail : SdkModel
 }
 
 /// Dynamic writeable type for Dashboard removes:
-/// can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, updated_at, last_updater_id, last_updater_name, user_name, view_count, url
+/// can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, updated_at, last_updater_id, last_updater_name, user_name, view_count, usage_count, is_owner_disabled, url
 public class WriteDashboard : SdkModel
 {
   /// <summary>Description</summary>
@@ -6699,7 +6724,7 @@ public class WriteDashboard : SdkModel
   public string? preferred_viewer { get; set; } = null;
   /// <summary>
   /// Dynamic writeable type for Certification removes:
-  /// user_name, updated_at
+  /// ui_status, user_name, updated_at
   /// </summary>
   public WriteCertification? certification_metadata { get; set; }
   /// <summary>Enables alerts to keep in sync with dashboard filter changes</summary>
@@ -6720,7 +6745,7 @@ public class WriteDashboard : SdkModel
   public string? load_configuration { get; set; } = null;
   /// <summary>Links this dashboard to a particular LookML dashboard such that calling a **sync** operation on that LookML dashboard will update this dashboard to match.</summary>
   public string? lookml_link_id { get; set; } = null;
-  /// <summary>Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://cloud.google.com/looker/docs/r/api/control-access)</summary>
+  /// <summary>Show filters bar.  **Security Note:** This property only affects the *cosmetic* appearance of the dashboard, not a user's ability to access data. Hiding the filters bar does **NOT** prevent users from changing filters by other means. For information on how to set up secure data access control policies, see [Control User Access to Data](https://docs.cloud.google.com/looker/docs/r/api/control-access)</summary>
   public bool? show_filters_bar { get; set; } = null;
   /// <summary>Show title</summary>
   public bool? show_title { get; set; } = null;
@@ -6735,8 +6760,6 @@ public class WriteDashboard : SdkModel
   /// <summary>Title color</summary>
   public string? title_color { get; set; } = null;
   public DashboardAppearance? appearance { get; set; }
-  /// <summary>The layout granularity to apply to this dashboard (ie: default or granular)</summary>
-  public string? layout_granularity { get; set; } = null;
 }
 
 /// Dynamic writeable type for DashboardBase removes:
@@ -6750,7 +6773,7 @@ public class WriteDashboardBase : SdkModel
   public WriteFolderBase? folder { get; set; }
   /// <summary>
   /// Dynamic writeable type for Certification removes:
-  /// user_name, updated_at
+  /// ui_status, user_name, updated_at
   /// </summary>
   public WriteCertification? certification_metadata { get; set; }
 }
@@ -6767,7 +6790,7 @@ public class WriteDashboardElement : SdkModel
   public string? dashboard_layout_id { get; set; } = null;
   /// <summary>
   /// Dynamic writeable type for LookWithQuery removes:
-  /// can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, user_name, view_count, url
+  /// can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, user_name, view_count, usage_count, is_owner_disabled, url
   /// </summary>
   public WriteLookWithQuery? look { get; set; }
   /// <summary>Id Of Look</summary>
@@ -6812,6 +6835,11 @@ public class WriteDashboardElement : SdkModel
   public string? extension_id { get; set; } = null;
   /// <summary>Custom ARIA description text</summary>
   public string? aria_description { get; set; } = null;
+  /// <summary>
+  /// Dynamic writeable type for Certification removes:
+  /// ui_status, user_name, updated_at
+  /// </summary>
+  public WriteCertification? certification_metadata { get; set; }
 }
 
 /// Dynamic writeable type for DashboardFilter removes:
@@ -7280,7 +7308,7 @@ public class WriteLookBasic : SdkModel
   public string? user_id { get; set; } = null;
   /// <summary>
   /// Dynamic writeable type for Certification removes:
-  /// user_name, updated_at
+  /// ui_status, user_name, updated_at
   /// </summary>
   public WriteCertification? certification_metadata { get; set; }
 }
@@ -7300,7 +7328,7 @@ public class WriteLookmlModel : SdkModel
 }
 
 /// Dynamic writeable type for LookWithQuery removes:
-/// can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, user_name, view_count, url
+/// can, content_metadata_id, id, content_favorite_id, created_at, deleted_at, deleter_id, embed_url, excel_file_url, favorite_count, google_spreadsheet_formula, image_embed_url, last_accessed_at, last_updater_id, last_viewed_at, model, public_slug, public_url, short_url, updated_at, user_name, view_count, usage_count, is_owner_disabled, url
 public class WriteLookWithQuery : SdkModel
 {
   /// <summary>Look Title</summary>
@@ -7309,7 +7337,7 @@ public class WriteLookWithQuery : SdkModel
   public string? user_id { get; set; } = null;
   /// <summary>
   /// Dynamic writeable type for Certification removes:
-  /// user_name, updated_at
+  /// ui_status, user_name, updated_at
   /// </summary>
   public WriteCertification? certification_metadata { get; set; }
   /// <summary>Whether or not a look is 'soft' deleted.</summary>
@@ -7352,6 +7380,8 @@ public class WriteMergeQuery : SdkModel
   public MergeQuerySourceQuery[]? source_queries { get; set; } = null;
   /// <summary>Total</summary>
   public bool? total { get; set; } = null;
+  /// <summary>Limit</summary>
+  public string? limit { get; set; } = null;
   /// <summary>Visualization Config</summary>
   public StringDictionary<string>? vis_config { get; set; } = null;
 }
@@ -7506,7 +7536,7 @@ public class WritePrivatelabelConfiguration : SdkModel
 }
 
 /// Dynamic writeable type for Project removes:
-/// can, id, uses_git, is_example, has_production_counterpart
+/// can, id, uses_git, is_git_dev_locked, is_example, has_production_counterpart
 public class WriteProject : SdkModel
 {
   /// <summary>Project display name</summary>
@@ -7850,6 +7880,8 @@ public class WriteSetting : SdkModel
   public string[]? managed_certificate_uri { get; set; } = null;
   /// <summary>Link to content certification documentation.</summary>
   public string? content_certification_documentation_link { get; set; } = null;
+  /// <summary>Allow content certification to be revoked on edits.</summary>
+  public bool? revoke_certification_on_edits { get; set; } = null;
 }
 
 /// Dynamic writeable type for SqlInterfaceQueryCreate removes:
@@ -7926,7 +7958,7 @@ public class WriteUser : SdkModel
   public bool? models_dir_validated { get; set; } = null;
   /// <summary>Per user dictionary of undocumented state information owned by the Looker UI.</summary>
   public StringDictionary<string>? ui_state { get; set; } = null;
-  /// <summary>Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.</summary>
+  /// <summary>Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.</summary>
   public bool? can_manage_api3_creds { get; set; } = null;
 }
 

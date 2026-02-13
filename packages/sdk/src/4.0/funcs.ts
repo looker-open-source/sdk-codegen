@@ -25,7 +25,7 @@
  */
 
 /**
- * 478 API methods
+ * 483 API methods
  */
 
 import type {
@@ -58,6 +58,7 @@ import type {
   IBoard,
   IBoardItem,
   IBoardSection,
+  ICertification,
   IColorCollection,
   IColumnSearch,
   IConnectionFeatures,
@@ -289,6 +290,7 @@ import type {
   IWriteBoard,
   IWriteBoardItem,
   IWriteBoardSection,
+  IWriteCertification,
   IWriteColorCollection,
   IWriteContentFavorite,
   IWriteContentMeta,
@@ -666,7 +668,7 @@ export const read_alert_notification = async (
 /**
  * ### Present client credentials to obtain an authorization token
  *
- * Looker API implements the OAuth2 [Resource Owner Password Credentials Grant](https://cloud.google.com/looker/docs/r/api/outh2_resource_owner_pc) pattern.
+ * Looker API implements the OAuth2 [Resource Owner Password Credentials Grant](https://docs.cloud.google.com/looker/docs/r/api/outh2_resource_owner_pc) pattern.
  * The client credentials required for this login must be obtained by creating an API key on a user account
  * in the Looker Admin console. The API key consists of a public `client_id` and a private `client_secret`.
  *
@@ -731,10 +733,10 @@ export const login = async (
  *
  * See 'login' for more detail on the access token and how to use it.
  *
- * In [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview) this call will be denied unless all of the following criteria are met:
- *   1. The calling user is an [API-only Service Account](https://cloud.google.com/looker/docs/looker-core-user-management#creating_an_api-only_service_account) with the Admin role
- *   2. The target user is an [Embed User type](https://cloud.google.com/looker/docs/r/single-sign-on-embedding)
- * Regular user types can not be impersonated in [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). If your application needs to call the API for these users, use OAuth authentication instead.
+ * In [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview) this call will be denied unless all of the following criteria are met:
+ *   1. The calling user is an [API-only Service Account](https://docs.cloud.google.com/looker/docs/looker-core-user-management#creating_an_api-only_service_account) with the Admin role
+ *   2. The target user is an [Embed User type](https://docs.cloud.google.com/looker/docs/r/single-sign-on-embedding)
+ * Regular user types can not be impersonated in [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview). If your application needs to call the API for these users, use OAuth authentication instead.
  *
  * POST /login/{user_id} -> IAccessToken
  *
@@ -1060,7 +1062,7 @@ export const update_artifacts = async (
  *
  * The value of the `secret` field will be set by Looker and returned.
  *
- * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
+ * **NOTE**: Calls to this endpoint require [Embedding](https://docs.cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
  *
  * POST /embed_config/secrets -> IEmbedSecret
  *
@@ -1085,7 +1087,7 @@ export const create_embed_secret = async (
 /**
  * ### Delete an embed secret.
  *
- * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
+ * **NOTE**: Calls to this endpoint require [Embedding](https://docs.cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
  *
  * DELETE /embed_config/secrets/{embed_secret_id} -> string
  *
@@ -1136,7 +1138,7 @@ export const delete_embed_secret = async (
  * embed url is created. Unknown group_id, user attribute names or model names will be passed through to the output URL.
  * Because of this, **these parameters are not validated** when the API call is made.
  *
- * The [Get Embed Url](https://cloud.google.com/looker/docs/r/get-signed-url) dialog can be used to determine and validate the correct permissions for signing an embed url.
+ * The [Get Embed Url](https://docs.cloud.google.com/looker/docs/r/get-signed-url) dialog can be used to determine and validate the correct permissions for signing an embed url.
  * This dialog also provides the SDK syntax for the API call to make. Alternatively, you can copy the signed URL into the Embed URI Validator text box
  * in `<your looker instance>/admin/embed` to diagnose potential problems.
  *
@@ -1152,7 +1154,7 @@ export const delete_embed_secret = async (
  * encrypted transport.
  *
  *
- * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
+ * **NOTE**: Calls to this endpoint require [Embedding](https://docs.cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
  *
  * POST /embed/sso_url -> IEmbedUrlResponse
  *
@@ -1181,7 +1183,7 @@ export const create_sso_embed_url = async (
  * This embed URL can then be used to instantiate a Looker embed session in a
  * "Powered by Looker" (PBL) web application.
  *
- * This is similar to Private Embedding (https://cloud.google.com/looker/docs/r/admin/embed/private-embed). Instead of
+ * This is similar to Private Embedding (https://docs.cloud.google.com/looker/docs/r/admin/embed/private-embed). Instead of
  * logging into the Web UI to authenticate, the user has already authenticated against the API to be able to
  * make this call. However, unlike Private Embed where the user has access to any other part of the Looker UI,
  * the embed web session created by requesting the EmbedUrlResponse.url in a browser only has access to
@@ -1276,7 +1278,7 @@ export const validate_embed_url = async (
  * - Navigation token - lives for 10 minutes. The Looker client will ask for this token once it is loaded into
  *   the iframe.
  *
- * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
+ * **NOTE**: Calls to this endpoint require [Embedding](https://docs.cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
  *
  * POST /embed/cookieless_session/acquire -> IEmbedCookielessSessionAcquireResponse
  *
@@ -1305,7 +1307,7 @@ export const acquire_embed_cookieless_session = async (
  * in the session and session reference data being cleared from the system. This endpoint can be used to log an embed
  * user out of the Looker instance.
  *
- * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
+ * **NOTE**: Calls to this endpoint require [Embedding](https://docs.cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
  *
  * DELETE /embed/cookieless_session/{session_reference_token} -> string
  *
@@ -1344,7 +1346,7 @@ export const delete_embed_cookieless_session = async (
  * the session time to live in the `session_reference_token_ttl` response property. If this property
  * contains a zero, the embed session has expired.
  *
- * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
+ * **NOTE**: Calls to this endpoint require [Embedding](https://docs.cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
  *
  * PUT /embed/cookieless_session/generate_tokens -> IEmbedCookielessSessionGenerateTokensResponse
  *
@@ -1385,9 +1387,9 @@ export const generate_tokens_for_cookieless_session = async (
  *
  * Looker will never return an **auth_password** field. That value can be set, but never retrieved.
  *
- * See the [Looker LDAP docs](https://cloud.google.com/looker/docs/r/api/ldap_setup) for additional information.
+ * See the [Looker LDAP docs](https://docs.cloud.google.com/looker/docs/r/api/ldap_setup) for additional information.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * GET /ldap_config -> ILDAPConfig
  *
@@ -1413,9 +1415,9 @@ export const ldap_config = async (
  *
  * It is **highly** recommended that any LDAP setting changes be tested using the APIs below before being set globally.
  *
- * See the [Looker LDAP docs](https://cloud.google.com/looker/docs/r/api/ldap_setup) for additional information.
+ * See the [Looker LDAP docs](https://docs.cloud.google.com/looker/docs/r/api/ldap_setup) for additional information.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * PATCH /ldap_config -> ILDAPConfig
  *
@@ -1457,7 +1459,7 @@ export const update_ldap_config = async (
  *
  * The active LDAP settings are not modified.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * PUT /ldap_config/test_connection -> ILDAPConfigTestResult
  *
@@ -1501,7 +1503,7 @@ export const test_ldap_config_connection = async (
  *
  * The active LDAP settings are not modified.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * PUT /ldap_config/test_auth -> ILDAPConfigTestResult
  *
@@ -1534,7 +1536,7 @@ export const test_ldap_config_auth = async (
  *
  * The active LDAP settings are not modified.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * PUT /ldap_config/test_user_info -> ILDAPConfigTestResult
  *
@@ -1567,7 +1569,7 @@ export const test_ldap_config_user_info = async (
  *
  * The active LDAP settings are not modified.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * PUT /ldap_config/test_user_auth -> ILDAPConfigTestResult
  *
@@ -1927,7 +1929,7 @@ export const deactivate_app_user = async (
  *
  * OIDC is enabled or disabled for Looker using the **enabled** field.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * GET /oidc_config -> IOIDCConfig
  *
@@ -1953,7 +1955,7 @@ export const oidc_config = async (
  *
  * It is **highly** recommended that any OIDC setting changes be tested using the APIs below before being set globally.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * PATCH /oidc_config -> IOIDCConfig
  *
@@ -1978,7 +1980,7 @@ export const update_oidc_config = async (
 /**
  * ### Get a OIDC test configuration by test_slug.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * GET /oidc_test_configs/{test_slug} -> IOIDCConfig
  *
@@ -2004,7 +2006,7 @@ export const oidc_test_config = async (
 /**
  * ### Delete a OIDC test configuration.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * DELETE /oidc_test_configs/{test_slug} -> string
  *
@@ -2030,7 +2032,7 @@ export const delete_oidc_test_config = async (
 /**
  * ### Create a OIDC test configuration.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * POST /oidc_test_configs -> IOIDCConfig
  *
@@ -2055,7 +2057,7 @@ export const create_oidc_test_config = async (
 /**
  * ### Get password config.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * GET /password_config -> IPasswordConfig
  *
@@ -2078,7 +2080,7 @@ export const password_config = async (
 /**
  * ### Update password config.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * PATCH /password_config -> IPasswordConfig
  *
@@ -2103,7 +2105,7 @@ export const update_password_config = async (
 /**
  * ### Force all credentials_email users to reset their login passwords upon their next login.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * PUT /password_config/force_password_reset_at_next_login_for_all_users -> string
  *
@@ -2137,7 +2139,7 @@ export const force_password_reset_at_next_login_for_all_users = async (
  *
  * SAML is enabled or disabled for Looker using the **enabled** field.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * GET /saml_config -> ISamlConfig
  *
@@ -2163,7 +2165,7 @@ export const saml_config = async (
  *
  * It is **highly** recommended that any SAML setting changes be tested using the APIs below before being set globally.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * PATCH /saml_config -> ISamlConfig
  *
@@ -2188,7 +2190,7 @@ export const update_saml_config = async (
 /**
  * ### Get a SAML test configuration by test_slug.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * GET /saml_test_configs/{test_slug} -> ISamlConfig
  *
@@ -2214,7 +2216,7 @@ export const saml_test_config = async (
 /**
  * ### Delete a SAML test configuration.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * DELETE /saml_test_configs/{test_slug} -> string
  *
@@ -2240,7 +2242,7 @@ export const delete_saml_test_config = async (
 /**
  * ### Create a SAML test configuration.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * POST /saml_test_configs -> ISamlConfig
  *
@@ -2265,7 +2267,7 @@ export const create_saml_test_config = async (
 /**
  * ### Parse the given xml as a SAML IdP metadata document and return the result.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * POST /parse_saml_idp_metadata -> ISamlMetadataParseResult
  *
@@ -2292,7 +2294,7 @@ export const parse_saml_idp_metadata = async (
  * Note that this requires that the url be public or at least at a location where the Looker instance
  * can fetch it without requiring any special authentication.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * POST /fetch_and_parse_saml_idp_metadata -> ISamlMetadataParseResult
  *
@@ -2363,7 +2365,7 @@ export const update_session_config = async (
  *
  * Returns the users that have been added to the Support Access Allowlist
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * GET /support_access/allowlist -> ISupportAccessAllowlistEntry[]
  *
@@ -2390,7 +2392,7 @@ export const get_support_access_allowlist_entries = async (
  *
  * Adds a list of emails to the Allowlist, using the provided reason
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * POST /support_access/allowlist -> ISupportAccessAllowlistEntry[]
  *
@@ -2419,7 +2421,7 @@ export const add_support_access_allowlist_entries = async (
  *
  * Deletes the specified Allowlist Entry Id
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * DELETE /support_access/allowlist/{entry_id} -> string
  *
@@ -2447,7 +2449,7 @@ export const delete_support_access_allowlist_entry = async (
  *
  * Enables Support Access for the provided duration
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * PUT /support_access/enable -> ISupportAccessStatus
  *
@@ -2474,7 +2476,7 @@ export const enable_support_access = async (
  *
  * Disables Support Access immediately
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * PUT /support_access/disable -> ISupportAccessStatus
  *
@@ -2499,7 +2501,7 @@ export const disable_support_access = async (
  *
  * Returns the current Support Access Status
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * GET /support_access/status -> ISupportAccessStatus
  *
@@ -3494,7 +3496,7 @@ export const create_digest_email_send = async (
  *
  * Returns the list of public egress IP Addresses for a hosted customer's instance
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * GET /public_egress_ip_addresses -> IEgressIpAddresses
  *
@@ -3607,7 +3609,7 @@ export const update_internal_help_resources = async (
 /**
  * ### Get all legacy features.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * GET /legacy_features -> ILegacyFeature[]
  *
@@ -3630,7 +3632,7 @@ export const all_legacy_features = async (
 /**
  * ### Get information about the legacy feature with a specific id.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * GET /legacy_features/{legacy_feature_id} -> ILegacyFeature
  *
@@ -3656,7 +3658,7 @@ export const legacy_feature = async (
 /**
  * ### Update information about the legacy feature with a specific id.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * PATCH /legacy_features/{legacy_feature_id} -> ILegacyFeature
  *
@@ -5766,6 +5768,58 @@ export const copy_dashboard = async (
     `/dashboards/${dashboard_id}/copy`,
     { folder_id },
     null,
+    options
+  );
+};
+
+/**
+ * ### Update dashboard certification
+ *
+ * PATCH /dashboards/{dashboard_id}/certification -> IDashboard
+ *
+ * @param sdk IAPIMethods implementation
+ * @param dashboard_id Dashboard id to update certification.
+ * @param body Partial<IWriteCertification>
+ * @param options one-time API call overrides
+ *
+ */
+export const update_dashboard_certification = async (
+  sdk: IAPIMethods,
+  dashboard_id: string,
+  body: Partial<IWriteCertification>,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IDashboard, IError | IValidationError>> => {
+  dashboard_id = encodeParam(dashboard_id);
+  return sdk.patch<IDashboard, IError | IValidationError>(
+    `/dashboards/${dashboard_id}/certification`,
+    null,
+    body,
+    options
+  );
+};
+
+/**
+ * ### Update LookML dashboard certification
+ *
+ * PATCH /dashboards/lookml/{dashboard_id}/certification -> IDashboard
+ *
+ * @param sdk IAPIMethods implementation
+ * @param dashboard_id LookML Dashboard id to update certification.
+ * @param body Partial<IWriteCertification>
+ * @param options one-time API call overrides
+ *
+ */
+export const update_lookml_certification = async (
+  sdk: IAPIMethods,
+  dashboard_id: string,
+  body: Partial<IWriteCertification>,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IDashboard, IError | IValidationError>> => {
+  dashboard_id = encodeParam(dashboard_id);
+  return sdk.patch<IDashboard, IError | IValidationError>(
+    `/dashboards/lookml/${dashboard_id}/certification`,
+    null,
+    body,
     options
   );
 };
@@ -8082,6 +8136,32 @@ export const move_look = async (
     `/looks/${look_id}/move`,
     { folder_id },
     null,
+    options
+  );
+};
+
+/**
+ * ### Update look certification
+ *
+ * PATCH /looks/{look_id}/certification -> ILook
+ *
+ * @param sdk IAPIMethods implementation
+ * @param look_id Look id to update certification.
+ * @param body Partial<IWriteCertification>
+ * @param options one-time API call overrides
+ *
+ */
+export const update_look_certification = async (
+  sdk: IAPIMethods,
+  look_id: string,
+  body: Partial<IWriteCertification>,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<ILook, IError | IValidationError>> => {
+  look_id = encodeParam(look_id);
+  return sdk.patch<ILook, IError | IValidationError>(
+    `/looks/${look_id}/certification`,
+    null,
+    body,
     options
   );
 };
@@ -11136,7 +11216,7 @@ export const role_groups = async (
 /**
  * ### Set all groups for a role, removing all existing group associations from that role.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * PUT /roles/{role_id}/groups -> IGroup[]
  *
@@ -11293,7 +11373,7 @@ export const scheduled_plan = async (
  * #### Email Permissions:
  *
  * For details about permissions required to schedule delivery to email and the safeguards
- * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
+ * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://docs.cloud.google.com/looker/docs/r/api/embed-permissions).
  *
  *
  * #### Scheduled Plan Destination Formats
@@ -11433,7 +11513,7 @@ export const all_scheduled_plans = async (
  *
  * When `run_as_recipient` is `true` and all the email recipients are Looker user accounts, the
  * queries are run in the context of each recipient, so different recipients may see different
- * data from the same scheduled render of a look or dashboard. For more details, see [Run As Recipient](https://cloud.google.com/looker/docs/r/admin/run-as-recipient).
+ * data from the same scheduled render of a look or dashboard. For more details, see [Run As Recipient](https://docs.cloud.google.com/looker/docs/r/admin/run-as-recipient).
  *
  * Admins can create and modify scheduled plans on behalf of other users by specifying a user id.
  * Non-admin users may not create or modify scheduled plans by or for other users.
@@ -11441,7 +11521,7 @@ export const all_scheduled_plans = async (
  * #### Email Permissions:
  *
  * For details about permissions required to schedule delivery to email and the safeguards
- * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
+ * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://docs.cloud.google.com/looker/docs/r/api/embed-permissions).
  *
  *
  * #### Scheduled Plan Destination Formats
@@ -11500,7 +11580,7 @@ export const create_scheduled_plan = async (
  * #### Email Permissions:
  *
  * For details about permissions required to schedule delivery to email and the safeguards
- * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
+ * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://docs.cloud.google.com/looker/docs/r/api/embed-permissions).
  *
  *
  * #### Scheduled Plan Destination Formats
@@ -11729,7 +11809,7 @@ export const scheduled_plans_for_lookml_dashboard = async (
  * #### Email Permissions:
  *
  * For details about permissions required to schedule delivery to email and the safeguards
- * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
+ * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://docs.cloud.google.com/looker/docs/r/api/embed-permissions).
  *
  *
  * #### Scheduled Plan Destination Formats
@@ -11782,6 +11862,36 @@ export const scheduled_plan_run_once_by_id = async (
 };
 
 //#endregion ScheduledPlan: Manage Scheduled Plans
+
+//#region SelfService: Self Service Models
+
+/**
+ * ### Update certification for a Self Service Explore
+ *
+ * POST /self_service_models/{model_name}/certification -> ICertification
+ *
+ * @param sdk IAPIMethods implementation
+ * @param model_name Name of self service model.
+ * @param body Partial<IWriteCertification>
+ * @param options one-time API call overrides
+ *
+ */
+export const update_self_service_explore_certification = async (
+  sdk: IAPIMethods,
+  model_name: string,
+  body: Partial<IWriteCertification>,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<ICertification, IError | IValidationError>> => {
+  model_name = encodeParam(model_name);
+  return sdk.post<ICertification, IError | IValidationError>(
+    `/self_service_models/${model_name}/certification`,
+    null,
+    body,
+    options
+  );
+};
+
+//#endregion SelfService: Self Service Models
 
 //#region Session: Session Information
 
@@ -11979,7 +12089,7 @@ export const all_themes = async (
  *
  * **Permanently delete** an existing theme with [Delete Theme](#!/Theme/delete_theme)
  *
- * For more information, see [Creating and Applying Themes](https://cloud.google.com/looker/docs/r/admin/themes).
+ * For more information, see [Creating and Applying Themes](https://docs.cloud.google.com/looker/docs/r/admin/themes).
  *
  * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
  *
@@ -12336,7 +12446,7 @@ export const delete_theme = async (
  * Boolean search params accept only "true" and "false" as values.
  *
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * GET /credentials_email/search -> ICredentialsEmailSearch[]
  *
@@ -12497,6 +12607,7 @@ export const search_users = async (
       id: request.id,
       first_name: request.first_name,
       last_name: request.last_name,
+      full_name: request.full_name,
       verified_looker_employee: request.verified_looker_employee,
       embed_user: request.embed_user,
       email: request.email,
@@ -12670,7 +12781,7 @@ export const delete_user = async (
  *
  * **NOTE**: The 'api' credential type was only used with the legacy Looker query API and is no longer supported. The credential type for API you are currently looking at is 'api3'.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * GET /users/credential/{credential_type}/{credential_id} -> IUser
  *
@@ -12765,7 +12876,7 @@ export const delete_service_account = async (
 /**
  * ### Email/password login information for the specified user.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * GET /users/{user_id}/credentials_email -> ICredentialsEmail
  *
@@ -12793,7 +12904,7 @@ export const user_credentials_email = async (
 /**
  * ### Email/password login information for the specified user.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * POST /users/{user_id}/credentials_email -> ICredentialsEmail
  *
@@ -12823,7 +12934,7 @@ export const create_user_credentials_email = async (
 /**
  * ### Email/password login information for the specified user.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * PATCH /users/{user_id}/credentials_email -> ICredentialsEmail
  *
@@ -12853,7 +12964,7 @@ export const update_user_credentials_email = async (
 /**
  * ### Email/password login information for the specified user.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * DELETE /users/{user_id}/credentials_email -> string
  *
@@ -12879,7 +12990,7 @@ export const delete_user_credentials_email = async (
 /**
  * ### Two-factor login information for the specified user.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * GET /users/{user_id}/credentials_totp -> ICredentialsTotp
  *
@@ -12907,7 +13018,7 @@ export const user_credentials_totp = async (
 /**
  * ### Two-factor login information for the specified user.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * POST /users/{user_id}/credentials_totp -> ICredentialsTotp
  *
@@ -12937,7 +13048,7 @@ export const create_user_credentials_totp = async (
 /**
  * ### Two-factor login information for the specified user.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * DELETE /users/{user_id}/credentials_totp -> string
  *
@@ -12963,7 +13074,7 @@ export const delete_user_credentials_totp = async (
 /**
  * ### LDAP login information for the specified user.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * GET /users/{user_id}/credentials_ldap -> ICredentialsLDAP
  *
@@ -12991,7 +13102,7 @@ export const user_credentials_ldap = async (
 /**
  * ### LDAP login information for the specified user.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * DELETE /users/{user_id}/credentials_ldap -> string
  *
@@ -13306,7 +13417,7 @@ export const create_user_credentials_api3 = async (
 /**
  * ### Embed login information for the specified user.
  *
- * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
+ * **NOTE**: Calls to this endpoint require [Embedding](https://docs.cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
  *
  * GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> ICredentialsEmbed
  *
@@ -13337,7 +13448,7 @@ export const user_credentials_embed = async (
 /**
  * ### Embed login information for the specified user.
  *
- * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
+ * **NOTE**: Calls to this endpoint require [Embedding](https://docs.cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
  *
  * DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> string
  *
@@ -13366,7 +13477,7 @@ export const delete_user_credentials_embed = async (
 /**
  * ### Embed login information for the specified user.
  *
- * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
+ * **NOTE**: Calls to this endpoint require [Embedding](https://docs.cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
  *
  * GET /users/{user_id}/credentials_embed -> ICredentialsEmbed[]
  *
@@ -13394,7 +13505,7 @@ export const all_user_credentials_embeds = async (
 /**
  * ### Looker Openid login information for the specified user. Used by Looker Analysts.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * GET /users/{user_id}/credentials_looker_openid -> ICredentialsLookerOpenid
  *
@@ -13422,7 +13533,7 @@ export const user_credentials_looker_openid = async (
 /**
  * ### Looker Openid login information for the specified user. Used by Looker Analysts.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * DELETE /users/{user_id}/credentials_looker_openid -> string
  *
@@ -13538,7 +13649,7 @@ export const all_user_sessions = async (
  * The expire period is always 60 minutes when expires is enabled.
  * This method can be called with an empty body.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * POST /users/{user_id}/credentials_email/password_reset -> ICredentialsEmail
  *
@@ -13732,7 +13843,7 @@ export const delete_user_attribute_user_value = async (
  * Password reset URLs will expire in 60 minutes.
  * This method can be called with an empty body.
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * POST /users/{user_id}/credentials_email/send_password_reset -> ICredentialsEmail
  *
@@ -13766,7 +13877,7 @@ export const send_user_credentials_email_password_reset = async (
  * The user's 'is_disabled' status must be true.
  * If the user has a credential email, they will receive a verification email and the user will be disabled until they verify the email
  *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
  *
  * POST /users/{user_id}/update_emails -> IUser
  *
@@ -13796,7 +13907,7 @@ export const wipeout_user_emails = async (
 /**
  * Create an embed user from an external user ID
  *
- * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
+ * **NOTE**: Calls to this endpoint require [Embedding](https://docs.cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
  *
  * POST /users/embed_user -> IUserPublic
  *

@@ -25,7 +25,7 @@
  */
 
 /**
- * 478 API methods
+ * 483 API methods
  */
 
 
@@ -326,7 +326,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Present client credentials to obtain an authorization token
      *
-     * Looker API implements the OAuth2 [Resource Owner Password Credentials Grant](https://cloud.google.com/looker/docs/r/api/outh2_resource_owner_pc) pattern.
+     * Looker API implements the OAuth2 [Resource Owner Password Credentials Grant](https://docs.cloud.google.com/looker/docs/r/api/outh2_resource_owner_pc) pattern.
      * The client credentials required for this login must be obtained by creating an API key on a user account
      * in the Looker Admin console. The API key consists of a public `client_id` and a private `client_secret`.
      *
@@ -389,10 +389,10 @@ open class LookerSDK: APIMethods {
      *
      * See 'login' for more detail on the access token and how to use it.
      *
-     * In [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview) this call will be denied unless all of the following criteria are met:
-     *   1. The calling user is an [API-only Service Account](https://cloud.google.com/looker/docs/looker-core-user-management#creating_an_api-only_service_account) with the Admin role
-     *   2. The target user is an [Embed User type](https://cloud.google.com/looker/docs/r/single-sign-on-embedding)
-     * Regular user types can not be impersonated in [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). If your application needs to call the API for these users, use OAuth authentication instead.
+     * In [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview) this call will be denied unless all of the following criteria are met:
+     *   1. The calling user is an [API-only Service Account](https://docs.cloud.google.com/looker/docs/looker-core-user-management#creating_an_api-only_service_account) with the Admin role
+     *   2. The target user is an [Embed User type](https://docs.cloud.google.com/looker/docs/r/single-sign-on-embedding)
+     * Regular user types can not be impersonated in [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview). If your application needs to call the API for these users, use OAuth authentication instead.
      *
      * POST /login/{user_id} -> AccessToken
      */
@@ -714,7 +714,7 @@ open class LookerSDK: APIMethods {
      *
      * The value of the `secret` field will be set by Looker and returned.
      *
-     * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
+     * **NOTE**: Calls to this endpoint require [Embedding](https://docs.cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
      *
      * POST /embed_config/secrets -> EmbedSecret
      */
@@ -732,7 +732,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Delete an embed secret.
      *
-     * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
+     * **NOTE**: Calls to this endpoint require [Embedding](https://docs.cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
      *
      * DELETE /embed_config/secrets/{embed_secret_id} -> String
      */
@@ -776,7 +776,7 @@ open class LookerSDK: APIMethods {
      * embed url is created. Unknown group_id, user attribute names or model names will be passed through to the output URL.
      * Because of this, **these parameters are not validated** when the API call is made.
      *
-     * The [Get Embed Url](https://cloud.google.com/looker/docs/r/get-signed-url) dialog can be used to determine and validate the correct permissions for signing an embed url.
+     * The [Get Embed Url](https://docs.cloud.google.com/looker/docs/r/get-signed-url) dialog can be used to determine and validate the correct permissions for signing an embed url.
      * This dialog also provides the SDK syntax for the API call to make. Alternatively, you can copy the signed URL into the Embed URI Validator text box
      * in `<your looker instance>/admin/embed` to diagnose potential problems.
      *
@@ -792,7 +792,7 @@ open class LookerSDK: APIMethods {
      * encrypted transport.
      *
      *
-     * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
+     * **NOTE**: Calls to this endpoint require [Embedding](https://docs.cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
      *
      * POST /embed/sso_url -> EmbedUrlResponse
      */
@@ -814,7 +814,7 @@ open class LookerSDK: APIMethods {
      * This embed URL can then be used to instantiate a Looker embed session in a
      * "Powered by Looker" (PBL) web application.
      *
-     * This is similar to Private Embedding (https://cloud.google.com/looker/docs/r/admin/embed/private-embed). Instead of
+     * This is similar to Private Embedding (https://docs.cloud.google.com/looker/docs/r/admin/embed/private-embed). Instead of
      * logging into the Web UI to authenticate, the user has already authenticated against the API to be able to
      * make this call. However, unlike Private Embed where the user has access to any other part of the Looker UI,
      * the embed web session created by requesting the EmbedUrlResponse.url in a browser only has access to
@@ -896,7 +896,7 @@ open class LookerSDK: APIMethods {
      * - Navigation token - lives for 10 minutes. The Looker client will ask for this token once it is loaded into
      *   the iframe.
      *
-     * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
+     * **NOTE**: Calls to this endpoint require [Embedding](https://docs.cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
      *
      * POST /embed/cookieless_session/acquire -> EmbedCookielessSessionAcquireResponse
      */
@@ -918,7 +918,7 @@ open class LookerSDK: APIMethods {
      * in the session and session reference data being cleared from the system. This endpoint can be used to log an embed
      * user out of the Looker instance.
      *
-     * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
+     * **NOTE**: Calls to this endpoint require [Embedding](https://docs.cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
      *
      * DELETE /embed/cookieless_session/{session_reference_token} -> String
      */
@@ -950,7 +950,7 @@ open class LookerSDK: APIMethods {
      * the session time to live in the `session_reference_token_ttl` response property. If this property
      * contains a zero, the embed session has expired.
      *
-     * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
+     * **NOTE**: Calls to this endpoint require [Embedding](https://docs.cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
      *
      * PUT /embed/cookieless_session/generate_tokens -> EmbedCookielessSessionGenerateTokensResponse
      */
@@ -981,9 +981,9 @@ open class LookerSDK: APIMethods {
      *
      * Looker will never return an **auth_password** field. That value can be set, but never retrieved.
      *
-     * See the [Looker LDAP docs](https://cloud.google.com/looker/docs/r/api/ldap_setup) for additional information.
+     * See the [Looker LDAP docs](https://docs.cloud.google.com/looker/docs/r/api/ldap_setup) for additional information.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * GET /ldap_config -> LDAPConfig
      */
@@ -1005,9 +1005,9 @@ open class LookerSDK: APIMethods {
      *
      * It is **highly** recommended that any LDAP setting changes be tested using the APIs below before being set globally.
      *
-     * See the [Looker LDAP docs](https://cloud.google.com/looker/docs/r/api/ldap_setup) for additional information.
+     * See the [Looker LDAP docs](https://docs.cloud.google.com/looker/docs/r/api/ldap_setup) for additional information.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * PATCH /ldap_config -> LDAPConfig
      */
@@ -1042,7 +1042,7 @@ open class LookerSDK: APIMethods {
      *
      * The active LDAP settings are not modified.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * PUT /ldap_config/test_connection -> LDAPConfigTestResult
      */
@@ -1079,7 +1079,7 @@ open class LookerSDK: APIMethods {
      *
      * The active LDAP settings are not modified.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * PUT /ldap_config/test_auth -> LDAPConfigTestResult
      */
@@ -1105,7 +1105,7 @@ open class LookerSDK: APIMethods {
      *
      * The active LDAP settings are not modified.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * PUT /ldap_config/test_user_info -> LDAPConfigTestResult
      */
@@ -1131,7 +1131,7 @@ open class LookerSDK: APIMethods {
      *
      * The active LDAP settings are not modified.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * PUT /ldap_config/test_user_auth -> LDAPConfigTestResult
      */
@@ -1431,7 +1431,7 @@ open class LookerSDK: APIMethods {
      *
      * OIDC is enabled or disabled for Looker using the **enabled** field.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * GET /oidc_config -> OIDCConfig
      */
@@ -1453,7 +1453,7 @@ open class LookerSDK: APIMethods {
      *
      * It is **highly** recommended that any OIDC setting changes be tested using the APIs below before being set globally.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * PATCH /oidc_config -> OIDCConfig
      */
@@ -1471,7 +1471,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Get a OIDC test configuration by test_slug.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * GET /oidc_test_configs/{test_slug} -> OIDCConfig
      */
@@ -1490,7 +1490,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Delete a OIDC test configuration.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * DELETE /oidc_test_configs/{test_slug} -> String
      */
@@ -1509,7 +1509,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Create a OIDC test configuration.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * POST /oidc_test_configs -> OIDCConfig
      */
@@ -1527,7 +1527,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Get password config.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * GET /password_config -> PasswordConfig
      */
@@ -1541,7 +1541,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Update password config.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * PATCH /password_config -> PasswordConfig
      */
@@ -1559,7 +1559,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Force all credentials_email users to reset their login passwords upon their next login.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * PUT /password_config/force_password_reset_at_next_login_for_all_users -> String
      */
@@ -1584,7 +1584,7 @@ open class LookerSDK: APIMethods {
      *
      * SAML is enabled or disabled for Looker using the **enabled** field.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * GET /saml_config -> SamlConfig
      */
@@ -1606,7 +1606,7 @@ open class LookerSDK: APIMethods {
      *
      * It is **highly** recommended that any SAML setting changes be tested using the APIs below before being set globally.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * PATCH /saml_config -> SamlConfig
      */
@@ -1624,7 +1624,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Get a SAML test configuration by test_slug.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * GET /saml_test_configs/{test_slug} -> SamlConfig
      */
@@ -1643,7 +1643,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Delete a SAML test configuration.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * DELETE /saml_test_configs/{test_slug} -> String
      */
@@ -1662,7 +1662,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Create a SAML test configuration.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * POST /saml_test_configs -> SamlConfig
      */
@@ -1680,7 +1680,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Parse the given xml as a SAML IdP metadata document and return the result.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * POST /parse_saml_idp_metadata -> SamlMetadataParseResult
      */
@@ -1700,7 +1700,7 @@ open class LookerSDK: APIMethods {
      * Note that this requires that the url be public or at least at a location where the Looker instance
      * can fetch it without requiring any special authentication.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * POST /fetch_and_parse_saml_idp_metadata -> SamlMetadataParseResult
      */
@@ -1748,7 +1748,7 @@ open class LookerSDK: APIMethods {
      *
      * Returns the users that have been added to the Support Access Allowlist
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * GET /support_access/allowlist -> [SupportAccessAllowlistEntry]
      */
@@ -1769,7 +1769,7 @@ open class LookerSDK: APIMethods {
      *
      * Adds a list of emails to the Allowlist, using the provided reason
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * POST /support_access/allowlist -> [SupportAccessAllowlistEntry]
      */
@@ -1789,7 +1789,7 @@ open class LookerSDK: APIMethods {
      *
      * Deletes the specified Allowlist Entry Id
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * DELETE /support_access/allowlist/{entry_id} -> String
      */
@@ -1810,7 +1810,7 @@ open class LookerSDK: APIMethods {
      *
      * Enables Support Access for the provided duration
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * PUT /support_access/enable -> SupportAccessStatus
      */
@@ -1830,7 +1830,7 @@ open class LookerSDK: APIMethods {
      *
      * Disables Support Access immediately
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * PUT /support_access/disable -> SupportAccessStatus
      */
@@ -1846,7 +1846,7 @@ open class LookerSDK: APIMethods {
      *
      * Returns the current Support Access Status
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * GET /support_access/status -> SupportAccessStatus
      */
@@ -2702,7 +2702,7 @@ open class LookerSDK: APIMethods {
      *
      * Returns the list of public egress IP Addresses for a hosted customer's instance
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * GET /public_egress_ip_addresses -> EgressIpAddresses
      */
@@ -2772,7 +2772,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Get all legacy features.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * GET /legacy_features -> [LegacyFeature]
      */
@@ -2786,7 +2786,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Get information about the legacy feature with a specific id.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * GET /legacy_features/{legacy_feature_id} -> LegacyFeature
      */
@@ -2805,7 +2805,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Update information about the legacy feature with a specific id.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * PATCH /legacy_features/{legacy_feature_id} -> LegacyFeature
      */
@@ -4322,7 +4322,7 @@ open class LookerSDK: APIMethods {
          */
         offset: Int64? = nil,
         /**
-         * @param {String} sorts One or more fields to sort by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :folder_id, :description, :view_count, :favorite_count, :slug, :content_favorite_id, :content_metadata_id, :deleted, :deleted_at, :last_viewed_at, :last_accessed_at]
+         * @param {String} sorts One or more fields to sort by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :folder_id, :description, :view_count, :favorite_count, :slug, :content_favorite_id, :content_metadata_id, :deleted, :deleted_at, :last_viewed_at, :last_accessed_at, :certification_status]
          */
         sorts: String? = nil,
         /**
@@ -4578,7 +4578,7 @@ open class LookerSDK: APIMethods {
          */
         offset: Int64? = nil,
         /**
-         * @param {String} sorts One or more fields to sort by. Sortable fields: [:title, :id, :folder_id, :content_favorite_id, :content_metadata_id]
+         * @param {String} sorts One or more fields to sort by. Sortable fields: [:title, :id, :folder_id, :content_favorite_id, :content_metadata_id, :certification_status]
          */
         sorts: String? = nil,
         options: ITransportSettings? = nil
@@ -4707,6 +4707,48 @@ open class LookerSDK: APIMethods {
         let path_dashboard_id = encodeParam(dashboard_id)
         let result: SDKResponse<Dashboard, SDKError> = self.post("/dashboards/\(path_dashboard_id)/copy", 
             ["folder_id": folder_id], nil, options)
+        return result
+    }
+
+    /**
+     * ### Update dashboard certification
+     *
+     * PATCH /dashboards/{dashboard_id}/certification -> Dashboard
+     */
+    public func update_dashboard_certification(
+        /**
+         * @param {String} dashboard_id Dashboard id to update certification.
+         */
+        _ dashboard_id: String,
+        /**
+         * @param {WriteCertification} body
+         */
+        _ body: WriteCertification,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Dashboard, SDKError> {
+        let path_dashboard_id = encodeParam(dashboard_id)
+        let result: SDKResponse<Dashboard, SDKError> = self.patch("/dashboards/\(path_dashboard_id)/certification", nil, try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Update LookML dashboard certification
+     *
+     * PATCH /dashboards/lookml/{dashboard_id}/certification -> Dashboard
+     */
+    public func update_lookml_certification(
+        /**
+         * @param {String} dashboard_id LookML Dashboard id to update certification.
+         */
+        _ dashboard_id: String,
+        /**
+         * @param {WriteCertification} body
+         */
+        _ body: WriteCertification,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Dashboard, SDKError> {
+        let path_dashboard_id = encodeParam(dashboard_id)
+        let result: SDKResponse<Dashboard, SDKError> = self.patch("/dashboards/lookml/\(path_dashboard_id)/certification", nil, try! self.encode(body), options)
         return result
     }
 
@@ -6722,7 +6764,7 @@ open class LookerSDK: APIMethods {
          */
         offset: Int64? = nil,
         /**
-         * @param {String} sorts One or more fields to sort results by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :folder_id, :description, :updated_at, :last_updater_id, :view_count, :favorite_count, :content_favorite_id, :deleted, :deleted_at, :last_viewed_at, :last_accessed_at, :query_id]
+         * @param {String} sorts One or more fields to sort results by. Sortable fields: [:title, :user_id, :id, :created_at, :space_id, :folder_id, :description, :updated_at, :last_updater_id, :view_count, :favorite_count, :content_favorite_id, :deleted, :deleted_at, :last_viewed_at, :last_accessed_at, :query_id, :certification_status]
          */
         sorts: String? = nil,
         /**
@@ -6971,6 +7013,27 @@ open class LookerSDK: APIMethods {
         let path_look_id = encodeParam(look_id)
         let result: SDKResponse<LookWithQuery, SDKError> = self.patch("/looks/\(path_look_id)/move", 
             ["folder_id": folder_id], nil, options)
+        return result
+    }
+
+    /**
+     * ### Update look certification
+     *
+     * PATCH /looks/{look_id}/certification -> Look
+     */
+    public func update_look_certification(
+        /**
+         * @param {String} look_id Look id to update certification.
+         */
+        _ look_id: String,
+        /**
+         * @param {WriteCertification} body
+         */
+        _ body: WriteCertification,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Look, SDKError> {
+        let path_look_id = encodeParam(look_id)
+        let result: SDKResponse<Look, SDKError> = self.patch("/looks/\(path_look_id)/certification", nil, try! self.encode(body), options)
         return result
     }
 
@@ -9952,7 +10015,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Set all groups for a role, removing all existing group associations from that role.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * PUT /roles/{role_id}/groups -> [LkGroup]
      */
@@ -10090,7 +10153,7 @@ open class LookerSDK: APIMethods {
      * #### Email Permissions:
      *
      * For details about permissions required to schedule delivery to email and the safeguards
-     * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
+     * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://docs.cloud.google.com/looker/docs/r/api/embed-permissions).
      *
      *
      * #### Scheduled Plan Destination Formats
@@ -10216,7 +10279,7 @@ open class LookerSDK: APIMethods {
      *
      * When `run_as_recipient` is `true` and all the email recipients are Looker user accounts, the
      * queries are run in the context of each recipient, so different recipients may see different
-     * data from the same scheduled render of a look or dashboard. For more details, see [Run As Recipient](https://cloud.google.com/looker/docs/r/admin/run-as-recipient).
+     * data from the same scheduled render of a look or dashboard. For more details, see [Run As Recipient](https://docs.cloud.google.com/looker/docs/r/admin/run-as-recipient).
      *
      * Admins can create and modify scheduled plans on behalf of other users by specifying a user id.
      * Non-admin users may not create or modify scheduled plans by or for other users.
@@ -10224,7 +10287,7 @@ open class LookerSDK: APIMethods {
      * #### Email Permissions:
      *
      * For details about permissions required to schedule delivery to email and the safeguards
-     * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
+     * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://docs.cloud.google.com/looker/docs/r/api/embed-permissions).
      *
      *
      * #### Scheduled Plan Destination Formats
@@ -10276,7 +10339,7 @@ open class LookerSDK: APIMethods {
      * #### Email Permissions:
      *
      * For details about permissions required to schedule delivery to email and the safeguards
-     * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
+     * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://docs.cloud.google.com/looker/docs/r/api/embed-permissions).
      *
      *
      * #### Scheduled Plan Destination Formats
@@ -10541,7 +10604,7 @@ open class LookerSDK: APIMethods {
      * #### Email Permissions:
      *
      * For details about permissions required to schedule delivery to email and the safeguards
-     * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://cloud.google.com/looker/docs/r/api/embed-permissions).
+     * Looker offers to protect against sending to unauthorized email destinations, see [Email Domain Allow List for Scheduled Looks](https://docs.cloud.google.com/looker/docs/r/api/embed-permissions).
      *
      *
      * #### Scheduled Plan Destination Formats
@@ -10585,6 +10648,31 @@ open class LookerSDK: APIMethods {
     ) -> SDKResponse<ScheduledPlan, SDKError> {
         let path_scheduled_plan_id = encodeParam(scheduled_plan_id)
         let result: SDKResponse<ScheduledPlan, SDKError> = self.post("/scheduled_plans/\(path_scheduled_plan_id)/run_once", nil, try! self.encode(body), options)
+        return result
+    }
+
+
+
+    // MARK SelfService: Self Service Models
+
+    /**
+     * ### Update certification for a Self Service Explore
+     *
+     * POST /self_service_models/{model_name}/certification -> Certification
+     */
+    public func update_self_service_explore_certification(
+        /**
+         * @param {String} model_name Name of self service model.
+         */
+        _ model_name: String,
+        /**
+         * @param {WriteCertification} body
+         */
+        _ body: WriteCertification,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Certification, SDKError> {
+        let path_model_name = encodeParam(model_name)
+        let result: SDKResponse<Certification, SDKError> = self.post("/self_service_models/\(path_model_name)/certification", nil, try! self.encode(body), options)
         return result
     }
 
@@ -10757,7 +10845,7 @@ open class LookerSDK: APIMethods {
      *
      * **Permanently delete** an existing theme with [Delete Theme](#!/Theme/delete_theme)
      *
-     * For more information, see [Creating and Applying Themes](https://cloud.google.com/looker/docs/r/admin/themes).
+     * For more information, see [Creating and Applying Themes](https://docs.cloud.google.com/looker/docs/r/admin/themes).
      *
      * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or https://console.cloud.google.com/support/cases/ to update your license for this feature.
      *
@@ -11096,7 +11184,7 @@ open class LookerSDK: APIMethods {
      * Boolean search params accept only "true" and "false" as values.
      *
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * GET /credentials_email/search -> [CredentialsEmailSearch]
      */
@@ -11291,6 +11379,10 @@ open class LookerSDK: APIMethods {
          */
         last_name: String? = nil,
         /**
+         * @param {String} full_name Match Full name (First Last).
+         */
+        full_name: String? = nil,
+        /**
          * @param {Bool} verified_looker_employee Search for user accounts associated with Looker employees. Availability of this filter is limited to users with permission to view complete user details.
          */
         verified_looker_employee: Bool? = nil,
@@ -11319,7 +11411,7 @@ open class LookerSDK: APIMethods {
          */
         group_id: String? = nil,
         /**
-         * @param {Bool} can_manage_api3_creds Search for users who can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview). Availability of this filter is limited to users with permission to view complete user details. This is an experimental feature and may not yet be available on your instance.
+         * @param {Bool} can_manage_api3_creds Search for users who can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview). Availability of this filter is limited to users with permission to view complete user details. This is an experimental feature and may not yet be available on your instance.
          */
         can_manage_api3_creds: Bool? = nil,
         /**
@@ -11329,7 +11421,7 @@ open class LookerSDK: APIMethods {
         options: ITransportSettings? = nil
     ) -> SDKResponse<[User], SDKError> {
         let result: SDKResponse<[User], SDKError> = self.get("/users/search", 
-            ["fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "first_name": first_name, "last_name": last_name, "verified_looker_employee": verified_looker_employee as Any?, "embed_user": embed_user as Any?, "email": email, "is_disabled": is_disabled as Any?, "filter_or": filter_or as Any?, "content_metadata_id": content_metadata_id, "group_id": group_id, "can_manage_api3_creds": can_manage_api3_creds as Any?, "is_service_account": is_service_account as Any?], nil, options)
+            ["fields": fields, "page": page, "per_page": per_page, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "first_name": first_name, "last_name": last_name, "full_name": full_name, "verified_looker_employee": verified_looker_employee as Any?, "embed_user": embed_user as Any?, "email": email, "is_disabled": is_disabled as Any?, "filter_or": filter_or as Any?, "content_metadata_id": content_metadata_id, "group_id": group_id, "can_manage_api3_creds": can_manage_api3_creds as Any?, "is_service_account": is_service_account as Any?], nil, options)
         return result
     }
 
@@ -11517,7 +11609,7 @@ open class LookerSDK: APIMethods {
      *
      * **NOTE**: The 'api' credential type was only used with the legacy Looker query API and is no longer supported. The credential type for API you are currently looking at is 'api3'.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * GET /users/credential/{credential_type}/{credential_id} -> User
      */
@@ -11601,7 +11693,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Email/password login information for the specified user.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * GET /users/{user_id}/credentials_email -> CredentialsEmail
      */
@@ -11625,7 +11717,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Email/password login information for the specified user.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * POST /users/{user_id}/credentials_email -> CredentialsEmail
      */
@@ -11653,7 +11745,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Email/password login information for the specified user.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * PATCH /users/{user_id}/credentials_email -> CredentialsEmail
      */
@@ -11681,7 +11773,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Email/password login information for the specified user.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * DELETE /users/{user_id}/credentials_email -> String
      */
@@ -11700,7 +11792,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Two-factor login information for the specified user.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * GET /users/{user_id}/credentials_totp -> CredentialsTotp
      */
@@ -11724,7 +11816,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Two-factor login information for the specified user.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * POST /users/{user_id}/credentials_totp -> CredentialsTotp
      */
@@ -11752,7 +11844,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Two-factor login information for the specified user.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * DELETE /users/{user_id}/credentials_totp -> String
      */
@@ -11771,7 +11863,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### LDAP login information for the specified user.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * GET /users/{user_id}/credentials_ldap -> CredentialsLDAP
      */
@@ -11795,7 +11887,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### LDAP login information for the specified user.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * DELETE /users/{user_id}/credentials_ldap -> String
      */
@@ -12055,7 +12147,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Embed login information for the specified user.
      *
-     * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
+     * **NOTE**: Calls to this endpoint require [Embedding](https://docs.cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
      *
      * GET /users/{user_id}/credentials_embed/{credentials_embed_id} -> CredentialsEmbed
      */
@@ -12084,7 +12176,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Embed login information for the specified user.
      *
-     * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
+     * **NOTE**: Calls to this endpoint require [Embedding](https://docs.cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
      *
      * DELETE /users/{user_id}/credentials_embed/{credentials_embed_id} -> String
      */
@@ -12108,7 +12200,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Embed login information for the specified user.
      *
-     * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
+     * **NOTE**: Calls to this endpoint require [Embedding](https://docs.cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
      *
      * GET /users/{user_id}/credentials_embed -> [CredentialsEmbed]
      */
@@ -12132,7 +12224,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Looker Openid login information for the specified user. Used by Looker Analysts.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * GET /users/{user_id}/credentials_looker_openid -> CredentialsLookerOpenid
      */
@@ -12156,7 +12248,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Looker Openid login information for the specified user. Used by Looker Analysts.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * DELETE /users/{user_id}/credentials_looker_openid -> String
      */
@@ -12254,7 +12346,7 @@ open class LookerSDK: APIMethods {
      * The expire period is always 60 minutes when expires is enabled.
      * This method can be called with an empty body.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * POST /users/{user_id}/credentials_email/password_reset -> CredentialsEmail
      */
@@ -12444,7 +12536,7 @@ open class LookerSDK: APIMethods {
      * Password reset URLs will expire in 60 minutes.
      * This method can be called with an empty body.
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * POST /users/{user_id}/credentials_email/send_password_reset -> CredentialsEmail
      */
@@ -12474,7 +12566,7 @@ open class LookerSDK: APIMethods {
      * The user's 'is_disabled' status must be true.
      * If the user has a credential email, they will receive a verification email and the user will be disabled until they verify the email
      *
-     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://cloud.google.com/looker/docs/r/looker-core/overview).
+     * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
      *
      * POST /users/{user_id}/update_emails -> User
      */
@@ -12502,7 +12594,7 @@ open class LookerSDK: APIMethods {
     /**
      * Create an embed user from an external user ID
      *
-     * **NOTE**: Calls to this endpoint require [Embedding](https://cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
+     * **NOTE**: Calls to this endpoint require [Embedding](https://docs.cloud.google.com/looker/docs/r/looker-core-feature-embed) to be enabled. Usage of this endpoint is not authorized for Looker Core Standard and Looker Core Enterprise.
      *
      * POST /users/embed_user -> UserPublic
      */
