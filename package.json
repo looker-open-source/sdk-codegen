@@ -158,7 +158,7 @@
     "typescript": "5.5.4",
     "url-loader": "4.1.1",
     "uuid": "9.0.1",
-    "webpack": "5.94.0",
+    "webpack": "5.104.1",
     "webpack-bundle-analyzer": "^4.10.2",
     "webpack-merge": "^5.10.0"
   },
