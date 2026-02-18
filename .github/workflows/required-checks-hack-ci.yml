@@ -91,13 +91,21 @@ jobs:
       - name: Debug info
         run: |
           echo "${{ toJSON(steps.filter.outputs) }}"
-          echo "apix: ${{ steps.filter.outputs.apix }}"
-          echo "codegen: ${{ steps.filter.outputs.codegen }}"
-          echo "hackathon: ${{ steps.filter.outputs.hackathon }}"
-          echo "python: ${{ steps.filter.outputs.python }}"
-          echo "resources: ${{ steps.filter.outputs.resources }}"
-          echo "tssdk: ${{ steps.filter.outputs.tssdk }}"
-          echo "gosdk: ${{ steps.filter.outputs.gosdk }}"
+          echo "apix: ${STEPS_FILTER_OUTPUTS_APIX}"
+          echo "codegen: ${STEPS_FILTER_OUTPUTS_CODEGEN}"
+          echo "hackathon: ${STEPS_FILTER_OUTPUTS_HACKATHON}"
+          echo "python: ${STEPS_FILTER_OUTPUTS_PYTHON}"
+          echo "resources: ${STEPS_FILTER_OUTPUTS_RESOURCES}"
+          echo "tssdk: ${STEPS_FILTER_OUTPUTS_TSSDK}"
+          echo "gosdk: ${STEPS_FILTER_OUTPUTS_GOSDK}"
+        env:
+          STEPS_FILTER_OUTPUTS_APIX: ${{ steps.filter.outputs.apix }}
+          STEPS_FILTER_OUTPUTS_CODEGEN: ${{ steps.filter.outputs.codegen }}
+          STEPS_FILTER_OUTPUTS_HACKATHON: ${{ steps.filter.outputs.hackathon }}
+          STEPS_FILTER_OUTPUTS_PYTHON: ${{ steps.filter.outputs.python }}
+          STEPS_FILTER_OUTPUTS_RESOURCES: ${{ steps.filter.outputs.resources }}
+          STEPS_FILTER_OUTPUTS_TSSDK: ${{ steps.filter.outputs.tssdk }}
+          STEPS_FILTER_OUTPUTS_GOSDK: ${{ steps.filter.outputs.gosdk }}
 
       - name: Create Codegen check
         if: steps.filter.outputs.codegen == 'false'
