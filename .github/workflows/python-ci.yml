@@ -200,10 +200,12 @@ jobs:
         # TODO: can we cache some layers of the image for faster download?
         # we probably don't want to cache the final image for IP security...
         run: |
-          docker pull --quiet us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ matrix.looker }}
+          docker pull --quiet us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${MATRIX_LOOKER}
           # set $LOOKER_OPTS to --no-ssl if we want to turn off ssl
-          docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ matrix.looker }}
+          docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${MATRIX_LOOKER}
           docker logs -f looker-sdk-codegen-ci --until=30s &
+        env:
+          MATRIX_LOOKER: ${{ matrix.looker }}
 
       - name: Install Tox and any other packages
         run: |
