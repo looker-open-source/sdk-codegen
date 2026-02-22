@@ -33,7 +33,7 @@
   "dependencies": {
     "@looker/sdk": "26.2.0",
     "@looker/sdk-rtl": "21.6.4",
-    "lodash": "4.17.21",
+    "lodash": "4.17.23",
     "uuid": "9.0.1"
   },
   "devDependencies": {
