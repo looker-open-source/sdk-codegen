@@ -229,7 +229,9 @@ export const fetchLookerVersion = async (
   return matches[0];
 };
 
-export const resolveSpecUrl = (
+export const LookerNotFoundError = 'Looker Not Found (404)';
+
+export const updateAndResolveSpecUrl = (
   spec: SpecItem,
   props: ISDKConfigProps
 ): string => {
@@ -261,7 +263,7 @@ export const fetchSpec = async (
   // TODO make this a switch or remove caching?
   if (isFileSync(fileName)) return fileName;
 
-  const fetchUrl = resolveSpecUrl(spec, props);
+  const fetchUrl = updateAndResolveSpecUrl(spec, props);
 
   try {
     const content = await authGetUrl(props, fetchUrl);
@@ -270,8 +272,8 @@ export const fetchSpec = async (
 
     return fileName;
   } catch (err: any) {
-    if (err.message && err.message.includes('Looker Not Found (404)')) {
-      warn(`Skipping missing spec file: ${fetchUrl} (404 Not Found)`);
+    if (err.message && err.message.includes(LookerNotFoundError)) {
+      warn(`Skipping missing spec file: ${fetchUrl} (${LookerNotFoundError})`);
       return '';
     }
     checkCertError(err);

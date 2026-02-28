@@ -40,10 +40,11 @@ import {
   authGetUrl,
   fetchLookerVersion,
   fetchLookerVersions,
+  LookerNotFoundError,
   openApiFileName,
-  resolveSpecUrl,
   specPath,
   swaggerFileName,
+  updateAndResolveSpecUrl,
 } from './fetchSpec';
 
 export const apiVersions = (props: any) => {
@@ -231,15 +232,17 @@ export const loadSpecs = async (config: IGenProps, fetch = true) => {
     if (!fetch) return undefined;
     if (!spec.specURL) return undefined;
 
-    const fetchUrl = resolveSpecUrl(spec, config.props);
+    const fetchUrl = updateAndResolveSpecUrl(spec, config.props);
 
     const p = { ...config.props, api_version: spec.version };
     let source;
     try {
       source = await authGetUrl(p, fetchUrl);
     } catch (err: any) {
-      if (err.message && err.message.includes('Looker Not Found (404)')) {
-        warn(`Skipping missing spec file: ${fetchUrl} (404 Not Found)`);
+      if (err.message && err.message.includes(LookerNotFoundError)) {
+        warn(
+          `Skipping missing spec file: ${fetchUrl} (${LookerNotFoundError})`
+        );
         return undefined;
       }
       throw err;
