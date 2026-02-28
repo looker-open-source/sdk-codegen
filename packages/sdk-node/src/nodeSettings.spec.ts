@@ -24,36 +24,52 @@
 
  */
 
-import fs from 'fs';
+// import * as fs from 'fs';
 // import 'whatwg-fetch';
 import type { IApiSettings } from '@looker/sdk-rtl';
-import { ApiConfigMap, boolDefault, defaultTimeout } from '@looker/sdk-rtl';
+import { ApiConfigMap } from '@looker/sdk-rtl';
 import { TestConfig } from '@looker/sdk-codegen-utils';
 import { ApiConfig, NodeSettings, NodeSettingsIniFile } from './nodeSettings';
 import { specToModel } from '@looker/sdk-codegen';
-
-const server = 'https\x58//self-signed.looker.com:19999';
 const mockIni = `
 [Looker]
-base_url=${server}
+base_url=https\x58//self-signed.looker.com:19999
 client_id=id
 client_secret=secret
 verify_ssl=false
 timeout=31
 [Looker31]
-base_url=${server}
+base_url=https\x58//self-signed.looker.com:19999
 verify_ssl=False
 timeout=30
 `;
-const config = TestConfig(specToModel);
-const section2 = 'Looker31';
+
+jest.mock('fs', () => {
+  const original = jest.requireActual('fs');
+  return {
+    ...original,
+    existsSync: (path: string) => {
+      if (path === 'mock.ini') return true;
+      if (path === 'missing.ini') return false;
+      return original.existsSync(path);
+    },
+    readFileSync: (path: string, options: any) => {
+      if (path === 'mock.ini') return mockIni;
+      return original.readFileSync(path, options);
+    },
+  };
+});
+
+const server = 'https\x58//self-signed.looker.com:19999';
+
 const envPrefix = 'LOOKERSDK';
+const section2 = 'Looker31';
 
 describe('NodeSettings', () => {
+  let config: ReturnType<typeof TestConfig>;
+
   beforeAll(() => {
-    jest
-      .spyOn(fs, 'readFileSync')
-      .mockImplementation((_path, _options) => mockIni);
+    config = TestConfig(specToModel);
   });
 
   describe('ApiConfig', () => {
@@ -99,19 +115,13 @@ describe('NodeSettings', () => {
   });
 
   describe('NodeSettingsEnv', () => {
-    const verifySsl = boolDefault(
-      config.testSection.verify_ssl,
-      false
-    ).toString();
-
     beforeAll(() => {
       const envKey = ApiConfigMap(envPrefix);
-      // populate environment variables
-      process.env[envKey.timeout] = defaultTimeout.toString();
-      process.env[envKey.client_id] = config.testSection.client_id;
-      process.env[envKey.client_secret] = config.testSection.client_secret;
-      process.env[envKey.base_url] = config.testSection.base_url;
-      process.env[envKey.verify_ssl] = verifySsl.toString();
+      process.env[envKey.timeout] = '30';
+      process.env[envKey.client_id] = 'client_id';
+      process.env[envKey.client_secret] = 'client_secret';
+      process.env[envKey.base_url] = server;
+      process.env[envKey.verify_ssl] = 'false';
     });
 
     afterAll(() => {
@@ -126,24 +136,24 @@ describe('NodeSettings', () => {
 
     it('settings are retrieved from environment variables', () => {
       const settings = new NodeSettings(envPrefix);
-      expect(settings.base_url).toEqual(config.baseUrl);
-      expect(settings.timeout).toEqual(defaultTimeout);
+      expect(settings.base_url).toEqual(server);
+      expect(settings.timeout).toEqual(30);
       expect(settings.verify_ssl).toEqual(false);
     });
 
     it('empty file name uses environment variables', () => {
       const settings = new NodeSettingsIniFile(envPrefix);
-      expect(settings.base_url).toEqual(config.baseUrl);
-      expect(settings.timeout).toEqual(defaultTimeout);
+      expect(settings.base_url).toEqual(server);
+      expect(settings.timeout).toEqual(30);
       expect(settings.verify_ssl).toEqual(false);
     });
 
     it('partial INI uses environment variables', () => {
       const settings = new NodeSettings(envPrefix, {
-        base_url: config.baseUrl,
+        base_url: server,
       } as IApiSettings);
-      expect(settings.base_url).toEqual(config.baseUrl);
-      expect(settings.timeout).toEqual(defaultTimeout);
+      expect(settings.base_url).toEqual(server);
+      expect(settings.timeout).toEqual(30);
       expect(settings.verify_ssl).toEqual(false);
       const creds = settings.readConfig();
       expect(creds.client_id).toBeDefined();
@@ -155,7 +165,7 @@ describe('NodeSettings', () => {
       process.env[envKey.timeout] = '66';
       process.env[envKey.verify_ssl] = '1';
       const settings = new NodeSettingsIniFile(envPrefix, config.testIni);
-      expect(settings.base_url).toEqual(config.testSection.base_url);
+      expect(settings.base_url).toEqual(server);
       expect(settings.timeout).toEqual(66);
       expect(settings.verify_ssl).toEqual(true);
       // process.env[strLookerTimeout] = config.testSection['timeout'] || defaultTimeout.toString()
@@ -164,28 +174,27 @@ describe('NodeSettings', () => {
   });
 
   describe('NodeSettingsIniFile', () => {
+    beforeEach(() => {
+      const envKey = ApiConfigMap(envPrefix);
+      delete process.env[envKey.timeout];
+      delete process.env[envKey.verify_ssl];
+      delete process.env[envKey.base_url];
+    });
+
     it('settings default to the first section', () => {
-      const settings = new NodeSettingsIniFile(envPrefix, config.testIni);
+      const settings = new NodeSettingsIniFile(envPrefix, 'mock.ini');
       expect(settings.timeout).toEqual(31);
       expect(settings.verify_ssl).toEqual(false);
     });
 
     it('retrieves the first section by name', () => {
-      const settings = new NodeSettingsIniFile(
-        envPrefix,
-        config.testIni,
-        'Looker'
-      );
+      const settings = new NodeSettingsIniFile(envPrefix, 'mock.ini', 'Looker');
       expect(settings.timeout).toEqual(31);
       expect(settings.verify_ssl).toEqual(false);
     });
 
     it('retrieves the second section by name', () => {
-      const settings = new NodeSettingsIniFile(
-        envPrefix,
-        config.testIni,
-        section2
-      );
+      const settings = new NodeSettingsIniFile(envPrefix, 'mock.ini', section2);
       expect(settings.timeout).toEqual(30);
       expect(settings.verify_ssl).toEqual(false);
     });
@@ -193,11 +202,7 @@ describe('NodeSettings', () => {
     it('fails with a bad section name', () => {
       expect(
         () =>
-          new NodeSettingsIniFile(
-            envPrefix,
-            config.testIni,
-            'NotAGoodLookForYou'
-          )
+          new NodeSettingsIniFile(envPrefix, 'mock.ini', 'NotAGoodLookForYou')
       ).toThrow(/No section named "NotAGoodLookForYou"/);
     });
 
