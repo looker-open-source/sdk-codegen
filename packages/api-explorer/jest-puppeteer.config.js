@@ -29,7 +29,8 @@ module.exports = {
   ...base,
   rootDir: '../..',
   preset: 'jest-puppeteer',
-  setupFilesAfterEnv: ['expect-puppeteer'],
+  testEnvironment: 'jest-environment-puppeteer',
+  setupFilesAfterEnv: [...base.setupFilesAfterEnv, 'expect-puppeteer'],
   launch: {
     // `headless:false` and `slowMo:250` can be useful for "test-watch" usage
     headless: true,
