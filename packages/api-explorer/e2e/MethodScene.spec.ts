@@ -23,7 +23,14 @@
  SOFTWARE.
 
  */
-import { goToPage, v40Url as v40, v40Url } from './helpers';
+import {
+  goToPage,
+  v40Url as v40,
+  v40Url,
+  injectToken,
+  ensureSdkSelected,
+  mockExternalResources,
+} from './helpers';
 
 jest.setTimeout(120000);
 
@@ -31,6 +38,9 @@ describe('MethodScene', () => {
   beforeEach(async () => {
     await jestPuppeteer.resetBrowser();
     await page.setDefaultNavigationTimeout(120000);
+    await injectToken();
+    await mockExternalResources();
+    await ensureSdkSelected('Python');
   });
 
   afterEach(async () => {

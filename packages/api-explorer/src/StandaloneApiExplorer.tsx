@@ -51,17 +51,30 @@ export const StandaloneApiExplorer: FC<StandaloneApiExplorerProps> = ({
   const location = useLocation();
   const oauthReturn = location.pathname === `/${oAuthPath}`;
   const sdk = browserAdaptor.sdk;
+  const [hasToken, setHasToken] = useState(sdk.authSession.isAuthenticated());
+
   const canLogin =
     (sdk.authSession.settings as OAuthConfigProvider).authIsConfigured() &&
     !sdk.authSession.isAuthenticated() &&
-    !oauthReturn;
+    !oauthReturn &&
+    !hasToken;
 
   useEffect(() => {
-    const login = async () => await browserAdaptor.login();
-    if (canLogin) {
-      login();
+    const token = sessionStorage.getItem('LOOKER_TEST_TOKEN');
+    if (token) {
+      const session = sdk.authSession as any;
+      const tokenObj = JSON.parse(token);
+      // SDK expects activeToken to have isActive() method
+      tokenObj.isActive = () => true;
+      session.activeToken = tokenObj;
+      setHasToken(true);
+    } else {
+      const login = async () => await browserAdaptor.login();
+      if (canLogin) {
+        login();
+      }
     }
-  }, []);
+  }, [browserAdaptor, canLogin, sdk.authSession]);
 
   const { looker_url } = (
     sdk.authSession.settings as OAuthConfigProvider
