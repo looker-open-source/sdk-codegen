@@ -32,7 +32,7 @@ import {
   getSpecsFromVersions,
   upgradeSpecObject,
 } from '@looker/sdk-codegen';
-import { log } from '@looker/sdk-codegen-utils';
+import { log, warn } from '@looker/sdk-codegen-utils';
 import { createJsonFile, readFileSync } from './nodeUtils';
 import type { ISDKConfigProps } from './sdkConfig';
 import { SDKConfig } from './sdkConfig';
@@ -41,6 +41,7 @@ import {
   fetchLookerVersion,
   fetchLookerVersions,
   openApiFileName,
+  resolveSpecUrl,
   specPath,
   swaggerFileName,
 } from './fetchSpec';
@@ -229,8 +230,20 @@ export const loadSpecs = async (config: IGenProps, fetch = true) => {
   const specFetch = async (spec: SpecItem) => {
     if (!fetch) return undefined;
     if (!spec.specURL) return undefined;
+
+    const fetchUrl = resolveSpecUrl(spec, config.props);
+
     const p = { ...config.props, api_version: spec.version };
-    let source = await authGetUrl(p, spec.specURL);
+    let source;
+    try {
+      source = await authGetUrl(p, fetchUrl);
+    } catch (err: any) {
+      if (err.message && err.message.includes('Looker Not Found (404)')) {
+        warn(`Skipping missing spec file: ${fetchUrl} (404 Not Found)`);
+        return undefined;
+      }
+      throw err;
+    }
     if (typeof source === 'string') source = JSON.parse(source);
     const upgrade = upgradeSpecObject(source);
     spec.api = ApiModel.fromJson(upgrade);

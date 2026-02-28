@@ -181,11 +181,12 @@ export const authGetUrl = async (
     }
     // Whoops!  Ok, try again with login
     options = mergeOptions(props, options ?? {});
-    options = mergeOptions(options, {
+    token = await login(options as ISDKConfigProps);
+    // Add the token to the headers for the subsequent getUrl call
+    const authOptions = mergeOptions(options, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    token = await login(options as ISDKConfigProps);
-    content = await getUrl(props, url, options);
+    content = await getUrl(props, url, authOptions);
     if (token) {
       await logout(props, token);
     }
@@ -228,6 +229,28 @@ export const fetchLookerVersion = async (
   return matches[0];
 };
 
+export const resolveSpecUrl = (
+  spec: SpecItem,
+  props: ISDKConfigProps
+): string => {
+  let fetchUrl = spec.specURL || 'missing spec url';
+  try {
+    const specUrlObj = new URL(fetchUrl);
+    const baseUrlObj = new URL(props.base_url);
+    if (
+      specUrlObj.hostname === baseUrlObj.hostname &&
+      specUrlObj.port !== baseUrlObj.port
+    ) {
+      specUrlObj.port = baseUrlObj.port;
+      fetchUrl = specUrlObj.toString();
+      spec.specURL = fetchUrl; // Update it on the spec object too
+    }
+  } catch (e) {
+    // Ignore URL parsing errors, just fall back to original specURL
+  }
+  return fetchUrl;
+};
+
 export const fetchSpec = async (
   name: string,
   spec: SpecItem,
@@ -238,13 +261,19 @@ export const fetchSpec = async (
   // TODO make this a switch or remove caching?
   if (isFileSync(fileName)) return fileName;
 
+  const fetchUrl = resolveSpecUrl(spec, props);
+
   try {
-    const content = await authGetUrl(props, spec.specURL || 'missing spec url');
+    const content = await authGetUrl(props, fetchUrl);
 
     createJsonFile(fileName, content);
 
     return fileName;
   } catch (err: any) {
+    if (err.message && err.message.includes('Looker Not Found (404)')) {
+      warn(`Skipping missing spec file: ${fetchUrl} (404 Not Found)`);
+      return '';
+    }
     checkCertError(err);
     return quit(err);
   }
