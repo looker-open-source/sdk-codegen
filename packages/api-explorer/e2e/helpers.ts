@@ -234,7 +234,15 @@ export const ensureSdkSelected = async (language: string): Promise<void> => {
         console.error(`Failed to find SDK option for ${language}`, e);
       }
       // Wait for selection to apply
-      await page.waitForTimeout(1000);
+      await page.waitForFunction(
+        (selector: string, lang: string) => {
+          const input = document.querySelector(selector) as HTMLInputElement;
+          return input?.value === lang;
+        },
+        {},
+        'input[aria-label="sdk language selector"]',
+        language
+      );
     } else {
       // eslint-disable-next-line no-console
       console.error('SDK selector input not found');

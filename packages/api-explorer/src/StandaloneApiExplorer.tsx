@@ -64,9 +64,7 @@ export const StandaloneApiExplorer: FC<StandaloneApiExplorerProps> = ({
     if (token) {
       const session = sdk.authSession as any;
       const tokenObj = JSON.parse(token);
-      // SDK expects activeToken to have isActive() method
-      tokenObj.isActive = () => true;
-      session.activeToken = tokenObj;
+      session.activeToken.setToken(tokenObj);
       setHasToken(true);
     } else {
       const login = async () => await browserAdaptor.login();
