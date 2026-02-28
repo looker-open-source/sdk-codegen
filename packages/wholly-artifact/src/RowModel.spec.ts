@@ -209,7 +209,7 @@ describe('RowModel', () => {
       } catch (e: any) {
         expect(e).toBeInstanceOf(LookerSDKError);
         expect(e.message).toEqual(
-          'SyntaxError: Unexpected token t in JSON at position 2'
+          "SyntaxError: Expected property name or '}' in JSON at position 2 (line 1 column 3)"
         );
       }
     });

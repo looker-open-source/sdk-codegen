@@ -45,34 +45,34 @@ describe('agendaUtils', () => {
       const locale = english;
       test('it shows before', () => {
         const actual = gapDiff(now, add(now, { minutes: 30 }), after, locale);
-        expect(actual).toEqual('in 30 minutes');
+        expect(actual).toEqual('starts in 30 minutes');
       });
 
       test('it shows during', () => {
         const actual = gapDiff(now, before, after, locale);
-        expect(actual).toEqual('in about 1 hour');
+        expect(actual).toEqual('ends in about 1 hour');
       });
 
       test('it shows after', () => {
         const actual = gapDiff(now, before, add(now, { minutes: -30 }), locale);
-        expect(actual).toEqual('30 minutes ago');
+        expect(actual).toEqual('ended 30 minutes ago');
       });
     });
     describe('in Japanese', () => {
       const locale = japanese;
       test('it shows before', () => {
         const actual = gapDiff(now, add(now, { minutes: 30 }), after, locale);
-        expect(actual).toEqual('30分後');
+        expect(actual).toEqual('starts 30分後');
       });
 
       test('it shows during', () => {
         const actual = gapDiff(now, before, after, locale);
-        expect(actual).toEqual('約1時間後');
+        expect(actual).toEqual('ends 約1時間後');
       });
 
       test('it shows after', () => {
         const actual = gapDiff(now, before, add(now, { minutes: -30 }), locale);
-        expect(actual).toEqual('30分前');
+        expect(actual).toEqual('ended 30分前');
       });
     });
   });

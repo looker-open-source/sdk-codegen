@@ -160,7 +160,8 @@
     "uuid": "9.0.1",
     "webpack": "5.94.0",
     "webpack-bundle-analyzer": "^4.10.2",
-    "webpack-merge": "^5.10.0"
+    "webpack-merge": "^5.10.0",
+    "whatwg-fetch": "^3.6.20"
   },
   "lint-staged": {
     "**/*.ts?(x)": [
