@@ -465,14 +465,14 @@ ${props.join(this.propDelimiter)}
     // let result = this.argFill('', 'options')
     // let result = this.argFill('', this.argGroup(indent, method.cookieArgs, request))
     // result = this.argFill(result, this.argGroup(indent, method.headerArgs, request))
-    let result = this.argFill(
-      '',
-      method.bodyArg ? `${request}${method.bodyArg}` : this.nullStr
-    );
-    result = this.argFill(
-      result,
-      this.argGroup(indent, method.queryArgs, request)
-    );
+    let body = method.bodyArg ? `${request}${method.bodyArg}` : this.nullStr;
+    let query = this.argGroup(indent, method.queryArgs, request);
+    if (method.isFormUrlEncoded) {
+      body = query;
+      query = this.nullStr;
+    }
+    let result = this.argFill('', body);
+    result = this.argFill(result, query);
     return result;
   }
 

@@ -25,7 +25,7 @@
  */
 
 import type { IApiVersion } from './specConverter';
-import { getSpecsFromVersions } from './specConverter';
+import { getSpecsFromVersions, upgradeSpecObject } from './specConverter';
 
 const payload = `{
   "looker_release_version":"22.3.0",
@@ -45,5 +45,37 @@ describe('specConverter', () => {
     const versions: IApiVersion = JSON.parse(payload);
     const specs = await getSpecsFromVersions(versions);
     expect(Object.keys(specs)).toEqual(['4.0', '4.0u']);
+  });
+
+  describe('upgradeSpecObject', () => {
+    it('normalizes login parameters', () => {
+      const swagger = {
+        swagger: '2.0',
+        info: { title: 'Looker API', version: '4.0' },
+        host: 'localhost:19999',
+        basePath: '/api/4.0',
+        schemes: ['https'],
+        definitions: {},
+        paths: {
+          '/login': {
+            post: {
+              operationId: 'login',
+              parameters: [],
+              responses: {},
+            },
+          },
+        },
+      };
+
+      const spec = upgradeSpecObject(swagger);
+      const loginParams = spec.paths['/login'].post.parameters;
+      expect(loginParams).toBeDefined();
+      expect(
+        loginParams.find((p: any) => p.name === 'client_id')
+      ).toBeDefined();
+      expect(
+        loginParams.find((p: any) => p.name === 'client_secret')
+      ).toBeDefined();
+    });
   });
 });
