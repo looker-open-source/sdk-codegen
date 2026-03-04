@@ -366,8 +366,8 @@ open class LookerSDK: APIMethods {
         client_secret: String? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<AccessToken, SDKError> {
-        let result: SDKResponse<AccessToken, SDKError> = self.post("/login", 
-            ["client_id": client_id, "client_secret": client_secret], nil, options)
+        let result: SDKResponse<AccessToken, SDKError> = self.post("/login", nil, 
+            ["client_id": client_id, "client_secret": client_secret], options)
         return result
     }
 
@@ -10658,7 +10658,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Update certification for a Self Service Explore
      *
-     * POST /self_service_models/{model_name}/certification -> Certification
+     * PATCH /self_service_models/{model_name}/certification -> Certification
      */
     public func update_self_service_explore_certification(
         /**
@@ -10672,7 +10672,7 @@ open class LookerSDK: APIMethods {
         options: ITransportSettings? = nil
     ) -> SDKResponse<Certification, SDKError> {
         let path_model_name = encodeParam(model_name)
-        let result: SDKResponse<Certification, SDKError> = self.post("/self_service_models/\(path_model_name)/certification", nil, try! self.encode(body), options)
+        let result: SDKResponse<Certification, SDKError> = self.patch("/self_service_models/\(path_model_name)/certification", nil, try! self.encode(body), options)
         return result
     }
 

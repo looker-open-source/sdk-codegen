@@ -7921,7 +7921,7 @@ export interface ILooker40SDK extends IAPIMethods {
   /**
    * ### Update certification for a Self Service Explore
    *
-   * POST /self_service_models/{model_name}/certification -> ICertification
+   * PATCH /self_service_models/{model_name}/certification -> ICertification
    *
    * @param model_name Name of self service model.
    * @param body Partial<IWriteCertification>

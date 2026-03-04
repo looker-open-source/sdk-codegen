@@ -709,8 +709,8 @@ export const login = async (
 ): Promise<SDKResponse<IAccessToken, IError>> => {
   return sdk.post<IAccessToken, IError>(
     '/login',
-    { client_id: request.client_id, client_secret: request.client_secret },
     null,
+    { client_id: request.client_id, client_secret: request.client_secret },
     options
   );
 };
@@ -11868,7 +11868,7 @@ export const scheduled_plan_run_once_by_id = async (
 /**
  * ### Update certification for a Self Service Explore
  *
- * POST /self_service_models/{model_name}/certification -> ICertification
+ * PATCH /self_service_models/{model_name}/certification -> ICertification
  *
  * @param sdk IAPIMethods implementation
  * @param model_name Name of self service model.
@@ -11883,7 +11883,7 @@ export const update_self_service_explore_certification = async (
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICertification, IError | IValidationError>> => {
   model_name = encodeParam(model_name);
-  return sdk.post<ICertification, IError | IValidationError>(
+  return sdk.patch<ICertification, IError | IValidationError>(
     `/self_service_models/${model_name}/certification`,
     null,
     body,

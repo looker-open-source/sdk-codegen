@@ -275,7 +275,7 @@ func (l *LookerSDK) ReadAlertNotification(
 func (l *LookerSDK) Login(request RequestLogin,
 	options *rtl.ApiSettings) (AccessToken, error) {
 	var result AccessToken
-	err := l.AuthSession.Do(&result, "POST", "/4.0", "/login", map[string]interface{}{"client_id": request.ClientId, "client_secret": request.ClientSecret}, nil, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/login", nil, map[string]interface{}{"client_id": request.ClientId, "client_secret": request.ClientSecret}, options)
 	return result, err
 
 }
@@ -6886,14 +6886,14 @@ func (l *LookerSDK) ScheduledPlanRunOnceById(
 
 // ### Update certification for a Self Service Explore
 //
-// POST /self_service_models/{model_name}/certification -> Certification
+// PATCH /self_service_models/{model_name}/certification -> Certification
 func (l *LookerSDK) UpdateSelfServiceExploreCertification(
 	modelName string,
 	body WriteCertification,
 	options *rtl.ApiSettings) (Certification, error) {
 	modelName = url.PathEscape(modelName)
 	var result Certification
-	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/self_service_models/%v/certification", modelName), nil, body, options)
+	err := l.AuthSession.Do(&result, "PATCH", "/4.0", fmt.Sprintf("/self_service_models/%v/certification", modelName), nil, body, options)
 	return result, err
 
 }

@@ -743,8 +743,8 @@ export class Looker40SDKStream extends APIMethods {
       callback,
       'POST',
       '/login',
-      { client_id: request.client_id, client_secret: request.client_secret },
       null,
+      { client_id: request.client_id, client_secret: request.client_secret },
       options
     );
   }
@@ -12715,7 +12715,7 @@ export class Looker40SDKStream extends APIMethods {
   /**
    * ### Update certification for a Self Service Explore
    *
-   * POST /self_service_models/{model_name}/certification -> ICertification
+   * PATCH /self_service_models/{model_name}/certification -> ICertification
    *
    * @param callback streaming output function
    * @param model_name Name of self service model.
@@ -12732,7 +12732,7 @@ export class Looker40SDKStream extends APIMethods {
     model_name = encodeParam(model_name);
     return this.authStream<ICertification>(
       callback,
-      'POST',
+      'PATCH',
       `/self_service_models/${model_name}/certification`,
       null,
       body,

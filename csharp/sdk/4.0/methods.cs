@@ -323,9 +323,9 @@ namespace Looker.SDK.API40
     string? client_secret = null,
     ITransportSettings? options = null)
 {  
-    return await AuthRequest<AccessToken, Exception>(HttpMethod.Post, "/login", new Values {
+    return await AuthRequest<AccessToken, Exception>(HttpMethod.Post, "/login", null,new Values {
       { "client_id", client_id },
-      { "client_secret", client_secret }},null,options);
+      { "client_secret", client_secret }},options);
   }
 
   /// ### Create an access token that runs as a given user.
@@ -9115,7 +9115,7 @@ namespace Looker.SDK.API40
 
   /// ### Update certification for a Self Service Explore
   ///
-  /// POST /self_service_models/{model_name}/certification -> Certification
+  /// PATCH /self_service_models/{model_name}/certification -> Certification
   ///
   /// <returns><c>Certification</c> Updated certification for self service model (application/json)</returns>
   ///
@@ -9126,7 +9126,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       model_name = SdkUtils.EncodeParam(model_name);
-    return await AuthRequest<Certification, Exception>(HttpMethod.Post, $"/self_service_models/{model_name}/certification", null,body,options);
+    return await AuthRequest<Certification, Exception>(HttpMethod.Patch, $"/self_service_models/{model_name}/certification", null,body,options);
   }
 
   #endregion SelfService: Self Service Models

@@ -691,8 +691,8 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   ): Promise<SDKResponse<IAccessToken, IError>> {
     return this.post<IAccessToken, IError>(
       '/login',
-      { client_id: request.client_id, client_secret: request.client_secret },
       null,
+      { client_id: request.client_id, client_secret: request.client_secret },
       options
     );
   }
@@ -11174,7 +11174,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   /**
    * ### Update certification for a Self Service Explore
    *
-   * POST /self_service_models/{model_name}/certification -> ICertification
+   * PATCH /self_service_models/{model_name}/certification -> ICertification
    *
    * @param model_name Name of self service model.
    * @param body Partial<IWriteCertification>
@@ -11187,7 +11187,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ICertification, IError | IValidationError>> {
     model_name = encodeParam(model_name);
-    return this.post<ICertification, IError | IValidationError>(
+    return this.patch<ICertification, IError | IValidationError>(
       `/self_service_models/${model_name}/certification`,
       null,
       body,
