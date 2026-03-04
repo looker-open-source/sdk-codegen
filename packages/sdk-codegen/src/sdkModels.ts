@@ -1550,8 +1550,7 @@ export class Method extends SchemadSymbol implements IMethod {
 
   get isFormUrlEncoded() {
     const method = this.httpMethod.toUpperCase();
-    if (method !== 'POST' && method !== 'PUT' && method !== 'PATCH')
-      return false;
+    if (!['POST', 'PUT', 'PATCH'].includes(method)) return false;
     const body = this.schema.requestBody as OAS.RequestBodyObject;
     return !!body?.content?.['application/x-www-form-urlencoded'];
   }
