@@ -217,6 +217,20 @@ describe('sdkModels', () => {
       expect(actual).toHaveLength(31);
     });
 
+    describe('isFormUrlEncoded', () => {
+      it('correctly identifies form-encoded methods', () => {
+        const login = apiTestModel.methods.login;
+        expect(login).toBeDefined();
+        expect(login.isFormUrlEncoded).toBe(true);
+      });
+
+      it('returns false for non-form-encoded methods', () => {
+        const user = apiTestModel.methods.user;
+        expect(user).toBeDefined();
+        expect(user.isFormUrlEncoded).toBe(false);
+      });
+    });
+
     describe('data mocking', () => {
       interface IProject {}
       interface IMockType {

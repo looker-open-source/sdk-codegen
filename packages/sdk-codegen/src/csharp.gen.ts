@@ -345,11 +345,13 @@ namespace Looker.SDK.API${this.apiRef}
     let result = this.argFill('', 'options');
     // result = this.argFill(result, this.argGroup(indent, method.cookieArgs))
     // result = this.argFill(result, this.argGroup(indent, method.headerArgs))
-    result = this.argFill(
-      result,
-      method.bodyArg ? method.bodyArg : this.nullStr
-    );
-    result = this.argFill(result, this.argGroup(indent, method.queryArgs));
+    let body = method.bodyArg ? method.bodyArg : this.nullStr;
+    let query = this.argGroup(indent, method.queryArgs);
+    const formArgs = this.assignFormArgs(method, body, query);
+    body = formArgs.body;
+    query = formArgs.query;
+    result = this.argFill(result, body);
+    result = this.argFill(result, query);
     return result;
   }
 
