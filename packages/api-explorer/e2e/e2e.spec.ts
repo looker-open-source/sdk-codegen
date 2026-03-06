@@ -25,7 +25,14 @@
  */
 import '@testing-library/jest-dom';
 
-import { goToPage, pageReload, v40Url as v40 } from './helpers';
+import {
+  injectToken,
+  pageReload,
+  goToPage,
+  ensureSdkSelected,
+  mockExternalResources,
+  v40Url as v40,
+} from './helpers';
 
 // https://github.com/smooth-code/jest-puppeteer/tree/master/packages/expect-puppeteer
 // https://github.com/puppeteer/puppeteer/blob/main/docs/api.md
@@ -36,6 +43,10 @@ describe('API Explorer', () => {
   beforeEach(async () => {
     await jestPuppeteer.resetBrowser();
     await page.setDefaultNavigationTimeout(120000);
+    // Inject token if remote
+    await injectToken();
+    await mockExternalResources();
+    await ensureSdkSelected('Python');
   });
 
   afterEach(async () => {
@@ -58,6 +69,7 @@ describe('API Explorer', () => {
         page.waitForNavigation(),
         expect(page).toClick('h3', { text: 'Get All Dashboards' }),
       ]);
+
       await expect(page.url()).toEqual(
         `${v40}/methods/Dashboard/all_dashboards?sdk=py`
       );

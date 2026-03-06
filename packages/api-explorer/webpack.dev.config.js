@@ -49,5 +49,30 @@ module.exports = merge(base, browser, {
       'Access-Control-Allow-Methods': '*',
       'Access-Control-Allow-Headers': '*',
     },
+    proxy: (() => {
+      const proxyTarget =
+        process.env.API_PROXY_TARGET ||
+        process.env.LOOKER_API_EXPLORER_URL ||
+        'http://localhost:19999';
+      return {
+        '/api': {
+          target: proxyTarget,
+          changeOrigin: true,
+          secure: false,
+          onProxyReq: proxyReq => {
+            proxyReq.removeHeader('Origin');
+            proxyReq.removeHeader('Referer');
+          },
+        },
+        '/login': {
+          target: proxyTarget,
+          changeOrigin: true,
+          secure: false,
+          onProxyReq: proxyReq => {
+            proxyReq.removeHeader('Origin');
+          },
+        },
+      };
+    })(),
   },
 });

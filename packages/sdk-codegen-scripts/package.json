@@ -32,7 +32,7 @@
     "@looker/sdk-codegen-utils": "21.0.29",
     "@looker/sdk-node": "26.2.0",
     "@looker/sdk-rtl": "21.6.4",
-    "config": "^3.3.1",
+    "config": "^3.3.10",
     "cross-env": "^7.0.2"
   },
   "devDependencies": {
