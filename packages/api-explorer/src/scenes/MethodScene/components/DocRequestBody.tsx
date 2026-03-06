@@ -39,13 +39,24 @@ interface DocRequestBodyProps {
  * @param method to document
  */
 export const DocRequestBody: FC<DocRequestBodyProps> = ({ method, api }) => {
-  const bodies = method.bodyParams;
+  const bodies = method.isFormUrlEncoded
+    ? method.queryParams
+    : method.bodyParams;
   if (bodies.length === 0) return <></>;
-  const header = bodies.length > 1 ? 'Request bodies' : 'Request body';
+  const header = method.isFormUrlEncoded
+    ? 'Form parameters'
+    : bodies.length > 1
+    ? 'Request bodies'
+    : 'Request body';
 
   return (
     <CollapserCard id="bodies" heading={header}>
       <>
+        {method.isFormUrlEncoded ? (
+          <div style={{ paddingBottom: '0.5rem', color: '#666' }}>
+            application/x-www-form-urlencoded
+          </div>
+        ) : null}
         {bodies.map(body => (
           <ExploreType
             api={api}

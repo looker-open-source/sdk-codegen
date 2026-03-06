@@ -155,9 +155,12 @@ export const createRequestParams = (
   const queryParams: any = {};
   const prepped = prepareInputs(inputs, requestContent);
   const trimmed = trimInputs(prepped, keepBody);
-  let body;
+  const bodyInputs = inputs.filter(i => i.location === 'body');
+  const isMultiBody = bodyInputs.length > 1;
+  let body: any = isMultiBody ? {} : undefined;
   for (const input of inputs) {
     const name = input.name;
+    if (name === '__proto__' || name === 'constructor') continue;
     switch (input.location) {
       case 'path':
         pathParams[name] = trimmed[name];
@@ -166,7 +169,11 @@ export const createRequestParams = (
         queryParams[name] = trimmed[name];
         break;
       case 'body':
-        body = trimmed[name];
+        if (isMultiBody) {
+          body[name] = trimmed[name];
+        } else {
+          body = trimmed[name];
+        }
         break;
       default:
         throw new Error(`Invalid input location: '${input.location}'`);
@@ -303,7 +310,10 @@ const editType = (spec: IApiModel, type: IType) => {
 export const createInputs = (spec: IApiModel, method: IMethod): RunItInput[] =>
   method.allParams.map(param => ({
     name: param.name,
-    location: param.location,
+    location:
+      method.isFormUrlEncoded && param.location === 'query'
+        ? 'body'
+        : param.location,
     type: editType(spec, param.type),
     required: param.required,
     description: param.description,
