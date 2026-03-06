@@ -298,6 +298,24 @@
     * @looker/sdk-codegen bumped from 21.10.3 to 21.10.4
     * @looker/sdk-codegen-utils bumped from 21.0.28 to 21.0.29
 
+## [0.9.83](https://github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.82...run-it-v0.9.83) (2026-03-06)
+
+
+### Features
+
+* **api-explorer:** render and format form-urlencoded queries as body parameters ([#1648](https://github.com/looker-open-source/sdk-codegen/issues/1648)) ([46eb5c9](https://github.com/looker-open-source/sdk-codegen/commit/46eb5c968098417fe3cfb6cce3adf8bffd21d663))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from 0.1.49 to 0.1.50
+    * @looker/extension-utils bumped from 0.1.59 to 0.1.60
+    * @looker/sdk bumped from 26.2.0 to 26.2.1
+    * @looker/sdk-codegen bumped from 21.10.4 to 21.11.0
+    * @looker/sdk-codegen-utils bumped from 21.0.29 to 21.0.30
+
 ## [0.9.72](https://github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.71...run-it-v0.9.72) (2025-02-06)
 
 

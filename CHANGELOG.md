@@ -1,5 +1,20 @@
 # Changelog
 
+## [26.3.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v26.2.0...sdk-codegen-all-v26.3.0) (2026-03-06)
+
+
+### Features
+
+* **api-explorer-test:** allow some api-explorer e2e tests to run remotely - phase 1 ([#1641](https://github.com/looker-open-source/sdk-codegen/issues/1641)) ([25a5335](https://github.com/looker-open-source/sdk-codegen/commit/25a53355a3abf2066aa06a7a3a20f35be0e61028)), closes [#1640](https://github.com/looker-open-source/sdk-codegen/issues/1640)
+* **api-explorer:** render and format form-urlencoded queries as body parameters ([#1648](https://github.com/looker-open-source/sdk-codegen/issues/1648)) ([46eb5c9](https://github.com/looker-open-source/sdk-codegen/commit/46eb5c968098417fe3cfb6cce3adf8bffd21d663))
+* refactor SDK generator for form-urlencoded params ([#1647](https://github.com/looker-open-source/sdk-codegen/issues/1647)) ([2197c17](https://github.com/looker-open-source/sdk-codegen/commit/2197c17df142df2de748aaddcdc4815d16724bff)), closes [#1646](https://github.com/looker-open-source/sdk-codegen/issues/1646)
+
+
+### Bug Fixes
+
+* **codegen:** allow yarn gen to work with remote looker server ([#1645](https://github.com/looker-open-source/sdk-codegen/issues/1645)) ([53621ea](https://github.com/looker-open-source/sdk-codegen/commit/53621ea1e8b84cc5be2f6e61d07a0e10d8502563)), closes [#1644](https://github.com/looker-open-source/sdk-codegen/issues/1644)
+* **tests:** fix some unit test failures and document remaining issues ([#1643](https://github.com/looker-open-source/sdk-codegen/issues/1643)) ([299ba8b](https://github.com/looker-open-source/sdk-codegen/commit/299ba8bd4ca6c406059da39b5fa2d44852b23ee5))
+
 ## [26.2.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v26.0.0...sdk-codegen-all-v26.2.0) (2026-02-13)
 
 
