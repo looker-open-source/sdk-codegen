@@ -25,6 +25,7 @@
  */
 
 /* eslint-disable @typescript-eslint/no-var-requires */
+require('whatwg-fetch');
 const Adapter = require('enzyme-adapter-react-16');
 const { configure } = require('enzyme');
 const ResizeObserver = require('resize-observer-polyfill');
