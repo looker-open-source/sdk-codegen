@@ -95,6 +95,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * devDependencies
     * @looker/sdk-codegen-utils bumped from 21.0.28 to 21.0.29
 
+## [21.11.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.10.4...sdk-codegen-v21.11.0) (2026-03-06)
+
+
+### Features
+
+* **api-explorer:** render and format form-urlencoded queries as body parameters ([#1648](https://github.com/looker-open-source/sdk-codegen/issues/1648)) ([46eb5c9](https://github.com/looker-open-source/sdk-codegen/commit/46eb5c968098417fe3cfb6cce3adf8bffd21d663))
+* refactor SDK generator for form-urlencoded params ([#1647](https://github.com/looker-open-source/sdk-codegen/issues/1647)) ([2197c17](https://github.com/looker-open-source/sdk-codegen/commit/2197c17df142df2de748aaddcdc4815d16724bff)), closes [#1646](https://github.com/looker-open-source/sdk-codegen/issues/1646)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen-utils bumped from 21.0.29 to 21.0.30
+
 ## [21.10.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.9.13...sdk-codegen-v21.10.0) (2025-09-17)
 
 
