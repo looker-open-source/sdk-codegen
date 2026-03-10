@@ -449,6 +449,24 @@ ${props.join(this.propDelimiter)}
     return `${args}${current ? this.argDelimiter : ''}${current}`;
   }
 
+  /**
+   * Reassigns body and query arguments for form-urlencoded requests
+   * @param method method definition
+   * @param body current body argument
+   * @param query current query argument
+   */
+  assignFormArgs(
+    method: IMethod,
+    body: string,
+    query: string
+  ): { body: string; query: string } {
+    const result = super.assignFormArgs(method, body, query);
+    if (result.query === this.nullStr) {
+      result.query = 'mapOf()';
+    }
+    return result;
+  }
+
   // build the http argument list from back to front, so trailing undefined arguments
   // can be omitted. Path arguments are resolved as part of the path parameter to general
   // purpose API method call
