@@ -523,6 +523,7 @@ ${this.hooks.join('\n')}
       any: { default: this.nullStr, name: 'Any' },
       boolean: { default: this.nullStr, name: 'bool' },
       byte: { default: this.nullStr, name: 'bytes' },
+      date: { default: this.nullStr, name: 'datetime.datetime' },
       datetime: { default: this.nullStr, name: 'datetime.datetime' },
       double: { default: this.nullStr, name: 'float' },
       float: { default: this.nullStr, name: 'float' },
