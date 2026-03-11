@@ -325,7 +325,7 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
     ): SDKResponse {
         return this.post<AccessToken>(
             "/login",
-            null,
+            mapOf(),
             mapOf(
                 "client_id" to client_id,
                 "client_secret" to client_secret,

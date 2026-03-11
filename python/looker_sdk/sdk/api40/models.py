@@ -111,8 +111,8 @@ class Agent(model.Model):
     has_inaccessible_source: Optional[bool] = None
     context: Optional["Context"] = None
     deleted: Optional[bool] = None
-    created_at: Optional[date] = None
-    updated_at: Optional[date] = None
+    created_at: Optional[datetime.datetime] = None
+    updated_at: Optional[datetime.datetime] = None
     content_metadata_id: Optional[str] = None
     code_interpreter: Optional[bool] = None
     studio_agent_id: Optional[str] = None
@@ -134,8 +134,8 @@ class Agent(model.Model):
         has_inaccessible_source: Optional[bool] = None,
         context: Optional["Context"] = None,
         deleted: Optional[bool] = None,
-        created_at: Optional[date] = None,
-        updated_at: Optional[date] = None,
+        created_at: Optional[datetime.datetime] = None,
+        updated_at: Optional[datetime.datetime] = None,
         content_metadata_id: Optional[str] = None,
         code_interpreter: Optional[bool] = None,
         studio_agent_id: Optional[str] = None
@@ -1450,7 +1450,7 @@ class ChatMessage(model.Model):
         messageId: Unique id of the message in the conversation.
     """
 
-    timestamp: Optional[date] = None
+    timestamp: Optional[datetime.datetime] = None
     userMessage: Optional["UserMessage"] = None
     systemMessage: Optional["SystemMessage"] = None
     messageId: Optional[str] = None
@@ -1458,7 +1458,7 @@ class ChatMessage(model.Model):
     def __init__(
         self,
         *,
-        timestamp: Optional[date] = None,
+        timestamp: Optional[datetime.datetime] = None,
         userMessage: Optional["UserMessage"] = None,
         systemMessage: Optional["SystemMessage"] = None,
         messageId: Optional[str] = None
@@ -3567,8 +3567,8 @@ class Conversation(model.Model):
     user_id: Optional[str] = None
     agent_id: Optional[str] = None
     deleted: Optional[bool] = None
-    created_at: Optional[date] = None
-    updated_at: Optional[date] = None
+    created_at: Optional[datetime.datetime] = None
+    updated_at: Optional[datetime.datetime] = None
     messages: Optional[Sequence["ConversationMessage"]] = None
     conversation_agent: Optional["Agent"] = None
     missing_agent: Optional[bool] = None
@@ -3585,8 +3585,8 @@ class Conversation(model.Model):
         user_id: Optional[str] = None,
         agent_id: Optional[str] = None,
         deleted: Optional[bool] = None,
-        created_at: Optional[date] = None,
-        updated_at: Optional[date] = None,
+        created_at: Optional[datetime.datetime] = None,
+        updated_at: Optional[datetime.datetime] = None,
         messages: Optional[Sequence["ConversationMessage"]] = None,
         conversation_agent: Optional["Agent"] = None,
         missing_agent: Optional[bool] = None,

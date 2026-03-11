@@ -323,7 +323,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
     ): SDKResponse {
         return this.post<ByteArray>(
             "/login",
-            null,
+            mapOf(),
             mapOf(
                 "client_id" to client_id,
                 "client_secret" to client_secret,
