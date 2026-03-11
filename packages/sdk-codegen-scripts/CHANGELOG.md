@@ -286,6 +286,23 @@
     * @looker/sdk-codegen-utils bumped from 21.0.28 to 21.0.29
     * @looker/sdk-node bumped from 26.0.0 to 26.2.0
 
+## [21.5.40](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.5.39...sdk-codegen-scripts-v21.5.40) (2026-03-11)
+
+
+### Bug Fixes
+
+* **codegen:** allow yarn gen to work with remote looker server ([#1645](https://github.com/looker-open-source/sdk-codegen/issues/1645)) ([53621ea](https://github.com/looker-open-source/sdk-codegen/commit/53621ea1e8b84cc5be2f6e61d07a0e10d8502563)), closes [#1644](https://github.com/looker-open-source/sdk-codegen/issues/1644)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from 26.2.0 to 26.4.0
+    * @looker/sdk-codegen bumped from 21.10.4 to 21.11.0
+    * @looker/sdk-codegen-utils bumped from 21.0.29 to 21.0.30
+    * @looker/sdk-node bumped from 26.2.0 to 26.4.0
+
 ## [21.5.31](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.5.30...sdk-codegen-scripts-v21.5.31) (2025-03-11)
 
 

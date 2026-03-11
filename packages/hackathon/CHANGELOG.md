@@ -403,6 +403,25 @@
     * @looker/sdk bumped from 26.0.0 to 26.2.0
     * @looker/wholly-artifact bumped from 0.1.39 to 0.1.40
 
+## [22.21.42](https://github.com/looker-open-source/sdk-codegen/compare/hackathon-v22.21.41...hackathon-v22.21.42) (2026-03-11)
+
+
+### Bug Fixes
+
+* **tests:** fix some unit test failures and document remaining issues ([#1643](https://github.com/looker-open-source/sdk-codegen/issues/1643)) ([299ba8b](https://github.com/looker-open-source/sdk-codegen/commit/299ba8bd4ca6c406059da39b5fa2d44852b23ee5))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from 0.1.49 to 0.1.50
+    * @looker/extension-sdk bumped from 26.2.0 to 26.4.0
+    * @looker/extension-sdk-react bumped from 26.2.0 to 26.4.0
+    * @looker/extension-utils bumped from 0.1.59 to 0.1.60
+    * @looker/sdk bumped from 26.2.0 to 26.4.0
+    * @looker/wholly-artifact bumped from 0.1.40 to 0.1.41
+
 ## [22.21.31](https://github.com/looker-open-source/sdk-codegen/compare/hackathon-v22.21.30...hackathon-v22.21.31) (2025-02-06)
 
 
