@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 483 API methods
+/// 502 API methods
 
 #nullable enable
 using System;
@@ -297,8 +297,6 @@ namespace Looker.SDK.API40
   /// Replace "4QDkCy..." with the `access_token` value returned by `login`.
   /// The word `token` is a string literal and must be included exactly as shown.
   ///
-  /// This function can accept `client_id` and `client_secret` parameters as URL query params or as www-form-urlencoded params in the body of the HTTP request. Since there is a small risk that URL parameters may be visible to intermediate nodes on the network route (proxies, routers, etc), passing credentials in the body of the request is considered more secure than URL params.
-  ///
   /// Example of passing credentials in the HTTP request body:
   /// ````
   /// POST HTTP /login
@@ -307,10 +305,12 @@ namespace Looker.SDK.API40
   /// client_id=CGc9B7v7J48dQSJvxxx&client_secret=nNVS9cSS3xNpSC9JdsBvvvvv
   /// ````
   ///
-  /// ### Best Practice:
-  /// Always pass credentials in body params. Pass credentials in URL query params **only** when you cannot pass body params due to application, tool, or other limitations.
+  /// *NOTICE*
   ///
-  /// For more information and detailed examples of Looker API authorization, see [How to Authenticate to Looker API](https://github.com/looker/looker-sdk-ruby/blob/master/authentication.md).
+  /// Pass 'client_id' and 'client_secret' as body parameters.
+  ///
+  /// The ability to use query parameters for `client_id` and `client_secret` will be deprecated
+  /// before the end of 2026.
   ///
   /// POST /login -> AccessToken
   ///
@@ -323,9 +323,9 @@ namespace Looker.SDK.API40
     string? client_secret = null,
     ITransportSettings? options = null)
 {  
-    return await AuthRequest<AccessToken, Exception>(HttpMethod.Post, "/login", new Values {
+    return await AuthRequest<AccessToken, Exception>(HttpMethod.Post, "/login", null,new Values {
       { "client_id", client_id },
-      { "client_secret", client_secret }},null,options);
+      { "client_secret", client_secret }},options);
   }
 
   /// ### Create an access token that runs as a given user.
@@ -2524,6 +2524,7 @@ namespace Looker.SDK.API40
   ///  - embed_cookieless_v2
   ///  - embed_enabled
   ///  - embed_config
+  ///  - mcp_tools
   ///
   /// GET /setting -> Setting
   ///
@@ -2563,6 +2564,7 @@ namespace Looker.SDK.API40
   ///  - embed_cookieless_v2
   ///  - embed_enabled
   ///  - embed_config
+  ///  - mcp_tools
   ///
   /// See the `Setting` type for more information on the specific values that can be configured.
   ///
@@ -3613,6 +3615,402 @@ namespace Looker.SDK.API40
   }
 
   #endregion Content: Manage Content
+
+  #region ConversationalAnalytics: Manage Conversations, Agents and Messages
+
+  /// ### Search Agents
+  ///
+  /// Returns an array of agent objects that match the specified search criteria.
+  ///
+  /// The parameters `limit`, and `offset` are recommended for fetching results in page-size chunks.
+  ///
+  /// Get a **single agent** by id with [get_agent()](#!/Agent/get_agent)
+  ///
+  /// GET /agents/search -> Agent[]
+  ///
+  /// <returns><c>Agent[]</c> agents (application/json)</returns>
+  ///
+  /// <param name="id">Match agent id. Can be a comma-separated list of ids.</param>
+  /// <param name="name">Match agent name.</param>
+  /// <param name="description">Match agent description.</param>
+  /// <param name="created_by_user_id">Filter on agents created by a particular user.</param>
+  /// <param name="fields">Requested fields.</param>
+  /// <param name="limit">Number of results to return. (used with offset)</param>
+  /// <param name="category">Filter on agent category. Can be a comma-separated list of categories.</param>
+  /// <param name="offset">Number of results to skip before returning. (used with limit)</param>
+  /// <param name="sorts">One or more fields to sort by. Sortable fields: [:id, :name, :description, :created_by_user_id, :created_at, :content_metadata_id, :category]</param>
+  /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
+  /// <param name="not_owned_by">Filter out the agents owned by the user passed at the :created_by_user_id params</param>
+  /// <param name="deleted">Filter on soft deleted agents.</param>
+  public async Task<SdkResponse<Agent[], Exception>> search_agents(
+    string? id = null,
+    string? name = null,
+    string? description = null,
+    string? created_by_user_id = null,
+    string? fields = null,
+    long? limit = null,
+    string? category = null,
+    long? offset = null,
+    string? sorts = null,
+    bool? filter_or = null,
+    bool? not_owned_by = null,
+    bool? deleted = null,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<Agent[], Exception>(HttpMethod.Get, "/agents/search", new Values {
+      { "id", id },
+      { "name", name },
+      { "description", description },
+      { "created_by_user_id", created_by_user_id },
+      { "fields", fields },
+      { "limit", limit },
+      { "category", category },
+      { "offset", offset },
+      { "sorts", sorts },
+      { "filter_or", filter_or },
+      { "not_owned_by", not_owned_by },
+      { "deleted", deleted }},null,options);
+  }
+
+  /// ### Create Agent
+  ///
+  /// Creates an agent.
+  /// Required fields: `name`, `description`, `sources`.
+  ///
+  /// POST /agents -> Agent
+  ///
+  /// <returns><c>Agent</c> Agent (application/json)</returns>
+  ///
+  /// <param name="fields">Requested fields</param>
+  public async Task<SdkResponse<Agent, Exception>> create_agent(
+    WriteAgent body,
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<Agent, Exception>(HttpMethod.Post, "/agents", new Values {
+      { "fields", fields }},body,options);
+  }
+
+  /// ### Delete Agents
+  ///
+  /// Delete agents.
+  ///
+  /// DELETE /agents -> string
+  ///
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  ///
+  /// <param name="id">Agent id. Can be a comma-separated list of ids.</param>
+  /// <param name="fields">Requested fields</param>
+  public async Task<SdkResponse<string, Exception>> delete_agent(
+    string id,
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, "/agents", new Values {
+      { "id", id },
+      { "fields", fields }},null,options);
+  }
+
+  /// ### Get Agent
+  ///
+  /// Get an agent.
+  ///
+  /// GET /agents/{agent_id} -> Agent
+  ///
+  /// <returns><c>Agent</c> Agent (application/json)</returns>
+  ///
+  /// <param name="agent_id">Agent ID</param>
+  /// <param name="fields">Requested fields</param>
+  public async Task<SdkResponse<Agent, Exception>> get_agent(
+    string agent_id,
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+      agent_id = SdkUtils.EncodeParam(agent_id);
+    return await AuthRequest<Agent, Exception>(HttpMethod.Get, $"/agents/{agent_id}", new Values {
+      { "fields", fields }},null,options);
+  }
+
+  /// ### Update Agent
+  ///
+  /// Update an agent.
+  ///
+  /// PATCH /agents/{agent_id} -> Agent
+  ///
+  /// <returns><c>Agent</c> Agent (application/json)</returns>
+  ///
+  /// <param name="agent_id">Agent ID</param>
+  /// <param name="fields">Requested fields</param>
+  public async Task<SdkResponse<Agent, Exception>> update_agent(
+    string agent_id,
+    WriteAgent body,
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+      agent_id = SdkUtils.EncodeParam(agent_id);
+    return await AuthRequest<Agent, Exception>(HttpMethod.Patch, $"/agents/{agent_id}", new Values {
+      { "fields", fields }},body,options);
+  }
+
+  /// ### Get All Conversation Messages
+  ///
+  /// Get all conversation messages.
+  ///
+  /// GET /conversations/{conversation_id}/messages -> ConversationMessage[]
+  ///
+  /// <returns><c>ConversationMessage[]</c> Conversation Message (application/json)</returns>
+  ///
+  /// <param name="conversation_id">Conversation ID</param>
+  /// <param name="fields">Requested fields</param>
+  public async Task<SdkResponse<ConversationMessage[], Exception>> all_conversation_messages(
+    string conversation_id,
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+      conversation_id = SdkUtils.EncodeParam(conversation_id);
+    return await AuthRequest<ConversationMessage[], Exception>(HttpMethod.Get, $"/conversations/{conversation_id}/messages", new Values {
+      { "fields", fields }},null,options);
+  }
+
+  /// ### Create Conversation Message
+  ///
+  /// Create one or more conversation messages.
+  /// Required fields for each message: `type`, `message`.
+  ///
+  /// The `order` for a message will be determined based on the highest order for previously saved
+  /// messages for the provided `conversation_id`.
+  ///
+  /// POST /conversations/{conversation_id}/messages -> ConversationMessage[]
+  ///
+  /// <returns><c>ConversationMessage[]</c> conversation messages (application/json)</returns>
+  ///
+  /// <param name="conversation_id">Conversation ID</param>
+  /// <param name="fields">Requested fields</param>
+  public async Task<SdkResponse<ConversationMessage[], Exception>> create_conversation_message(
+    string conversation_id,
+    WriteConversationMessages body,
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+      conversation_id = SdkUtils.EncodeParam(conversation_id);
+    return await AuthRequest<ConversationMessage[], Exception>(HttpMethod.Post, $"/conversations/{conversation_id}/messages", new Values {
+      { "fields", fields }},body,options);
+  }
+
+  /// ### Delete Conversation Message
+  ///
+  /// Delete an conversation message.
+  ///
+  /// DELETE /conversations/{conversation_id}/messages -> string
+  ///
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  ///
+  /// <param name="conversation_id">Conversation ID</param>
+  /// <param name="id">Conversation message id. Can be a comma-separated list of ids.</param>
+  /// <param name="fields">Requested fields</param>
+  public async Task<SdkResponse<string, Exception>> delete_conversation_message(
+    string conversation_id,
+    string id,
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+      conversation_id = SdkUtils.EncodeParam(conversation_id);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/conversations/{conversation_id}/messages", new Values {
+      { "id", id },
+      { "fields", fields }},null,options);
+  }
+
+  /// ### Get Conversation Message
+  ///
+  /// Get a conversation message.
+  ///
+  /// GET /conversations/{conversation_id}/messages/{message_id} -> ConversationMessage
+  ///
+  /// <returns><c>ConversationMessage</c> Conversation Message (application/json)</returns>
+  ///
+  /// <param name="conversation_id">Conversation ID</param>
+  /// <param name="message_id">Conversation Message ID</param>
+  /// <param name="fields">Requested fields</param>
+  public async Task<SdkResponse<ConversationMessage, Exception>> get_conversation_message(
+    string conversation_id,
+    string message_id,
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+      conversation_id = SdkUtils.EncodeParam(conversation_id);
+      message_id = SdkUtils.EncodeParam(message_id);
+    return await AuthRequest<ConversationMessage, Exception>(HttpMethod.Get, $"/conversations/{conversation_id}/messages/{message_id}", new Values {
+      { "fields", fields }},null,options);
+  }
+
+  /// ### Update Conversation Message
+  ///
+  /// Update an conversation message.
+  ///
+  /// PATCH /conversations/{conversation_id}/messages/{message_id} -> ConversationMessage
+  ///
+  /// <returns><c>ConversationMessage</c> Conversation Message (application/json)</returns>
+  ///
+  /// <param name="conversation_id">Conversation ID</param>
+  /// <param name="message_id">Conversation Message ID</param>
+  /// <param name="fields">Requested fields</param>
+  public async Task<SdkResponse<ConversationMessage, Exception>> update_conversation_message(
+    string conversation_id,
+    string message_id,
+    WriteConversationMessage body,
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+      conversation_id = SdkUtils.EncodeParam(conversation_id);
+      message_id = SdkUtils.EncodeParam(message_id);
+    return await AuthRequest<ConversationMessage, Exception>(HttpMethod.Patch, $"/conversations/{conversation_id}/messages/{message_id}", new Values {
+      { "fields", fields }},body,options);
+  }
+
+  /// ### Search Conversations
+  ///
+  /// Returns an array of conversation objects that match the specified search criteria.
+  /// This will only return conversations owned by the current user.
+  ///
+  /// The parameters `limit`, and `offset` are recommended for fetching results in page-size chunks.
+  ///
+  /// Get a **single conversation** by id with [get_conversation()](#!/Conversation/get_conversation)
+  ///
+  /// GET /conversations/search -> Conversation[]
+  ///
+  /// <returns><c>Conversation[]</c> conversations (application/json)</returns>
+  ///
+  /// <param name="id">Match conversation id. Can be a comma-separated list of ids.</param>
+  /// <param name="name">Match conversation name.</param>
+  /// <param name="agent_id">Match conversations with a particular agent. Pass "null" to find conversations with no agent, or "not null" to find conversations with any agent.</param>
+  /// <param name="fields">Requested fields.</param>
+  /// <param name="limit">Number of results to return. (used with offset)</param>
+  /// <param name="offset">Number of results to skip before returning. (used with limit)</param>
+  /// <param name="sorts">One or more fields to sort by. Sortable fields: [:id, :name, :user_id, :agent_id, :created_at, :updated_at, :category]</param>
+  /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
+  /// <param name="category">Filter on conversation category. Can be a comma-separated list of categories.</param>
+  /// <param name="deleted">Filter on soft deleted conversations.</param>
+  public async Task<SdkResponse<Conversation[], Exception>> search_conversations(
+    string? id = null,
+    string? name = null,
+    string? agent_id = null,
+    string? fields = null,
+    long? limit = null,
+    long? offset = null,
+    string? sorts = null,
+    bool? filter_or = null,
+    string? category = null,
+    bool? deleted = null,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<Conversation[], Exception>(HttpMethod.Get, "/conversations/search", new Values {
+      { "id", id },
+      { "name", name },
+      { "agent_id", agent_id },
+      { "fields", fields },
+      { "limit", limit },
+      { "offset", offset },
+      { "sorts", sorts },
+      { "filter_or", filter_or },
+      { "category", category },
+      { "deleted", deleted }},null,options);
+  }
+
+  /// ### Create Conversation
+  ///
+  /// Creates a conversation.
+  /// Required fields: `name`.
+  ///
+  /// POST /conversations -> Conversation
+  ///
+  /// <returns><c>Conversation</c> Conversation (application/json)</returns>
+  ///
+  /// <param name="fields">Requested fields</param>
+  public async Task<SdkResponse<Conversation, Exception>> create_conversation(
+    WriteConversation body,
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<Conversation, Exception>(HttpMethod.Post, "/conversations", new Values {
+      { "fields", fields }},body,options);
+  }
+
+  /// ### Delete Conversations
+  ///
+  /// Delete conversations.
+  ///
+  /// DELETE /conversations -> string
+  ///
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  ///
+  /// <param name="id">Conversation id. Can be a comma-separated list of ids.</param>
+  /// <param name="fields">Requested fields</param>
+  public async Task<SdkResponse<string, Exception>> delete_conversation(
+    string id,
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, "/conversations", new Values {
+      { "id", id },
+      { "fields", fields }},null,options);
+  }
+
+  /// ### Get Conversation
+  ///
+  /// Get an conversation.
+  ///
+  /// GET /conversations/{conversation_id} -> Conversation
+  ///
+  /// <returns><c>Conversation</c> Conversation (application/json)</returns>
+  ///
+  /// <param name="conversation_id">Conversation ID</param>
+  /// <param name="fields">Requested fields</param>
+  public async Task<SdkResponse<Conversation, Exception>> get_conversation(
+    string conversation_id,
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+      conversation_id = SdkUtils.EncodeParam(conversation_id);
+    return await AuthRequest<Conversation, Exception>(HttpMethod.Get, $"/conversations/{conversation_id}", new Values {
+      { "fields", fields }},null,options);
+  }
+
+  /// ### Update Conversation
+  ///
+  /// Update an conversation.
+  ///
+  /// PATCH /conversations/{conversation_id} -> Conversation
+  ///
+  /// <returns><c>Conversation</c> Conversation (application/json)</returns>
+  ///
+  /// <param name="conversation_id">Conversation ID</param>
+  /// <param name="fields">Requested fields</param>
+  public async Task<SdkResponse<Conversation, Exception>> update_conversation(
+    string conversation_id,
+    WriteConversation body,
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+      conversation_id = SdkUtils.EncodeParam(conversation_id);
+    return await AuthRequest<Conversation, Exception>(HttpMethod.Patch, $"/conversations/{conversation_id}", new Values {
+      { "fields", fields }},body,options);
+  }
+
+  /// ## Takes the latest conversation context (ID and a user message) and
+  /// ## returns a list of newly generated system messages.
+  ///
+  /// POST /conversational_analytics/chat -> ChatMessage[]
+  ///
+  /// <returns><c>ChatMessage[]</c> A list of message objects generated in response to the user's input. (application/json)</returns>
+  ///
+  public async Task<SdkResponse<ChatMessage[], Exception>> conversational_analytics_chat(
+    ConversationalAnalyticsChatRequest body,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<ChatMessage[], Exception>(HttpMethod.Post, "/conversational_analytics/chat", null,body,options);
+  }
+
+  #endregion ConversationalAnalytics: Manage Conversations, Agents and Messages
 
   #region Dashboard: Manage Dashboards
 
@@ -6372,6 +6770,8 @@ namespace Looker.SDK.API40
 
   /// ### Fetches a CI Run.
   ///
+  /// This endpoint is deprecated. [Get Continuous Integration Run](#!/Project/get_continuous_integration_run) should be used instead.
+  ///
   /// GET /projects/{project_id}/ci/runs/{run_id} -> ProjectRun
   ///
   /// <returns><c>ProjectRun</c> CI Run (application/json)</returns>
@@ -6379,6 +6779,7 @@ namespace Looker.SDK.API40
   /// <param name="project_id">Project Id</param>
   /// <param name="run_id">Run Id</param>
   /// <param name="fields">Requested fields</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<ProjectRun, Exception>> get_ci_run(
     string project_id,
     string run_id,
@@ -6393,12 +6794,15 @@ namespace Looker.SDK.API40
 
   /// ### Creates a CI Run.
   ///
+  /// This endpoint is deprecated. [Create Continuous Integration Run](#!/Project/create_continuous_integration_run) should be used instead.
+  ///
   /// POST /projects/{project_id}/ci/run -> CreateCIRunResponse
   ///
   /// <returns><c>CreateCIRunResponse</c> CI Run (application/json)</returns>
   ///
   /// <param name="project_id">Project Id</param>
   /// <param name="fields">Requested fields</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<CreateCIRunResponse, Exception>> create_ci_run(
     string project_id,
     CreateCIRunRequest body,
@@ -6408,6 +6812,46 @@ namespace Looker.SDK.API40
       project_id = SdkUtils.EncodeParam(project_id);
     return await AuthRequest<CreateCIRunResponse, Exception>(HttpMethod.Post, $"/projects/{project_id}/ci/run", new Values {
       { "fields", fields }},body,options);
+  }
+
+  /// ### Creates and queues a Continuous Integration Run.
+  ///
+  /// POST /projects/{project_id}/continuous_integration/runs -> CIRun
+  ///
+  /// <returns><c>CIRun</c> Continuous Integration run info (application/json)</returns>
+  ///
+  /// <param name="project_id">Project Id</param>
+  /// <param name="fields">Requested fields</param>
+  public async Task<SdkResponse<CIRun, Exception>> create_continuous_integration_run(
+    string project_id,
+    CreateContinuousIntegrationRunRequest body,
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+      project_id = SdkUtils.EncodeParam(project_id);
+    return await AuthRequest<CIRun, Exception>(HttpMethod.Post, $"/projects/{project_id}/continuous_integration/runs", new Values {
+      { "fields", fields }},body,options);
+  }
+
+  /// ### Gets a Continuous Integration run.
+  ///
+  /// GET /projects/{project_id}/continuous_integration/runs/{run_id} -> CIRun
+  ///
+  /// <returns><c>CIRun</c> Continuous Integration run info (application/json)</returns>
+  ///
+  /// <param name="project_id">Project Id</param>
+  /// <param name="run_id">Run Id</param>
+  /// <param name="fields">Requested fields</param>
+  public async Task<SdkResponse<CIRun, Exception>> get_continuous_integration_run(
+    string project_id,
+    string run_id,
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+      project_id = SdkUtils.EncodeParam(project_id);
+      run_id = SdkUtils.EncodeParam(run_id);
+    return await AuthRequest<CIRun, Exception>(HttpMethod.Get, $"/projects/{project_id}/continuous_integration/runs/{run_id}", new Values {
+      { "fields", fields }},null,options);
   }
 
   /// ### Generate Lockfile for All LookML Dependencies
@@ -8081,6 +8525,7 @@ namespace Looker.SDK.API40
   /// <param name="all_access">Match model sets by all_access status.</param>
   /// <param name="built_in">Match model sets by built_in status.</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression.</param>
+  /// <param name="models">Matches model sets that contain all of the specified models (comma separated). This is an experimental feature and may not yet be available on your instance.</param>
   public async Task<SdkResponse<ModelSet[], Exception>> search_model_sets(
     string? fields = null,
     long? limit = null,
@@ -8091,6 +8536,7 @@ namespace Looker.SDK.API40
     bool? all_access = null,
     bool? built_in = null,
     bool? filter_or = null,
+    string? models = null,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<ModelSet[], Exception>(HttpMethod.Get, "/model_sets/search", new Values {
@@ -8102,7 +8548,8 @@ namespace Looker.SDK.API40
       { "name", name },
       { "all_access", all_access },
       { "built_in", built_in },
-      { "filter_or", filter_or }},null,options);
+      { "filter_or", filter_or },
+      { "models", models }},null,options);
   }
 
   /// ### Get information about the model set with a specific id.
@@ -8230,6 +8677,7 @@ namespace Looker.SDK.API40
   /// <param name="all_access">Match permission sets by all_access status.</param>
   /// <param name="built_in">Match permission sets by built_in status.</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression.</param>
+  /// <param name="permissions">Matches permission sets that contain all of the specified permissions (comma separated). This is an experimental feature and may not yet be available on your instance.</param>
   public async Task<SdkResponse<PermissionSet[], Exception>> search_permission_sets(
     string? fields = null,
     long? limit = null,
@@ -8240,6 +8688,7 @@ namespace Looker.SDK.API40
     bool? all_access = null,
     bool? built_in = null,
     bool? filter_or = null,
+    string? permissions = null,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<PermissionSet[], Exception>(HttpMethod.Get, "/permission_sets/search", new Values {
@@ -8251,7 +8700,8 @@ namespace Looker.SDK.API40
       { "name", name },
       { "all_access", all_access },
       { "built_in", built_in },
-      { "filter_or", filter_or }},null,options);
+      { "filter_or", filter_or },
+      { "permissions", permissions }},null,options);
   }
 
   /// ### Get information about the permission set with a specific id.
@@ -8401,6 +8851,8 @@ namespace Looker.SDK.API40
   /// <param name="offset">Number of results to skip before returning any (used with `limit`).</param>
   /// <param name="sorts">Fields to sort by.</param>
   /// <param name="id">Match role id.</param>
+  /// <param name="model_set_ids">Match roles with these model set ids (comma separated). This is an experimental feature and may not yet be available on your instance.</param>
+  /// <param name="permission_set_ids">Match roles with these permission set ids (comma separated). This is an experimental feature and may not yet be available on your instance.</param>
   /// <param name="name">Match role name.</param>
   /// <param name="built_in">Match roles by built_in status.</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression.</param>
@@ -8410,6 +8862,8 @@ namespace Looker.SDK.API40
     long? offset = null,
     string? sorts = null,
     string? id = null,
+    string? model_set_ids = null,
+    string? permission_set_ids = null,
     string? name = null,
     bool? built_in = null,
     bool? filter_or = null,
@@ -8421,6 +8875,8 @@ namespace Looker.SDK.API40
       { "offset", offset },
       { "sorts", sorts },
       { "id", id },
+      { "model_set_ids", model_set_ids },
+      { "permission_set_ids", permission_set_ids },
       { "name", name },
       { "built_in", built_in },
       { "filter_or", filter_or }},null,options);
@@ -9115,7 +9571,7 @@ namespace Looker.SDK.API40
 
   /// ### Update certification for a Self Service Explore
   ///
-  /// POST /self_service_models/{model_name}/certification -> Certification
+  /// PATCH /self_service_models/{model_name}/certification -> Certification
   ///
   /// <returns><c>Certification</c> Updated certification for self service model (application/json)</returns>
   ///
@@ -9126,7 +9582,7 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
       model_name = SdkUtils.EncodeParam(model_name);
-    return await AuthRequest<Certification, Exception>(HttpMethod.Post, $"/self_service_models/{model_name}/certification", null,body,options);
+    return await AuthRequest<Certification, Exception>(HttpMethod.Patch, $"/self_service_models/{model_name}/certification", null,body,options);
   }
 
   #endregion SelfService: Self Service Models
