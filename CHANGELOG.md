@@ -1,5 +1,12 @@
 # Changelog
 
+## [26.4.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v26.4.0...sdk-codegen-all-v26.4.1) (2026-03-11)
+
+
+### Bug Fixes
+
+* fix yarn lock ([#1659](https://github.com/looker-open-source/sdk-codegen/issues/1659)) ([13a9f61](https://github.com/looker-open-source/sdk-codegen/commit/13a9f61b2e9514d0fdbaede274b684ce8604c73c))
+
 ## [26.4.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v26.2.0...sdk-codegen-all-v26.4.0) (2026-03-11)
 
 
