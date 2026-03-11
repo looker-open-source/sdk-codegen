@@ -376,21 +376,17 @@ ${this.hooks.join('\n')}
       args,
       `${currIndent}transport_options=transport_options`
     );
-    if (method.isFormUrlEncoded) {
-      if (method.queryArgs.length) {
-        args = this.argFill(
-          args,
-          `${currIndent}body=${this.argGroup('', method.queryArgs)}`
-        );
-      }
-    } else {
-      if (method.bodyArg) {
-        args = this.argFill(args, `${currIndent}body=${method.bodyArg}`);
-      }
-      if (method.queryArgs.length) {
-        const queryParams = this.argGroup('', method.queryArgs);
-        args = this.argFill(args, `${currIndent}query_params=${queryParams}`);
-      }
+    const body = method.bodyArg ? method.bodyArg : this.nullStr;
+    const query = method.queryArgs.length
+      ? this.argGroup('', method.queryArgs)
+      : this.nullStr;
+    const formArgs = this.assignFormArgs(method, body, query);
+
+    if (formArgs.body !== this.nullStr) {
+      args = this.argFill(args, `${currIndent}body=${formArgs.body}`);
+    }
+    if (formArgs.query !== this.nullStr) {
+      args = this.argFill(args, `${currIndent}query_params=${formArgs.query}`);
     }
     let returnType = this.methodReturnType(method);
     if (method.responseIsBoth()) {
