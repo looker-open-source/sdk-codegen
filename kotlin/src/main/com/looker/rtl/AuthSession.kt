@@ -25,6 +25,9 @@
 package com.looker.rtl
 
 import com.google.api.client.http.UrlEncodedContent
+import com.google.cloud.iam.credentials.v1.GenerateIdTokenRequest
+import com.google.cloud.iam.credentials.v1.IamCredentialsClient
+import com.google.cloud.iam.credentials.v1.ServiceAccountName
 
 open class AuthSession(
     open val apiSettings: ConfigurationProvider,
@@ -57,11 +60,43 @@ open class AuthSession(
      */
     fun authenticate(init: RequestSettings): RequestSettings {
         val headers = init.headers.toMutableMap()
+
+        // Handles Google IAP
+        val iapToken = fetchIapToken()
+        if (iapToken != null) {
+            headers["Proxy-Authorization"] = "Bearer $iapToken"
+        }
+
+        // Handles Looker Identity
         val token = getToken()
         if (token.accessToken.isNotBlank()) {
             headers["Authorization"] = "token ${token.accessToken}"
         }
+
         return init.copy(headers = headers)
+    }
+
+    private fun fetchIapToken(): String? {
+
+        val config = apiSettings.readConfig()
+        val audience = config["iap_client_id"]
+        val serviceAccount = config["iap_service_account_email"]
+
+        if (audience.isNullOrBlank() || serviceAccount.isNullOrBlank()) return null
+
+        return try {
+            IamCredentialsClient.create().use { client ->
+                val request = GenerateIdTokenRequest.newBuilder()
+                    .setName(ServiceAccountName.of("-", serviceAccount).toString())
+                    .setAudience(audience)
+                    .setIncludeEmail(true)
+                    .build()
+                client.generateIdToken(request).token
+            }
+        } catch (e: Exception) {
+            System.err.println("IAP Token Generation Failed: ${e.message}")
+            null
+        }
     }
 
     fun isSudo(): Boolean = sudoId.isNotBlank() && sudoToken.isActive()
@@ -136,15 +171,20 @@ open class AuthSession(
                 )
             val params = mapOf(client_id to clientId, client_secret to clientSecret)
             val body = UrlEncodedContent(params)
-            val token =
-                ok<AuthToken>(
-                    transport.request<AuthToken>(
-                        HttpMethod.POST,
-                        "$apiPath/login",
-                        emptyMap(),
-                        body,
-                    ),
-                )
+            val token = ok<AuthToken>(
+                transport.request<AuthToken>(
+                    HttpMethod.POST,
+                    "$apiPath/login",
+                    emptyMap(),
+                    body,
+                ) { requestSettings ->
+                    val headers = requestSettings.headers.toMutableMap()
+                    fetchIapToken()?.let {
+                        headers["Proxy-Authorization"] = "Bearer $it"
+                    }
+                    requestSettings.copy(headers = headers)
+                },
+            )
             authToken = token
         }
 
@@ -165,14 +205,18 @@ open class AuthSession(
 
     private fun doLogout(): Boolean {
         val token = activeToken()
-        val resp =
-            transport.request<String>(HttpMethod.DELETE, "/logout") {
-                val headers = it.headers.toMutableMap()
-                if (token.accessToken.isNotBlank()) {
-                    headers["Authorization"] = "Bearer ${token.accessToken}"
-                }
-                it.copy(headers = headers)
+        val resp = transport.request<String>(HttpMethod.DELETE, "/logout") { requestSettings ->
+            val headers = requestSettings.headers.toMutableMap()
+
+            fetchIapToken()?.let {
+                headers["Proxy-Authorization"] = "Bearer $it"
             }
+
+            if (token.accessToken.isNotBlank()) {
+                headers["Authorization"] = "Bearer ${token.accessToken}"
+            }
+            requestSettings.copy(headers = headers)
+        }
 
         val success =
             when (resp) {

@@ -176,6 +176,7 @@ data class RequestSettings(
     val method: HttpMethod,
     val url: String,
     val headers: Map<String, String> = emptyMap(),
+    val iapToken: String? = null,
 )
 
 typealias Authenticator = (init: RequestSettings) -> RequestSettings
@@ -190,6 +191,7 @@ interface TransportOptions {
     var headers: Map<String, String>
     var environmentPrefix: String
     var httpTransport: String
+    var iapToken: String?
 }
 
 interface ConfigurationProvider : TransportOptions {
@@ -206,6 +208,7 @@ data class TransportSettings(
     override var headers: Map<String, String> = emptyMap(),
     override var environmentPrefix: String = "LOOKERSDK",
     override var httpTransport: String = DEFAULT_HTTP_TRANSPORT,
+    override var iapToken: String? = null,
 ) : TransportOptions
 
 private val utcFormat by lazy { DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'") }
@@ -376,14 +379,17 @@ open class Transport(
         queryParams: Values = emptyMap(),
         body: Any? = null,
         noinline authenticator: Authenticator? = null,
+        noinline customConfiguration: ((RequestSettings) -> RequestSettings)? = null,
     ): SDKResponse {
         val transport: HttpTransport = initTransport(options)
 
         val finalizedRequestSettings: RequestSettings =
             finalizeRequest(method, path, queryParams, authenticator)
 
+        val settingsWithCustom = customConfiguration?.invoke(finalizedRequestSettings) ?: finalizedRequestSettings
+
         val requestInitializer: HttpRequestInitializer =
-            customInitializer(options, finalizedRequestSettings)
+            customInitializer(options, settingsWithCustom)
         val requestFactory: HttpRequestFactory = transport.createRequestFactory(requestInitializer)
 
         val httpContent: HttpContent? =
@@ -410,8 +416,8 @@ open class Transport(
         val request: HttpRequest =
             requestFactory
                 .buildRequest(
-                    finalizedRequestSettings.method.toString(),
-                    GenericUrl(finalizedRequestSettings.url),
+                    settingsWithCustom.method.toString(),
+                    GenericUrl(settingsWithCustom.url),
                     httpContent,
                 ).setSuppressUserAgentSuffix(true)
 
