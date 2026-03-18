@@ -376,12 +376,17 @@ ${this.hooks.join('\n')}
       args,
       `${currIndent}transport_options=transport_options`
     );
-    if (method.bodyArg) {
-      args = this.argFill(args, `${currIndent}body=${method.bodyArg}`);
+    const body = method.bodyArg ? method.bodyArg : this.nullStr;
+    const query = method.queryArgs.length
+      ? this.argGroup('', method.queryArgs)
+      : this.nullStr;
+    const formArgs = this.assignFormArgs(method, body, query);
+
+    if (formArgs.body !== this.nullStr) {
+      args = this.argFill(args, `${currIndent}body=${formArgs.body}`);
     }
-    if (method.queryArgs.length) {
-      const queryParams = this.argGroup('', method.queryArgs);
-      args = this.argFill(args, `${currIndent}query_params=${queryParams}`);
+    if (formArgs.query !== this.nullStr) {
+      args = this.argFill(args, `${currIndent}query_params=${formArgs.query}`);
     }
     let returnType = this.methodReturnType(method);
     if (method.responseIsBoth()) {
@@ -514,6 +519,7 @@ ${this.hooks.join('\n')}
       any: { default: this.nullStr, name: 'Any' },
       boolean: { default: this.nullStr, name: 'bool' },
       byte: { default: this.nullStr, name: 'bytes' },
+      date: { default: this.nullStr, name: 'datetime.datetime' },
       datetime: { default: this.nullStr, name: 'datetime.datetime' },
       double: { default: this.nullStr, name: 'float' },
       float: { default: this.nullStr, name: 'float' },

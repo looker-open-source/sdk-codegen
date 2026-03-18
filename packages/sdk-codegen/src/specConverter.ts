@@ -610,13 +610,60 @@ export const convertDefs = (defs: ArgValues): ArgValues => {
 };
 
 /**
+ * Re-inject client_id and client_secret into /login if they are missing
+ * to ensure backward compatibility of the SDK when they are removed from the specification.
+ */
+const normalizeLogin = (api: any) => {
+  const login = api.paths?.['/login']?.post;
+  if (!login) return;
+
+  login.parameters = login.parameters || [];
+
+  // Inject requestBody so isFormUrlEncoded correctly identifies it as a form endpoint
+  login.requestBody = login.requestBody || {
+    content: {
+      'application/x-www-form-urlencoded': {
+        schema: {
+          type: 'object',
+        },
+      },
+    },
+  };
+
+  const hasParam = (name: string) =>
+    login.parameters.some((p: any) => p.name === name);
+
+  if (!hasParam('client_id')) {
+    login.parameters.push({
+      name: 'client_id',
+      in: 'query',
+      description: 'client_id part of API3 Key.',
+      required: false,
+      schema: { type: 'string' },
+    });
+  }
+
+  if (!hasParam('client_secret')) {
+    login.parameters.push({
+      name: 'client_secret',
+      in: 'query',
+      description: 'client_secret part of API3 Key.',
+      required: false,
+      schema: { type: 'string' },
+    });
+  }
+};
+
+/**
  * On-demand conversion of swagger to openAPI specification
  * @param spec to possibly convert
  * @returns OpenAPI version of the specification or throws error if not Swagger or OpenAPI
  */
 export const upgradeSpecObject = (spec: any) => {
   if (isOpenApi(spec)) {
-    return JSON.parse(swapXLookerTags(JSON.stringify(spec)));
+    const api = JSON.parse(swapXLookerTags(JSON.stringify(spec)));
+    normalizeLogin(api);
+    return api;
   }
   if (!isSwagger(spec)) {
     throw new Error('Input is not a Swagger or OpenAPI specification');
@@ -642,6 +689,7 @@ export const upgradeSpecObject = (spec: any) => {
     },
   };
   // const result = fixConversionObjects(api, spec)
+  normalizeLogin(api);
   return api;
 };
 

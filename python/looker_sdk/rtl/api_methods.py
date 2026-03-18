@@ -37,7 +37,7 @@ from looker_sdk.rtl import auth_session
 TBody = Optional[
     Union[
         str,
-        MutableMapping[str, str],
+        MutableMapping[str, Any],
         Sequence[str],
         Sequence[int],
         model.Model,
