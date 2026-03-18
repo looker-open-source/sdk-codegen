@@ -42,6 +42,9 @@ dependencies {
     implementation("com.google.http-client:google-http-client-apache-v2")
     implementation("com.google.http-client:google-http-client-gson")
 
+    implementation(platform("com.google.cloud:libraries-bom:26.54.0"))
+    implementation("com.google.cloud:google-cloud-iamcredentials")
+
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
     implementation("com.google.code.gson:gson:2.8.5")
 
