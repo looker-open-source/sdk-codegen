@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 502 API methods
+/// 504 API methods
 
 #nullable enable
 using System;
@@ -147,7 +147,7 @@ namespace Looker.SDK.API40
   }
 
   /// ### Update select alert fields
-  /// # Available fields: `owner_id`, `is_disabled`, `disabled_reason`, `is_public`, `threshold`
+  /// # Available fields: `owner_id`, `is_disabled`, `disabled_reason`, `is_public`, `threshold`, `enhancements`
   /// #
   ///
   /// PATCH /alerts/{alert_id} -> Alert
@@ -2503,6 +2503,8 @@ namespace Looker.SDK.API40
   ///
   /// Available settings are:
   ///  - allow_user_timezones
+  ///  - auto_certify_lookml_content
+  ///  - content_certification_documentation_link
   ///  - custom_welcome_email
   ///  - data_connector_default_enabled
   ///  - dashboard_auto_refresh_restriction
@@ -2510,6 +2512,7 @@ namespace Looker.SDK.API40
   ///  - extension_framework_enabled
   ///  - extension_load_url_enabled
   ///  - instance_config
+  ///  - is_content_certification_enabled
   ///  - managed_certificate_uri
   ///  - marketplace_auto_install_enabled
   ///  - marketplace_automation
@@ -2518,6 +2521,7 @@ namespace Looker.SDK.API40
   ///  - marketplace_site
   ///  - onboarding_enabled
   ///  - privatelabel_configuration
+  ///  - revoke_certification_on_edits
   ///  - timezone
   ///  - host_url
   ///  - email_domain_allowlist
@@ -2543,6 +2547,8 @@ namespace Looker.SDK.API40
   ///
   /// Available settings are:
   ///  - allow_user_timezones
+  ///  - auto_certify_lookml_content
+  ///  - content_certification_documentation_link
   ///  - custom_welcome_email
   ///  - data_connector_default_enabled
   ///  - dashboard_auto_refresh_restriction
@@ -2550,6 +2556,7 @@ namespace Looker.SDK.API40
   ///  - extension_framework_enabled
   ///  - extension_load_url_enabled
   ///  - instance_config
+  ///  - is_content_certification_enabled
   ///  - managed_certificate_uri
   ///  - marketplace_auto_install_enabled
   ///  - marketplace_automation
@@ -2558,6 +2565,7 @@ namespace Looker.SDK.API40
   ///  - marketplace_site
   ///  - onboarding_enabled
   ///  - privatelabel_configuration
+  ///  - revoke_certification_on_edits
   ///  - timezone
   ///  - host_url
   ///  - email_domain_allowlist
@@ -6034,6 +6042,32 @@ namespace Looker.SDK.API40
   }
 
   #endregion Integration: Manage Integrations
+
+  #region KeyDriverAnalysis: Run Key Driver Analysis
+
+  /// ### Analyze Key Drivers
+  ///
+  /// Identifies the dimensional segments that most significantly drove a metric's change between two time periods.
+  ///
+  /// Given a data source (a saved query or a model/explore pair), a contribution metric, and a list of
+  /// dimensions to analyse, this endpoint compares a test (breach) period against a control (baseline)
+  /// period and returns a ranked list of segment-level insights.
+  /// Each insight reports the metric value in both periods, the absolute and relative difference,
+  /// the unexpected deviation (how much a segment over or under-performed relative to the overall trend),
+  /// its proportional contribution to the total change, and its a-priori support (what share of total volume that segment represents).
+  ///
+  /// POST /internal/kda/analyze -> KdaResponsePayload
+  ///
+  /// <returns><c>KdaResponsePayload</c> Analysis result as JSON (application/json)</returns>
+  ///
+  public async Task<SdkResponse<KdaResponsePayload, Exception>> run_key_driver_analysis(
+    KdaRequestPayload body,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<KdaResponsePayload, Exception>(HttpMethod.Post, "/internal/kda/analyze", null,body,options);
+  }
+
+  #endregion KeyDriverAnalysis: Run Key Driver Analysis
 
   #region Look: Run and Manage Looks
 
