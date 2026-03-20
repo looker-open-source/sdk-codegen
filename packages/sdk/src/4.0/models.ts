@@ -25,7 +25,7 @@
  */
 
 /**
- * 519 API models: 349 Spec, 75 Request, 70 Write, 25 Enum
+ * 523 API models: 352 Spec, 75 Request, 70 Write, 26 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl';
@@ -170,6 +170,10 @@ export interface IAlert {
    * An optional description for the alert. This supplements the title
    */
   description?: string | null;
+  /**
+   * Enum of additional alert properties. Valid values are: "NONE", "STRATEGIC_NARRATIVE".
+   */
+  enhancements?: Enhancements | null;
   /**
    * Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
    */
@@ -374,6 +378,10 @@ export interface IAlertPatch {
    * New threshold value
    */
   threshold?: number | null;
+  /**
+   * Enum of additional alert properties. Valid values are: "NONE", "STRATEGIC_NARRATIVE".
+   */
+  enhancements?: Enhancements | null;
 }
 
 /**
@@ -5123,6 +5131,14 @@ export interface IEmbedUrlResponse {
   url?: string;
 }
 
+/**
+ * Enum of additional alert properties. Valid values are: "NONE", "STRATEGIC_NARRATIVE". (Enum defined in Alert)
+ */
+export enum Enhancements {
+  NONE = 'NONE',
+  STRATEGIC_NARRATIVE = 'STRATEGIC_NARRATIVE',
+}
+
 export interface IError {
   /**
    * Error details (read-only)
@@ -6300,6 +6316,51 @@ export interface IJsonBiTableCalc {
    * If table calculation is a measure (read-only)
    */
   measure: boolean | null;
+}
+
+export interface IKdaDataSource {
+  query_id?: string | null;
+  model_name?: string | null;
+  explore_name?: string | null;
+}
+
+export interface IKdaRequestPayload {
+  data_source: IKdaDataSource;
+  /**
+   * The LookML measure to analyze (e.g., 'orders.total_revenue').
+   */
+  contribution_metric: string | null;
+  /**
+   * List of LookML dimensions to analyze as drivers. Max 6 dimensions allowed.
+   */
+  dimensions: string[] | null;
+  /**
+   * Optional Looker-syntax filters to scope the entire dataset (e.g., {'users.country': 'India'}).
+   */
+  base_filters?: IDictionary<string> | null;
+  /**
+   * Defines the EXPECTED, PAST, or NORMAL group (State A). For time KDA, put the past date filter here (e.g., {'orders.created_date': 'last week'}). For cohort KDA, put the baseline segment here (e.g., {'users.status': 'Active'}).
+   */
+  baseline_filters?: IDictionary<string> | null;
+  /**
+   * Defines the ANOMALOUS, CURRENT, or COMPARISON group (State B). For time KDA, put the current date here. For 'Rest of Population' cohort comparisons, use a minus sign to negate the baseline (e.g., {'users.status': '-Active'}).
+   */
+  breach_filters?: IDictionary<string> | null;
+}
+
+export interface IKdaResponsePayload {
+  /**
+   * Status of the analysis (e.g., 'SUCCESS', 'FAILED') (read-only)
+   */
+  status: string | null;
+  /**
+   * Dimensions that were analyzed (read-only)
+   */
+  dimensions: string[] | null;
+  /**
+   * List of identified key drivers (read-only)
+   */
+  drivers: any[] | null;
 }
 
 /**
@@ -8158,6 +8219,13 @@ export interface IMcpTools {
   run_dashboard?: IMcpToolSetting;
   run_look?: IMcpToolSetting;
   update_project_file?: IMcpToolSetting;
+  validate_project?: IMcpToolSetting;
+  get_project_directories?: IMcpToolSetting;
+  create_project_directory?: IMcpToolSetting;
+  delete_project_directory?: IMcpToolSetting;
+  get_lookml_tests?: IMcpToolSetting;
+  run_lookml_tests?: IMcpToolSetting;
+  create_view_from_table?: IMcpToolSetting;
 }
 
 export interface IMcpToolSetting {
@@ -13102,6 +13170,10 @@ export interface ISelfServiceModelUploadData {
    * Drive URL
    */
   drive_url?: string | null;
+  /**
+   * User ID of the uploaded data owner (read-only)
+   */
+  owner_id?: string | null;
 }
 
 export interface IServiceAccount {
@@ -13335,6 +13407,10 @@ export interface ISetting {
    * Allow content certification.
    */
   is_content_certification_enabled?: boolean;
+  /**
+   * Allow auto certification of lookml content.
+   */
+  auto_certify_lookml_content?: boolean;
   mcp_tools?: IMcpTools;
 }
 
@@ -14747,6 +14823,10 @@ export interface IWriteAlert {
    * An optional description for the alert. This supplements the title
    */
   description?: string | null;
+  /**
+   * Enum of additional alert properties. Valid values are: "NONE", "STRATEGIC_NARRATIVE".
+   */
+  enhancements?: Enhancements | null;
   /**
    * Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
    */
@@ -16505,6 +16585,41 @@ export interface IWriteMcpTools {
    * description, category, access_level
    */
   update_project_file?: IWriteMcpToolSetting | null;
+  /**
+   * Dynamic writeable type for McpToolSetting removes:
+   * description, category, access_level
+   */
+  validate_project?: IWriteMcpToolSetting | null;
+  /**
+   * Dynamic writeable type for McpToolSetting removes:
+   * description, category, access_level
+   */
+  get_project_directories?: IWriteMcpToolSetting | null;
+  /**
+   * Dynamic writeable type for McpToolSetting removes:
+   * description, category, access_level
+   */
+  create_project_directory?: IWriteMcpToolSetting | null;
+  /**
+   * Dynamic writeable type for McpToolSetting removes:
+   * description, category, access_level
+   */
+  delete_project_directory?: IWriteMcpToolSetting | null;
+  /**
+   * Dynamic writeable type for McpToolSetting removes:
+   * description, category, access_level
+   */
+  get_lookml_tests?: IWriteMcpToolSetting | null;
+  /**
+   * Dynamic writeable type for McpToolSetting removes:
+   * description, category, access_level
+   */
+  run_lookml_tests?: IWriteMcpToolSetting | null;
+  /**
+   * Dynamic writeable type for McpToolSetting removes:
+   * description, category, access_level
+   */
+  create_view_from_table?: IWriteMcpToolSetting | null;
 }
 
 /**
@@ -17436,6 +17551,10 @@ export interface IWriteSetting {
    * Allow content certification.
    */
   is_content_certification_enabled?: boolean;
+  /**
+   * Allow auto certification of lookml content.
+   */
+  auto_certify_lookml_content?: boolean;
   /**
    * Dynamic writeable type for McpTools
    */
