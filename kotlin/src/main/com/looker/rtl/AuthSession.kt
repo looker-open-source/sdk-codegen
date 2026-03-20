@@ -27,6 +27,7 @@ package com.looker.rtl
 import com.google.api.client.http.UrlEncodedContent
 import com.google.cloud.iam.credentials.v1.GenerateIdTokenRequest
 import com.google.cloud.iam.credentials.v1.IamCredentialsClient
+import com.google.cloud.iam.credentials.v1.IamCredentialsSettings
 import com.google.cloud.iam.credentials.v1.ServiceAccountName
 
 open class AuthSession(
@@ -76,8 +77,7 @@ open class AuthSession(
         return init.copy(headers = headers)
     }
 
-    private fun fetchIapToken(): String? {
-
+    fun fetchIapToken(): String? {
         val config = apiSettings.readConfig()
         val audience = config["iap_client_id"]
         val serviceAccount = config["iap_service_account_email"]
@@ -85,7 +85,13 @@ open class AuthSession(
         if (audience.isNullOrBlank() || serviceAccount.isNullOrBlank()) return null
 
         return try {
-            IamCredentialsClient.create().use { client ->
+            val settings = IamCredentialsSettings.newBuilder()
+                .setTransportChannelProvider(
+                    IamCredentialsSettings.defaultHttpJsonTransportProviderBuilder().build(),
+                )
+                .build()
+
+            IamCredentialsClient.create(settings).use { client ->
                 val request = GenerateIdTokenRequest.newBuilder()
                     .setName(ServiceAccountName.of("-", serviceAccount).toString())
                     .setAudience(audience)
@@ -94,7 +100,6 @@ open class AuthSession(
                 client.generateIdToken(request).token
             }
         } catch (e: Exception) {
-            System.err.println("IAP Token Generation Failed: ${e.message}")
             null
         }
     }
@@ -205,11 +210,11 @@ open class AuthSession(
 
     private fun doLogout(): Boolean {
         val token = activeToken()
-        val resp = transport.request<String>(HttpMethod.DELETE, "/logout") { requestSettings ->
+        val resp = transport.request<Void>(HttpMethod.DELETE, "/logout") { requestSettings ->
             val headers = requestSettings.headers.toMutableMap()
 
-            fetchIapToken()?.let {
-                headers["Proxy-Authorization"] = "Bearer $it"
+            fetchIapToken()?.let { iapToken ->
+                headers["Proxy-Authorization"] = "Bearer $iapToken"
             }
 
             if (token.accessToken.isNotBlank()) {
