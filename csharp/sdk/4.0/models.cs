@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 444 API models: 349 Spec, 0 Request, 70 Write, 25 Enum
+/// 448 API models: 352 Spec, 0 Request, 70 Write, 26 Enum
 
 #nullable enable
 using System;
@@ -115,6 +115,9 @@ public class Alert : SdkModel
   public string? dashboard_element_id { get; set; } = null;
   /// <summary>An optional description for the alert. This supplements the title</summary>
   public string? description { get; set; } = null;
+  /// <summary>Enum of additional alert properties. Valid values are: "NONE", "STRATEGIC_NARRATIVE".</summary>
+  [JsonConverter(typeof(StringEnumConverter))]
+  public Enhancements? enhancements { get; set; }
   /// <summary>Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`</summary>
   public AlertDestination[] destinations { get; set; } = null;
   public AlertField field { get; set; } = null;
@@ -238,6 +241,9 @@ public class AlertPatch : SdkModel
   public bool? is_public { get; set; } = null;
   /// <summary>New threshold value</summary>
   public double? threshold { get; set; } = null;
+  /// <summary>Enum of additional alert properties. Valid values are: "NONE", "STRATEGIC_NARRATIVE".</summary>
+  [JsonConverter(typeof(StringEnumConverter))]
+  public Enhancements? enhancements { get; set; }
 }
 
 /// The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: "left", "right". (Enum defined in LookmlModelExploreField)
@@ -3076,6 +3082,15 @@ public class EmbedUrlResponse : SdkModel
   public string? url { get; set; } = null;
 }
 
+/// Enum of additional alert properties. Valid values are: "NONE", "STRATEGIC_NARRATIVE". (Enum defined in Alert)
+public enum Enhancements
+{
+  [EnumMember(Value = "NONE")]
+  NONE,
+  [EnumMember(Value = "STRATEGIC_NARRATIVE")]
+  STRATEGIC_NARRATIVE
+}
+
 public class Error : SdkModel
 {
   /// <summary>Error details (read-only)</summary>
@@ -3770,6 +3785,38 @@ public class JsonBiTableCalc : SdkModel
   public string value_format { get; set; } = "";
   /// <summary>If table calculation is a measure (read-only)</summary>
   public bool measure { get; set; }
+}
+
+public class KdaDataSource : SdkModel
+{
+  public string? query_id { get; set; } = null;
+  public string? model_name { get; set; } = null;
+  public string? explore_name { get; set; } = null;
+}
+
+public class KdaRequestPayload : SdkModel
+{
+  public KdaDataSource data_source { get; set; } = null;
+  /// <summary>The LookML measure to analyze (e.g., 'orders.total_revenue').</summary>
+  public string contribution_metric { get; set; } = "";
+  /// <summary>List of LookML dimensions to analyze as drivers. Max 6 dimensions allowed.</summary>
+  public string[] dimensions { get; set; } = null;
+  /// <summary>Optional Looker-syntax filters to scope the entire dataset (e.g., {'users.country': 'India'}).</summary>
+  public StringDictionary<string>? base_filters { get; set; } = null;
+  /// <summary>Defines the EXPECTED, PAST, or NORMAL group (State A). For time KDA, put the past date filter here (e.g., {'orders.created_date': 'last week'}). For cohort KDA, put the baseline segment here (e.g., {'users.status': 'Active'}).</summary>
+  public StringDictionary<string>? baseline_filters { get; set; } = null;
+  /// <summary>Defines the ANOMALOUS, CURRENT, or COMPARISON group (State B). For time KDA, put the current date here. For 'Rest of Population' cohort comparisons, use a minus sign to negate the baseline (e.g., {'users.status': '-Active'}).</summary>
+  public StringDictionary<string>? breach_filters { get; set; } = null;
+}
+
+public class KdaResponsePayload : SdkModel
+{
+  /// <summary>Status of the analysis (e.g., 'SUCCESS', 'FAILED') (read-only)</summary>
+  public string status { get; set; } = "";
+  /// <summary>Dimensions that were analyzed (read-only)</summary>
+  public string[] dimensions { get; set; } = null;
+  /// <summary>List of identified key drivers (read-only)</summary>
+  public object[] drivers { get; set; } = null;
 }
 
 /// The type of calculation for the period_over_period measure. Valid values are: "previous", "difference", "relative_change". (Enum defined in LookmlModelExploreFieldPeriodOverPeriodParams)
@@ -4856,6 +4903,13 @@ public class McpTools : SdkModel
   public McpToolSetting? run_dashboard { get; set; }
   public McpToolSetting? run_look { get; set; }
   public McpToolSetting? update_project_file { get; set; }
+  public McpToolSetting? validate_project { get; set; }
+  public McpToolSetting? get_project_directories { get; set; }
+  public McpToolSetting? create_project_directory { get; set; }
+  public McpToolSetting? delete_project_directory { get; set; }
+  public McpToolSetting? get_lookml_tests { get; set; }
+  public McpToolSetting? run_lookml_tests { get; set; }
+  public McpToolSetting? create_view_from_table { get; set; }
 }
 
 public class McpToolSetting : SdkModel
@@ -6239,6 +6293,8 @@ public class SelfServiceModelUploadData : SdkModel
   public string? upload_type { get; set; } = null;
   /// <summary>Drive URL</summary>
   public string? drive_url { get; set; } = null;
+  /// <summary>User ID of the uploaded data owner (read-only)</summary>
+  public string? owner_id { get; set; } = null;
 }
 
 public class ServiceAccount : SdkModel
@@ -6368,6 +6424,8 @@ public class Setting : SdkModel
   public bool? revoke_certification_on_edits { get; set; } = null;
   /// <summary>Allow content certification.</summary>
   public bool? is_content_certification_enabled { get; set; } = null;
+  /// <summary>Allow auto certification of lookml content.</summary>
+  public bool? auto_certify_lookml_content { get; set; } = null;
   public McpTools? mcp_tools { get; set; }
 }
 
@@ -7274,6 +7332,9 @@ public class WriteAlert : SdkModel
   public string? dashboard_element_id { get; set; } = null;
   /// <summary>An optional description for the alert. This supplements the title</summary>
   public string? description { get; set; } = null;
+  /// <summary>Enum of additional alert properties. Valid values are: "NONE", "STRATEGIC_NARRATIVE".</summary>
+  [JsonConverter(typeof(StringEnumConverter))]
+  public Enhancements? enhancements { get; set; }
   /// <summary>Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`</summary>
   public AlertDestination[] destinations { get; set; } = null;
   public AlertField field { get; set; } = null;
@@ -8388,6 +8449,41 @@ public class WriteMcpTools : SdkModel
   /// description, category, access_level
   /// </summary>
   public WriteMcpToolSetting? update_project_file { get; set; }
+  /// <summary>
+  /// Dynamic writeable type for McpToolSetting removes:
+  /// description, category, access_level
+  /// </summary>
+  public WriteMcpToolSetting? validate_project { get; set; }
+  /// <summary>
+  /// Dynamic writeable type for McpToolSetting removes:
+  /// description, category, access_level
+  /// </summary>
+  public WriteMcpToolSetting? get_project_directories { get; set; }
+  /// <summary>
+  /// Dynamic writeable type for McpToolSetting removes:
+  /// description, category, access_level
+  /// </summary>
+  public WriteMcpToolSetting? create_project_directory { get; set; }
+  /// <summary>
+  /// Dynamic writeable type for McpToolSetting removes:
+  /// description, category, access_level
+  /// </summary>
+  public WriteMcpToolSetting? delete_project_directory { get; set; }
+  /// <summary>
+  /// Dynamic writeable type for McpToolSetting removes:
+  /// description, category, access_level
+  /// </summary>
+  public WriteMcpToolSetting? get_lookml_tests { get; set; }
+  /// <summary>
+  /// Dynamic writeable type for McpToolSetting removes:
+  /// description, category, access_level
+  /// </summary>
+  public WriteMcpToolSetting? run_lookml_tests { get; set; }
+  /// <summary>
+  /// Dynamic writeable type for McpToolSetting removes:
+  /// description, category, access_level
+  /// </summary>
+  public WriteMcpToolSetting? create_view_from_table { get; set; }
 }
 
 /// Dynamic writeable type for McpToolSetting removes:
@@ -8918,6 +9014,8 @@ public class WriteSetting : SdkModel
   public bool? revoke_certification_on_edits { get; set; } = null;
   /// <summary>Allow content certification.</summary>
   public bool? is_content_certification_enabled { get; set; } = null;
+  /// <summary>Allow auto certification of lookml content.</summary>
+  public bool? auto_certify_lookml_content { get; set; } = null;
   /// <summary>Dynamic writeable type for McpTools</summary>
   public WriteMcpTools? mcp_tools { get; set; }
 }

@@ -25,7 +25,7 @@
  */
 
 /**
- * 502 API methods
+ * 504 API methods
  */
 
 import type {
@@ -143,6 +143,8 @@ import type {
   IInternalHelpResources,
   IInternalHelpResourcesContent,
   IJsonBi,
+  IKdaRequestPayload,
+  IKdaResponsePayload,
   ILDAPConfig,
   ILDAPConfigTestResult,
   ILegacyFeature,
@@ -497,7 +499,7 @@ export const update_alert = async (
 
 /**
  * ### Update select alert fields
- * # Available fields: `owner_id`, `is_disabled`, `disabled_reason`, `is_public`, `threshold`
+ * # Available fields: `owner_id`, `is_disabled`, `disabled_reason`, `is_public`, `threshold`, `enhancements`
  * #
  *
  * PATCH /alerts/{alert_id} -> IAlert
@@ -3738,6 +3740,8 @@ export const mobile_settings = async (
  *
  * Available settings are:
  *  - allow_user_timezones
+ *  - auto_certify_lookml_content
+ *  - content_certification_documentation_link
  *  - custom_welcome_email
  *  - data_connector_default_enabled
  *  - dashboard_auto_refresh_restriction
@@ -3745,6 +3749,7 @@ export const mobile_settings = async (
  *  - extension_framework_enabled
  *  - extension_load_url_enabled
  *  - instance_config
+ *  - is_content_certification_enabled
  *  - managed_certificate_uri
  *  - marketplace_auto_install_enabled
  *  - marketplace_automation
@@ -3753,6 +3758,7 @@ export const mobile_settings = async (
  *  - marketplace_site
  *  - onboarding_enabled
  *  - privatelabel_configuration
+ *  - revoke_certification_on_edits
  *  - timezone
  *  - host_url
  *  - email_domain_allowlist
@@ -3786,6 +3792,8 @@ export const get_setting = async (
  *
  * Available settings are:
  *  - allow_user_timezones
+ *  - auto_certify_lookml_content
+ *  - content_certification_documentation_link
  *  - custom_welcome_email
  *  - data_connector_default_enabled
  *  - dashboard_auto_refresh_restriction
@@ -3793,6 +3801,7 @@ export const get_setting = async (
  *  - extension_framework_enabled
  *  - extension_load_url_enabled
  *  - instance_config
+ *  - is_content_certification_enabled
  *  - managed_certificate_uri
  *  - marketplace_auto_install_enabled
  *  - marketplace_automation
@@ -3801,6 +3810,7 @@ export const get_setting = async (
  *  - marketplace_site
  *  - onboarding_enabled
  *  - privatelabel_configuration
+ *  - revoke_certification_on_edits
  *  - timezone
  *  - host_url
  *  - email_domain_allowlist
@@ -8295,6 +8305,42 @@ export const test_integration = async (
 };
 
 //#endregion Integration: Manage Integrations
+
+//#region KeyDriverAnalysis: Run Key Driver Analysis
+
+/**
+ * ### Analyze Key Drivers
+ *
+ * Identifies the dimensional segments that most significantly drove a metric's change between two time periods.
+ *
+ * Given a data source (a saved query or a model/explore pair), a contribution metric, and a list of
+ * dimensions to analyse, this endpoint compares a test (breach) period against a control (baseline)
+ * period and returns a ranked list of segment-level insights.
+ * Each insight reports the metric value in both periods, the absolute and relative difference,
+ * the unexpected deviation (how much a segment over or under-performed relative to the overall trend),
+ * its proportional contribution to the total change, and its a-priori support (what share of total volume that segment represents).
+ *
+ * POST /internal/kda/analyze -> IKdaResponsePayload
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IKdaRequestPayload>
+ * @param options one-time API call overrides
+ *
+ */
+export const run_key_driver_analysis = async (
+  sdk: IAPIMethods,
+  body: Partial<IKdaRequestPayload>,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IKdaResponsePayload, IError | IValidationError>> => {
+  return sdk.post<IKdaResponsePayload, IError | IValidationError>(
+    '/internal/kda/analyze',
+    null,
+    body,
+    options
+  );
+};
+
+//#endregion KeyDriverAnalysis: Run Key Driver Analysis
 
 //#region Look: Run and Manage Looks
 
