@@ -24,9 +24,6 @@
 
 package com.looker.sdk
 
-import com.google.cloud.iam.credentials.v1.GenerateIdTokenRequest
-import com.google.cloud.iam.credentials.v1.IamCredentialsClient
-import com.google.cloud.iam.credentials.v1.ServiceAccountName
 import com.looker.rtl.ConfigurationProvider
 import com.looker.rtl.DEFAULT_HTTP_TRANSPORT
 import com.looker.rtl.DEFAULT_TIMEOUT
@@ -67,8 +64,8 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
 
     override var iapToken: String? = null
 
-    private val keyIapAudience: String = "iap_audience"
-    private val keyIapServiceAccount: String = "iap_service_account"
+    private val keyIapClientId: String = "iap_client_id"
+    private val keyIapServiceAccountEmail: String = "iap_service_account_email"
 
     companion object {
         @JvmStatic
@@ -119,13 +116,6 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
     init {
         val settings = this.readConfig()
 
-        val audience = settings[keyIapAudience]
-        val serviceAccount = settings[keyIapServiceAccount]
-
-        if (!audience.isNullOrEmpty() && !serviceAccount.isNullOrEmpty()) {
-            this.iapToken = fetchIapToken(serviceAccount, audience)
-        }
-
         // Only replace the current values if new values are provided
         settings[keyBaseUrl].let { value ->
             baseUrl = unQuote(value ?: baseUrl)
@@ -149,10 +139,6 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
 
         settings[keyHttpTransport].let { value ->
             httpTransport = if (value !== null) value else httpTransport
-        }
-
-        settings[keyIapAudience]?.let { value ->
-            iapToken = value
         }
     }
 
@@ -186,17 +172,9 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
         addSystemProperty(map, keyVerifySSL)
         addSystemProperty(map, keyTimeout)
         addSystemProperty(map, keyHttpTransport)
-        return map.toMap()
-    }
+        addSystemProperty(map, keyIapClientId)
+        addSystemProperty(map, keyIapServiceAccountEmail)
 
-    private fun fetchIapToken(serviceAccount: String, audience: String): String {
-        return IamCredentialsClient.create().use { client ->
-            val request = GenerateIdTokenRequest.newBuilder()
-                .setName(ServiceAccountName.of("-", serviceAccount).toString())
-                .setAudience(audience)
-                .setIncludeEmail(true)
-                .build()
-            client.generateIdToken(request).token
-        }
+        return map.toMap()
     }
 }
