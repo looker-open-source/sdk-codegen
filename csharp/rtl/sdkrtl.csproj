@@ -1,8 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <!-- <TargetFramework>netstandard3.1</TargetFramework> -->
+    <TargetFramework>net6.0</TargetFramework>
     <GenerateTargetFrameworkAttribute>false</GenerateTargetFrameworkAttribute>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
   </PropertyGroup>
 
 </Project>
