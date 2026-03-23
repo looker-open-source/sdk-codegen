@@ -1340,6 +1340,9 @@ export interface IMethod extends ISchemadSymbol {
   /** true if this method is a rate-limited API endpoint */
   rateLimited: boolean;
 
+  /** true if this method consumes application/x-www-form-urlencoded and is POST/PUT/PATCH */
+  isFormUrlEncoded: boolean;
+
   /**
    * Get a list of parameters for location, or just all parameters
    * @param {MethodParameterLocation} location is optional. defaults to all parameters
@@ -1510,7 +1513,7 @@ export class Method extends SchemadSymbol implements IMethod {
     this.params = [];
     params.forEach(p => this.addParam(api, p));
     responses.forEach(r => this.addType(api, r.type));
-    if (body) {
+    if (body && !this.isFormUrlEncoded) {
       this.addParam(api, body);
     }
     this.activityType = schema['x-looker-activity-type'];
@@ -1543,6 +1546,13 @@ export class Method extends SchemadSymbol implements IMethod {
     }
 
     return false;
+  }
+
+  get isFormUrlEncoded() {
+    const method = this.httpMethod.toUpperCase();
+    if (!['POST', 'PUT', 'PATCH'].includes(method)) return false;
+    const body = this.schema.requestBody as OAS.RequestBodyObject;
+    return !!body?.content?.['application/x-www-form-urlencoded'];
   }
 
   eligibleForRequestType(): boolean {

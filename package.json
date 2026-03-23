@@ -1,7 +1,7 @@
 {
   "license": "MIT",
   "name": "sdk-codegen-all",
-  "version": "26.2.0",
+  "version": "26.6.0",
   "description": "All workspaces for SDK code generation",
   "author": "Looker",
   "private": true,
@@ -160,7 +160,8 @@
     "uuid": "9.0.1",
     "webpack": "5.94.0",
     "webpack-bundle-analyzer": "^4.10.2",
-    "webpack-merge": "^5.10.0"
+    "webpack-merge": "^5.10.0",
+    "whatwg-fetch": "^3.6.20"
   },
   "lint-staged": {
     "**/*.ts?(x)": [
@@ -334,6 +335,9 @@
   ],
   "keywords": [],
   "resolutions": {
+    "@typescript-eslint/eslint-plugin": "^5.61.0",
+    "@typescript-eslint/experimental-utils": "^5.61.0",
+    "@typescript-eslint/parser": "^5.61.0",
     "@types/react": "17.0.65",
     "react": "^17.0.2",
     "set-value": "^2.0.1",

@@ -25,7 +25,7 @@
  */
 
 /**
- * 381 API models: 291 Spec, 0 Request, 65 Write, 25 Enum
+ * 448 API models: 352 Spec, 0 Request, 70 Write, 26 Enum
  */
 
 
@@ -86,6 +86,189 @@ public struct AccessToken: SDKModel {
 
 }
 
+public struct Agent: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _id = "id"
+        case _created_by_user_id = "created_by_user_id"
+        case _created_by_name = "created_by_name"
+        case _created_by_first_name = "created_by_first_name"
+        case _created_by_last_name = "created_by_last_name"
+        case _created_by_avatar_url = "created_by_avatar_url"
+        case _name = "name"
+        case _description = "description"
+        case _category = "category"
+        case sources
+        case has_inaccessible_source
+        case context
+        case deleted
+        case created_at
+        case updated_at
+        case _content_metadata_id = "content_metadata_id"
+        case code_interpreter
+        case _studio_agent_id = "studio_agent_id"
+    }
+    /**
+     * Operations the current user is able to perform on this object (read-only)
+     */
+    public var can: StringDictionary<Bool>?
+
+    private var _id: AnyString?
+    /**
+     * Agent unique identifier (read-only)
+     */
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
+    private var _created_by_user_id: AnyString?
+    /**
+     * User that created the Agent (read-only)
+     */
+    public var created_by_user_id: String? {
+        get { _created_by_user_id?.value }
+        set { _created_by_user_id = newValue.map(AnyString.init) }
+    }
+
+    private var _created_by_name: AnyString?
+    /**
+     * Name of user that created the Agent (read-only)
+     */
+    public var created_by_name: String? {
+        get { _created_by_name?.value }
+        set { _created_by_name = newValue.map(AnyString.init) }
+    }
+
+    private var _created_by_first_name: AnyString?
+    /**
+     * Name of user that created the Agent (read-only)
+     */
+    public var created_by_first_name: String? {
+        get { _created_by_first_name?.value }
+        set { _created_by_first_name = newValue.map(AnyString.init) }
+    }
+
+    private var _created_by_last_name: AnyString?
+    /**
+     * Name of user that created the Agent (read-only)
+     */
+    public var created_by_last_name: String? {
+        get { _created_by_last_name?.value }
+        set { _created_by_last_name = newValue.map(AnyString.init) }
+    }
+
+    private var _created_by_avatar_url: AnyString?
+    /**
+     * Avatar URL of user that created the Agent (read-only)
+     */
+    public var created_by_avatar_url: String? {
+        get { _created_by_avatar_url?.value }
+        set { _created_by_avatar_url = newValue.map(AnyString.init) }
+    }
+
+    private var _name: AnyString?
+    /**
+     * Agent name
+     */
+    public var name: String? {
+        get { _name?.value }
+        set { _name = newValue.map(AnyString.init) }
+    }
+
+    private var _description: AnyString?
+    /**
+     * Agent description
+     */
+    public var description: String? {
+        get { _description?.value }
+        set { _description = newValue.map(AnyString.init) }
+    }
+
+    private var _category: AnyString?
+    /**
+     * The category of the agent (e.g., dashboard, conversation)
+     */
+    public var category: String? {
+        get { _category?.value }
+        set { _category = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Agent sources
+     */
+    public var sources: [Source]?
+
+    /**
+     * Has inaccessible source (read-only)
+     */
+    public var has_inaccessible_source: Bool?
+
+    public var context: Context?
+
+    /**
+     * Is Agent soft deleted
+     */
+    public var deleted: Bool?
+
+    /**
+     * Agent created_at (read-only)
+     */
+    public var created_at: Date?
+
+    /**
+     * Agent updated_at (read-only)
+     */
+    public var updated_at: Date?
+
+    private var _content_metadata_id: AnyString?
+    /**
+     * Content metadata ID for this Agent (read-only)
+     */
+    public var content_metadata_id: String? {
+        get { _content_metadata_id?.value }
+        set { _content_metadata_id = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Enables Code Interpreter for this Agent
+     */
+    public var code_interpreter: Bool?
+
+    private var _studio_agent_id: AnyString?
+    /**
+     * Studio Agent ID (if this agent was migrated) (read-only)
+     */
+    public var studio_agent_id: String? {
+        get { _studio_agent_id?.value }
+        set { _studio_agent_id = newValue.map(AnyString.init) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, created_by_user_id: String? = nil, created_by_name: String? = nil, created_by_first_name: String? = nil, created_by_last_name: String? = nil, created_by_avatar_url: String? = nil, name: String? = nil, description: String? = nil, category: String? = nil, sources: [Source]? = nil, has_inaccessible_source: Bool? = nil, context: Context? = nil, deleted: Bool? = nil, created_at: Date? = nil, updated_at: Date? = nil, content_metadata_id: String? = nil, code_interpreter: Bool? = nil, studio_agent_id: String? = nil) {
+        self.can = can
+        self._id = id.map(AnyString.init)
+        self._created_by_user_id = created_by_user_id.map(AnyString.init)
+        self._created_by_name = created_by_name.map(AnyString.init)
+        self._created_by_first_name = created_by_first_name.map(AnyString.init)
+        self._created_by_last_name = created_by_last_name.map(AnyString.init)
+        self._created_by_avatar_url = created_by_avatar_url.map(AnyString.init)
+        self._name = name.map(AnyString.init)
+        self._description = description.map(AnyString.init)
+        self._category = category.map(AnyString.init)
+        self.sources = sources
+        self.has_inaccessible_source = has_inaccessible_source
+        self.context = context
+        self.deleted = deleted
+        self.created_at = created_at
+        self.updated_at = updated_at
+        self._content_metadata_id = content_metadata_id.map(AnyString.init)
+        self.code_interpreter = code_interpreter
+        self._studio_agent_id = studio_agent_id.map(AnyString.init)
+    }
+
+}
+
 public struct Alert: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -99,6 +282,7 @@ public struct Alert: SDKModel {
         case _custom_title = "custom_title"
         case _dashboard_element_id = "dashboard_element_id"
         case _description = "description"
+        case enhancements
         case destinations
         case field
         case followed
@@ -194,6 +378,11 @@ public struct Alert: SDKModel {
         get { _description?.value }
         set { _description = newValue.map(AnyString.init) }
     }
+
+    /**
+     * Enum of additional alert properties. Valid values are: "NONE", "STRATEGIC_NARRATIVE".
+     */
+    public var enhancements: Enhancements?
 
     /**
      * Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
@@ -306,7 +495,7 @@ public struct Alert: SDKModel {
 
     public var time_series_condition_state: AlertConditionState?
 
-    public init(applied_dashboard_filters: [AlertAppliedDashboardFilter]? = nil, comparison_type: ComparisonType, cron: String, custom_url_base: String? = nil, custom_url_params: String? = nil, custom_url_label: String? = nil, show_custom_url: Bool? = nil, custom_title: String? = nil, dashboard_element_id: String? = nil, description: String? = nil, destinations: [AlertDestination], field: AlertField, followed: Bool? = nil, followable: Bool? = nil, id: String? = nil, is_disabled: Bool? = nil, disabled_reason: String? = nil, is_public: Bool? = nil, investigative_content_type: InvestigativeContentType? = nil, investigative_content_id: String? = nil, investigative_content_title: String? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, owner_id: String, owner_display_name: String? = nil, threshold: Double, time_series_condition_state: AlertConditionState? = nil) {
+    public init(applied_dashboard_filters: [AlertAppliedDashboardFilter]? = nil, comparison_type: ComparisonType, cron: String, custom_url_base: String? = nil, custom_url_params: String? = nil, custom_url_label: String? = nil, show_custom_url: Bool? = nil, custom_title: String? = nil, dashboard_element_id: String? = nil, description: String? = nil, enhancements: Enhancements? = nil, destinations: [AlertDestination], field: AlertField, followed: Bool? = nil, followable: Bool? = nil, id: String? = nil, is_disabled: Bool? = nil, disabled_reason: String? = nil, is_public: Bool? = nil, investigative_content_type: InvestigativeContentType? = nil, investigative_content_id: String? = nil, investigative_content_title: String? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, owner_id: String, owner_display_name: String? = nil, threshold: Double, time_series_condition_state: AlertConditionState? = nil) {
         self.applied_dashboard_filters = applied_dashboard_filters
         self.comparison_type = comparison_type
         self._cron = AnyString.init(cron)
@@ -317,6 +506,7 @@ public struct Alert: SDKModel {
         self._custom_title = custom_title.map(AnyString.init)
         self._dashboard_element_id = dashboard_element_id.map(AnyString.init)
         self._description = description.map(AnyString.init)
+        self.enhancements = enhancements
         self.destinations = destinations
         self.field = field
         self.followed = followed
@@ -336,8 +526,8 @@ public struct Alert: SDKModel {
         self.time_series_condition_state = time_series_condition_state
     }
 
-    public init(applied_dashboard_filters: [AlertAppliedDashboardFilter]? = nil, _ comparison_type: ComparisonType, _ cron: String, custom_url_base: String? = nil, custom_url_params: String? = nil, custom_url_label: String? = nil, show_custom_url: Bool? = nil, custom_title: String? = nil, dashboard_element_id: String? = nil, description: String? = nil, _ destinations: [AlertDestination], _ field: AlertField, followed: Bool? = nil, followable: Bool? = nil, id: String? = nil, is_disabled: Bool? = nil, disabled_reason: String? = nil, is_public: Bool? = nil, investigative_content_type: InvestigativeContentType? = nil, investigative_content_id: String? = nil, investigative_content_title: String? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, _ owner_id: String, owner_display_name: String? = nil, _ threshold: Double, time_series_condition_state: AlertConditionState? = nil) {
-        self.init(applied_dashboard_filters: applied_dashboard_filters, comparison_type: comparison_type, cron: cron, custom_url_base: custom_url_base, custom_url_params: custom_url_params, custom_url_label: custom_url_label, show_custom_url: show_custom_url, custom_title: custom_title, dashboard_element_id: dashboard_element_id, description: description, destinations: destinations, field: field, followed: followed, followable: followable, id: id, is_disabled: is_disabled, disabled_reason: disabled_reason, is_public: is_public, investigative_content_type: investigative_content_type, investigative_content_id: investigative_content_id, investigative_content_title: investigative_content_title, lookml_dashboard_id: lookml_dashboard_id, lookml_link_id: lookml_link_id, owner_id: owner_id, owner_display_name: owner_display_name, threshold: threshold, time_series_condition_state: time_series_condition_state)
+    public init(applied_dashboard_filters: [AlertAppliedDashboardFilter]? = nil, _ comparison_type: ComparisonType, _ cron: String, custom_url_base: String? = nil, custom_url_params: String? = nil, custom_url_label: String? = nil, show_custom_url: Bool? = nil, custom_title: String? = nil, dashboard_element_id: String? = nil, description: String? = nil, enhancements: Enhancements? = nil, _ destinations: [AlertDestination], _ field: AlertField, followed: Bool? = nil, followable: Bool? = nil, id: String? = nil, is_disabled: Bool? = nil, disabled_reason: String? = nil, is_public: Bool? = nil, investigative_content_type: InvestigativeContentType? = nil, investigative_content_id: String? = nil, investigative_content_title: String? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, _ owner_id: String, owner_display_name: String? = nil, _ threshold: Double, time_series_condition_state: AlertConditionState? = nil) {
+        self.init(applied_dashboard_filters: applied_dashboard_filters, comparison_type: comparison_type, cron: cron, custom_url_base: custom_url_base, custom_url_params: custom_url_params, custom_url_label: custom_url_label, show_custom_url: show_custom_url, custom_title: custom_title, dashboard_element_id: dashboard_element_id, description: description, enhancements: enhancements, destinations: destinations, field: field, followed: followed, followable: followable, id: id, is_disabled: is_disabled, disabled_reason: disabled_reason, is_public: is_public, investigative_content_type: investigative_content_type, investigative_content_id: investigative_content_id, investigative_content_title: investigative_content_title, lookml_dashboard_id: lookml_dashboard_id, lookml_link_id: lookml_link_id, owner_id: owner_id, owner_display_name: owner_display_name, threshold: threshold, time_series_condition_state: time_series_condition_state)
     }
 
 }
@@ -579,6 +769,7 @@ public struct AlertNotifications: SDKModel {
         case _ran_at = "ran_at"
         case alert
         case _notification_type = "notification_type"
+        case _triggering_field_title = "triggering_field_title"
     }
     private var _notification_id: AnyString?
     /**
@@ -642,7 +833,16 @@ public struct AlertNotifications: SDKModel {
         set { _notification_type = newValue.map(AnyString.init) }
     }
 
-    public init(notification_id: String? = nil, alert_condition_id: String? = nil, user_id: String? = nil, is_read: Bool? = nil, field_value: Double? = nil, threshold_value: Double? = nil, ran_at: String? = nil, alert: MobilePayload? = nil, notification_type: String? = nil) {
+    private var _triggering_field_title: AnyString?
+    /**
+     * The title of the field on which the alert condition is set (read-only)
+     */
+    public var triggering_field_title: String? {
+        get { _triggering_field_title?.value }
+        set { _triggering_field_title = newValue.map(AnyString.init) }
+    }
+
+    public init(notification_id: String? = nil, alert_condition_id: String? = nil, user_id: String? = nil, is_read: Bool? = nil, field_value: Double? = nil, threshold_value: Double? = nil, ran_at: String? = nil, alert: MobilePayload? = nil, notification_type: String? = nil, triggering_field_title: String? = nil) {
         self._notification_id = notification_id.map(AnyString.init)
         self._alert_condition_id = alert_condition_id.map(AnyString.init)
         self._user_id = user_id.map(AnyString.init)
@@ -652,6 +852,7 @@ public struct AlertNotifications: SDKModel {
         self._ran_at = ran_at.map(AnyString.init)
         self.alert = alert
         self._notification_type = notification_type.map(AnyString.init)
+        self._triggering_field_title = triggering_field_title.map(AnyString.init)
     }
 
 }
@@ -664,6 +865,7 @@ public struct AlertPatch: SDKModel {
         case _disabled_reason = "disabled_reason"
         case is_public
         case threshold
+        case enhancements
     }
     private var _owner_id: AnyString?
     /**
@@ -698,12 +900,18 @@ public struct AlertPatch: SDKModel {
      */
     public var threshold: Double?
 
-    public init(owner_id: String? = nil, is_disabled: Bool? = nil, disabled_reason: String? = nil, is_public: Bool? = nil, threshold: Double? = nil) {
+    /**
+     * Enum of additional alert properties. Valid values are: "NONE", "STRATEGIC_NARRATIVE".
+     */
+    public var enhancements: Enhancements?
+
+    public init(owner_id: String? = nil, is_disabled: Bool? = nil, disabled_reason: String? = nil, is_public: Bool? = nil, threshold: Double? = nil, enhancements: Enhancements? = nil) {
         self._owner_id = owner_id.map(AnyString.init)
         self.is_disabled = is_disabled
         self._disabled_reason = disabled_reason.map(AnyString.init)
         self.is_public = is_public
         self.threshold = threshold
+        self.enhancements = enhancements
     }
 
 }
@@ -714,6 +922,168 @@ public struct AlertPatch: SDKModel {
 public enum Align: String, Codable {
     case left = "left"
     case right = "right"
+}
+
+public struct AnalysisEvent: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _plannerReasoning = "plannerReasoning"
+        case _coderInstruction = "coderInstruction"
+        case _code = "code"
+        case _executionOutput = "executionOutput"
+        case _executionError = "executionError"
+        case _resultVegaChartJson = "resultVegaChartJson"
+        case _resultNaturalLanguage = "resultNaturalLanguage"
+        case _resultCsvData = "resultCsvData"
+        case _resultReferenceData = "resultReferenceData"
+        case _error = "error"
+    }
+    private var _plannerReasoning: AnyString?
+    /**
+     * Python codegen planner's reasoning. (read-only)
+     */
+    public var plannerReasoning: String? {
+        get { _plannerReasoning?.value }
+        set { _plannerReasoning = newValue.map(AnyString.init) }
+    }
+
+    private var _coderInstruction: AnyString?
+    /**
+     * Instructions issued for code generation. (read-only)
+     */
+    public var coderInstruction: String? {
+        get { _coderInstruction?.value }
+        set { _coderInstruction = newValue.map(AnyString.init) }
+    }
+
+    private var _code: AnyString?
+    /**
+     * Generated code. (read-only)
+     */
+    public var code: String? {
+        get { _code?.value }
+        set { _code = newValue.map(AnyString.init) }
+    }
+
+    private var _executionOutput: AnyString?
+    /**
+     * Output from code execution. (read-only)
+     */
+    public var executionOutput: String? {
+        get { _executionOutput?.value }
+        set { _executionOutput = newValue.map(AnyString.init) }
+    }
+
+    private var _executionError: AnyString?
+    /**
+     * An error from code execution. (read-only)
+     */
+    public var executionError: String? {
+        get { _executionError?.value }
+        set { _executionError = newValue.map(AnyString.init) }
+    }
+
+    private var _resultVegaChartJson: AnyString?
+    /**
+     * Result as Vega chart JSON string. (read-only)
+     */
+    public var resultVegaChartJson: String? {
+        get { _resultVegaChartJson?.value }
+        set { _resultVegaChartJson = newValue.map(AnyString.init) }
+    }
+
+    private var _resultNaturalLanguage: AnyString?
+    /**
+     * Result as NL string. (read-only)
+     */
+    public var resultNaturalLanguage: String? {
+        get { _resultNaturalLanguage?.value }
+        set { _resultNaturalLanguage = newValue.map(AnyString.init) }
+    }
+
+    private var _resultCsvData: AnyString?
+    /**
+     * Result as CSV string. (read-only)
+     */
+    public var resultCsvData: String? {
+        get { _resultCsvData?.value }
+        set { _resultCsvData = newValue.map(AnyString.init) }
+    }
+
+    private var _resultReferenceData: AnyString?
+    /**
+     * Result as a reference to a data source. (read-only)
+     */
+    public var resultReferenceData: String? {
+        get { _resultReferenceData?.value }
+        set { _resultReferenceData = newValue.map(AnyString.init) }
+    }
+
+    private var _error: AnyString?
+    /**
+     * A generic error message. (read-only)
+     */
+    public var error: String? {
+        get { _error?.value }
+        set { _error = newValue.map(AnyString.init) }
+    }
+
+    public init(plannerReasoning: String? = nil, coderInstruction: String? = nil, code: String? = nil, executionOutput: String? = nil, executionError: String? = nil, resultVegaChartJson: String? = nil, resultNaturalLanguage: String? = nil, resultCsvData: String? = nil, resultReferenceData: String? = nil, error: String? = nil) {
+        self._plannerReasoning = plannerReasoning.map(AnyString.init)
+        self._coderInstruction = coderInstruction.map(AnyString.init)
+        self._code = code.map(AnyString.init)
+        self._executionOutput = executionOutput.map(AnyString.init)
+        self._executionError = executionError.map(AnyString.init)
+        self._resultVegaChartJson = resultVegaChartJson.map(AnyString.init)
+        self._resultNaturalLanguage = resultNaturalLanguage.map(AnyString.init)
+        self._resultCsvData = resultCsvData.map(AnyString.init)
+        self._resultReferenceData = resultReferenceData.map(AnyString.init)
+        self._error = error.map(AnyString.init)
+    }
+
+}
+
+public struct AnalysisMessage: SDKModel {
+    public var query: AnalysisQuery?
+
+    public var progressEvent: AnalysisEvent?
+
+    public init(query: AnalysisQuery? = nil, progressEvent: AnalysisEvent? = nil) {
+        self.query = query
+        self.progressEvent = progressEvent
+    }
+
+}
+
+public struct AnalysisQuery: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _question = "question"
+        case _dataResultNames = "dataResultNames"
+    }
+    private var _question: AnyString?
+    /**
+     * An analysis question. (read-only)
+     */
+    public var question: String? {
+        get { _question?.value }
+        set { _question = newValue.map(AnyString.init) }
+    }
+
+    private var _dataResultNames: [AnyString]?
+    /**
+     * The names of previously retrieved data results to analyze. (read-only)
+     */
+    public var dataResultNames: [String]? {
+        get { if let v = _dataResultNames { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _dataResultNames = v.map { AnyString.init($0) } } else { _dataResultNames = nil } }
+    }
+
+    public init(question: String? = nil, dataResultNames: [String]? = nil) {
+        self._question = question.map(AnyString.init)
+        if let v = dataResultNames { _dataResultNames = v.map { AnyString.init($0) } } else { _dataResultNames = nil }
+    }
+
 }
 
 public struct ApiSession: SDKModel {
@@ -1361,6 +1731,133 @@ public struct BackupConfiguration: SDKModel {
 
 }
 
+public struct BigQueryJob: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _projectId = "projectId"
+        case _jobId = "jobId"
+        case _location = "location"
+        case destinationTable
+        case schema
+    }
+    private var _projectId: AnyString?
+    /**
+     * The project that the job belongs to. (read-only)
+     */
+    public var projectId: String? {
+        get { _projectId?.value }
+        set { _projectId = newValue.map(AnyString.init) }
+    }
+
+    private var _jobId: AnyString?
+    /**
+     * The ID of the job. (read-only)
+     */
+    public var jobId: String? {
+        get { _jobId?.value }
+        set { _jobId = newValue.map(AnyString.init) }
+    }
+
+    private var _location: AnyString?
+    /**
+     * The location of the job. (read-only)
+     */
+    public var location: String? {
+        get { _location?.value }
+        set { _location = newValue.map(AnyString.init) }
+    }
+
+    public var destinationTable: BigQueryTableReference?
+
+    public var schema: DataSourceSchema?
+
+    public init(projectId: String? = nil, jobId: String? = nil, location: String? = nil, destinationTable: BigQueryTableReference? = nil, schema: DataSourceSchema? = nil) {
+        self._projectId = projectId.map(AnyString.init)
+        self._jobId = jobId.map(AnyString.init)
+        self._location = location.map(AnyString.init)
+        self.destinationTable = destinationTable
+        self.schema = schema
+    }
+
+}
+
+public struct BigQueryTableReference: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _projectId = "projectId"
+        case _datasetId = "datasetId"
+        case _tableId = "tableId"
+        case schema
+    }
+    private var _projectId: AnyString?
+    /**
+     * The project that the table belongs to. (read-only)
+     */
+    public var projectId: String? {
+        get { _projectId?.value }
+        set { _projectId = newValue.map(AnyString.init) }
+    }
+
+    private var _datasetId: AnyString?
+    /**
+     * The dataset that the table belongs to. (read-only)
+     */
+    public var datasetId: String? {
+        get { _datasetId?.value }
+        set { _datasetId = newValue.map(AnyString.init) }
+    }
+
+    private var _tableId: AnyString?
+    /**
+     * The table id. (read-only)
+     */
+    public var tableId: String? {
+        get { _tableId?.value }
+        set { _tableId = newValue.map(AnyString.init) }
+    }
+
+    public var schema: DataSourceSchema?
+
+    public init(projectId: String? = nil, datasetId: String? = nil, tableId: String? = nil, schema: DataSourceSchema? = nil) {
+        self._projectId = projectId.map(AnyString.init)
+        self._datasetId = datasetId.map(AnyString.init)
+        self._tableId = tableId.map(AnyString.init)
+        self.schema = schema
+    }
+
+}
+
+public struct Blob: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _mimeType = "mimeType"
+        case _data = "data"
+    }
+    private var _mimeType: AnyString?
+    /**
+     * The IANA standard MIME type of the message data. (read-only)
+     */
+    public var mimeType: String? {
+        get { _mimeType?.value }
+        set { _mimeType = newValue.map(AnyString.init) }
+    }
+
+    private var _data: AnyString?
+    /**
+     * The data represented as bytes. (read-only)
+     */
+    public var data: String? {
+        get { _data?.value }
+        set { _data = newValue.map(AnyString.init) }
+    }
+
+    public init(mimeType: String? = nil, data: String? = nil) {
+        self._mimeType = mimeType.map(AnyString.init)
+        self._data = data.map(AnyString.init)
+    }
+
+}
+
 public struct Board: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -1948,6 +2445,386 @@ public enum CertificationStatus: String, Codable {
     case revoked = "revoked"
 }
 
+public struct ChartMessage: SDKModel {
+    public var query: ChartQuery?
+
+    public var result: ChartResult?
+
+    public init(query: ChartQuery? = nil, result: ChartResult? = nil) {
+        self.query = query
+        self.result = result
+    }
+
+}
+
+public struct ChartQuery: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _instructions = "instructions"
+        case _dataResultName = "dataResultName"
+    }
+    private var _instructions: AnyString?
+    /**
+     * Natural language instructions for generating the chart. (read-only)
+     */
+    public var instructions: String? {
+        get { _instructions?.value }
+        set { _instructions = newValue.map(AnyString.init) }
+    }
+
+    private var _dataResultName: AnyString?
+    /**
+     * The name of a previously retrieved data result to use in the chart. (read-only)
+     */
+    public var dataResultName: String? {
+        get { _dataResultName?.value }
+        set { _dataResultName = newValue.map(AnyString.init) }
+    }
+
+    public init(instructions: String? = nil, dataResultName: String? = nil) {
+        self._instructions = instructions.map(AnyString.init)
+        self._dataResultName = dataResultName.map(AnyString.init)
+    }
+
+}
+
+public struct ChartResult: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _vegaConfig = "vegaConfig"
+        case image
+    }
+    private var _vegaConfig: AnyString?
+    /**
+     * A generated Vega chart config. (read-only)
+     */
+    public var vegaConfig: String? {
+        get { _vegaConfig?.value }
+        set { _vegaConfig = newValue.map(AnyString.init) }
+    }
+
+    public var image: Blob?
+
+    public init(vegaConfig: String? = nil, image: Blob? = nil) {
+        self._vegaConfig = vegaConfig.map(AnyString.init)
+        self.image = image
+    }
+
+}
+
+public struct ChatMessage: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case timestamp
+        case userMessage
+        case systemMessage
+        case _messageId = "messageId"
+    }
+    /**
+     * The time at which the message was received or generated. (read-only)
+     */
+    public var timestamp: Date?
+
+    public var userMessage: UserMessage?
+
+    public var systemMessage: SystemMessage?
+
+    private var _messageId: AnyString?
+    /**
+     * Unique id of the message in the conversation. (read-only)
+     */
+    public var messageId: String? {
+        get { _messageId?.value }
+        set { _messageId = newValue.map(AnyString.init) }
+    }
+
+    public init(timestamp: Date? = nil, userMessage: UserMessage? = nil, systemMessage: SystemMessage? = nil, messageId: String? = nil) {
+        self.timestamp = timestamp
+        self.userMessage = userMessage
+        self.systemMessage = systemMessage
+        self._messageId = messageId.map(AnyString.init)
+    }
+
+}
+
+public struct CIAssertValidatorErrorItem: SDKModel {
+    public var assert_error: CIAssertValidatorTestError?
+
+    public var generic_error: CIGenericError?
+
+    public init(assert_error: CIAssertValidatorTestError? = nil, generic_error: CIGenericError? = nil) {
+        self.assert_error = assert_error
+        self.generic_error = generic_error
+    }
+
+}
+
+public struct CIAssertValidatorResult: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _name = "name"
+        case _status = "status"
+        case tested
+    }
+    private var _name: AnyString?
+    /**
+     * Name of the validator (assert)
+     */
+    public var name: String? {
+        get { _name?.value }
+        set { _name = newValue.map(AnyString.init) }
+    }
+
+    private var _status: AnyString?
+    /**
+     * Status of the validation (unknown, failed, passed, skipped, errored, cancelled, queued, running)
+     */
+    public var status: String? {
+        get { _status?.value }
+        set { _status = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Results of the validation
+     */
+    public var tested: [CIAssertValidatorTestedExplore]?
+
+    public init(name: String? = nil, status: String? = nil, tested: [CIAssertValidatorTestedExplore]? = nil) {
+        self._name = name.map(AnyString.init)
+        self._status = status.map(AnyString.init)
+        self.tested = tested
+    }
+
+}
+
+public struct CIAssertValidatorTestedExplore: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _model = "model"
+        case _explore = "explore"
+        case _status = "status"
+        case _skip_reason = "skip_reason"
+        case _error_count = "error_count"
+        case errors
+        case _success_count = "success_count"
+        case successes
+    }
+    private var _model: AnyString?
+    /**
+     * LookML model that was tested
+     */
+    public var model: String? {
+        get { _model?.value }
+        set { _model = newValue.map(AnyString.init) }
+    }
+
+    private var _explore: AnyString?
+    /**
+     * LookML Explore that was tested
+     */
+    public var explore: String? {
+        get { _explore?.value }
+        set { _explore = newValue.map(AnyString.init) }
+    }
+
+    private var _status: AnyString?
+    /**
+     * Status of the validation (unknown, failed, passed, skipped, errored, cancelled, queued, running)
+     */
+    public var status: String? {
+        get { _status?.value }
+        set { _status = newValue.map(AnyString.init) }
+    }
+
+    private var _skip_reason: AnyString?
+    /**
+     * Reason the validation was skipped
+     */
+    public var skip_reason: String? {
+        get { _skip_reason?.value }
+        set { _skip_reason = newValue.map(AnyString.init) }
+    }
+
+    private var _error_count: AnyInt?
+    /**
+     * Total number of failed data tests
+     */
+    public var error_count: Int64? {
+        get { _error_count?.value }
+        set { _error_count = newValue.map(AnyInt.init) }
+    }
+
+    /**
+     * Details of data tests that failed validation
+     */
+    public var errors: [CIAssertValidatorErrorItem]?
+
+    private var _success_count: AnyString?
+    /**
+     * Total number of successful data tests
+     */
+    public var success_count: String? {
+        get { _success_count?.value }
+        set { _success_count = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Details of data tests that passed validation
+     */
+    public var successes: [CIAssertValidatorTestSuccess]?
+
+    public init(model: String? = nil, explore: String? = nil, status: String? = nil, skip_reason: String? = nil, error_count: Int64? = nil, errors: [CIAssertValidatorErrorItem]? = nil, success_count: String? = nil, successes: [CIAssertValidatorTestSuccess]? = nil) {
+        self._model = model.map(AnyString.init)
+        self._explore = explore.map(AnyString.init)
+        self._status = status.map(AnyString.init)
+        self._skip_reason = skip_reason.map(AnyString.init)
+        self._error_count = error_count.map(AnyInt.init)
+        self.errors = errors
+        self._success_count = success_count.map(AnyString.init)
+        self.successes = successes
+    }
+
+}
+
+public struct CIAssertValidatorTestError: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _model = "model"
+        case _explore = "explore"
+        case _test_name = "test_name"
+        case _explore_url = "explore_url"
+        case _lookml_url = "lookml_url"
+        case _message = "message"
+    }
+    private var _model: AnyString?
+    /**
+     * LookML model that contains the data test
+     */
+    public var model: String? {
+        get { _model?.value }
+        set { _model = newValue.map(AnyString.init) }
+    }
+
+    private var _explore: AnyString?
+    /**
+     * LookML Explore that is used as the explore_source for the data test
+     */
+    public var explore: String? {
+        get { _explore?.value }
+        set { _explore = newValue.map(AnyString.init) }
+    }
+
+    private var _test_name: AnyString?
+    /**
+     * Name of the data test
+     */
+    public var test_name: String? {
+        get { _test_name?.value }
+        set { _test_name = newValue.map(AnyString.init) }
+    }
+
+    private var _explore_url: AnyString?
+    /**
+     * URL to the Explore
+     */
+    public var explore_url: String? {
+        get { _explore_url?.value }
+        set { _explore_url = newValue.map(AnyString.init) }
+    }
+
+    private var _lookml_url: AnyString?
+    /**
+     * URL to the LookML file where the data test is defined
+     */
+    public var lookml_url: String? {
+        get { _lookml_url?.value }
+        set { _lookml_url = newValue.map(AnyString.init) }
+    }
+
+    private var _message: AnyString?
+    /**
+     * Message returned by the data test
+     */
+    public var message: String? {
+        get { _message?.value }
+        set { _message = newValue.map(AnyString.init) }
+    }
+
+    public init(model: String? = nil, explore: String? = nil, test_name: String? = nil, explore_url: String? = nil, lookml_url: String? = nil, message: String? = nil) {
+        self._model = model.map(AnyString.init)
+        self._explore = explore.map(AnyString.init)
+        self._test_name = test_name.map(AnyString.init)
+        self._explore_url = explore_url.map(AnyString.init)
+        self._lookml_url = lookml_url.map(AnyString.init)
+        self._message = message.map(AnyString.init)
+    }
+
+}
+
+public struct CIAssertValidatorTestSuccess: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _model = "model"
+        case _explore = "explore"
+        case _test_name = "test_name"
+        case _explore_url = "explore_url"
+        case _lookml_url = "lookml_url"
+    }
+    private var _model: AnyString?
+    /**
+     * LookML model that contains the data test
+     */
+    public var model: String? {
+        get { _model?.value }
+        set { _model = newValue.map(AnyString.init) }
+    }
+
+    private var _explore: AnyString?
+    /**
+     * LookML Explore that is used as the explore_source for the data test
+     */
+    public var explore: String? {
+        get { _explore?.value }
+        set { _explore = newValue.map(AnyString.init) }
+    }
+
+    private var _test_name: AnyString?
+    /**
+     * Name of the data test
+     */
+    public var test_name: String? {
+        get { _test_name?.value }
+        set { _test_name = newValue.map(AnyString.init) }
+    }
+
+    private var _explore_url: AnyString?
+    /**
+     * URL to the Explore
+     */
+    public var explore_url: String? {
+        get { _explore_url?.value }
+        set { _explore_url = newValue.map(AnyString.init) }
+    }
+
+    private var _lookml_url: AnyString?
+    /**
+     * URL to the LookML file where the data test is defined
+     */
+    public var lookml_url: String? {
+        get { _lookml_url?.value }
+        set { _lookml_url = newValue.map(AnyString.init) }
+    }
+
+    public init(model: String? = nil, explore: String? = nil, test_name: String? = nil, explore_url: String? = nil, lookml_url: String? = nil) {
+        self._model = model.map(AnyString.init)
+        self._explore = explore.map(AnyString.init)
+        self._test_name = test_name.map(AnyString.init)
+        self._explore_url = explore_url.map(AnyString.init)
+        self._lookml_url = lookml_url.map(AnyString.init)
+    }
+
+}
+
 public struct CIChangeRequest: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -1997,6 +2874,361 @@ public struct CIChangeRequest: SDKModel {
         self._change_request_url = change_request_url.map(AnyString.init)
         self._change_request_name = change_request_name.map(AnyString.init)
         self._change_request_commits_url = change_request_commits_url.map(AnyString.init)
+    }
+
+}
+
+public struct CIContentValidatorContentError: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _type = "type"
+        case _title = "title"
+        case _detail = "detail"
+        case _status = "status"
+        case _instance = "instance"
+        case _model = "model"
+        case _explore = "explore"
+        case _field_name = "field_name"
+        case _content_type = "content_type"
+        case _folder = "folder"
+        case _url = "url"
+        case _tile_type = "tile_type"
+        case _tile_title = "tile_title"
+        case _message = "message"
+    }
+    private var _type: AnyString?
+    /**
+     * A URI reference that identifies the problem type
+     */
+    public var type: String? {
+        get { _type?.value }
+        set { _type = newValue.map(AnyString.init) }
+    }
+
+    private var _title: AnyString?
+    /**
+     * Overview of the error
+     */
+    public var title: String? {
+        get { _title?.value }
+        set { _title = newValue.map(AnyString.init) }
+    }
+
+    private var _detail: AnyString?
+    /**
+     * Detail of the error
+     */
+    public var detail: String? {
+        get { _detail?.value }
+        set { _detail = newValue.map(AnyString.init) }
+    }
+
+    private var _status: AnyString?
+    /**
+     * The HTTP status code for the problem
+     */
+    public var status: String? {
+        get { _status?.value }
+        set { _status = newValue.map(AnyString.init) }
+    }
+
+    private var _instance: AnyString?
+    /**
+     * URI reference that identifies the specific occurrence of the problem
+     */
+    public var instance: String? {
+        get { _instance?.value }
+        set { _instance = newValue.map(AnyString.init) }
+    }
+
+    private var _model: AnyString?
+    /**
+     * LookML model that contains the error
+     */
+    public var model: String? {
+        get { _model?.value }
+        set { _model = newValue.map(AnyString.init) }
+    }
+
+    private var _explore: AnyString?
+    /**
+     * LookML Explore that contains the error
+     */
+    public var explore: String? {
+        get { _explore?.value }
+        set { _explore = newValue.map(AnyString.init) }
+    }
+
+    private var _field_name: AnyString?
+    /**
+     * LookML field that caused the error
+     */
+    public var field_name: String? {
+        get { _field_name?.value }
+        set { _field_name = newValue.map(AnyString.init) }
+    }
+
+    private var _content_type: AnyString?
+    /**
+     * Type of the content (dashboard, look)
+     */
+    public var content_type: String? {
+        get { _content_type?.value }
+        set { _content_type = newValue.map(AnyString.init) }
+    }
+
+    private var _folder: AnyString?
+    /**
+     * Folder of the content
+     */
+    public var folder: String? {
+        get { _folder?.value }
+        set { _folder = newValue.map(AnyString.init) }
+    }
+
+    private var _url: AnyString?
+    /**
+     * URL of the content
+     */
+    public var url: String? {
+        get { _url?.value }
+        set { _url = newValue.map(AnyString.init) }
+    }
+
+    private var _tile_type: AnyString?
+    /**
+     * Type of the tile (dashboard_element, dashboard_filter)
+     */
+    public var tile_type: String? {
+        get { _tile_type?.value }
+        set { _tile_type = newValue.map(AnyString.init) }
+    }
+
+    private var _tile_title: AnyString?
+    /**
+     * Title of the tile
+     */
+    public var tile_title: String? {
+        get { _tile_title?.value }
+        set { _tile_title = newValue.map(AnyString.init) }
+    }
+
+    private var _message: AnyString?
+    /**
+     * Message returned by the content validator
+     */
+    public var message: String? {
+        get { _message?.value }
+        set { _message = newValue.map(AnyString.init) }
+    }
+
+    public init(type: String? = nil, title: String? = nil, detail: String? = nil, status: String? = nil, instance: String? = nil, model: String? = nil, explore: String? = nil, field_name: String? = nil, content_type: String? = nil, folder: String? = nil, url: String? = nil, tile_type: String? = nil, tile_title: String? = nil, message: String? = nil) {
+        self._type = type.map(AnyString.init)
+        self._title = title.map(AnyString.init)
+        self._detail = detail.map(AnyString.init)
+        self._status = status.map(AnyString.init)
+        self._instance = instance.map(AnyString.init)
+        self._model = model.map(AnyString.init)
+        self._explore = explore.map(AnyString.init)
+        self._field_name = field_name.map(AnyString.init)
+        self._content_type = content_type.map(AnyString.init)
+        self._folder = folder.map(AnyString.init)
+        self._url = url.map(AnyString.init)
+        self._tile_type = tile_type.map(AnyString.init)
+        self._tile_title = tile_title.map(AnyString.init)
+        self._message = message.map(AnyString.init)
+    }
+
+}
+
+public struct CIContentValidatorErrorItem: SDKModel {
+    public var content_error: CIContentValidatorContentError?
+
+    public var generic_error: CIGenericError?
+
+    public init(content_error: CIContentValidatorContentError? = nil, generic_error: CIGenericError? = nil) {
+        self.content_error = content_error
+        self.generic_error = generic_error
+    }
+
+}
+
+public struct CIContentValidatorResult: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _name = "name"
+        case incremental
+        case _status = "status"
+        case tested
+    }
+    private var _name: AnyString?
+    /**
+     * Name of the validator (content)
+     */
+    public var name: String? {
+        get { _name?.value }
+        set { _name = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Whether the validation was incremental
+     */
+    public var incremental: Bool?
+
+    private var _status: AnyString?
+    /**
+     * Status of the validation (unknown, failed, passed, skipped, errored, cancelled, queued, running)
+     */
+    public var status: String? {
+        get { _status?.value }
+        set { _status = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Results of the content validation
+     */
+    public var tested: [CIContentValidatorTestedExplore]?
+
+    public init(name: String? = nil, incremental: Bool? = nil, status: String? = nil, tested: [CIContentValidatorTestedExplore]? = nil) {
+        self._name = name.map(AnyString.init)
+        self.incremental = incremental
+        self._status = status.map(AnyString.init)
+        self.tested = tested
+    }
+
+}
+
+public struct CIContentValidatorTestedExplore: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _model = "model"
+        case _explore = "explore"
+        case _status = "status"
+        case _skip_reason = "skip_reason"
+        case _error_count = "error_count"
+        case errors
+    }
+    private var _model: AnyString?
+    /**
+     * LookML model that was tested
+     */
+    public var model: String? {
+        get { _model?.value }
+        set { _model = newValue.map(AnyString.init) }
+    }
+
+    private var _explore: AnyString?
+    /**
+     * LookML Explore that was tested
+     */
+    public var explore: String? {
+        get { _explore?.value }
+        set { _explore = newValue.map(AnyString.init) }
+    }
+
+    private var _status: AnyString?
+    /**
+     * Status of the validation (unknown, failed, passed, skipped, errored, cancelled, queued, running)
+     */
+    public var status: String? {
+        get { _status?.value }
+        set { _status = newValue.map(AnyString.init) }
+    }
+
+    private var _skip_reason: AnyString?
+    /**
+     * Reason the validation was skipped
+     */
+    public var skip_reason: String? {
+        get { _skip_reason?.value }
+        set { _skip_reason = newValue.map(AnyString.init) }
+    }
+
+    private var _error_count: AnyInt?
+    /**
+     * Total number of failed content validations
+     */
+    public var error_count: Int64? {
+        get { _error_count?.value }
+        set { _error_count = newValue.map(AnyInt.init) }
+    }
+
+    /**
+     * Details of the content that failed validation
+     */
+    public var errors: [CIContentValidatorErrorItem]?
+
+    public init(model: String? = nil, explore: String? = nil, status: String? = nil, skip_reason: String? = nil, error_count: Int64? = nil, errors: [CIContentValidatorErrorItem]? = nil) {
+        self._model = model.map(AnyString.init)
+        self._explore = explore.map(AnyString.init)
+        self._status = status.map(AnyString.init)
+        self._skip_reason = skip_reason.map(AnyString.init)
+        self._error_count = error_count.map(AnyInt.init)
+        self.errors = errors
+    }
+
+}
+
+public struct CIGenericError: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _type = "type"
+        case _title = "title"
+        case _detail = "detail"
+        case _status = "status"
+        case _instance = "instance"
+    }
+    private var _type: AnyString?
+    /**
+     * A URI reference that identifies the problem type
+     */
+    public var type: String? {
+        get { _type?.value }
+        set { _type = newValue.map(AnyString.init) }
+    }
+
+    private var _title: AnyString?
+    /**
+     * Overview of the error
+     */
+    public var title: String? {
+        get { _title?.value }
+        set { _title = newValue.map(AnyString.init) }
+    }
+
+    private var _detail: AnyString?
+    /**
+     * Detail of the error
+     */
+    public var detail: String? {
+        get { _detail?.value }
+        set { _detail = newValue.map(AnyString.init) }
+    }
+
+    private var _status: AnyString?
+    /**
+     * The HTTP status code for the problem
+     */
+    public var status: String? {
+        get { _status?.value }
+        set { _status = newValue.map(AnyString.init) }
+    }
+
+    private var _instance: AnyString?
+    /**
+     * URI reference that identifies the specific occurrence of the problem
+     */
+    public var instance: String? {
+        get { _instance?.value }
+        set { _instance = newValue.map(AnyString.init) }
+    }
+
+    public init(type: String? = nil, title: String? = nil, detail: String? = nil, status: String? = nil, instance: String? = nil) {
+        self._type = type.map(AnyString.init)
+        self._title = title.map(AnyString.init)
+        self._detail = detail.map(AnyString.init)
+        self._status = status.map(AnyString.init)
+        self._instance = instance.map(AnyString.init)
     }
 
 }
@@ -2054,6 +3286,564 @@ public struct CIGitState: SDKModel {
 
 }
 
+public struct CILookMLValidatorError: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _type = "type"
+        case _title = "title"
+        case _detail = "detail"
+        case _status = "status"
+        case _instance = "instance"
+        case _model = "model"
+        case _explore = "explore"
+        case _field_name = "field_name"
+        case _message = "message"
+        case _severity = "severity"
+        case _line_number = "line_number"
+        case _lookml_url = "lookml_url"
+        case _file_path = "file_path"
+    }
+    private var _type: AnyString?
+    /**
+     * A URI reference that identifies the problem type
+     */
+    public var type: String? {
+        get { _type?.value }
+        set { _type = newValue.map(AnyString.init) }
+    }
+
+    private var _title: AnyString?
+    /**
+     * Overview of the error
+     */
+    public var title: String? {
+        get { _title?.value }
+        set { _title = newValue.map(AnyString.init) }
+    }
+
+    private var _detail: AnyString?
+    /**
+     * Detail of the error
+     */
+    public var detail: String? {
+        get { _detail?.value }
+        set { _detail = newValue.map(AnyString.init) }
+    }
+
+    private var _status: AnyString?
+    /**
+     * The HTTP status code for the problem
+     */
+    public var status: String? {
+        get { _status?.value }
+        set { _status = newValue.map(AnyString.init) }
+    }
+
+    private var _instance: AnyString?
+    /**
+     * URI reference that identifies the specific occurrence of the problem
+     */
+    public var instance: String? {
+        get { _instance?.value }
+        set { _instance = newValue.map(AnyString.init) }
+    }
+
+    private var _model: AnyString?
+    /**
+     * LookML model that contains the error
+     */
+    public var model: String? {
+        get { _model?.value }
+        set { _model = newValue.map(AnyString.init) }
+    }
+
+    private var _explore: AnyString?
+    /**
+     * LookML Explore that contains the error
+     */
+    public var explore: String? {
+        get { _explore?.value }
+        set { _explore = newValue.map(AnyString.init) }
+    }
+
+    private var _field_name: AnyString?
+    /**
+     * LookML field that caused the error
+     */
+    public var field_name: String? {
+        get { _field_name?.value }
+        set { _field_name = newValue.map(AnyString.init) }
+    }
+
+    private var _message: AnyString?
+    /**
+     * Message returned by the LookML validator
+     */
+    public var message: String? {
+        get { _message?.value }
+        set { _message = newValue.map(AnyString.init) }
+    }
+
+    private var _severity: AnyString?
+    /**
+     * Severity of the error (warning, error, fatal, info, success)
+     */
+    public var severity: String? {
+        get { _severity?.value }
+        set { _severity = newValue.map(AnyString.init) }
+    }
+
+    private var _line_number: AnyString?
+    /**
+     * Line number of the error in the LookML file
+     */
+    public var line_number: String? {
+        get { _line_number?.value }
+        set { _line_number = newValue.map(AnyString.init) }
+    }
+
+    private var _lookml_url: AnyString?
+    /**
+     * URL to the LookML that caused the error
+     */
+    public var lookml_url: String? {
+        get { _lookml_url?.value }
+        set { _lookml_url = newValue.map(AnyString.init) }
+    }
+
+    private var _file_path: AnyString?
+    /**
+     * IDE folder path to the LookML file that caused the error
+     */
+    public var file_path: String? {
+        get { _file_path?.value }
+        set { _file_path = newValue.map(AnyString.init) }
+    }
+
+    public init(type: String? = nil, title: String? = nil, detail: String? = nil, status: String? = nil, instance: String? = nil, model: String? = nil, explore: String? = nil, field_name: String? = nil, message: String? = nil, severity: String? = nil, line_number: String? = nil, lookml_url: String? = nil, file_path: String? = nil) {
+        self._type = type.map(AnyString.init)
+        self._title = title.map(AnyString.init)
+        self._detail = detail.map(AnyString.init)
+        self._status = status.map(AnyString.init)
+        self._instance = instance.map(AnyString.init)
+        self._model = model.map(AnyString.init)
+        self._explore = explore.map(AnyString.init)
+        self._field_name = field_name.map(AnyString.init)
+        self._message = message.map(AnyString.init)
+        self._severity = severity.map(AnyString.init)
+        self._line_number = line_number.map(AnyString.init)
+        self._lookml_url = lookml_url.map(AnyString.init)
+        self._file_path = file_path.map(AnyString.init)
+    }
+
+}
+
+public struct CILookMLValidatorErrorItem: SDKModel {
+    public var lookml_error: CILookMLValidatorError?
+
+    public var generic_error: CIGenericError?
+
+    public init(lookml_error: CILookMLValidatorError? = nil, generic_error: CIGenericError? = nil) {
+        self.lookml_error = lookml_error
+        self.generic_error = generic_error
+    }
+
+}
+
+public struct CILookMLValidatorResult: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _name = "name"
+        case _status = "status"
+        case _error_count = "error_count"
+        case errors
+    }
+    private var _name: AnyString?
+    /**
+     * Name of the validator (lookml)
+     */
+    public var name: String? {
+        get { _name?.value }
+        set { _name = newValue.map(AnyString.init) }
+    }
+
+    private var _status: AnyString?
+    /**
+     * Status of the validation (unknown, failed, passed, skipped, errored, cancelled, queued, running)
+     */
+    public var status: String? {
+        get { _status?.value }
+        set { _status = newValue.map(AnyString.init) }
+    }
+
+    private var _error_count: AnyInt?
+    /**
+     * Total number of failed LookML validations
+     */
+    public var error_count: Int64? {
+        get { _error_count?.value }
+        set { _error_count = newValue.map(AnyInt.init) }
+    }
+
+    /**
+     * Details of the LookML that failed validation
+     */
+    public var errors: [CILookMLValidatorErrorItem]?
+
+    public init(name: String? = nil, status: String? = nil, error_count: Int64? = nil, errors: [CILookMLValidatorErrorItem]? = nil) {
+        self._name = name.map(AnyString.init)
+        self._status = status.map(AnyString.init)
+        self._error_count = error_count.map(AnyInt.init)
+        self.errors = errors
+    }
+
+}
+
+public struct CIRun: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _id = "id"
+        case _ci_suite_id = "ci_suite_id"
+        case _project_id = "project_id"
+        case _status = "status"
+        case _title = "title"
+        case _trigger_type = "trigger_type"
+        case _user_id = "user_id"
+        case _triggered_by_name = "triggered_by_name"
+        case _execution_id = "execution_id"
+        case result
+        case _change_request_number = "change_request_number"
+        case _change_request_url = "change_request_url"
+        case _change_request_name = "change_request_name"
+        case _change_request_commits_url = "change_request_commits_url"
+        case _git_service_name = "git_service_name"
+        case _git_commit_ref = "git_commit_ref"
+        case _git_branch_name = "git_branch_name"
+        case _git_repository_name = "git_repository_name"
+        case _git_target_branch_name = "git_target_branch_name"
+        case _git_status_url = "git_status_url"
+        case _git_target_url = "git_target_url"
+        case created_at
+        case started_at
+        case finished_at
+        case _retries = "retries"
+        case _assigned_ci_user_id = "assigned_ci_user_id"
+        case assigned_ci_user_at
+        case _crashed_check_count = "crashed_check_count"
+        case _run_url = "run_url"
+    }
+    /**
+     * Operations the current user is able to perform on this object (read-only)
+     */
+    public var can: StringDictionary<Bool>?
+
+    private var _id: AnyString?
+    /**
+     * Public ID of the CI run (read-only)
+     */
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
+    private var _ci_suite_id: AnyString?
+    /**
+     * ID of the CI suite (read-only)
+     */
+    public var ci_suite_id: String? {
+        get { _ci_suite_id?.value }
+        set { _ci_suite_id = newValue.map(AnyString.init) }
+    }
+
+    private var _project_id: AnyString?
+    /**
+     * ID of the project (read-only)
+     */
+    public var project_id: String? {
+        get { _project_id?.value }
+        set { _project_id = newValue.map(AnyString.init) }
+    }
+
+    private var _status: AnyString?
+    /**
+     * Status of the CI run
+     */
+    public var status: String? {
+        get { _status?.value }
+        set { _status = newValue.map(AnyString.init) }
+    }
+
+    private var _title: AnyString?
+    /**
+     * Title of the CI run (read-only)
+     */
+    public var title: String? {
+        get { _title?.value }
+        set { _title = newValue.map(AnyString.init) }
+    }
+
+    private var _trigger_type: AnyString?
+    /**
+     * Trigger type of the CI run (read-only)
+     */
+    public var trigger_type: String? {
+        get { _trigger_type?.value }
+        set { _trigger_type = newValue.map(AnyString.init) }
+    }
+
+    private var _user_id: AnyInt?
+    /**
+     * ID of the user that triggered the CI run (read-only)
+     */
+    public var user_id: Int64? {
+        get { _user_id?.value }
+        set { _user_id = newValue.map(AnyInt.init) }
+    }
+
+    private var _triggered_by_name: AnyString?
+    /**
+     * Name of user that triggered the CI run (read-only)
+     */
+    public var triggered_by_name: String? {
+        get { _triggered_by_name?.value }
+        set { _triggered_by_name = newValue.map(AnyString.init) }
+    }
+
+    private var _execution_id: AnyString?
+    /**
+     * Execution ID of the CI run (read-only)
+     */
+    public var execution_id: String? {
+        get { _execution_id?.value }
+        set { _execution_id = newValue.map(AnyString.init) }
+    }
+
+    public var result: CIRunResult?
+
+    private var _change_request_number: AnyInt?
+    /**
+     * Change request number of the CI run
+     */
+    public var change_request_number: Int64? {
+        get { _change_request_number?.value }
+        set { _change_request_number = newValue.map(AnyInt.init) }
+    }
+
+    private var _change_request_url: AnyString?
+    /**
+     * Change request URL of the CI run
+     */
+    public var change_request_url: String? {
+        get { _change_request_url?.value }
+        set { _change_request_url = newValue.map(AnyString.init) }
+    }
+
+    private var _change_request_name: AnyString?
+    /**
+     * Change request name of the CI run
+     */
+    public var change_request_name: String? {
+        get { _change_request_name?.value }
+        set { _change_request_name = newValue.map(AnyString.init) }
+    }
+
+    private var _change_request_commits_url: AnyString?
+    /**
+     * Change request commits URL of the CI run
+     */
+    public var change_request_commits_url: String? {
+        get { _change_request_commits_url?.value }
+        set { _change_request_commits_url = newValue.map(AnyString.init) }
+    }
+
+    private var _git_service_name: AnyString?
+    /**
+     * Git service name of the CI run (read-only)
+     */
+    public var git_service_name: String? {
+        get { _git_service_name?.value }
+        set { _git_service_name = newValue.map(AnyString.init) }
+    }
+
+    private var _git_commit_ref: AnyString?
+    /**
+     * Git commit ref of the CI run
+     */
+    public var git_commit_ref: String? {
+        get { _git_commit_ref?.value }
+        set { _git_commit_ref = newValue.map(AnyString.init) }
+    }
+
+    private var _git_branch_name: AnyString?
+    /**
+     * Git branch name of the CI run
+     */
+    public var git_branch_name: String? {
+        get { _git_branch_name?.value }
+        set { _git_branch_name = newValue.map(AnyString.init) }
+    }
+
+    private var _git_repository_name: AnyString?
+    /**
+     * Git repository name of the CI run
+     */
+    public var git_repository_name: String? {
+        get { _git_repository_name?.value }
+        set { _git_repository_name = newValue.map(AnyString.init) }
+    }
+
+    private var _git_target_branch_name: AnyString?
+    /**
+     * Git target branch name of the CI run
+     */
+    public var git_target_branch_name: String? {
+        get { _git_target_branch_name?.value }
+        set { _git_target_branch_name = newValue.map(AnyString.init) }
+    }
+
+    private var _git_status_url: AnyString?
+    /**
+     * Git status URL of the CI run
+     */
+    public var git_status_url: String? {
+        get { _git_status_url?.value }
+        set { _git_status_url = newValue.map(AnyString.init) }
+    }
+
+    private var _git_target_url: AnyString?
+    /**
+     * Git target URL of the CI run
+     */
+    public var git_target_url: String? {
+        get { _git_target_url?.value }
+        set { _git_target_url = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Time and date that the CI run was created (read-only)
+     */
+    public var created_at: Date?
+
+    /**
+     * Time and date that the CI run was started (read-only)
+     */
+    public var started_at: Date?
+
+    /**
+     * Time and date that the CI run was finished (read-only)
+     */
+    public var finished_at: Date?
+
+    private var _retries: AnyInt?
+    /**
+     * Number of retries of the CI run (read-only)
+     */
+    public var retries: Int64? {
+        get { _retries?.value }
+        set { _retries = newValue.map(AnyInt.init) }
+    }
+
+    private var _assigned_ci_user_id: AnyInt?
+    /**
+     * ID of the CI user assigned to the CI run (read-only)
+     */
+    public var assigned_ci_user_id: Int64? {
+        get { _assigned_ci_user_id?.value }
+        set { _assigned_ci_user_id = newValue.map(AnyInt.init) }
+    }
+
+    /**
+     * Time and date that the CI user was assigned to the CI run (read-only)
+     */
+    public var assigned_ci_user_at: Date?
+
+    private var _crashed_check_count: AnyInt?
+    /**
+     * Number of crashed checks of the CI run (read-only)
+     */
+    public var crashed_check_count: Int64? {
+        get { _crashed_check_count?.value }
+        set { _crashed_check_count = newValue.map(AnyInt.init) }
+    }
+
+    private var _run_url: AnyString?
+    /**
+     * URL of the CI run (read-only)
+     */
+    public var run_url: String? {
+        get { _run_url?.value }
+        set { _run_url = newValue.map(AnyString.init) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, ci_suite_id: String? = nil, project_id: String? = nil, status: String? = nil, title: String? = nil, trigger_type: String? = nil, user_id: Int64? = nil, triggered_by_name: String? = nil, execution_id: String? = nil, result: CIRunResult? = nil, change_request_number: Int64? = nil, change_request_url: String? = nil, change_request_name: String? = nil, change_request_commits_url: String? = nil, git_service_name: String? = nil, git_commit_ref: String? = nil, git_branch_name: String? = nil, git_repository_name: String? = nil, git_target_branch_name: String? = nil, git_status_url: String? = nil, git_target_url: String? = nil, created_at: Date? = nil, started_at: Date? = nil, finished_at: Date? = nil, retries: Int64? = nil, assigned_ci_user_id: Int64? = nil, assigned_ci_user_at: Date? = nil, crashed_check_count: Int64? = nil, run_url: String? = nil) {
+        self.can = can
+        self._id = id.map(AnyString.init)
+        self._ci_suite_id = ci_suite_id.map(AnyString.init)
+        self._project_id = project_id.map(AnyString.init)
+        self._status = status.map(AnyString.init)
+        self._title = title.map(AnyString.init)
+        self._trigger_type = trigger_type.map(AnyString.init)
+        self._user_id = user_id.map(AnyInt.init)
+        self._triggered_by_name = triggered_by_name.map(AnyString.init)
+        self._execution_id = execution_id.map(AnyString.init)
+        self.result = result
+        self._change_request_number = change_request_number.map(AnyInt.init)
+        self._change_request_url = change_request_url.map(AnyString.init)
+        self._change_request_name = change_request_name.map(AnyString.init)
+        self._change_request_commits_url = change_request_commits_url.map(AnyString.init)
+        self._git_service_name = git_service_name.map(AnyString.init)
+        self._git_commit_ref = git_commit_ref.map(AnyString.init)
+        self._git_branch_name = git_branch_name.map(AnyString.init)
+        self._git_repository_name = git_repository_name.map(AnyString.init)
+        self._git_target_branch_name = git_target_branch_name.map(AnyString.init)
+        self._git_status_url = git_status_url.map(AnyString.init)
+        self._git_target_url = git_target_url.map(AnyString.init)
+        self.created_at = created_at
+        self.started_at = started_at
+        self.finished_at = finished_at
+        self._retries = retries.map(AnyInt.init)
+        self._assigned_ci_user_id = assigned_ci_user_id.map(AnyInt.init)
+        self.assigned_ci_user_at = assigned_ci_user_at
+        self._crashed_check_count = crashed_check_count.map(AnyInt.init)
+        self._run_url = run_url.map(AnyString.init)
+    }
+
+}
+
+public struct CIRunResult: SDKModel {
+    public var sql_result: CISqlValidatorResult?
+
+    public var sql_error: CIGenericError?
+
+    public var assert_result: CIAssertValidatorResult?
+
+    public var assert_error: CIGenericError?
+
+    public var content_result: CIContentValidatorResult?
+
+    public var content_error: CIGenericError?
+
+    public var lookml_result: CILookMLValidatorResult?
+
+    public var lookml_error: CIGenericError?
+
+    public var generic_error: CIGenericError?
+
+    public init(sql_result: CISqlValidatorResult? = nil, sql_error: CIGenericError? = nil, assert_result: CIAssertValidatorResult? = nil, assert_error: CIGenericError? = nil, content_result: CIContentValidatorResult? = nil, content_error: CIGenericError? = nil, lookml_result: CILookMLValidatorResult? = nil, lookml_error: CIGenericError? = nil, generic_error: CIGenericError? = nil) {
+        self.sql_result = sql_result
+        self.sql_error = sql_error
+        self.assert_result = assert_result
+        self.assert_error = assert_error
+        self.content_result = content_result
+        self.content_error = content_error
+        self.lookml_result = lookml_result
+        self.lookml_error = lookml_error
+        self.generic_error = generic_error
+    }
+
+}
+
 public struct CIScheduleTrigger: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -2099,6 +3889,275 @@ public struct CIScheduleTrigger: SDKModel {
         self._day = day.map(AnyString.init)
         self._hour = hour.map(AnyString.init)
         self._frequency = frequency.map(AnyString.init)
+    }
+
+}
+
+public struct CISqlValidatorError: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _type = "type"
+        case _title = "title"
+        case _detail = "detail"
+        case _status = "status"
+        case _instance = "instance"
+        case _model = "model"
+        case _explore = "explore"
+        case _message = "message"
+        case _explore_url = "explore_url"
+        case _lookml_url = "lookml_url"
+        case _dimension = "dimension"
+        case _line_number = "line_number"
+    }
+    private var _type: AnyString?
+    /**
+     * A URI reference that identifies the problem type
+     */
+    public var type: String? {
+        get { _type?.value }
+        set { _type = newValue.map(AnyString.init) }
+    }
+
+    private var _title: AnyString?
+    /**
+     * Overview of the error
+     */
+    public var title: String? {
+        get { _title?.value }
+        set { _title = newValue.map(AnyString.init) }
+    }
+
+    private var _detail: AnyString?
+    /**
+     * Detail of the error
+     */
+    public var detail: String? {
+        get { _detail?.value }
+        set { _detail = newValue.map(AnyString.init) }
+    }
+
+    private var _status: AnyString?
+    /**
+     * The HTTP status code for the problem
+     */
+    public var status: String? {
+        get { _status?.value }
+        set { _status = newValue.map(AnyString.init) }
+    }
+
+    private var _instance: AnyString?
+    /**
+     * URI reference that identifies the specific occurrence of the problem
+     */
+    public var instance: String? {
+        get { _instance?.value }
+        set { _instance = newValue.map(AnyString.init) }
+    }
+
+    private var _model: AnyString?
+    /**
+     * LookML model that contains the Explore that failed SQL validation
+     */
+    public var model: String? {
+        get { _model?.value }
+        set { _model = newValue.map(AnyString.init) }
+    }
+
+    private var _explore: AnyString?
+    /**
+     * LookML Explore that failed SQL validation
+     */
+    public var explore: String? {
+        get { _explore?.value }
+        set { _explore = newValue.map(AnyString.init) }
+    }
+
+    private var _message: AnyString?
+    /**
+     * Message returned by the SQL validation
+     */
+    public var message: String? {
+        get { _message?.value }
+        set { _message = newValue.map(AnyString.init) }
+    }
+
+    private var _explore_url: AnyString?
+    /**
+     * URL to the Explore
+     */
+    public var explore_url: String? {
+        get { _explore_url?.value }
+        set { _explore_url = newValue.map(AnyString.init) }
+    }
+
+    private var _lookml_url: AnyString?
+    /**
+     * URL to the LookML that caused the error
+     */
+    public var lookml_url: String? {
+        get { _lookml_url?.value }
+        set { _lookml_url = newValue.map(AnyString.init) }
+    }
+
+    private var _dimension: AnyString?
+    /**
+     * LookML dimension that caused the error
+     */
+    public var dimension: String? {
+        get { _dimension?.value }
+        set { _dimension = newValue.map(AnyString.init) }
+    }
+
+    private var _line_number: AnyString?
+    /**
+     * Line of the error in the LookML file
+     */
+    public var line_number: String? {
+        get { _line_number?.value }
+        set { _line_number = newValue.map(AnyString.init) }
+    }
+
+    public init(type: String? = nil, title: String? = nil, detail: String? = nil, status: String? = nil, instance: String? = nil, model: String? = nil, explore: String? = nil, message: String? = nil, explore_url: String? = nil, lookml_url: String? = nil, dimension: String? = nil, line_number: String? = nil) {
+        self._type = type.map(AnyString.init)
+        self._title = title.map(AnyString.init)
+        self._detail = detail.map(AnyString.init)
+        self._status = status.map(AnyString.init)
+        self._instance = instance.map(AnyString.init)
+        self._model = model.map(AnyString.init)
+        self._explore = explore.map(AnyString.init)
+        self._message = message.map(AnyString.init)
+        self._explore_url = explore_url.map(AnyString.init)
+        self._lookml_url = lookml_url.map(AnyString.init)
+        self._dimension = dimension.map(AnyString.init)
+        self._line_number = line_number.map(AnyString.init)
+    }
+
+}
+
+public struct CISqlValidatorErrorItem: SDKModel {
+    public var sql_error: CISqlValidatorError?
+
+    public var generic_error: CIGenericError?
+
+    public init(sql_error: CISqlValidatorError? = nil, generic_error: CIGenericError? = nil) {
+        self.sql_error = sql_error
+        self.generic_error = generic_error
+    }
+
+}
+
+public struct CISqlValidatorResult: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _name = "name"
+        case incremental
+        case _status = "status"
+        case tested
+    }
+    private var _name: AnyString?
+    /**
+     * Name of the validator (sql)
+     */
+    public var name: String? {
+        get { _name?.value }
+        set { _name = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Whether the validation was incremental
+     */
+    public var incremental: Bool?
+
+    private var _status: AnyString?
+    /**
+     * Status of the validation (unknown, failed, passed, skipped, errored, cancelled, queued, running)
+     */
+    public var status: String? {
+        get { _status?.value }
+        set { _status = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * The results of tested Explores
+     */
+    public var tested: [CISqlValidatorTestedExplore]?
+
+    public init(name: String? = nil, incremental: Bool? = nil, status: String? = nil, tested: [CISqlValidatorTestedExplore]? = nil) {
+        self._name = name.map(AnyString.init)
+        self.incremental = incremental
+        self._status = status.map(AnyString.init)
+        self.tested = tested
+    }
+
+}
+
+public struct CISqlValidatorTestedExplore: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _model = "model"
+        case _explore = "explore"
+        case _status = "status"
+        case _skip_reason = "skip_reason"
+        case _error_count = "error_count"
+        case errors
+    }
+    private var _model: AnyString?
+    /**
+     * LookML model that was tested
+     */
+    public var model: String? {
+        get { _model?.value }
+        set { _model = newValue.map(AnyString.init) }
+    }
+
+    private var _explore: AnyString?
+    /**
+     * LookML Explore that was tested
+     */
+    public var explore: String? {
+        get { _explore?.value }
+        set { _explore = newValue.map(AnyString.init) }
+    }
+
+    private var _status: AnyString?
+    /**
+     * Status of the validation (unknown, failed, passed, skipped, errored, cancelled, queued, running)
+     */
+    public var status: String? {
+        get { _status?.value }
+        set { _status = newValue.map(AnyString.init) }
+    }
+
+    private var _skip_reason: AnyString?
+    /**
+     * Reason the validation was skipped
+     */
+    public var skip_reason: String? {
+        get { _skip_reason?.value }
+        set { _skip_reason = newValue.map(AnyString.init) }
+    }
+
+    private var _error_count: AnyInt?
+    /**
+     * Total number of failed validations
+     */
+    public var error_count: Int64? {
+        get { _error_count?.value }
+        set { _error_count = newValue.map(AnyInt.init) }
+    }
+
+    /**
+     * Details of the LookML that failed SQL validation
+     */
+    public var errors: [CISqlValidatorErrorItem]?
+
+    public init(model: String? = nil, explore: String? = nil, status: String? = nil, skip_reason: String? = nil, error_count: Int64? = nil, errors: [CISqlValidatorErrorItem]? = nil) {
+        self._model = model.map(AnyString.init)
+        self._explore = explore.map(AnyString.init)
+        self._status = status.map(AnyString.init)
+        self._skip_reason = skip_reason.map(AnyString.init)
+        self._error_count = error_count.map(AnyInt.init)
+        self.errors = errors
     }
 
 }
@@ -4274,6 +6333,26 @@ public struct ContentView: SDKModel {
 
 }
 
+public struct Context: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _instructions = "instructions"
+    }
+    private var _instructions: AnyString?
+    /**
+     * Agent instructions
+     */
+    public var instructions: String? {
+        get { _instructions?.value }
+        set { _instructions = newValue.map(AnyString.init) }
+    }
+
+    public init(instructions: String? = nil) {
+        self._instructions = instructions.map(AnyString.init)
+    }
+
+}
+
 public struct ContinuousPalette: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -4319,6 +6398,225 @@ public struct ContinuousPalette: SDKModel {
         self._label = label.map(AnyString.init)
         self._type = type.map(AnyString.init)
         self.stops = stops
+    }
+
+}
+
+public struct Conversation: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _id = "id"
+        case _name = "name"
+        case _category = "category"
+        case sources
+        case _user_id = "user_id"
+        case _agent_id = "agent_id"
+        case deleted
+        case created_at
+        case updated_at
+        case messages
+        case conversation_agent
+        case missing_agent
+        case _studio_conversation_id = "studio_conversation_id"
+    }
+    /**
+     * Operations the current user is able to perform on this object (read-only)
+     */
+    public var can: StringDictionary<Bool>?
+
+    private var _id: AnyString?
+    /**
+     * Conversation unique identifier (read-only)
+     */
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
+    private var _name: AnyString?
+    /**
+     * Conversation name
+     */
+    public var name: String? {
+        get { _name?.value }
+        set { _name = newValue.map(AnyString.init) }
+    }
+
+    private var _category: AnyString?
+    /**
+     * The category of the conversation (e.g., dashboard, conversation)
+     */
+    public var category: String? {
+        get { _category?.value }
+        set { _category = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Conversation sources
+     */
+    public var sources: [Source]?
+
+    private var _user_id: AnyString?
+    /**
+     * User id (read-only)
+     */
+    public var user_id: String? {
+        get { _user_id?.value }
+        set { _user_id = newValue.map(AnyString.init) }
+    }
+
+    private var _agent_id: AnyString?
+    /**
+     * Agent id
+     */
+    public var agent_id: String? {
+        get { _agent_id?.value }
+        set { _agent_id = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Is conversation soft deleted
+     */
+    public var deleted: Bool?
+
+    /**
+     * Conversation created_at (read-only)
+     */
+    public var created_at: Date?
+
+    /**
+     * Conversation updated_at (read-only)
+     */
+    public var updated_at: Date?
+
+    /**
+     * Conversation messages (read-only)
+     */
+    public var messages: [ConversationMessage]?
+
+    public var conversation_agent: Agent?
+
+    /**
+     * Agent associated with this conversation was deleted (read-only)
+     */
+    public var missing_agent: Bool?
+
+    private var _studio_conversation_id: AnyString?
+    /**
+     * Studio Conversation ID (if this conversation was migrated) (read-only)
+     */
+    public var studio_conversation_id: String? {
+        get { _studio_conversation_id?.value }
+        set { _studio_conversation_id = newValue.map(AnyString.init) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, category: String? = nil, sources: [Source]? = nil, user_id: String? = nil, agent_id: String? = nil, deleted: Bool? = nil, created_at: Date? = nil, updated_at: Date? = nil, messages: [ConversationMessage]? = nil, conversation_agent: Agent? = nil, missing_agent: Bool? = nil, studio_conversation_id: String? = nil) {
+        self.can = can
+        self._id = id.map(AnyString.init)
+        self._name = name.map(AnyString.init)
+        self._category = category.map(AnyString.init)
+        self.sources = sources
+        self._user_id = user_id.map(AnyString.init)
+        self._agent_id = agent_id.map(AnyString.init)
+        self.deleted = deleted
+        self.created_at = created_at
+        self.updated_at = updated_at
+        self.messages = messages
+        self.conversation_agent = conversation_agent
+        self.missing_agent = missing_agent
+        self._studio_conversation_id = studio_conversation_id.map(AnyString.init)
+    }
+
+}
+
+public struct ConversationalAnalyticsChatRequest: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _conversation_id = "conversation_id"
+        case _user_message = "user_message"
+    }
+    private var _conversation_id: AnyString
+    /**
+     * A unique identifier for the conversation.
+     */
+    public var conversation_id: String {
+        get { _conversation_id.value }
+        set { _conversation_id = AnyString.init(newValue) }
+    }
+
+    private var _user_message: AnyString
+    /**
+     * The text content of the most recent message in the conversation.
+     */
+    public var user_message: String {
+        get { _user_message.value }
+        set { _user_message = AnyString.init(newValue) }
+    }
+
+    public init(conversation_id: String, user_message: String) {
+        self._conversation_id = AnyString.init(conversation_id)
+        self._user_message = AnyString.init(user_message)
+    }
+
+    public init(_ conversation_id: String, _ user_message: String) {
+        self.init(conversation_id: conversation_id, user_message: user_message)
+    }
+
+}
+
+public struct ConversationMessage: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _id = "id"
+        case message
+        case _type = "type"
+        case _order = "order"
+    }
+    /**
+     * Operations the current user is able to perform on this object (read-only)
+     */
+    public var can: StringDictionary<Bool>?
+
+    private var _id: AnyString?
+    /**
+     * Message unique identifier (read-only)
+     */
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Message content
+     */
+    public var message: StringDictionary<AnyCodable>?
+
+    private var _type: AnyString?
+    /**
+     * Message type
+     */
+    public var type: String? {
+        get { _type?.value }
+        set { _type = newValue.map(AnyString.init) }
+    }
+
+    private var _order: AnyInt?
+    /**
+     * Message order (read-only)
+     */
+    public var order: Int64? {
+        get { _order?.value }
+        set { _order = newValue.map(AnyInt.init) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, message: StringDictionary<AnyCodable>? = nil, type: String? = nil, order: Int64? = nil) {
+        self.can = can
+        self._id = id.map(AnyString.init)
+        self.message = message
+        self._type = type.map(AnyString.init)
+        self._order = order.map(AnyInt.init)
     }
 
 }
@@ -4441,6 +6739,48 @@ public struct CreateCIRunResponse: SDKModel {
     public init(run_id: String? = nil, status: String? = nil) {
         self._run_id = run_id.map(AnyString.init)
         self._status = status.map(AnyString.init)
+    }
+
+}
+
+public struct CreateContinuousIntegrationRunRequest: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _suite_id = "suite_id"
+        case _branch = "branch"
+        case _commit = "commit"
+    }
+    private var _suite_id: AnyString?
+    /**
+     * The suite ID.
+     */
+    public var suite_id: String? {
+        get { _suite_id?.value }
+        set { _suite_id = newValue.map(AnyString.init) }
+    }
+
+    private var _branch: AnyString?
+    /**
+     * The git branch to use. Required for dev workspace. Omit to test production.
+     */
+    public var branch: String? {
+        get { _branch?.value }
+        set { _branch = newValue.map(AnyString.init) }
+    }
+
+    private var _commit: AnyString?
+    /**
+     * Commit that the CI run should validate. Omit to test production.
+     */
+    public var commit: String? {
+        get { _commit?.value }
+        set { _commit = newValue.map(AnyString.init) }
+    }
+
+    public init(suite_id: String? = nil, branch: String? = nil, commit: String? = nil) {
+        self._suite_id = suite_id.map(AnyString.init)
+        self._branch = branch.map(AnyString.init)
+        self._commit = commit.map(AnyString.init)
     }
 
 }
@@ -7892,6 +10232,48 @@ public struct DataActionUserState: SDKModel {
 
 }
 
+public struct DataFilter: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _field = "field"
+        case _value = "value"
+        case _type = "type"
+    }
+    private var _field: AnyString?
+    /**
+     * The field to filter on. (read-only)
+     */
+    public var field: String? {
+        get { _field?.value }
+        set { _field = newValue.map(AnyString.init) }
+    }
+
+    private var _value: AnyString?
+    /**
+     * The default value used for this filter. (read-only)
+     */
+    public var value: String? {
+        get { _value?.value }
+        set { _value = newValue.map(AnyString.init) }
+    }
+
+    private var _type: AnyString?
+    /**
+     * The type of filter present on a datasource. (read-only)
+     */
+    public var type: String? {
+        get { _type?.value }
+        set { _type = newValue.map(AnyString.init) }
+    }
+
+    public init(field: String? = nil, value: String? = nil, type: String? = nil) {
+        self._field = field.map(AnyString.init)
+        self._value = value.map(AnyString.init)
+        self._type = type.map(AnyString.init)
+    }
+
+}
+
 public struct Datagroup: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -8007,6 +10389,200 @@ public struct Datagroup: SDKModel {
 
 }
 
+public struct DataMessage: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case query
+        case _generatedSql = "generatedSql"
+        case result
+        case generatedLookerQuery
+        case bigQueryJob
+    }
+    public var query: DataQuery?
+
+    private var _generatedSql: AnyString?
+    /**
+     * SQL generated by the system. (read-only)
+     */
+    public var generatedSql: String? {
+        get { _generatedSql?.value }
+        set { _generatedSql = newValue.map(AnyString.init) }
+    }
+
+    public var result: DataResult?
+
+    public var generatedLookerQuery: Query?
+
+    public var bigQueryJob: BigQueryJob?
+
+    public init(query: DataQuery? = nil, generatedSql: String? = nil, result: DataResult? = nil, generatedLookerQuery: Query? = nil, bigQueryJob: BigQueryJob? = nil) {
+        self.query = query
+        self._generatedSql = generatedSql.map(AnyString.init)
+        self.result = result
+        self.generatedLookerQuery = generatedLookerQuery
+        self.bigQueryJob = bigQueryJob
+    }
+
+}
+
+public struct DataQuery: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _question = "question"
+        case _name = "name"
+        case datasources
+        case looker
+    }
+    private var _question: AnyString?
+    /**
+     * A natural language question to answer. (read-only)
+     */
+    public var question: String? {
+        get { _question?.value }
+        set { _question = newValue.map(AnyString.init) }
+    }
+
+    private var _name: AnyString?
+    /**
+     * A snake-case name for the query. (read-only)
+     */
+    public var name: String? {
+        get { _name?.value }
+        set { _name = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * The datasources available to answer the question. (read-only)
+     */
+    public var datasources: [Datasource]?
+
+    public var looker: Query?
+
+    public init(question: String? = nil, name: String? = nil, datasources: [Datasource]? = nil, looker: Query? = nil) {
+        self._question = question.map(AnyString.init)
+        self._name = name.map(AnyString.init)
+        self.datasources = datasources
+        self.looker = looker
+    }
+
+}
+
+public struct DataResult: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _name = "name"
+        case schema
+        case data
+    }
+    private var _name: AnyString?
+    /**
+     * A snake-case name for the data result. (read-only)
+     */
+    public var name: String? {
+        get { _name?.value }
+        set { _name = newValue.map(AnyString.init) }
+    }
+
+    public var schema: DataSourceSchema?
+
+    /**
+     * The content of the data. (read-only)
+     */
+    public var data: [AnyCodable]?
+
+    public init(name: String? = nil, schema: DataSourceSchema? = nil, data: [AnyCodable]? = nil) {
+        self._name = name.map(AnyString.init)
+        self.schema = schema
+        self.data = data
+    }
+
+}
+
+public struct Datasource: SDKModel {
+    public var lookerExploreReference: LookerExploreReference?
+
+    public var schema: DataSourceSchema?
+
+    /**
+     * A struct representation of the schema. (read-only)
+     */
+    public var structSchema: StringDictionary<AnyCodable>?
+
+    public init(lookerExploreReference: LookerExploreReference? = nil, schema: DataSourceSchema? = nil, structSchema: StringDictionary<AnyCodable>? = nil) {
+        self.lookerExploreReference = lookerExploreReference
+        self.schema = schema
+        self.structSchema = structSchema
+    }
+
+}
+
+public struct DataSourceSchema: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case fields
+        case _description = "description"
+        case _synonyms = "synonyms"
+        case _tags = "tags"
+        case _displayName = "displayName"
+        case filters
+    }
+    /**
+     * The fields in the schema. (read-only)
+     */
+    public var fields: [Field]?
+
+    private var _description: AnyString?
+    /**
+     * A textual description of the table's content and purpose. (read-only)
+     */
+    public var description: String? {
+        get { _description?.value }
+        set { _description = newValue.map(AnyString.init) }
+    }
+
+    private var _synonyms: [AnyString]?
+    /**
+     * A list of alternative names or synonyms. (read-only)
+     */
+    public var synonyms: [String]? {
+        get { if let v = _synonyms { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _synonyms = v.map { AnyString.init($0) } } else { _synonyms = nil } }
+    }
+
+    private var _tags: [AnyString]?
+    /**
+     * A list of tags or keywords. (read-only)
+     */
+    public var tags: [String]? {
+        get { if let v = _tags { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _tags = v.map { AnyString.init($0) } } else { _tags = nil } }
+    }
+
+    private var _displayName: AnyString?
+    /**
+     * Table displayName. (read-only)
+     */
+    public var displayName: String? {
+        get { _displayName?.value }
+        set { _displayName = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * The filters on the datasource's underlying data. (read-only)
+     */
+    public var filters: [DataFilter]?
+
+    public init(fields: [Field]? = nil, description: String? = nil, synonyms: [String]? = nil, tags: [String]? = nil, displayName: String? = nil, filters: [DataFilter]? = nil) {
+        self.fields = fields
+        self._description = description.map(AnyString.init)
+        if let v = synonyms { _synonyms = v.map { AnyString.init($0) } } else { _synonyms = nil }
+        if let v = tags { _tags = v.map { AnyString.init($0) } } else { _tags = nil }
+        self._displayName = displayName.map(AnyString.init)
+        self.filters = filters
+    }
+
+}
+
 public struct DBConnection: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -8074,6 +10650,7 @@ public struct DBConnection: SDKModel {
         case bq_roles_verified
         case _p4sa_name = "p4sa_name"
         case query_holding_disabled
+        case _service_name = "service_name"
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -8533,7 +11110,16 @@ public struct DBConnection: SDKModel {
      */
     public var query_holding_disabled: Bool?
 
-    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, named_driver_version_requested: String? = nil, named_driver_version_actual: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, has_password: Bool? = nil, uses_oauth: Bool? = nil, uses_key_pair_auth: Bool? = nil, uses_instance_oauth: Bool? = nil, uses_service_auth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, tmp_db_host: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, supports_data_studio_link: Bool? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, default_bq_connection: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil, p4sa_name: String? = nil, query_holding_disabled: Bool? = nil) {
+    private var _service_name: AnyString?
+    /**
+     * Service name used for connections with TNS enabled
+     */
+    public var service_name: String? {
+        get { _service_name?.value }
+        set { _service_name = newValue.map(AnyString.init) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, named_driver_version_requested: String? = nil, named_driver_version_actual: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, has_password: Bool? = nil, uses_oauth: Bool? = nil, uses_key_pair_auth: Bool? = nil, uses_instance_oauth: Bool? = nil, uses_service_auth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, tmp_db_host: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, supports_data_studio_link: Bool? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, default_bq_connection: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil, p4sa_name: String? = nil, query_holding_disabled: Bool? = nil, service_name: String? = nil) {
         self.can = can
         self._name = name.map(AnyString.init)
         self.dialect = dialect
@@ -8598,6 +11184,7 @@ public struct DBConnection: SDKModel {
         self.bq_roles_verified = bq_roles_verified
         self._p4sa_name = p4sa_name.map(AnyString.init)
         self.query_holding_disabled = query_holding_disabled
+        self._service_name = service_name.map(AnyString.init)
     }
 
 }
@@ -8672,6 +11259,7 @@ public struct DBConnectionOverride: SDKModel {
         case _pdt_jdbc_additional_params = "pdt_jdbc_additional_params"
         case _after_connect_statements = "after_connect_statements"
         case _pdt_after_connect_statements = "pdt_after_connect_statements"
+        case _pdt_service_name = "pdt_service_name"
     }
     private var _context: AnyString?
     /**
@@ -8867,7 +11455,16 @@ public struct DBConnectionOverride: SDKModel {
         set { _pdt_after_connect_statements = newValue.map(AnyString.init) }
     }
 
-    public init(context: String? = nil, host: String? = nil, pdt_host: String? = nil, port: String? = nil, pdt_port: String? = nil, username: String? = nil, pdt_username: String? = nil, password: String? = nil, pdt_password: String? = nil, has_password: Bool? = nil, certificate: String? = nil, pdt_certificate: String? = nil, file_type: String? = nil, pdt_file_type: String? = nil, database: String? = nil, pdt_database: String? = nil, schema: String? = nil, pdt_schema: String? = nil, jdbc_additional_params: String? = nil, pdt_jdbc_additional_params: String? = nil, after_connect_statements: String? = nil, pdt_after_connect_statements: String? = nil) {
+    private var _pdt_service_name: AnyString?
+    /**
+     * Service name used for connections with TNS enabled
+     */
+    public var pdt_service_name: String? {
+        get { _pdt_service_name?.value }
+        set { _pdt_service_name = newValue.map(AnyString.init) }
+    }
+
+    public init(context: String? = nil, host: String? = nil, pdt_host: String? = nil, port: String? = nil, pdt_port: String? = nil, username: String? = nil, pdt_username: String? = nil, password: String? = nil, pdt_password: String? = nil, has_password: Bool? = nil, certificate: String? = nil, pdt_certificate: String? = nil, file_type: String? = nil, pdt_file_type: String? = nil, database: String? = nil, pdt_database: String? = nil, schema: String? = nil, pdt_schema: String? = nil, jdbc_additional_params: String? = nil, pdt_jdbc_additional_params: String? = nil, after_connect_statements: String? = nil, pdt_after_connect_statements: String? = nil, pdt_service_name: String? = nil) {
         self._context = context.map(AnyString.init)
         self._host = host.map(AnyString.init)
         self._pdt_host = pdt_host.map(AnyString.init)
@@ -8890,6 +11487,7 @@ public struct DBConnectionOverride: SDKModel {
         self._pdt_jdbc_additional_params = pdt_jdbc_additional_params.map(AnyString.init)
         self._after_connect_statements = after_connect_statements.map(AnyString.init)
         self._pdt_after_connect_statements = pdt_after_connect_statements.map(AnyString.init)
+        self._pdt_service_name = pdt_service_name.map(AnyString.init)
     }
 
 }
@@ -9375,6 +11973,11 @@ public struct DialectInfoOptions: SDKModel {
     public var cost_estimate: Bool?
 
     /**
+     * Disable this connection. This will prevent any queries from running on this connection. (read-only)
+     */
+    public var disabled: Bool?
+
+    /**
      * Can disable query context comments (read-only)
      */
     public var disable_context_comment: Bool?
@@ -9464,12 +12067,13 @@ public struct DialectInfoOptions: SDKModel {
      */
     public var supports_connection_pooling: Bool?
 
-    public init(additional_params: Bool? = nil, after_connect_statements: Bool? = nil, analytical_view_dataset: Bool? = nil, auth: Bool? = nil, cost_estimate: Bool? = nil, disable_context_comment: Bool? = nil, host: Bool? = nil, instance_name: Bool? = nil, key_pair_authentication: Bool? = nil, max_billing_gigabytes: Bool? = nil, oauth_credentials: Bool? = nil, pdts_for_oauth: Bool? = nil, port: Bool? = nil, project_name: Bool? = nil, schema: Bool? = nil, service_account_credentials: Bool? = nil, ssl: Bool? = nil, timezone: Bool? = nil, tmp_table: Bool? = nil, tns: Bool? = nil, username: Bool? = nil, username_required: Bool? = nil, supports_connection_pooling: Bool? = nil) {
+    public init(additional_params: Bool? = nil, after_connect_statements: Bool? = nil, analytical_view_dataset: Bool? = nil, auth: Bool? = nil, cost_estimate: Bool? = nil, disabled: Bool? = nil, disable_context_comment: Bool? = nil, host: Bool? = nil, instance_name: Bool? = nil, key_pair_authentication: Bool? = nil, max_billing_gigabytes: Bool? = nil, oauth_credentials: Bool? = nil, pdts_for_oauth: Bool? = nil, port: Bool? = nil, project_name: Bool? = nil, schema: Bool? = nil, service_account_credentials: Bool? = nil, ssl: Bool? = nil, timezone: Bool? = nil, tmp_table: Bool? = nil, tns: Bool? = nil, username: Bool? = nil, username_required: Bool? = nil, supports_connection_pooling: Bool? = nil) {
         self.additional_params = additional_params
         self.after_connect_statements = after_connect_statements
         self.analytical_view_dataset = analytical_view_dataset
         self.auth = auth
         self.cost_estimate = cost_estimate
+        self.disabled = disabled
         self.disable_context_comment = disable_context_comment
         self.host = host
         self.instance_name = instance_name
@@ -10363,6 +12967,14 @@ public struct EmbedUrlResponse: SDKModel {
 
 }
 
+/**
+ * Enum of additional alert properties. Valid values are: "NONE", "STRATEGIC_NARRATIVE". (Enum defined in Alert)
+ */
+public enum Enhancements: String, Codable {
+    case NONE = "NONE"
+    case STRATEGIC_NARRATIVE = "STRATEGIC_NARRATIVE"
+}
+
 public struct LkError: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -10394,6 +13006,69 @@ public struct LkError: SDKModel {
 
     public init(_ message: String, _ documentation_url: String) {
         self.init(message: message, documentation_url: documentation_url)
+    }
+
+}
+
+public struct ErrorMessage: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _text = "text"
+    }
+    private var _text: AnyString?
+    /**
+     * The text of the error. (read-only)
+     */
+    public var text: String? {
+        get { _text?.value }
+        set { _text = newValue.map(AnyString.init) }
+    }
+
+    public init(text: String? = nil) {
+        self._text = text.map(AnyString.init)
+    }
+
+}
+
+public struct ExampleQueries: SDKModel {
+    /**
+     * A list of derived and authored example queries. (read-only)
+     */
+    public var exampleQueries: [ExampleQuery]?
+
+    public init(exampleQueries: [ExampleQuery]? = nil) {
+        self.exampleQueries = exampleQueries
+    }
+
+}
+
+public struct ExampleQuery: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _naturalLanguageQuestion = "naturalLanguageQuestion"
+        case _sqlQuery = "sqlQuery"
+    }
+    private var _naturalLanguageQuestion: AnyString?
+    /**
+     * A natural language question that a user might ask. (read-only)
+     */
+    public var naturalLanguageQuestion: String? {
+        get { _naturalLanguageQuestion?.value }
+        set { _naturalLanguageQuestion = newValue.map(AnyString.init) }
+    }
+
+    private var _sqlQuery: AnyString?
+    /**
+     * The SQL query that should be generated to answer the natural language question. (read-only)
+     */
+    public var sqlQuery: String? {
+        get { _sqlQuery?.value }
+        set { _sqlQuery = newValue.map(AnyString.init) }
+    }
+
+    public init(naturalLanguageQuestion: String? = nil, sqlQuery: String? = nil) {
+        self._naturalLanguageQuestion = naturalLanguageQuestion.map(AnyString.init)
+        self._sqlQuery = sqlQuery.map(AnyString.init)
     }
 
 }
@@ -10490,6 +13165,121 @@ public struct ExternalOauthApplication: SDKModel {
         self._dialect_name = dialect_name.map(AnyString.init)
         self.bi_directional_data_access = bi_directional_data_access
         self.created_at = created_at
+    }
+
+}
+
+public struct Field: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _name = "name"
+        case _type = "type"
+        case _description = "description"
+        case _mode = "mode"
+        case _synonyms = "synonyms"
+        case _tags = "tags"
+        case _displayName = "displayName"
+        case subfields
+        case _category = "category"
+        case _valueFormat = "valueFormat"
+    }
+    private var _name: AnyString?
+    /**
+     * The name of the field. (read-only)
+     */
+    public var name: String? {
+        get { _name?.value }
+        set { _name = newValue.map(AnyString.init) }
+    }
+
+    private var _type: AnyString?
+    /**
+     * The type of the field. (read-only)
+     */
+    public var type: String? {
+        get { _type?.value }
+        set { _type = newValue.map(AnyString.init) }
+    }
+
+    private var _description: AnyString?
+    /**
+     * A brief description of the field. (read-only)
+     */
+    public var description: String? {
+        get { _description?.value }
+        set { _description = newValue.map(AnyString.init) }
+    }
+
+    private var _mode: AnyString?
+    /**
+     * The mode of the field (e.g., NULLABLE, REPEATED). (read-only)
+     */
+    public var mode: String? {
+        get { _mode?.value }
+        set { _mode = newValue.map(AnyString.init) }
+    }
+
+    private var _synonyms: [AnyString]?
+    /**
+     * A list of alternative names or synonyms. (read-only)
+     */
+    public var synonyms: [String]? {
+        get { if let v = _synonyms { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _synonyms = v.map { AnyString.init($0) } } else { _synonyms = nil } }
+    }
+
+    private var _tags: [AnyString]?
+    /**
+     * A list of tags or keywords. (read-only)
+     */
+    public var tags: [String]? {
+        get { if let v = _tags { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _tags = v.map { AnyString.init($0) } } else { _tags = nil } }
+    }
+
+    private var _displayName: AnyString?
+    /**
+     * Field displayName. (read-only)
+     */
+    public var displayName: String? {
+        get { _displayName?.value }
+        set { _displayName = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Recursive property for nested schema structures. (read-only)
+     */
+    public var subfields: [AnyCodable]?
+
+    private var _category: AnyString?
+    /**
+     * Field category. (read-only)
+     */
+    public var category: String? {
+        get { _category?.value }
+        set { _category = newValue.map(AnyString.init) }
+    }
+
+    private var _valueFormat: AnyString?
+    /**
+     * Looker only. Value format of the field. (read-only)
+     */
+    public var valueFormat: String? {
+        get { _valueFormat?.value }
+        set { _valueFormat = newValue.map(AnyString.init) }
+    }
+
+    public init(name: String? = nil, type: String? = nil, description: String? = nil, mode: String? = nil, synonyms: [String]? = nil, tags: [String]? = nil, displayName: String? = nil, subfields: [AnyCodable]? = nil, category: String? = nil, valueFormat: String? = nil) {
+        self._name = name.map(AnyString.init)
+        self._type = type.map(AnyString.init)
+        self._description = description.map(AnyString.init)
+        self._mode = mode.map(AnyString.init)
+        if let v = synonyms { _synonyms = v.map { AnyString.init($0) } } else { _synonyms = nil }
+        if let v = tags { _tags = v.map { AnyString.init($0) } } else { _tags = nil }
+        self._displayName = displayName.map(AnyString.init)
+        self.subfields = subfields
+        self._category = category.map(AnyString.init)
+        self._valueFormat = valueFormat.map(AnyString.init)
     }
 
 }
@@ -13003,6 +15793,141 @@ public struct JsonBiTableCalc: SDKModel {
 
 }
 
+public struct KdaDataSource: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _query_id = "query_id"
+        case _model_name = "model_name"
+        case _explore_name = "explore_name"
+    }
+    private var _query_id: AnyString?
+    public var query_id: String? {
+        get { _query_id?.value }
+        set { _query_id = newValue.map(AnyString.init) }
+    }
+
+    private var _model_name: AnyString?
+    public var model_name: String? {
+        get { _model_name?.value }
+        set { _model_name = newValue.map(AnyString.init) }
+    }
+
+    private var _explore_name: AnyString?
+    public var explore_name: String? {
+        get { _explore_name?.value }
+        set { _explore_name = newValue.map(AnyString.init) }
+    }
+
+    public init(query_id: String? = nil, model_name: String? = nil, explore_name: String? = nil) {
+        self._query_id = query_id.map(AnyString.init)
+        self._model_name = model_name.map(AnyString.init)
+        self._explore_name = explore_name.map(AnyString.init)
+    }
+
+}
+
+public struct KdaRequestPayload: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case data_source
+        case _contribution_metric = "contribution_metric"
+        case _dimensions = "dimensions"
+        case base_filters
+        case baseline_filters
+        case breach_filters
+    }
+    public var data_source: KdaDataSource
+
+    private var _contribution_metric: AnyString
+    /**
+     * The LookML measure to analyze (e.g., 'orders.total_revenue').
+     */
+    public var contribution_metric: String {
+        get { _contribution_metric.value }
+        set { _contribution_metric = AnyString.init(newValue) }
+    }
+
+    private var _dimensions: [AnyString]
+    /**
+     * List of LookML dimensions to analyze as drivers. Max 6 dimensions allowed.
+     */
+    public var dimensions: [String] {
+        get { _dimensions.map { $0.value } }
+        set { _dimensions = newValue.map { AnyString.init($0) } }
+    }
+
+    /**
+     * Optional Looker-syntax filters to scope the entire dataset (e.g., {'users.country': 'India'}).
+     */
+    public var base_filters: StringDictionary<AnyCodable>?
+
+    /**
+     * Defines the EXPECTED, PAST, or NORMAL group (State A). For time KDA, put the past date filter here (e.g., {'orders.created_date': 'last week'}). For cohort KDA, put the baseline segment here (e.g., {'users.status': 'Active'}).
+     */
+    public var baseline_filters: StringDictionary<AnyCodable>?
+
+    /**
+     * Defines the ANOMALOUS, CURRENT, or COMPARISON group (State B). For time KDA, put the current date here. For 'Rest of Population' cohort comparisons, use a minus sign to negate the baseline (e.g., {'users.status': '-Active'}).
+     */
+    public var breach_filters: StringDictionary<AnyCodable>?
+
+    public init(data_source: KdaDataSource, contribution_metric: String, dimensions: [String], base_filters: StringDictionary<AnyCodable>? = nil, baseline_filters: StringDictionary<AnyCodable>? = nil, breach_filters: StringDictionary<AnyCodable>? = nil) {
+        self.data_source = data_source
+        self._contribution_metric = AnyString.init(contribution_metric)
+        self._dimensions = dimensions.map { AnyString.init($0) }
+        self.base_filters = base_filters
+        self.baseline_filters = baseline_filters
+        self.breach_filters = breach_filters
+    }
+
+    public init(_ data_source: KdaDataSource, _ contribution_metric: String, _ dimensions: [String], base_filters: StringDictionary<AnyCodable>? = nil, baseline_filters: StringDictionary<AnyCodable>? = nil, breach_filters: StringDictionary<AnyCodable>? = nil) {
+        self.init(data_source: data_source, contribution_metric: contribution_metric, dimensions: dimensions, base_filters: base_filters, baseline_filters: baseline_filters, breach_filters: breach_filters)
+    }
+
+}
+
+public struct KdaResponsePayload: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _status = "status"
+        case _dimensions = "dimensions"
+        case drivers
+    }
+    private var _status: AnyString
+    /**
+     * Status of the analysis (e.g., 'SUCCESS', 'FAILED') (read-only)
+     */
+    public var status: String {
+        get { _status.value }
+        set { _status = AnyString.init(newValue) }
+    }
+
+    private var _dimensions: [AnyString]
+    /**
+     * Dimensions that were analyzed (read-only)
+     */
+    public var dimensions: [String] {
+        get { _dimensions.map { $0.value } }
+        set { _dimensions = newValue.map { AnyString.init($0) } }
+    }
+
+    /**
+     * List of identified key drivers (read-only)
+     */
+    public var drivers: [AnyCodable]
+
+    public init(status: String, dimensions: [String], drivers: [AnyCodable]) {
+        self._status = AnyString.init(status)
+        self._dimensions = dimensions.map { AnyString.init($0) }
+        self.drivers = drivers
+    }
+
+    public init(_ status: String, _ dimensions: [String], _ drivers: [AnyCodable]) {
+        self.init(status: status, dimensions: dimensions, drivers: drivers)
+    }
+
+}
+
 /**
  * The type of calculation for the period_over_period measure. Valid values are: "previous", "difference", "relative_change". (Enum defined in LookmlModelExploreFieldPeriodOverPeriodParams)
  */
@@ -14466,6 +17391,56 @@ public struct LookBasic: SDKModel {
 
 }
 
+public struct LookerExploreReference: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _lookerInstanceUri = "lookerInstanceUri"
+        case privateLookerInstanceInfo
+        case _lookmlModel = "lookmlModel"
+        case _explore = "explore"
+        case schema
+    }
+    private var _lookerInstanceUri: AnyString?
+    /**
+     * The base url of the Looker instance. (read-only)
+     */
+    public var lookerInstanceUri: String? {
+        get { _lookerInstanceUri?.value }
+        set { _lookerInstanceUri = newValue.map(AnyString.init) }
+    }
+
+    public var privateLookerInstanceInfo: PrivateLookerInstanceInfo?
+
+    private var _lookmlModel: AnyString?
+    /**
+     * Name of the LookML model. (read-only)
+     */
+    public var lookmlModel: String? {
+        get { _lookmlModel?.value }
+        set { _lookmlModel = newValue.map(AnyString.init) }
+    }
+
+    private var _explore: AnyString?
+    /**
+     * Name of the LookML Explore. (read-only)
+     */
+    public var explore: String? {
+        get { _explore?.value }
+        set { _explore = newValue.map(AnyString.init) }
+    }
+
+    public var schema: DataSourceSchema?
+
+    public init(lookerInstanceUri: String? = nil, privateLookerInstanceInfo: PrivateLookerInstanceInfo? = nil, lookmlModel: String? = nil, explore: String? = nil, schema: DataSourceSchema? = nil) {
+        self._lookerInstanceUri = lookerInstanceUri.map(AnyString.init)
+        self.privateLookerInstanceInfo = privateLookerInstanceInfo
+        self._lookmlModel = lookmlModel.map(AnyString.init)
+        self._explore = explore.map(AnyString.init)
+        self.schema = schema
+    }
+
+}
+
 public struct LookmlFieldLink: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -14607,6 +17582,7 @@ public struct LookmlModelExplore: SDKModel {
         case can_pivot_in_db
         case can_subtotal
         case has_timezone_support
+        case self_service_explore_data
         case supports_cost_estimate
         case _connection_name = "connection_name"
         case _null_sort_treatment = "null_sort_treatment"
@@ -14734,6 +17710,8 @@ public struct LookmlModelExplore: SDKModel {
      * Has timezone support (read-only)
      */
     public var has_timezone_support: Bool?
+
+    public var self_service_explore_data: SelfServiceModelUploadData?
 
     /**
      * Cost estimates supported (read-only)
@@ -14904,7 +17882,7 @@ public struct LookmlModelExplore: SDKModel {
         set { if let v = newValue { _always_join = v.map { AnyString.init($0) } } else { _always_join = nil } }
     }
 
-    public init(id: String? = nil, name: String? = nil, description: String? = nil, label: String? = nil, title: String? = nil, scopes: [String]? = nil, can_total: Bool? = nil, can_develop: Bool? = nil, can_see_lookml: Bool? = nil, lookml_link: String? = nil, can_save: Bool? = nil, can_explain: Bool? = nil, can_pivot_in_db: Bool? = nil, can_subtotal: Bool? = nil, has_timezone_support: Bool? = nil, supports_cost_estimate: Bool? = nil, connection_name: String? = nil, null_sort_treatment: String? = nil, files: [String]? = nil, source_file: String? = nil, project_name: String? = nil, model_name: String? = nil, view_name: String? = nil, hidden: Bool? = nil, sql_table_name: String? = nil, access_filter_fields: [String]? = nil, access_filters: [LookmlModelExploreAccessFilter]? = nil, aliases: [LookmlModelExploreAlias]? = nil, always_filter: [LookmlModelExploreAlwaysFilter]? = nil, conditionally_filter: [LookmlModelExploreConditionallyFilter]? = nil, index_fields: [String]? = nil, sets: [LookmlModelExploreSet]? = nil, tags: [String]? = nil, errors: [LookmlModelExploreError]? = nil, fields: LookmlModelExploreFieldset? = nil, joins: [LookmlModelExploreJoins]? = nil, group_label: String? = nil, supported_measure_types: [LookmlModelExploreSupportedMeasureType]? = nil, always_join: [String]? = nil) {
+    public init(id: String? = nil, name: String? = nil, description: String? = nil, label: String? = nil, title: String? = nil, scopes: [String]? = nil, can_total: Bool? = nil, can_develop: Bool? = nil, can_see_lookml: Bool? = nil, lookml_link: String? = nil, can_save: Bool? = nil, can_explain: Bool? = nil, can_pivot_in_db: Bool? = nil, can_subtotal: Bool? = nil, has_timezone_support: Bool? = nil, self_service_explore_data: SelfServiceModelUploadData? = nil, supports_cost_estimate: Bool? = nil, connection_name: String? = nil, null_sort_treatment: String? = nil, files: [String]? = nil, source_file: String? = nil, project_name: String? = nil, model_name: String? = nil, view_name: String? = nil, hidden: Bool? = nil, sql_table_name: String? = nil, access_filter_fields: [String]? = nil, access_filters: [LookmlModelExploreAccessFilter]? = nil, aliases: [LookmlModelExploreAlias]? = nil, always_filter: [LookmlModelExploreAlwaysFilter]? = nil, conditionally_filter: [LookmlModelExploreConditionallyFilter]? = nil, index_fields: [String]? = nil, sets: [LookmlModelExploreSet]? = nil, tags: [String]? = nil, errors: [LookmlModelExploreError]? = nil, fields: LookmlModelExploreFieldset? = nil, joins: [LookmlModelExploreJoins]? = nil, group_label: String? = nil, supported_measure_types: [LookmlModelExploreSupportedMeasureType]? = nil, always_join: [String]? = nil) {
         self._id = id.map(AnyString.init)
         self._name = name.map(AnyString.init)
         self._description = description.map(AnyString.init)
@@ -14920,6 +17898,7 @@ public struct LookmlModelExplore: SDKModel {
         self.can_pivot_in_db = can_pivot_in_db
         self.can_subtotal = can_subtotal
         self.has_timezone_support = has_timezone_support
+        self.self_service_explore_data = self_service_explore_data
         self.supports_cost_estimate = supports_cost_estimate
         self._connection_name = connection_name.map(AnyString.init)
         self._null_sort_treatment = null_sort_treatment.map(AnyString.init)
@@ -17424,6 +20403,187 @@ public struct MaterializePDT: SDKModel {
 
 }
 
+public struct McpTools: SDKModel {
+    /**
+     * Enable all MCP tools
+     */
+    public var enable_all: Bool?
+
+    public var add_dashboard_element: McpToolSetting?
+
+    public var add_dashboard_filter: McpToolSetting?
+
+    public var create_project_file: McpToolSetting?
+
+    public var delete_project_file: McpToolSetting?
+
+    public var dev_mode: McpToolSetting?
+
+    public var generate_embed_url: McpToolSetting?
+
+    public var get_connection_databases: McpToolSetting?
+
+    public var get_connection_schemas: McpToolSetting?
+
+    public var get_connection_table_columns: McpToolSetting?
+
+    public var get_connection_tables: McpToolSetting?
+
+    public var get_connections: McpToolSetting?
+
+    public var get_dashboards: McpToolSetting?
+
+    public var get_dimensions: McpToolSetting?
+
+    public var get_explores: McpToolSetting?
+
+    public var get_filters: McpToolSetting?
+
+    public var get_looks: McpToolSetting?
+
+    public var get_measures: McpToolSetting?
+
+    public var get_models: McpToolSetting?
+
+    public var get_parameters: McpToolSetting?
+
+    public var get_project_file: McpToolSetting?
+
+    public var get_project_files: McpToolSetting?
+
+    public var get_projects: McpToolSetting?
+
+    public var health_analyze: McpToolSetting?
+
+    public var health_pulse: McpToolSetting?
+
+    public var health_vacuum: McpToolSetting?
+
+    public var make_dashboard: McpToolSetting?
+
+    public var make_look: McpToolSetting?
+
+    public var query: McpToolSetting?
+
+    public var query_sql: McpToolSetting?
+
+    public var query_url: McpToolSetting?
+
+    public var run_dashboard: McpToolSetting?
+
+    public var run_look: McpToolSetting?
+
+    public var update_project_file: McpToolSetting?
+
+    public var validate_project: McpToolSetting?
+
+    public var get_project_directories: McpToolSetting?
+
+    public var create_project_directory: McpToolSetting?
+
+    public var delete_project_directory: McpToolSetting?
+
+    public var get_lookml_tests: McpToolSetting?
+
+    public var run_lookml_tests: McpToolSetting?
+
+    public var create_view_from_table: McpToolSetting?
+
+    public init(enable_all: Bool? = nil, add_dashboard_element: McpToolSetting? = nil, add_dashboard_filter: McpToolSetting? = nil, create_project_file: McpToolSetting? = nil, delete_project_file: McpToolSetting? = nil, dev_mode: McpToolSetting? = nil, generate_embed_url: McpToolSetting? = nil, get_connection_databases: McpToolSetting? = nil, get_connection_schemas: McpToolSetting? = nil, get_connection_table_columns: McpToolSetting? = nil, get_connection_tables: McpToolSetting? = nil, get_connections: McpToolSetting? = nil, get_dashboards: McpToolSetting? = nil, get_dimensions: McpToolSetting? = nil, get_explores: McpToolSetting? = nil, get_filters: McpToolSetting? = nil, get_looks: McpToolSetting? = nil, get_measures: McpToolSetting? = nil, get_models: McpToolSetting? = nil, get_parameters: McpToolSetting? = nil, get_project_file: McpToolSetting? = nil, get_project_files: McpToolSetting? = nil, get_projects: McpToolSetting? = nil, health_analyze: McpToolSetting? = nil, health_pulse: McpToolSetting? = nil, health_vacuum: McpToolSetting? = nil, make_dashboard: McpToolSetting? = nil, make_look: McpToolSetting? = nil, query: McpToolSetting? = nil, query_sql: McpToolSetting? = nil, query_url: McpToolSetting? = nil, run_dashboard: McpToolSetting? = nil, run_look: McpToolSetting? = nil, update_project_file: McpToolSetting? = nil, validate_project: McpToolSetting? = nil, get_project_directories: McpToolSetting? = nil, create_project_directory: McpToolSetting? = nil, delete_project_directory: McpToolSetting? = nil, get_lookml_tests: McpToolSetting? = nil, run_lookml_tests: McpToolSetting? = nil, create_view_from_table: McpToolSetting? = nil) {
+        self.enable_all = enable_all
+        self.add_dashboard_element = add_dashboard_element
+        self.add_dashboard_filter = add_dashboard_filter
+        self.create_project_file = create_project_file
+        self.delete_project_file = delete_project_file
+        self.dev_mode = dev_mode
+        self.generate_embed_url = generate_embed_url
+        self.get_connection_databases = get_connection_databases
+        self.get_connection_schemas = get_connection_schemas
+        self.get_connection_table_columns = get_connection_table_columns
+        self.get_connection_tables = get_connection_tables
+        self.get_connections = get_connections
+        self.get_dashboards = get_dashboards
+        self.get_dimensions = get_dimensions
+        self.get_explores = get_explores
+        self.get_filters = get_filters
+        self.get_looks = get_looks
+        self.get_measures = get_measures
+        self.get_models = get_models
+        self.get_parameters = get_parameters
+        self.get_project_file = get_project_file
+        self.get_project_files = get_project_files
+        self.get_projects = get_projects
+        self.health_analyze = health_analyze
+        self.health_pulse = health_pulse
+        self.health_vacuum = health_vacuum
+        self.make_dashboard = make_dashboard
+        self.make_look = make_look
+        self.query = query
+        self.query_sql = query_sql
+        self.query_url = query_url
+        self.run_dashboard = run_dashboard
+        self.run_look = run_look
+        self.update_project_file = update_project_file
+        self.validate_project = validate_project
+        self.get_project_directories = get_project_directories
+        self.create_project_directory = create_project_directory
+        self.delete_project_directory = delete_project_directory
+        self.get_lookml_tests = get_lookml_tests
+        self.run_lookml_tests = run_lookml_tests
+        self.create_view_from_table = create_view_from_table
+    }
+
+}
+
+public struct McpToolSetting: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case enabled
+        case _description = "description"
+        case _category = "category"
+        case _access_level = "access_level"
+    }
+    /**
+     * Is this tool enabled
+     */
+    public var enabled: Bool?
+
+    private var _description: AnyString?
+    /**
+     * Tool description (read-only)
+     */
+    public var description: String? {
+        get { _description?.value }
+        set { _description = newValue.map(AnyString.init) }
+    }
+
+    private var _category: AnyString?
+    /**
+     * Tool category (read-only)
+     */
+    public var category: String? {
+        get { _category?.value }
+        set { _category = newValue.map(AnyString.init) }
+    }
+
+    private var _access_level: AnyString?
+    /**
+     * Tool access level (read-only)
+     */
+    public var access_level: String? {
+        get { _access_level?.value }
+        set { _access_level = newValue.map(AnyString.init) }
+    }
+
+    public init(enabled: Bool? = nil, description: String? = nil, category: String? = nil, access_level: String? = nil) {
+        self.enabled = enabled
+        self._description = description.map(AnyString.init)
+        self._category = category.map(AnyString.init)
+        self._access_level = access_level.map(AnyString.init)
+    }
+
+}
+
 public struct MergeFields: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -18991,6 +22151,37 @@ public struct PrivatelabelConfiguration: SDKModel {
         self.alerts_logo = alerts_logo
         self.alerts_links = alerts_links
         self.folders_mentions = folders_mentions
+    }
+
+}
+
+public struct PrivateLookerInstanceInfo: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _lookerInstanceId = "lookerInstanceId"
+        case _serviceDirectoryName = "serviceDirectoryName"
+    }
+    private var _lookerInstanceId: AnyString?
+    /**
+     * The Looker instance id. (read-only)
+     */
+    public var lookerInstanceId: String? {
+        get { _lookerInstanceId?.value }
+        set { _lookerInstanceId = newValue.map(AnyString.init) }
+    }
+
+    private var _serviceDirectoryName: AnyString?
+    /**
+     * The service directory name of the Looker instance. (read-only)
+     */
+    public var serviceDirectoryName: String? {
+        get { _serviceDirectoryName?.value }
+        set { _serviceDirectoryName = newValue.map(AnyString.init) }
+    }
+
+    public init(lookerInstanceId: String? = nil, serviceDirectoryName: String? = nil) {
+        self._lookerInstanceId = lookerInstanceId.map(AnyString.init)
+        self._serviceDirectoryName = serviceDirectoryName.map(AnyString.init)
     }
 
 }
@@ -22662,6 +25853,50 @@ public struct SchemaColumns: SDKModel {
 
 }
 
+public struct SchemaMessage: SDKModel {
+    public var query: SchemaQuery?
+
+    public var result: SchemaResult?
+
+    public init(query: SchemaQuery? = nil, result: SchemaResult? = nil) {
+        self.query = query
+        self.result = result
+    }
+
+}
+
+public struct SchemaQuery: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _question = "question"
+    }
+    private var _question: AnyString?
+    /**
+     * The question for schema resolution. (read-only)
+     */
+    public var question: String? {
+        get { _question?.value }
+        set { _question = newValue.map(AnyString.init) }
+    }
+
+    public init(question: String? = nil) {
+        self._question = question.map(AnyString.init)
+    }
+
+}
+
+public struct SchemaResult: SDKModel {
+    /**
+     * The datasources used to resolve the schema query. (read-only)
+     */
+    public var datasources: [Datasource]?
+
+    public init(datasources: [Datasource]? = nil) {
+        self.datasources = datasources
+    }
+
+}
+
 public struct SchemaTable: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -22780,6 +26015,48 @@ public struct SchemaTables: SDKModel {
 public enum SecretType: String, Codable {
     case SSO = "SSO"
     case JWT = "JWT"
+}
+
+public struct SelfServiceModelUploadData: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _upload_type = "upload_type"
+        case _drive_url = "drive_url"
+        case _owner_id = "owner_id"
+    }
+    private var _upload_type: AnyString?
+    /**
+     * Type of the upload (e.g. 'csv', 'sheet')
+     */
+    public var upload_type: String? {
+        get { _upload_type?.value }
+        set { _upload_type = newValue.map(AnyString.init) }
+    }
+
+    private var _drive_url: AnyString?
+    /**
+     * Drive URL
+     */
+    public var drive_url: String? {
+        get { _drive_url?.value }
+        set { _drive_url = newValue.map(AnyString.init) }
+    }
+
+    private var _owner_id: AnyString?
+    /**
+     * User ID of the uploaded data owner (read-only)
+     */
+    public var owner_id: String? {
+        get { _owner_id?.value }
+        set { _owner_id = newValue.map(AnyString.init) }
+    }
+
+    public init(upload_type: String? = nil, drive_url: String? = nil, owner_id: String? = nil) {
+        self._upload_type = upload_type.map(AnyString.init)
+        self._drive_url = drive_url.map(AnyString.init)
+        self._owner_id = owner_id.map(AnyString.init)
+    }
+
 }
 
 public struct ServiceAccount: SDKModel {
@@ -23136,6 +26413,9 @@ public struct Setting: SDKModel {
         case _managed_certificate_uri = "managed_certificate_uri"
         case _content_certification_documentation_link = "content_certification_documentation_link"
         case revoke_certification_on_edits
+        case is_content_certification_enabled
+        case auto_certify_lookml_content
+        case mcp_tools
     }
     public var instance_config: InstanceConfig?
 
@@ -23289,7 +26569,19 @@ public struct Setting: SDKModel {
      */
     public var revoke_certification_on_edits: Bool?
 
-    public init(instance_config: InstanceConfig? = nil, extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_site: String? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_enabled: Bool? = nil, embed_config: EmbedConfig? = nil, login_notification_enabled: Bool? = nil, login_notification_text: String? = nil, dashboard_auto_refresh_restriction: Bool? = nil, dashboard_auto_refresh_minimum_interval: String? = nil, managed_certificate_uri: [String]? = nil, content_certification_documentation_link: String? = nil, revoke_certification_on_edits: Bool? = nil) {
+    /**
+     * Allow content certification.
+     */
+    public var is_content_certification_enabled: Bool?
+
+    /**
+     * Allow auto certification of lookml content.
+     */
+    public var auto_certify_lookml_content: Bool?
+
+    public var mcp_tools: McpTools?
+
+    public init(instance_config: InstanceConfig? = nil, extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_site: String? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_enabled: Bool? = nil, embed_config: EmbedConfig? = nil, login_notification_enabled: Bool? = nil, login_notification_text: String? = nil, dashboard_auto_refresh_restriction: Bool? = nil, dashboard_auto_refresh_minimum_interval: String? = nil, managed_certificate_uri: [String]? = nil, content_certification_documentation_link: String? = nil, revoke_certification_on_edits: Bool? = nil, is_content_certification_enabled: Bool? = nil, auto_certify_lookml_content: Bool? = nil, mcp_tools: McpTools? = nil) {
         self.instance_config = instance_config
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
@@ -23317,6 +26609,9 @@ public struct Setting: SDKModel {
         if let v = managed_certificate_uri { _managed_certificate_uri = v.map { AnyString.init($0) } } else { _managed_certificate_uri = nil }
         self._content_certification_documentation_link = content_certification_documentation_link.map(AnyString.init)
         self.revoke_certification_on_edits = revoke_certification_on_edits
+        self.is_content_certification_enabled = is_content_certification_enabled
+        self.auto_certify_lookml_content = auto_certify_lookml_content
+        self.mcp_tools = mcp_tools
     }
 
 }
@@ -23571,6 +26866,37 @@ public struct Snippet: SDKModel {
         self._name = name.map(AnyString.init)
         self._label = label.map(AnyString.init)
         self._sql = sql.map(AnyString.init)
+    }
+
+}
+
+public struct Source: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _model = "model"
+        case _explore = "explore"
+    }
+    private var _model: AnyString?
+    /**
+     * Source model
+     */
+    public var model: String? {
+        get { _model?.value }
+        set { _model = newValue.map(AnyString.init) }
+    }
+
+    private var _explore: AnyString?
+    /**
+     * Source explore
+     */
+    public var explore: String? {
+        get { _explore?.value }
+        set { _explore = newValue.map(AnyString.init) }
+    }
+
+    public init(model: String? = nil, explore: String? = nil) {
+        self._model = model.map(AnyString.init)
+        self._explore = explore.map(AnyString.init)
     }
 
 }
@@ -24589,6 +27915,85 @@ public enum SupportedFormattings: String, Codable {
 public enum SupportedVisualizationFormattings: String, Codable {
     case apply = "apply"
     case noapply = "noapply"
+}
+
+public struct SystemMessage: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case text
+        case schema
+        case data
+        case analysis
+        case chart
+        case error
+        case exampleQueries
+        case _groupId = "groupId"
+    }
+    public var text: TextMessage?
+
+    public var schema: SchemaMessage?
+
+    public var data: DataMessage?
+
+    public var analysis: AnalysisMessage?
+
+    public var chart: ChartMessage?
+
+    public var error: ErrorMessage?
+
+    public var exampleQueries: ExampleQueries?
+
+    private var _groupId: AnyInt?
+    /**
+     * Identifies the group that the event belongs to. (read-only)
+     */
+    public var groupId: Int64? {
+        get { _groupId?.value }
+        set { _groupId = newValue.map(AnyInt.init) }
+    }
+
+    public init(text: TextMessage? = nil, schema: SchemaMessage? = nil, data: DataMessage? = nil, analysis: AnalysisMessage? = nil, chart: ChartMessage? = nil, error: ErrorMessage? = nil, exampleQueries: ExampleQueries? = nil, groupId: Int64? = nil) {
+        self.text = text
+        self.schema = schema
+        self.data = data
+        self.analysis = analysis
+        self.chart = chart
+        self.error = error
+        self.exampleQueries = exampleQueries
+        self._groupId = groupId.map(AnyInt.init)
+    }
+
+}
+
+public struct TextMessage: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _parts = "parts"
+        case _textType = "textType"
+    }
+    private var _parts: [AnyString]?
+    /**
+     * The parts of the message. (read-only)
+     */
+    public var parts: [String]? {
+        get { if let v = _parts { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _parts = v.map { AnyString.init($0) } } else { _parts = nil } }
+    }
+
+    private var _textType: AnyString?
+    /**
+     * The type of the text message. (read-only)
+     */
+    public var textType: String? {
+        get { _textType?.value }
+        set { _textType = newValue.map(AnyString.init) }
+    }
+
+    public init(parts: [String]? = nil, textType: String? = nil) {
+        if let v = parts { _parts = v.map { AnyString.init($0) } } else { _parts = nil }
+        self._textType = textType.map(AnyString.init)
+    }
+
 }
 
 public struct Theme: SDKModel {
@@ -26003,6 +29408,26 @@ public struct UserLoginLockout: SDKModel {
 
 }
 
+public struct UserMessage: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _text = "text"
+    }
+    private var _text: AnyString?
+    /**
+     * Text content of the user message. (read-only)
+     */
+    public var text: String? {
+        get { _text?.value }
+        set { _text = newValue.map(AnyString.init) }
+    }
+
+    public init(text: String? = nil) {
+        self._text = text.map(AnyString.init)
+    }
+
+}
+
 public struct UserPublic: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -26419,6 +29844,77 @@ public struct Workspace: SDKModel {
 }
 
 /**
+ * Dynamic writeable type for Agent removes:
+ * can, id, created_by_user_id, created_by_name, created_by_first_name, created_by_last_name, created_by_avatar_url, has_inaccessible_source, created_at, updated_at, content_metadata_id, studio_agent_id
+ */
+public struct WriteAgent: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _name = "name"
+        case _description = "description"
+        case _category = "category"
+        case sources
+        case context
+        case deleted
+        case code_interpreter
+    }
+    private var _name: AnyString?
+    /**
+     * Agent name
+     */
+    public var name: String? {
+        get { _name?.value }
+        set { _name = newValue.map(AnyString.init) }
+    }
+
+    private var _description: AnyString?
+    /**
+     * Agent description
+     */
+    public var description: String? {
+        get { _description?.value }
+        set { _description = newValue.map(AnyString.init) }
+    }
+
+    private var _category: AnyString?
+    /**
+     * The category of the agent (e.g., dashboard, conversation)
+     */
+    public var category: String? {
+        get { _category?.value }
+        set { _category = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Agent sources
+     */
+    public var sources: [Source]?
+
+    public var context: Context?
+
+    /**
+     * Is Agent soft deleted
+     */
+    public var deleted: Bool?
+
+    /**
+     * Enables Code Interpreter for this Agent
+     */
+    public var code_interpreter: Bool?
+
+    public init(name: String? = nil, description: String? = nil, category: String? = nil, sources: [Source]? = nil, context: Context? = nil, deleted: Bool? = nil, code_interpreter: Bool? = nil) {
+        self._name = name.map(AnyString.init)
+        self._description = description.map(AnyString.init)
+        self._category = category.map(AnyString.init)
+        self.sources = sources
+        self.context = context
+        self.deleted = deleted
+        self.code_interpreter = code_interpreter
+    }
+
+}
+
+/**
  * Dynamic writeable type for Alert removes:
  * followed, followable, id, investigative_content_title, owner_display_name
  */
@@ -26435,6 +29931,7 @@ public struct WriteAlert: SDKModel {
         case _custom_title = "custom_title"
         case _dashboard_element_id = "dashboard_element_id"
         case _description = "description"
+        case enhancements
         case destinations
         case field
         case is_disabled
@@ -26527,6 +30024,11 @@ public struct WriteAlert: SDKModel {
     }
 
     /**
+     * Enum of additional alert properties. Valid values are: "NONE", "STRATEGIC_NARRATIVE".
+     */
+    public var enhancements: Enhancements?
+
+    /**
      * Array of destinations to send alerts to. Must be the same type of destination. Example `[{ "destination_type": "EMAIL", "email_address": "test@test.com" }]`
      */
     public var destinations: [AlertDestination]
@@ -26600,7 +30102,7 @@ public struct WriteAlert: SDKModel {
 
     public var time_series_condition_state: AlertConditionState?
 
-    public init(applied_dashboard_filters: [AlertAppliedDashboardFilter]? = nil, comparison_type: ComparisonType, cron: String, custom_url_base: String? = nil, custom_url_params: String? = nil, custom_url_label: String? = nil, show_custom_url: Bool? = nil, custom_title: String? = nil, dashboard_element_id: String? = nil, description: String? = nil, destinations: [AlertDestination], field: AlertField, is_disabled: Bool? = nil, disabled_reason: String? = nil, is_public: Bool? = nil, investigative_content_type: InvestigativeContentType? = nil, investigative_content_id: String? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, owner_id: String, threshold: Double, time_series_condition_state: AlertConditionState? = nil) {
+    public init(applied_dashboard_filters: [AlertAppliedDashboardFilter]? = nil, comparison_type: ComparisonType, cron: String, custom_url_base: String? = nil, custom_url_params: String? = nil, custom_url_label: String? = nil, show_custom_url: Bool? = nil, custom_title: String? = nil, dashboard_element_id: String? = nil, description: String? = nil, enhancements: Enhancements? = nil, destinations: [AlertDestination], field: AlertField, is_disabled: Bool? = nil, disabled_reason: String? = nil, is_public: Bool? = nil, investigative_content_type: InvestigativeContentType? = nil, investigative_content_id: String? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, owner_id: String, threshold: Double, time_series_condition_state: AlertConditionState? = nil) {
         self.applied_dashboard_filters = applied_dashboard_filters
         self.comparison_type = comparison_type
         self._cron = AnyString.init(cron)
@@ -26611,6 +30113,7 @@ public struct WriteAlert: SDKModel {
         self._custom_title = custom_title.map(AnyString.init)
         self._dashboard_element_id = dashboard_element_id.map(AnyString.init)
         self._description = description.map(AnyString.init)
+        self.enhancements = enhancements
         self.destinations = destinations
         self.field = field
         self.is_disabled = is_disabled
@@ -26625,8 +30128,8 @@ public struct WriteAlert: SDKModel {
         self.time_series_condition_state = time_series_condition_state
     }
 
-    public init(applied_dashboard_filters: [AlertAppliedDashboardFilter]? = nil, _ comparison_type: ComparisonType, _ cron: String, custom_url_base: String? = nil, custom_url_params: String? = nil, custom_url_label: String? = nil, show_custom_url: Bool? = nil, custom_title: String? = nil, dashboard_element_id: String? = nil, description: String? = nil, _ destinations: [AlertDestination], _ field: AlertField, is_disabled: Bool? = nil, disabled_reason: String? = nil, is_public: Bool? = nil, investigative_content_type: InvestigativeContentType? = nil, investigative_content_id: String? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, _ owner_id: String, _ threshold: Double, time_series_condition_state: AlertConditionState? = nil) {
-        self.init(applied_dashboard_filters: applied_dashboard_filters, comparison_type: comparison_type, cron: cron, custom_url_base: custom_url_base, custom_url_params: custom_url_params, custom_url_label: custom_url_label, show_custom_url: show_custom_url, custom_title: custom_title, dashboard_element_id: dashboard_element_id, description: description, destinations: destinations, field: field, is_disabled: is_disabled, disabled_reason: disabled_reason, is_public: is_public, investigative_content_type: investigative_content_type, investigative_content_id: investigative_content_id, lookml_dashboard_id: lookml_dashboard_id, lookml_link_id: lookml_link_id, owner_id: owner_id, threshold: threshold, time_series_condition_state: time_series_condition_state)
+    public init(applied_dashboard_filters: [AlertAppliedDashboardFilter]? = nil, _ comparison_type: ComparisonType, _ cron: String, custom_url_base: String? = nil, custom_url_params: String? = nil, custom_url_label: String? = nil, show_custom_url: Bool? = nil, custom_title: String? = nil, dashboard_element_id: String? = nil, description: String? = nil, enhancements: Enhancements? = nil, _ destinations: [AlertDestination], _ field: AlertField, is_disabled: Bool? = nil, disabled_reason: String? = nil, is_public: Bool? = nil, investigative_content_type: InvestigativeContentType? = nil, investigative_content_id: String? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, _ owner_id: String, _ threshold: Double, time_series_condition_state: AlertConditionState? = nil) {
+        self.init(applied_dashboard_filters: applied_dashboard_filters, comparison_type: comparison_type, cron: cron, custom_url_base: custom_url_base, custom_url_params: custom_url_params, custom_url_label: custom_url_label, show_custom_url: show_custom_url, custom_title: custom_title, dashboard_element_id: dashboard_element_id, description: description, enhancements: enhancements, destinations: destinations, field: field, is_disabled: is_disabled, disabled_reason: disabled_reason, is_public: is_public, investigative_content_type: investigative_content_type, investigative_content_id: investigative_content_id, lookml_dashboard_id: lookml_dashboard_id, lookml_link_id: lookml_link_id, owner_id: owner_id, threshold: threshold, time_series_condition_state: time_series_condition_state)
     }
 
 }
@@ -27127,6 +30630,117 @@ public struct WriteContentMeta: SDKModel {
 
     public init(inherits: Bool? = nil) {
         self.inherits = inherits
+    }
+
+}
+
+/**
+ * Dynamic writeable type for Conversation removes:
+ * can, id, user_id, created_at, updated_at, messages, missing_agent, studio_conversation_id
+ */
+public struct WriteConversation: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _name = "name"
+        case _category = "category"
+        case sources
+        case _agent_id = "agent_id"
+        case deleted
+        case conversation_agent
+    }
+    private var _name: AnyString?
+    /**
+     * Conversation name
+     */
+    public var name: String? {
+        get { _name?.value }
+        set { _name = newValue.map(AnyString.init) }
+    }
+
+    private var _category: AnyString?
+    /**
+     * The category of the conversation (e.g., dashboard, conversation)
+     */
+    public var category: String? {
+        get { _category?.value }
+        set { _category = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Conversation sources
+     */
+    public var sources: [Source]?
+
+    private var _agent_id: AnyString?
+    /**
+     * Agent id
+     */
+    public var agent_id: String? {
+        get { _agent_id?.value }
+        set { _agent_id = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Is conversation soft deleted
+     */
+    public var deleted: Bool?
+
+    /**
+     * Dynamic writeable type for Agent removes:
+     * can, id, created_by_user_id, created_by_name, created_by_first_name, created_by_last_name, created_by_avatar_url, has_inaccessible_source, created_at, updated_at, content_metadata_id, studio_agent_id
+     */
+    public var conversation_agent: WriteAgent?
+
+    public init(name: String? = nil, category: String? = nil, sources: [Source]? = nil, agent_id: String? = nil, deleted: Bool? = nil, conversation_agent: WriteAgent? = nil) {
+        self._name = name.map(AnyString.init)
+        self._category = category.map(AnyString.init)
+        self.sources = sources
+        self._agent_id = agent_id.map(AnyString.init)
+        self.deleted = deleted
+        self.conversation_agent = conversation_agent
+    }
+
+}
+
+/**
+ * Dynamic writeable type for ConversationMessage removes:
+ * can, id, order
+ */
+public struct WriteConversationMessage: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case message
+        case _type = "type"
+    }
+    /**
+     * Message content
+     */
+    public var message: StringDictionary<AnyCodable>?
+
+    private var _type: AnyString?
+    /**
+     * Message type
+     */
+    public var type: String? {
+        get { _type?.value }
+        set { _type = newValue.map(AnyString.init) }
+    }
+
+    public init(message: StringDictionary<AnyCodable>? = nil, type: String? = nil) {
+        self.message = message
+        self._type = type.map(AnyString.init)
+    }
+
+}
+
+public struct WriteConversationMessages: SDKModel {
+    /**
+     * Array of conversation messages to create
+     */
+    public var messages: [AnyCodable]?
+
+    public init(messages: [AnyCodable]? = nil) {
+        self.messages = messages
     }
 
 }
@@ -28409,6 +32023,7 @@ public struct WriteDBConnection: SDKModel {
         case _bq_storage_project_id = "bq_storage_project_id"
         case bq_roles_verified
         case query_holding_disabled
+        case _service_name = "service_name"
     }
     private var _name: AnyString?
     /**
@@ -28761,7 +32376,16 @@ public struct WriteDBConnection: SDKModel {
      */
     public var query_holding_disabled: Bool?
 
-    public init(name: String? = nil, named_driver_version_requested: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, uses_key_pair_auth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, tmp_db_host: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: WriteDBConnectionOverride? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil, query_holding_disabled: Bool? = nil) {
+    private var _service_name: AnyString?
+    /**
+     * Service name used for connections with TNS enabled
+     */
+    public var service_name: String? {
+        get { _service_name?.value }
+        set { _service_name = newValue.map(AnyString.init) }
+    }
+
+    public init(name: String? = nil, named_driver_version_requested: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, uses_key_pair_auth: Bool? = nil, certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, tmp_db_host: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: WriteDBConnectionOverride? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil, query_holding_disabled: Bool? = nil, service_name: String? = nil) {
         self._name = name.map(AnyString.init)
         self._named_driver_version_requested = named_driver_version_requested.map(AnyString.init)
         self._host = host.map(AnyString.init)
@@ -28808,6 +32432,7 @@ public struct WriteDBConnection: SDKModel {
         self._bq_storage_project_id = bq_storage_project_id.map(AnyString.init)
         self.bq_roles_verified = bq_roles_verified
         self.query_holding_disabled = query_holding_disabled
+        self._service_name = service_name.map(AnyString.init)
     }
 
 }
@@ -28840,6 +32465,7 @@ public struct WriteDBConnectionOverride: SDKModel {
         case _pdt_jdbc_additional_params = "pdt_jdbc_additional_params"
         case _after_connect_statements = "after_connect_statements"
         case _pdt_after_connect_statements = "pdt_after_connect_statements"
+        case _pdt_service_name = "pdt_service_name"
     }
     private var _context: AnyString?
     /**
@@ -29030,7 +32656,16 @@ public struct WriteDBConnectionOverride: SDKModel {
         set { _pdt_after_connect_statements = newValue.map(AnyString.init) }
     }
 
-    public init(context: String? = nil, host: String? = nil, pdt_host: String? = nil, port: String? = nil, pdt_port: String? = nil, username: String? = nil, pdt_username: String? = nil, password: String? = nil, pdt_password: String? = nil, certificate: String? = nil, pdt_certificate: String? = nil, file_type: String? = nil, pdt_file_type: String? = nil, database: String? = nil, pdt_database: String? = nil, schema: String? = nil, pdt_schema: String? = nil, jdbc_additional_params: String? = nil, pdt_jdbc_additional_params: String? = nil, after_connect_statements: String? = nil, pdt_after_connect_statements: String? = nil) {
+    private var _pdt_service_name: AnyString?
+    /**
+     * Service name used for connections with TNS enabled
+     */
+    public var pdt_service_name: String? {
+        get { _pdt_service_name?.value }
+        set { _pdt_service_name = newValue.map(AnyString.init) }
+    }
+
+    public init(context: String? = nil, host: String? = nil, pdt_host: String? = nil, port: String? = nil, pdt_port: String? = nil, username: String? = nil, pdt_username: String? = nil, password: String? = nil, pdt_password: String? = nil, certificate: String? = nil, pdt_certificate: String? = nil, file_type: String? = nil, pdt_file_type: String? = nil, database: String? = nil, pdt_database: String? = nil, schema: String? = nil, pdt_schema: String? = nil, jdbc_additional_params: String? = nil, pdt_jdbc_additional_params: String? = nil, after_connect_statements: String? = nil, pdt_after_connect_statements: String? = nil, pdt_service_name: String? = nil) {
         self._context = context.map(AnyString.init)
         self._host = host.map(AnyString.init)
         self._pdt_host = pdt_host.map(AnyString.init)
@@ -29052,6 +32687,7 @@ public struct WriteDBConnectionOverride: SDKModel {
         self._pdt_jdbc_additional_params = pdt_jdbc_additional_params.map(AnyString.init)
         self._after_connect_statements = after_connect_statements.map(AnyString.init)
         self._pdt_after_connect_statements = pdt_after_connect_statements.map(AnyString.init)
+        self._pdt_service_name = pdt_service_name.map(AnyString.init)
     }
 
 }
@@ -30049,6 +33685,317 @@ public struct WriteLookWithQuery: SDKModel {
         self.folder = folder
         self._folder_id = folder_id.map(AnyString.init)
         self.query = query
+    }
+
+}
+
+/**
+ * Dynamic writeable type for McpTools
+ */
+public struct WriteMcpTools: SDKModel {
+    /**
+     * Enable all MCP tools
+     */
+    public var enable_all: Bool?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var add_dashboard_element: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var add_dashboard_filter: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var create_project_file: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var delete_project_file: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var dev_mode: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var generate_embed_url: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var get_connection_databases: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var get_connection_schemas: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var get_connection_table_columns: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var get_connection_tables: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var get_connections: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var get_dashboards: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var get_dimensions: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var get_explores: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var get_filters: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var get_looks: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var get_measures: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var get_models: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var get_parameters: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var get_project_file: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var get_project_files: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var get_projects: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var health_analyze: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var health_pulse: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var health_vacuum: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var make_dashboard: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var make_look: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var query: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var query_sql: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var query_url: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var run_dashboard: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var run_look: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var update_project_file: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var validate_project: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var get_project_directories: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var create_project_directory: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var delete_project_directory: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var get_lookml_tests: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var run_lookml_tests: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var create_view_from_table: WriteMcpToolSetting?
+
+    public init(enable_all: Bool? = nil, add_dashboard_element: WriteMcpToolSetting? = nil, add_dashboard_filter: WriteMcpToolSetting? = nil, create_project_file: WriteMcpToolSetting? = nil, delete_project_file: WriteMcpToolSetting? = nil, dev_mode: WriteMcpToolSetting? = nil, generate_embed_url: WriteMcpToolSetting? = nil, get_connection_databases: WriteMcpToolSetting? = nil, get_connection_schemas: WriteMcpToolSetting? = nil, get_connection_table_columns: WriteMcpToolSetting? = nil, get_connection_tables: WriteMcpToolSetting? = nil, get_connections: WriteMcpToolSetting? = nil, get_dashboards: WriteMcpToolSetting? = nil, get_dimensions: WriteMcpToolSetting? = nil, get_explores: WriteMcpToolSetting? = nil, get_filters: WriteMcpToolSetting? = nil, get_looks: WriteMcpToolSetting? = nil, get_measures: WriteMcpToolSetting? = nil, get_models: WriteMcpToolSetting? = nil, get_parameters: WriteMcpToolSetting? = nil, get_project_file: WriteMcpToolSetting? = nil, get_project_files: WriteMcpToolSetting? = nil, get_projects: WriteMcpToolSetting? = nil, health_analyze: WriteMcpToolSetting? = nil, health_pulse: WriteMcpToolSetting? = nil, health_vacuum: WriteMcpToolSetting? = nil, make_dashboard: WriteMcpToolSetting? = nil, make_look: WriteMcpToolSetting? = nil, query: WriteMcpToolSetting? = nil, query_sql: WriteMcpToolSetting? = nil, query_url: WriteMcpToolSetting? = nil, run_dashboard: WriteMcpToolSetting? = nil, run_look: WriteMcpToolSetting? = nil, update_project_file: WriteMcpToolSetting? = nil, validate_project: WriteMcpToolSetting? = nil, get_project_directories: WriteMcpToolSetting? = nil, create_project_directory: WriteMcpToolSetting? = nil, delete_project_directory: WriteMcpToolSetting? = nil, get_lookml_tests: WriteMcpToolSetting? = nil, run_lookml_tests: WriteMcpToolSetting? = nil, create_view_from_table: WriteMcpToolSetting? = nil) {
+        self.enable_all = enable_all
+        self.add_dashboard_element = add_dashboard_element
+        self.add_dashboard_filter = add_dashboard_filter
+        self.create_project_file = create_project_file
+        self.delete_project_file = delete_project_file
+        self.dev_mode = dev_mode
+        self.generate_embed_url = generate_embed_url
+        self.get_connection_databases = get_connection_databases
+        self.get_connection_schemas = get_connection_schemas
+        self.get_connection_table_columns = get_connection_table_columns
+        self.get_connection_tables = get_connection_tables
+        self.get_connections = get_connections
+        self.get_dashboards = get_dashboards
+        self.get_dimensions = get_dimensions
+        self.get_explores = get_explores
+        self.get_filters = get_filters
+        self.get_looks = get_looks
+        self.get_measures = get_measures
+        self.get_models = get_models
+        self.get_parameters = get_parameters
+        self.get_project_file = get_project_file
+        self.get_project_files = get_project_files
+        self.get_projects = get_projects
+        self.health_analyze = health_analyze
+        self.health_pulse = health_pulse
+        self.health_vacuum = health_vacuum
+        self.make_dashboard = make_dashboard
+        self.make_look = make_look
+        self.query = query
+        self.query_sql = query_sql
+        self.query_url = query_url
+        self.run_dashboard = run_dashboard
+        self.run_look = run_look
+        self.update_project_file = update_project_file
+        self.validate_project = validate_project
+        self.get_project_directories = get_project_directories
+        self.create_project_directory = create_project_directory
+        self.delete_project_directory = delete_project_directory
+        self.get_lookml_tests = get_lookml_tests
+        self.run_lookml_tests = run_lookml_tests
+        self.create_view_from_table = create_view_from_table
+    }
+
+}
+
+/**
+ * Dynamic writeable type for McpToolSetting removes:
+ * description, category, access_level
+ */
+public struct WriteMcpToolSetting: SDKModel {
+    /**
+     * Is this tool enabled
+     */
+    public var enabled: Bool?
+
+    public init(enabled: Bool? = nil) {
+        self.enabled = enabled
     }
 
 }
@@ -31967,6 +35914,9 @@ public struct WriteSetting: SDKModel {
         case _managed_certificate_uri = "managed_certificate_uri"
         case _content_certification_documentation_link = "content_certification_documentation_link"
         case revoke_certification_on_edits
+        case is_content_certification_enabled
+        case auto_certify_lookml_content
+        case mcp_tools
     }
     /**
      * Toggle extension framework on or off
@@ -32098,7 +36048,22 @@ public struct WriteSetting: SDKModel {
      */
     public var revoke_certification_on_edits: Bool?
 
-    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_config: WriteEmbedConfig? = nil, dashboard_auto_refresh_restriction: Bool? = nil, dashboard_auto_refresh_minimum_interval: String? = nil, managed_certificate_uri: [String]? = nil, content_certification_documentation_link: String? = nil, revoke_certification_on_edits: Bool? = nil) {
+    /**
+     * Allow content certification.
+     */
+    public var is_content_certification_enabled: Bool?
+
+    /**
+     * Allow auto certification of lookml content.
+     */
+    public var auto_certify_lookml_content: Bool?
+
+    /**
+     * Dynamic writeable type for McpTools
+     */
+    public var mcp_tools: WriteMcpTools?
+
+    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_config: WriteEmbedConfig? = nil, dashboard_auto_refresh_restriction: Bool? = nil, dashboard_auto_refresh_minimum_interval: String? = nil, managed_certificate_uri: [String]? = nil, content_certification_documentation_link: String? = nil, revoke_certification_on_edits: Bool? = nil, is_content_certification_enabled: Bool? = nil, auto_certify_lookml_content: Bool? = nil, mcp_tools: WriteMcpTools? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
@@ -32121,6 +36086,9 @@ public struct WriteSetting: SDKModel {
         if let v = managed_certificate_uri { _managed_certificate_uri = v.map { AnyString.init($0) } } else { _managed_certificate_uri = nil }
         self._content_certification_documentation_link = content_certification_documentation_link.map(AnyString.init)
         self.revoke_certification_on_edits = revoke_certification_on_edits
+        self.is_content_certification_enabled = is_content_certification_enabled
+        self.auto_certify_lookml_content = auto_certify_lookml_content
+        self.mcp_tools = mcp_tools
     }
 
 }

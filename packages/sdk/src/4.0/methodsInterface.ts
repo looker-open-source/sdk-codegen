@@ -25,7 +25,7 @@
  */
 
 /**
- * 483 API methods
+ * 504 API methods
  */
 
 import type {
@@ -41,6 +41,7 @@ import type {
  */
 import type {
   IAccessToken,
+  IAgent,
   IAlert,
   IAlertNotifications,
   IAlertPatch,
@@ -54,6 +55,8 @@ import type {
   IBoardItem,
   IBoardSection,
   ICertification,
+  IChatMessage,
+  ICIRun,
   IColorCollection,
   IColumnSearch,
   IConnectionFeatures,
@@ -64,9 +67,13 @@ import type {
   IContentSummary,
   IContentValidation,
   IContentView,
+  IConversation,
+  IConversationalAnalyticsChatRequest,
+  IConversationMessage,
   ICostEstimate,
   ICreateCIRunRequest,
   ICreateCIRunResponse,
+  ICreateContinuousIntegrationRunRequest,
   ICreateCostEstimate,
   ICreateCredentialsApi3,
   ICreateEmbedUserRequest,
@@ -131,6 +138,8 @@ import type {
   IInternalHelpResources,
   IInternalHelpResourcesContent,
   IJsonBi,
+  IKdaRequestPayload,
+  IKdaResponsePayload,
   ILDAPConfig,
   ILDAPConfigTestResult,
   ILegacyFeature,
@@ -208,12 +217,14 @@ import type {
   IRequestScheduledPlansForDashboard,
   IRequestScheduledPlansForLook,
   IRequestScheduledPlansForLookmlDashboard,
+  IRequestSearchAgents,
   IRequestSearchAlerts,
   IRequestSearchArtifacts,
   IRequestSearchBoards,
   IRequestSearchContent,
   IRequestSearchContentFavorites,
   IRequestSearchContentViews,
+  IRequestSearchConversations,
   IRequestSearchCredentialsEmail,
   IRequestSearchDashboardElements,
   IRequestSearchDashboards,
@@ -279,6 +290,7 @@ import type {
   IWelcomeEmailTest,
   IWhitelabelConfiguration,
   IWorkspace,
+  IWriteAgent,
   IWriteAlert,
   IWriteApiSession,
   IWriteBackupConfiguration,
@@ -289,6 +301,9 @@ import type {
   IWriteColorCollection,
   IWriteContentFavorite,
   IWriteContentMeta,
+  IWriteConversation,
+  IWriteConversationMessage,
+  IWriteConversationMessages,
   IWriteCreateDashboardFilter,
   IWriteCredentialsApi3,
   IWriteCredentialsEmail,
@@ -417,7 +432,7 @@ export interface ILooker40SDK extends IAPIMethods {
 
   /**
    * ### Update select alert fields
-   * # Available fields: `owner_id`, `is_disabled`, `disabled_reason`, `is_public`, `threshold`
+   * # Available fields: `owner_id`, `is_disabled`, `disabled_reason`, `is_public`, `threshold`, `enhancements`
    * #
    *
    * PATCH /alerts/{alert_id} -> IAlert
@@ -560,8 +575,6 @@ export interface ILooker40SDK extends IAPIMethods {
    * Replace "4QDkCy..." with the `access_token` value returned by `login`.
    * The word `token` is a string literal and must be included exactly as shown.
    *
-   * This function can accept `client_id` and `client_secret` parameters as URL query params or as www-form-urlencoded params in the body of the HTTP request. Since there is a small risk that URL parameters may be visible to intermediate nodes on the network route (proxies, routers, etc), passing credentials in the body of the request is considered more secure than URL params.
-   *
    * Example of passing credentials in the HTTP request body:
    * ````
    * POST HTTP /login
@@ -570,10 +583,12 @@ export interface ILooker40SDK extends IAPIMethods {
    * client_id=CGc9B7v7J48dQSJvxxx&client_secret=nNVS9cSS3xNpSC9JdsBvvvvv
    * ````
    *
-   * ### Best Practice:
-   * Always pass credentials in body params. Pass credentials in URL query params **only** when you cannot pass body params due to application, tool, or other limitations.
+   * *NOTICE*
    *
-   * For more information and detailed examples of Looker API authorization, see [How to Authenticate to Looker API](https://github.com/looker/looker-sdk-ruby/blob/master/authentication.md).
+   * Pass 'client_id' and 'client_secret' as body parameters.
+   *
+   * The ability to use query parameters for `client_id` and `client_secret` will be deprecated
+   * before the end of 2026.
    *
    * POST /login -> IAccessToken
    *
@@ -2616,6 +2631,8 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * Available settings are:
    *  - allow_user_timezones
+   *  - auto_certify_lookml_content
+   *  - content_certification_documentation_link
    *  - custom_welcome_email
    *  - data_connector_default_enabled
    *  - dashboard_auto_refresh_restriction
@@ -2623,6 +2640,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *  - extension_framework_enabled
    *  - extension_load_url_enabled
    *  - instance_config
+   *  - is_content_certification_enabled
    *  - managed_certificate_uri
    *  - marketplace_auto_install_enabled
    *  - marketplace_automation
@@ -2631,12 +2649,14 @@ export interface ILooker40SDK extends IAPIMethods {
    *  - marketplace_site
    *  - onboarding_enabled
    *  - privatelabel_configuration
+   *  - revoke_certification_on_edits
    *  - timezone
    *  - host_url
    *  - email_domain_allowlist
    *  - embed_cookieless_v2
    *  - embed_enabled
    *  - embed_config
+   *  - mcp_tools
    *
    * GET /setting -> ISetting
    *
@@ -2654,6 +2674,8 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * Available settings are:
    *  - allow_user_timezones
+   *  - auto_certify_lookml_content
+   *  - content_certification_documentation_link
    *  - custom_welcome_email
    *  - data_connector_default_enabled
    *  - dashboard_auto_refresh_restriction
@@ -2661,6 +2683,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *  - extension_framework_enabled
    *  - extension_load_url_enabled
    *  - instance_config
+   *  - is_content_certification_enabled
    *  - managed_certificate_uri
    *  - marketplace_auto_install_enabled
    *  - marketplace_automation
@@ -2669,12 +2692,14 @@ export interface ILooker40SDK extends IAPIMethods {
    *  - marketplace_site
    *  - onboarding_enabled
    *  - privatelabel_configuration
+   *  - revoke_certification_on_edits
    *  - timezone
    *  - host_url
    *  - email_domain_allowlist
    *  - embed_cookieless_v2
    *  - embed_enabled
    *  - embed_config
+   *  - mcp_tools
    *
    * See the `Setting` type for more information on the specific values that can be configured.
    *
@@ -3560,6 +3585,320 @@ export interface ILooker40SDK extends IAPIMethods {
   ): Promise<SDKResponse<string, IError>>;
 
   //#endregion Content: Manage Content
+
+  //#region ConversationalAnalytics: Manage Conversations, Agents and Messages
+
+  /**
+   * ### Search Agents
+   *
+   * Returns an array of agent objects that match the specified search criteria.
+   *
+   * The parameters `limit`, and `offset` are recommended for fetching results in page-size chunks.
+   *
+   * Get a **single agent** by id with [get_agent()](#!/Agent/get_agent)
+   *
+   * GET /agents/search -> IAgent[]
+   *
+   * @param request composed interface "IRequestSearchAgents" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  search_agents(
+    request: IRequestSearchAgents,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IAgent[], IError>>;
+
+  /**
+   * ### Create Agent
+   *
+   * Creates an agent.
+   * Required fields: `name`, `description`, `sources`.
+   *
+   * POST /agents -> IAgent
+   *
+   * @param body Partial<IWriteAgent>
+   * @param fields Requested fields
+   * @param options one-time API call overrides
+   *
+   */
+  create_agent(
+    body: Partial<IWriteAgent>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IAgent, IError | IValidationError>>;
+
+  /**
+   * ### Delete Agents
+   *
+   * Delete agents.
+   *
+   * DELETE /agents -> string
+   *
+   * @param id Agent id. Can be a comma-separated list of ids.
+   * @param fields Requested fields
+   * @param options one-time API call overrides
+   *
+   */
+  delete_agent(
+    id: string,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string, IError>>;
+
+  /**
+   * ### Get Agent
+   *
+   * Get an agent.
+   *
+   * GET /agents/{agent_id} -> IAgent
+   *
+   * @param agent_id Agent ID
+   * @param fields Requested fields
+   * @param options one-time API call overrides
+   *
+   */
+  get_agent(
+    agent_id: string,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IAgent, IError>>;
+
+  /**
+   * ### Update Agent
+   *
+   * Update an agent.
+   *
+   * PATCH /agents/{agent_id} -> IAgent
+   *
+   * @param agent_id Agent ID
+   * @param body Partial<IWriteAgent>
+   * @param fields Requested fields
+   * @param options one-time API call overrides
+   *
+   */
+  update_agent(
+    agent_id: string,
+    body: Partial<IWriteAgent>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IAgent, IError | IValidationError>>;
+
+  /**
+   * ### Get All Conversation Messages
+   *
+   * Get all conversation messages.
+   *
+   * GET /conversations/{conversation_id}/messages -> IConversationMessage[]
+   *
+   * @param conversation_id Conversation ID
+   * @param fields Requested fields
+   * @param options one-time API call overrides
+   *
+   */
+  all_conversation_messages(
+    conversation_id: string,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IConversationMessage[], IError>>;
+
+  /**
+   * ### Create Conversation Message
+   *
+   * Create one or more conversation messages.
+   * Required fields for each message: `type`, `message`.
+   *
+   * The `order` for a message will be determined based on the highest order for previously saved
+   * messages for the provided `conversation_id`.
+   *
+   * POST /conversations/{conversation_id}/messages -> IConversationMessage[]
+   *
+   * @param conversation_id Conversation ID
+   * @param body Partial<IWriteConversationMessages>
+   * @param fields Requested fields
+   * @param options one-time API call overrides
+   *
+   */
+  create_conversation_message(
+    conversation_id: string,
+    body: Partial<IWriteConversationMessages>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IConversationMessage[], IError | IValidationError>>;
+
+  /**
+   * ### Delete Conversation Message
+   *
+   * Delete an conversation message.
+   *
+   * DELETE /conversations/{conversation_id}/messages -> string
+   *
+   * @param conversation_id Conversation ID
+   * @param id Conversation message id. Can be a comma-separated list of ids.
+   * @param fields Requested fields
+   * @param options one-time API call overrides
+   *
+   */
+  delete_conversation_message(
+    conversation_id: string,
+    id: string,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string, IError>>;
+
+  /**
+   * ### Get Conversation Message
+   *
+   * Get a conversation message.
+   *
+   * GET /conversations/{conversation_id}/messages/{message_id} -> IConversationMessage
+   *
+   * @param conversation_id Conversation ID
+   * @param message_id Conversation Message ID
+   * @param fields Requested fields
+   * @param options one-time API call overrides
+   *
+   */
+  get_conversation_message(
+    conversation_id: string,
+    message_id: string,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IConversationMessage, IError>>;
+
+  /**
+   * ### Update Conversation Message
+   *
+   * Update an conversation message.
+   *
+   * PATCH /conversations/{conversation_id}/messages/{message_id} -> IConversationMessage
+   *
+   * @param conversation_id Conversation ID
+   * @param message_id Conversation Message ID
+   * @param body Partial<IWriteConversationMessage>
+   * @param fields Requested fields
+   * @param options one-time API call overrides
+   *
+   */
+  update_conversation_message(
+    conversation_id: string,
+    message_id: string,
+    body: Partial<IWriteConversationMessage>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IConversationMessage, IError | IValidationError>>;
+
+  /**
+   * ### Search Conversations
+   *
+   * Returns an array of conversation objects that match the specified search criteria.
+   * This will only return conversations owned by the current user.
+   *
+   * The parameters `limit`, and `offset` are recommended for fetching results in page-size chunks.
+   *
+   * Get a **single conversation** by id with [get_conversation()](#!/Conversation/get_conversation)
+   *
+   * GET /conversations/search -> IConversation[]
+   *
+   * @param request composed interface "IRequestSearchConversations" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  search_conversations(
+    request: IRequestSearchConversations,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IConversation[], IError>>;
+
+  /**
+   * ### Create Conversation
+   *
+   * Creates a conversation.
+   * Required fields: `name`.
+   *
+   * POST /conversations -> IConversation
+   *
+   * @param body Partial<IWriteConversation>
+   * @param fields Requested fields
+   * @param options one-time API call overrides
+   *
+   */
+  create_conversation(
+    body: Partial<IWriteConversation>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IConversation, IError | IValidationError>>;
+
+  /**
+   * ### Delete Conversations
+   *
+   * Delete conversations.
+   *
+   * DELETE /conversations -> string
+   *
+   * @param id Conversation id. Can be a comma-separated list of ids.
+   * @param fields Requested fields
+   * @param options one-time API call overrides
+   *
+   */
+  delete_conversation(
+    id: string,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string, IError>>;
+
+  /**
+   * ### Get Conversation
+   *
+   * Get an conversation.
+   *
+   * GET /conversations/{conversation_id} -> IConversation
+   *
+   * @param conversation_id Conversation ID
+   * @param fields Requested fields
+   * @param options one-time API call overrides
+   *
+   */
+  get_conversation(
+    conversation_id: string,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IConversation, IError>>;
+
+  /**
+   * ### Update Conversation
+   *
+   * Update an conversation.
+   *
+   * PATCH /conversations/{conversation_id} -> IConversation
+   *
+   * @param conversation_id Conversation ID
+   * @param body Partial<IWriteConversation>
+   * @param fields Requested fields
+   * @param options one-time API call overrides
+   *
+   */
+  update_conversation(
+    conversation_id: string,
+    body: Partial<IWriteConversation>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IConversation, IError | IValidationError>>;
+
+  /**
+   * ## Takes the latest conversation context (ID and a user message) and
+   * ## returns a list of newly generated system messages.
+   *
+   * POST /conversational_analytics/chat -> IChatMessage[]
+   *
+   * @param body Partial<IConversationalAnalyticsChatRequest>
+   * @param options one-time API call overrides
+   *
+   */
+  conversational_analytics_chat(
+    body: Partial<IConversationalAnalyticsChatRequest>,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IChatMessage[], IError>>;
+
+  //#endregion ConversationalAnalytics: Manage Conversations, Agents and Messages
 
   //#region Dashboard: Manage Dashboards
 
@@ -5179,6 +5518,33 @@ export interface ILooker40SDK extends IAPIMethods {
 
   //#endregion Integration: Manage Integrations
 
+  //#region KeyDriverAnalysis: Run Key Driver Analysis
+
+  /**
+   * ### Analyze Key Drivers
+   *
+   * Identifies the dimensional segments that most significantly drove a metric's change between two time periods.
+   *
+   * Given a data source (a saved query or a model/explore pair), a contribution metric, and a list of
+   * dimensions to analyse, this endpoint compares a test (breach) period against a control (baseline)
+   * period and returns a ranked list of segment-level insights.
+   * Each insight reports the metric value in both periods, the absolute and relative difference,
+   * the unexpected deviation (how much a segment over or under-performed relative to the overall trend),
+   * its proportional contribution to the total change, and its a-priori support (what share of total volume that segment represents).
+   *
+   * POST /internal/kda/analyze -> IKdaResponsePayload
+   *
+   * @param body Partial<IKdaRequestPayload>
+   * @param options one-time API call overrides
+   *
+   */
+  run_key_driver_analysis(
+    body: Partial<IKdaRequestPayload>,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IKdaResponsePayload, IError | IValidationError>>;
+
+  //#endregion KeyDriverAnalysis: Run Key Driver Analysis
+
   //#region Look: Run and Manage Looks
 
   /**
@@ -5706,7 +6072,11 @@ export interface ILooker40SDK extends IAPIMethods {
   /**
    * ### Fetches a CI Run.
    *
+   * This endpoint is deprecated. [Get Continuous Integration Run](#!/Project/get_continuous_integration_run) should be used instead.
+   *
    * GET /projects/{project_id}/ci/runs/{run_id} -> IProjectRun
+   *
+   * @deprecated
    *
    * @param project_id Project Id
    * @param run_id Run Id
@@ -5724,7 +6094,11 @@ export interface ILooker40SDK extends IAPIMethods {
   /**
    * ### Creates a CI Run.
    *
+   * This endpoint is deprecated. [Create Continuous Integration Run](#!/Project/create_continuous_integration_run) should be used instead.
+   *
    * POST /projects/{project_id}/ci/run -> ICreateCIRunResponse
+   *
+   * @deprecated
    *
    * @param project_id Project Id
    * @param body Partial<ICreateCIRunRequest>
@@ -5738,6 +6112,42 @@ export interface ILooker40SDK extends IAPIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ICreateCIRunResponse, IError | IValidationError>>;
+
+  /**
+   * ### Creates and queues a Continuous Integration Run.
+   *
+   * POST /projects/{project_id}/continuous_integration/runs -> ICIRun
+   *
+   * @param project_id Project Id
+   * @param body Partial<ICreateContinuousIntegrationRunRequest>
+   * @param fields Requested fields
+   * @param options one-time API call overrides
+   *
+   */
+  create_continuous_integration_run(
+    project_id: string,
+    body: Partial<ICreateContinuousIntegrationRunRequest>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ICIRun, IError | IValidationError>>;
+
+  /**
+   * ### Gets a Continuous Integration run.
+   *
+   * GET /projects/{project_id}/continuous_integration/runs/{run_id} -> ICIRun
+   *
+   * @param project_id Project Id
+   * @param run_id Run Id
+   * @param fields Requested fields
+   * @param options one-time API call overrides
+   *
+   */
+  get_continuous_integration_run(
+    project_id: string,
+    run_id: string,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ICIRun, IError>>;
 
   /**
    * ### Generate Lockfile for All LookML Dependencies
@@ -7921,7 +8331,7 @@ export interface ILooker40SDK extends IAPIMethods {
   /**
    * ### Update certification for a Self Service Explore
    *
-   * POST /self_service_models/{model_name}/certification -> ICertification
+   * PATCH /self_service_models/{model_name}/certification -> ICertification
    *
    * @param model_name Name of self service model.
    * @param body Partial<IWriteCertification>

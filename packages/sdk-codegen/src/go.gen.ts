@@ -287,14 +287,15 @@ export class GoGen extends CodeGen {
     let result = this.argFill('', 'options');
     // let result = this.argFill('', this.argGroup(indent, method.cookieArgs, request))
     // result = this.argFill(result, this.argGroup(indent, method.headerArgs, request))
-    result = this.argFill(
-      result,
-      method.bodyArg ? this.accessor(method.bodyArg, request) : this.nullStr
-    );
-    result = this.argFill(
-      result,
-      this.argGroup(indent, method.queryArgs, request)
-    );
+    let body = method.bodyArg
+      ? this.accessor(method.bodyArg, request)
+      : this.nullStr;
+    let query = this.argGroup(indent, method.queryArgs, request);
+    const formArgs = this.assignFormArgs(method, body, query);
+    body = formArgs.body;
+    query = formArgs.query;
+    result = this.argFill(result, body);
+    result = this.argFill(result, query);
     return result;
   }
 

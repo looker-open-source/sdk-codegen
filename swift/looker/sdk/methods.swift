@@ -25,7 +25,7 @@
  */
 
 /**
- * 483 API methods
+ * 504 API methods
  */
 
 
@@ -169,7 +169,7 @@ open class LookerSDK: APIMethods {
 
     /**
      * ### Update select alert fields
-     * # Available fields: `owner_id`, `is_disabled`, `disabled_reason`, `is_public`, `threshold`
+     * # Available fields: `owner_id`, `is_disabled`, `disabled_reason`, `is_public`, `threshold`, `enhancements`
      * #
      *
      * PATCH /alerts/{alert_id} -> Alert
@@ -338,8 +338,6 @@ open class LookerSDK: APIMethods {
      * Replace "4QDkCy..." with the `access_token` value returned by `login`.
      * The word `token` is a string literal and must be included exactly as shown.
      *
-     * This function can accept `client_id` and `client_secret` parameters as URL query params or as www-form-urlencoded params in the body of the HTTP request. Since there is a small risk that URL parameters may be visible to intermediate nodes on the network route (proxies, routers, etc), passing credentials in the body of the request is considered more secure than URL params.
-     *
      * Example of passing credentials in the HTTP request body:
      * ````
      * POST HTTP /login
@@ -348,10 +346,12 @@ open class LookerSDK: APIMethods {
      * client_id=CGc9B7v7J48dQSJvxxx&client_secret=nNVS9cSS3xNpSC9JdsBvvvvv
      * ````
      *
-     * ### Best Practice:
-     * Always pass credentials in body params. Pass credentials in URL query params **only** when you cannot pass body params due to application, tool, or other limitations.
+     * *NOTICE*
      *
-     * For more information and detailed examples of Looker API authorization, see [How to Authenticate to Looker API](https://github.com/looker/looker-sdk-ruby/blob/master/authentication.md).
+     * Pass 'client_id' and 'client_secret' as body parameters.
+     *
+     * The ability to use query parameters for `client_id` and `client_secret` will be deprecated
+     * before the end of 2026.
      *
      * POST /login -> AccessToken
      */
@@ -366,8 +366,8 @@ open class LookerSDK: APIMethods {
         client_secret: String? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<AccessToken, SDKError> {
-        let result: SDKResponse<AccessToken, SDKError> = self.post("/login", 
-            ["client_id": client_id, "client_secret": client_secret], nil, options)
+        let result: SDKResponse<AccessToken, SDKError> = self.post("/login", nil, 
+            ["client_id": client_id, "client_secret": client_secret], options)
         return result
     }
 
@@ -2854,6 +2854,8 @@ open class LookerSDK: APIMethods {
      *
      * Available settings are:
      *  - allow_user_timezones
+     *  - auto_certify_lookml_content
+     *  - content_certification_documentation_link
      *  - custom_welcome_email
      *  - data_connector_default_enabled
      *  - dashboard_auto_refresh_restriction
@@ -2861,6 +2863,7 @@ open class LookerSDK: APIMethods {
      *  - extension_framework_enabled
      *  - extension_load_url_enabled
      *  - instance_config
+     *  - is_content_certification_enabled
      *  - managed_certificate_uri
      *  - marketplace_auto_install_enabled
      *  - marketplace_automation
@@ -2869,12 +2872,14 @@ open class LookerSDK: APIMethods {
      *  - marketplace_site
      *  - onboarding_enabled
      *  - privatelabel_configuration
+     *  - revoke_certification_on_edits
      *  - timezone
      *  - host_url
      *  - email_domain_allowlist
      *  - embed_cookieless_v2
      *  - embed_enabled
      *  - embed_config
+     *  - mcp_tools
      *
      * GET /setting -> Setting
      */
@@ -2895,6 +2900,8 @@ open class LookerSDK: APIMethods {
      *
      * Available settings are:
      *  - allow_user_timezones
+     *  - auto_certify_lookml_content
+     *  - content_certification_documentation_link
      *  - custom_welcome_email
      *  - data_connector_default_enabled
      *  - dashboard_auto_refresh_restriction
@@ -2902,6 +2909,7 @@ open class LookerSDK: APIMethods {
      *  - extension_framework_enabled
      *  - extension_load_url_enabled
      *  - instance_config
+     *  - is_content_certification_enabled
      *  - managed_certificate_uri
      *  - marketplace_auto_install_enabled
      *  - marketplace_automation
@@ -2910,12 +2918,14 @@ open class LookerSDK: APIMethods {
      *  - marketplace_site
      *  - onboarding_enabled
      *  - privatelabel_configuration
+     *  - revoke_certification_on_edits
      *  - timezone
      *  - host_url
      *  - email_domain_allowlist
      *  - embed_cookieless_v2
      *  - embed_enabled
      *  - embed_config
+     *  - mcp_tools
      *
      * See the `Setting` type for more information on the specific values that can be configured.
      *
@@ -4159,6 +4169,498 @@ open class LookerSDK: APIMethods {
         let path_resource_id = encodeParam(resource_id)
         let result: SDKResponse<String, SDKError> = self.get("/vector_thumbnail/\(path_type)/\(path_resource_id)", 
             ["reload": reload], nil, options)
+        return result
+    }
+
+
+
+    // MARK ConversationalAnalytics: Manage Conversations, Agents and Messages
+
+    /**
+     * ### Search Agents
+     *
+     * Returns an array of agent objects that match the specified search criteria.
+     *
+     * The parameters `limit`, and `offset` are recommended for fetching results in page-size chunks.
+     *
+     * Get a **single agent** by id with [get_agent()](#!/Agent/get_agent)
+     *
+     * GET /agents/search -> [Agent]
+     */
+    public func search_agents(
+        /**
+         * @param {String} id Match agent id. Can be a comma-separated list of ids.
+         */
+        id: String? = nil,
+        /**
+         * @param {String} name Match agent name.
+         */
+        name: String? = nil,
+        /**
+         * @param {String} description Match agent description.
+         */
+        description: String? = nil,
+        /**
+         * @param {String} created_by_user_id Filter on agents created by a particular user.
+         */
+        created_by_user_id: String? = nil,
+        /**
+         * @param {String} fields Requested fields.
+         */
+        fields: String? = nil,
+        /**
+         * @param {Int64} limit Number of results to return. (used with offset)
+         */
+        limit: Int64? = nil,
+        /**
+         * @param {String} category Filter on agent category. Can be a comma-separated list of categories.
+         */
+        category: String? = nil,
+        /**
+         * @param {Int64} offset Number of results to skip before returning. (used with limit)
+         */
+        offset: Int64? = nil,
+        /**
+         * @param {String} sorts One or more fields to sort by. Sortable fields: [:id, :name, :description, :created_by_user_id, :created_at, :content_metadata_id, :category]
+         */
+        sorts: String? = nil,
+        /**
+         * @param {Bool} filter_or Combine given search criteria in a boolean OR expression
+         */
+        filter_or: Bool? = nil,
+        /**
+         * @param {Bool} not_owned_by Filter out the agents owned by the user passed at the :created_by_user_id params
+         */
+        not_owned_by: Bool? = nil,
+        /**
+         * @param {Bool} deleted Filter on soft deleted agents.
+         */
+        deleted: Bool? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<[Agent], SDKError> {
+        let result: SDKResponse<[Agent], SDKError> = self.get("/agents/search", 
+            ["id": id, "name": name, "description": description, "created_by_user_id": created_by_user_id, "fields": fields, "limit": limit, "category": category, "offset": offset, "sorts": sorts, "filter_or": filter_or as Any?, "not_owned_by": not_owned_by as Any?, "deleted": deleted as Any?], nil, options)
+        return result
+    }
+
+    /**
+     * ### Create Agent
+     *
+     * Creates an agent.
+     * Required fields: `name`, `description`, `sources`.
+     *
+     * POST /agents -> Agent
+     */
+    public func create_agent(
+        /**
+         * @param {WriteAgent} body
+         */
+        _ body: WriteAgent,
+        /**
+         * @param {String} fields Requested fields
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Agent, SDKError> {
+        let result: SDKResponse<Agent, SDKError> = self.post("/agents", 
+            ["fields": fields], try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Delete Agents
+     *
+     * Delete agents.
+     *
+     * DELETE /agents -> String
+     */
+    public func delete_agent(
+        /**
+         * @param {String} id Agent id. Can be a comma-separated list of ids.
+         */
+        _ id: String,
+        /**
+         * @param {String} fields Requested fields
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<String, SDKError> {
+        let result: SDKResponse<String, SDKError> = self.delete("/agents", 
+            ["id": id, "fields": fields], nil, options)
+        return result
+    }
+
+    /**
+     * ### Get Agent
+     *
+     * Get an agent.
+     *
+     * GET /agents/{agent_id} -> Agent
+     */
+    public func get_agent(
+        /**
+         * @param {String} agent_id Agent ID
+         */
+        _ agent_id: String,
+        /**
+         * @param {String} fields Requested fields
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Agent, SDKError> {
+        let path_agent_id = encodeParam(agent_id)
+        let result: SDKResponse<Agent, SDKError> = self.get("/agents/\(path_agent_id)", 
+            ["fields": fields], nil, options)
+        return result
+    }
+
+    /**
+     * ### Update Agent
+     *
+     * Update an agent.
+     *
+     * PATCH /agents/{agent_id} -> Agent
+     */
+    public func update_agent(
+        /**
+         * @param {String} agent_id Agent ID
+         */
+        _ agent_id: String,
+        /**
+         * @param {WriteAgent} body
+         */
+        _ body: WriteAgent,
+        /**
+         * @param {String} fields Requested fields
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Agent, SDKError> {
+        let path_agent_id = encodeParam(agent_id)
+        let result: SDKResponse<Agent, SDKError> = self.patch("/agents/\(path_agent_id)", 
+            ["fields": fields], try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Get All Conversation Messages
+     *
+     * Get all conversation messages.
+     *
+     * GET /conversations/{conversation_id}/messages -> [ConversationMessage]
+     */
+    public func all_conversation_messages(
+        /**
+         * @param {String} conversation_id Conversation ID
+         */
+        _ conversation_id: String,
+        /**
+         * @param {String} fields Requested fields
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<[ConversationMessage], SDKError> {
+        let path_conversation_id = encodeParam(conversation_id)
+        let result: SDKResponse<[ConversationMessage], SDKError> = self.get("/conversations/\(path_conversation_id)/messages", 
+            ["fields": fields], nil, options)
+        return result
+    }
+
+    /**
+     * ### Create Conversation Message
+     *
+     * Create one or more conversation messages.
+     * Required fields for each message: `type`, `message`.
+     *
+     * The `order` for a message will be determined based on the highest order for previously saved
+     * messages for the provided `conversation_id`.
+     *
+     * POST /conversations/{conversation_id}/messages -> [ConversationMessage]
+     */
+    public func create_conversation_message(
+        /**
+         * @param {String} conversation_id Conversation ID
+         */
+        _ conversation_id: String,
+        /**
+         * @param {WriteConversationMessages} body
+         */
+        _ body: WriteConversationMessages,
+        /**
+         * @param {String} fields Requested fields
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<[ConversationMessage], SDKError> {
+        let path_conversation_id = encodeParam(conversation_id)
+        let result: SDKResponse<[ConversationMessage], SDKError> = self.post("/conversations/\(path_conversation_id)/messages", 
+            ["fields": fields], try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Delete Conversation Message
+     *
+     * Delete an conversation message.
+     *
+     * DELETE /conversations/{conversation_id}/messages -> String
+     */
+    public func delete_conversation_message(
+        /**
+         * @param {String} conversation_id Conversation ID
+         */
+        _ conversation_id: String,
+        /**
+         * @param {String} id Conversation message id. Can be a comma-separated list of ids.
+         */
+        _ id: String,
+        /**
+         * @param {String} fields Requested fields
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<String, SDKError> {
+        let path_conversation_id = encodeParam(conversation_id)
+        let result: SDKResponse<String, SDKError> = self.delete("/conversations/\(path_conversation_id)/messages", 
+            ["id": id, "fields": fields], nil, options)
+        return result
+    }
+
+    /**
+     * ### Get Conversation Message
+     *
+     * Get a conversation message.
+     *
+     * GET /conversations/{conversation_id}/messages/{message_id} -> ConversationMessage
+     */
+    public func get_conversation_message(
+        /**
+         * @param {String} conversation_id Conversation ID
+         */
+        _ conversation_id: String,
+        /**
+         * @param {String} message_id Conversation Message ID
+         */
+        _ message_id: String,
+        /**
+         * @param {String} fields Requested fields
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<ConversationMessage, SDKError> {
+        let path_conversation_id = encodeParam(conversation_id)
+        let path_message_id = encodeParam(message_id)
+        let result: SDKResponse<ConversationMessage, SDKError> = self.get("/conversations/\(path_conversation_id)/messages/\(path_message_id)", 
+            ["fields": fields], nil, options)
+        return result
+    }
+
+    /**
+     * ### Update Conversation Message
+     *
+     * Update an conversation message.
+     *
+     * PATCH /conversations/{conversation_id}/messages/{message_id} -> ConversationMessage
+     */
+    public func update_conversation_message(
+        /**
+         * @param {String} conversation_id Conversation ID
+         */
+        _ conversation_id: String,
+        /**
+         * @param {String} message_id Conversation Message ID
+         */
+        _ message_id: String,
+        /**
+         * @param {WriteConversationMessage} body
+         */
+        _ body: WriteConversationMessage,
+        /**
+         * @param {String} fields Requested fields
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<ConversationMessage, SDKError> {
+        let path_conversation_id = encodeParam(conversation_id)
+        let path_message_id = encodeParam(message_id)
+        let result: SDKResponse<ConversationMessage, SDKError> = self.patch("/conversations/\(path_conversation_id)/messages/\(path_message_id)", 
+            ["fields": fields], try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Search Conversations
+     *
+     * Returns an array of conversation objects that match the specified search criteria.
+     * This will only return conversations owned by the current user.
+     *
+     * The parameters `limit`, and `offset` are recommended for fetching results in page-size chunks.
+     *
+     * Get a **single conversation** by id with [get_conversation()](#!/Conversation/get_conversation)
+     *
+     * GET /conversations/search -> [Conversation]
+     */
+    public func search_conversations(
+        /**
+         * @param {String} id Match conversation id. Can be a comma-separated list of ids.
+         */
+        id: String? = nil,
+        /**
+         * @param {String} name Match conversation name.
+         */
+        name: String? = nil,
+        /**
+         * @param {String} agent_id Match conversations with a particular agent. Pass "null" to find conversations with no agent, or "not null" to find conversations with any agent.
+         */
+        agent_id: String? = nil,
+        /**
+         * @param {String} fields Requested fields.
+         */
+        fields: String? = nil,
+        /**
+         * @param {Int64} limit Number of results to return. (used with offset)
+         */
+        limit: Int64? = nil,
+        /**
+         * @param {Int64} offset Number of results to skip before returning. (used with limit)
+         */
+        offset: Int64? = nil,
+        /**
+         * @param {String} sorts One or more fields to sort by. Sortable fields: [:id, :name, :user_id, :agent_id, :created_at, :updated_at, :category]
+         */
+        sorts: String? = nil,
+        /**
+         * @param {Bool} filter_or Combine given search criteria in a boolean OR expression
+         */
+        filter_or: Bool? = nil,
+        /**
+         * @param {String} category Filter on conversation category. Can be a comma-separated list of categories.
+         */
+        category: String? = nil,
+        /**
+         * @param {Bool} deleted Filter on soft deleted conversations.
+         */
+        deleted: Bool? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<[Conversation], SDKError> {
+        let result: SDKResponse<[Conversation], SDKError> = self.get("/conversations/search", 
+            ["id": id, "name": name, "agent_id": agent_id, "fields": fields, "limit": limit, "offset": offset, "sorts": sorts, "filter_or": filter_or as Any?, "category": category, "deleted": deleted as Any?], nil, options)
+        return result
+    }
+
+    /**
+     * ### Create Conversation
+     *
+     * Creates a conversation.
+     * Required fields: `name`.
+     *
+     * POST /conversations -> Conversation
+     */
+    public func create_conversation(
+        /**
+         * @param {WriteConversation} body
+         */
+        _ body: WriteConversation,
+        /**
+         * @param {String} fields Requested fields
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Conversation, SDKError> {
+        let result: SDKResponse<Conversation, SDKError> = self.post("/conversations", 
+            ["fields": fields], try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Delete Conversations
+     *
+     * Delete conversations.
+     *
+     * DELETE /conversations -> String
+     */
+    public func delete_conversation(
+        /**
+         * @param {String} id Conversation id. Can be a comma-separated list of ids.
+         */
+        _ id: String,
+        /**
+         * @param {String} fields Requested fields
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<String, SDKError> {
+        let result: SDKResponse<String, SDKError> = self.delete("/conversations", 
+            ["id": id, "fields": fields], nil, options)
+        return result
+    }
+
+    /**
+     * ### Get Conversation
+     *
+     * Get an conversation.
+     *
+     * GET /conversations/{conversation_id} -> Conversation
+     */
+    public func get_conversation(
+        /**
+         * @param {String} conversation_id Conversation ID
+         */
+        _ conversation_id: String,
+        /**
+         * @param {String} fields Requested fields
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Conversation, SDKError> {
+        let path_conversation_id = encodeParam(conversation_id)
+        let result: SDKResponse<Conversation, SDKError> = self.get("/conversations/\(path_conversation_id)", 
+            ["fields": fields], nil, options)
+        return result
+    }
+
+    /**
+     * ### Update Conversation
+     *
+     * Update an conversation.
+     *
+     * PATCH /conversations/{conversation_id} -> Conversation
+     */
+    public func update_conversation(
+        /**
+         * @param {String} conversation_id Conversation ID
+         */
+        _ conversation_id: String,
+        /**
+         * @param {WriteConversation} body
+         */
+        _ body: WriteConversation,
+        /**
+         * @param {String} fields Requested fields
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Conversation, SDKError> {
+        let path_conversation_id = encodeParam(conversation_id)
+        let result: SDKResponse<Conversation, SDKError> = self.patch("/conversations/\(path_conversation_id)", 
+            ["fields": fields], try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ## Takes the latest conversation context (ID and a user message) and
+     * ## returns a list of newly generated system messages.
+     *
+     * POST /conversational_analytics/chat -> [ChatMessage]
+     */
+    public func conversational_analytics_chat(
+        /**
+         * @param {ConversationalAnalyticsChatRequest} body
+         */
+        _ body: ConversationalAnalyticsChatRequest,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<[ChatMessage], SDKError> {
+        let result: SDKResponse<[ChatMessage], SDKError> = self.post("/conversational_analytics/chat", nil, try! self.encode(body), options)
         return result
     }
 
@@ -6615,6 +7117,35 @@ open class LookerSDK: APIMethods {
 
 
 
+    // MARK KeyDriverAnalysis: Run Key Driver Analysis
+
+    /**
+     * ### Analyze Key Drivers
+     *
+     * Identifies the dimensional segments that most significantly drove a metric's change between two time periods.
+     *
+     * Given a data source (a saved query or a model/explore pair), a contribution metric, and a list of
+     * dimensions to analyse, this endpoint compares a test (breach) period against a control (baseline)
+     * period and returns a ranked list of segment-level insights.
+     * Each insight reports the metric value in both periods, the absolute and relative difference,
+     * the unexpected deviation (how much a segment over or under-performed relative to the overall trend),
+     * its proportional contribution to the total change, and its a-priori support (what share of total volume that segment represents).
+     *
+     * POST /internal/kda/analyze -> KdaResponsePayload
+     */
+    public func run_key_driver_analysis(
+        /**
+         * @param {KdaRequestPayload} body
+         */
+        _ body: KdaRequestPayload,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<KdaResponsePayload, SDKError> {
+        let result: SDKResponse<KdaResponsePayload, SDKError> = self.post("/internal/kda/analyze", nil, try! self.encode(body), options)
+        return result
+    }
+
+
+
     // MARK Look: Run and Manage Looks
 
     /**
@@ -7497,8 +8028,11 @@ open class LookerSDK: APIMethods {
     /**
      * ### Fetches a CI Run.
      *
+     * This endpoint is deprecated. [Get Continuous Integration Run](#!/Project/get_continuous_integration_run) should be used instead.
+     *
      * GET /projects/{project_id}/ci/runs/{run_id} -> ProjectRun
      */
+    @available(*, deprecated)
     public func get_ci_run(
         /**
          * @param {String} project_id Project Id
@@ -7524,8 +8058,11 @@ open class LookerSDK: APIMethods {
     /**
      * ### Creates a CI Run.
      *
+     * This endpoint is deprecated. [Create Continuous Integration Run](#!/Project/create_continuous_integration_run) should be used instead.
+     *
      * POST /projects/{project_id}/ci/run -> CreateCIRunResponse
      */
+    @available(*, deprecated)
     public func create_ci_run(
         /**
          * @param {String} project_id Project Id
@@ -7544,6 +8081,59 @@ open class LookerSDK: APIMethods {
         let path_project_id = encodeParam(project_id)
         let result: SDKResponse<CreateCIRunResponse, SDKError> = self.post("/projects/\(path_project_id)/ci/run", 
             ["fields": fields], try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Creates and queues a Continuous Integration Run.
+     *
+     * POST /projects/{project_id}/continuous_integration/runs -> CIRun
+     */
+    public func create_continuous_integration_run(
+        /**
+         * @param {String} project_id Project Id
+         */
+        _ project_id: String,
+        /**
+         * @param {CreateContinuousIntegrationRunRequest} body
+         */
+        _ body: CreateContinuousIntegrationRunRequest,
+        /**
+         * @param {String} fields Requested fields
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<CIRun, SDKError> {
+        let path_project_id = encodeParam(project_id)
+        let result: SDKResponse<CIRun, SDKError> = self.post("/projects/\(path_project_id)/continuous_integration/runs", 
+            ["fields": fields], try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Gets a Continuous Integration run.
+     *
+     * GET /projects/{project_id}/continuous_integration/runs/{run_id} -> CIRun
+     */
+    public func get_continuous_integration_run(
+        /**
+         * @param {String} project_id Project Id
+         */
+        _ project_id: String,
+        /**
+         * @param {String} run_id Run Id
+         */
+        _ run_id: String,
+        /**
+         * @param {String} fields Requested fields
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<CIRun, SDKError> {
+        let path_project_id = encodeParam(project_id)
+        let path_run_id = encodeParam(run_id)
+        let result: SDKResponse<CIRun, SDKError> = self.get("/projects/\(path_project_id)/continuous_integration/runs/\(path_run_id)", 
+            ["fields": fields], nil, options)
         return result
     }
 
@@ -9480,10 +10070,14 @@ open class LookerSDK: APIMethods {
          * @param {Bool} filter_or Combine given search criteria in a boolean OR expression.
          */
         filter_or: Bool? = nil,
+        /**
+         * @param {String} models Matches model sets that contain all of the specified models (comma separated). This is an experimental feature and may not yet be available on your instance.
+         */
+        models: String? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<[ModelSet], SDKError> {
         let result: SDKResponse<[ModelSet], SDKError> = self.get("/model_sets/search", 
-            ["fields": fields, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "name": name, "all_access": all_access as Any?, "built_in": built_in as Any?, "filter_or": filter_or as Any?], nil, options)
+            ["fields": fields, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "name": name, "all_access": all_access as Any?, "built_in": built_in as Any?, "filter_or": filter_or as Any?, "models": models], nil, options)
         return result
     }
 
@@ -9655,10 +10249,14 @@ open class LookerSDK: APIMethods {
          * @param {Bool} filter_or Combine given search criteria in a boolean OR expression.
          */
         filter_or: Bool? = nil,
+        /**
+         * @param {String} permissions Matches permission sets that contain all of the specified permissions (comma separated). This is an experimental feature and may not yet be available on your instance.
+         */
+        permissions: String? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<[PermissionSet], SDKError> {
         let result: SDKResponse<[PermissionSet], SDKError> = self.get("/permission_sets/search", 
-            ["fields": fields, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "name": name, "all_access": all_access as Any?, "built_in": built_in as Any?, "filter_or": filter_or as Any?], nil, options)
+            ["fields": fields, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "name": name, "all_access": all_access as Any?, "built_in": built_in as Any?, "filter_or": filter_or as Any?, "permissions": permissions], nil, options)
         return result
     }
 
@@ -9848,6 +10446,14 @@ open class LookerSDK: APIMethods {
          */
         id: String? = nil,
         /**
+         * @param {String} model_set_ids Match roles with these model set ids (comma separated). This is an experimental feature and may not yet be available on your instance.
+         */
+        model_set_ids: String? = nil,
+        /**
+         * @param {String} permission_set_ids Match roles with these permission set ids (comma separated). This is an experimental feature and may not yet be available on your instance.
+         */
+        permission_set_ids: String? = nil,
+        /**
          * @param {String} name Match role name.
          */
         name: String? = nil,
@@ -9862,7 +10468,7 @@ open class LookerSDK: APIMethods {
         options: ITransportSettings? = nil
     ) -> SDKResponse<[Role], SDKError> {
         let result: SDKResponse<[Role], SDKError> = self.get("/roles/search", 
-            ["fields": fields, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "name": name, "built_in": built_in as Any?, "filter_or": filter_or as Any?], nil, options)
+            ["fields": fields, "limit": limit, "offset": offset, "sorts": sorts, "id": id, "model_set_ids": model_set_ids, "permission_set_ids": permission_set_ids, "name": name, "built_in": built_in as Any?, "filter_or": filter_or as Any?], nil, options)
         return result
     }
 
@@ -10658,7 +11264,7 @@ open class LookerSDK: APIMethods {
     /**
      * ### Update certification for a Self Service Explore
      *
-     * POST /self_service_models/{model_name}/certification -> Certification
+     * PATCH /self_service_models/{model_name}/certification -> Certification
      */
     public func update_self_service_explore_certification(
         /**
@@ -10672,7 +11278,7 @@ open class LookerSDK: APIMethods {
         options: ITransportSettings? = nil
     ) -> SDKResponse<Certification, SDKError> {
         let path_model_name = encodeParam(model_name)
-        let result: SDKResponse<Certification, SDKError> = self.post("/self_service_models/\(path_model_name)/certification", nil, try! self.encode(body), options)
+        let result: SDKResponse<Certification, SDKError> = self.patch("/self_service_models/\(path_model_name)/certification", nil, try! self.encode(body), options)
         return result
     }
 
