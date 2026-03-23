@@ -29,6 +29,7 @@ import com.google.cloud.iam.credentials.v1.GenerateIdTokenRequest
 import com.google.cloud.iam.credentials.v1.IamCredentialsClient
 import com.google.cloud.iam.credentials.v1.IamCredentialsSettings
 import com.google.cloud.iam.credentials.v1.ServiceAccountName
+import java.time.LocalDateTime
 
 open class AuthSession(
     open val apiSettings: ConfigurationProvider,
@@ -37,6 +38,9 @@ open class AuthSession(
     var authToken: AuthToken = AuthToken()
     private var sudoToken: AuthToken = AuthToken()
     var sudoId: String = ""
+
+    private var cachedIapToken: String? = null
+    private var iapTokenExpiration: LocalDateTime? = null
 
     /** Abstraction of AuthToken retrieval to support sudo mode */
     fun activeToken(): AuthToken {
@@ -78,6 +82,12 @@ open class AuthSession(
     }
 
     fun fetchIapToken(): String? {
+        if (cachedIapToken != null && iapTokenExpiration != null) {
+            if (LocalDateTime.now().isBefore(iapTokenExpiration)) {
+                return cachedIapToken
+            }
+        }
+
         val config = apiSettings.readConfig()
         val audience = config["iap_client_id"]
         val serviceAccount = config["iap_service_account_email"]
@@ -97,9 +107,15 @@ open class AuthSession(
                     .setAudience(audience)
                     .setIncludeEmail(true)
                     .build()
-                client.generateIdToken(request).token
+                val token = client.generateIdToken(request).token
+                cachedIapToken = token
+                val tokenExpiryWait = 50L
+                iapTokenExpiration = LocalDateTime.now().plusMinutes(tokenExpiryWait)
+                token
             }
         } catch (e: Exception) {
+            cachedIapToken = null
+            iapTokenExpiration = null
             null
         }
     }
@@ -122,6 +138,9 @@ open class AuthSession(
         sudoId = ""
         authToken.reset()
         sudoToken.reset()
+
+        cachedIapToken = null
+        iapTokenExpiration = null
     }
 
     /**
@@ -210,7 +229,8 @@ open class AuthSession(
 
     private fun doLogout(): Boolean {
         val token = activeToken()
-        val resp = transport.request<Void>(HttpMethod.DELETE, "/logout") { requestSettings ->
+
+        val resp = transport.request<Any>(HttpMethod.DELETE, "/logout") { requestSettings ->
             val headers = requestSettings.headers.toMutableMap()
 
             fetchIapToken()?.let { iapToken ->
@@ -222,6 +242,7 @@ open class AuthSession(
             }
             requestSettings.copy(headers = headers)
         }
+        println("DEBUG: Logout response received: $resp")
 
         val success =
             when (resp) {
