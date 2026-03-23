@@ -35,6 +35,10 @@ open class AuthSession(
     open val apiSettings: ConfigurationProvider,
     open val transport: Transport = Transport(apiSettings),
 ) {
+    companion object {
+        private const val IAP_TOKEN_CACHE_MINUTES = 50L
+    }
+
     var authToken: AuthToken = AuthToken()
     private var sudoToken: AuthToken = AuthToken()
     var sudoId: String = ""
@@ -109,8 +113,7 @@ open class AuthSession(
                     .build()
                 val token = client.generateIdToken(request).token
                 cachedIapToken = token
-                val tokenExpiryWait = 50L
-                iapTokenExpiration = LocalDateTime.now().plusMinutes(tokenExpiryWait)
+                iapTokenExpiration = LocalDateTime.now().plusMinutes(IAP_TOKEN_CACHE_MINUTES)
                 token
             }
         } catch (e: Exception) {
@@ -242,7 +245,6 @@ open class AuthSession(
             }
             requestSettings.copy(headers = headers)
         }
-        println("DEBUG: Logout response received: $resp")
 
         val success =
             when (resp) {
