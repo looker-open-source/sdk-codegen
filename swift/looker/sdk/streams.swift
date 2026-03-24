@@ -25,7 +25,7 @@
  */
 
 /**
- * 502 API methods
+ * 504 API methods
  */
 
 
@@ -167,7 +167,7 @@ open class LookerSDKStream: APIMethods {
 
     /**
      * ### Update select alert fields
-     * # Available fields: `owner_id`, `is_disabled`, `disabled_reason`, `is_public`, `threshold`
+     * # Available fields: `owner_id`, `is_disabled`, `disabled_reason`, `is_public`, `threshold`, `enhancements`
      * #
      *
      * PATCH /alerts/{alert_id} -> Alert
@@ -2852,6 +2852,8 @@ open class LookerSDKStream: APIMethods {
      *
      * Available settings are:
      *  - allow_user_timezones
+     *  - auto_certify_lookml_content
+     *  - content_certification_documentation_link
      *  - custom_welcome_email
      *  - data_connector_default_enabled
      *  - dashboard_auto_refresh_restriction
@@ -2859,6 +2861,7 @@ open class LookerSDKStream: APIMethods {
      *  - extension_framework_enabled
      *  - extension_load_url_enabled
      *  - instance_config
+     *  - is_content_certification_enabled
      *  - managed_certificate_uri
      *  - marketplace_auto_install_enabled
      *  - marketplace_automation
@@ -2867,6 +2870,7 @@ open class LookerSDKStream: APIMethods {
      *  - marketplace_site
      *  - onboarding_enabled
      *  - privatelabel_configuration
+     *  - revoke_certification_on_edits
      *  - timezone
      *  - host_url
      *  - email_domain_allowlist
@@ -2894,6 +2898,8 @@ open class LookerSDKStream: APIMethods {
      *
      * Available settings are:
      *  - allow_user_timezones
+     *  - auto_certify_lookml_content
+     *  - content_certification_documentation_link
      *  - custom_welcome_email
      *  - data_connector_default_enabled
      *  - dashboard_auto_refresh_restriction
@@ -2901,6 +2907,7 @@ open class LookerSDKStream: APIMethods {
      *  - extension_framework_enabled
      *  - extension_load_url_enabled
      *  - instance_config
+     *  - is_content_certification_enabled
      *  - managed_certificate_uri
      *  - marketplace_auto_install_enabled
      *  - marketplace_automation
@@ -2909,6 +2916,7 @@ open class LookerSDKStream: APIMethods {
      *  - marketplace_site
      *  - onboarding_enabled
      *  - privatelabel_configuration
+     *  - revoke_certification_on_edits
      *  - timezone
      *  - host_url
      *  - email_domain_allowlist
@@ -7102,6 +7110,35 @@ open class LookerSDKStream: APIMethods {
     ) -> SDKResponse<Data, SDKError> {
         let path_integration_id = encodeParam(integration_id)
         let result: SDKResponse<Data, SDKError> = self.post("/integrations/\(path_integration_id)/test", nil, nil, options)
+        return result
+    }
+
+
+
+    // MARK KeyDriverAnalysis: Run Key Driver Analysis
+
+    /**
+     * ### Analyze Key Drivers
+     *
+     * Identifies the dimensional segments that most significantly drove a metric's change between two time periods.
+     *
+     * Given a data source (a saved query or a model/explore pair), a contribution metric, and a list of
+     * dimensions to analyse, this endpoint compares a test (breach) period against a control (baseline)
+     * period and returns a ranked list of segment-level insights.
+     * Each insight reports the metric value in both periods, the absolute and relative difference,
+     * the unexpected deviation (how much a segment over or under-performed relative to the overall trend),
+     * its proportional contribution to the total change, and its a-priori support (what share of total volume that segment represents).
+     *
+     * POST /internal/kda/analyze -> KdaResponsePayload
+     */
+    public func run_key_driver_analysis(
+        /**
+         * @param {KdaRequestPayload} body
+         */
+        _ body: KdaRequestPayload,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/internal/kda/analyze", nil, try! self.encode(body), options)
         return result
     }
 
