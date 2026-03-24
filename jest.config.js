@@ -86,7 +86,10 @@ module.exports = {
   transform: {
     '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
   },
-  transformIgnorePatterns: [excludeNodeModulesExcept.string],
+  transformIgnorePatterns: [
+    excludeNodeModulesExcept.string,
+    "/node_modules/(?!cheerio)/"
+  ],
   testPathIgnorePatterns: ['packages/.*?/lib'],
   testEnvironment: require.resolve('jest-environment-jsdom'),
   testEnvironmentOptions: {
