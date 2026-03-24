@@ -455,13 +455,13 @@ open class Transport(
                 SDKResponse.SDKSuccessResponse(rawResult)
             } catch (e: HttpResponseException) {
                 SDKResponse.SDKErrorResponse(
-                    "$method $path $ERROR_BODY: ${e.content}",
+                    "$method $path $ERROR_BODY: ${e.content ?: ""}",
                     method,
                     path,
                     e.statusCode,
                     e.statusMessage,
                     e.headers,
-                    e.content,
+                    e.content ?: "",
                 )
             } catch (e: Exception) {
                 SDKResponse.SDKError(e.message ?: "Something went wrong", e)
