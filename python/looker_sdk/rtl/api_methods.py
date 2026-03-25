@@ -167,7 +167,7 @@ class APIMethods:
             processed = {}
             for k, v in body.items():
                 if isinstance(v, (dict, list, model.Model)):
-                    processed[k] = self.serialize(api_model=v).decode("utf-8")
+                    processed[k] = self.serialize(api_model=v).decode("utf-8")  # type: ignore
                 elif isinstance(v, (datetime.datetime, datetime.date)):
                     processed[k] = v.isoformat()
                 else:
