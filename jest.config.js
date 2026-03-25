@@ -73,6 +73,7 @@ module.exports = {
     '\\.(css)$': '<rootDir>/config/jest/styleMock.js',
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
       '<rootDir>/config/jest/fileMock.js',
+    '^cheerio$': '<rootDir>/node_modules/cheerio/dist/commonjs/index.js',
   },
   restoreMocks: true,
   setupFilesAfterEnv: [
@@ -86,10 +87,7 @@ module.exports = {
   transform: {
     '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
   },
-  transformIgnorePatterns: [
-    excludeNodeModulesExcept.string,
-    "/node_modules/(?!cheerio)/"
-  ],
+  transformIgnorePatterns: [excludeNodeModulesExcept.string],
   testPathIgnorePatterns: ['packages/.*?/lib'],
   testEnvironment: require.resolve('jest-environment-jsdom'),
   testEnvironmentOptions: {
