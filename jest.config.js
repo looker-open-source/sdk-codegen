@@ -73,7 +73,6 @@ module.exports = {
     '\\.(css)$': '<rootDir>/config/jest/styleMock.js',
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
       '<rootDir>/config/jest/fileMock.js',
-    '^cheerio$': '<rootDir>/node_modules/cheerio/dist/commonjs/index.js',
   },
   restoreMocks: true,
   setupFilesAfterEnv: [
@@ -92,6 +91,7 @@ module.exports = {
   testEnvironment: require.resolve('jest-environment-jsdom'),
   testEnvironmentOptions: {
     url: 'http://localhost/',
+    customExportConditions: ['node', 'node-addons'],
   },
   globals: {
     fetch: global.fetch,
