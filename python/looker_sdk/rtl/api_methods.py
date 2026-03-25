@@ -23,9 +23,10 @@
 """Functionality for making authenticated API calls
 """
 import datetime
-import json
-from typing import Any, MutableMapping, Optional, Sequence, Type, Union
+import re
 import urllib.parse
+import json
+from typing import Any, MutableMapping, Optional, Sequence, Tuple, Type, Union
 
 from looker_sdk import error
 from looker_sdk.rtl import model
@@ -156,10 +157,14 @@ class APIMethods:
         )
         return self._return(response, structure)
 
-    def _get_serialized(self, body: TBody) -> Optional[bytes]:
+    def _get_serialized(
+        self, body: TBody, transport_options: Optional[transport.TransportOptions] = None
+    ) -> Optional[bytes]:
         serialized: Optional[bytes]
         if isinstance(body, str):
             serialized = body.encode("utf-8")
+        elif isinstance(body, model.URLSearchParams):
+            serialized = urllib.parse.urlencode(body).encode("utf-8")
         elif isinstance(body, (list, dict, model.Model)):
             serialized = self.serialize(api_model=body)  # type: ignore
         else:
@@ -176,7 +181,13 @@ class APIMethods:
     ) -> TReturn:
         """POST method"""
         params = self._convert_query_params(query_params) if query_params else None
-        serialized = self._get_serialized(body)
+        if isinstance(body, model.URLSearchParams):
+            if transport_options is None:
+                transport_options = {}
+            if "headers" not in transport_options:
+                transport_options["headers"] = {}
+            transport_options["headers"]["Content-Type"] = "application/x-www-form-urlencoded"
+        serialized = self._get_serialized(body, transport_options)
         response = self.transport.request(
             transport.HttpMethod.POST,
             self._path(path),
@@ -197,7 +208,13 @@ class APIMethods:
     ) -> TReturn:
         """PATCH method"""
         params = self._convert_query_params(query_params) if query_params else None
-        serialized = self._get_serialized(body)
+        if isinstance(body, model.URLSearchParams):
+            if transport_options is None:
+                transport_options = {}
+            if "headers" not in transport_options:
+                transport_options["headers"] = {}
+            transport_options["headers"]["Content-Type"] = "application/x-www-form-urlencoded"
+        serialized = self._get_serialized(body, transport_options)
         response = self.transport.request(
             transport.HttpMethod.PATCH,
             self._path(path),
@@ -218,7 +235,13 @@ class APIMethods:
     ) -> TReturn:
         """PUT method"""
         params = self._convert_query_params(query_params) if query_params else None
-        serialized = self._get_serialized(body)
+        if isinstance(body, model.URLSearchParams):
+            if transport_options is None:
+                transport_options = {}
+            if "headers" not in transport_options:
+                transport_options["headers"] = {}
+            transport_options["headers"]["Content-Type"] = "application/x-www-form-urlencoded"
+        serialized = self._get_serialized(body, transport_options)
         response = self.transport.request(
             transport.HttpMethod.PUT,
             self._path(path),

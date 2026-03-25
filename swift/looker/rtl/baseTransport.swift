@@ -156,6 +156,9 @@ open class BaseTransport : ITransport  {
             if (body is String) {
                 req.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
                 req.httpBody = (body as! String).data(using: .utf8)
+            } else if (body is FormValues) {
+                req.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+                req.httpBody = encodeParams((body as! FormValues).values).data(using: .utf8)
             } else {
                 /// Only string and encoded JSON (iow`Data`) can be provided for the body
                 req.httpBody = body as? Data

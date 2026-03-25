@@ -87,6 +87,9 @@ func NewAuthSessionWithTransport(config ApiSettings, transport http.RoundTripper
 	}
 }
 
+// Values is a map alias used for form urlencoded bodies
+type Values map[string]interface{}
+
 func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars map[string]interface{}, body interface{}, options *ApiSettings) error {
 
 	// prepare URL
@@ -97,29 +100,36 @@ func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars m
 
 	// serialize body to string and determine request's Content-Type header
 	if body != nil {
-		// get the `body`'s type
-		kind := reflect.TypeOf(body).Kind()
-		value := reflect.ValueOf(body)
-
-		// check if it is pointer
-		if kind == reflect.Ptr {
-			// if so find the type it points to
-			kind = reflect.ValueOf(body).Elem().Kind()
-			value = reflect.ValueOf(body).Elem()
-		}
-
-		if kind == reflect.String {
-			contentTypeHeader = "text/plain"
-			bodyString = fmt.Sprintf("%v", value)
+		if v, ok := body.(Values); ok {
+			contentTypeHeader = "application/x-www-form-urlencoded"
+			u := &url.URL{}
+			setQuery(u, map[string]interface{}(v))
+			bodyString = u.RawQuery
 		} else {
-			contentTypeHeader = "application/json"
-			serializedBody, err := json.Marshal(body)
+			// get the `body`'s type
+			kind := reflect.TypeOf(body).Kind()
+			value := reflect.ValueOf(body)
 
-			if err != nil {
-				_, _ = fmt.Fprintf(os.Stderr, "error serializing body: %v", err)
+			// check if it is pointer
+			if kind == reflect.Ptr {
+				// if so find the type it points to
+				kind = reflect.ValueOf(body).Elem().Kind()
+				value = reflect.ValueOf(body).Elem()
 			}
 
-			bodyString = string(serializedBody)
+			if kind == reflect.String {
+				contentTypeHeader = "text/plain"
+				bodyString = fmt.Sprintf("%v", value)
+			} else {
+				contentTypeHeader = "application/json"
+				serializedBody, err := json.Marshal(body)
+
+				if err != nil {
+					_, _ = fmt.Fprintf(os.Stderr, "error serializing body: %v", err)
+				}
+
+				bodyString = string(serializedBody)
+			}
 		}
 	}
 

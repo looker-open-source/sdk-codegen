@@ -234,6 +234,13 @@ namespace Looker.RTL
                         Encoding.UTF8,
                         "application/x-www-form-urlencoded");
                 }
+                else if (body is FormValues)
+                {
+                    var dict = ((FormValues)body)
+                        .Where(k => k.Value != null)
+                        .ToDictionary(k => k.Key, k => k.Value.ToString());
+                    request.Content = new FormUrlEncodedContent(dict);
+                }
                 else
                 {
                     request.Content =

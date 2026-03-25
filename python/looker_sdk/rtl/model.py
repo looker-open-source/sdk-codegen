@@ -228,3 +228,7 @@ class DelimSequence(collections.UserList, Sequence[T]):
             f"{self.separator.join(str(d) for d in self.data)}"
             f"{self.suffix}"
         )
+
+class URLSearchParams(dict):
+    pass
+
