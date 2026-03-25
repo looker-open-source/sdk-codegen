@@ -323,7 +323,7 @@ namespace Looker.SDK.API40
     string? client_secret = null,
     ITransportSettings? options = null)
 {  
-    return await AuthRequest<AccessToken, Exception>(HttpMethod.Post, "/login", null,new Values {
+    return await AuthRequest<AccessToken, Exception>(HttpMethod.Post, "/login", null,new FormValues {
       { "client_id", client_id },
       { "client_secret", client_secret }},options);
   }

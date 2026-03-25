@@ -31,6 +31,7 @@ import warnings
 
 from . import models as mdls
 from looker_sdk.rtl import api_methods
+from looker_sdk.rtl import model
 from looker_sdk.rtl import transport
 
 
@@ -394,7 +395,9 @@ class Looker40SDK(api_methods.APIMethods):
             self.post(
                 path="/login",
                 structure=mdls.AccessToken,
-                body={"client_id": client_id, "client_secret": client_secret},
+                body=model.URLSearchParams(
+                    {"client_id": client_id, "client_secret": client_secret}
+                ),
                 transport_options=transport_options,
             ),
         )

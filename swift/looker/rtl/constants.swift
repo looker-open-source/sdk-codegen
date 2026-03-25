@@ -88,6 +88,13 @@ public typealias ValueDictionary<K: Hashable, V> = Dictionary<K, V>
 
 public typealias Values = [String: Any?]
 
+public struct FormValues {
+    public var values: Values
+    public init(_ values: Values) {
+        self.values = values
+    }
+}
+
 /// Extension for converting a `String` to `Bool`
 public extension String {
     var bool: Bool? {

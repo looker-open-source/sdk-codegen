@@ -366,8 +366,8 @@ open class LookerSDK: APIMethods {
         client_secret: String? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<AccessToken, SDKError> {
-        let result: SDKResponse<AccessToken, SDKError> = self.post("/login", nil, 
-            ["client_id": client_id, "client_secret": client_secret], options)
+        let result: SDKResponse<AccessToken, SDKError> = self.post("/login", nil, FormValues(
+            ["client_id": client_id, "client_secret": client_secret]), options)
         return result
     }
 

@@ -458,11 +458,15 @@ ${props.join(this.propDelimiter)}
   assignFormArgs(
     method: IMethod,
     body: string,
-    query: string
-  ): { body: string; query: string } {
-    const result = super.assignFormArgs(method, body, query);
+    query: string,
+    options: string
+  ): { body: string; query: string; options: string } {
+    const result = super.assignFormArgs(method, body, query, options);
     if (result.query === this.nullStr) {
       result.query = 'mapOf()';
+    }
+    if (method.isFormUrlEncoded) {
+      result.body = `encodeValues(${result.body})`;
     }
     return result;
   }
@@ -483,11 +487,13 @@ ${props.join(this.propDelimiter)}
     // let result = this.argFill('', 'options')
     // let result = this.argFill('', this.argGroup(indent, method.cookieArgs, request))
     // result = this.argFill(result, this.argGroup(indent, method.headerArgs, request))
+    let options = 'options';
     let body = method.bodyArg ? `${request}${method.bodyArg}` : this.nullStr;
     let query = this.argGroup(indent, method.queryArgs, request);
-    const formArgs = this.assignFormArgs(method, body, query);
+    const formArgs = this.assignFormArgs(method, body, query, options);
     body = formArgs.body;
     query = formArgs.query;
+    options = formArgs.options; // Kotlin generator ignores options down the line currently
     let result = this.argFill('', body);
     result = this.argFill(result, query);
     return result;

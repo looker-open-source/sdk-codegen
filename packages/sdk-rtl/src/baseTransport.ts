@@ -165,8 +165,43 @@ export abstract class BaseTransport implements ITransport {
       body = undefined;
     } else {
       if (typeof body !== 'string') {
-        body = JSON.stringify(body);
-        headers['Content-Type'] = 'application/json';
+        let isUrlEncoded = body instanceof URLSearchParams;
+        if (!isUrlEncoded) {
+          isUrlEncoded = Object.keys(headers).some(
+            k =>
+              k.toLowerCase() === 'content-type' &&
+              headers[k]
+                ?.toString()
+                .includes('application/x-www-form-urlencoded')
+          );
+        }
+
+        if (isUrlEncoded) {
+          if (body instanceof URLSearchParams) {
+            body = body.toString();
+          } else {
+            const params = new URLSearchParams();
+            Object.entries(body as any).forEach(([k, v]) => {
+              if (v !== undefined && v !== null) {
+                params.append(
+                  k,
+                  v instanceof Date
+                    ? v.toISOString()
+                    : typeof v === 'object'
+                    ? JSON.stringify(v)
+                    : v.toString()
+                );
+              }
+            });
+            body = params.toString();
+          }
+          if (!headers['Content-Type']) {
+            headers['Content-Type'] = 'application/x-www-form-urlencoded';
+          }
+        } else {
+          body = JSON.stringify(body);
+          headers['Content-Type'] = 'application/json';
+        }
       }
     }
 
