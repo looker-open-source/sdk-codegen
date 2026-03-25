@@ -707,7 +707,10 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
     return this.post<IAccessToken, IError>(
       '/login',
       null,
-      { client_id: request.client_id, client_secret: request.client_secret },
+      new URLSearchParams({
+        client_id: request.client_id,
+        client_secret: request.client_secret,
+      } as unknown as Record<string, string>),
       options
     );
   }

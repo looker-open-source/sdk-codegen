@@ -275,7 +275,7 @@ func (l *LookerSDK) ReadAlertNotification(
 func (l *LookerSDK) Login(request RequestLogin,
 	options *rtl.ApiSettings) (AccessToken, error) {
 	var result AccessToken
-	err := l.AuthSession.Do(&result, "POST", "/4.0", "/login", nil, map[string]interface{}{"client_id": request.ClientId, "client_secret": request.ClientSecret}, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", "/login", nil, rtl.Values{"client_id": request.ClientId, "client_secret": request.ClientSecret}, options)
 	return result, err
 
 }
