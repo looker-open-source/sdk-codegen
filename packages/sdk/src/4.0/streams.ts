@@ -759,7 +759,10 @@ export class Looker40SDKStream extends APIMethods {
       'POST',
       '/login',
       null,
-      { client_id: request.client_id, client_secret: request.client_secret },
+      new URLSearchParams({
+        client_id: request.client_id,
+        client_secret: request.client_secret,
+      } as unknown as Record<string, string>),
       options
     );
   }
