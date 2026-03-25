@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [26.6.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-v26.6.0...sdk-v26.6.1) (2026-03-25)
+
+
+### Features
+
+* generate SDKs for Looker 26.6.1 ([#1676](https://github.com/looker-open-source/sdk-codegen/issues/1676)) ([b48b953](https://github.com/looker-open-source/sdk-codegen/commit/b48b953d920463596bb0839cd88fc000c1a4cff3))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from 21.6.4 to 21.6.5
+
 ## [26.6.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-v26.4.0...sdk-v26.6.0) (2026-03-20)
 
 

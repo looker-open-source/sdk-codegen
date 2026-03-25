@@ -1317,12 +1317,13 @@ export abstract class CodeGen implements ICodeGen {
   assignFormArgs(
     method: IMethod,
     body: string,
-    query: string
-  ): { body: string; query: string } {
+    query: string,
+    options: string
+  ): { body: string; query: string; options: string } {
     if (method.isFormUrlEncoded) {
-      return { body: query, query: this.nullStr };
+      return { body: query, query: this.nullStr, options };
     }
-    return { body, query };
+    return { body, query, options };
   }
 
   // build the http argument list from back to front, so trailing undefined arguments
@@ -1338,9 +1339,13 @@ export abstract class CodeGen implements ICodeGen {
     result = this.argFill(result, this.argGroup(indent, method.headerArgs));
     let body = method.bodyArg ? method.bodyArg : this.nullStr;
     let query = this.argGroup(indent, method.queryArgs);
-    const formArgs = this.assignFormArgs(method, body, query);
+    // Add 'options' since it might be modified for form encoding
+    let options = this.nullStr;
+    const formArgs = this.assignFormArgs(method, body, query, options);
     body = formArgs.body;
     query = formArgs.query;
+    options = formArgs.options;
+    result = this.argFill(result, options);
     result = this.argFill(result, body);
     result = this.argFill(result, query);
     return result;

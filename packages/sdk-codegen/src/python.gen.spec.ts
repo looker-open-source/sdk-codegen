@@ -81,6 +81,7 @@ import warnings
 
 from . import models as mdls
 from looker_sdk.rtl import api_methods
+from looker_sdk.rtl import model
 from looker_sdk.rtl import transport
 
 class LookerSDK(api_methods.APIMethods):

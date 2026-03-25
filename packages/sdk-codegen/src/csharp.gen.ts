@@ -341,15 +341,30 @@ namespace Looker.SDK.API${this.apiRef}
       : this.nullStr;
   }
 
+  assignFormArgs(
+    method: IMethod,
+    body: string,
+    query: string,
+    options: string
+  ): { body: string; query: string; options: string } {
+    if (method.isFormUrlEncoded) {
+      // CSharp uses "new FormValues { ... }" to trigger RTL-level URL encoding.
+      query = query.replace(/new Values \{/g, 'new FormValues {');
+      return { body: query, query: this.nullStr, options };
+    }
+    return { body, query, options };
+  }
+
   httpArgs(indent: string, method: IMethod) {
-    let result = this.argFill('', 'options');
-    // result = this.argFill(result, this.argGroup(indent, method.cookieArgs))
-    // result = this.argFill(result, this.argGroup(indent, method.headerArgs))
+    let options = 'options';
     let body = method.bodyArg ? method.bodyArg : this.nullStr;
     let query = this.argGroup(indent, method.queryArgs);
-    const formArgs = this.assignFormArgs(method, body, query);
+    const formArgs = this.assignFormArgs(method, body, query, options);
     body = formArgs.body;
     query = formArgs.query;
+    options = formArgs.options;
+
+    let result = this.argFill('', options);
     result = this.argFill(result, body);
     result = this.argFill(result, query);
     return result;

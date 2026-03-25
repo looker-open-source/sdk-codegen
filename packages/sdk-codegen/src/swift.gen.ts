@@ -724,16 +724,22 @@ ${indent}}\n`;
     // add options at the end of the request calls. this will cause all other arguments to be
     // filled in but there's no way to avoid this for passing in the last optional parameter.
     // Fortunately, this code bloat is minimal and also hidden from the consumer.
-    let result = this.argFill('', 'options');
-    // let result = this.argFill('', this.argGroup(indent, method.cookieArgs, request))
-    // result = this.argFill(result, this.argGroup(indent, method.headerArgs, request))
+    let options = 'options';
     let body = method.bodyArg
       ? `try! self.encode(${request}${method.bodyArg})`
       : this.nullStr;
     let query = this.queryGroup(indent, method, request);
-    const formArgs = this.assignFormArgs(method, body, query);
-    body = formArgs.body;
-    query = formArgs.query;
+    if (method.isFormUrlEncoded) {
+      body = `FormValues(${query})`;
+      query = this.nullStr;
+    } else {
+      const formArgs = this.assignFormArgs(method, body, query, options);
+      body = formArgs.body;
+      query = formArgs.query;
+      options = formArgs.options;
+    }
+
+    let result = this.argFill('', options);
     result = this.argFill(result, body);
     result = this.argFill(result, query);
     return result;

@@ -326,9 +326,11 @@ class LookerSDK(authSession: AuthSession) : APIMethods(authSession) {
         return this.post<AccessToken>(
             "/login",
             mapOf(),
-            mapOf(
-                "client_id" to client_id,
-                "client_secret" to client_secret,
+            encodeValues(
+                mapOf(
+                    "client_id" to client_id,
+                    "client_secret" to client_secret,
+                ),
             ),
         )
     }

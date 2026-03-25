@@ -101,6 +101,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * devDependencies
     * @looker/sdk-codegen-utils bumped from 21.0.30 to 21.0.31
 
+## [21.11.2](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.11.1...sdk-codegen-v21.11.2) (2026-03-25)
+
+
+### Bug Fixes
+
+* **codegen:** implement type-driven form encoding across SDKs ([#1674](https://github.com/looker-open-source/sdk-codegen/issues/1674)) ([58aaf86](https://github.com/looker-open-source/sdk-codegen/commit/58aaf8603be2a10cdd641c84d8d46ff98ce6d269)), closes [#1673](https://github.com/looker-open-source/sdk-codegen/issues/1673)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from 21.6.4 to 21.6.5
+  * devDependencies
+    * @looker/sdk-codegen-utils bumped from 21.0.31 to 21.0.32
+
 ## [21.11.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.10.4...sdk-codegen-v21.11.0) (2026-03-11)
 
 

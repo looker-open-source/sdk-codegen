@@ -284,19 +284,33 @@ export class GoGen extends CodeGen {
     // add options at the end of the request calls. this will cause all other arguments to be
     // filled in but there's no way to avoid this for passing in the last optional parameter.
     // Fortunately, this code bloat is minimal and also hidden from the consumer.
-    let result = this.argFill('', 'options');
-    // let result = this.argFill('', this.argGroup(indent, method.cookieArgs, request))
-    // result = this.argFill(result, this.argGroup(indent, method.headerArgs, request))
+    let options = 'options';
     let body = method.bodyArg
       ? this.accessor(method.bodyArg, request)
       : this.nullStr;
     let query = this.argGroup(indent, method.queryArgs, request);
-    const formArgs = this.assignFormArgs(method, body, query);
+    const formArgs = this.assignFormArgs(method, body, query, options);
     body = formArgs.body;
     query = formArgs.query;
+    options = formArgs.options;
+
+    let result = this.argFill('', options);
     result = this.argFill(result, body);
     result = this.argFill(result, query);
     return result;
+  }
+
+  assignFormArgs(
+    method: IMethod,
+    body: string,
+    query: string,
+    options: string
+  ): { body: string; query: string; options: string } {
+    if (method.isFormUrlEncoded) {
+      body = query.replace('map[string]interface{}', 'rtl.Values');
+      query = this.nullStr;
+    }
+    return { body, query, options };
   }
 
   argGroup(_indent: string, args: Arg[], prefix?: string) {
