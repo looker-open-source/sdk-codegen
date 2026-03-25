@@ -296,4 +296,44 @@ describe('BrowserTransport', () => {
     expect((typed as any).string4).toBe('4');
     expect((typed as any).num4).toBe(4);
   });
+
+  it('serializes form-urlencoded nested objects and dates cleanly', async () => {
+    class TestTransport extends BrowserTransport {
+      public async testInitRequest(
+        method: any,
+        path: string,
+        body?: any,
+        authenticator?: any,
+        options?: any
+      ) {
+        return this.initRequest(method, path, body, authenticator, options);
+      }
+    }
+    const xp = new TestTransport({} as any);
+    const date = new Date('2026-01-01T00:00:00.000Z');
+    const body = {
+      simple: 'string',
+      date: date,
+      nested: { foo: 'bar' },
+      array: [1, 2, 3],
+    };
+
+    const req = await xp.testInitRequest(
+      'POST',
+      'http://dummy.com',
+      body,
+      undefined,
+      {
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      }
+    );
+
+    expect(req.body).toEqual(
+      `simple=string&date=${encodeURIComponent(
+        '2026-01-01T00:00:00.000Z'
+      )}&nested=${encodeURIComponent(
+        '{"foo":"bar"}'
+      )}&array=${encodeURIComponent('[1,2,3]')}`
+    );
+  });
 });

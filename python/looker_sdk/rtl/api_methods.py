@@ -164,7 +164,15 @@ class APIMethods:
         if isinstance(body, str):
             serialized = body.encode("utf-8")
         elif isinstance(body, model.URLSearchParams):
-            serialized = urllib.parse.urlencode(body).encode("utf-8")
+            processed = {}
+            for k, v in body.items():
+                if isinstance(v, (dict, list, model.Model)):
+                    processed[k] = self.serialize(api_model=v).decode("utf-8")
+                elif isinstance(v, (datetime.datetime, datetime.date)):
+                    processed[k] = v.isoformat()
+                else:
+                    processed[k] = str(v)
+            serialized = urllib.parse.urlencode(processed).encode("utf-8")
         elif isinstance(body, (list, dict, model.Model)):
             serialized = self.serialize(api_model=body)  # type: ignore
         else:

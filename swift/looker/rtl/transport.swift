@@ -332,7 +332,13 @@ public func encodeParam(_ value: Any?) -> String {
             encoded = DateFormatter.iso8601Full.string(from: x)
             break
         default:
-            encoded = "\(val)"
+            if JSONSerialization.isValidJSONObject(val),
+               let json = try? JSONSerialization.data(withJSONObject: val, options: []),
+               let jsonString = String(data: json, encoding: .utf8) {
+                encoded = jsonString
+            } else {
+                encoded = "\(val)"
+            }
         }
 //        if val is Array<Any> {
 //            let a = val as! Array<Any>

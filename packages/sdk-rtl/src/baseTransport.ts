@@ -185,7 +185,11 @@ export abstract class BaseTransport implements ITransport {
               if (v !== undefined && v !== null) {
                 params.append(
                   k,
-                  Array.isArray(v) ? JSON.stringify(v) : v.toString()
+                  v instanceof Date
+                    ? v.toISOString()
+                    : typeof v === 'object'
+                    ? JSON.stringify(v)
+                    : v.toString()
                 );
               }
             });
