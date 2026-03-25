@@ -1,5 +1,17 @@
 # Changelog
 
+## [26.6.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v26.6.0...sdk-codegen-all-v26.6.1) (2026-03-25)
+
+
+### Features
+
+* generate SDKs for Looker 26.6.1 ([#1676](https://github.com/looker-open-source/sdk-codegen/issues/1676)) ([b48b953](https://github.com/looker-open-source/sdk-codegen/commit/b48b953d920463596bb0839cd88fc000c1a4cff3))
+
+
+### Bug Fixes
+
+* **codegen:** implement type-driven form encoding across SDKs ([#1674](https://github.com/looker-open-source/sdk-codegen/issues/1674)) ([58aaf86](https://github.com/looker-open-source/sdk-codegen/commit/58aaf8603be2a10cdd641c84d8d46ff98ce6d269)), closes [#1673](https://github.com/looker-open-source/sdk-codegen/issues/1673)
+
 ## [26.6.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v26.4.1...sdk-codegen-all-v26.6.0) (2026-03-20)
 
 

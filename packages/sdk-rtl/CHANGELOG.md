@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [21.6.5](https://github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.6.4...sdk-rtl-v21.6.5) (2026-03-25)
+
+
+### Bug Fixes
+
+* **codegen:** implement type-driven form encoding across SDKs ([#1674](https://github.com/looker-open-source/sdk-codegen/issues/1674)) ([58aaf86](https://github.com/looker-open-source/sdk-codegen/commit/58aaf8603be2a10cdd641c84d8d46ff98ce6d269)), closes [#1673](https://github.com/looker-open-source/sdk-codegen/issues/1673)
+
 ## [21.6.4](https://github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.6.3...sdk-rtl-v21.6.4) (2025-03-11)
 
 
