@@ -105,6 +105,7 @@ import warnings
 
 from . import models as mdls
 from ${this.packagePath}.rtl import api_methods
+from ${this.packagePath}.rtl import model
 from ${this.packagePath}.rtl import transport
 
 class ${this.packageName}(api_methods.APIMethods):
@@ -371,16 +372,22 @@ ${this.hooks.join('\n')}
 
   httpArgs(callerIndent: string, method: IMethod): string {
     const currIndent = this.bumper(callerIndent);
-    let args = '';
-    args = this.argFill(
-      args,
-      `${currIndent}transport_options=transport_options`
-    );
     const body = method.bodyArg ? method.bodyArg : this.nullStr;
     const query = method.queryArgs.length
       ? this.argGroup('', method.queryArgs)
       : this.nullStr;
-    const formArgs = this.assignFormArgs(method, body, query);
+    const formArgs = this.assignFormArgs(
+      method,
+      body,
+      query,
+      'transport_options'
+    );
+
+    let args = '';
+    args = this.argFill(
+      args,
+      `${currIndent}transport_options=${formArgs.options}`
+    );
 
     if (formArgs.body !== this.nullStr) {
       args = this.argFill(args, `${currIndent}body=${formArgs.body}`);
@@ -436,6 +443,19 @@ ${this.hooks.join('\n')}
       }
     }
     return encodings;
+  }
+
+  assignFormArgs(
+    method: IMethod,
+    body: string,
+    query: string,
+    options: string
+  ): { body: string; query: string; options: string } {
+    if (method.isFormUrlEncoded) {
+      body = `model.URLSearchParams(${query})`;
+      query = this.nullStr;
+    }
+    return { body, query, options };
   }
 
   declareMethod(indent: string, method: IMethod) {

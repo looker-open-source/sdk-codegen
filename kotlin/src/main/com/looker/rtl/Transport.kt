@@ -217,8 +217,10 @@ fun encodeParam(value: Any?): String {
             value.toOffsetDateTime().format(utcFormat)
         } else if (value is Date) {
             value.toInstant().atZone(ZoneOffset.UTC).format(utcFormat)
-        } else {
+        } else if (value is String || value is Number || value is Boolean) {
             "$value"
+        } else {
+            GSON.toJson(value)
         }
     try {
         val decoded = URLDecoder.decode(encoded, utf8)

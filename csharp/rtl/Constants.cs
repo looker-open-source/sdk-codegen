@@ -80,4 +80,11 @@ namespace Looker.RTL
     public class Values : Dictionary<string, object>, IValues
     {
     }
+
+    /// <summary>
+    /// Type for explicitly specifying url-encoded form values
+    /// </summary>
+    public class FormValues : Values
+    {
+    }
 }

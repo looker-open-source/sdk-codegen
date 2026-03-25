@@ -234,6 +234,18 @@ namespace Looker.RTL
                         Encoding.UTF8,
                         "application/x-www-form-urlencoded");
                 }
+                else if (body is FormValues)
+                {
+                    var dict = ((FormValues)body)
+                        .Where(k => k.Value != null)
+                        .ToDictionary(k => k.Key, k =>
+                        {
+                            if (k.Value is DateTime dt) return dt.ToString("o");
+                            if (k.Value is string || k.Value.GetType().IsPrimitive) return k.Value.ToString();
+                            return JsonSerializer.Serialize(k.Value, new JsonSerializerOptions { IgnoreNullValues = true });
+                        });
+                    request.Content = new FormUrlEncodedContent(dict);
+                }
                 else
                 {
                     request.Content =
