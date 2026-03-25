@@ -191,7 +191,6 @@ interface TransportOptions {
     var headers: Map<String, String>
     var environmentPrefix: String
     var httpTransport: String
-    var iapToken: String?
 }
 
 interface ConfigurationProvider : TransportOptions {
@@ -208,7 +207,6 @@ data class TransportSettings(
     override var headers: Map<String, String> = emptyMap(),
     override var environmentPrefix: String = "LOOKERSDK",
     override var httpTransport: String = DEFAULT_HTTP_TRANSPORT,
-    override var iapToken: String? = null,
 ) : TransportOptions
 
 private val utcFormat by lazy { DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'") }

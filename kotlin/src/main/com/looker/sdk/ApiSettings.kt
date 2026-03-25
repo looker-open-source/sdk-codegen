@@ -62,8 +62,6 @@ fun apiConfig(contents: String): ApiSections {
 // memory long term.
 open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : ConfigurationProvider {
 
-    override var iapToken: String? = null
-
     private val keyIapClientId: String = "iap_client_id"
     private val keyIapServiceAccountEmail: String = "iap_service_account_email"
 
