@@ -5937,7 +5937,7 @@ class DBConnection(model.Model):
         p4sa_name: Optional[str] = None,
         query_holding_disabled: Optional[bool] = None,
         service_name: Optional[str] = None,
-        disabled: Optional[str] = None
+        disabled: Optional[bool] = None
     ):
         self.can = can
         self.name = name
@@ -17619,7 +17619,7 @@ class WriteDBConnection(model.Model):
         bq_roles_verified: Optional[bool] = None,
         query_holding_disabled: Optional[bool] = None,
         service_name: Optional[str] = None,
-        disabled: Optional[str] = None
+        disabled: Optional[bool] = None
     ):
         self.name = name
         self.named_driver_version_requested = named_driver_version_requested
