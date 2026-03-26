@@ -62,6 +62,9 @@ fun apiConfig(contents: String): ApiSections {
 // memory long term.
 open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : ConfigurationProvider {
 
+    private val keyIapClientId: String = "iap_client_id"
+    private val keyIapServiceAccountEmail: String = "iap_service_account_email"
+
     companion object {
         @JvmStatic
         fun fromIniFile(filename: String = "./looker.ini", section: String = ""): ConfigurationProvider {
@@ -167,6 +170,9 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
         addSystemProperty(map, keyVerifySSL)
         addSystemProperty(map, keyTimeout)
         addSystemProperty(map, keyHttpTransport)
+        addSystemProperty(map, keyIapClientId)
+        addSystemProperty(map, keyIapServiceAccountEmail)
+
         return map.toMap()
     }
 }
