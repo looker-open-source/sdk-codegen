@@ -346,7 +346,8 @@
     "glob-parent": ">= 5.1.2",
     "ws": ">= 7.4.6",
     "**/url-parse": ">= 1.5.7",
-    "parse-url": "^8.1.0"
+    "parse-url": "^8.1.0",
+    "cheerio": "1.0.0-rc.12"
   },
   "dependencies": {
     "yarn": "^1.22.22",

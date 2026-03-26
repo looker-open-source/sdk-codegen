@@ -91,6 +91,7 @@ module.exports = {
   testEnvironment: require.resolve('jest-environment-jsdom'),
   testEnvironmentOptions: {
     url: 'http://localhost/',
+    customExportConditions: ['node', 'node-addons'],
   },
   globals: {
     fetch: global.fetch,

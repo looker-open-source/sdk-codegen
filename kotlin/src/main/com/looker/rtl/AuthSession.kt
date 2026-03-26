@@ -25,14 +25,26 @@
 package com.looker.rtl
 
 import com.google.api.client.http.UrlEncodedContent
+import com.google.cloud.iam.credentials.v1.GenerateIdTokenRequest
+import com.google.cloud.iam.credentials.v1.IamCredentialsClient
+import com.google.cloud.iam.credentials.v1.IamCredentialsSettings
+import com.google.cloud.iam.credentials.v1.ServiceAccountName
+import java.time.LocalDateTime
 
 open class AuthSession(
     open val apiSettings: ConfigurationProvider,
     open val transport: Transport = Transport(apiSettings),
 ) {
+    companion object {
+        private const val IAP_TOKEN_CACHE_MINUTES = 50L
+    }
+
     var authToken: AuthToken = AuthToken()
     private var sudoToken: AuthToken = AuthToken()
     var sudoId: String = ""
+
+    private var cachedIapToken: String? = null
+    private var iapTokenExpiration: LocalDateTime? = null
 
     /** Abstraction of AuthToken retrieval to support sudo mode */
     fun activeToken(): AuthToken {
@@ -57,11 +69,61 @@ open class AuthSession(
      */
     fun authenticate(init: RequestSettings): RequestSettings {
         val headers = init.headers.toMutableMap()
+
+        // Handles Google IAP
+        val iapToken = fetchIapToken()
+        if (iapToken != null) {
+            headers["Proxy-Authorization"] = "Bearer $iapToken"
+        }
+
+        // Handles Looker Identity
         val token = getToken()
         if (token.accessToken.isNotBlank()) {
             headers["Authorization"] = "token ${token.accessToken}"
         }
+
         return init.copy(headers = headers)
+    }
+
+    fun fetchIapToken(): String? {
+        if (cachedIapToken != null && iapTokenExpiration != null) {
+            if (LocalDateTime.now().isBefore(iapTokenExpiration)) {
+                return cachedIapToken
+            }
+        }
+
+        val config = apiSettings.readConfig()
+        val audience = config["iap_client_id"]
+        val serviceAccount = config["iap_service_account_email"]
+
+        if (audience.isNullOrBlank() || serviceAccount.isNullOrBlank()) return null
+
+        return try {
+            val settings = IamCredentialsSettings.newBuilder()
+                .setTransportChannelProvider(
+                    IamCredentialsSettings.defaultHttpJsonTransportProviderBuilder().build(),
+                )
+                .build()
+
+            IamCredentialsClient.create(settings).use { client ->
+                val request = GenerateIdTokenRequest.newBuilder()
+                    .setName(ServiceAccountName.of("-", serviceAccount).toString())
+                    .setAudience(audience)
+                    .setIncludeEmail(true)
+                    .build()
+                val token = client.generateIdToken(request).token
+                cachedIapToken = token
+                iapTokenExpiration = LocalDateTime.now().plusMinutes(IAP_TOKEN_CACHE_MINUTES)
+                token
+            }
+        } catch (e: Exception) {
+            cachedIapToken = null
+            iapTokenExpiration = null
+            throw RuntimeException(
+                "OIDC Token failed for IAP. Please check your IAP Client ID and IAP Service Account Email. Underlying Google Cloud error: ${e.message}",
+                e,
+            )
+        }
     }
 
     fun isSudo(): Boolean = sudoId.isNotBlank() && sudoToken.isActive()
@@ -82,6 +144,9 @@ open class AuthSession(
         sudoId = ""
         authToken.reset()
         sudoToken.reset()
+
+        cachedIapToken = null
+        iapTokenExpiration = null
     }
 
     /**
@@ -136,16 +201,35 @@ open class AuthSession(
                 )
             val params = mapOf(client_id to clientId, client_secret to clientSecret)
             val body = UrlEncodedContent(params)
-            val token =
-                ok<AuthToken>(
+
+            val iapToken = fetchIapToken()
+
+            try {
+                val token = ok<AuthToken>(
                     transport.request<AuthToken>(
                         HttpMethod.POST,
                         "$apiPath/login",
                         emptyMap(),
                         body,
-                    ),
+                    ) { requestSettings ->
+                        val headers = requestSettings.headers.toMutableMap()
+                        iapToken?.let {
+                            headers["Proxy-Authorization"] = "Bearer $it"
+                        }
+                        requestSettings.copy(headers = headers)
+                    },
                 )
-            authToken = token
+                authToken = token
+            } catch (e: Exception) {
+                val isUsingIap = !config["iap_client_id"].isNullOrBlank() || !config["iap_service_account_email"].isNullOrBlank()
+
+                val errorMessage = if (isUsingIap) {
+                    "Authentication failed during login. \nPlease check your iap_client_id and iap_service_account_email fields, as well as your Looker credentials.\nDetails: ${e.message}"
+                } else {
+                    "Authentication failed during login. \nPlease check your Looker client_id and client_secret.\nDetails: ${e.message}"
+                }
+                throw RuntimeException(errorMessage, e)
+            }
         }
 
         if (sudoId.isNotBlank()) {
@@ -154,7 +238,7 @@ open class AuthSession(
                 transport.request<AuthToken>(HttpMethod.POST, "/login/$newId") { requestSettings ->
                     val headers = requestSettings.headers.toMutableMap()
                     if (token.accessToken.isNotBlank()) {
-                        headers["Authorization"] = "Bearer ${token.accessToken}"
+                        headers["Authorization"] = "token ${token.accessToken}"
                     }
                     requestSettings.copy(headers = headers)
                 }
@@ -165,14 +249,20 @@ open class AuthSession(
 
     private fun doLogout(): Boolean {
         val token = activeToken()
-        val resp =
-            transport.request<String>(HttpMethod.DELETE, "/logout") {
-                val headers = it.headers.toMutableMap()
-                if (token.accessToken.isNotBlank()) {
-                    headers["Authorization"] = "Bearer ${token.accessToken}"
-                }
-                it.copy(headers = headers)
+        val apiPath = "/api/${apiSettings.apiVersion}"
+
+        val resp = transport.request<Any>(HttpMethod.DELETE, "$apiPath/logout") { requestSettings ->
+            val headers = requestSettings.headers.toMutableMap()
+
+            fetchIapToken()?.let { iapToken ->
+                headers["Proxy-Authorization"] = "Bearer $iapToken"
             }
+
+            if (token.accessToken.isNotBlank()) {
+                headers["Authorization"] = "token ${token.accessToken}"
+            }
+            requestSettings.copy(headers = headers)
+        }
 
         val success =
             when (resp) {
