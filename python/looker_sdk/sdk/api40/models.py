@@ -5867,7 +5867,7 @@ class DBConnection(model.Model):
     p4sa_name: Optional[str] = None
     query_holding_disabled: Optional[bool] = None
     service_name: Optional[str] = None
-    disabled: Optional[str] = None
+    disabled: Optional[bool] = None
 
     def __init__(
         self,
