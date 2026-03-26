@@ -17567,7 +17567,7 @@ class WriteDBConnection(model.Model):
     bq_roles_verified: Optional[bool] = None
     query_holding_disabled: Optional[bool] = None
     service_name: Optional[str] = None
-    disabled: Optional[str] = None
+    disabled: Optional[bool] = None
 
     def __init__(
         self,
