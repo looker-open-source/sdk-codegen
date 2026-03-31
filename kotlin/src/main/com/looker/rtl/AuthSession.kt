@@ -48,6 +48,7 @@ open class AuthSession(
 
     private var cachedIapToken: String? = null
     private var iapTokenExpiration: LocalDateTime? = null
+    private var isIapConfigured: Boolean? = null
 
     /** Abstraction of AuthToken retrieval to support sudo mode */
     fun activeToken(): AuthToken {
@@ -99,6 +100,8 @@ open class AuthSession(
 
     @Synchronized
     fun fetchIapToken(): String? {
+        if (isIapConfigured == false) return null
+
         if (cachedIapToken != null && iapTokenExpiration != null) {
             if (LocalDateTime.now().isBefore(iapTokenExpiration!!.minusMinutes(5))) {
                 return cachedIapToken
@@ -109,7 +112,12 @@ open class AuthSession(
         val audience = config["iap_client_id"]
         val serviceAccount = config["iap_service_account_email"]
 
-        if (audience.isNullOrBlank() || serviceAccount.isNullOrBlank()) return null
+        if (audience.isNullOrBlank() || serviceAccount.isNullOrBlank()) {
+            isIapConfigured = false
+            return null
+        }
+
+        isIapConfigured = true
 
         return try {
             googleCreds.refreshIfExpired()
