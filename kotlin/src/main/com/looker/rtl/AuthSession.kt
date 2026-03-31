@@ -115,7 +115,7 @@ open class AuthSession(
             googleCreds.refreshIfExpired()
             val accessToken = googleCreds.accessToken.tokenValue
 
-            val encodedServiceAccount = java.net.URLEncoder.encode(serviceAccount, "UTF-8")
+            val encodedServiceAccount = java.net.URLEncoder.encode(serviceAccount, java.nio.charset.StandardCharsets.UTF_8)
             val apiUrl = "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/$encodedServiceAccount:generateIdToken"
 
             val jsonBody = com.google.gson.JsonObject().apply {
