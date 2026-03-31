@@ -112,16 +112,16 @@ open class AuthSession(
         if (audience.isNullOrBlank() || serviceAccount.isNullOrBlank()) return null
 
         return try {
-//            val googleCreds = GoogleCredentials.getApplicationDefault()
-//                .createScoped(listOf("https://www.googleapis.com/auth/cloud-platform"))
-//
-//            googleCreds.refreshIfExpired()
-//            val accessToken = googleCreds.accessToken.tokenValue
             googleCreds.refreshIfExpired()
             val accessToken = googleCreds.accessToken.tokenValue
 
-            val apiUrl = "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/$serviceAccount:generateIdToken"
-            val jsonBody = """{"audience": "$audience", "includeEmail": true}"""
+            val encodedServiceAccount = java.net.URLEncoder.encode(serviceAccount, "UTF-8")
+            val apiUrl = "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/$encodedServiceAccount:generateIdToken"
+
+            val jsonBody = com.google.gson.JsonObject().apply {
+                addProperty("audience", audience)
+                addProperty("includeEmail", true)
+            }.toString()
 
             val iapRequest = HttpRequest.newBuilder()
                 .uri(URI.create(apiUrl))
