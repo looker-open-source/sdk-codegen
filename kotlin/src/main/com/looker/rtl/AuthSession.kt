@@ -121,7 +121,7 @@ open class AuthSession(
 
         return try {
             googleCreds.refreshIfExpired()
-            val accessToken = googleCreds.accessToken.tokenValue
+            val accessToken = googleCreds.accessToken?.tokenValue ?: throw RuntimeException("Failed to obtain Google access token")
 
             val encodedServiceAccount = java.net.URLEncoder.encode(serviceAccount, java.nio.charset.StandardCharsets.UTF_8)
             val apiUrl = "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/$encodedServiceAccount:generateIdToken"
