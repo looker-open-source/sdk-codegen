@@ -92,6 +92,12 @@ open class AuthSession(
         .connectTimeout(Duration.ofSeconds(5))
         .build()
 
+    private val googleCreds by lazy {
+        GoogleCredentials.getApplicationDefault()
+            .createScoped(listOf("https://www.googleapis.com/auth/cloud-platform"))
+    }
+
+    @Synchronized
     fun fetchIapToken(): String? {
         if (cachedIapToken != null && iapTokenExpiration != null) {
             if (LocalDateTime.now().isBefore(iapTokenExpiration!!.minusMinutes(5))) {
@@ -106,9 +112,11 @@ open class AuthSession(
         if (audience.isNullOrBlank() || serviceAccount.isNullOrBlank()) return null
 
         return try {
-            val googleCreds = GoogleCredentials.getApplicationDefault()
-                .createScoped(listOf("https://www.googleapis.com/auth/cloud-platform"))
-
+//            val googleCreds = GoogleCredentials.getApplicationDefault()
+//                .createScoped(listOf("https://www.googleapis.com/auth/cloud-platform"))
+//
+//            googleCreds.refreshIfExpired()
+//            val accessToken = googleCreds.accessToken.tokenValue
             googleCreds.refreshIfExpired()
             val accessToken = googleCreds.accessToken.tokenValue
 
