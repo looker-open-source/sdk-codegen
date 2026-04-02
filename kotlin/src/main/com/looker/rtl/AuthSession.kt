@@ -156,7 +156,7 @@ open class AuthSession(
             cachedIapToken = null
             iapTokenExpiration = null
             throw RuntimeException(
-                "OIDC Token failed for IAP. Ensure your Google credentials are authenticated. Underlying error: ${e.message}",
+                "OIDC Token failed for IAP. Ensure your Google credentials are authenticated. Error: ${e.message}",
                 e,
             )
         }
