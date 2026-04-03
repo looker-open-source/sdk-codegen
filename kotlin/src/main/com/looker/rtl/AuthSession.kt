@@ -25,10 +25,13 @@
 package com.looker.rtl
 
 import com.google.api.client.http.UrlEncodedContent
-import com.google.cloud.iam.credentials.v1.GenerateIdTokenRequest
-import com.google.cloud.iam.credentials.v1.IamCredentialsClient
-import com.google.cloud.iam.credentials.v1.IamCredentialsSettings
-import com.google.cloud.iam.credentials.v1.ServiceAccountName
+import com.google.auth.oauth2.GoogleCredentials
+import com.google.gson.JsonParser
+import java.net.URI
+import java.net.http.HttpClient
+import java.net.http.HttpRequest
+import java.net.http.HttpResponse
+import java.time.Duration
 import java.time.LocalDateTime
 
 open class AuthSession(
@@ -45,6 +48,7 @@ open class AuthSession(
 
     private var cachedIapToken: String? = null
     private var iapTokenExpiration: LocalDateTime? = null
+    private var isIapConfigured: Boolean? = null
 
     /** Abstraction of AuthToken retrieval to support sudo mode */
     fun activeToken(): AuthToken {
@@ -85,9 +89,21 @@ open class AuthSession(
         return init.copy(headers = headers)
     }
 
+    private val httpClient: HttpClient = HttpClient.newBuilder()
+        .connectTimeout(Duration.ofSeconds(5))
+        .build()
+
+    private val googleCreds by lazy {
+        GoogleCredentials.getApplicationDefault()
+            .createScoped(listOf("https://www.googleapis.com/auth/cloud-platform"))
+    }
+
+    @Synchronized
     fun fetchIapToken(): String? {
+        if (isIapConfigured == false) return null
+
         if (cachedIapToken != null && iapTokenExpiration != null) {
-            if (LocalDateTime.now().isBefore(iapTokenExpiration)) {
+            if (LocalDateTime.now().isBefore(iapTokenExpiration!!.minusMinutes(5))) {
                 return cachedIapToken
             }
         }
@@ -96,31 +112,51 @@ open class AuthSession(
         val audience = config["iap_client_id"]
         val serviceAccount = config["iap_service_account_email"]
 
-        if (audience.isNullOrBlank() || serviceAccount.isNullOrBlank()) return null
+        if (audience.isNullOrBlank() || serviceAccount.isNullOrBlank()) {
+            isIapConfigured = false
+            return null
+        }
+
+        isIapConfigured = true
 
         return try {
-            val settings = IamCredentialsSettings.newBuilder()
-                .setTransportChannelProvider(
-                    IamCredentialsSettings.defaultHttpJsonTransportProviderBuilder().build(),
-                )
+            googleCreds.refreshIfExpired()
+            val accessToken = googleCreds.accessToken?.tokenValue ?: throw RuntimeException("Failed to obtain Google access token")
+
+            val encodedServiceAccount = java.net.URLEncoder.encode(serviceAccount, java.nio.charset.StandardCharsets.UTF_8)
+            val apiUrl = "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/$encodedServiceAccount:generateIdToken"
+
+            val jsonBody = com.google.gson.JsonObject().apply {
+                addProperty("audience", audience)
+                addProperty("includeEmail", true)
+            }.toString()
+
+            val iapRequest = HttpRequest.newBuilder()
+                .uri(URI.create(apiUrl))
+                .header("Authorization", "Bearer $accessToken")
+                .header("Content-Type", "application/json")
+                .timeout(Duration.ofSeconds(5))
+                .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
                 .build()
 
-            IamCredentialsClient.create(settings).use { client ->
-                val request = GenerateIdTokenRequest.newBuilder()
-                    .setName(ServiceAccountName.of("-", serviceAccount).toString())
-                    .setAudience(audience)
-                    .setIncludeEmail(true)
-                    .build()
-                val token = client.generateIdToken(request).token
-                cachedIapToken = token
-                iapTokenExpiration = LocalDateTime.now().plusMinutes(IAP_TOKEN_CACHE_MINUTES)
-                token
+            val iapResponse = httpClient.send(iapRequest, HttpResponse.BodyHandlers.ofString())
+
+            if (iapResponse.statusCode() != 200) {
+                throw RuntimeException("IAM API Error: ${iapResponse.statusCode()} - ${iapResponse.body()}")
             }
+
+            val iapJsonObject = JsonParser.parseString(iapResponse.body()).asJsonObject
+            val token = iapJsonObject.get("token")?.asString
+                ?: throw RuntimeException("Could not find token in IAM JSON response")
+
+            cachedIapToken = token
+            iapTokenExpiration = LocalDateTime.now().plusMinutes(IAP_TOKEN_CACHE_MINUTES)
+            token
         } catch (e: Exception) {
             cachedIapToken = null
             iapTokenExpiration = null
             throw RuntimeException(
-                "OIDC Token failed for IAP. Please check your IAP Client ID and IAP Service Account Email. Underlying Google Cloud error: ${e.message}",
+                "OIDC Token failed for IAP. Ensure your Google credentials are authenticated. Error: ${e.message}",
                 e,
             )
         }
