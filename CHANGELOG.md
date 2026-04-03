@@ -1,5 +1,12 @@
 # Changelog
 
+## [26.6.3](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v26.6.2...sdk-codegen-all-v26.6.3) (2026-04-03)
+
+
+### Features
+
+* **Kotlin SDK:** Iap kotlin sdk support ([#1684](https://github.com/looker-open-source/sdk-codegen/issues/1684)) ([5669868](https://github.com/looker-open-source/sdk-codegen/commit/5669868a267017e3185874186eca1bdf4c69288f))
+
 ## [26.6.2](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v26.6.1...sdk-codegen-all-v26.6.2) (2026-03-27)
 
 
