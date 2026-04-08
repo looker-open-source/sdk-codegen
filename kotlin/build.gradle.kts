@@ -7,6 +7,7 @@ val googleHttpVersion = providers.gradleProperty("googleHttpVersion").get()
 plugins {
     kotlin("jvm")
     id("com.diffplug.spotless")
+    id("com.github.johnrengelman.shadow") version "8.1.1"
 }
 
 sourceSets {
