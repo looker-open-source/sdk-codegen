@@ -130,36 +130,41 @@ open class AuthSession(
 
             val url = java.net.URL(apiUrl)
             val connection = url.openConnection() as java.net.HttpURLConnection
-            connection.requestMethod = requestMethod
-            connection.setRequestProperty("Authorization", "Bearer $accessToken")
-            connection.setRequestProperty("Content-Type", "application/json")
-            connection.connectTimeout = connectTimeout
-            connection.readTimeout = readTimeout
-            connection.doOutput = doOutput
 
-            connection.outputStream.use { os ->
-                val input = jsonBody.toByteArray(Charsets.UTF_8)
-                os.write(input, 0, input.size)
+            try {
+                connection.requestMethod = requestMethod
+                connection.setRequestProperty("Authorization", "Bearer $accessToken")
+                connection.setRequestProperty("Content-Type", "application/json")
+                connection.connectTimeout = connectTimeout
+                connection.readTimeout = readTimeout
+                connection.doOutput = doOutput
+
+                connection.outputStream.use { os ->
+                    val input = jsonBody.toByteArray(Charsets.UTF_8)
+                    os.write(input, 0, input.size)
+                }
+
+                val statusCode = connection.responseCode
+                val responseBody = if (statusCode == 200) {
+                    connection.inputStream.bufferedReader().use { it.readText() }
+                } else {
+                    connection.errorStream?.bufferedReader()?.use { it.readText() } ?: ""
+                }
+
+                if (statusCode != 200) {
+                    throw RuntimeException("IAM API Error: $statusCode - $responseBody")
+                }
+
+                val iapJsonObject = JsonParser.parseString(responseBody).asJsonObject
+                val token = iapJsonObject.get("token")?.asString
+                    ?: throw RuntimeException("Could not find token in IAM JSON response")
+
+                cachedIapToken = token
+                iapTokenExpiration = LocalDateTime.now().plusMinutes(IAP_TOKEN_CACHE_MINUTES)
+                token
+            } finally {
+                connection.disconnect()
             }
-
-            val statusCode = connection.responseCode
-            val responseBody = if (statusCode == 200) {
-                connection.inputStream.bufferedReader().use { it.readText() }
-            } else {
-                connection.errorStream?.bufferedReader()?.use { it.readText() } ?: ""
-            }
-
-            if (statusCode != 200) {
-                throw RuntimeException("IAM API Error: $statusCode - $responseBody")
-            }
-
-            val iapJsonObject = JsonParser.parseString(responseBody).asJsonObject
-            val token = iapJsonObject.get("token")?.asString
-                ?: throw RuntimeException("Could not find token in IAM JSON response")
-
-            cachedIapToken = token
-            iapTokenExpiration = LocalDateTime.now().plusMinutes(IAP_TOKEN_CACHE_MINUTES)
-            token
         } catch (e: Exception) {
             cachedIapToken = null
             iapTokenExpiration = null
