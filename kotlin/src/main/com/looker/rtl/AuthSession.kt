@@ -146,7 +146,7 @@ open class AuthSession(
             val responseBody = if (statusCode == 200) {
                 connection.inputStream.bufferedReader().use { it.readText() }
             } else {
-                connection.errorStream.bufferedReader().use { it.readText() }
+                connection.errorStream?.bufferedReader()?.use { it.readText() } ?: ""
             }
 
             if (statusCode != 200) {
