@@ -251,9 +251,9 @@ open class AuthSession(
             val params = mapOf(client_id to clientId, client_secret to clientSecret)
             val body = UrlEncodedContent(params)
 
-            val iapToken = fetchIapToken()
-
             try {
+                val iapToken = fetchIapToken()
+
                 val token = ok<AuthToken>(
                     transport.request<AuthToken>(
                         HttpMethod.POST,
@@ -269,15 +269,26 @@ open class AuthSession(
                     },
                 )
                 authToken = token
-            } catch (e: Exception) {
-                val isUsingIap = !config["iap_client_id"].isNullOrBlank() || !config["iap_service_account_email"].isNullOrBlank()
+            } catch (e: Throwable) {
+                val config = apiSettings.readConfig()
+                val isUsingIap =
+                    !config["iap_client_id"].isNullOrBlank() || !config["iap_service_account_email"].isNullOrBlank()
 
-                val errorMessage = if (isUsingIap) {
-                    "Authentication failed during login. \nPlease check your iap_client_id and iap_service_account_email fields, as well as your Looker credentials.\nDetails: ${e.message}"
+                if (isUsingIap) {
+                    throw RuntimeException(
+                        """Please ensure your Identity-Aware Proxy credentials and your Looker credentials  are correct.
+                        | Underlying Error: ${e.message}
+                        """.trimMargin(),
+                        e,
+                    )
                 } else {
-                    "Authentication failed during login. \nPlease check your Looker client_id and client_secret.\nDetails: ${e.message}"
+                    throw RuntimeException(
+                        """Please check your Looker API client_id and client_secret.
+                        | Underlying Error: ${e.message}
+                        """.trimMargin(),
+                        e,
+                    )
                 }
-                throw RuntimeException(errorMessage, e)
             }
         }
 
