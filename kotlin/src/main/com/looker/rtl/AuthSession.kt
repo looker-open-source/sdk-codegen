@@ -27,11 +27,6 @@ package com.looker.rtl
 import com.google.api.client.http.UrlEncodedContent
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.gson.JsonParser
-import java.net.URI
-import java.net.http.HttpClient
-import java.net.http.HttpRequest
-import java.net.http.HttpResponse
-import java.time.Duration
 import java.time.LocalDateTime
 
 open class AuthSession(
@@ -89,10 +84,6 @@ open class AuthSession(
         return init.copy(headers = headers)
     }
 
-    private val httpClient: HttpClient = HttpClient.newBuilder()
-        .connectTimeout(Duration.ofSeconds(5))
-        .build()
-
     private val googleCreds by lazy {
         GoogleCredentials.getApplicationDefault()
             .createScoped(listOf("https://www.googleapis.com/auth/cloud-platform"))
@@ -126,26 +117,43 @@ open class AuthSession(
             val encodedServiceAccount = java.net.URLEncoder.encode(serviceAccount, java.nio.charset.StandardCharsets.UTF_8)
             val apiUrl = "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/$encodedServiceAccount:generateIdToken"
 
+            val includeEmail = true
+            val requestMethod = "POST"
+            val connectTimeout = 5000
+            val readTimeout = 5000
+            val doOutput = true
+
             val jsonBody = com.google.gson.JsonObject().apply {
                 addProperty("audience", audience)
-                addProperty("includeEmail", true)
+                addProperty("includeEmail", includeEmail)
             }.toString()
 
-            val iapRequest = HttpRequest.newBuilder()
-                .uri(URI.create(apiUrl))
-                .header("Authorization", "Bearer $accessToken")
-                .header("Content-Type", "application/json")
-                .timeout(Duration.ofSeconds(5))
-                .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
-                .build()
+            val url = java.net.URL(apiUrl)
+            val connection = url.openConnection() as java.net.HttpURLConnection
+            connection.requestMethod = requestMethod
+            connection.setRequestProperty("Authorization", "Bearer $accessToken")
+            connection.setRequestProperty("Content-Type", "application/json")
+            connection.connectTimeout = connectTimeout
+            connection.readTimeout = readTimeout
+            connection.doOutput = doOutput
 
-            val iapResponse = httpClient.send(iapRequest, HttpResponse.BodyHandlers.ofString())
-
-            if (iapResponse.statusCode() != 200) {
-                throw RuntimeException("IAM API Error: ${iapResponse.statusCode()} - ${iapResponse.body()}")
+            connection.outputStream.use { os ->
+                val input = jsonBody.toByteArray(Charsets.UTF_8)
+                os.write(input, 0, input.size)
             }
 
-            val iapJsonObject = JsonParser.parseString(iapResponse.body()).asJsonObject
+            val statusCode = connection.responseCode
+            val responseBody = if (statusCode == 200) {
+                connection.inputStream.bufferedReader().use { it.readText() }
+            } else {
+                connection.errorStream.bufferedReader().use { it.readText() }
+            }
+
+            if (statusCode != 200) {
+                throw RuntimeException("IAM API Error: $statusCode - $responseBody")
+            }
+
+            val iapJsonObject = JsonParser.parseString(responseBody).asJsonObject
             val token = iapJsonObject.get("token")?.asString
                 ?: throw RuntimeException("Could not find token in IAM JSON response")
 
