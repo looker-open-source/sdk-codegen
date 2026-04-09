@@ -27,11 +27,6 @@ package com.looker.rtl
 import com.google.api.client.http.UrlEncodedContent
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.gson.JsonParser
-import java.net.URI
-import java.net.http.HttpClient
-import java.net.http.HttpRequest
-import java.net.http.HttpResponse
-import java.time.Duration
 import java.time.LocalDateTime
 
 open class AuthSession(
@@ -89,10 +84,6 @@ open class AuthSession(
         return init.copy(headers = headers)
     }
 
-    private val httpClient: HttpClient = HttpClient.newBuilder()
-        .connectTimeout(Duration.ofSeconds(5))
-        .build()
-
     private val googleCreds by lazy {
         GoogleCredentials.getApplicationDefault()
             .createScoped(listOf("https://www.googleapis.com/auth/cloud-platform"))
@@ -126,32 +117,54 @@ open class AuthSession(
             val encodedServiceAccount = java.net.URLEncoder.encode(serviceAccount, java.nio.charset.StandardCharsets.UTF_8)
             val apiUrl = "https://iamcredentials.googleapis.com/v1/projects/-/serviceAccounts/$encodedServiceAccount:generateIdToken"
 
+            val includeEmail = true
+            val requestMethod = "POST"
+            val connectTimeout = 5000
+            val readTimeout = 5000
+            val doOutput = true
+
             val jsonBody = com.google.gson.JsonObject().apply {
                 addProperty("audience", audience)
-                addProperty("includeEmail", true)
+                addProperty("includeEmail", includeEmail)
             }.toString()
 
-            val iapRequest = HttpRequest.newBuilder()
-                .uri(URI.create(apiUrl))
-                .header("Authorization", "Bearer $accessToken")
-                .header("Content-Type", "application/json")
-                .timeout(Duration.ofSeconds(5))
-                .POST(HttpRequest.BodyPublishers.ofString(jsonBody))
-                .build()
+            val url = java.net.URL(apiUrl)
+            val connection = url.openConnection() as java.net.HttpURLConnection
 
-            val iapResponse = httpClient.send(iapRequest, HttpResponse.BodyHandlers.ofString())
+            try {
+                connection.requestMethod = requestMethod
+                connection.setRequestProperty("Authorization", "Bearer $accessToken")
+                connection.setRequestProperty("Content-Type", "application/json")
+                connection.connectTimeout = connectTimeout
+                connection.readTimeout = readTimeout
+                connection.doOutput = doOutput
 
-            if (iapResponse.statusCode() != 200) {
-                throw RuntimeException("IAM API Error: ${iapResponse.statusCode()} - ${iapResponse.body()}")
+                connection.outputStream.use { os ->
+                    val input = jsonBody.toByteArray(Charsets.UTF_8)
+                    os.write(input, 0, input.size)
+                }
+
+                val statusCode = connection.responseCode
+                val responseBody = if (statusCode == 200) {
+                    connection.inputStream.bufferedReader().use { it.readText() }
+                } else {
+                    connection.errorStream?.bufferedReader()?.use { it.readText() } ?: ""
+                }
+
+                if (statusCode != 200) {
+                    throw RuntimeException("IAM API Error: $statusCode - $responseBody")
+                }
+
+                val iapJsonObject = JsonParser.parseString(responseBody).asJsonObject
+                val token = iapJsonObject.get("token")?.asString
+                    ?: throw RuntimeException("Could not find token in IAM JSON response")
+
+                cachedIapToken = token
+                iapTokenExpiration = LocalDateTime.now().plusMinutes(IAP_TOKEN_CACHE_MINUTES)
+                token
+            } finally {
+                connection.disconnect()
             }
-
-            val iapJsonObject = JsonParser.parseString(iapResponse.body()).asJsonObject
-            val token = iapJsonObject.get("token")?.asString
-                ?: throw RuntimeException("Could not find token in IAM JSON response")
-
-            cachedIapToken = token
-            iapTokenExpiration = LocalDateTime.now().plusMinutes(IAP_TOKEN_CACHE_MINUTES)
-            token
         } catch (e: Exception) {
             cachedIapToken = null
             iapTokenExpiration = null
@@ -238,9 +251,9 @@ open class AuthSession(
             val params = mapOf(client_id to clientId, client_secret to clientSecret)
             val body = UrlEncodedContent(params)
 
-            val iapToken = fetchIapToken()
-
             try {
+                val iapToken = fetchIapToken()
+
                 val token = ok<AuthToken>(
                     transport.request<AuthToken>(
                         HttpMethod.POST,
@@ -256,15 +269,26 @@ open class AuthSession(
                     },
                 )
                 authToken = token
-            } catch (e: Exception) {
-                val isUsingIap = !config["iap_client_id"].isNullOrBlank() || !config["iap_service_account_email"].isNullOrBlank()
+            } catch (e: Throwable) {
+                val config = apiSettings.readConfig()
+                val isUsingIap =
+                    !config["iap_client_id"].isNullOrBlank() || !config["iap_service_account_email"].isNullOrBlank()
 
-                val errorMessage = if (isUsingIap) {
-                    "Authentication failed during login. \nPlease check your iap_client_id and iap_service_account_email fields, as well as your Looker credentials.\nDetails: ${e.message}"
+                if (isUsingIap) {
+                    throw RuntimeException(
+                        """Please ensure your Identity-Aware Proxy credentials and your Looker credentials  are correct.
+                        | Underlying Error: ${e.message}
+                        """.trimMargin(),
+                        e,
+                    )
                 } else {
-                    "Authentication failed during login. \nPlease check your Looker client_id and client_secret.\nDetails: ${e.message}"
+                    throw RuntimeException(
+                        """Please check your Looker API client_id and client_secret.
+                        | Underlying Error: ${e.message}
+                        """.trimMargin(),
+                        e,
+                    )
                 }
-                throw RuntimeException(errorMessage, e)
             }
         }
 
