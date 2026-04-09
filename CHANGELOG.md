@@ -1,5 +1,13 @@
 # Changelog
 
+## [26.6.4](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v26.6.3...sdk-codegen-all-v26.6.4) (2026-04-09)
+
+
+### Features
+
+* Adding shadow jar building ability to Kotlin SDK ([#1698](https://github.com/looker-open-source/sdk-codegen/issues/1698)) ([6468b1f](https://github.com/looker-open-source/sdk-codegen/commit/6468b1f6deee19d67e7df74d50d2709a045053b6))
+* Switching HTTP request library for FetchIAPToken ([#1699](https://github.com/looker-open-source/sdk-codegen/issues/1699)) ([b316568](https://github.com/looker-open-source/sdk-codegen/commit/b316568df65a315fb4c54fab404f99f8d1089804))
+
 ## [26.6.3](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v26.6.2...sdk-codegen-all-v26.6.3) (2026-04-03)
 
 
