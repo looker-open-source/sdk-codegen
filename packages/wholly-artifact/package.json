@@ -44,7 +44,7 @@
     "@looker/sdk-rtl": "21.6.5",
     "@looker/sdk": "26.6.1",
     "lodash": "4.17.21",
-    "uuid": "9.0.1"
+    "uuid": "14.0.0"
   },
   "keywords": [
     "Looker",

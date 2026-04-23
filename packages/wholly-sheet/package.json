@@ -34,7 +34,7 @@
     "@looker/sdk": "26.6.1",
     "@looker/sdk-rtl": "21.6.5",
     "lodash": "4.17.21",
-    "uuid": "9.0.1"
+    "uuid": "14.0.0"
   },
   "devDependencies": {
     "@looker/eslint-plugin": "~1.0.0",
