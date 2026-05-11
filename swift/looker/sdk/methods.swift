@@ -401,15 +401,10 @@ open class LookerSDK: APIMethods {
          * @param {String} user_id Id of user.
          */
         _ user_id: String,
-        /**
-         * @param {Bool} associative When true (default), API calls using the returned access_token are attributed to the admin user who created the access_token. When false, API activity is attributed to the user the access_token runs as. False requires a looker license.
-         */
-        associative: Bool? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<AccessToken, SDKError> {
         let path_user_id = encodeParam(user_id)
-        let result: SDKResponse<AccessToken, SDKError> = self.post("/login/\(path_user_id)", 
-            ["associative": associative as Any?], nil, options)
+        let result: SDKResponse<AccessToken, SDKError> = self.post("/login/\(path_user_id)", nil, nil, options)
         return result
     }
 
@@ -9309,20 +9304,12 @@ open class LookerSDK: APIMethods {
          * @param {Bool} server_table_calcs Perform table calculations on query results
          */
         server_table_calcs: Bool? = nil,
-        /**
-         * @param {String} source Specifies the source of this call.
-         */
-        source: String? = nil,
-        /**
-         * @param {Bool} enable_oauth_error_response Return a specialized OAuth error response if a database OAuth error occurs.
-         */
-        enable_oauth_error_response: Bool? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<String, SDKError> {
         let path_query_id = encodeParam(query_id)
         let path_result_format = encodeParam(result_format)
         let result: SDKResponse<String, SDKError> = self.get("/queries/\(path_query_id)/run/\(path_result_format)", 
-            ["limit": limit, "apply_formatting": apply_formatting as Any?, "apply_vis": apply_vis as Any?, "cache": cache as Any?, "image_width": image_width, "image_height": image_height, "generate_drill_links": generate_drill_links as Any?, "force_production": force_production as Any?, "cache_only": cache_only as Any?, "path_prefix": path_prefix, "rebuild_pdts": rebuild_pdts as Any?, "server_table_calcs": server_table_calcs as Any?, "source": source, "enable_oauth_error_response": enable_oauth_error_response as Any?], nil, options)
+            ["limit": limit, "apply_formatting": apply_formatting as Any?, "apply_vis": apply_vis as Any?, "cache": cache as Any?, "image_width": image_width, "image_height": image_height, "generate_drill_links": generate_drill_links as Any?, "force_production": force_production as Any?, "cache_only": cache_only as Any?, "path_prefix": path_prefix, "rebuild_pdts": rebuild_pdts as Any?, "server_table_calcs": server_table_calcs as Any?], nil, options)
         return result
     }
 
@@ -9440,15 +9427,11 @@ open class LookerSDK: APIMethods {
          * @param {Bool} server_table_calcs Perform table calculations on query results
          */
         server_table_calcs: Bool? = nil,
-        /**
-         * @param {Bool} enable_oauth_error_response Return a specialized OAuth error response if a database OAuth error occurs.
-         */
-        enable_oauth_error_response: Bool? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<String, SDKError> {
         let path_result_format = encodeParam(result_format)
         let result: SDKResponse<String, SDKError> = self.post("/queries/run/\(path_result_format)", 
-            ["limit": limit, "apply_formatting": apply_formatting as Any?, "apply_vis": apply_vis as Any?, "cache": cache as Any?, "image_width": image_width, "image_height": image_height, "generate_drill_links": generate_drill_links as Any?, "force_production": force_production as Any?, "cache_only": cache_only as Any?, "path_prefix": path_prefix, "rebuild_pdts": rebuild_pdts as Any?, "server_table_calcs": server_table_calcs as Any?, "enable_oauth_error_response": enable_oauth_error_response as Any?], try! self.encode(body), options)
+            ["limit": limit, "apply_formatting": apply_formatting as Any?, "apply_vis": apply_vis as Any?, "cache": cache as Any?, "image_width": image_width, "image_height": image_height, "generate_drill_links": generate_drill_links as Any?, "force_production": force_production as Any?, "cache_only": cache_only as Any?, "path_prefix": path_prefix, "rebuild_pdts": rebuild_pdts as Any?, "server_table_calcs": server_table_calcs as Any?], try! self.encode(body), options)
         return result
     }
 
@@ -12017,7 +12000,7 @@ open class LookerSDK: APIMethods {
          */
         group_id: String? = nil,
         /**
-         * @param {Bool} can_manage_api3_creds Search for users who can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview). Availability of this filter is limited to users with permission to view complete user details. This is an experimental feature and may not yet be available on your instance.
+         * @param {Bool} can_manage_api3_creds Search for users who can manage API3 credentials. Availability of this filter is limited to users with permission to view complete user details. This is an experimental feature and may not yet be available on your instance.
          */
         can_manage_api3_creds: Bool? = nil,
         /**

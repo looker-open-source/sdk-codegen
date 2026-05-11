@@ -430,8 +430,6 @@ class Looker40SDK(api_methods.APIMethods):
         self,
         # Id of user.
         user_id: str,
-        # When true (default), API calls using the returned access_token are attributed to the admin user who created the access_token. When false, API activity is attributed to the user the access_token runs as. False requires a looker license.
-        associative: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> mdls.AccessToken:
         """Login user"""
@@ -444,7 +442,6 @@ class Looker40SDK(api_methods.APIMethods):
             self.post(
                 path=f"/login/{user_id}",
                 structure=mdls.AccessToken,
-                query_params={"associative": associative},
                 transport_options=transport_options,
             ),
         )
@@ -10060,10 +10057,6 @@ class Looker40SDK(api_methods.APIMethods):
         rebuild_pdts: Optional[bool] = None,
         # Perform table calculations on query results
         server_table_calcs: Optional[bool] = None,
-        # Specifies the source of this call.
-        source: Optional[str] = None,
-        # Return a specialized OAuth error response if a database OAuth error occurs.
-        enable_oauth_error_response: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> Union[str, bytes]:
         """Run Query"""
@@ -10087,8 +10080,6 @@ class Looker40SDK(api_methods.APIMethods):
                     "path_prefix": path_prefix,
                     "rebuild_pdts": rebuild_pdts,
                     "server_table_calcs": server_table_calcs,
-                    "source": source,
-                    "enable_oauth_error_response": enable_oauth_error_response,
                 },
                 transport_options=transport_options,
             ),
@@ -10177,8 +10168,6 @@ class Looker40SDK(api_methods.APIMethods):
         rebuild_pdts: Optional[bool] = None,
         # Perform table calculations on query results
         server_table_calcs: Optional[bool] = None,
-        # Return a specialized OAuth error response if a database OAuth error occurs.
-        enable_oauth_error_response: Optional[bool] = None,
         transport_options: Optional[transport.TransportOptions] = None,
     ) -> Union[str, bytes]:
         """Run Inline Query"""
@@ -10201,7 +10190,6 @@ class Looker40SDK(api_methods.APIMethods):
                     "path_prefix": path_prefix,
                     "rebuild_pdts": rebuild_pdts,
                     "server_table_calcs": server_table_calcs,
-                    "enable_oauth_error_response": enable_oauth_error_response,
                 },
                 body=body,
                 transport_options=transport_options,
@@ -12871,7 +12859,7 @@ class Looker40SDK(api_methods.APIMethods):
         content_metadata_id: Optional[str] = None,
         # Search for users who are direct members of this group
         group_id: Optional[str] = None,
-        # Search for users who can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview). Availability of this filter is limited to users with permission to view complete user details. This is an experimental feature and may not yet be available on your instance.
+        # Search for users who can manage API3 credentials. Availability of this filter is limited to users with permission to view complete user details. This is an experimental feature and may not yet be available on your instance.
         can_manage_api3_creds: Optional[bool] = None,
         # Search for service account users. Send true to get only service accounts, or false to get all other types of users. Availability of this filter is limited to users with permission to view complete user details.
         is_service_account: Optional[bool] = None,

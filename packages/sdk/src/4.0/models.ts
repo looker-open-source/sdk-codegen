@@ -25,7 +25,7 @@
  */
 
 /**
- * 523 API models: 352 Spec, 75 Request, 70 Write, 26 Enum
+ * 526 API models: 355 Spec, 75 Request, 70 Write, 26 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl';
@@ -142,6 +142,10 @@ export interface IAlert {
    * Vixie-Style crontab specification when to run. At minimum, it has to be longer than 15 minute intervals
    */
   cron: string;
+  /**
+   * ID of the query
+   */
+  query_id?: string | null;
   /**
    * Domain for the custom url selected by the alert creator from the admin defined domain allowlist
    */
@@ -1494,6 +1498,10 @@ export interface ICIRun {
    * URL of the CI run (read-only)
    */
   run_url?: string;
+  /**
+   * User attributes for the CI run (read-only)
+   */
+  user_attributes?: ICIRunUserAttribute[] | null;
 }
 
 export interface ICIRunResult {
@@ -1506,6 +1514,21 @@ export interface ICIRunResult {
   lookml_result?: ICILookMLValidatorResult;
   lookml_error?: ICIGenericError;
   generic_error?: ICIGenericError;
+}
+
+export interface ICIRunUserAttribute {
+  /**
+   * ID of the user attribute
+   */
+  id?: number;
+  /**
+   * Name of the user attribute
+   */
+  name?: string;
+  /**
+   * Value of the user attribute
+   */
+  value?: string | null;
 }
 
 export interface ICIScheduleTrigger {
@@ -1839,7 +1862,7 @@ export interface IContentMeta {
    */
   content_type?: string | null;
   /**
-   * Whether content inherits its access levels from parent
+   * Whether content inherits its access levels from parent. Can be false only if the associated content is a folder, an agent or a board.
    */
   inherits?: boolean;
   /**
@@ -2144,6 +2167,10 @@ export interface IContentValidationDashboardElement {
    * Id Of Query
    */
   query_id?: string | null;
+  /**
+   * ID of the filter this element represents
+   */
+  filter_id?: string | null;
   /**
    * Text tile subtitle text
    */
@@ -2646,6 +2673,10 @@ export interface ICreateContinuousIntegrationRunRequest {
    * Commit that the CI run should validate. Omit to test production.
    */
   commit?: string | null;
+  /**
+   * User attributes to override for the CI run.
+   */
+  user_attributes?: IUserAttributeOverride[] | null;
 }
 
 /**
@@ -2769,6 +2800,10 @@ export interface ICreateDashboardRenderTask {
    * Dashboard layout style: single_column or tiled
    */
   dashboard_style?: string | null;
+  /**
+   * IDs of tabs to render (ID on a UDD and a tab label on lookml dashboards)
+   */
+  tab_ids?: string[] | null;
 }
 
 export interface ICreateEmbedUserRequest {
@@ -3313,7 +3348,7 @@ export interface IDashboard {
    */
   title?: string | null;
   /**
-   * Id of User (read-only)
+   * Id of User
    */
   user_id?: string | null;
   /**
@@ -3462,6 +3497,7 @@ export interface IDashboard {
    * Relative URL of the dashboard (read-only)
    */
   url?: string | null;
+  download_settings?: IDashboardDownloadSettings;
 }
 
 export interface IDashboardAggregateTableLookml {
@@ -3504,6 +3540,10 @@ export interface IDashboardAppearance {
    * Key color
    */
   key_color?: string | null;
+  /**
+   * Whether to modernize visualizations on this dashboard
+   */
+  modern_vis2026?: boolean | null;
 }
 
 export interface IDashboardBase {
@@ -3566,6 +3606,33 @@ export interface IDashboardBase {
    */
   preferred_viewer?: string | null;
   certification_metadata?: ICertification;
+}
+
+export interface IDashboardDownloadSettings {
+  /**
+   * Format option
+   */
+  format_option?: string | null;
+  /**
+   * Value option
+   */
+  value_options?: string | null;
+  /**
+   * Result option
+   */
+  result_options?: string | null;
+  /**
+   * Limit option
+   */
+  limit_options?: string | null;
+  /**
+   * Rows limit
+   */
+  rows_limit?: number | null;
+  /**
+   * Columns limit
+   */
+  columns_limit?: number | null;
 }
 
 export interface IDashboardElement {
@@ -3631,6 +3698,10 @@ export interface IDashboardElement {
    * Id Of Query
    */
   query_id?: string | null;
+  /**
+   * ID of the filter this element represents
+   */
+  filter_id?: string | null;
   /**
    * Refresh Interval
    */
@@ -3811,6 +3882,10 @@ export interface IDashboardLayout {
    * Order
    */
   order?: number | null;
+  /**
+   * LookML link ID (stable name)
+   */
+  lookml_link_id?: string | null;
 }
 
 export interface IDashboardLayoutComponent {
@@ -3847,7 +3922,7 @@ export interface IDashboardLayoutComponent {
    */
   height?: number | null;
   /**
-   * Whether or not the dashboard layout component is deleted (read-only)
+   * Whether or not the dashboard layout component is deleted
    */
   deleted?: boolean;
   /**
@@ -7249,6 +7324,10 @@ export interface ILookmlModelExploreField {
    */
   align?: Align;
   /**
+   * An array of custom timeframes available for this field for filtering, if applicable. (read-only)
+   */
+  available_custom_timeframes?: string[] | null;
+  /**
    * Whether it's possible to filter on this field. (read-only)
    */
   can_filter?: boolean;
@@ -8226,6 +8305,7 @@ export interface IMcpTools {
   get_lookml_tests?: IMcpToolSetting;
   run_lookml_tests?: IMcpToolSetting;
   create_view_from_table?: IMcpToolSetting;
+  project_git_branch?: IMcpToolSetting;
 }
 
 export interface IMcpToolSetting {
@@ -8360,6 +8440,10 @@ export interface IMobilePayload {
    * Slug of the query which runs the alert queries. (read-only)
    */
   query_slug?: string;
+  /**
+   * ID of the query (read-only)
+   */
+  query_id?: string | null;
 }
 
 export interface IMobileSettings {
@@ -10518,10 +10602,6 @@ export interface IRequestRunInlineQuery {
    * Perform table calculations on query results
    */
   server_table_calcs?: boolean | null;
-  /**
-   * Return a specialized OAuth error response if a database OAuth error occurs.
-   */
-  enable_oauth_error_response?: boolean | null;
 }
 
 /**
@@ -10668,14 +10748,6 @@ export interface IRequestRunQuery {
    * Perform table calculations on query results
    */
   server_table_calcs?: boolean | null;
-  /**
-   * Specifies the source of this call.
-   */
-  source?: string | null;
-  /**
-   * Return a specialized OAuth error response if a database OAuth error occurs.
-   */
-  enable_oauth_error_response?: boolean | null;
 }
 
 /**
@@ -12063,7 +12135,7 @@ export interface IRequestSearchUsers {
    */
   group_id?: string | null;
   /**
-   * Search for users who can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview). Availability of this filter is limited to users with permission to view complete user details. This is an experimental feature and may not yet be available on your instance.
+   * Search for users who can manage API3 credentials. Availability of this filter is limited to users with permission to view complete user details. This is an experimental feature and may not yet be available on your instance.
    */
   can_manage_api3_creds?: boolean | null;
   /**
@@ -12934,6 +13006,14 @@ export interface IScheduledPlan {
    */
   long_tables?: boolean;
   /**
+   * Whether or not to add page breaks between tabs
+   */
+  pdf_page_breaks?: boolean;
+  /**
+   * IDs of tabs to render (ID on a UDD and a tab label on lookml dashboards)
+   */
+  tab_ids?: string[] | null;
+  /**
    * The pixel width at which we render the inline table visualizations
    */
   inline_table_width?: number | null;
@@ -13411,6 +13491,10 @@ export interface ISetting {
    * Allow auto certification of lookml content.
    */
   auto_certify_lookml_content?: boolean;
+  /**
+   * Toggle CA agent observability
+   */
+  ca_agent_observability?: boolean;
   mcp_tools?: IMcpTools;
 }
 
@@ -14350,7 +14434,7 @@ export interface IUser {
    */
   is_iam_admin?: boolean;
   /**
-   * Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.
+   * Indicates if the user can manage API3 credentials. This is an experimental feature and may not yet be available on your instance.
    */
   can_manage_api3_creds?: boolean;
   /**
@@ -14416,6 +14500,14 @@ export interface IUserAttribute {
    * Destinations to which a hidden attribute may be sent. Once set, cannot be edited.
    */
   hidden_value_domain_whitelist?: string | null;
+  /**
+   * Whether this user attribute is needed for a CI run
+   */
+  needed_for_ci_run?: boolean;
+  /**
+   * The value to use for this user attribute during a CI run
+   */
+  value_for_ci_run?: string | null;
 }
 
 /**
@@ -14465,6 +14557,17 @@ export interface IUserAttributeGroupValue {
    * Value of user attribute for group (read-only)
    */
   value?: string | null;
+}
+
+export interface IUserAttributeOverride {
+  /**
+   * Name of user attribute that should be overridden for CI Run
+   */
+  name?: string;
+  /**
+   * Value of user attribute that should be set for CI Run
+   */
+  value?: string;
 }
 
 export interface IUserAttributeWithValue {
@@ -14796,6 +14899,10 @@ export interface IWriteAlert {
    */
   cron: string;
   /**
+   * ID of the query
+   */
+  query_id?: string | null;
+  /**
    * Domain for the custom url selected by the alert creator from the admin defined domain allowlist
    */
   custom_url_base?: string | null;
@@ -15092,7 +15199,7 @@ export interface IWriteContentFavorite {
  */
 export interface IWriteContentMeta {
   /**
-   * Whether content inherits its access levels from parent
+   * Whether content inherits its access levels from parent. Can be false only if the associated content is a folder, an agent or a board.
    */
   inherits?: boolean;
 }
@@ -15269,7 +15376,7 @@ export interface IWriteCredentialsEmail {
 
 /**
  * Dynamic writeable type for Dashboard removes:
- * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, updated_at, last_updater_id, last_updater_name, user_name, view_count, usage_count, is_owner_disabled, url
+ * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, updated_at, last_updater_id, last_updater_name, user_name, view_count, usage_count, is_owner_disabled, url
  */
 export interface IWriteDashboard {
   /**
@@ -15297,6 +15404,10 @@ export interface IWriteDashboard {
    * Dashboard Title
    */
   title?: string | null;
+  /**
+   * Id of User
+   */
+  user_id?: string | null;
   /**
    * Content Metadata Slug
    */
@@ -15375,6 +15486,7 @@ export interface IWriteDashboard {
    */
   title_color?: string | null;
   appearance?: IDashboardAppearance | null;
+  download_settings?: IDashboardDownloadSettings | null;
 }
 
 /**
@@ -15445,6 +15557,10 @@ export interface IWriteDashboardElement {
    * Id Of Query
    */
   query_id?: string | null;
+  /**
+   * ID of the filter this element represents
+   */
+  filter_id?: string | null;
   /**
    * Refresh Interval
    */
@@ -15589,11 +15705,15 @@ export interface IWriteDashboardLayout {
    * Order
    */
   order?: number | null;
+  /**
+   * LookML link ID (stable name)
+   */
+  lookml_link_id?: string | null;
 }
 
 /**
  * Dynamic writeable type for DashboardLayoutComponent removes:
- * can, id, deleted, element_title, element_title_hidden, vis_type
+ * can, id, element_title, element_title_hidden, vis_type
  */
 export interface IWriteDashboardLayoutComponent {
   /**
@@ -15620,6 +15740,10 @@ export interface IWriteDashboardLayoutComponent {
    * Height
    */
   height?: number | null;
+  /**
+   * Whether or not the dashboard layout component is deleted
+   */
+  deleted?: boolean;
   /**
    * Row (granular layout)
    */
@@ -16620,6 +16744,11 @@ export interface IWriteMcpTools {
    * description, category, access_level
    */
   create_view_from_table?: IWriteMcpToolSetting | null;
+  /**
+   * Dynamic writeable type for McpToolSetting removes:
+   * description, category, access_level
+   */
+  project_git_branch?: IWriteMcpToolSetting | null;
 }
 
 /**
@@ -17407,6 +17536,14 @@ export interface IWriteScheduledPlan {
    */
   long_tables?: boolean;
   /**
+   * Whether or not to add page breaks between tabs
+   */
+  pdf_page_breaks?: boolean;
+  /**
+   * IDs of tabs to render (ID on a UDD and a tab label on lookml dashboards)
+   */
+  tab_ids?: string[] | null;
+  /**
    * The pixel width at which we render the inline table visualizations
    */
   inline_table_width?: number | null;
@@ -17556,6 +17693,10 @@ export interface IWriteSetting {
    */
   auto_certify_lookml_content?: boolean;
   /**
+   * Toggle CA agent observability
+   */
+  ca_agent_observability?: boolean;
+  /**
    * Dynamic writeable type for McpTools
    */
   mcp_tools?: IWriteMcpTools | null;
@@ -17681,7 +17822,7 @@ export interface IWriteUser {
    */
   ui_state?: IDictionary<string> | null;
   /**
-   * Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.
+   * Indicates if the user can manage API3 credentials. This is an experimental feature and may not yet be available on your instance.
    */
   can_manage_api3_creds?: boolean;
 }
@@ -17723,6 +17864,14 @@ export interface IWriteUserAttribute {
    * Destinations to which a hidden attribute may be sent. Once set, cannot be edited.
    */
   hidden_value_domain_whitelist?: string | null;
+  /**
+   * Whether this user attribute is needed for a CI run
+   */
+  needed_for_ci_run?: boolean;
+  /**
+   * The value to use for this user attribute during a CI run
+   */
+  value_for_ci_run?: string | null;
 }
 
 /**

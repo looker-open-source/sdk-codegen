@@ -357,19 +357,14 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * Regular user types can not be impersonated in [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview). If your application needs to call the API for these users, use OAuth authentication instead.
      *
      * @param {String} user_id Id of user.
-     * @param {Boolean} associative When true (default), API calls using the returned access_token are attributed to the admin user who created the access_token. When false, API activity is attributed to the user the access_token runs as. False requires a looker license.
      *
      * POST /login/{user_id} -> ByteArray
      */
-    @JvmOverloads fun login_user(
+    fun login_user(
         user_id: String,
-        associative: Boolean? = null,
     ): SDKResponse {
         val path_user_id = encodeParam(user_id)
-        return this.post<ByteArray>(
-            "/login/${path_user_id}",
-            mapOf("associative" to associative),
-        )
+        return this.post<ByteArray>("/login/${path_user_id}", mapOf())
     }
 
     /**
@@ -8084,8 +8079,6 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * @param {String} path_prefix Prefix to use for drill links (url encoded).
      * @param {Boolean} rebuild_pdts Rebuild PDTS used in query.
      * @param {Boolean} server_table_calcs Perform table calculations on query results
-     * @param {String} source Specifies the source of this call.
-     * @param {Boolean} enable_oauth_error_response Return a specialized OAuth error response if a database OAuth error occurs.
      *
      * GET /queries/{query_id}/run/{result_format} -> ByteArray
      *
@@ -8106,8 +8099,6 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         path_prefix: String? = null,
         rebuild_pdts: Boolean? = null,
         server_table_calcs: Boolean? = null,
-        source: String? = null,
-        enable_oauth_error_response: Boolean? = null,
     ): SDKResponse {
         val path_query_id = encodeParam(query_id)
         val path_result_format = encodeParam(result_format)
@@ -8126,8 +8117,6 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
                 "path_prefix" to path_prefix,
                 "rebuild_pdts" to rebuild_pdts,
                 "server_table_calcs" to server_table_calcs,
-                "source" to source,
-                "enable_oauth_error_response" to enable_oauth_error_response,
             ),
         )
     }
@@ -8199,7 +8188,6 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * @param {String} path_prefix Prefix to use for drill links (url encoded).
      * @param {Boolean} rebuild_pdts Rebuild PDTS used in query.
      * @param {Boolean} server_table_calcs Perform table calculations on query results
-     * @param {Boolean} enable_oauth_error_response Return a specialized OAuth error response if a database OAuth error occurs.
      *
      * POST /queries/run/{result_format} -> ByteArray
      *
@@ -8220,7 +8208,6 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
         path_prefix: String? = null,
         rebuild_pdts: Boolean? = null,
         server_table_calcs: Boolean? = null,
-        enable_oauth_error_response: Boolean? = null,
     ): SDKResponse {
         val path_result_format = encodeParam(result_format)
         return this.post<ByteArray>(
@@ -8238,7 +8225,6 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
                 "path_prefix" to path_prefix,
                 "rebuild_pdts" to rebuild_pdts,
                 "server_table_calcs" to server_table_calcs,
-                "enable_oauth_error_response" to enable_oauth_error_response,
             ),
             body,
         )
@@ -10482,7 +10468,7 @@ class LookerSDKStream(authSession: AuthSession) : APIMethods(authSession) {
      * @param {Boolean} filter_or Combine given search criteria in a boolean OR expression
      * @param {String} content_metadata_id Search for users who have access to this content_metadata item
      * @param {String} group_id Search for users who are direct members of this group
-     * @param {Boolean} can_manage_api3_creds Search for users who can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview). Availability of this filter is limited to users with permission to view complete user details. This is an experimental feature and may not yet be available on your instance.
+     * @param {Boolean} can_manage_api3_creds Search for users who can manage API3 credentials. Availability of this filter is limited to users with permission to view complete user details. This is an experimental feature and may not yet be available on your instance.
      * @param {Boolean} is_service_account Search for service account users. Send true to get only service accounts, or false to get all other types of users. Availability of this filter is limited to users with permission to view complete user details.
      *
      * GET /users/search -> ByteArray

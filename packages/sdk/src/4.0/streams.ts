@@ -794,14 +794,12 @@ export class Looker40SDKStream extends APIMethods {
    *
    * @param callback streaming output function
    * @param user_id Id of user.
-   * @param associative When true (default), API calls using the returned access_token are attributed to the admin user who created the access_token. When false, API activity is attributed to the user the access_token runs as. False requires a looker license.
    * @param options one-time API call overrides
    *
    */
   async login_user(
     callback: (response: Response) => Promise<IAccessToken>,
     user_id: string,
-    associative?: boolean,
     options?: Partial<ITransportSettings>
   ) {
     user_id = encodeParam(user_id);
@@ -809,7 +807,7 @@ export class Looker40SDKStream extends APIMethods {
       callback,
       'POST',
       `/login/${user_id}`,
-      { associative },
+      null,
       null,
       options
     );
@@ -11315,8 +11313,6 @@ export class Looker40SDKStream extends APIMethods {
         path_prefix: request.path_prefix,
         rebuild_pdts: request.rebuild_pdts,
         server_table_calcs: request.server_table_calcs,
-        source: request.source,
-        enable_oauth_error_response: request.enable_oauth_error_response,
       },
       null,
       options
@@ -11409,7 +11405,6 @@ export class Looker40SDKStream extends APIMethods {
         path_prefix: request.path_prefix,
         rebuild_pdts: request.rebuild_pdts,
         server_table_calcs: request.server_table_calcs,
-        enable_oauth_error_response: request.enable_oauth_error_response,
       },
       request.body,
       options

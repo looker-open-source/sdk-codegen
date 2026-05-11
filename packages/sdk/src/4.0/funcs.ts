@@ -760,20 +760,18 @@ export const login = async (
  *
  * @param sdk IAPIMethods implementation
  * @param user_id Id of user.
- * @param associative When true (default), API calls using the returned access_token are attributed to the admin user who created the access_token. When false, API activity is attributed to the user the access_token runs as. False requires a looker license.
  * @param options one-time API call overrides
  *
  */
 export const login_user = async (
   sdk: IAPIMethods,
   user_id: string,
-  associative?: boolean,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IAccessToken, IError>> => {
   user_id = encodeParam(user_id);
   return sdk.post<IAccessToken, IError>(
     `/login/${user_id}`,
-    { associative },
+    null,
     null,
     options
   );
@@ -10549,8 +10547,6 @@ export const run_query = async (
       path_prefix: request.path_prefix,
       rebuild_pdts: request.rebuild_pdts,
       server_table_calcs: request.server_table_calcs,
-      source: request.source,
-      enable_oauth_error_response: request.enable_oauth_error_response,
     },
     null,
     options
@@ -10641,7 +10637,6 @@ export const run_inline_query = async (
       path_prefix: request.path_prefix,
       rebuild_pdts: request.rebuild_pdts,
       server_table_calcs: request.server_table_calcs,
-      enable_oauth_error_response: request.enable_oauth_error_response,
     },
     request.body,
     options

@@ -627,13 +627,11 @@ export interface ILooker40SDK extends IAPIMethods {
    * POST /login/{user_id} -> IAccessToken
    *
    * @param user_id Id of user.
-   * @param associative When true (default), API calls using the returned access_token are attributed to the admin user who created the access_token. When false, API activity is attributed to the user the access_token runs as. False requires a looker license.
    * @param options one-time API call overrides
    *
    */
   login_user(
     user_id: string,
-    associative?: boolean,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IAccessToken, IError>>;
 

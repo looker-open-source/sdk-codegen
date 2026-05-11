@@ -355,15 +355,12 @@ namespace Looker.SDK.API40
   /// <returns><c>AccessToken</c> Access token with metadata. (application/json)</returns>
   ///
   /// <param name="user_id">Id of user.</param>
-  /// <param name="associative">When true (default), API calls using the returned access_token are attributed to the admin user who created the access_token. When false, API activity is attributed to the user the access_token runs as. False requires a looker license.</param>
   public async Task<SdkResponse<AccessToken, Exception>> login_user(
     string user_id,
-    bool? associative = null,
     ITransportSettings? options = null)
 {  
       user_id = SdkUtils.EncodeParam(user_id);
-    return await AuthRequest<AccessToken, Exception>(HttpMethod.Post, $"/login/{user_id}", new Values {
-      { "associative", associative }},null,options);
+    return await AuthRequest<AccessToken, Exception>(HttpMethod.Post, $"/login/{user_id}", null,null,options);
   }
 
   /// ### Logout of the API and invalidate the current access token.
@@ -7888,8 +7885,6 @@ namespace Looker.SDK.API40
   /// <param name="path_prefix">Prefix to use for drill links (url encoded).</param>
   /// <param name="rebuild_pdts">Rebuild PDTS used in query.</param>
   /// <param name="server_table_calcs">Perform table calculations on query results</param>
-  /// <param name="source">Specifies the source of this call.</param>
-  /// <param name="enable_oauth_error_response">Return a specialized OAuth error response if a database OAuth error occurs.</param>
   public async Task<SdkResponse<TSuccess, Exception>> run_query<TSuccess>(
     string query_id,
     string result_format,
@@ -7905,8 +7900,6 @@ namespace Looker.SDK.API40
     string? path_prefix = null,
     bool? rebuild_pdts = null,
     bool? server_table_calcs = null,
-    string? source = null,
-    bool? enable_oauth_error_response = null,
     ITransportSettings? options = null) where TSuccess : class
 {  
       query_id = SdkUtils.EncodeParam(query_id);
@@ -7923,9 +7916,7 @@ namespace Looker.SDK.API40
       { "cache_only", cache_only },
       { "path_prefix", path_prefix },
       { "rebuild_pdts", rebuild_pdts },
-      { "server_table_calcs", server_table_calcs },
-      { "source", source },
-      { "enable_oauth_error_response", enable_oauth_error_response }},null,options);
+      { "server_table_calcs", server_table_calcs }},null,options);
   }
 
   /// ### Run the query that is specified inline in the posted body.
@@ -8004,7 +7995,6 @@ namespace Looker.SDK.API40
   /// <param name="path_prefix">Prefix to use for drill links (url encoded).</param>
   /// <param name="rebuild_pdts">Rebuild PDTS used in query.</param>
   /// <param name="server_table_calcs">Perform table calculations on query results</param>
-  /// <param name="enable_oauth_error_response">Return a specialized OAuth error response if a database OAuth error occurs.</param>
   public async Task<SdkResponse<TSuccess, Exception>> run_inline_query<TSuccess>(
     string result_format,
     WriteQuery body,
@@ -8020,7 +8010,6 @@ namespace Looker.SDK.API40
     string? path_prefix = null,
     bool? rebuild_pdts = null,
     bool? server_table_calcs = null,
-    bool? enable_oauth_error_response = null,
     ITransportSettings? options = null) where TSuccess : class
 {  
       result_format = SdkUtils.EncodeParam(result_format);
@@ -8036,8 +8025,7 @@ namespace Looker.SDK.API40
       { "cache_only", cache_only },
       { "path_prefix", path_prefix },
       { "rebuild_pdts", rebuild_pdts },
-      { "server_table_calcs", server_table_calcs },
-      { "enable_oauth_error_response", enable_oauth_error_response }},body,options);
+      { "server_table_calcs", server_table_calcs }},body,options);
   }
 
   /// ### Run an URL encoded query.
@@ -10231,7 +10219,7 @@ namespace Looker.SDK.API40
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
   /// <param name="content_metadata_id">Search for users who have access to this content_metadata item</param>
   /// <param name="group_id">Search for users who are direct members of this group</param>
-  /// <param name="can_manage_api3_creds">Search for users who can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview). Availability of this filter is limited to users with permission to view complete user details. This is an experimental feature and may not yet be available on your instance.</param>
+  /// <param name="can_manage_api3_creds">Search for users who can manage API3 credentials. Availability of this filter is limited to users with permission to view complete user details. This is an experimental feature and may not yet be available on your instance.</param>
   /// <param name="is_service_account">Search for service account users. Send true to get only service accounts, or false to get all other types of users. Availability of this filter is limited to users with permission to view complete user details.</param>
   public async Task<SdkResponse<User[], Exception>> search_users(
     string? fields = null,
