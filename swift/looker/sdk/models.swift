@@ -25,7 +25,7 @@
  */
 
 /**
- * 448 API models: 352 Spec, 0 Request, 70 Write, 26 Enum
+ * 451 API models: 355 Spec, 0 Request, 70 Write, 26 Enum
  */
 
 
@@ -275,6 +275,7 @@ public struct Alert: SDKModel {
         case applied_dashboard_filters
         case comparison_type
         case _cron = "cron"
+        case _query_id = "query_id"
         case _custom_url_base = "custom_url_base"
         case _custom_url_params = "custom_url_params"
         case _custom_url_label = "custom_url_label"
@@ -318,6 +319,15 @@ public struct Alert: SDKModel {
     public var cron: String {
         get { _cron.value }
         set { _cron = AnyString.init(newValue) }
+    }
+
+    private var _query_id: AnyString?
+    /**
+     * ID of the query
+     */
+    public var query_id: String? {
+        get { _query_id?.value }
+        set { _query_id = newValue.map(AnyString.init) }
     }
 
     private var _custom_url_base: AnyString?
@@ -495,10 +505,11 @@ public struct Alert: SDKModel {
 
     public var time_series_condition_state: AlertConditionState?
 
-    public init(applied_dashboard_filters: [AlertAppliedDashboardFilter]? = nil, comparison_type: ComparisonType, cron: String, custom_url_base: String? = nil, custom_url_params: String? = nil, custom_url_label: String? = nil, show_custom_url: Bool? = nil, custom_title: String? = nil, dashboard_element_id: String? = nil, description: String? = nil, enhancements: Enhancements? = nil, destinations: [AlertDestination], field: AlertField, followed: Bool? = nil, followable: Bool? = nil, id: String? = nil, is_disabled: Bool? = nil, disabled_reason: String? = nil, is_public: Bool? = nil, investigative_content_type: InvestigativeContentType? = nil, investigative_content_id: String? = nil, investigative_content_title: String? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, owner_id: String, owner_display_name: String? = nil, threshold: Double, time_series_condition_state: AlertConditionState? = nil) {
+    public init(applied_dashboard_filters: [AlertAppliedDashboardFilter]? = nil, comparison_type: ComparisonType, cron: String, query_id: String? = nil, custom_url_base: String? = nil, custom_url_params: String? = nil, custom_url_label: String? = nil, show_custom_url: Bool? = nil, custom_title: String? = nil, dashboard_element_id: String? = nil, description: String? = nil, enhancements: Enhancements? = nil, destinations: [AlertDestination], field: AlertField, followed: Bool? = nil, followable: Bool? = nil, id: String? = nil, is_disabled: Bool? = nil, disabled_reason: String? = nil, is_public: Bool? = nil, investigative_content_type: InvestigativeContentType? = nil, investigative_content_id: String? = nil, investigative_content_title: String? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, owner_id: String, owner_display_name: String? = nil, threshold: Double, time_series_condition_state: AlertConditionState? = nil) {
         self.applied_dashboard_filters = applied_dashboard_filters
         self.comparison_type = comparison_type
         self._cron = AnyString.init(cron)
+        self._query_id = query_id.map(AnyString.init)
         self._custom_url_base = custom_url_base.map(AnyString.init)
         self._custom_url_params = custom_url_params.map(AnyString.init)
         self._custom_url_label = custom_url_label.map(AnyString.init)
@@ -526,8 +537,8 @@ public struct Alert: SDKModel {
         self.time_series_condition_state = time_series_condition_state
     }
 
-    public init(applied_dashboard_filters: [AlertAppliedDashboardFilter]? = nil, _ comparison_type: ComparisonType, _ cron: String, custom_url_base: String? = nil, custom_url_params: String? = nil, custom_url_label: String? = nil, show_custom_url: Bool? = nil, custom_title: String? = nil, dashboard_element_id: String? = nil, description: String? = nil, enhancements: Enhancements? = nil, _ destinations: [AlertDestination], _ field: AlertField, followed: Bool? = nil, followable: Bool? = nil, id: String? = nil, is_disabled: Bool? = nil, disabled_reason: String? = nil, is_public: Bool? = nil, investigative_content_type: InvestigativeContentType? = nil, investigative_content_id: String? = nil, investigative_content_title: String? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, _ owner_id: String, owner_display_name: String? = nil, _ threshold: Double, time_series_condition_state: AlertConditionState? = nil) {
-        self.init(applied_dashboard_filters: applied_dashboard_filters, comparison_type: comparison_type, cron: cron, custom_url_base: custom_url_base, custom_url_params: custom_url_params, custom_url_label: custom_url_label, show_custom_url: show_custom_url, custom_title: custom_title, dashboard_element_id: dashboard_element_id, description: description, enhancements: enhancements, destinations: destinations, field: field, followed: followed, followable: followable, id: id, is_disabled: is_disabled, disabled_reason: disabled_reason, is_public: is_public, investigative_content_type: investigative_content_type, investigative_content_id: investigative_content_id, investigative_content_title: investigative_content_title, lookml_dashboard_id: lookml_dashboard_id, lookml_link_id: lookml_link_id, owner_id: owner_id, owner_display_name: owner_display_name, threshold: threshold, time_series_condition_state: time_series_condition_state)
+    public init(applied_dashboard_filters: [AlertAppliedDashboardFilter]? = nil, _ comparison_type: ComparisonType, _ cron: String, query_id: String? = nil, custom_url_base: String? = nil, custom_url_params: String? = nil, custom_url_label: String? = nil, show_custom_url: Bool? = nil, custom_title: String? = nil, dashboard_element_id: String? = nil, description: String? = nil, enhancements: Enhancements? = nil, _ destinations: [AlertDestination], _ field: AlertField, followed: Bool? = nil, followable: Bool? = nil, id: String? = nil, is_disabled: Bool? = nil, disabled_reason: String? = nil, is_public: Bool? = nil, investigative_content_type: InvestigativeContentType? = nil, investigative_content_id: String? = nil, investigative_content_title: String? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, _ owner_id: String, owner_display_name: String? = nil, _ threshold: Double, time_series_condition_state: AlertConditionState? = nil) {
+        self.init(applied_dashboard_filters: applied_dashboard_filters, comparison_type: comparison_type, cron: cron, query_id: query_id, custom_url_base: custom_url_base, custom_url_params: custom_url_params, custom_url_label: custom_url_label, show_custom_url: show_custom_url, custom_title: custom_title, dashboard_element_id: dashboard_element_id, description: description, enhancements: enhancements, destinations: destinations, field: field, followed: followed, followable: followable, id: id, is_disabled: is_disabled, disabled_reason: disabled_reason, is_public: is_public, investigative_content_type: investigative_content_type, investigative_content_id: investigative_content_id, investigative_content_title: investigative_content_title, lookml_dashboard_id: lookml_dashboard_id, lookml_link_id: lookml_link_id, owner_id: owner_id, owner_display_name: owner_display_name, threshold: threshold, time_series_condition_state: time_series_condition_state)
     }
 
 }
@@ -3532,6 +3543,7 @@ public struct CIRun: SDKModel {
         case assigned_ci_user_at
         case _crashed_check_count = "crashed_check_count"
         case _run_url = "run_url"
+        case user_attributes
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -3776,7 +3788,12 @@ public struct CIRun: SDKModel {
         set { _run_url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, ci_suite_id: String? = nil, project_id: String? = nil, status: String? = nil, title: String? = nil, trigger_type: String? = nil, user_id: Int64? = nil, triggered_by_name: String? = nil, execution_id: String? = nil, result: CIRunResult? = nil, change_request_number: Int64? = nil, change_request_url: String? = nil, change_request_name: String? = nil, change_request_commits_url: String? = nil, git_service_name: String? = nil, git_commit_ref: String? = nil, git_branch_name: String? = nil, git_repository_name: String? = nil, git_target_branch_name: String? = nil, git_status_url: String? = nil, git_target_url: String? = nil, created_at: Date? = nil, started_at: Date? = nil, finished_at: Date? = nil, retries: Int64? = nil, assigned_ci_user_id: Int64? = nil, assigned_ci_user_at: Date? = nil, crashed_check_count: Int64? = nil, run_url: String? = nil) {
+    /**
+     * User attributes for the CI run (read-only)
+     */
+    public var user_attributes: [CIRunUserAttribute]?
+
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, ci_suite_id: String? = nil, project_id: String? = nil, status: String? = nil, title: String? = nil, trigger_type: String? = nil, user_id: Int64? = nil, triggered_by_name: String? = nil, execution_id: String? = nil, result: CIRunResult? = nil, change_request_number: Int64? = nil, change_request_url: String? = nil, change_request_name: String? = nil, change_request_commits_url: String? = nil, git_service_name: String? = nil, git_commit_ref: String? = nil, git_branch_name: String? = nil, git_repository_name: String? = nil, git_target_branch_name: String? = nil, git_status_url: String? = nil, git_target_url: String? = nil, created_at: Date? = nil, started_at: Date? = nil, finished_at: Date? = nil, retries: Int64? = nil, assigned_ci_user_id: Int64? = nil, assigned_ci_user_at: Date? = nil, crashed_check_count: Int64? = nil, run_url: String? = nil, user_attributes: [CIRunUserAttribute]? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
         self._ci_suite_id = ci_suite_id.map(AnyString.init)
@@ -3807,6 +3824,7 @@ public struct CIRun: SDKModel {
         self.assigned_ci_user_at = assigned_ci_user_at
         self._crashed_check_count = crashed_check_count.map(AnyInt.init)
         self._run_url = run_url.map(AnyString.init)
+        self.user_attributes = user_attributes
     }
 
 }
@@ -3840,6 +3858,48 @@ public struct CIRunResult: SDKModel {
         self.lookml_result = lookml_result
         self.lookml_error = lookml_error
         self.generic_error = generic_error
+    }
+
+}
+
+public struct CIRunUserAttribute: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _id = "id"
+        case _name = "name"
+        case _value = "value"
+    }
+    private var _id: AnyInt?
+    /**
+     * ID of the user attribute
+     */
+    public var id: Int64? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyInt.init) }
+    }
+
+    private var _name: AnyString?
+    /**
+     * Name of the user attribute
+     */
+    public var name: String? {
+        get { _name?.value }
+        set { _name = newValue.map(AnyString.init) }
+    }
+
+    private var _value: AnyString?
+    /**
+     * Value of the user attribute
+     */
+    public var value: String? {
+        get { _value?.value }
+        set { _value = newValue.map(AnyString.init) }
+    }
+
+    public init(id: Int64? = nil, name: String? = nil, value: String? = nil) {
+        self._id = id.map(AnyInt.init)
+        self._name = name.map(AnyString.init)
+        self._value = value.map(AnyString.init)
     }
 
 }
@@ -4639,7 +4699,7 @@ public struct ContentMeta: SDKModel {
     }
 
     /**
-     * Whether content inherits its access levels from parent
+     * Whether content inherits its access levels from parent. Can be false only if the associated content is a folder, an agent or a board.
      */
     public var inherits: Bool?
 
@@ -5346,6 +5406,7 @@ public struct ContentValidationDashboardElement: SDKModel {
         case _note_text = "note_text"
         case _note_text_as_html = "note_text_as_html"
         case _query_id = "query_id"
+        case _filter_id = "filter_id"
         case _subtitle_text = "subtitle_text"
         case _title = "title"
         case title_hidden
@@ -5436,6 +5497,15 @@ public struct ContentValidationDashboardElement: SDKModel {
         set { _query_id = newValue.map(AnyString.init) }
     }
 
+    private var _filter_id: AnyString?
+    /**
+     * ID of the filter this element represents
+     */
+    public var filter_id: String? {
+        get { _filter_id?.value }
+        set { _filter_id = newValue.map(AnyString.init) }
+    }
+
     private var _subtitle_text: AnyString?
     /**
      * Text tile subtitle text
@@ -5504,7 +5574,7 @@ public struct ContentValidationDashboardElement: SDKModel {
         set { _aria_description = newValue.map(AnyString.init) }
     }
 
-    public init(body_text: String? = nil, dashboard_id: String? = nil, id: String? = nil, look_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, note_text_as_html: String? = nil, query_id: String? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil, rich_content_json: String? = nil, extension_id: String? = nil, aria_description: String? = nil) {
+    public init(body_text: String? = nil, dashboard_id: String? = nil, id: String? = nil, look_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, note_text_as_html: String? = nil, query_id: String? = nil, filter_id: String? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil, rich_content_json: String? = nil, extension_id: String? = nil, aria_description: String? = nil) {
         self._body_text = body_text.map(AnyString.init)
         self._dashboard_id = dashboard_id.map(AnyString.init)
         self._id = id.map(AnyString.init)
@@ -5514,6 +5584,7 @@ public struct ContentValidationDashboardElement: SDKModel {
         self._note_text = note_text.map(AnyString.init)
         self._note_text_as_html = note_text_as_html.map(AnyString.init)
         self._query_id = query_id.map(AnyString.init)
+        self._filter_id = filter_id.map(AnyString.init)
         self._subtitle_text = subtitle_text.map(AnyString.init)
         self._title = title.map(AnyString.init)
         self.title_hidden = title_hidden
@@ -6749,6 +6820,7 @@ public struct CreateContinuousIntegrationRunRequest: SDKModel {
         case _suite_id = "suite_id"
         case _branch = "branch"
         case _commit = "commit"
+        case user_attributes
     }
     private var _suite_id: AnyString?
     /**
@@ -6777,10 +6849,16 @@ public struct CreateContinuousIntegrationRunRequest: SDKModel {
         set { _commit = newValue.map(AnyString.init) }
     }
 
-    public init(suite_id: String? = nil, branch: String? = nil, commit: String? = nil) {
+    /**
+     * User attributes to override for the CI run.
+     */
+    public var user_attributes: [UserAttributeOverride]?
+
+    public init(suite_id: String? = nil, branch: String? = nil, commit: String? = nil, user_attributes: [UserAttributeOverride]? = nil) {
         self._suite_id = suite_id.map(AnyString.init)
         self._branch = branch.map(AnyString.init)
         self._commit = commit.map(AnyString.init)
+        self.user_attributes = user_attributes
     }
 
 }
@@ -7075,6 +7153,7 @@ public struct CreateDashboardRenderTask: SDKModel {
     private enum CodingKeys : String, CodingKey {
         case _dashboard_filters = "dashboard_filters"
         case _dashboard_style = "dashboard_style"
+        case _tab_ids = "tab_ids"
     }
     private var _dashboard_filters: AnyString?
     /**
@@ -7094,9 +7173,19 @@ public struct CreateDashboardRenderTask: SDKModel {
         set { _dashboard_style = newValue.map(AnyString.init) }
     }
 
-    public init(dashboard_filters: String? = nil, dashboard_style: String? = nil) {
+    private var _tab_ids: [AnyString]?
+    /**
+     * IDs of tabs to render (ID on a UDD and a tab label on lookml dashboards)
+     */
+    public var tab_ids: [String]? {
+        get { if let v = _tab_ids { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _tab_ids = v.map { AnyString.init($0) } } else { _tab_ids = nil } }
+    }
+
+    public init(dashboard_filters: String? = nil, dashboard_style: String? = nil, tab_ids: [String]? = nil) {
         self._dashboard_filters = dashboard_filters.map(AnyString.init)
         self._dashboard_style = dashboard_style.map(AnyString.init)
+        if let v = tab_ids { _tab_ids = v.map { AnyString.init($0) } } else { _tab_ids = nil }
     }
 
 }
@@ -8446,6 +8535,7 @@ public struct Dashboard: SDKModel {
         case _usage_count = "usage_count"
         case is_owner_disabled
         case _url = "url"
+        case download_settings
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -8540,7 +8630,7 @@ public struct Dashboard: SDKModel {
 
     private var _user_id: AnyString?
     /**
-     * Id of User (read-only)
+     * Id of User
      */
     public var user_id: String? {
         get { _user_id?.value }
@@ -8807,7 +8897,9 @@ public struct Dashboard: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, content_favorite_id: String? = nil, content_metadata_id: String? = nil, description: String? = nil, hidden: Bool? = nil, id: String? = nil, model: LookModel? = nil, query_timezone: String? = nil, readonly: Bool? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, folder: FolderBase? = nil, title: String? = nil, user_id: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, certification_metadata: Certification? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, created_at: Date? = nil, crossfilter_enabled: Bool? = nil, dashboard_elements: [DashboardElement]? = nil, dashboard_filters: [DashboardFilter]? = nil, dashboard_layouts: [DashboardLayout]? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, edit_uri: String? = nil, enable_viz_full_screen: Bool? = nil, favorite_count: Int64? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, last_accessed_at: Date? = nil, last_viewed_at: Date? = nil, updated_at: Date? = nil, last_updater_id: String? = nil, last_updater_name: String? = nil, user_name: String? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, view_count: Int64? = nil, appearance: DashboardAppearance? = nil, usage_count: Int64? = nil, is_owner_disabled: Bool? = nil, url: String? = nil) {
+    public var download_settings: DashboardDownloadSettings?
+
+    public init(can: StringDictionary<Bool>? = nil, content_favorite_id: String? = nil, content_metadata_id: String? = nil, description: String? = nil, hidden: Bool? = nil, id: String? = nil, model: LookModel? = nil, query_timezone: String? = nil, readonly: Bool? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, folder: FolderBase? = nil, title: String? = nil, user_id: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, certification_metadata: Certification? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, created_at: Date? = nil, crossfilter_enabled: Bool? = nil, dashboard_elements: [DashboardElement]? = nil, dashboard_filters: [DashboardFilter]? = nil, dashboard_layouts: [DashboardLayout]? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, edit_uri: String? = nil, enable_viz_full_screen: Bool? = nil, favorite_count: Int64? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, last_accessed_at: Date? = nil, last_viewed_at: Date? = nil, updated_at: Date? = nil, last_updater_id: String? = nil, last_updater_name: String? = nil, user_name: String? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, view_count: Int64? = nil, appearance: DashboardAppearance? = nil, usage_count: Int64? = nil, is_owner_disabled: Bool? = nil, url: String? = nil, download_settings: DashboardDownloadSettings? = nil) {
         self.can = can
         self._content_favorite_id = content_favorite_id.map(AnyString.init)
         self._content_metadata_id = content_metadata_id.map(AnyString.init)
@@ -8860,6 +8952,7 @@ public struct Dashboard: SDKModel {
         self._usage_count = usage_count.map(AnyInt.init)
         self.is_owner_disabled = is_owner_disabled
         self._url = url.map(AnyString.init)
+        self.download_settings = download_settings
     }
 
 }
@@ -8905,6 +8998,7 @@ public struct DashboardAppearance: SDKModel {
         case _tile_background_color = "tile_background_color"
         case tile_shadow
         case _key_color = "key_color"
+        case modern_vis2026
     }
     private var _page_side_margins: AnyInt?
     /**
@@ -8965,7 +9059,12 @@ public struct DashboardAppearance: SDKModel {
         set { _key_color = newValue.map(AnyString.init) }
     }
 
-    public init(page_side_margins: Int64? = nil, page_background_color: String? = nil, tile_title_alignment: String? = nil, tile_space_between: Int64? = nil, tile_background_color: String? = nil, tile_shadow: Bool? = nil, key_color: String? = nil) {
+    /**
+     * Whether to modernize visualizations on this dashboard
+     */
+    public var modern_vis2026: Bool?
+
+    public init(page_side_margins: Int64? = nil, page_background_color: String? = nil, tile_title_alignment: String? = nil, tile_space_between: Int64? = nil, tile_background_color: String? = nil, tile_shadow: Bool? = nil, key_color: String? = nil, modern_vis2026: Bool? = nil) {
         self._page_side_margins = page_side_margins.map(AnyInt.init)
         self._page_background_color = page_background_color.map(AnyString.init)
         self._tile_title_alignment = tile_title_alignment.map(AnyString.init)
@@ -8973,6 +9072,7 @@ public struct DashboardAppearance: SDKModel {
         self._tile_background_color = tile_background_color.map(AnyString.init)
         self.tile_shadow = tile_shadow
         self._key_color = key_color.map(AnyString.init)
+        self.modern_vis2026 = modern_vis2026
     }
 
 }
@@ -9140,6 +9240,81 @@ public struct DashboardBase: SDKModel {
 
 }
 
+public struct DashboardDownloadSettings: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _format_option = "format_option"
+        case _value_options = "value_options"
+        case _result_options = "result_options"
+        case _limit_options = "limit_options"
+        case _rows_limit = "rows_limit"
+        case _columns_limit = "columns_limit"
+    }
+    private var _format_option: AnyString?
+    /**
+     * Format option
+     */
+    public var format_option: String? {
+        get { _format_option?.value }
+        set { _format_option = newValue.map(AnyString.init) }
+    }
+
+    private var _value_options: AnyString?
+    /**
+     * Value option
+     */
+    public var value_options: String? {
+        get { _value_options?.value }
+        set { _value_options = newValue.map(AnyString.init) }
+    }
+
+    private var _result_options: AnyString?
+    /**
+     * Result option
+     */
+    public var result_options: String? {
+        get { _result_options?.value }
+        set { _result_options = newValue.map(AnyString.init) }
+    }
+
+    private var _limit_options: AnyString?
+    /**
+     * Limit option
+     */
+    public var limit_options: String? {
+        get { _limit_options?.value }
+        set { _limit_options = newValue.map(AnyString.init) }
+    }
+
+    private var _rows_limit: AnyInt?
+    /**
+     * Rows limit
+     */
+    public var rows_limit: Int64? {
+        get { _rows_limit?.value }
+        set { _rows_limit = newValue.map(AnyInt.init) }
+    }
+
+    private var _columns_limit: AnyInt?
+    /**
+     * Columns limit
+     */
+    public var columns_limit: Int64? {
+        get { _columns_limit?.value }
+        set { _columns_limit = newValue.map(AnyInt.init) }
+    }
+
+    public init(format_option: String? = nil, value_options: String? = nil, result_options: String? = nil, limit_options: String? = nil, rows_limit: Int64? = nil, columns_limit: Int64? = nil) {
+        self._format_option = format_option.map(AnyString.init)
+        self._value_options = value_options.map(AnyString.init)
+        self._result_options = result_options.map(AnyString.init)
+        self._limit_options = limit_options.map(AnyString.init)
+        self._rows_limit = rows_limit.map(AnyInt.init)
+        self._columns_limit = columns_limit.map(AnyInt.init)
+    }
+
+}
+
 public struct DashboardElement: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -9160,6 +9335,7 @@ public struct DashboardElement: SDKModel {
         case _note_text_as_html = "note_text_as_html"
         case query
         case _query_id = "query_id"
+        case _filter_id = "filter_id"
         case _refresh_interval = "refresh_interval"
         case _refresh_interval_to_i = "refresh_interval_to_i"
         case result_maker
@@ -9312,6 +9488,15 @@ public struct DashboardElement: SDKModel {
         set { _query_id = newValue.map(AnyString.init) }
     }
 
+    private var _filter_id: AnyString?
+    /**
+     * ID of the filter this element represents
+     */
+    public var filter_id: String? {
+        get { _filter_id?.value }
+        set { _filter_id = newValue.map(AnyString.init) }
+    }
+
     private var _refresh_interval: AnyString?
     /**
      * Refresh Interval
@@ -9438,7 +9623,7 @@ public struct DashboardElement: SDKModel {
 
     public var certification_metadata: Certification?
 
-    public init(can: StringDictionary<Bool>? = nil, body_text: String? = nil, body_text_as_html: String? = nil, dashboard_id: String? = nil, dashboard_layout_id: String? = nil, edit_uri: String? = nil, id: String? = nil, look: LookWithQuery? = nil, look_id: String? = nil, lookml_link_id: String? = nil, merge_result_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, note_text_as_html: String? = nil, query: Query? = nil, query_id: String? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, result_maker: ResultMakerWithIdVisConfigAndDynamicFields? = nil, result_maker_id: String? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil, alert_count: Int64? = nil, rich_content_json: String? = nil, title_text_as_html: String? = nil, subtitle_text_as_html: String? = nil, extension_id: String? = nil, aria_description: String? = nil, certification_metadata: Certification? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, body_text: String? = nil, body_text_as_html: String? = nil, dashboard_id: String? = nil, dashboard_layout_id: String? = nil, edit_uri: String? = nil, id: String? = nil, look: LookWithQuery? = nil, look_id: String? = nil, lookml_link_id: String? = nil, merge_result_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, note_text_as_html: String? = nil, query: Query? = nil, query_id: String? = nil, filter_id: String? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, result_maker: ResultMakerWithIdVisConfigAndDynamicFields? = nil, result_maker_id: String? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil, alert_count: Int64? = nil, rich_content_json: String? = nil, title_text_as_html: String? = nil, subtitle_text_as_html: String? = nil, extension_id: String? = nil, aria_description: String? = nil, certification_metadata: Certification? = nil) {
         self.can = can
         self._body_text = body_text.map(AnyString.init)
         self._body_text_as_html = body_text_as_html.map(AnyString.init)
@@ -9456,6 +9641,7 @@ public struct DashboardElement: SDKModel {
         self._note_text_as_html = note_text_as_html.map(AnyString.init)
         self.query = query
         self._query_id = query_id.map(AnyString.init)
+        self._filter_id = filter_id.map(AnyString.init)
         self._refresh_interval = refresh_interval.map(AnyString.init)
         self._refresh_interval_to_i = refresh_interval_to_i.map(AnyInt.init)
         self.result_maker = result_maker
@@ -9657,6 +9843,7 @@ public struct DashboardLayout: SDKModel {
         case _label = "label"
         case _description = "description"
         case _order = "order"
+        case _lookml_link_id = "lookml_link_id"
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -9759,7 +9946,16 @@ public struct DashboardLayout: SDKModel {
         set { _order = newValue.map(AnyInt.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, dashboard_id: String? = nil, type: String? = nil, active: Bool? = nil, column_width: Int64? = nil, width: Int64? = nil, deleted: Bool? = nil, dashboard_title: String? = nil, dashboard_layout_components: [DashboardLayoutComponent]? = nil, label: String? = nil, description: String? = nil, order: Int64? = nil) {
+    private var _lookml_link_id: AnyString?
+    /**
+     * LookML link ID (stable name)
+     */
+    public var lookml_link_id: String? {
+        get { _lookml_link_id?.value }
+        set { _lookml_link_id = newValue.map(AnyString.init) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, dashboard_id: String? = nil, type: String? = nil, active: Bool? = nil, column_width: Int64? = nil, width: Int64? = nil, deleted: Bool? = nil, dashboard_title: String? = nil, dashboard_layout_components: [DashboardLayoutComponent]? = nil, label: String? = nil, description: String? = nil, order: Int64? = nil, lookml_link_id: String? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
         self._dashboard_id = dashboard_id.map(AnyString.init)
@@ -9773,6 +9969,7 @@ public struct DashboardLayout: SDKModel {
         self._label = label.map(AnyString.init)
         self._description = description.map(AnyString.init)
         self._order = order.map(AnyInt.init)
+        self._lookml_link_id = lookml_link_id.map(AnyString.init)
     }
 
 }
@@ -9866,7 +10063,7 @@ public struct DashboardLayoutComponent: SDKModel {
     }
 
     /**
-     * Whether or not the dashboard layout component is deleted (read-only)
+     * Whether or not the dashboard layout component is deleted
      */
     public var deleted: Bool?
 
@@ -18100,6 +18297,7 @@ public struct LookmlModelExploreField: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
         case align
+        case _available_custom_timeframes = "available_custom_timeframes"
         case can_filter
         case category
         case _default_filter_value = "default_filter_value"
@@ -18166,6 +18364,15 @@ public struct LookmlModelExploreField: SDKModel {
      * The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: "left", "right". (read-only)
      */
     public var align: Align?
+
+    private var _available_custom_timeframes: [AnyString]?
+    /**
+     * An array of custom timeframes available for this field for filtering, if applicable. (read-only)
+     */
+    public var available_custom_timeframes: [String]? {
+        get { if let v = _available_custom_timeframes { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _available_custom_timeframes = v.map { AnyString.init($0) } } else { _available_custom_timeframes = nil } }
+    }
 
     /**
      * Whether it's possible to filter on this field. (read-only)
@@ -18587,8 +18794,9 @@ public struct LookmlModelExploreField: SDKModel {
      */
     public var convert_tz: Bool?
 
-    public init(align: Align? = nil, can_filter: Bool? = nil, category: Category? = nil, default_filter_value: String? = nil, description: String? = nil, dimension_group: String? = nil, drill_fields: [String]? = nil, enumerations: [LookmlModelExploreFieldEnumeration]? = nil, error: String? = nil, field_group_label: String? = nil, field_group_variant: String? = nil, fill_style: FillStyle? = nil, fiscal_month_offset: Int64? = nil, has_allowed_values: Bool? = nil, has_drills_metadata: Bool? = nil, hidden: Bool? = nil, is_filter: Bool? = nil, is_fiscal: Bool? = nil, is_numeric: Bool? = nil, is_timeframe: Bool? = nil, can_time_filter: Bool? = nil, time_interval: LookmlModelExploreFieldTimeInterval? = nil, label: String? = nil, label_from_parameter: String? = nil, label_short: String? = nil, lookml_link: String? = nil, links: [LookmlFieldLink]? = nil, map_layer: LookmlModelExploreFieldMapLayer? = nil, measure: Bool? = nil, name: String? = nil, strict_value_format: Bool? = nil, parameter: Bool? = nil, period_over_period_params: LookmlModelExploreFieldPeriodOverPeriodParams? = nil, permanent: Bool? = nil, primary_key: Bool? = nil, project_name: String? = nil, requires_refresh_on_sort: Bool? = nil, scope: String? = nil, sortable: Bool? = nil, source_file: String? = nil, source_file_path: String? = nil, sql: String? = nil, sql_case: [LookmlModelExploreFieldSqlCase]? = nil, filters: [LookmlModelExploreFieldMeasureFilters]? = nil, suggest_dimension: String? = nil, suggest_explore: String? = nil, suggestable: Bool? = nil, suggestions: [String]? = nil, synonyms: [String]? = nil, tags: [String]? = nil, type: String? = nil, user_attribute_filter_types: [UserAttributeFilterTypes]? = nil, value_format: String? = nil, value_format_name: String? = nil, view: String? = nil, view_label: String? = nil, `dynamic`: Bool? = nil, week_start_day: WeekStartDay? = nil, times_used: Int64? = nil, original_view: String? = nil, datatype: String? = nil, convert_tz: Bool? = nil) {
+    public init(align: Align? = nil, available_custom_timeframes: [String]? = nil, can_filter: Bool? = nil, category: Category? = nil, default_filter_value: String? = nil, description: String? = nil, dimension_group: String? = nil, drill_fields: [String]? = nil, enumerations: [LookmlModelExploreFieldEnumeration]? = nil, error: String? = nil, field_group_label: String? = nil, field_group_variant: String? = nil, fill_style: FillStyle? = nil, fiscal_month_offset: Int64? = nil, has_allowed_values: Bool? = nil, has_drills_metadata: Bool? = nil, hidden: Bool? = nil, is_filter: Bool? = nil, is_fiscal: Bool? = nil, is_numeric: Bool? = nil, is_timeframe: Bool? = nil, can_time_filter: Bool? = nil, time_interval: LookmlModelExploreFieldTimeInterval? = nil, label: String? = nil, label_from_parameter: String? = nil, label_short: String? = nil, lookml_link: String? = nil, links: [LookmlFieldLink]? = nil, map_layer: LookmlModelExploreFieldMapLayer? = nil, measure: Bool? = nil, name: String? = nil, strict_value_format: Bool? = nil, parameter: Bool? = nil, period_over_period_params: LookmlModelExploreFieldPeriodOverPeriodParams? = nil, permanent: Bool? = nil, primary_key: Bool? = nil, project_name: String? = nil, requires_refresh_on_sort: Bool? = nil, scope: String? = nil, sortable: Bool? = nil, source_file: String? = nil, source_file_path: String? = nil, sql: String? = nil, sql_case: [LookmlModelExploreFieldSqlCase]? = nil, filters: [LookmlModelExploreFieldMeasureFilters]? = nil, suggest_dimension: String? = nil, suggest_explore: String? = nil, suggestable: Bool? = nil, suggestions: [String]? = nil, synonyms: [String]? = nil, tags: [String]? = nil, type: String? = nil, user_attribute_filter_types: [UserAttributeFilterTypes]? = nil, value_format: String? = nil, value_format_name: String? = nil, view: String? = nil, view_label: String? = nil, `dynamic`: Bool? = nil, week_start_day: WeekStartDay? = nil, times_used: Int64? = nil, original_view: String? = nil, datatype: String? = nil, convert_tz: Bool? = nil) {
         self.align = align
+        if let v = available_custom_timeframes { _available_custom_timeframes = v.map { AnyString.init($0) } } else { _available_custom_timeframes = nil }
         self.can_filter = can_filter
         self.category = category
         self._default_filter_value = default_filter_value.map(AnyString.init)
@@ -20489,7 +20697,9 @@ public struct McpTools: SDKModel {
 
     public var create_view_from_table: McpToolSetting?
 
-    public init(enable_all: Bool? = nil, add_dashboard_element: McpToolSetting? = nil, add_dashboard_filter: McpToolSetting? = nil, create_project_file: McpToolSetting? = nil, delete_project_file: McpToolSetting? = nil, dev_mode: McpToolSetting? = nil, generate_embed_url: McpToolSetting? = nil, get_connection_databases: McpToolSetting? = nil, get_connection_schemas: McpToolSetting? = nil, get_connection_table_columns: McpToolSetting? = nil, get_connection_tables: McpToolSetting? = nil, get_connections: McpToolSetting? = nil, get_dashboards: McpToolSetting? = nil, get_dimensions: McpToolSetting? = nil, get_explores: McpToolSetting? = nil, get_filters: McpToolSetting? = nil, get_looks: McpToolSetting? = nil, get_measures: McpToolSetting? = nil, get_models: McpToolSetting? = nil, get_parameters: McpToolSetting? = nil, get_project_file: McpToolSetting? = nil, get_project_files: McpToolSetting? = nil, get_projects: McpToolSetting? = nil, health_analyze: McpToolSetting? = nil, health_pulse: McpToolSetting? = nil, health_vacuum: McpToolSetting? = nil, make_dashboard: McpToolSetting? = nil, make_look: McpToolSetting? = nil, query: McpToolSetting? = nil, query_sql: McpToolSetting? = nil, query_url: McpToolSetting? = nil, run_dashboard: McpToolSetting? = nil, run_look: McpToolSetting? = nil, update_project_file: McpToolSetting? = nil, validate_project: McpToolSetting? = nil, get_project_directories: McpToolSetting? = nil, create_project_directory: McpToolSetting? = nil, delete_project_directory: McpToolSetting? = nil, get_lookml_tests: McpToolSetting? = nil, run_lookml_tests: McpToolSetting? = nil, create_view_from_table: McpToolSetting? = nil) {
+    public var project_git_branch: McpToolSetting?
+
+    public init(enable_all: Bool? = nil, add_dashboard_element: McpToolSetting? = nil, add_dashboard_filter: McpToolSetting? = nil, create_project_file: McpToolSetting? = nil, delete_project_file: McpToolSetting? = nil, dev_mode: McpToolSetting? = nil, generate_embed_url: McpToolSetting? = nil, get_connection_databases: McpToolSetting? = nil, get_connection_schemas: McpToolSetting? = nil, get_connection_table_columns: McpToolSetting? = nil, get_connection_tables: McpToolSetting? = nil, get_connections: McpToolSetting? = nil, get_dashboards: McpToolSetting? = nil, get_dimensions: McpToolSetting? = nil, get_explores: McpToolSetting? = nil, get_filters: McpToolSetting? = nil, get_looks: McpToolSetting? = nil, get_measures: McpToolSetting? = nil, get_models: McpToolSetting? = nil, get_parameters: McpToolSetting? = nil, get_project_file: McpToolSetting? = nil, get_project_files: McpToolSetting? = nil, get_projects: McpToolSetting? = nil, health_analyze: McpToolSetting? = nil, health_pulse: McpToolSetting? = nil, health_vacuum: McpToolSetting? = nil, make_dashboard: McpToolSetting? = nil, make_look: McpToolSetting? = nil, query: McpToolSetting? = nil, query_sql: McpToolSetting? = nil, query_url: McpToolSetting? = nil, run_dashboard: McpToolSetting? = nil, run_look: McpToolSetting? = nil, update_project_file: McpToolSetting? = nil, validate_project: McpToolSetting? = nil, get_project_directories: McpToolSetting? = nil, create_project_directory: McpToolSetting? = nil, delete_project_directory: McpToolSetting? = nil, get_lookml_tests: McpToolSetting? = nil, run_lookml_tests: McpToolSetting? = nil, create_view_from_table: McpToolSetting? = nil, project_git_branch: McpToolSetting? = nil) {
         self.enable_all = enable_all
         self.add_dashboard_element = add_dashboard_element
         self.add_dashboard_filter = add_dashboard_filter
@@ -20531,6 +20741,7 @@ public struct McpTools: SDKModel {
         self.get_lookml_tests = get_lookml_tests
         self.run_lookml_tests = run_lookml_tests
         self.create_view_from_table = create_view_from_table
+        self.project_git_branch = project_git_branch
     }
 
 }
@@ -20814,6 +21025,7 @@ public struct MobilePayload: SDKModel {
         case _dashboard_name = "dashboard_name"
         case _dashboard_id = "dashboard_id"
         case _query_slug = "query_slug"
+        case _query_id = "query_id"
     }
     private var _title: AnyString?
     /**
@@ -20869,17 +21081,27 @@ public struct MobilePayload: SDKModel {
         set { _query_slug = newValue.map(AnyString.init) }
     }
 
-    public init(title: String? = nil, alert_id: String, investigative_content_id: String? = nil, dashboard_name: String? = nil, dashboard_id: String? = nil, query_slug: String? = nil) {
+    private var _query_id: AnyString?
+    /**
+     * ID of the query (read-only)
+     */
+    public var query_id: String? {
+        get { _query_id?.value }
+        set { _query_id = newValue.map(AnyString.init) }
+    }
+
+    public init(title: String? = nil, alert_id: String, investigative_content_id: String? = nil, dashboard_name: String? = nil, dashboard_id: String? = nil, query_slug: String? = nil, query_id: String? = nil) {
         self._title = title.map(AnyString.init)
         self._alert_id = AnyString.init(alert_id)
         self._investigative_content_id = investigative_content_id.map(AnyString.init)
         self._dashboard_name = dashboard_name.map(AnyString.init)
         self._dashboard_id = dashboard_id.map(AnyString.init)
         self._query_slug = query_slug.map(AnyString.init)
+        self._query_id = query_id.map(AnyString.init)
     }
 
-    public init(title: String? = nil, _ alert_id: String, investigative_content_id: String? = nil, dashboard_name: String? = nil, dashboard_id: String? = nil, query_slug: String? = nil) {
-        self.init(title: title, alert_id: alert_id, investigative_content_id: investigative_content_id, dashboard_name: dashboard_name, dashboard_id: dashboard_id, query_slug: query_slug)
+    public init(title: String? = nil, _ alert_id: String, investigative_content_id: String? = nil, dashboard_name: String? = nil, dashboard_id: String? = nil, query_slug: String? = nil, query_id: String? = nil) {
+        self.init(title: title, alert_id: alert_id, investigative_content_id: investigative_content_id, dashboard_name: dashboard_name, dashboard_id: dashboard_id, query_slug: query_slug, query_id: query_id)
     }
 
 }
@@ -25238,6 +25460,8 @@ public struct ScheduledPlan: SDKModel {
         case embed
         case _color_theme = "color_theme"
         case long_tables
+        case pdf_page_breaks
+        case _tab_ids = "tab_ids"
         case _inline_table_width = "inline_table_width"
         case _query_id = "query_id"
         case _id = "id"
@@ -25449,6 +25673,20 @@ public struct ScheduledPlan: SDKModel {
      */
     public var long_tables: Bool?
 
+    /**
+     * Whether or not to add page breaks between tabs
+     */
+    public var pdf_page_breaks: Bool?
+
+    private var _tab_ids: [AnyString]?
+    /**
+     * IDs of tabs to render (ID on a UDD and a tab label on lookml dashboards)
+     */
+    public var tab_ids: [String]? {
+        get { if let v = _tab_ids { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _tab_ids = v.map { AnyString.init($0) } } else { _tab_ids = nil } }
+    }
+
     private var _inline_table_width: AnyInt?
     /**
      * The pixel width at which we render the inline table visualizations
@@ -25512,7 +25750,7 @@ public struct ScheduledPlan: SDKModel {
      */
     public var can: StringDictionary<Bool>?
 
-    public init(name: String? = nil, user_id: String? = nil, run_as_recipient: Bool? = nil, enabled: Bool? = nil, look_id: String? = nil, dashboard_id: String? = nil, lookml_dashboard_id: String? = nil, filters_string: String? = nil, dashboard_filters: String? = nil, require_results: Bool? = nil, require_no_results: Bool? = nil, require_change: Bool? = nil, send_all_results: Bool? = nil, crontab: String? = nil, datagroup: String? = nil, timezone: String? = nil, scheduled_plan_destination: [ScheduledPlanDestination]? = nil, run_once: Bool? = nil, include_links: Bool? = nil, custom_url_base: String? = nil, custom_url_params: String? = nil, custom_url_label: String? = nil, show_custom_url: Bool? = nil, pdf_paper_size: String? = nil, pdf_landscape: Bool? = nil, embed: Bool? = nil, color_theme: String? = nil, long_tables: Bool? = nil, inline_table_width: Int64? = nil, query_id: String? = nil, id: String? = nil, created_at: Date? = nil, updated_at: Date? = nil, title: String? = nil, user: UserPublic? = nil, next_run_at: Date? = nil, last_run_at: Date? = nil, can: StringDictionary<Bool>? = nil) {
+    public init(name: String? = nil, user_id: String? = nil, run_as_recipient: Bool? = nil, enabled: Bool? = nil, look_id: String? = nil, dashboard_id: String? = nil, lookml_dashboard_id: String? = nil, filters_string: String? = nil, dashboard_filters: String? = nil, require_results: Bool? = nil, require_no_results: Bool? = nil, require_change: Bool? = nil, send_all_results: Bool? = nil, crontab: String? = nil, datagroup: String? = nil, timezone: String? = nil, scheduled_plan_destination: [ScheduledPlanDestination]? = nil, run_once: Bool? = nil, include_links: Bool? = nil, custom_url_base: String? = nil, custom_url_params: String? = nil, custom_url_label: String? = nil, show_custom_url: Bool? = nil, pdf_paper_size: String? = nil, pdf_landscape: Bool? = nil, embed: Bool? = nil, color_theme: String? = nil, long_tables: Bool? = nil, pdf_page_breaks: Bool? = nil, tab_ids: [String]? = nil, inline_table_width: Int64? = nil, query_id: String? = nil, id: String? = nil, created_at: Date? = nil, updated_at: Date? = nil, title: String? = nil, user: UserPublic? = nil, next_run_at: Date? = nil, last_run_at: Date? = nil, can: StringDictionary<Bool>? = nil) {
         self._name = name.map(AnyString.init)
         self._user_id = user_id.map(AnyString.init)
         self.run_as_recipient = run_as_recipient
@@ -25541,6 +25779,8 @@ public struct ScheduledPlan: SDKModel {
         self.embed = embed
         self._color_theme = color_theme.map(AnyString.init)
         self.long_tables = long_tables
+        self.pdf_page_breaks = pdf_page_breaks
+        if let v = tab_ids { _tab_ids = v.map { AnyString.init($0) } } else { _tab_ids = nil }
         self._inline_table_width = inline_table_width.map(AnyInt.init)
         self._query_id = query_id.map(AnyString.init)
         self._id = id.map(AnyString.init)
@@ -26415,6 +26655,7 @@ public struct Setting: SDKModel {
         case revoke_certification_on_edits
         case is_content_certification_enabled
         case auto_certify_lookml_content
+        case ca_agent_observability
         case mcp_tools
     }
     public var instance_config: InstanceConfig?
@@ -26579,9 +26820,14 @@ public struct Setting: SDKModel {
      */
     public var auto_certify_lookml_content: Bool?
 
+    /**
+     * Toggle CA agent observability
+     */
+    public var ca_agent_observability: Bool?
+
     public var mcp_tools: McpTools?
 
-    public init(instance_config: InstanceConfig? = nil, extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_site: String? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_enabled: Bool? = nil, embed_config: EmbedConfig? = nil, login_notification_enabled: Bool? = nil, login_notification_text: String? = nil, dashboard_auto_refresh_restriction: Bool? = nil, dashboard_auto_refresh_minimum_interval: String? = nil, managed_certificate_uri: [String]? = nil, content_certification_documentation_link: String? = nil, revoke_certification_on_edits: Bool? = nil, is_content_certification_enabled: Bool? = nil, auto_certify_lookml_content: Bool? = nil, mcp_tools: McpTools? = nil) {
+    public init(instance_config: InstanceConfig? = nil, extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_site: String? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_enabled: Bool? = nil, embed_config: EmbedConfig? = nil, login_notification_enabled: Bool? = nil, login_notification_text: String? = nil, dashboard_auto_refresh_restriction: Bool? = nil, dashboard_auto_refresh_minimum_interval: String? = nil, managed_certificate_uri: [String]? = nil, content_certification_documentation_link: String? = nil, revoke_certification_on_edits: Bool? = nil, is_content_certification_enabled: Bool? = nil, auto_certify_lookml_content: Bool? = nil, ca_agent_observability: Bool? = nil, mcp_tools: McpTools? = nil) {
         self.instance_config = instance_config
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
@@ -26611,6 +26857,7 @@ public struct Setting: SDKModel {
         self.revoke_certification_on_edits = revoke_certification_on_edits
         self.is_content_certification_enabled = is_content_certification_enabled
         self.auto_certify_lookml_content = auto_certify_lookml_content
+        self.ca_agent_observability = ca_agent_observability
         self.mcp_tools = mcp_tools
     }
 
@@ -28866,7 +29113,7 @@ public struct User: SDKModel {
     public var is_iam_admin: Bool?
 
     /**
-     * Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.
+     * Indicates if the user can manage API3 credentials. This is an experimental feature and may not yet be available on your instance.
      */
     public var can_manage_api3_creds: Bool?
 
@@ -28953,6 +29200,8 @@ public struct UserAttribute: SDKModel {
         case user_can_view
         case user_can_edit
         case _hidden_value_domain_whitelist = "hidden_value_domain_whitelist"
+        case needed_for_ci_run
+        case _value_for_ci_run = "value_for_ci_run"
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -29038,7 +29287,21 @@ public struct UserAttribute: SDKModel {
         set { _hidden_value_domain_whitelist = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String, label: String, type: String, default_value: String? = nil, is_system: Bool? = nil, is_permanent: Bool? = nil, value_is_hidden: Bool? = nil, user_can_view: Bool? = nil, user_can_edit: Bool? = nil, hidden_value_domain_whitelist: String? = nil) {
+    /**
+     * Whether this user attribute is needed for a CI run
+     */
+    public var needed_for_ci_run: Bool?
+
+    private var _value_for_ci_run: AnyString?
+    /**
+     * The value to use for this user attribute during a CI run
+     */
+    public var value_for_ci_run: String? {
+        get { _value_for_ci_run?.value }
+        set { _value_for_ci_run = newValue.map(AnyString.init) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String, label: String, type: String, default_value: String? = nil, is_system: Bool? = nil, is_permanent: Bool? = nil, value_is_hidden: Bool? = nil, user_can_view: Bool? = nil, user_can_edit: Bool? = nil, hidden_value_domain_whitelist: String? = nil, needed_for_ci_run: Bool? = nil, value_for_ci_run: String? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
         self._name = AnyString.init(name)
@@ -29051,10 +29314,12 @@ public struct UserAttribute: SDKModel {
         self.user_can_view = user_can_view
         self.user_can_edit = user_can_edit
         self._hidden_value_domain_whitelist = hidden_value_domain_whitelist.map(AnyString.init)
+        self.needed_for_ci_run = needed_for_ci_run
+        self._value_for_ci_run = value_for_ci_run.map(AnyString.init)
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, _ name: String, _ label: String, _ type: String, default_value: String? = nil, is_system: Bool? = nil, is_permanent: Bool? = nil, value_is_hidden: Bool? = nil, user_can_view: Bool? = nil, user_can_edit: Bool? = nil, hidden_value_domain_whitelist: String? = nil) {
-        self.init(can: can, id: id, name: name, label: label, type: type, default_value: default_value, is_system: is_system, is_permanent: is_permanent, value_is_hidden: value_is_hidden, user_can_view: user_can_view, user_can_edit: user_can_edit, hidden_value_domain_whitelist: hidden_value_domain_whitelist)
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, _ name: String, _ label: String, _ type: String, default_value: String? = nil, is_system: Bool? = nil, is_permanent: Bool? = nil, value_is_hidden: Bool? = nil, user_can_view: Bool? = nil, user_can_edit: Bool? = nil, hidden_value_domain_whitelist: String? = nil, needed_for_ci_run: Bool? = nil, value_for_ci_run: String? = nil) {
+        self.init(can: can, id: id, name: name, label: label, type: type, default_value: default_value, is_system: is_system, is_permanent: is_permanent, value_is_hidden: value_is_hidden, user_can_view: user_can_view, user_can_edit: user_can_edit, hidden_value_domain_whitelist: hidden_value_domain_whitelist, needed_for_ci_run: needed_for_ci_run, value_for_ci_run: value_for_ci_run)
     }
 
 }
@@ -29150,6 +29415,37 @@ public struct UserAttributeGroupValue: SDKModel {
         self._user_attribute_id = user_attribute_id.map(AnyString.init)
         self.value_is_hidden = value_is_hidden
         self._rank = rank.map(AnyInt.init)
+        self._value = value.map(AnyString.init)
+    }
+
+}
+
+public struct UserAttributeOverride: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _name = "name"
+        case _value = "value"
+    }
+    private var _name: AnyString?
+    /**
+     * Name of user attribute that should be overridden for CI Run
+     */
+    public var name: String? {
+        get { _name?.value }
+        set { _name = newValue.map(AnyString.init) }
+    }
+
+    private var _value: AnyString?
+    /**
+     * Value of user attribute that should be set for CI Run
+     */
+    public var value: String? {
+        get { _value?.value }
+        set { _value = newValue.map(AnyString.init) }
+    }
+
+    public init(name: String? = nil, value: String? = nil) {
+        self._name = name.map(AnyString.init)
         self._value = value.map(AnyString.init)
     }
 
@@ -29924,6 +30220,7 @@ public struct WriteAlert: SDKModel {
         case applied_dashboard_filters
         case comparison_type
         case _cron = "cron"
+        case _query_id = "query_id"
         case _custom_url_base = "custom_url_base"
         case _custom_url_params = "custom_url_params"
         case _custom_url_label = "custom_url_label"
@@ -29962,6 +30259,15 @@ public struct WriteAlert: SDKModel {
     public var cron: String {
         get { _cron.value }
         set { _cron = AnyString.init(newValue) }
+    }
+
+    private var _query_id: AnyString?
+    /**
+     * ID of the query
+     */
+    public var query_id: String? {
+        get { _query_id?.value }
+        set { _query_id = newValue.map(AnyString.init) }
     }
 
     private var _custom_url_base: AnyString?
@@ -30102,10 +30408,11 @@ public struct WriteAlert: SDKModel {
 
     public var time_series_condition_state: AlertConditionState?
 
-    public init(applied_dashboard_filters: [AlertAppliedDashboardFilter]? = nil, comparison_type: ComparisonType, cron: String, custom_url_base: String? = nil, custom_url_params: String? = nil, custom_url_label: String? = nil, show_custom_url: Bool? = nil, custom_title: String? = nil, dashboard_element_id: String? = nil, description: String? = nil, enhancements: Enhancements? = nil, destinations: [AlertDestination], field: AlertField, is_disabled: Bool? = nil, disabled_reason: String? = nil, is_public: Bool? = nil, investigative_content_type: InvestigativeContentType? = nil, investigative_content_id: String? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, owner_id: String, threshold: Double, time_series_condition_state: AlertConditionState? = nil) {
+    public init(applied_dashboard_filters: [AlertAppliedDashboardFilter]? = nil, comparison_type: ComparisonType, cron: String, query_id: String? = nil, custom_url_base: String? = nil, custom_url_params: String? = nil, custom_url_label: String? = nil, show_custom_url: Bool? = nil, custom_title: String? = nil, dashboard_element_id: String? = nil, description: String? = nil, enhancements: Enhancements? = nil, destinations: [AlertDestination], field: AlertField, is_disabled: Bool? = nil, disabled_reason: String? = nil, is_public: Bool? = nil, investigative_content_type: InvestigativeContentType? = nil, investigative_content_id: String? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, owner_id: String, threshold: Double, time_series_condition_state: AlertConditionState? = nil) {
         self.applied_dashboard_filters = applied_dashboard_filters
         self.comparison_type = comparison_type
         self._cron = AnyString.init(cron)
+        self._query_id = query_id.map(AnyString.init)
         self._custom_url_base = custom_url_base.map(AnyString.init)
         self._custom_url_params = custom_url_params.map(AnyString.init)
         self._custom_url_label = custom_url_label.map(AnyString.init)
@@ -30128,8 +30435,8 @@ public struct WriteAlert: SDKModel {
         self.time_series_condition_state = time_series_condition_state
     }
 
-    public init(applied_dashboard_filters: [AlertAppliedDashboardFilter]? = nil, _ comparison_type: ComparisonType, _ cron: String, custom_url_base: String? = nil, custom_url_params: String? = nil, custom_url_label: String? = nil, show_custom_url: Bool? = nil, custom_title: String? = nil, dashboard_element_id: String? = nil, description: String? = nil, enhancements: Enhancements? = nil, _ destinations: [AlertDestination], _ field: AlertField, is_disabled: Bool? = nil, disabled_reason: String? = nil, is_public: Bool? = nil, investigative_content_type: InvestigativeContentType? = nil, investigative_content_id: String? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, _ owner_id: String, _ threshold: Double, time_series_condition_state: AlertConditionState? = nil) {
-        self.init(applied_dashboard_filters: applied_dashboard_filters, comparison_type: comparison_type, cron: cron, custom_url_base: custom_url_base, custom_url_params: custom_url_params, custom_url_label: custom_url_label, show_custom_url: show_custom_url, custom_title: custom_title, dashboard_element_id: dashboard_element_id, description: description, enhancements: enhancements, destinations: destinations, field: field, is_disabled: is_disabled, disabled_reason: disabled_reason, is_public: is_public, investigative_content_type: investigative_content_type, investigative_content_id: investigative_content_id, lookml_dashboard_id: lookml_dashboard_id, lookml_link_id: lookml_link_id, owner_id: owner_id, threshold: threshold, time_series_condition_state: time_series_condition_state)
+    public init(applied_dashboard_filters: [AlertAppliedDashboardFilter]? = nil, _ comparison_type: ComparisonType, _ cron: String, query_id: String? = nil, custom_url_base: String? = nil, custom_url_params: String? = nil, custom_url_label: String? = nil, show_custom_url: Bool? = nil, custom_title: String? = nil, dashboard_element_id: String? = nil, description: String? = nil, enhancements: Enhancements? = nil, _ destinations: [AlertDestination], _ field: AlertField, is_disabled: Bool? = nil, disabled_reason: String? = nil, is_public: Bool? = nil, investigative_content_type: InvestigativeContentType? = nil, investigative_content_id: String? = nil, lookml_dashboard_id: String? = nil, lookml_link_id: String? = nil, _ owner_id: String, _ threshold: Double, time_series_condition_state: AlertConditionState? = nil) {
+        self.init(applied_dashboard_filters: applied_dashboard_filters, comparison_type: comparison_type, cron: cron, query_id: query_id, custom_url_base: custom_url_base, custom_url_params: custom_url_params, custom_url_label: custom_url_label, show_custom_url: show_custom_url, custom_title: custom_title, dashboard_element_id: dashboard_element_id, description: description, enhancements: enhancements, destinations: destinations, field: field, is_disabled: is_disabled, disabled_reason: disabled_reason, is_public: is_public, investigative_content_type: investigative_content_type, investigative_content_id: investigative_content_id, lookml_dashboard_id: lookml_dashboard_id, lookml_link_id: lookml_link_id, owner_id: owner_id, threshold: threshold, time_series_condition_state: time_series_condition_state)
     }
 
 }
@@ -30624,7 +30931,7 @@ public struct WriteContentFavorite: SDKModel {
  */
 public struct WriteContentMeta: SDKModel {
     /**
-     * Whether content inherits its access levels from parent
+     * Whether content inherits its access levels from parent. Can be false only if the associated content is a folder, an agent or a board.
      */
     public var inherits: Bool?
 
@@ -31025,7 +31332,7 @@ public struct WriteCredentialsEmail: SDKModel {
 
 /**
  * Dynamic writeable type for Dashboard removes:
- * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, updated_at, last_updater_id, last_updater_name, user_name, view_count, usage_count, is_owner_disabled, url
+ * can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, updated_at, last_updater_id, last_updater_name, user_name, view_count, usage_count, is_owner_disabled, url
  */
 public struct WriteDashboard: SDKModel {
 
@@ -31036,6 +31343,7 @@ public struct WriteDashboard: SDKModel {
         case _refresh_interval = "refresh_interval"
         case folder
         case _title = "title"
+        case _user_id = "user_id"
         case _slug = "slug"
         case _preferred_viewer = "preferred_viewer"
         case certification_metadata
@@ -31056,6 +31364,7 @@ public struct WriteDashboard: SDKModel {
         case _tile_text_color = "tile_text_color"
         case _title_color = "title_color"
         case appearance
+        case download_settings
     }
     private var _description: AnyString?
     /**
@@ -31102,6 +31411,15 @@ public struct WriteDashboard: SDKModel {
     public var title: String? {
         get { _title?.value }
         set { _title = newValue.map(AnyString.init) }
+    }
+
+    private var _user_id: AnyString?
+    /**
+     * Id of User
+     */
+    public var user_id: String? {
+        get { _user_id?.value }
+        set { _user_id = newValue.map(AnyString.init) }
     }
 
     private var _slug: AnyString?
@@ -31242,13 +31560,16 @@ public struct WriteDashboard: SDKModel {
 
     public var appearance: DashboardAppearance?
 
-    public init(description: String? = nil, hidden: Bool? = nil, query_timezone: String? = nil, refresh_interval: String? = nil, folder: WriteFolderBase? = nil, title: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, certification_metadata: WriteCertification? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, crossfilter_enabled: Bool? = nil, deleted: Bool? = nil, enable_viz_full_screen: Bool? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, appearance: DashboardAppearance? = nil) {
+    public var download_settings: DashboardDownloadSettings?
+
+    public init(description: String? = nil, hidden: Bool? = nil, query_timezone: String? = nil, refresh_interval: String? = nil, folder: WriteFolderBase? = nil, title: String? = nil, user_id: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, certification_metadata: WriteCertification? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, crossfilter_enabled: Bool? = nil, deleted: Bool? = nil, enable_viz_full_screen: Bool? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, appearance: DashboardAppearance? = nil, download_settings: DashboardDownloadSettings? = nil) {
         self._description = description.map(AnyString.init)
         self.hidden = hidden
         self._query_timezone = query_timezone.map(AnyString.init)
         self._refresh_interval = refresh_interval.map(AnyString.init)
         self.folder = folder
         self._title = title.map(AnyString.init)
+        self._user_id = user_id.map(AnyString.init)
         self._slug = slug.map(AnyString.init)
         self._preferred_viewer = preferred_viewer.map(AnyString.init)
         self.certification_metadata = certification_metadata
@@ -31269,6 +31590,7 @@ public struct WriteDashboard: SDKModel {
         self._tile_text_color = tile_text_color.map(AnyString.init)
         self._title_color = title_color.map(AnyString.init)
         self.appearance = appearance
+        self.download_settings = download_settings
     }
 
 }
@@ -31315,6 +31637,7 @@ public struct WriteDashboardElement: SDKModel {
         case _note_text = "note_text"
         case query
         case _query_id = "query_id"
+        case _filter_id = "filter_id"
         case _refresh_interval = "refresh_interval"
         case result_maker
         case _result_maker_id = "result_maker_id"
@@ -31421,6 +31744,15 @@ public struct WriteDashboardElement: SDKModel {
         set { _query_id = newValue.map(AnyString.init) }
     }
 
+    private var _filter_id: AnyString?
+    /**
+     * ID of the filter this element represents
+     */
+    public var filter_id: String? {
+        get { _filter_id?.value }
+        set { _filter_id = newValue.map(AnyString.init) }
+    }
+
     private var _refresh_interval: AnyString?
     /**
      * Refresh Interval
@@ -31519,7 +31851,7 @@ public struct WriteDashboardElement: SDKModel {
      */
     public var certification_metadata: WriteCertification?
 
-    public init(body_text: String? = nil, dashboard_id: String? = nil, dashboard_layout_id: String? = nil, look: WriteLookWithQuery? = nil, look_id: String? = nil, merge_result_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, query: WriteQuery? = nil, query_id: String? = nil, refresh_interval: String? = nil, result_maker: WriteResultMakerWithIdVisConfigAndDynamicFields? = nil, result_maker_id: String? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil, rich_content_json: String? = nil, extension_id: String? = nil, aria_description: String? = nil, certification_metadata: WriteCertification? = nil) {
+    public init(body_text: String? = nil, dashboard_id: String? = nil, dashboard_layout_id: String? = nil, look: WriteLookWithQuery? = nil, look_id: String? = nil, merge_result_id: String? = nil, note_display: String? = nil, note_state: String? = nil, note_text: String? = nil, query: WriteQuery? = nil, query_id: String? = nil, filter_id: String? = nil, refresh_interval: String? = nil, result_maker: WriteResultMakerWithIdVisConfigAndDynamicFields? = nil, result_maker_id: String? = nil, subtitle_text: String? = nil, title: String? = nil, title_hidden: Bool? = nil, title_text: String? = nil, type: String? = nil, rich_content_json: String? = nil, extension_id: String? = nil, aria_description: String? = nil, certification_metadata: WriteCertification? = nil) {
         self._body_text = body_text.map(AnyString.init)
         self._dashboard_id = dashboard_id.map(AnyString.init)
         self._dashboard_layout_id = dashboard_layout_id.map(AnyString.init)
@@ -31531,6 +31863,7 @@ public struct WriteDashboardElement: SDKModel {
         self._note_text = note_text.map(AnyString.init)
         self.query = query
         self._query_id = query_id.map(AnyString.init)
+        self._filter_id = filter_id.map(AnyString.init)
         self._refresh_interval = refresh_interval.map(AnyString.init)
         self.result_maker = result_maker
         self._result_maker_id = result_maker_id.map(AnyString.init)
@@ -31695,6 +32028,7 @@ public struct WriteDashboardLayout: SDKModel {
         case _label = "label"
         case _description = "description"
         case _order = "order"
+        case _lookml_link_id = "lookml_link_id"
     }
     private var _dashboard_id: AnyString?
     /**
@@ -31764,7 +32098,16 @@ public struct WriteDashboardLayout: SDKModel {
         set { _order = newValue.map(AnyInt.init) }
     }
 
-    public init(dashboard_id: String? = nil, type: String? = nil, active: Bool? = nil, column_width: Int64? = nil, width: Int64? = nil, label: String? = nil, description: String? = nil, order: Int64? = nil) {
+    private var _lookml_link_id: AnyString?
+    /**
+     * LookML link ID (stable name)
+     */
+    public var lookml_link_id: String? {
+        get { _lookml_link_id?.value }
+        set { _lookml_link_id = newValue.map(AnyString.init) }
+    }
+
+    public init(dashboard_id: String? = nil, type: String? = nil, active: Bool? = nil, column_width: Int64? = nil, width: Int64? = nil, label: String? = nil, description: String? = nil, order: Int64? = nil, lookml_link_id: String? = nil) {
         self._dashboard_id = dashboard_id.map(AnyString.init)
         self._type = type.map(AnyString.init)
         self.active = active
@@ -31773,13 +32116,14 @@ public struct WriteDashboardLayout: SDKModel {
         self._label = label.map(AnyString.init)
         self._description = description.map(AnyString.init)
         self._order = order.map(AnyInt.init)
+        self._lookml_link_id = lookml_link_id.map(AnyString.init)
     }
 
 }
 
 /**
  * Dynamic writeable type for DashboardLayoutComponent removes:
- * can, id, deleted, element_title, element_title_hidden, vis_type
+ * can, id, element_title, element_title_hidden, vis_type
  */
 public struct WriteDashboardLayoutComponent: SDKModel {
 
@@ -31790,6 +32134,7 @@ public struct WriteDashboardLayoutComponent: SDKModel {
         case _column = "column"
         case _width = "width"
         case _height = "height"
+        case deleted
         case _granular_row = "granular_row"
         case _granular_column = "granular_column"
         case _granular_width = "granular_width"
@@ -31849,6 +32194,11 @@ public struct WriteDashboardLayoutComponent: SDKModel {
         set { _height = newValue.map(AnyInt.init) }
     }
 
+    /**
+     * Whether or not the dashboard layout component is deleted
+     */
+    public var deleted: Bool?
+
     private var _granular_row: AnyInt?
     /**
      * Row (granular layout)
@@ -31885,13 +32235,14 @@ public struct WriteDashboardLayoutComponent: SDKModel {
         set { _granular_height = newValue.map(AnyInt.init) }
     }
 
-    public init(dashboard_layout_id: String? = nil, dashboard_element_id: String? = nil, row: Int64? = nil, column: Int64? = nil, width: Int64? = nil, height: Int64? = nil, granular_row: Int64? = nil, granular_column: Int64? = nil, granular_width: Int64? = nil, granular_height: Int64? = nil) {
+    public init(dashboard_layout_id: String? = nil, dashboard_element_id: String? = nil, row: Int64? = nil, column: Int64? = nil, width: Int64? = nil, height: Int64? = nil, deleted: Bool? = nil, granular_row: Int64? = nil, granular_column: Int64? = nil, granular_width: Int64? = nil, granular_height: Int64? = nil) {
         self._dashboard_layout_id = dashboard_layout_id.map(AnyString.init)
         self._dashboard_element_id = dashboard_element_id.map(AnyString.init)
         self._row = row.map(AnyInt.init)
         self._column = column.map(AnyInt.init)
         self._width = width.map(AnyInt.init)
         self._height = height.map(AnyInt.init)
+        self.deleted = deleted
         self._granular_row = granular_row.map(AnyInt.init)
         self._granular_column = granular_column.map(AnyInt.init)
         self._granular_width = granular_width.map(AnyInt.init)
@@ -33938,7 +34289,13 @@ public struct WriteMcpTools: SDKModel {
      */
     public var create_view_from_table: WriteMcpToolSetting?
 
-    public init(enable_all: Bool? = nil, add_dashboard_element: WriteMcpToolSetting? = nil, add_dashboard_filter: WriteMcpToolSetting? = nil, create_project_file: WriteMcpToolSetting? = nil, delete_project_file: WriteMcpToolSetting? = nil, dev_mode: WriteMcpToolSetting? = nil, generate_embed_url: WriteMcpToolSetting? = nil, get_connection_databases: WriteMcpToolSetting? = nil, get_connection_schemas: WriteMcpToolSetting? = nil, get_connection_table_columns: WriteMcpToolSetting? = nil, get_connection_tables: WriteMcpToolSetting? = nil, get_connections: WriteMcpToolSetting? = nil, get_dashboards: WriteMcpToolSetting? = nil, get_dimensions: WriteMcpToolSetting? = nil, get_explores: WriteMcpToolSetting? = nil, get_filters: WriteMcpToolSetting? = nil, get_looks: WriteMcpToolSetting? = nil, get_measures: WriteMcpToolSetting? = nil, get_models: WriteMcpToolSetting? = nil, get_parameters: WriteMcpToolSetting? = nil, get_project_file: WriteMcpToolSetting? = nil, get_project_files: WriteMcpToolSetting? = nil, get_projects: WriteMcpToolSetting? = nil, health_analyze: WriteMcpToolSetting? = nil, health_pulse: WriteMcpToolSetting? = nil, health_vacuum: WriteMcpToolSetting? = nil, make_dashboard: WriteMcpToolSetting? = nil, make_look: WriteMcpToolSetting? = nil, query: WriteMcpToolSetting? = nil, query_sql: WriteMcpToolSetting? = nil, query_url: WriteMcpToolSetting? = nil, run_dashboard: WriteMcpToolSetting? = nil, run_look: WriteMcpToolSetting? = nil, update_project_file: WriteMcpToolSetting? = nil, validate_project: WriteMcpToolSetting? = nil, get_project_directories: WriteMcpToolSetting? = nil, create_project_directory: WriteMcpToolSetting? = nil, delete_project_directory: WriteMcpToolSetting? = nil, get_lookml_tests: WriteMcpToolSetting? = nil, run_lookml_tests: WriteMcpToolSetting? = nil, create_view_from_table: WriteMcpToolSetting? = nil) {
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
+    public var project_git_branch: WriteMcpToolSetting?
+
+    public init(enable_all: Bool? = nil, add_dashboard_element: WriteMcpToolSetting? = nil, add_dashboard_filter: WriteMcpToolSetting? = nil, create_project_file: WriteMcpToolSetting? = nil, delete_project_file: WriteMcpToolSetting? = nil, dev_mode: WriteMcpToolSetting? = nil, generate_embed_url: WriteMcpToolSetting? = nil, get_connection_databases: WriteMcpToolSetting? = nil, get_connection_schemas: WriteMcpToolSetting? = nil, get_connection_table_columns: WriteMcpToolSetting? = nil, get_connection_tables: WriteMcpToolSetting? = nil, get_connections: WriteMcpToolSetting? = nil, get_dashboards: WriteMcpToolSetting? = nil, get_dimensions: WriteMcpToolSetting? = nil, get_explores: WriteMcpToolSetting? = nil, get_filters: WriteMcpToolSetting? = nil, get_looks: WriteMcpToolSetting? = nil, get_measures: WriteMcpToolSetting? = nil, get_models: WriteMcpToolSetting? = nil, get_parameters: WriteMcpToolSetting? = nil, get_project_file: WriteMcpToolSetting? = nil, get_project_files: WriteMcpToolSetting? = nil, get_projects: WriteMcpToolSetting? = nil, health_analyze: WriteMcpToolSetting? = nil, health_pulse: WriteMcpToolSetting? = nil, health_vacuum: WriteMcpToolSetting? = nil, make_dashboard: WriteMcpToolSetting? = nil, make_look: WriteMcpToolSetting? = nil, query: WriteMcpToolSetting? = nil, query_sql: WriteMcpToolSetting? = nil, query_url: WriteMcpToolSetting? = nil, run_dashboard: WriteMcpToolSetting? = nil, run_look: WriteMcpToolSetting? = nil, update_project_file: WriteMcpToolSetting? = nil, validate_project: WriteMcpToolSetting? = nil, get_project_directories: WriteMcpToolSetting? = nil, create_project_directory: WriteMcpToolSetting? = nil, delete_project_directory: WriteMcpToolSetting? = nil, get_lookml_tests: WriteMcpToolSetting? = nil, run_lookml_tests: WriteMcpToolSetting? = nil, create_view_from_table: WriteMcpToolSetting? = nil, project_git_branch: WriteMcpToolSetting? = nil) {
         self.enable_all = enable_all
         self.add_dashboard_element = add_dashboard_element
         self.add_dashboard_filter = add_dashboard_filter
@@ -33980,6 +34337,7 @@ public struct WriteMcpTools: SDKModel {
         self.get_lookml_tests = get_lookml_tests
         self.run_lookml_tests = run_lookml_tests
         self.create_view_from_table = create_view_from_table
+        self.project_git_branch = project_git_branch
     }
 
 }
@@ -35546,6 +35904,8 @@ public struct WriteScheduledPlan: SDKModel {
         case embed
         case _color_theme = "color_theme"
         case long_tables
+        case pdf_page_breaks
+        case _tab_ids = "tab_ids"
         case _inline_table_width = "inline_table_width"
         case _query_id = "query_id"
     }
@@ -35749,6 +36109,20 @@ public struct WriteScheduledPlan: SDKModel {
      */
     public var long_tables: Bool?
 
+    /**
+     * Whether or not to add page breaks between tabs
+     */
+    public var pdf_page_breaks: Bool?
+
+    private var _tab_ids: [AnyString]?
+    /**
+     * IDs of tabs to render (ID on a UDD and a tab label on lookml dashboards)
+     */
+    public var tab_ids: [String]? {
+        get { if let v = _tab_ids { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _tab_ids = v.map { AnyString.init($0) } } else { _tab_ids = nil } }
+    }
+
     private var _inline_table_width: AnyInt?
     /**
      * The pixel width at which we render the inline table visualizations
@@ -35767,7 +36141,7 @@ public struct WriteScheduledPlan: SDKModel {
         set { _query_id = newValue.map(AnyString.init) }
     }
 
-    public init(name: String? = nil, user_id: String? = nil, run_as_recipient: Bool? = nil, enabled: Bool? = nil, look_id: String? = nil, dashboard_id: String? = nil, lookml_dashboard_id: String? = nil, filters_string: String? = nil, dashboard_filters: String? = nil, require_results: Bool? = nil, require_no_results: Bool? = nil, require_change: Bool? = nil, send_all_results: Bool? = nil, crontab: String? = nil, datagroup: String? = nil, timezone: String? = nil, scheduled_plan_destination: [ScheduledPlanDestination]? = nil, run_once: Bool? = nil, include_links: Bool? = nil, custom_url_base: String? = nil, custom_url_params: String? = nil, custom_url_label: String? = nil, show_custom_url: Bool? = nil, pdf_paper_size: String? = nil, pdf_landscape: Bool? = nil, embed: Bool? = nil, color_theme: String? = nil, long_tables: Bool? = nil, inline_table_width: Int64? = nil, query_id: String? = nil) {
+    public init(name: String? = nil, user_id: String? = nil, run_as_recipient: Bool? = nil, enabled: Bool? = nil, look_id: String? = nil, dashboard_id: String? = nil, lookml_dashboard_id: String? = nil, filters_string: String? = nil, dashboard_filters: String? = nil, require_results: Bool? = nil, require_no_results: Bool? = nil, require_change: Bool? = nil, send_all_results: Bool? = nil, crontab: String? = nil, datagroup: String? = nil, timezone: String? = nil, scheduled_plan_destination: [ScheduledPlanDestination]? = nil, run_once: Bool? = nil, include_links: Bool? = nil, custom_url_base: String? = nil, custom_url_params: String? = nil, custom_url_label: String? = nil, show_custom_url: Bool? = nil, pdf_paper_size: String? = nil, pdf_landscape: Bool? = nil, embed: Bool? = nil, color_theme: String? = nil, long_tables: Bool? = nil, pdf_page_breaks: Bool? = nil, tab_ids: [String]? = nil, inline_table_width: Int64? = nil, query_id: String? = nil) {
         self._name = name.map(AnyString.init)
         self._user_id = user_id.map(AnyString.init)
         self.run_as_recipient = run_as_recipient
@@ -35796,6 +36170,8 @@ public struct WriteScheduledPlan: SDKModel {
         self.embed = embed
         self._color_theme = color_theme.map(AnyString.init)
         self.long_tables = long_tables
+        self.pdf_page_breaks = pdf_page_breaks
+        if let v = tab_ids { _tab_ids = v.map { AnyString.init($0) } } else { _tab_ids = nil }
         self._inline_table_width = inline_table_width.map(AnyInt.init)
         self._query_id = query_id.map(AnyString.init)
     }
@@ -35916,6 +36292,7 @@ public struct WriteSetting: SDKModel {
         case revoke_certification_on_edits
         case is_content_certification_enabled
         case auto_certify_lookml_content
+        case ca_agent_observability
         case mcp_tools
     }
     /**
@@ -36059,11 +36436,16 @@ public struct WriteSetting: SDKModel {
     public var auto_certify_lookml_content: Bool?
 
     /**
+     * Toggle CA agent observability
+     */
+    public var ca_agent_observability: Bool?
+
+    /**
      * Dynamic writeable type for McpTools
      */
     public var mcp_tools: WriteMcpTools?
 
-    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_config: WriteEmbedConfig? = nil, dashboard_auto_refresh_restriction: Bool? = nil, dashboard_auto_refresh_minimum_interval: String? = nil, managed_certificate_uri: [String]? = nil, content_certification_documentation_link: String? = nil, revoke_certification_on_edits: Bool? = nil, is_content_certification_enabled: Bool? = nil, auto_certify_lookml_content: Bool? = nil, mcp_tools: WriteMcpTools? = nil) {
+    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_config: WriteEmbedConfig? = nil, dashboard_auto_refresh_restriction: Bool? = nil, dashboard_auto_refresh_minimum_interval: String? = nil, managed_certificate_uri: [String]? = nil, content_certification_documentation_link: String? = nil, revoke_certification_on_edits: Bool? = nil, is_content_certification_enabled: Bool? = nil, auto_certify_lookml_content: Bool? = nil, ca_agent_observability: Bool? = nil, mcp_tools: WriteMcpTools? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
@@ -36088,6 +36470,7 @@ public struct WriteSetting: SDKModel {
         self.revoke_certification_on_edits = revoke_certification_on_edits
         self.is_content_certification_enabled = is_content_certification_enabled
         self.auto_certify_lookml_content = auto_certify_lookml_content
+        self.ca_agent_observability = ca_agent_observability
         self.mcp_tools = mcp_tools
     }
 
@@ -36359,7 +36742,7 @@ public struct WriteUser: SDKModel {
     public var ui_state: StringDictionary<AnyCodable>?
 
     /**
-     * Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.
+     * Indicates if the user can manage API3 credentials. This is an experimental feature and may not yet be available on your instance.
      */
     public var can_manage_api3_creds: Bool?
 
@@ -36392,6 +36775,8 @@ public struct WriteUserAttribute: SDKModel {
         case user_can_view
         case user_can_edit
         case _hidden_value_domain_whitelist = "hidden_value_domain_whitelist"
+        case needed_for_ci_run
+        case _value_for_ci_run = "value_for_ci_run"
     }
     private var _name: AnyString
     /**
@@ -36453,7 +36838,21 @@ public struct WriteUserAttribute: SDKModel {
         set { _hidden_value_domain_whitelist = newValue.map(AnyString.init) }
     }
 
-    public init(name: String, label: String, type: String, default_value: String? = nil, value_is_hidden: Bool? = nil, user_can_view: Bool? = nil, user_can_edit: Bool? = nil, hidden_value_domain_whitelist: String? = nil) {
+    /**
+     * Whether this user attribute is needed for a CI run
+     */
+    public var needed_for_ci_run: Bool?
+
+    private var _value_for_ci_run: AnyString?
+    /**
+     * The value to use for this user attribute during a CI run
+     */
+    public var value_for_ci_run: String? {
+        get { _value_for_ci_run?.value }
+        set { _value_for_ci_run = newValue.map(AnyString.init) }
+    }
+
+    public init(name: String, label: String, type: String, default_value: String? = nil, value_is_hidden: Bool? = nil, user_can_view: Bool? = nil, user_can_edit: Bool? = nil, hidden_value_domain_whitelist: String? = nil, needed_for_ci_run: Bool? = nil, value_for_ci_run: String? = nil) {
         self._name = AnyString.init(name)
         self._label = AnyString.init(label)
         self._type = AnyString.init(type)
@@ -36462,10 +36861,12 @@ public struct WriteUserAttribute: SDKModel {
         self.user_can_view = user_can_view
         self.user_can_edit = user_can_edit
         self._hidden_value_domain_whitelist = hidden_value_domain_whitelist.map(AnyString.init)
+        self.needed_for_ci_run = needed_for_ci_run
+        self._value_for_ci_run = value_for_ci_run.map(AnyString.init)
     }
 
-    public init(_ name: String, _ label: String, _ type: String, default_value: String? = nil, value_is_hidden: Bool? = nil, user_can_view: Bool? = nil, user_can_edit: Bool? = nil, hidden_value_domain_whitelist: String? = nil) {
-        self.init(name: name, label: label, type: type, default_value: default_value, value_is_hidden: value_is_hidden, user_can_view: user_can_view, user_can_edit: user_can_edit, hidden_value_domain_whitelist: hidden_value_domain_whitelist)
+    public init(_ name: String, _ label: String, _ type: String, default_value: String? = nil, value_is_hidden: Bool? = nil, user_can_view: Bool? = nil, user_can_edit: Bool? = nil, hidden_value_domain_whitelist: String? = nil, needed_for_ci_run: Bool? = nil, value_for_ci_run: String? = nil) {
+        self.init(name: name, label: label, type: type, default_value: default_value, value_is_hidden: value_is_hidden, user_can_view: user_can_view, user_can_edit: user_can_edit, hidden_value_domain_whitelist: hidden_value_domain_whitelist, needed_for_ci_run: needed_for_ci_run, value_for_ci_run: value_for_ci_run)
     }
 
 }

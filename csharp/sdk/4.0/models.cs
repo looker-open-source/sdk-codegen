@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 448 API models: 352 Spec, 0 Request, 70 Write, 26 Enum
+/// 451 API models: 355 Spec, 0 Request, 70 Write, 26 Enum
 
 #nullable enable
 using System;
@@ -101,6 +101,8 @@ public class Alert : SdkModel
   public ComparisonType comparison_type { get; set; }
   /// <summary>Vixie-Style crontab specification when to run. At minimum, it has to be longer than 15 minute intervals</summary>
   public string cron { get; set; } = "";
+  /// <summary>ID of the query</summary>
+  public string? query_id { get; set; } = null;
   /// <summary>Domain for the custom url selected by the alert creator from the admin defined domain allowlist</summary>
   public string? custom_url_base { get; set; } = null;
   /// <summary>Parameters and path for the custom url defined by the alert creator</summary>
@@ -934,6 +936,8 @@ public class CIRun : SdkModel
   public long? crashed_check_count { get; set; } = null;
   /// <summary>URL of the CI run (read-only)</summary>
   public string? run_url { get; set; } = null;
+  /// <summary>User attributes for the CI run (read-only)</summary>
+  public CIRunUserAttribute[]? user_attributes { get; set; } = null;
 }
 
 public class CIRunResult : SdkModel
@@ -947,6 +951,16 @@ public class CIRunResult : SdkModel
   public CILookMLValidatorResult? lookml_result { get; set; }
   public CIGenericError? lookml_error { get; set; }
   public CIGenericError? generic_error { get; set; }
+}
+
+public class CIRunUserAttribute : SdkModel
+{
+  /// <summary>ID of the user attribute</summary>
+  public long? id { get; set; } = null;
+  /// <summary>Name of the user attribute</summary>
+  public string? name { get; set; } = null;
+  /// <summary>Value of the user attribute</summary>
+  public string? value { get; set; } = null;
 }
 
 public class CIScheduleTrigger : SdkModel
@@ -1157,7 +1171,7 @@ public class ContentMeta : SdkModel
   public string? agent_id { get; set; } = null;
   /// <summary>Content Type ("dashboard", "look", or "folder") (read-only)</summary>
   public string? content_type { get; set; } = null;
-  /// <summary>Whether content inherits its access levels from parent</summary>
+  /// <summary>Whether content inherits its access levels from parent. Can be false only if the associated content is a folder, an agent or a board.</summary>
   public bool? inherits { get; set; } = null;
   /// <summary>Id of Inherited Content (read-only)</summary>
   public string? inheriting_id { get; set; } = null;
@@ -1329,6 +1343,8 @@ public class ContentValidationDashboardElement : SdkModel
   public string? note_text_as_html { get; set; } = null;
   /// <summary>Id Of Query</summary>
   public string? query_id { get; set; } = null;
+  /// <summary>ID of the filter this element represents</summary>
+  public string? filter_id { get; set; } = null;
   /// <summary>Text tile subtitle text</summary>
   public string? subtitle_text { get; set; } = null;
   /// <summary>Title of dashboard element</summary>
@@ -1641,6 +1657,8 @@ public class CreateContinuousIntegrationRunRequest : SdkModel
   public string? branch { get; set; } = null;
   /// <summary>Commit that the CI run should validate. Omit to test production.</summary>
   public string? commit { get; set; } = null;
+  /// <summary>User attributes to override for the CI run.</summary>
+  public UserAttributeOverride[]? user_attributes { get; set; } = null;
 }
 
 /// WARNING: no writeable properties found for POST, PUT, or PATCH
@@ -1712,6 +1730,8 @@ public class CreateDashboardRenderTask : SdkModel
   public string? dashboard_filters { get; set; } = null;
   /// <summary>Dashboard layout style: single_column or tiled</summary>
   public string? dashboard_style { get; set; } = null;
+  /// <summary>IDs of tabs to render (ID on a UDD and a tab label on lookml dashboards)</summary>
+  public string[]? tab_ids { get; set; } = null;
 }
 
 public class CreateEmbedUserRequest : SdkModel
@@ -2031,7 +2051,7 @@ public class Dashboard : SdkModel
   public FolderBase? folder { get; set; }
   /// <summary>Dashboard Title</summary>
   public string? title { get; set; } = null;
-  /// <summary>Id of User (read-only)</summary>
+  /// <summary>Id of User</summary>
   public string? user_id { get; set; } = null;
   /// <summary>Content Metadata Slug</summary>
   public string? slug { get; set; } = null;
@@ -2107,6 +2127,7 @@ public class Dashboard : SdkModel
   public bool? is_owner_disabled { get; set; } = null;
   /// <summary>Relative URL of the dashboard (read-only)</summary>
   public string? url { get; set; } = null;
+  public DashboardDownloadSettings? download_settings { get; set; }
 }
 
 public class DashboardAggregateTableLookml : SdkModel
@@ -2133,6 +2154,8 @@ public class DashboardAppearance : SdkModel
   public bool? tile_shadow { get; set; } = null;
   /// <summary>Key color</summary>
   public string? key_color { get; set; } = null;
+  /// <summary>Whether to modernize visualizations on this dashboard</summary>
+  public bool? modern_vis2026 { get; set; } = null;
 }
 
 public class DashboardBase : SdkModel
@@ -2170,6 +2193,22 @@ public class DashboardBase : SdkModel
   public Certification? certification_metadata { get; set; }
 }
 
+public class DashboardDownloadSettings : SdkModel
+{
+  /// <summary>Format option</summary>
+  public string? format_option { get; set; } = null;
+  /// <summary>Value option</summary>
+  public string? value_options { get; set; } = null;
+  /// <summary>Result option</summary>
+  public string? result_options { get; set; } = null;
+  /// <summary>Limit option</summary>
+  public string? limit_options { get; set; } = null;
+  /// <summary>Rows limit</summary>
+  public long? rows_limit { get; set; } = null;
+  /// <summary>Columns limit</summary>
+  public long? columns_limit { get; set; } = null;
+}
+
 public class DashboardElement : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
@@ -2204,6 +2243,8 @@ public class DashboardElement : SdkModel
   public Query? query { get; set; }
   /// <summary>Id Of Query</summary>
   public string? query_id { get; set; } = null;
+  /// <summary>ID of the filter this element represents</summary>
+  public string? filter_id { get; set; } = null;
   /// <summary>Refresh Interval</summary>
   public string? refresh_interval { get; set; } = null;
   /// <summary>Refresh Interval as integer (read-only)</summary>
@@ -2300,6 +2341,8 @@ public class DashboardLayout : SdkModel
   public string? description { get; set; } = null;
   /// <summary>Order</summary>
   public long? order { get; set; } = null;
+  /// <summary>LookML link ID (stable name)</summary>
+  public string? lookml_link_id { get; set; } = null;
 }
 
 public class DashboardLayoutComponent : SdkModel
@@ -2320,7 +2363,7 @@ public class DashboardLayoutComponent : SdkModel
   public long? width { get; set; } = null;
   /// <summary>Height</summary>
   public long? height { get; set; } = null;
-  /// <summary>Whether or not the dashboard layout component is deleted (read-only)</summary>
+  /// <summary>Whether or not the dashboard layout component is deleted</summary>
   public bool? deleted { get; set; } = null;
   /// <summary>Dashboard element title, extracted from the Dashboard Element. (read-only)</summary>
   public string? element_title { get; set; } = null;
@@ -4330,6 +4373,8 @@ public class LookmlModelExploreField : SdkModel
   /// <summary>The appropriate horizontal text alignment the values of this field should be displayed in. Valid values are: "left", "right". (read-only)</summary>
   [JsonConverter(typeof(StringEnumConverter))]
   public Align? align { get; set; }
+  /// <summary>An array of custom timeframes available for this field for filtering, if applicable. (read-only)</summary>
+  public string[]? available_custom_timeframes { get; set; } = null;
   /// <summary>Whether it's possible to filter on this field. (read-only)</summary>
   public bool? can_filter { get; set; } = null;
   /// <summary>Field category Valid values are: "parameter", "filter", "measure", "dimension". (read-only)</summary>
@@ -4910,6 +4955,7 @@ public class McpTools : SdkModel
   public McpToolSetting? get_lookml_tests { get; set; }
   public McpToolSetting? run_lookml_tests { get; set; }
   public McpToolSetting? create_view_from_table { get; set; }
+  public McpToolSetting? project_git_branch { get; set; }
 }
 
 public class McpToolSetting : SdkModel
@@ -4992,6 +5038,8 @@ public class MobilePayload : SdkModel
   public string? dashboard_id { get; set; } = null;
   /// <summary>Slug of the query which runs the alert queries. (read-only)</summary>
   public string? query_slug { get; set; } = null;
+  /// <summary>ID of the query (read-only)</summary>
+  public string? query_id { get; set; } = null;
 }
 
 public class MobileSettings : SdkModel
@@ -6143,6 +6191,10 @@ public class ScheduledPlan : SdkModel
   public string? color_theme { get; set; } = null;
   /// <summary>Whether or not to expand table vis to full length</summary>
   public bool? long_tables { get; set; } = null;
+  /// <summary>Whether or not to add page breaks between tabs</summary>
+  public bool? pdf_page_breaks { get; set; } = null;
+  /// <summary>IDs of tabs to render (ID on a UDD and a tab label on lookml dashboards)</summary>
+  public string[]? tab_ids { get; set; } = null;
   /// <summary>The pixel width at which we render the inline table visualizations</summary>
   public long? inline_table_width { get; set; } = null;
   /// <summary>Query id</summary>
@@ -6426,6 +6478,8 @@ public class Setting : SdkModel
   public bool? is_content_certification_enabled { get; set; } = null;
   /// <summary>Allow auto certification of lookml content.</summary>
   public bool? auto_certify_lookml_content { get; set; } = null;
+  /// <summary>Toggle CA agent observability</summary>
+  public bool? ca_agent_observability { get; set; } = null;
   public McpTools? mcp_tools { get; set; }
 }
 
@@ -7031,7 +7085,7 @@ public class User : SdkModel
   public string? embed_group_folder_id { get; set; } = null;
   /// <summary>User is an IAM Admin. This field may only be applicable for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview). The is_iam_admin is not returned by default. Please explicitly request this attribute if needed via the fields query param. Note: Including the optional is_iam_admin attribute can increase API latency. For best performance, use this attribute only when filtering for users with the 'Admin via IAM' role. When using this filter, always paginate your results with the offset and limit fields to optimize response time. (read-only)</summary>
   public bool? is_iam_admin { get; set; } = null;
-  /// <summary>Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.</summary>
+  /// <summary>Indicates if the user can manage API3 credentials. This is an experimental feature and may not yet be available on your instance.</summary>
   public bool? can_manage_api3_creds { get; set; } = null;
   /// <summary>Indicates if this user is a service account. (read-only)</summary>
   public bool? is_service_account { get; set; } = null;
@@ -7067,6 +7121,10 @@ public class UserAttribute : SdkModel
   public bool? user_can_edit { get; set; } = null;
   /// <summary>Destinations to which a hidden attribute may be sent. Once set, cannot be edited.</summary>
   public string? hidden_value_domain_whitelist { get; set; } = null;
+  /// <summary>Whether this user attribute is needed for a CI run</summary>
+  public bool? needed_for_ci_run { get; set; } = null;
+  /// <summary>The value to use for this user attribute during a CI run</summary>
+  public string? value_for_ci_run { get; set; } = null;
 }
 
 /// An array of user attribute types that are allowed to be used in filters on this field. Valid values are: "advanced_filter_string", "advanced_filter_number", "advanced_filter_datetime", "string", "number", "datetime", "relative_url", "yesno", "zipcode". (Enum defined in LookmlModelExploreField)
@@ -7108,6 +7166,14 @@ public class UserAttributeGroupValue : SdkModel
   /// <summary>Precedence for resolving value for user (read-only)</summary>
   public long? rank { get; set; } = null;
   /// <summary>Value of user attribute for group (read-only)</summary>
+  public string? value { get; set; } = null;
+}
+
+public class UserAttributeOverride : SdkModel
+{
+  /// <summary>Name of user attribute that should be overridden for CI Run</summary>
+  public string? name { get; set; } = null;
+  /// <summary>Value of user attribute that should be set for CI Run</summary>
   public string? value { get; set; } = null;
 }
 
@@ -7318,6 +7384,8 @@ public class WriteAlert : SdkModel
   public ComparisonType comparison_type { get; set; }
   /// <summary>Vixie-Style crontab specification when to run. At minimum, it has to be longer than 15 minute intervals</summary>
   public string cron { get; set; } = "";
+  /// <summary>ID of the query</summary>
+  public string? query_id { get; set; } = null;
   /// <summary>Domain for the custom url selected by the alert creator from the admin defined domain allowlist</summary>
   public string? custom_url_base { get; set; } = null;
   /// <summary>Parameters and path for the custom url defined by the alert creator</summary>
@@ -7500,7 +7568,7 @@ public class WriteContentFavorite : SdkModel
 /// can, id, name, parent_id, dashboard_id, look_id, folder_id, homepage_id, agent_id, content_type, inheriting_id, slug
 public class WriteContentMeta : SdkModel
 {
-  /// <summary>Whether content inherits its access levels from parent</summary>
+  /// <summary>Whether content inherits its access levels from parent. Can be false only if the associated content is a folder, an agent or a board.</summary>
   public bool? inherits { get; set; } = null;
 }
 
@@ -7611,7 +7679,7 @@ public class WriteCredentialsEmail : SdkModel
 }
 
 /// Dynamic writeable type for Dashboard removes:
-/// can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, user_id, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, updated_at, last_updater_id, last_updater_name, user_name, view_count, usage_count, is_owner_disabled, url
+/// can, content_favorite_id, content_metadata_id, id, model, readonly, refresh_interval_to_i, created_at, dashboard_elements, dashboard_filters, dashboard_layouts, deleted_at, deleter_id, edit_uri, favorite_count, last_accessed_at, last_viewed_at, updated_at, last_updater_id, last_updater_name, user_name, view_count, usage_count, is_owner_disabled, url
 public class WriteDashboard : SdkModel
 {
   /// <summary>Description</summary>
@@ -7629,6 +7697,8 @@ public class WriteDashboard : SdkModel
   public WriteFolderBase? folder { get; set; }
   /// <summary>Dashboard Title</summary>
   public string? title { get; set; } = null;
+  /// <summary>Id of User</summary>
+  public string? user_id { get; set; } = null;
   /// <summary>Content Metadata Slug</summary>
   public string? slug { get; set; } = null;
   /// <summary>The preferred route for viewing this dashboard (ie: dashboards or dashboards-next)</summary>
@@ -7671,6 +7741,7 @@ public class WriteDashboard : SdkModel
   /// <summary>Title color</summary>
   public string? title_color { get; set; } = null;
   public DashboardAppearance? appearance { get; set; }
+  public DashboardDownloadSettings? download_settings { get; set; }
 }
 
 /// Dynamic writeable type for DashboardBase removes:
@@ -7721,6 +7792,8 @@ public class WriteDashboardElement : SdkModel
   public WriteQuery? query { get; set; }
   /// <summary>Id Of Query</summary>
   public string? query_id { get; set; } = null;
+  /// <summary>ID of the filter this element represents</summary>
+  public string? filter_id { get; set; } = null;
   /// <summary>Refresh Interval</summary>
   public string? refresh_interval { get; set; } = null;
   /// <summary>
@@ -7803,10 +7876,12 @@ public class WriteDashboardLayout : SdkModel
   public string? description { get; set; } = null;
   /// <summary>Order</summary>
   public long? order { get; set; } = null;
+  /// <summary>LookML link ID (stable name)</summary>
+  public string? lookml_link_id { get; set; } = null;
 }
 
 /// Dynamic writeable type for DashboardLayoutComponent removes:
-/// can, id, deleted, element_title, element_title_hidden, vis_type
+/// can, id, element_title, element_title_hidden, vis_type
 public class WriteDashboardLayoutComponent : SdkModel
 {
   /// <summary>Id of Dashboard Layout</summary>
@@ -7821,6 +7896,8 @@ public class WriteDashboardLayoutComponent : SdkModel
   public long? width { get; set; } = null;
   /// <summary>Height</summary>
   public long? height { get; set; } = null;
+  /// <summary>Whether or not the dashboard layout component is deleted</summary>
+  public bool? deleted { get; set; } = null;
   /// <summary>Row (granular layout)</summary>
   public long? granular_row { get; set; } = null;
   /// <summary>Column (granular layout)</summary>
@@ -8484,6 +8561,11 @@ public class WriteMcpTools : SdkModel
   /// description, category, access_level
   /// </summary>
   public WriteMcpToolSetting? create_view_from_table { get; set; }
+  /// <summary>
+  /// Dynamic writeable type for McpToolSetting removes:
+  /// description, category, access_level
+  /// </summary>
+  public WriteMcpToolSetting? project_git_branch { get; set; }
 }
 
 /// Dynamic writeable type for McpToolSetting removes:
@@ -8928,6 +9010,10 @@ public class WriteScheduledPlan : SdkModel
   public string? color_theme { get; set; } = null;
   /// <summary>Whether or not to expand table vis to full length</summary>
   public bool? long_tables { get; set; } = null;
+  /// <summary>Whether or not to add page breaks between tabs</summary>
+  public bool? pdf_page_breaks { get; set; } = null;
+  /// <summary>IDs of tabs to render (ID on a UDD and a tab label on lookml dashboards)</summary>
+  public string[]? tab_ids { get; set; } = null;
   /// <summary>The pixel width at which we render the inline table visualizations</summary>
   public long? inline_table_width { get; set; } = null;
   /// <summary>Query id</summary>
@@ -9016,6 +9102,8 @@ public class WriteSetting : SdkModel
   public bool? is_content_certification_enabled { get; set; } = null;
   /// <summary>Allow auto certification of lookml content.</summary>
   public bool? auto_certify_lookml_content { get; set; } = null;
+  /// <summary>Toggle CA agent observability</summary>
+  public bool? ca_agent_observability { get; set; } = null;
   /// <summary>Dynamic writeable type for McpTools</summary>
   public WriteMcpTools? mcp_tools { get; set; }
 }
@@ -9094,7 +9182,7 @@ public class WriteUser : SdkModel
   public bool? models_dir_validated { get; set; } = null;
   /// <summary>Per user dictionary of undocumented state information owned by the Looker UI.</summary>
   public StringDictionary<string>? ui_state { get; set; } = null;
-  /// <summary>Indicates if the user can manage API3 credentials. This field may only be applicable for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview). This is an experimental feature and may not yet be available on your instance.</summary>
+  /// <summary>Indicates if the user can manage API3 credentials. This is an experimental feature and may not yet be available on your instance.</summary>
   public bool? can_manage_api3_creds { get; set; } = null;
 }
 
@@ -9118,6 +9206,10 @@ public class WriteUserAttribute : SdkModel
   public bool? user_can_edit { get; set; } = null;
   /// <summary>Destinations to which a hidden attribute may be sent. Once set, cannot be edited.</summary>
   public string? hidden_value_domain_whitelist { get; set; } = null;
+  /// <summary>Whether this user attribute is needed for a CI run</summary>
+  public bool? needed_for_ci_run { get; set; } = null;
+  /// <summary>The value to use for this user attribute during a CI run</summary>
+  public string? value_for_ci_run { get; set; } = null;
 }
 
 /// Dynamic writeable type for UserAttributeWithValue removes:

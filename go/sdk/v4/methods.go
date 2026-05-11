@@ -306,11 +306,10 @@ func (l *LookerSDK) Login(request RequestLogin,
 // POST /login/{user_id} -> AccessToken
 func (l *LookerSDK) LoginUser(
 	userId string,
-	associative bool,
 	options *rtl.ApiSettings) (AccessToken, error) {
 	userId = url.PathEscape(userId)
 	var result AccessToken
-	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/login/%v", userId), map[string]interface{}{"associative": associative}, nil, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/login/%v", userId), nil, nil, options)
 	return result, err
 
 }
@@ -6017,7 +6016,7 @@ func (l *LookerSDK) RunQuery(request RequestRunQuery,
 	request.QueryId = url.PathEscape(request.QueryId)
 	request.ResultFormat = url.PathEscape(request.ResultFormat)
 	var result string
-	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/queries/%v/run/%v", request.QueryId, request.ResultFormat), map[string]interface{}{"limit": request.Limit, "apply_formatting": request.ApplyFormatting, "apply_vis": request.ApplyVis, "cache": request.Cache, "image_width": request.ImageWidth, "image_height": request.ImageHeight, "generate_drill_links": request.GenerateDrillLinks, "force_production": request.ForceProduction, "cache_only": request.CacheOnly, "path_prefix": request.PathPrefix, "rebuild_pdts": request.RebuildPdts, "server_table_calcs": request.ServerTableCalcs, "source": request.Source, "enable_oauth_error_response": request.EnableOauthErrorResponse}, nil, options)
+	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/queries/%v/run/%v", request.QueryId, request.ResultFormat), map[string]interface{}{"limit": request.Limit, "apply_formatting": request.ApplyFormatting, "apply_vis": request.ApplyVis, "cache": request.Cache, "image_width": request.ImageWidth, "image_height": request.ImageHeight, "generate_drill_links": request.GenerateDrillLinks, "force_production": request.ForceProduction, "cache_only": request.CacheOnly, "path_prefix": request.PathPrefix, "rebuild_pdts": request.RebuildPdts, "server_table_calcs": request.ServerTableCalcs}, nil, options)
 	return result, err
 
 }
@@ -6085,7 +6084,7 @@ func (l *LookerSDK) RunInlineQuery(request RequestRunInlineQuery,
 	options *rtl.ApiSettings) (string, error) {
 	request.ResultFormat = url.PathEscape(request.ResultFormat)
 	var result string
-	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/queries/run/%v", request.ResultFormat), map[string]interface{}{"limit": request.Limit, "apply_formatting": request.ApplyFormatting, "apply_vis": request.ApplyVis, "cache": request.Cache, "image_width": request.ImageWidth, "image_height": request.ImageHeight, "generate_drill_links": request.GenerateDrillLinks, "force_production": request.ForceProduction, "cache_only": request.CacheOnly, "path_prefix": request.PathPrefix, "rebuild_pdts": request.RebuildPdts, "server_table_calcs": request.ServerTableCalcs, "enable_oauth_error_response": request.EnableOauthErrorResponse}, request.Body, options)
+	err := l.AuthSession.Do(&result, "POST", "/4.0", fmt.Sprintf("/queries/run/%v", request.ResultFormat), map[string]interface{}{"limit": request.Limit, "apply_formatting": request.ApplyFormatting, "apply_vis": request.ApplyVis, "cache": request.Cache, "image_width": request.ImageWidth, "image_height": request.ImageHeight, "generate_drill_links": request.GenerateDrillLinks, "force_production": request.ForceProduction, "cache_only": request.CacheOnly, "path_prefix": request.PathPrefix, "rebuild_pdts": request.RebuildPdts, "server_table_calcs": request.ServerTableCalcs}, request.Body, options)
 	return result, err
 
 }
