@@ -241,7 +241,7 @@ jobs:
           python-version: '3.14'
       - name: Twine upload check
         run: |
-          pip install wheel twine
+          pip install wheel twine setuptools
           python setup.py sdist bdist_wheel
           twine check dist/*
 
