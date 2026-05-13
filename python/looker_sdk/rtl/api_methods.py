@@ -107,7 +107,7 @@ class APIMethods:
             ret = response.value
         else:
             value = response.value.decode(encoding=encoding)
-            if structure is Union[str, bytes] or structure is str or value == "":  # type: ignore
+            if structure == Union[str, bytes] or structure == str or value == "":  # type: ignore
                 ret = value
             else:
                 # ignore type: mypy bug doesn't recognized kwarg
