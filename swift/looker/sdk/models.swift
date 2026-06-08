@@ -25,7 +25,7 @@
  */
 
 /**
- * 451 API models: 355 Spec, 0 Request, 70 Write, 26 Enum
+ * 458 API models: 361 Spec, 0 Request, 71 Write, 26 Enum
  */
 
 
@@ -101,6 +101,8 @@ public struct Agent: SDKModel {
         case _category = "category"
         case sources
         case has_inaccessible_source
+        case golden_queries
+        case _golden_query_ids = "golden_query_ids"
         case context
         case deleted
         case created_at
@@ -108,6 +110,7 @@ public struct Agent: SDKModel {
         case _content_metadata_id = "content_metadata_id"
         case code_interpreter
         case _studio_agent_id = "studio_agent_id"
+        case workflow_params
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -125,7 +128,7 @@ public struct Agent: SDKModel {
 
     private var _created_by_user_id: AnyString?
     /**
-     * User that created the Agent (read-only)
+     * User that created the Agent
      */
     public var created_by_user_id: String? {
         get { _created_by_user_id?.value }
@@ -205,6 +208,20 @@ public struct Agent: SDKModel {
      */
     public var has_inaccessible_source: Bool?
 
+    /**
+     * Agent golden questions (read-only)
+     */
+    public var golden_queries: [GoldenQuery]?
+
+    private var _golden_query_ids: [AnyInt]?
+    /**
+     * IDs of golden queries linked to the agent
+     */
+    public var golden_query_ids: [Int64]? {
+        get { if let v = _golden_query_ids { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _golden_query_ids = v.map { AnyInt.init($0) } } else { _golden_query_ids = nil } }
+    }
+
     public var context: Context?
 
     /**
@@ -245,7 +262,9 @@ public struct Agent: SDKModel {
         set { _studio_agent_id = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, created_by_user_id: String? = nil, created_by_name: String? = nil, created_by_first_name: String? = nil, created_by_last_name: String? = nil, created_by_avatar_url: String? = nil, name: String? = nil, description: String? = nil, category: String? = nil, sources: [Source]? = nil, has_inaccessible_source: Bool? = nil, context: Context? = nil, deleted: Bool? = nil, created_at: Date? = nil, updated_at: Date? = nil, content_metadata_id: String? = nil, code_interpreter: Bool? = nil, studio_agent_id: String? = nil) {
+    public var workflow_params: WorkflowParams?
+
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, created_by_user_id: String? = nil, created_by_name: String? = nil, created_by_first_name: String? = nil, created_by_last_name: String? = nil, created_by_avatar_url: String? = nil, name: String? = nil, description: String? = nil, category: String? = nil, sources: [Source]? = nil, has_inaccessible_source: Bool? = nil, golden_queries: [GoldenQuery]? = nil, golden_query_ids: [Int64]? = nil, context: Context? = nil, deleted: Bool? = nil, created_at: Date? = nil, updated_at: Date? = nil, content_metadata_id: String? = nil, code_interpreter: Bool? = nil, studio_agent_id: String? = nil, workflow_params: WorkflowParams? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
         self._created_by_user_id = created_by_user_id.map(AnyString.init)
@@ -258,6 +277,8 @@ public struct Agent: SDKModel {
         self._category = category.map(AnyString.init)
         self.sources = sources
         self.has_inaccessible_source = has_inaccessible_source
+        self.golden_queries = golden_queries
+        if let v = golden_query_ids { _golden_query_ids = v.map { AnyInt.init($0) } } else { _golden_query_ids = nil }
         self.context = context
         self.deleted = deleted
         self.created_at = created_at
@@ -265,6 +286,7 @@ public struct Agent: SDKModel {
         self._content_metadata_id = content_metadata_id.map(AnyString.init)
         self.code_interpreter = code_interpreter
         self._studio_agent_id = studio_agent_id.map(AnyString.init)
+        self.workflow_params = workflow_params
     }
 
 }
@@ -1660,6 +1682,26 @@ public struct AssertValidatorTestSuccess: SDKModel {
 
 }
 
+public struct AsyncDeployResponse: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _status = "status"
+    }
+    private var _status: AnyString?
+    /**
+     * Status of the async deploy request (e.g., 'queued') (read-only)
+     */
+    public var status: String? {
+        get { _status?.value }
+        set { _status = newValue.map(AnyString.init) }
+    }
+
+    public init(status: String? = nil) {
+        self._status = status.map(AnyString.init)
+    }
+
+}
+
 public struct BackupConfiguration: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -1957,7 +1999,7 @@ public struct Board: SDKModel {
 
     private var _user_id: AnyString?
     /**
-     * User id of board creator (read-only)
+     * User id of board creator
      */
     public var user_id: String? {
         get { _user_id?.value }
@@ -8431,6 +8473,95 @@ public struct CredentialsTotp: SDKModel {
 
 }
 
+public struct CredentialsWorkforce: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _created_at = "created_at"
+        case _email = "email"
+        case is_disabled
+        case _logged_in_at = "logged_in_at"
+        case _workforce_user_id = "workforce_user_id"
+        case _type = "type"
+        case _url = "url"
+    }
+    /**
+     * Operations the current user is able to perform on this object (read-only)
+     */
+    public var can: StringDictionary<Bool>?
+
+    private var _created_at: AnyString?
+    /**
+     * Timestamp for the creation of this credential (read-only)
+     */
+    public var created_at: String? {
+        get { _created_at?.value }
+        set { _created_at = newValue.map(AnyString.init) }
+    }
+
+    private var _email: AnyString?
+    /**
+     * Email address (read-only)
+     */
+    public var email: String? {
+        get { _email?.value }
+        set { _email = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Has this credential been disabled? (read-only)
+     */
+    public var is_disabled: Bool?
+
+    private var _logged_in_at: AnyString?
+    /**
+     * Timestamp for most recent login using credential (read-only)
+     */
+    public var logged_in_at: String? {
+        get { _logged_in_at?.value }
+        set { _logged_in_at = newValue.map(AnyString.init) }
+    }
+
+    private var _workforce_user_id: AnyString?
+    /**
+     * Workforce Unique ID for this user (read-only)
+     */
+    public var workforce_user_id: String? {
+        get { _workforce_user_id?.value }
+        set { _workforce_user_id = newValue.map(AnyString.init) }
+    }
+
+    private var _type: AnyString?
+    /**
+     * Short name for the type of this kind of credential (read-only)
+     */
+    public var type: String? {
+        get { _type?.value }
+        set { _type = newValue.map(AnyString.init) }
+    }
+
+    private var _url: AnyString?
+    /**
+     * Link to get this item (read-only)
+     */
+    public var url: String? {
+        get { _url?.value }
+        set { _url = newValue.map(AnyString.init) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, created_at: String? = nil, email: String? = nil, is_disabled: Bool? = nil, logged_in_at: String? = nil, workforce_user_id: String? = nil, type: String? = nil, url: String? = nil) {
+        self.can = can
+        self._created_at = created_at.map(AnyString.init)
+        self._email = email.map(AnyString.init)
+        self.is_disabled = is_disabled
+        self._logged_in_at = logged_in_at.map(AnyString.init)
+        self._workforce_user_id = workforce_user_id.map(AnyString.init)
+        self._type = type.map(AnyString.init)
+        self._url = url.map(AnyString.init)
+    }
+
+}
+
 public struct CustomWelcomeEmail: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -8501,6 +8632,7 @@ public struct Dashboard: SDKModel {
         case _preferred_viewer = "preferred_viewer"
         case certification_metadata
         case alert_sync_with_dashboard_filter_enabled
+        case chat_enabled
         case _background_color = "background_color"
         case created_at
         case crossfilter_enabled
@@ -8535,6 +8667,7 @@ public struct Dashboard: SDKModel {
         case _usage_count = "usage_count"
         case is_owner_disabled
         case _url = "url"
+        case preserve_desktop_layout
         case download_settings
     }
     /**
@@ -8661,6 +8794,11 @@ public struct Dashboard: SDKModel {
      * Enables alerts to keep in sync with dashboard filter changes
      */
     public var alert_sync_with_dashboard_filter_enabled: Bool?
+
+    /**
+     * Whether chat is enabled for this dashboard
+     */
+    public var chat_enabled: Bool?
 
     private var _background_color: AnyString?
     /**
@@ -8897,9 +9035,14 @@ public struct Dashboard: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
+    /**
+     * Whether to preserve the desktop layout on mobile viewports. i.e. don't force a single column layout on mobile.
+     */
+    public var preserve_desktop_layout: Bool?
+
     public var download_settings: DashboardDownloadSettings?
 
-    public init(can: StringDictionary<Bool>? = nil, content_favorite_id: String? = nil, content_metadata_id: String? = nil, description: String? = nil, hidden: Bool? = nil, id: String? = nil, model: LookModel? = nil, query_timezone: String? = nil, readonly: Bool? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, folder: FolderBase? = nil, title: String? = nil, user_id: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, certification_metadata: Certification? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, created_at: Date? = nil, crossfilter_enabled: Bool? = nil, dashboard_elements: [DashboardElement]? = nil, dashboard_filters: [DashboardFilter]? = nil, dashboard_layouts: [DashboardLayout]? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, edit_uri: String? = nil, enable_viz_full_screen: Bool? = nil, favorite_count: Int64? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, last_accessed_at: Date? = nil, last_viewed_at: Date? = nil, updated_at: Date? = nil, last_updater_id: String? = nil, last_updater_name: String? = nil, user_name: String? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, view_count: Int64? = nil, appearance: DashboardAppearance? = nil, usage_count: Int64? = nil, is_owner_disabled: Bool? = nil, url: String? = nil, download_settings: DashboardDownloadSettings? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, content_favorite_id: String? = nil, content_metadata_id: String? = nil, description: String? = nil, hidden: Bool? = nil, id: String? = nil, model: LookModel? = nil, query_timezone: String? = nil, readonly: Bool? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, folder: FolderBase? = nil, title: String? = nil, user_id: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, certification_metadata: Certification? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, chat_enabled: Bool? = nil, background_color: String? = nil, created_at: Date? = nil, crossfilter_enabled: Bool? = nil, dashboard_elements: [DashboardElement]? = nil, dashboard_filters: [DashboardFilter]? = nil, dashboard_layouts: [DashboardLayout]? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, edit_uri: String? = nil, enable_viz_full_screen: Bool? = nil, favorite_count: Int64? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, last_accessed_at: Date? = nil, last_viewed_at: Date? = nil, updated_at: Date? = nil, last_updater_id: String? = nil, last_updater_name: String? = nil, user_name: String? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, view_count: Int64? = nil, appearance: DashboardAppearance? = nil, usage_count: Int64? = nil, is_owner_disabled: Bool? = nil, url: String? = nil, preserve_desktop_layout: Bool? = nil, download_settings: DashboardDownloadSettings? = nil) {
         self.can = can
         self._content_favorite_id = content_favorite_id.map(AnyString.init)
         self._content_metadata_id = content_metadata_id.map(AnyString.init)
@@ -8918,6 +9061,7 @@ public struct Dashboard: SDKModel {
         self._preferred_viewer = preferred_viewer.map(AnyString.init)
         self.certification_metadata = certification_metadata
         self.alert_sync_with_dashboard_filter_enabled = alert_sync_with_dashboard_filter_enabled
+        self.chat_enabled = chat_enabled
         self._background_color = background_color.map(AnyString.init)
         self.created_at = created_at
         self.crossfilter_enabled = crossfilter_enabled
@@ -8952,6 +9096,7 @@ public struct Dashboard: SDKModel {
         self._usage_count = usage_count.map(AnyInt.init)
         self.is_owner_disabled = is_owner_disabled
         self._url = url.map(AnyString.init)
+        self.preserve_desktop_layout = preserve_desktop_layout
         self.download_settings = download_settings
     }
 
@@ -11828,6 +11973,48 @@ public enum DependencyStatus: String, Codable {
     case install_none = "install_none"
 }
 
+public struct DeployStatusResponse: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _status = "status"
+        case _error = "error"
+        case _commit_sha = "commit_sha"
+    }
+    private var _status: AnyString?
+    /**
+     * Status of the deploy (e.g., 'PENDING', 'COMPILING', 'SUCCESS', 'FAILED') (read-only)
+     */
+    public var status: String? {
+        get { _status?.value }
+        set { _status = newValue.map(AnyString.init) }
+    }
+
+    private var _error: AnyString?
+    /**
+     * Error message if the deploy failed (read-only)
+     */
+    public var error: String? {
+        get { _error?.value }
+        set { _error = newValue.map(AnyString.init) }
+    }
+
+    private var _commit_sha: AnyString?
+    /**
+     * Commit SHA of the deployment (read-only)
+     */
+    public var commit_sha: String? {
+        get { _commit_sha?.value }
+        set { _commit_sha = newValue.map(AnyString.init) }
+    }
+
+    public init(status: String? = nil, error: String? = nil, commit_sha: String? = nil) {
+        self._status = status.map(AnyString.init)
+        self._error = error.map(AnyString.init)
+        self._commit_sha = commit_sha.map(AnyString.init)
+    }
+
+}
+
 /**
  * Type of destination that the alert will be sent to Valid values are: "EMAIL", "ACTION_HUB". (Enum defined in AlertDestination)
  */
@@ -12404,6 +12591,7 @@ public struct EmbedConfig: SDKModel {
         case strict_sameorigin_for_login
         case look_filters
         case hide_look_navigation
+        case permissions
         case embed_enabled
     }
     private var _domain_allowlist: [AnyString]?
@@ -12478,11 +12666,16 @@ public struct EmbedConfig: SDKModel {
     public var hide_look_navigation: Bool?
 
     /**
+     * Tree of allowed embed permissions (read-only)
+     */
+    public var permissions: StringDictionary<AnyCodable>?
+
+    /**
      * True if embedding is licensed for this Looker instance. (read-only)
      */
     public var embed_enabled: Bool?
 
-    public init(domain_allowlist: [String]? = nil, alert_url_allowlist: [String]? = nil, alert_url_param_owner: String? = nil, alert_url_label: String? = nil, sso_auth_enabled: Bool? = nil, embed_cookieless_v2: Bool? = nil, embed_content_navigation: Bool? = nil, embed_content_management: Bool? = nil, strict_sameorigin_for_login: Bool? = nil, look_filters: Bool? = nil, hide_look_navigation: Bool? = nil, embed_enabled: Bool? = nil) {
+    public init(domain_allowlist: [String]? = nil, alert_url_allowlist: [String]? = nil, alert_url_param_owner: String? = nil, alert_url_label: String? = nil, sso_auth_enabled: Bool? = nil, embed_cookieless_v2: Bool? = nil, embed_content_navigation: Bool? = nil, embed_content_management: Bool? = nil, strict_sameorigin_for_login: Bool? = nil, look_filters: Bool? = nil, hide_look_navigation: Bool? = nil, permissions: StringDictionary<AnyCodable>? = nil, embed_enabled: Bool? = nil) {
         if let v = domain_allowlist { _domain_allowlist = v.map { AnyString.init($0) } } else { _domain_allowlist = nil }
         if let v = alert_url_allowlist { _alert_url_allowlist = v.map { AnyString.init($0) } } else { _alert_url_allowlist = nil }
         self._alert_url_param_owner = alert_url_param_owner.map(AnyString.init)
@@ -12494,6 +12687,7 @@ public struct EmbedConfig: SDKModel {
         self.strict_sameorigin_for_login = strict_sameorigin_for_login
         self.look_filters = look_filters
         self.hide_look_navigation = hide_look_navigation
+        self.permissions = permissions
         self.embed_enabled = embed_enabled
     }
 
@@ -14181,6 +14375,109 @@ public struct GitStatus: SDKModel {
         self.conflict = conflict
         self.revertable = revertable
         self._text = text.map(AnyString.init)
+    }
+
+}
+
+public struct GoldenQuery: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _id = "id"
+        case _query_id = "query_id"
+        case _questions = "questions"
+        case _answer = "answer"
+        case is_active
+        case _created_by_user_id = "created_by_user_id"
+        case _last_updated_by_user_id = "last_updated_by_user_id"
+        case created_at
+        case last_updated_at
+    }
+    /**
+     * Operations the current user is able to perform on this object (read-only)
+     */
+    public var can: StringDictionary<Bool>?
+
+    private var _id: AnyInt?
+    /**
+     * Unique identifier for the golden question (read-only)
+     */
+    public var id: Int64? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyInt.init) }
+    }
+
+    private var _query_id: AnyInt?
+    /**
+     * ID of the associated Looker Query resolved from the answer (read-only)
+     */
+    public var query_id: Int64? {
+        get { _query_id?.value }
+        set { _query_id = newValue.map(AnyInt.init) }
+    }
+
+    private var _questions: [AnyString]?
+    /**
+     * Variations of the golden question text
+     */
+    public var questions: [String]? {
+        get { if let v = _questions { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _questions = v.map { AnyString.init($0) } } else { _questions = nil } }
+    }
+
+    private var _answer: AnyString?
+    /**
+     * The Explore URL representing the answer to the question
+     */
+    public var answer: String? {
+        get { _answer?.value }
+        set { _answer = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Whether this golden question should be utilized by the agent
+     */
+    public var is_active: Bool?
+
+    private var _created_by_user_id: AnyInt?
+    /**
+     * ID of the user who created the question (read-only)
+     */
+    public var created_by_user_id: Int64? {
+        get { _created_by_user_id?.value }
+        set { _created_by_user_id = newValue.map(AnyInt.init) }
+    }
+
+    private var _last_updated_by_user_id: AnyInt?
+    /**
+     * ID of the user who last updated the question (read-only)
+     */
+    public var last_updated_by_user_id: Int64? {
+        get { _last_updated_by_user_id?.value }
+        set { _last_updated_by_user_id = newValue.map(AnyInt.init) }
+    }
+
+    /**
+     * Time when the question was created (read-only)
+     */
+    public var created_at: Date?
+
+    /**
+     * Time when the question was last updated (read-only)
+     */
+    public var last_updated_at: Date?
+
+    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, query_id: Int64? = nil, questions: [String]? = nil, answer: String? = nil, is_active: Bool? = nil, created_by_user_id: Int64? = nil, last_updated_by_user_id: Int64? = nil, created_at: Date? = nil, last_updated_at: Date? = nil) {
+        self.can = can
+        self._id = id.map(AnyInt.init)
+        self._query_id = query_id.map(AnyInt.init)
+        if let v = questions { _questions = v.map { AnyString.init($0) } } else { _questions = nil }
+        self._answer = answer.map(AnyString.init)
+        self.is_active = is_active
+        self._created_by_user_id = created_by_user_id.map(AnyInt.init)
+        self._last_updated_by_user_id = last_updated_by_user_id.map(AnyInt.init)
+        self.created_at = created_at
+        self.last_updated_at = last_updated_at
     }
 
 }
@@ -17782,6 +18079,7 @@ public struct LookmlModelExplore: SDKModel {
         case self_service_explore_data
         case supports_cost_estimate
         case _connection_name = "connection_name"
+        case _dialect_name = "dialect_name"
         case _null_sort_treatment = "null_sort_treatment"
         case _files = "files"
         case _source_file = "source_file"
@@ -17922,6 +18220,15 @@ public struct LookmlModelExplore: SDKModel {
     public var connection_name: String? {
         get { _connection_name?.value }
         set { _connection_name = newValue.map(AnyString.init) }
+    }
+
+    private var _dialect_name: AnyString?
+    /**
+     * Dialect name (read-only)
+     */
+    public var dialect_name: String? {
+        get { _dialect_name?.value }
+        set { _dialect_name = newValue.map(AnyString.init) }
     }
 
     private var _null_sort_treatment: AnyString?
@@ -18079,7 +18386,7 @@ public struct LookmlModelExplore: SDKModel {
         set { if let v = newValue { _always_join = v.map { AnyString.init($0) } } else { _always_join = nil } }
     }
 
-    public init(id: String? = nil, name: String? = nil, description: String? = nil, label: String? = nil, title: String? = nil, scopes: [String]? = nil, can_total: Bool? = nil, can_develop: Bool? = nil, can_see_lookml: Bool? = nil, lookml_link: String? = nil, can_save: Bool? = nil, can_explain: Bool? = nil, can_pivot_in_db: Bool? = nil, can_subtotal: Bool? = nil, has_timezone_support: Bool? = nil, self_service_explore_data: SelfServiceModelUploadData? = nil, supports_cost_estimate: Bool? = nil, connection_name: String? = nil, null_sort_treatment: String? = nil, files: [String]? = nil, source_file: String? = nil, project_name: String? = nil, model_name: String? = nil, view_name: String? = nil, hidden: Bool? = nil, sql_table_name: String? = nil, access_filter_fields: [String]? = nil, access_filters: [LookmlModelExploreAccessFilter]? = nil, aliases: [LookmlModelExploreAlias]? = nil, always_filter: [LookmlModelExploreAlwaysFilter]? = nil, conditionally_filter: [LookmlModelExploreConditionallyFilter]? = nil, index_fields: [String]? = nil, sets: [LookmlModelExploreSet]? = nil, tags: [String]? = nil, errors: [LookmlModelExploreError]? = nil, fields: LookmlModelExploreFieldset? = nil, joins: [LookmlModelExploreJoins]? = nil, group_label: String? = nil, supported_measure_types: [LookmlModelExploreSupportedMeasureType]? = nil, always_join: [String]? = nil) {
+    public init(id: String? = nil, name: String? = nil, description: String? = nil, label: String? = nil, title: String? = nil, scopes: [String]? = nil, can_total: Bool? = nil, can_develop: Bool? = nil, can_see_lookml: Bool? = nil, lookml_link: String? = nil, can_save: Bool? = nil, can_explain: Bool? = nil, can_pivot_in_db: Bool? = nil, can_subtotal: Bool? = nil, has_timezone_support: Bool? = nil, self_service_explore_data: SelfServiceModelUploadData? = nil, supports_cost_estimate: Bool? = nil, connection_name: String? = nil, dialect_name: String? = nil, null_sort_treatment: String? = nil, files: [String]? = nil, source_file: String? = nil, project_name: String? = nil, model_name: String? = nil, view_name: String? = nil, hidden: Bool? = nil, sql_table_name: String? = nil, access_filter_fields: [String]? = nil, access_filters: [LookmlModelExploreAccessFilter]? = nil, aliases: [LookmlModelExploreAlias]? = nil, always_filter: [LookmlModelExploreAlwaysFilter]? = nil, conditionally_filter: [LookmlModelExploreConditionallyFilter]? = nil, index_fields: [String]? = nil, sets: [LookmlModelExploreSet]? = nil, tags: [String]? = nil, errors: [LookmlModelExploreError]? = nil, fields: LookmlModelExploreFieldset? = nil, joins: [LookmlModelExploreJoins]? = nil, group_label: String? = nil, supported_measure_types: [LookmlModelExploreSupportedMeasureType]? = nil, always_join: [String]? = nil) {
         self._id = id.map(AnyString.init)
         self._name = name.map(AnyString.init)
         self._description = description.map(AnyString.init)
@@ -18098,6 +18405,7 @@ public struct LookmlModelExplore: SDKModel {
         self.self_service_explore_data = self_service_explore_data
         self.supports_cost_estimate = supports_cost_estimate
         self._connection_name = connection_name.map(AnyString.init)
+        self._dialect_name = dialect_name.map(AnyString.init)
         self._null_sort_treatment = null_sort_treatment.map(AnyString.init)
         if let v = files { _files = v.map { AnyString.init($0) } } else { _files = nil }
         self._source_file = source_file.map(AnyString.init)
@@ -20697,9 +21005,7 @@ public struct McpTools: SDKModel {
 
     public var create_view_from_table: McpToolSetting?
 
-    public var project_git_branch: McpToolSetting?
-
-    public init(enable_all: Bool? = nil, add_dashboard_element: McpToolSetting? = nil, add_dashboard_filter: McpToolSetting? = nil, create_project_file: McpToolSetting? = nil, delete_project_file: McpToolSetting? = nil, dev_mode: McpToolSetting? = nil, generate_embed_url: McpToolSetting? = nil, get_connection_databases: McpToolSetting? = nil, get_connection_schemas: McpToolSetting? = nil, get_connection_table_columns: McpToolSetting? = nil, get_connection_tables: McpToolSetting? = nil, get_connections: McpToolSetting? = nil, get_dashboards: McpToolSetting? = nil, get_dimensions: McpToolSetting? = nil, get_explores: McpToolSetting? = nil, get_filters: McpToolSetting? = nil, get_looks: McpToolSetting? = nil, get_measures: McpToolSetting? = nil, get_models: McpToolSetting? = nil, get_parameters: McpToolSetting? = nil, get_project_file: McpToolSetting? = nil, get_project_files: McpToolSetting? = nil, get_projects: McpToolSetting? = nil, health_analyze: McpToolSetting? = nil, health_pulse: McpToolSetting? = nil, health_vacuum: McpToolSetting? = nil, make_dashboard: McpToolSetting? = nil, make_look: McpToolSetting? = nil, query: McpToolSetting? = nil, query_sql: McpToolSetting? = nil, query_url: McpToolSetting? = nil, run_dashboard: McpToolSetting? = nil, run_look: McpToolSetting? = nil, update_project_file: McpToolSetting? = nil, validate_project: McpToolSetting? = nil, get_project_directories: McpToolSetting? = nil, create_project_directory: McpToolSetting? = nil, delete_project_directory: McpToolSetting? = nil, get_lookml_tests: McpToolSetting? = nil, run_lookml_tests: McpToolSetting? = nil, create_view_from_table: McpToolSetting? = nil, project_git_branch: McpToolSetting? = nil) {
+    public init(enable_all: Bool? = nil, add_dashboard_element: McpToolSetting? = nil, add_dashboard_filter: McpToolSetting? = nil, create_project_file: McpToolSetting? = nil, delete_project_file: McpToolSetting? = nil, dev_mode: McpToolSetting? = nil, generate_embed_url: McpToolSetting? = nil, get_connection_databases: McpToolSetting? = nil, get_connection_schemas: McpToolSetting? = nil, get_connection_table_columns: McpToolSetting? = nil, get_connection_tables: McpToolSetting? = nil, get_connections: McpToolSetting? = nil, get_dashboards: McpToolSetting? = nil, get_dimensions: McpToolSetting? = nil, get_explores: McpToolSetting? = nil, get_filters: McpToolSetting? = nil, get_looks: McpToolSetting? = nil, get_measures: McpToolSetting? = nil, get_models: McpToolSetting? = nil, get_parameters: McpToolSetting? = nil, get_project_file: McpToolSetting? = nil, get_project_files: McpToolSetting? = nil, get_projects: McpToolSetting? = nil, health_analyze: McpToolSetting? = nil, health_pulse: McpToolSetting? = nil, health_vacuum: McpToolSetting? = nil, make_dashboard: McpToolSetting? = nil, make_look: McpToolSetting? = nil, query: McpToolSetting? = nil, query_sql: McpToolSetting? = nil, query_url: McpToolSetting? = nil, run_dashboard: McpToolSetting? = nil, run_look: McpToolSetting? = nil, update_project_file: McpToolSetting? = nil, validate_project: McpToolSetting? = nil, get_project_directories: McpToolSetting? = nil, create_project_directory: McpToolSetting? = nil, delete_project_directory: McpToolSetting? = nil, get_lookml_tests: McpToolSetting? = nil, run_lookml_tests: McpToolSetting? = nil, create_view_from_table: McpToolSetting? = nil) {
         self.enable_all = enable_all
         self.add_dashboard_element = add_dashboard_element
         self.add_dashboard_filter = add_dashboard_filter
@@ -20741,7 +21047,6 @@ public struct McpTools: SDKModel {
         self.get_lookml_tests = get_lookml_tests
         self.run_lookml_tests = run_lookml_tests
         self.create_view_from_table = create_view_from_table
-        self.project_git_branch = project_git_branch
     }
 
 }
@@ -28864,6 +29169,7 @@ public struct User: SDKModel {
         case credentials_oidc
         case credentials_saml
         case credentials_totp
+        case credentials_workforce
         case _display_name = "display_name"
         case _email = "email"
         case _embed_group_space_id = "embed_group_space_id"
@@ -28939,6 +29245,8 @@ public struct User: SDKModel {
     public var credentials_saml: CredentialsSaml?
 
     public var credentials_totp: CredentialsTotp?
+
+    public var credentials_workforce: CredentialsWorkforce?
 
     private var _display_name: AnyString?
     /**
@@ -29140,7 +29448,7 @@ public struct User: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, avatar_url: String? = nil, avatar_url_without_sizing: String? = nil, credentials_api3: [CredentialsApi3]? = nil, credentials_email: CredentialsEmail? = nil, credentials_embed: [CredentialsEmbed]? = nil, credentials_google: CredentialsGoogle? = nil, credentials_ldap: CredentialsLDAP? = nil, credentials_looker_openid: CredentialsLookerOpenid? = nil, credentials_oidc: CredentialsOIDC? = nil, credentials_saml: CredentialsSaml? = nil, credentials_totp: CredentialsTotp? = nil, display_name: String? = nil, email: String? = nil, embed_group_space_id: String? = nil, first_name: String? = nil, group_ids: [String]? = nil, home_folder_id: String? = nil, id: String? = nil, is_disabled: Bool? = nil, last_name: String? = nil, locale: String? = nil, looker_versions: [String]? = nil, models_dir_validated: Bool? = nil, personal_folder_id: String? = nil, presumed_looker_employee: Bool? = nil, role_ids: [String]? = nil, sessions: [Session]? = nil, ui_state: StringDictionary<AnyCodable>? = nil, verified_looker_employee: Bool? = nil, roles_externally_managed: Bool? = nil, allow_direct_roles: Bool? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, embed_group_folder_id: String? = nil, is_iam_admin: Bool? = nil, can_manage_api3_creds: Bool? = nil, is_service_account: Bool? = nil, service_account_name: String? = nil, url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, avatar_url: String? = nil, avatar_url_without_sizing: String? = nil, credentials_api3: [CredentialsApi3]? = nil, credentials_email: CredentialsEmail? = nil, credentials_embed: [CredentialsEmbed]? = nil, credentials_google: CredentialsGoogle? = nil, credentials_ldap: CredentialsLDAP? = nil, credentials_looker_openid: CredentialsLookerOpenid? = nil, credentials_oidc: CredentialsOIDC? = nil, credentials_saml: CredentialsSaml? = nil, credentials_totp: CredentialsTotp? = nil, credentials_workforce: CredentialsWorkforce? = nil, display_name: String? = nil, email: String? = nil, embed_group_space_id: String? = nil, first_name: String? = nil, group_ids: [String]? = nil, home_folder_id: String? = nil, id: String? = nil, is_disabled: Bool? = nil, last_name: String? = nil, locale: String? = nil, looker_versions: [String]? = nil, models_dir_validated: Bool? = nil, personal_folder_id: String? = nil, presumed_looker_employee: Bool? = nil, role_ids: [String]? = nil, sessions: [Session]? = nil, ui_state: StringDictionary<AnyCodable>? = nil, verified_looker_employee: Bool? = nil, roles_externally_managed: Bool? = nil, allow_direct_roles: Bool? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, embed_group_folder_id: String? = nil, is_iam_admin: Bool? = nil, can_manage_api3_creds: Bool? = nil, is_service_account: Bool? = nil, service_account_name: String? = nil, url: String? = nil) {
         self.can = can
         self._avatar_url = avatar_url.map(AnyString.init)
         self._avatar_url_without_sizing = avatar_url_without_sizing.map(AnyString.init)
@@ -29153,6 +29461,7 @@ public struct User: SDKModel {
         self.credentials_oidc = credentials_oidc
         self.credentials_saml = credentials_saml
         self.credentials_totp = credentials_totp
+        self.credentials_workforce = credentials_workforce
         self._display_name = display_name.map(AnyString.init)
         self._email = email.map(AnyString.init)
         self._embed_group_space_id = embed_group_space_id.map(AnyString.init)
@@ -30105,6 +30414,72 @@ public struct WhitelabelConfiguration: SDKModel {
 
 }
 
+public struct WorkflowDestination: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _type = "type"
+        case _parameters = "parameters"
+    }
+    private var _type: AnyString?
+    /**
+     * Defines the delivery mechanism ('email' or 'action_hub').
+     */
+    public var type: String? {
+        get { _type?.value }
+        set { _type = newValue.map(AnyString.init) }
+    }
+
+    private var _parameters: AnyString?
+    /**
+     * The routing configuration.
+     */
+    public var parameters: String? {
+        get { _parameters?.value }
+        set { _parameters = newValue.map(AnyString.init) }
+    }
+
+    public init(type: String? = nil, parameters: String? = nil) {
+        self._type = type.map(AnyString.init)
+        self._parameters = parameters.map(AnyString.init)
+    }
+
+}
+
+public struct WorkflowParams: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _primary_agent = "primary_agent"
+        case _polling_frequency_cron = "polling_frequency_cron"
+        case destination
+    }
+    private var _primary_agent: AnyString?
+    /**
+     * The ID of the primary parent agent
+     */
+    public var primary_agent: String? {
+        get { _primary_agent?.value }
+        set { _primary_agent = newValue.map(AnyString.init) }
+    }
+
+    private var _polling_frequency_cron: AnyString?
+    /**
+     * Crontab specifying the execution frequency
+     */
+    public var polling_frequency_cron: String? {
+        get { _polling_frequency_cron?.value }
+        set { _polling_frequency_cron = newValue.map(AnyString.init) }
+    }
+
+    public var destination: WorkflowDestination?
+
+    public init(primary_agent: String? = nil, polling_frequency_cron: String? = nil, destination: WorkflowDestination? = nil) {
+        self._primary_agent = primary_agent.map(AnyString.init)
+        self._polling_frequency_cron = polling_frequency_cron.map(AnyString.init)
+        self.destination = destination
+    }
+
+}
+
 public struct Workspace: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -30141,19 +30516,31 @@ public struct Workspace: SDKModel {
 
 /**
  * Dynamic writeable type for Agent removes:
- * can, id, created_by_user_id, created_by_name, created_by_first_name, created_by_last_name, created_by_avatar_url, has_inaccessible_source, created_at, updated_at, content_metadata_id, studio_agent_id
+ * can, id, created_by_name, created_by_first_name, created_by_last_name, created_by_avatar_url, has_inaccessible_source, golden_queries, created_at, updated_at, content_metadata_id, studio_agent_id
  */
 public struct WriteAgent: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
+        case _created_by_user_id = "created_by_user_id"
         case _name = "name"
         case _description = "description"
         case _category = "category"
         case sources
+        case _golden_query_ids = "golden_query_ids"
         case context
         case deleted
         case code_interpreter
+        case workflow_params
     }
+    private var _created_by_user_id: AnyString?
+    /**
+     * User that created the Agent
+     */
+    public var created_by_user_id: String? {
+        get { _created_by_user_id?.value }
+        set { _created_by_user_id = newValue.map(AnyString.init) }
+    }
+
     private var _name: AnyString?
     /**
      * Agent name
@@ -30186,6 +30573,15 @@ public struct WriteAgent: SDKModel {
      */
     public var sources: [Source]?
 
+    private var _golden_query_ids: [AnyInt]?
+    /**
+     * IDs of golden queries linked to the agent
+     */
+    public var golden_query_ids: [Int64]? {
+        get { if let v = _golden_query_ids { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _golden_query_ids = v.map { AnyInt.init($0) } } else { _golden_query_ids = nil } }
+    }
+
     public var context: Context?
 
     /**
@@ -30198,14 +30594,19 @@ public struct WriteAgent: SDKModel {
      */
     public var code_interpreter: Bool?
 
-    public init(name: String? = nil, description: String? = nil, category: String? = nil, sources: [Source]? = nil, context: Context? = nil, deleted: Bool? = nil, code_interpreter: Bool? = nil) {
+    public var workflow_params: WorkflowParams?
+
+    public init(created_by_user_id: String? = nil, name: String? = nil, description: String? = nil, category: String? = nil, sources: [Source]? = nil, golden_query_ids: [Int64]? = nil, context: Context? = nil, deleted: Bool? = nil, code_interpreter: Bool? = nil, workflow_params: WorkflowParams? = nil) {
+        self._created_by_user_id = created_by_user_id.map(AnyString.init)
         self._name = name.map(AnyString.init)
         self._description = description.map(AnyString.init)
         self._category = category.map(AnyString.init)
         self.sources = sources
+        if let v = golden_query_ids { _golden_query_ids = v.map { AnyInt.init($0) } } else { _golden_query_ids = nil }
         self.context = context
         self.deleted = deleted
         self.code_interpreter = code_interpreter
+        self.workflow_params = workflow_params
     }
 
 }
@@ -30535,7 +30936,7 @@ public struct WriteBackupConfiguration: SDKModel {
 
 /**
  * Dynamic writeable type for Board removes:
- * can, content_metadata_id, created_at, board_sections, id, updated_at, user_id, primary_homepage
+ * can, content_metadata_id, created_at, board_sections, id, updated_at, primary_homepage
  */
 public struct WriteBoard: SDKModel {
 
@@ -30544,6 +30945,7 @@ public struct WriteBoard: SDKModel {
         case _description = "description"
         case _section_order = "section_order"
         case _title = "title"
+        case _user_id = "user_id"
     }
     /**
      * Date of board deletion
@@ -30577,11 +30979,21 @@ public struct WriteBoard: SDKModel {
         set { _title = newValue.map(AnyString.init) }
     }
 
-    public init(deleted_at: Date? = nil, description: String? = nil, section_order: [String]? = nil, title: String? = nil) {
+    private var _user_id: AnyString?
+    /**
+     * User id of board creator
+     */
+    public var user_id: String? {
+        get { _user_id?.value }
+        set { _user_id = newValue.map(AnyString.init) }
+    }
+
+    public init(deleted_at: Date? = nil, description: String? = nil, section_order: [String]? = nil, title: String? = nil, user_id: String? = nil) {
         self.deleted_at = deleted_at
         self._description = description.map(AnyString.init)
         if let v = section_order { _section_order = v.map { AnyString.init($0) } } else { _section_order = nil }
         self._title = title.map(AnyString.init)
+        self._user_id = user_id.map(AnyString.init)
     }
 
 }
@@ -30994,7 +31406,7 @@ public struct WriteConversation: SDKModel {
 
     /**
      * Dynamic writeable type for Agent removes:
-     * can, id, created_by_user_id, created_by_name, created_by_first_name, created_by_last_name, created_by_avatar_url, has_inaccessible_source, created_at, updated_at, content_metadata_id, studio_agent_id
+     * can, id, created_by_name, created_by_first_name, created_by_last_name, created_by_avatar_url, has_inaccessible_source, golden_queries, created_at, updated_at, content_metadata_id, studio_agent_id
      */
     public var conversation_agent: WriteAgent?
 
@@ -31348,6 +31760,7 @@ public struct WriteDashboard: SDKModel {
         case _preferred_viewer = "preferred_viewer"
         case certification_metadata
         case alert_sync_with_dashboard_filter_enabled
+        case chat_enabled
         case _background_color = "background_color"
         case crossfilter_enabled
         case deleted
@@ -31364,6 +31777,7 @@ public struct WriteDashboard: SDKModel {
         case _tile_text_color = "tile_text_color"
         case _title_color = "title_color"
         case appearance
+        case preserve_desktop_layout
         case download_settings
     }
     private var _description: AnyString?
@@ -31450,6 +31864,11 @@ public struct WriteDashboard: SDKModel {
      * Enables alerts to keep in sync with dashboard filter changes
      */
     public var alert_sync_with_dashboard_filter_enabled: Bool?
+
+    /**
+     * Whether chat is enabled for this dashboard
+     */
+    public var chat_enabled: Bool?
 
     private var _background_color: AnyString?
     /**
@@ -31560,9 +31979,14 @@ public struct WriteDashboard: SDKModel {
 
     public var appearance: DashboardAppearance?
 
+    /**
+     * Whether to preserve the desktop layout on mobile viewports. i.e. don't force a single column layout on mobile.
+     */
+    public var preserve_desktop_layout: Bool?
+
     public var download_settings: DashboardDownloadSettings?
 
-    public init(description: String? = nil, hidden: Bool? = nil, query_timezone: String? = nil, refresh_interval: String? = nil, folder: WriteFolderBase? = nil, title: String? = nil, user_id: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, certification_metadata: WriteCertification? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, background_color: String? = nil, crossfilter_enabled: Bool? = nil, deleted: Bool? = nil, enable_viz_full_screen: Bool? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, appearance: DashboardAppearance? = nil, download_settings: DashboardDownloadSettings? = nil) {
+    public init(description: String? = nil, hidden: Bool? = nil, query_timezone: String? = nil, refresh_interval: String? = nil, folder: WriteFolderBase? = nil, title: String? = nil, user_id: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, certification_metadata: WriteCertification? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, chat_enabled: Bool? = nil, background_color: String? = nil, crossfilter_enabled: Bool? = nil, deleted: Bool? = nil, enable_viz_full_screen: Bool? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, appearance: DashboardAppearance? = nil, preserve_desktop_layout: Bool? = nil, download_settings: DashboardDownloadSettings? = nil) {
         self._description = description.map(AnyString.init)
         self.hidden = hidden
         self._query_timezone = query_timezone.map(AnyString.init)
@@ -31574,6 +31998,7 @@ public struct WriteDashboard: SDKModel {
         self._preferred_viewer = preferred_viewer.map(AnyString.init)
         self.certification_metadata = certification_metadata
         self.alert_sync_with_dashboard_filter_enabled = alert_sync_with_dashboard_filter_enabled
+        self.chat_enabled = chat_enabled
         self._background_color = background_color.map(AnyString.init)
         self.crossfilter_enabled = crossfilter_enabled
         self.deleted = deleted
@@ -31590,6 +32015,7 @@ public struct WriteDashboard: SDKModel {
         self._tile_text_color = tile_text_color.map(AnyString.init)
         self._title_color = title_color.map(AnyString.init)
         self.appearance = appearance
+        self.preserve_desktop_layout = preserve_desktop_layout
         self.download_settings = download_settings
     }
 
@@ -33045,7 +33471,7 @@ public struct WriteDBConnectionOverride: SDKModel {
 
 /**
  * Dynamic writeable type for EmbedConfig removes:
- * embed_enabled
+ * permissions, embed_enabled
  */
 public struct WriteEmbedConfig: SDKModel {
 
@@ -33332,6 +33758,48 @@ public struct WriteGitBranch: SDKModel {
     public init(name: String? = nil, ref: String? = nil) {
         self._name = name.map(AnyString.init)
         self._ref = ref.map(AnyString.init)
+    }
+
+}
+
+/**
+ * Dynamic writeable type for GoldenQuery removes:
+ * can, id, query_id, created_by_user_id, last_updated_by_user_id, created_at, last_updated_at
+ */
+public struct WriteGoldenQuery: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _questions = "questions"
+        case _answer = "answer"
+        case is_active
+    }
+    private var _questions: [AnyString]?
+    /**
+     * Variations of the golden question text
+     */
+    public var questions: [String]? {
+        get { if let v = _questions { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _questions = v.map { AnyString.init($0) } } else { _questions = nil } }
+    }
+
+    private var _answer: AnyString?
+    /**
+     * The Explore URL representing the answer to the question
+     */
+    public var answer: String? {
+        get { _answer?.value }
+        set { _answer = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Whether this golden question should be utilized by the agent
+     */
+    public var is_active: Bool?
+
+    public init(questions: [String]? = nil, answer: String? = nil, is_active: Bool? = nil) {
+        if let v = questions { _questions = v.map { AnyString.init($0) } } else { _questions = nil }
+        self._answer = answer.map(AnyString.init)
+        self.is_active = is_active
     }
 
 }
@@ -34289,13 +34757,7 @@ public struct WriteMcpTools: SDKModel {
      */
     public var create_view_from_table: WriteMcpToolSetting?
 
-    /**
-     * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
-     */
-    public var project_git_branch: WriteMcpToolSetting?
-
-    public init(enable_all: Bool? = nil, add_dashboard_element: WriteMcpToolSetting? = nil, add_dashboard_filter: WriteMcpToolSetting? = nil, create_project_file: WriteMcpToolSetting? = nil, delete_project_file: WriteMcpToolSetting? = nil, dev_mode: WriteMcpToolSetting? = nil, generate_embed_url: WriteMcpToolSetting? = nil, get_connection_databases: WriteMcpToolSetting? = nil, get_connection_schemas: WriteMcpToolSetting? = nil, get_connection_table_columns: WriteMcpToolSetting? = nil, get_connection_tables: WriteMcpToolSetting? = nil, get_connections: WriteMcpToolSetting? = nil, get_dashboards: WriteMcpToolSetting? = nil, get_dimensions: WriteMcpToolSetting? = nil, get_explores: WriteMcpToolSetting? = nil, get_filters: WriteMcpToolSetting? = nil, get_looks: WriteMcpToolSetting? = nil, get_measures: WriteMcpToolSetting? = nil, get_models: WriteMcpToolSetting? = nil, get_parameters: WriteMcpToolSetting? = nil, get_project_file: WriteMcpToolSetting? = nil, get_project_files: WriteMcpToolSetting? = nil, get_projects: WriteMcpToolSetting? = nil, health_analyze: WriteMcpToolSetting? = nil, health_pulse: WriteMcpToolSetting? = nil, health_vacuum: WriteMcpToolSetting? = nil, make_dashboard: WriteMcpToolSetting? = nil, make_look: WriteMcpToolSetting? = nil, query: WriteMcpToolSetting? = nil, query_sql: WriteMcpToolSetting? = nil, query_url: WriteMcpToolSetting? = nil, run_dashboard: WriteMcpToolSetting? = nil, run_look: WriteMcpToolSetting? = nil, update_project_file: WriteMcpToolSetting? = nil, validate_project: WriteMcpToolSetting? = nil, get_project_directories: WriteMcpToolSetting? = nil, create_project_directory: WriteMcpToolSetting? = nil, delete_project_directory: WriteMcpToolSetting? = nil, get_lookml_tests: WriteMcpToolSetting? = nil, run_lookml_tests: WriteMcpToolSetting? = nil, create_view_from_table: WriteMcpToolSetting? = nil, project_git_branch: WriteMcpToolSetting? = nil) {
+    public init(enable_all: Bool? = nil, add_dashboard_element: WriteMcpToolSetting? = nil, add_dashboard_filter: WriteMcpToolSetting? = nil, create_project_file: WriteMcpToolSetting? = nil, delete_project_file: WriteMcpToolSetting? = nil, dev_mode: WriteMcpToolSetting? = nil, generate_embed_url: WriteMcpToolSetting? = nil, get_connection_databases: WriteMcpToolSetting? = nil, get_connection_schemas: WriteMcpToolSetting? = nil, get_connection_table_columns: WriteMcpToolSetting? = nil, get_connection_tables: WriteMcpToolSetting? = nil, get_connections: WriteMcpToolSetting? = nil, get_dashboards: WriteMcpToolSetting? = nil, get_dimensions: WriteMcpToolSetting? = nil, get_explores: WriteMcpToolSetting? = nil, get_filters: WriteMcpToolSetting? = nil, get_looks: WriteMcpToolSetting? = nil, get_measures: WriteMcpToolSetting? = nil, get_models: WriteMcpToolSetting? = nil, get_parameters: WriteMcpToolSetting? = nil, get_project_file: WriteMcpToolSetting? = nil, get_project_files: WriteMcpToolSetting? = nil, get_projects: WriteMcpToolSetting? = nil, health_analyze: WriteMcpToolSetting? = nil, health_pulse: WriteMcpToolSetting? = nil, health_vacuum: WriteMcpToolSetting? = nil, make_dashboard: WriteMcpToolSetting? = nil, make_look: WriteMcpToolSetting? = nil, query: WriteMcpToolSetting? = nil, query_sql: WriteMcpToolSetting? = nil, query_url: WriteMcpToolSetting? = nil, run_dashboard: WriteMcpToolSetting? = nil, run_look: WriteMcpToolSetting? = nil, update_project_file: WriteMcpToolSetting? = nil, validate_project: WriteMcpToolSetting? = nil, get_project_directories: WriteMcpToolSetting? = nil, create_project_directory: WriteMcpToolSetting? = nil, delete_project_directory: WriteMcpToolSetting? = nil, get_lookml_tests: WriteMcpToolSetting? = nil, run_lookml_tests: WriteMcpToolSetting? = nil, create_view_from_table: WriteMcpToolSetting? = nil) {
         self.enable_all = enable_all
         self.add_dashboard_element = add_dashboard_element
         self.add_dashboard_filter = add_dashboard_filter
@@ -34337,7 +34799,6 @@ public struct WriteMcpTools: SDKModel {
         self.get_lookml_tests = get_lookml_tests
         self.run_lookml_tests = run_lookml_tests
         self.create_view_from_table = create_view_from_table
-        self.project_git_branch = project_git_branch
     }
 
 }
@@ -36384,7 +36845,7 @@ public struct WriteSetting: SDKModel {
 
     /**
      * Dynamic writeable type for EmbedConfig removes:
-     * embed_enabled
+     * permissions, embed_enabled
      */
     public var embed_config: WriteEmbedConfig?
 
@@ -36669,7 +37130,7 @@ public struct WriteTheme: SDKModel {
 
 /**
  * Dynamic writeable type for User removes:
- * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, is_service_account, service_account_name, url
+ * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, credentials_workforce, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, is_service_account, service_account_name, url
  */
 public struct WriteUser: SDKModel {
 

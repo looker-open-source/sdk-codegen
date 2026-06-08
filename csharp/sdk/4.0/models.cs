@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 451 API models: 355 Spec, 0 Request, 70 Write, 26 Enum
+/// 458 API models: 361 Spec, 0 Request, 71 Write, 26 Enum
 
 #nullable enable
 using System;
@@ -57,7 +57,7 @@ public class Agent : SdkModel
   public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>Agent unique identifier (read-only)</summary>
   public string? id { get; set; } = null;
-  /// <summary>User that created the Agent (read-only)</summary>
+  /// <summary>User that created the Agent</summary>
   public string? created_by_user_id { get; set; } = null;
   /// <summary>Name of user that created the Agent (read-only)</summary>
   public string? created_by_name { get; set; } = null;
@@ -77,6 +77,10 @@ public class Agent : SdkModel
   public Source[]? sources { get; set; } = null;
   /// <summary>Has inaccessible source (read-only)</summary>
   public bool? has_inaccessible_source { get; set; } = null;
+  /// <summary>Agent golden questions (read-only)</summary>
+  public GoldenQuery[]? golden_queries { get; set; } = null;
+  /// <summary>IDs of golden queries linked to the agent</summary>
+  public long[]? golden_query_ids { get; set; } = null;
   public Context? context { get; set; }
   /// <summary>Is Agent soft deleted</summary>
   public bool? deleted { get; set; } = null;
@@ -90,6 +94,7 @@ public class Agent : SdkModel
   public bool? code_interpreter { get; set; } = null;
   /// <summary>Studio Agent ID (if this agent was migrated) (read-only)</summary>
   public string? studio_agent_id { get; set; } = null;
+  public WorkflowParams? workflow_params { get; set; }
 }
 
 public class Alert : SdkModel
@@ -428,6 +433,12 @@ public class AssertValidatorTestSuccess : SdkModel
   public string? lookml_url { get; set; } = null;
 }
 
+public class AsyncDeployResponse : SdkModel
+{
+  /// <summary>Status of the async deploy request (e.g., 'queued') (read-only)</summary>
+  public string? status { get; set; } = null;
+}
+
 public class BackupConfiguration : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
@@ -499,7 +510,7 @@ public class Board : SdkModel
   public string? title { get; set; } = null;
   /// <summary>Date of last board update (read-only)</summary>
   public DateTime? updated_at { get; set; } = null;
-  /// <summary>User id of board creator (read-only)</summary>
+  /// <summary>User id of board creator</summary>
   public string? user_id { get; set; } = null;
   /// <summary>Whether the board is the primary homepage or not (read-only)</summary>
   public bool? primary_homepage { get; set; } = null;
@@ -2013,6 +2024,26 @@ public class CredentialsTotp : SdkModel
   public string? url { get; set; } = null;
 }
 
+public class CredentialsWorkforce : SdkModel
+{
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
+  public StringDictionary<bool>? can { get; set; } = null;
+  /// <summary>Timestamp for the creation of this credential (read-only)</summary>
+  public string? created_at { get; set; } = null;
+  /// <summary>Email address (read-only)</summary>
+  public string? email { get; set; } = null;
+  /// <summary>Has this credential been disabled? (read-only)</summary>
+  public bool? is_disabled { get; set; } = null;
+  /// <summary>Timestamp for most recent login using credential (read-only)</summary>
+  public string? logged_in_at { get; set; } = null;
+  /// <summary>Workforce Unique ID for this user (read-only)</summary>
+  public string? workforce_user_id { get; set; } = null;
+  /// <summary>Short name for the type of this kind of credential (read-only)</summary>
+  public string? type { get; set; } = null;
+  /// <summary>Link to get this item (read-only)</summary>
+  public string? url { get; set; } = null;
+}
+
 public class CustomWelcomeEmail : SdkModel
 {
   /// <summary>If true, custom email content will replace the default body of welcome emails</summary>
@@ -2060,6 +2091,8 @@ public class Dashboard : SdkModel
   public Certification? certification_metadata { get; set; }
   /// <summary>Enables alerts to keep in sync with dashboard filter changes</summary>
   public bool? alert_sync_with_dashboard_filter_enabled { get; set; } = null;
+  /// <summary>Whether chat is enabled for this dashboard</summary>
+  public bool? chat_enabled { get; set; } = null;
   /// <summary>Background color</summary>
   public string? background_color { get; set; } = null;
   /// <summary>Time that the Dashboard was created. (read-only)</summary>
@@ -2127,6 +2160,8 @@ public class Dashboard : SdkModel
   public bool? is_owner_disabled { get; set; } = null;
   /// <summary>Relative URL of the dashboard (read-only)</summary>
   public string? url { get; set; } = null;
+  /// <summary>Whether to preserve the desktop layout on mobile viewports. i.e. don't force a single column layout on mobile.</summary>
+  public bool? preserve_desktop_layout { get; set; } = null;
   public DashboardDownloadSettings? download_settings { get; set; }
 }
 
@@ -2785,6 +2820,16 @@ public enum DependencyStatus
   install_none
 }
 
+public class DeployStatusResponse : SdkModel
+{
+  /// <summary>Status of the deploy (e.g., 'PENDING', 'COMPILING', 'SUCCESS', 'FAILED') (read-only)</summary>
+  public string? status { get; set; } = null;
+  /// <summary>Error message if the deploy failed (read-only)</summary>
+  public string? error { get; set; } = null;
+  /// <summary>Commit SHA of the deployment (read-only)</summary>
+  public string? commit_sha { get; set; } = null;
+}
+
 /// Type of destination that the alert will be sent to Valid values are: "EMAIL", "ACTION_HUB". (Enum defined in AlertDestination)
 public enum DestinationType
 {
@@ -2978,6 +3023,8 @@ public class EmbedConfig : SdkModel
   public bool? look_filters { get; set; } = null;
   /// <summary>When true, removes navigation to Looks from embedded dashboards and explores.</summary>
   public bool? hide_look_navigation { get; set; } = null;
+  /// <summary>Tree of allowed embed permissions (read-only)</summary>
+  public StringDictionary<object>? permissions { get; set; } = null;
   /// <summary>True if embedding is licensed for this Looker instance. (read-only)</summary>
   public bool? embed_enabled { get; set; } = null;
 }
@@ -3386,6 +3433,30 @@ public class GitStatus : SdkModel
   public bool? revertable { get; set; } = null;
   /// <summary>Git description of the action (read-only)</summary>
   public string? text { get; set; } = null;
+}
+
+public class GoldenQuery : SdkModel
+{
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
+  public StringDictionary<bool>? can { get; set; } = null;
+  /// <summary>Unique identifier for the golden question (read-only)</summary>
+  public long? id { get; set; } = null;
+  /// <summary>ID of the associated Looker Query resolved from the answer (read-only)</summary>
+  public long? query_id { get; set; } = null;
+  /// <summary>Variations of the golden question text</summary>
+  public string[]? questions { get; set; } = null;
+  /// <summary>The Explore URL representing the answer to the question</summary>
+  public string? answer { get; set; } = null;
+  /// <summary>Whether this golden question should be utilized by the agent</summary>
+  public bool? is_active { get; set; } = null;
+  /// <summary>ID of the user who created the question (read-only)</summary>
+  public long? created_by_user_id { get; set; } = null;
+  /// <summary>ID of the user who last updated the question (read-only)</summary>
+  public long? last_updated_by_user_id { get; set; } = null;
+  /// <summary>Time when the question was created (read-only)</summary>
+  public DateTime? created_at { get; set; } = null;
+  /// <summary>Time when the question was last updated (read-only)</summary>
+  public DateTime? last_updated_at { get; set; } = null;
 }
 
 public class Group : SdkModel
@@ -4279,6 +4350,8 @@ public class LookmlModelExplore : SdkModel
   public bool? supports_cost_estimate { get; set; } = null;
   /// <summary>Connection name (read-only)</summary>
   public string? connection_name { get; set; } = null;
+  /// <summary>Dialect name (read-only)</summary>
+  public string? dialect_name { get; set; } = null;
   /// <summary>How nulls are sorted, possible values are "low", "high", "first" and "last" (read-only)</summary>
   public string? null_sort_treatment { get; set; } = null;
   /// <summary>List of model source files (read-only)</summary>
@@ -4955,7 +5028,6 @@ public class McpTools : SdkModel
   public McpToolSetting? get_lookml_tests { get; set; }
   public McpToolSetting? run_lookml_tests { get; set; }
   public McpToolSetting? create_view_from_table { get; set; }
-  public McpToolSetting? project_git_branch { get; set; }
 }
 
 public class McpToolSetting : SdkModel
@@ -7037,6 +7109,7 @@ public class User : SdkModel
   public CredentialsOIDC? credentials_oidc { get; set; }
   public CredentialsSaml? credentials_saml { get; set; }
   public CredentialsTotp? credentials_totp { get; set; }
+  public CredentialsWorkforce? credentials_workforce { get; set; }
   /// <summary>Full name for display (available only if both first_name and last_name are set) (read-only)</summary>
   public string? display_name { get; set; } = null;
   /// <summary>EMail address (read-only)</summary>
@@ -7344,6 +7417,23 @@ public class WhitelabelConfiguration : SdkModel
   public bool? folders_mentions { get; set; } = null;
 }
 
+public class WorkflowDestination : SdkModel
+{
+  /// <summary>Defines the delivery mechanism ('email' or 'action_hub').</summary>
+  public string? type { get; set; } = null;
+  /// <summary>The routing configuration.</summary>
+  public string? parameters { get; set; } = null;
+}
+
+public class WorkflowParams : SdkModel
+{
+  /// <summary>The ID of the primary parent agent</summary>
+  public string? primary_agent { get; set; } = null;
+  /// <summary>Crontab specifying the execution frequency</summary>
+  public string? polling_frequency_cron { get; set; } = null;
+  public WorkflowDestination? destination { get; set; }
+}
+
 public class Workspace : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
@@ -7355,9 +7445,11 @@ public class Workspace : SdkModel
 }
 
 /// Dynamic writeable type for Agent removes:
-/// can, id, created_by_user_id, created_by_name, created_by_first_name, created_by_last_name, created_by_avatar_url, has_inaccessible_source, created_at, updated_at, content_metadata_id, studio_agent_id
+/// can, id, created_by_name, created_by_first_name, created_by_last_name, created_by_avatar_url, has_inaccessible_source, golden_queries, created_at, updated_at, content_metadata_id, studio_agent_id
 public class WriteAgent : SdkModel
 {
+  /// <summary>User that created the Agent</summary>
+  public string? created_by_user_id { get; set; } = null;
   /// <summary>Agent name</summary>
   public string? name { get; set; } = null;
   /// <summary>Agent description</summary>
@@ -7366,11 +7458,14 @@ public class WriteAgent : SdkModel
   public string? category { get; set; } = null;
   /// <summary>Agent sources</summary>
   public Source[]? sources { get; set; } = null;
+  /// <summary>IDs of golden queries linked to the agent</summary>
+  public long[]? golden_query_ids { get; set; } = null;
   public Context? context { get; set; }
   /// <summary>Is Agent soft deleted</summary>
   public bool? deleted { get; set; } = null;
   /// <summary>Enables Code Interpreter for this Agent</summary>
   public bool? code_interpreter { get; set; } = null;
+  public WorkflowParams? workflow_params { get; set; }
 }
 
 /// Dynamic writeable type for Alert removes:
@@ -7453,7 +7548,7 @@ public class WriteBackupConfiguration : SdkModel
 }
 
 /// Dynamic writeable type for Board removes:
-/// can, content_metadata_id, created_at, board_sections, id, updated_at, user_id, primary_homepage
+/// can, content_metadata_id, created_at, board_sections, id, updated_at, primary_homepage
 public class WriteBoard : SdkModel
 {
   /// <summary>Date of board deletion</summary>
@@ -7464,6 +7559,8 @@ public class WriteBoard : SdkModel
   public string[]? section_order { get; set; } = null;
   /// <summary>Title of the board</summary>
   public string? title { get; set; } = null;
+  /// <summary>User id of board creator</summary>
+  public string? user_id { get; set; } = null;
 }
 
 /// Dynamic writeable type for BoardItem removes:
@@ -7588,7 +7685,7 @@ public class WriteConversation : SdkModel
   public bool? deleted { get; set; } = null;
   /// <summary>
   /// Dynamic writeable type for Agent removes:
-  /// can, id, created_by_user_id, created_by_name, created_by_first_name, created_by_last_name, created_by_avatar_url, has_inaccessible_source, created_at, updated_at, content_metadata_id, studio_agent_id
+  /// can, id, created_by_name, created_by_first_name, created_by_last_name, created_by_avatar_url, has_inaccessible_source, golden_queries, created_at, updated_at, content_metadata_id, studio_agent_id
   /// </summary>
   public WriteAgent? conversation_agent { get; set; }
 }
@@ -7710,6 +7807,8 @@ public class WriteDashboard : SdkModel
   public WriteCertification? certification_metadata { get; set; }
   /// <summary>Enables alerts to keep in sync with dashboard filter changes</summary>
   public bool? alert_sync_with_dashboard_filter_enabled { get; set; } = null;
+  /// <summary>Whether chat is enabled for this dashboard</summary>
+  public bool? chat_enabled { get; set; } = null;
   /// <summary>Background color</summary>
   public string? background_color { get; set; } = null;
   /// <summary>Enables crossfiltering in dashboards - only available in dashboards-next (beta)</summary>
@@ -7741,6 +7840,8 @@ public class WriteDashboard : SdkModel
   /// <summary>Title color</summary>
   public string? title_color { get; set; } = null;
   public DashboardAppearance? appearance { get; set; }
+  /// <summary>Whether to preserve the desktop layout on mobile viewports. i.e. don't force a single column layout on mobile.</summary>
+  public bool? preserve_desktop_layout { get; set; } = null;
   public DashboardDownloadSettings? download_settings { get; set; }
 }
 
@@ -8082,7 +8183,7 @@ public class WriteDBConnectionOverride : SdkModel
 }
 
 /// Dynamic writeable type for EmbedConfig removes:
-/// embed_enabled
+/// permissions, embed_enabled
 public class WriteEmbedConfig : SdkModel
 {
   /// <summary>List of domains to allow for embedding</summary>
@@ -8158,6 +8259,18 @@ public class WriteGitBranch : SdkModel
   public string? name { get; set; } = null;
   /// <summary>The resolved ref of this branch. Updating `ref` results in `git reset --hard <new_ref>``.</summary>
   public string? @ref { get; set; } = null;
+}
+
+/// Dynamic writeable type for GoldenQuery removes:
+/// can, id, query_id, created_by_user_id, last_updated_by_user_id, created_at, last_updated_at
+public class WriteGoldenQuery : SdkModel
+{
+  /// <summary>Variations of the golden question text</summary>
+  public string[]? questions { get; set; } = null;
+  /// <summary>The Explore URL representing the answer to the question</summary>
+  public string? answer { get; set; } = null;
+  /// <summary>Whether this golden question should be utilized by the agent</summary>
+  public bool? is_active { get; set; } = null;
 }
 
 /// Dynamic writeable type for Group removes:
@@ -8561,11 +8674,6 @@ public class WriteMcpTools : SdkModel
   /// description, category, access_level
   /// </summary>
   public WriteMcpToolSetting? create_view_from_table { get; set; }
-  /// <summary>
-  /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
-  /// </summary>
-  public WriteMcpToolSetting? project_git_branch { get; set; }
 }
 
 /// Dynamic writeable type for McpToolSetting removes:
@@ -9085,7 +9193,7 @@ public class WriteSetting : SdkModel
   public bool? embed_cookieless_v2 { get; set; } = null;
   /// <summary>
   /// Dynamic writeable type for EmbedConfig removes:
-  /// embed_enabled
+  /// permissions, embed_enabled
   /// </summary>
   public WriteEmbedConfig? embed_config { get; set; }
   /// <summary>Toggle Dashboard Auto Refresh restriction</summary>
@@ -9160,7 +9268,7 @@ public class WriteTheme : SdkModel
 }
 
 /// Dynamic writeable type for User removes:
-/// can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, is_service_account, service_account_name, url
+/// can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, credentials_workforce, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, is_service_account, service_account_name, url
 public class WriteUser : SdkModel
 {
   /// <summary>

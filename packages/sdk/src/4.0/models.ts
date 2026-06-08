@@ -25,7 +25,7 @@
  */
 
 /**
- * 526 API models: 355 Spec, 75 Request, 70 Write, 26 Enum
+ * 534 API models: 361 Spec, 76 Request, 71 Write, 26 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl';
@@ -63,7 +63,7 @@ export interface IAgent {
    */
   id?: string;
   /**
-   * User that created the Agent (read-only)
+   * User that created the Agent
    */
   created_by_user_id?: string;
   /**
@@ -102,6 +102,14 @@ export interface IAgent {
    * Has inaccessible source (read-only)
    */
   has_inaccessible_source?: boolean;
+  /**
+   * Agent golden questions (read-only)
+   */
+  golden_queries?: IGoldenQuery[] | null;
+  /**
+   * IDs of golden queries linked to the agent
+   */
+  golden_query_ids?: number[] | null;
   context?: IContext;
   /**
    * Is Agent soft deleted
@@ -127,6 +135,7 @@ export interface IAgent {
    * Studio Agent ID (if this agent was migrated) (read-only)
    */
   studio_agent_id?: string | null;
+  workflow_params?: IWorkflowParams;
 }
 
 export interface IAlert {
@@ -663,6 +672,13 @@ export interface IAssertValidatorTestSuccess {
   lookml_url?: string;
 }
 
+export interface IAsyncDeployResponse {
+  /**
+   * Status of the async deploy request (e.g., 'queued') (read-only)
+   */
+  status?: string;
+}
+
 export interface IBackupConfiguration {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -780,7 +796,7 @@ export interface IBoard {
    */
   updated_at?: Date | null;
   /**
-   * User id of board creator (read-only)
+   * User id of board creator
    */
   user_id?: string | null;
   /**
@@ -3281,6 +3297,41 @@ export interface ICredentialsTotp {
   url?: string | null;
 }
 
+export interface ICredentialsWorkforce {
+  /**
+   * Operations the current user is able to perform on this object (read-only)
+   */
+  can?: IDictionary<boolean>;
+  /**
+   * Timestamp for the creation of this credential (read-only)
+   */
+  created_at?: string | null;
+  /**
+   * Email address (read-only)
+   */
+  email?: string | null;
+  /**
+   * Has this credential been disabled? (read-only)
+   */
+  is_disabled?: boolean;
+  /**
+   * Timestamp for most recent login using credential (read-only)
+   */
+  logged_in_at?: string | null;
+  /**
+   * Workforce Unique ID for this user (read-only)
+   */
+  workforce_user_id?: string | null;
+  /**
+   * Short name for the type of this kind of credential (read-only)
+   */
+  type?: string | null;
+  /**
+   * Link to get this item (read-only)
+   */
+  url?: string | null;
+}
+
 export interface ICustomWelcomeEmail {
   /**
    * If true, custom email content will replace the default body of welcome emails
@@ -3364,6 +3415,10 @@ export interface IDashboard {
    * Enables alerts to keep in sync with dashboard filter changes
    */
   alert_sync_with_dashboard_filter_enabled?: boolean;
+  /**
+   * Whether chat is enabled for this dashboard
+   */
+  chat_enabled?: boolean;
   /**
    * Background color
    */
@@ -3497,6 +3552,10 @@ export interface IDashboard {
    * Relative URL of the dashboard (read-only)
    */
   url?: string | null;
+  /**
+   * Whether to preserve the desktop layout on mobile viewports. i.e. don't force a single column layout on mobile.
+   */
+  preserve_desktop_layout?: boolean;
   download_settings?: IDashboardDownloadSettings;
 }
 
@@ -4634,6 +4693,21 @@ export enum DependencyStatus {
   install_none = 'install_none',
 }
 
+export interface IDeployStatusResponse {
+  /**
+   * Status of the deploy (e.g., 'PENDING', 'COMPILING', 'SUCCESS', 'FAILED') (read-only)
+   */
+  status?: string;
+  /**
+   * Error message if the deploy failed (read-only)
+   */
+  error?: string | null;
+  /**
+   * Commit SHA of the deployment (read-only)
+   */
+  commit_sha?: string | null;
+}
+
 /**
  * Type of destination that the alert will be sent to Valid values are: "EMAIL", "ACTION_HUB". (Enum defined in AlertDestination)
  */
@@ -4956,6 +5030,10 @@ export interface IEmbedConfig {
    * When true, removes navigation to Looks from embedded dashboards and explores.
    */
   hide_look_navigation?: boolean;
+  /**
+   * Tree of allowed embed permissions (read-only)
+   */
+  permissions?: IDictionary<any> | null;
   /**
    * True if embedding is licensed for this Looker instance. (read-only)
    */
@@ -5635,6 +5713,49 @@ export interface IGitStatus {
    * Git description of the action (read-only)
    */
   text?: string | null;
+}
+
+export interface IGoldenQuery {
+  /**
+   * Operations the current user is able to perform on this object (read-only)
+   */
+  can?: IDictionary<boolean>;
+  /**
+   * Unique identifier for the golden question (read-only)
+   */
+  id?: number;
+  /**
+   * ID of the associated Looker Query resolved from the answer (read-only)
+   */
+  query_id?: number | null;
+  /**
+   * Variations of the golden question text
+   */
+  questions?: string[];
+  /**
+   * The Explore URL representing the answer to the question
+   */
+  answer?: string;
+  /**
+   * Whether this golden question should be utilized by the agent
+   */
+  is_active?: boolean;
+  /**
+   * ID of the user who created the question (read-only)
+   */
+  created_by_user_id?: number | null;
+  /**
+   * ID of the user who last updated the question (read-only)
+   */
+  last_updated_by_user_id?: number | null;
+  /**
+   * Time when the question was created (read-only)
+   */
+  created_at?: Date;
+  /**
+   * Time when the question was last updated (read-only)
+   */
+  last_updated_at?: Date | null;
 }
 
 export interface IGroup {
@@ -7169,6 +7290,10 @@ export interface ILookmlModelExplore {
    */
   connection_name?: string | null;
   /**
+   * Dialect name (read-only)
+   */
+  dialect_name?: string | null;
+  /**
    * How nulls are sorted, possible values are "low", "high", "first" and "last" (read-only)
    */
   null_sort_treatment?: string | null;
@@ -8305,7 +8430,6 @@ export interface IMcpTools {
   get_lookml_tests?: IMcpToolSetting;
   run_lookml_tests?: IMcpToolSetting;
   create_view_from_table?: IMcpToolSetting;
-  project_git_branch?: IMcpToolSetting;
 }
 
 export interface IMcpToolSetting {
@@ -10001,6 +10125,24 @@ export interface IRequestArtifactNamespaces {
 }
 
 /**
+ * Dynamically generated request type for async_deploy_ref_to_production
+ */
+export interface IRequestAsyncDeployRefToProduction {
+  /**
+   * Id of project
+   */
+  project_id: string;
+  /**
+   * Branch to deploy to production
+   */
+  branch?: string | null;
+  /**
+   * Ref to deploy to production
+   */
+  ref?: string | null;
+}
+
+/**
  * Dynamically generated request type for connection_columns
  */
 export interface IRequestConnectionColumns {
@@ -10868,6 +11010,10 @@ export interface IRequestSearchAgents {
    * Filter on soft deleted agents.
    */
   deleted?: boolean | null;
+  /**
+   * Match workflow agents with a particular primary agent (parent). Pass "null" to find agents with no primary agent.
+   */
+  primary_agent_id?: string | null;
 }
 
 /**
@@ -12010,6 +12156,10 @@ export interface IRequestSearchThemes {
    * Combine given search criteria in a boolean OR expression
    */
   filter_or?: boolean | null;
+  /**
+   * Match theme type ('internal', 'embed', or 'all').
+   */
+  theme_type?: string | null;
 }
 
 /**
@@ -14337,6 +14487,7 @@ export interface IUser {
   credentials_oidc?: ICredentialsOIDC;
   credentials_saml?: ICredentialsSaml;
   credentials_totp?: ICredentialsTotp;
+  credentials_workforce?: ICredentialsWorkforce;
   /**
    * Full name for display (available only if both first_name and last_name are set) (read-only)
    */
@@ -14834,6 +14985,29 @@ export interface IWhitelabelConfiguration {
   folders_mentions?: boolean;
 }
 
+export interface IWorkflowDestination {
+  /**
+   * Defines the delivery mechanism ('email' or 'action_hub').
+   */
+  type?: string;
+  /**
+   * The routing configuration.
+   */
+  parameters?: string;
+}
+
+export interface IWorkflowParams {
+  /**
+   * The ID of the primary parent agent
+   */
+  primary_agent?: string | null;
+  /**
+   * Crontab specifying the execution frequency
+   */
+  polling_frequency_cron?: string;
+  destination?: IWorkflowDestination;
+}
+
 export interface IWorkspace {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -14851,9 +15025,13 @@ export interface IWorkspace {
 
 /**
  * Dynamic writeable type for Agent removes:
- * can, id, created_by_user_id, created_by_name, created_by_first_name, created_by_last_name, created_by_avatar_url, has_inaccessible_source, created_at, updated_at, content_metadata_id, studio_agent_id
+ * can, id, created_by_name, created_by_first_name, created_by_last_name, created_by_avatar_url, has_inaccessible_source, golden_queries, created_at, updated_at, content_metadata_id, studio_agent_id
  */
 export interface IWriteAgent {
+  /**
+   * User that created the Agent
+   */
+  created_by_user_id?: string;
   /**
    * Agent name
    */
@@ -14870,6 +15048,10 @@ export interface IWriteAgent {
    * Agent sources
    */
   sources?: ISource[] | null;
+  /**
+   * IDs of golden queries linked to the agent
+   */
+  golden_query_ids?: number[] | null;
   context?: IContext | null;
   /**
    * Is Agent soft deleted
@@ -14879,6 +15061,7 @@ export interface IWriteAgent {
    * Enables Code Interpreter for this Agent
    */
   code_interpreter?: boolean;
+  workflow_params?: IWorkflowParams | null;
 }
 
 /**
@@ -15018,7 +15201,7 @@ export interface IWriteBackupConfiguration {
 
 /**
  * Dynamic writeable type for Board removes:
- * can, content_metadata_id, created_at, board_sections, id, updated_at, user_id, primary_homepage
+ * can, content_metadata_id, created_at, board_sections, id, updated_at, primary_homepage
  */
 export interface IWriteBoard {
   /**
@@ -15037,6 +15220,10 @@ export interface IWriteBoard {
    * Title of the board
    */
   title?: string | null;
+  /**
+   * User id of board creator
+   */
+  user_id?: string | null;
 }
 
 /**
@@ -15231,7 +15418,7 @@ export interface IWriteConversation {
   deleted?: boolean;
   /**
    * Dynamic writeable type for Agent removes:
-   * can, id, created_by_user_id, created_by_name, created_by_first_name, created_by_last_name, created_by_avatar_url, has_inaccessible_source, created_at, updated_at, content_metadata_id, studio_agent_id
+   * can, id, created_by_name, created_by_first_name, created_by_last_name, created_by_avatar_url, has_inaccessible_source, golden_queries, created_at, updated_at, content_metadata_id, studio_agent_id
    */
   conversation_agent?: IWriteAgent | null;
 }
@@ -15426,6 +15613,10 @@ export interface IWriteDashboard {
    */
   alert_sync_with_dashboard_filter_enabled?: boolean;
   /**
+   * Whether chat is enabled for this dashboard
+   */
+  chat_enabled?: boolean;
+  /**
    * Background color
    */
   background_color?: string | null;
@@ -15486,6 +15677,10 @@ export interface IWriteDashboard {
    */
   title_color?: string | null;
   appearance?: IDashboardAppearance | null;
+  /**
+   * Whether to preserve the desktop layout on mobile viewports. i.e. don't force a single column layout on mobile.
+   */
+  preserve_desktop_layout?: boolean;
   download_settings?: IDashboardDownloadSettings | null;
 }
 
@@ -16085,7 +16280,7 @@ export interface IWriteDBConnectionOverride {
 
 /**
  * Dynamic writeable type for EmbedConfig removes:
- * embed_enabled
+ * permissions, embed_enabled
  */
 export interface IWriteEmbedConfig {
   /**
@@ -16212,6 +16407,25 @@ export interface IWriteGitBranch {
    * The resolved ref of this branch. Updating `ref` results in `git reset --hard <new_ref>``.
    */
   ref?: string | null;
+}
+
+/**
+ * Dynamic writeable type for GoldenQuery removes:
+ * can, id, query_id, created_by_user_id, last_updated_by_user_id, created_at, last_updated_at
+ */
+export interface IWriteGoldenQuery {
+  /**
+   * Variations of the golden question text
+   */
+  questions?: string[] | null;
+  /**
+   * The Explore URL representing the answer to the question
+   */
+  answer?: string;
+  /**
+   * Whether this golden question should be utilized by the agent
+   */
+  is_active?: boolean;
 }
 
 /**
@@ -16744,11 +16958,6 @@ export interface IWriteMcpTools {
    * description, category, access_level
    */
   create_view_from_table?: IWriteMcpToolSetting | null;
-  /**
-   * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
-   */
-  project_git_branch?: IWriteMcpToolSetting | null;
 }
 
 /**
@@ -17661,7 +17870,7 @@ export interface IWriteSetting {
   embed_cookieless_v2?: boolean;
   /**
    * Dynamic writeable type for EmbedConfig removes:
-   * embed_enabled
+   * permissions, embed_enabled
    */
   embed_config?: IWriteEmbedConfig | null;
   /**
@@ -17785,7 +17994,7 @@ export interface IWriteTheme {
 
 /**
  * Dynamic writeable type for User removes:
- * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, is_service_account, service_account_name, url
+ * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, credentials_workforce, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, is_service_account, service_account_name, url
  */
 export interface IWriteUser {
   /**

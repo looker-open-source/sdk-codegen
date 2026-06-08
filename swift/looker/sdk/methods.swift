@@ -25,7 +25,7 @@
  */
 
 /**
- * 504 API methods
+ * 512 API methods
  */
 
 
@@ -4231,10 +4231,14 @@ open class LookerSDK: APIMethods {
          * @param {Bool} deleted Filter on soft deleted agents.
          */
         deleted: Bool? = nil,
+        /**
+         * @param {String} primary_agent_id Match workflow agents with a particular primary agent (parent). Pass "null" to find agents with no primary agent.
+         */
+        primary_agent_id: String? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<[Agent], SDKError> {
         let result: SDKResponse<[Agent], SDKError> = self.get("/agents/search", 
-            ["id": id, "name": name, "description": description, "created_by_user_id": created_by_user_id, "fields": fields, "limit": limit, "category": category, "offset": offset, "sorts": sorts, "filter_or": filter_or as Any?, "not_owned_by": not_owned_by as Any?, "deleted": deleted as Any?], nil, options)
+            ["id": id, "name": name, "description": description, "created_by_user_id": created_by_user_id, "fields": fields, "limit": limit, "category": category, "offset": offset, "sorts": sorts, "filter_or": filter_or as Any?, "not_owned_by": not_owned_by as Any?, "deleted": deleted as Any?, "primary_agent_id": primary_agent_id], nil, options)
         return result
     }
 
@@ -4656,6 +4660,66 @@ open class LookerSDK: APIMethods {
         options: ITransportSettings? = nil
     ) -> SDKResponse<[ChatMessage], SDKError> {
         let result: SDKResponse<[ChatMessage], SDKError> = self.post("/conversational_analytics/chat", nil, try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Create Golden Query
+     *
+     * Creates a golden query.
+     *
+     * POST /golden_queries -> GoldenQuery
+     */
+    public func create_golden_query(
+        /**
+         * @param {WriteGoldenQuery} body
+         */
+        _ body: WriteGoldenQuery,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<GoldenQuery, SDKError> {
+        let result: SDKResponse<GoldenQuery, SDKError> = self.post("/golden_queries", nil, try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Update Golden Query
+     *
+     * Updates a golden query.
+     *
+     * PATCH /golden_queries/{golden_query_id} -> GoldenQuery
+     */
+    public func update_golden_query(
+        /**
+         * @param {Int64} golden_query_id Golden Query ID
+         */
+        _ golden_query_id: Int64,
+        /**
+         * @param {WriteGoldenQuery} body
+         */
+        _ body: WriteGoldenQuery,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<GoldenQuery, SDKError> {
+        let path_golden_query_id = encodeParam(golden_query_id)
+        let result: SDKResponse<GoldenQuery, SDKError> = self.patch("/golden_queries/\(path_golden_query_id)", nil, try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Delete Golden Query
+     *
+     * Deletes a golden query by ID.
+     *
+     * DELETE /golden_queries/{golden_query_id} -> String
+     */
+    public func delete_golden_query(
+        /**
+         * @param {Int64} golden_query_id Golden Query ID
+         */
+        _ golden_query_id: Int64,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<String, SDKError> {
+        let path_golden_query_id = encodeParam(golden_query_id)
+        let result: SDKResponse<String, SDKError> = self.delete("/golden_queries/\(path_golden_query_id)", nil, nil, options)
         return result
     }
 
@@ -5708,6 +5772,41 @@ open class LookerSDK: APIMethods {
     ) -> SDKResponse<DashboardLayout, SDKError> {
         let result: SDKResponse<DashboardLayout, SDKError> = self.post("/dashboard_layouts", 
             ["fields": fields], try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Get Dashboard Filter State
+     * Returns the stored filter state for a given GUID.
+     *
+     * GET /dashboard_filter_state/{guid} -> String
+     */
+    public func dashboard_filter_state(
+        /**
+         * @param {String} guid GUID of the filter state
+         */
+        _ guid: String,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<String, SDKError> {
+        let path_guid = encodeParam(guid)
+        let result: SDKResponse<String, SDKError> = self.get("/dashboard_filter_state/\(path_guid)", nil, nil, options)
+        return result
+    }
+
+    /**
+     * ### Create Dashboard Filter State
+     * Saves the filter state and returns a GUID.
+     *
+     * POST /dashboard_filter_state -> Dashboard
+     */
+    public func create_dashboard_filter_state(
+        /**
+         * @param {String} body
+         */
+        _ body: String,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Dashboard, SDKError> {
+        let result: SDKResponse<Dashboard, SDKError> = self.post("/dashboard_filter_state", nil, try! self.encode(body), options)
         return result
     }
 
@@ -8334,6 +8433,60 @@ open class LookerSDK: APIMethods {
         let path_project_id = encodeParam(project_id)
         let result: SDKResponse<String, SDKError> = self.post("/projects/\(path_project_id)/deploy_ref_to_production", 
             ["branch": branch, "ref": ref], nil, options)
+        return result
+    }
+
+    /**
+     * ### Asynchronously Deploy a Remote Branch or Ref to Production
+     *
+     * Git must have been configured and deploy permission required.
+     * This endpoint kicks off the deploy process and returns immediately.
+     *
+     * Can only specify either a branch or a ref.
+     *
+     * POST /projects/{project_id}/async_deploy_ref_to_production -> AsyncDeployResponse
+     */
+    public func async_deploy_ref_to_production(
+        /**
+         * @param {String} project_id Id of project
+         */
+        _ project_id: String,
+        /**
+         * @param {String} branch Branch to deploy to production
+         */
+        branch: String? = nil,
+        /**
+         * @param {String} ref Ref to deploy to production
+         */
+        ref: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<AsyncDeployResponse, SDKError> {
+        let path_project_id = encodeParam(project_id)
+        let result: SDKResponse<AsyncDeployResponse, SDKError> = self.post("/projects/\(path_project_id)/async_deploy_ref_to_production", 
+            ["branch": branch, "ref": ref], nil, options)
+        return result
+    }
+
+    /**
+     * ### Check Status of Asynchronous Deploy
+     * Get the status of an asynchronous deploy operation.
+     *
+     * GET /projects/{project_id}/deploy_status/{deployment_id} -> DeployStatusResponse
+     */
+    public func async_deploy_status(
+        /**
+         * @param {String} project_id Id of project
+         */
+        _ project_id: String,
+        /**
+         * @param {Int64} deployment_id Id of deployment
+         */
+        _ deployment_id: Int64,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<DeployStatusResponse, SDKError> {
+        let path_project_id = encodeParam(project_id)
+        let path_deployment_id = encodeParam(deployment_id)
+        let result: SDKResponse<DeployStatusResponse, SDKError> = self.get("/projects/\(path_project_id)/deploy_status/\(path_deployment_id)", nil, nil, options)
         return result
     }
 
@@ -11245,6 +11398,26 @@ open class LookerSDK: APIMethods {
     // MARK SelfService: Self Service Models
 
     /**
+     * ### Get Allowed Connections under advanced connection governance
+     *
+     * This endpoint returns the list of allowed connection names for self-service models
+     * when advanced connection governance is enabled.
+     *
+     * GET /self_service_models/allowed_connections -> [String]
+     */
+    public func get_self_service_model_allowed_connections(
+        /**
+         * @param {Bool} google_sheets Include connections allowed for Google Sheets.
+         */
+        google_sheets: Bool? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<[String], SDKError> {
+        let result: SDKResponse<[String], SDKError> = self.get("/self_service_models/allowed_connections", 
+            ["google_sheets": google_sheets as Any?], nil, options)
+        return result
+    }
+
+    /**
      * ### Update certification for a Self Service Explore
      *
      * PATCH /self_service_models/{model_name}/certification -> Certification
@@ -11530,10 +11703,14 @@ open class LookerSDK: APIMethods {
          * @param {Bool} filter_or Combine given search criteria in a boolean OR expression
          */
         filter_or: Bool? = nil,
+        /**
+         * @param {String} theme_type Match theme type ('internal', 'embed', or 'all').
+         */
+        theme_type: String? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<[Theme], SDKError> {
         let result: SDKResponse<[Theme], SDKError> = self.get("/themes/search", 
-            ["id": id, "name": name, "begin_at": begin_at as Any?, "end_at": end_at as Any?, "limit": limit, "offset": offset, "sorts": sorts, "fields": fields, "filter_or": filter_or as Any?], nil, options)
+            ["id": id, "name": name, "begin_at": begin_at as Any?, "end_at": end_at as Any?, "limit": limit, "offset": offset, "sorts": sorts, "fields": fields, "filter_or": filter_or as Any?, "theme_type": theme_type], nil, options)
         return result
     }
 

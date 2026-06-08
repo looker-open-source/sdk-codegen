@@ -25,7 +25,7 @@
  */
 
 /**
- * 504 API methods
+ * 512 API methods
  */
 
 import type {
@@ -52,6 +52,7 @@ import type {
   IArtifact,
   IArtifactNamespace,
   IArtifactUsage,
+  IAsyncDeployResponse,
   IBackupConfiguration,
   IBoard,
   IBoardItem,
@@ -108,6 +109,7 @@ import type {
   IDBConnection,
   IDBConnectionTestResult,
   IDependencyGraph,
+  IDeployStatusResponse,
   IDialectInfo,
   IDigestEmails,
   IDigestEmailSend,
@@ -126,6 +128,7 @@ import type {
   IGitBranch,
   IGitConnectionTest,
   IGitConnectionTestResult,
+  IGoldenQuery,
   IGroup,
   IGroupHierarchy,
   IGroupIdForGroupInclusion,
@@ -190,6 +193,7 @@ import type {
   IRequestAllUsers,
   IRequestArtifact,
   IRequestArtifactNamespaces,
+  IRequestAsyncDeployRefToProduction,
   IRequestConnectionColumns,
   IRequestConnectionSchemas,
   IRequestConnectionSearchColumns,
@@ -319,6 +323,7 @@ import type {
   IWriteEmbedSecret,
   IWriteExternalOauthApplication,
   IWriteGitBranch,
+  IWriteGoldenQuery,
   IWriteGroup,
   IWriteIntegration,
   IWriteIntegrationHub,
@@ -5672,6 +5677,7 @@ export class Looker40SDKStream extends APIMethods {
         filter_or: request.filter_or,
         not_owned_by: request.not_owned_by,
         deleted: request.deleted,
+        primary_agent_id: request.primary_agent_id,
       },
       null,
       options
@@ -6151,6 +6157,89 @@ export class Looker40SDKStream extends APIMethods {
       '/conversational_analytics/chat',
       null,
       body,
+      options
+    );
+  }
+
+  /**
+   * ### Create Golden Query
+   *
+   * Creates a golden query.
+   *
+   * POST /golden_queries -> IGoldenQuery
+   *
+   * @param callback streaming output function
+   * @param body Partial<IWriteGoldenQuery>
+   * @param options one-time API call overrides
+   *
+   */
+  async create_golden_query(
+    callback: (response: Response) => Promise<IGoldenQuery>,
+    body: Partial<IWriteGoldenQuery>,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<IGoldenQuery>(
+      callback,
+      'POST',
+      '/golden_queries',
+      null,
+      body,
+      options
+    );
+  }
+
+  /**
+   * ### Update Golden Query
+   *
+   * Updates a golden query.
+   *
+   * PATCH /golden_queries/{golden_query_id} -> IGoldenQuery
+   *
+   * @param callback streaming output function
+   * @param golden_query_id Golden Query ID
+   * @param body Partial<IWriteGoldenQuery>
+   * @param options one-time API call overrides
+   *
+   */
+  async update_golden_query(
+    callback: (response: Response) => Promise<IGoldenQuery>,
+    golden_query_id: number,
+    body: Partial<IWriteGoldenQuery>,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<IGoldenQuery>(
+      callback,
+      'PATCH',
+      `/golden_queries/${golden_query_id}`,
+      null,
+      body,
+      options
+    );
+  }
+
+  /**
+   * ### Delete Golden Query
+   *
+   * Deletes a golden query by ID.
+   *
+   * DELETE /golden_queries/{golden_query_id} -> string
+   *
+   * @param callback streaming output function
+   * @param golden_query_id Golden Query ID
+   * @param options one-time API call overrides
+   *
+   */
+  async delete_golden_query(
+    callback: (response: Response) => Promise<string>,
+    golden_query_id: number,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<string>(
+      callback,
+      'DELETE',
+      `/golden_queries/${golden_query_id}`,
+      null,
+      null,
       options
     );
   }
@@ -7345,6 +7434,59 @@ export class Looker40SDKStream extends APIMethods {
       'POST',
       '/dashboard_layouts',
       { fields },
+      body,
+      options
+    );
+  }
+
+  /**
+   * ### Get Dashboard Filter State
+   * Returns the stored filter state for a given GUID.
+   *
+   * GET /dashboard_filter_state/{guid} -> string
+   *
+   * @param callback streaming output function
+   * @param guid GUID of the filter state
+   * @param options one-time API call overrides
+   *
+   */
+  async dashboard_filter_state(
+    callback: (response: Response) => Promise<string>,
+    guid: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    guid = encodeParam(guid);
+    return this.authStream<string>(
+      callback,
+      'GET',
+      `/dashboard_filter_state/${guid}`,
+      null,
+      null,
+      options
+    );
+  }
+
+  /**
+   * ### Create Dashboard Filter State
+   * Saves the filter state and returns a GUID.
+   *
+   * POST /dashboard_filter_state -> IDashboard
+   *
+   * @param callback streaming output function
+   * @param body string
+   * @param options one-time API call overrides
+   *
+   */
+  async create_dashboard_filter_state(
+    callback: (response: Response) => Promise<IDashboard>,
+    body: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<IDashboard>(
+      callback,
+      'POST',
+      '/dashboard_filter_state',
+      null,
       body,
       options
     );
@@ -10218,6 +10360,66 @@ export class Looker40SDKStream extends APIMethods {
       'POST',
       `/projects/${request.project_id}/deploy_ref_to_production`,
       { branch: request.branch, ref: request.ref },
+      null,
+      options
+    );
+  }
+
+  /**
+   * ### Asynchronously Deploy a Remote Branch or Ref to Production
+   *
+   * Git must have been configured and deploy permission required.
+   * This endpoint kicks off the deploy process and returns immediately.
+   *
+   * Can only specify either a branch or a ref.
+   *
+   * POST /projects/{project_id}/async_deploy_ref_to_production -> IAsyncDeployResponse
+   *
+   * @param callback streaming output function
+   * @param request composed interface "IRequestAsyncDeployRefToProduction" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  async async_deploy_ref_to_production(
+    callback: (response: Response) => Promise<IAsyncDeployResponse>,
+    request: IRequestAsyncDeployRefToProduction,
+    options?: Partial<ITransportSettings>
+  ) {
+    request.project_id = encodeParam(request.project_id);
+    return this.authStream<IAsyncDeployResponse>(
+      callback,
+      'POST',
+      `/projects/${request.project_id}/async_deploy_ref_to_production`,
+      { branch: request.branch, ref: request.ref },
+      null,
+      options
+    );
+  }
+
+  /**
+   * ### Check Status of Asynchronous Deploy
+   * Get the status of an asynchronous deploy operation.
+   *
+   * GET /projects/{project_id}/deploy_status/{deployment_id} -> IDeployStatusResponse
+   *
+   * @param callback streaming output function
+   * @param project_id Id of project
+   * @param deployment_id Id of deployment
+   * @param options one-time API call overrides
+   *
+   */
+  async async_deploy_status(
+    callback: (response: Response) => Promise<IDeployStatusResponse>,
+    project_id: string,
+    deployment_id: number,
+    options?: Partial<ITransportSettings>
+  ) {
+    project_id = encodeParam(project_id);
+    return this.authStream<IDeployStatusResponse>(
+      callback,
+      'GET',
+      `/projects/${project_id}/deploy_status/${deployment_id}`,
+      null,
       null,
       options
     );
@@ -13372,6 +13574,34 @@ export class Looker40SDKStream extends APIMethods {
   //#region SelfService: Self Service Models
 
   /**
+   * ### Get Allowed Connections under advanced connection governance
+   *
+   * This endpoint returns the list of allowed connection names for self-service models
+   * when advanced connection governance is enabled.
+   *
+   * GET /self_service_models/allowed_connections -> string[]
+   *
+   * @param callback streaming output function
+   * @param google_sheets Include connections allowed for Google Sheets.
+   * @param options one-time API call overrides
+   *
+   */
+  async get_self_service_model_allowed_connections(
+    callback: (response: Response) => Promise<string[]>,
+    google_sheets?: boolean,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<string[]>(
+      callback,
+      'GET',
+      '/self_service_models/allowed_connections',
+      { google_sheets },
+      null,
+      options
+    );
+  }
+
+  /**
    * ### Update certification for a Self Service Explore
    *
    * PATCH /self_service_models/{model_name}/certification -> ICertification
@@ -13711,6 +13941,7 @@ export class Looker40SDKStream extends APIMethods {
         sorts: request.sorts,
         fields: request.fields,
         filter_or: request.filter_or,
+        theme_type: request.theme_type,
       },
       null,
       options
