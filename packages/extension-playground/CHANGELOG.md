@@ -320,6 +320,14 @@
     * @looker/extension-sdk-react bumped from 26.6.1 to 26.8.0
     * @looker/sdk bumped from 26.6.1 to 26.8.0
 
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-sdk bumped from 26.8.0 to 26.10.0
+    * @looker/extension-sdk-react bumped from 26.8.0 to 26.10.0
+    * @looker/sdk bumped from 26.8.0 to 26.10.0
+
 ## [1.0.29](https://github.com/looker-open-source/sdk-codegen/compare/extension-playground-v1.0.28...extension-playground-v1.0.29) (2025-02-06)
 
 
