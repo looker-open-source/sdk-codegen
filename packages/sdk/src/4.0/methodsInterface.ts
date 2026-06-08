@@ -25,7 +25,7 @@
  */
 
 /**
- * 504 API methods
+ * 512 API methods
  */
 
 import type {
@@ -50,6 +50,7 @@ import type {
   IArtifact,
   IArtifactNamespace,
   IArtifactUsage,
+  IAsyncDeployResponse,
   IBackupConfiguration,
   IBoard,
   IBoardItem,
@@ -106,6 +107,7 @@ import type {
   IDBConnection,
   IDBConnectionTestResult,
   IDependencyGraph,
+  IDeployStatusResponse,
   IDialectInfo,
   IDigestEmails,
   IDigestEmailSend,
@@ -125,6 +127,7 @@ import type {
   IGitBranch,
   IGitConnectionTest,
   IGitConnectionTestResult,
+  IGoldenQuery,
   IGroup,
   IGroupHierarchy,
   IGroupIdForGroupInclusion,
@@ -189,6 +192,7 @@ import type {
   IRequestAllUsers,
   IRequestArtifact,
   IRequestArtifactNamespaces,
+  IRequestAsyncDeployRefToProduction,
   IRequestConnectionColumns,
   IRequestConnectionSchemas,
   IRequestConnectionSearchColumns,
@@ -318,6 +322,7 @@ import type {
   IWriteEmbedSecret,
   IWriteExternalOauthApplication,
   IWriteGitBranch,
+  IWriteGoldenQuery,
   IWriteGroup,
   IWriteIntegration,
   IWriteIntegrationHub,
@@ -3896,6 +3901,56 @@ export interface ILooker40SDK extends IAPIMethods {
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IChatMessage[], IError>>;
 
+  /**
+   * ### Create Golden Query
+   *
+   * Creates a golden query.
+   *
+   * POST /golden_queries -> IGoldenQuery
+   *
+   * @param body Partial<IWriteGoldenQuery>
+   * @param options one-time API call overrides
+   *
+   */
+  create_golden_query(
+    body: Partial<IWriteGoldenQuery>,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IGoldenQuery, IError | IValidationError>>;
+
+  /**
+   * ### Update Golden Query
+   *
+   * Updates a golden query.
+   *
+   * PATCH /golden_queries/{golden_query_id} -> IGoldenQuery
+   *
+   * @param golden_query_id Golden Query ID
+   * @param body Partial<IWriteGoldenQuery>
+   * @param options one-time API call overrides
+   *
+   */
+  update_golden_query(
+    golden_query_id: number,
+    body: Partial<IWriteGoldenQuery>,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IGoldenQuery, IError | IValidationError>>;
+
+  /**
+   * ### Delete Golden Query
+   *
+   * Deletes a golden query by ID.
+   *
+   * DELETE /golden_queries/{golden_query_id} -> string
+   *
+   * @param golden_query_id Golden Query ID
+   * @param options one-time API call overrides
+   *
+   */
+  delete_golden_query(
+    golden_query_id: number,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string, IError>>;
+
   //#endregion ConversationalAnalytics: Manage Conversations, Agents and Messages
 
   //#region Dashboard: Manage Dashboards
@@ -4630,6 +4685,36 @@ export interface ILooker40SDK extends IAPIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IDashboardLayout, IError | IValidationError>>;
+
+  /**
+   * ### Get Dashboard Filter State
+   * Returns the stored filter state for a given GUID.
+   *
+   * GET /dashboard_filter_state/{guid} -> string
+   *
+   * @param guid GUID of the filter state
+   * @param options one-time API call overrides
+   *
+   */
+  dashboard_filter_state(
+    guid: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string, IError>>;
+
+  /**
+   * ### Create Dashboard Filter State
+   * Saves the filter state and returns a GUID.
+   *
+   * POST /dashboard_filter_state -> IDashboard
+   *
+   * @param body string
+   * @param options one-time API call overrides
+   *
+   */
+  create_dashboard_filter_state(
+    body: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IDashboard, IError | IValidationError>>;
 
   //#endregion Dashboard: Manage Dashboards
 
@@ -6305,6 +6390,42 @@ export interface ILooker40SDK extends IAPIMethods {
     request: IRequestDeployRefToProduction,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError | IValidationError>>;
+
+  /**
+   * ### Asynchronously Deploy a Remote Branch or Ref to Production
+   *
+   * Git must have been configured and deploy permission required.
+   * This endpoint kicks off the deploy process and returns immediately.
+   *
+   * Can only specify either a branch or a ref.
+   *
+   * POST /projects/{project_id}/async_deploy_ref_to_production -> IAsyncDeployResponse
+   *
+   * @param request composed interface "IRequestAsyncDeployRefToProduction" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  async_deploy_ref_to_production(
+    request: IRequestAsyncDeployRefToProduction,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IAsyncDeployResponse, IError | IValidationError>>;
+
+  /**
+   * ### Check Status of Asynchronous Deploy
+   * Get the status of an asynchronous deploy operation.
+   *
+   * GET /projects/{project_id}/deploy_status/{deployment_id} -> IDeployStatusResponse
+   *
+   * @param project_id Id of project
+   * @param deployment_id Id of deployment
+   * @param options one-time API call overrides
+   *
+   */
+  async_deploy_status(
+    project_id: string,
+    deployment_id: number,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IDeployStatusResponse, IError>>;
 
   /**
    * ### Deploy LookML from this Development Mode Project to Production
@@ -8327,6 +8448,23 @@ export interface ILooker40SDK extends IAPIMethods {
   //#region SelfService: Self Service Models
 
   /**
+   * ### Get Allowed Connections under advanced connection governance
+   *
+   * This endpoint returns the list of allowed connection names for self-service models
+   * when advanced connection governance is enabled.
+   *
+   * GET /self_service_models/allowed_connections -> string[]
+   *
+   * @param google_sheets Include connections allowed for Google Sheets.
+   * @param options one-time API call overrides
+   *
+   */
+  get_self_service_model_allowed_connections(
+    google_sheets?: boolean,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string[], IError>>;
+
+  /**
    * ### Update certification for a Self Service Explore
    *
    * PATCH /self_service_models/{model_name}/certification -> ICertification
@@ -8559,7 +8697,7 @@ export interface ILooker40SDK extends IAPIMethods {
   search_themes(
     request: IRequestSearchThemes,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ITheme[], IError>>;
+  ): Promise<SDKResponse<ITheme[], IError | IValidationError>>;
 
   /**
    * ### Get the default theme

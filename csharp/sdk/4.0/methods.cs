@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 504 API methods
+/// 512 API methods
 
 #nullable enable
 using System;
@@ -3647,6 +3647,7 @@ namespace Looker.SDK.API40
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
   /// <param name="not_owned_by">Filter out the agents owned by the user passed at the :created_by_user_id params</param>
   /// <param name="deleted">Filter on soft deleted agents.</param>
+  /// <param name="primary_agent_id">Match workflow agents with a particular primary agent (parent). Pass "null" to find agents with no primary agent.</param>
   public async Task<SdkResponse<Agent[], Exception>> search_agents(
     string? id = null,
     string? name = null,
@@ -3660,6 +3661,7 @@ namespace Looker.SDK.API40
     bool? filter_or = null,
     bool? not_owned_by = null,
     bool? deleted = null,
+    string? primary_agent_id = null,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<Agent[], Exception>(HttpMethod.Get, "/agents/search", new Values {
@@ -3674,7 +3676,8 @@ namespace Looker.SDK.API40
       { "sorts", sorts },
       { "filter_or", filter_or },
       { "not_owned_by", not_owned_by },
-      { "deleted", deleted }},null,options);
+      { "deleted", deleted },
+      { "primary_agent_id", primary_agent_id }},null,options);
   }
 
   /// ### Create Agent
@@ -4013,6 +4016,54 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
     return await AuthRequest<ChatMessage[], Exception>(HttpMethod.Post, "/conversational_analytics/chat", null,body,options);
+  }
+
+  /// ### Create Golden Query
+  ///
+  /// Creates a golden query.
+  ///
+  /// POST /golden_queries -> GoldenQuery
+  ///
+  /// <returns><c>GoldenQuery</c> Golden Query (application/json)</returns>
+  ///
+  public async Task<SdkResponse<GoldenQuery, Exception>> create_golden_query(
+    WriteGoldenQuery body,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<GoldenQuery, Exception>(HttpMethod.Post, "/golden_queries", null,body,options);
+  }
+
+  /// ### Update Golden Query
+  ///
+  /// Updates a golden query.
+  ///
+  /// PATCH /golden_queries/{golden_query_id} -> GoldenQuery
+  ///
+  /// <returns><c>GoldenQuery</c> Golden Query (application/json)</returns>
+  ///
+  /// <param name="golden_query_id">Golden Query ID</param>
+  public async Task<SdkResponse<GoldenQuery, Exception>> update_golden_query(
+    long golden_query_id,
+    WriteGoldenQuery body,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<GoldenQuery, Exception>(HttpMethod.Patch, $"/golden_queries/{golden_query_id}", null,body,options);
+  }
+
+  /// ### Delete Golden Query
+  ///
+  /// Deletes a golden query by ID.
+  ///
+  /// DELETE /golden_queries/{golden_query_id} -> string
+  ///
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  ///
+  /// <param name="golden_query_id">Golden Query ID</param>
+  public async Task<SdkResponse<string, Exception>> delete_golden_query(
+    long golden_query_id,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/golden_queries/{golden_query_id}", null,null,options);
   }
 
   #endregion ConversationalAnalytics: Manage Conversations, Agents and Messages
@@ -4888,6 +4939,36 @@ namespace Looker.SDK.API40
 {  
     return await AuthRequest<DashboardLayout, Exception>(HttpMethod.Post, "/dashboard_layouts", new Values {
       { "fields", fields }},body,options);
+  }
+
+  /// ### Get Dashboard Filter State
+  /// Returns the stored filter state for a given GUID.
+  ///
+  /// GET /dashboard_filter_state/{guid} -> string
+  ///
+  /// <returns><c>string</c> JSON string of filter state (application/json)</returns>
+  ///
+  /// <param name="guid">GUID of the filter state</param>
+  public async Task<SdkResponse<string, Exception>> dashboard_filter_state(
+    string guid,
+    ITransportSettings? options = null)
+{  
+      guid = SdkUtils.EncodeParam(guid);
+    return await AuthRequest<string, Exception>(HttpMethod.Get, $"/dashboard_filter_state/{guid}", null,null,options);
+  }
+
+  /// ### Create Dashboard Filter State
+  /// Saves the filter state and returns a GUID.
+  ///
+  /// POST /dashboard_filter_state -> Dashboard
+  ///
+  /// <returns><c>Dashboard</c> Dashboard Filter State (application/json)</returns>
+  ///
+  public async Task<SdkResponse<Dashboard, Exception>> create_dashboard_filter_state(
+    string body,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<Dashboard, Exception>(HttpMethod.Post, "/dashboard_filter_state", null,body,options);
   }
 
   #endregion Dashboard: Manage Dashboards
@@ -7063,6 +7144,50 @@ namespace Looker.SDK.API40
     return await AuthRequest<TSuccess, Exception>(HttpMethod.Post, $"/projects/{project_id}/deploy_ref_to_production", new Values {
       { "branch", branch },
       { "ref", @ref }},null,options);
+  }
+
+  /// ### Asynchronously Deploy a Remote Branch or Ref to Production
+  ///
+  /// Git must have been configured and deploy permission required.
+  /// This endpoint kicks off the deploy process and returns immediately.
+  ///
+  /// Can only specify either a branch or a ref.
+  ///
+  /// POST /projects/{project_id}/async_deploy_ref_to_production -> AsyncDeployResponse
+  ///
+  /// <returns><c>AsyncDeployResponse</c> Returns 200 if project deploy was successfully queued (application/json)</returns>
+  ///
+  /// <param name="project_id">Id of project</param>
+  /// <param name="branch">Branch to deploy to production</param>
+  /// <param name="ref">Ref to deploy to production</param>
+  public async Task<SdkResponse<AsyncDeployResponse, Exception>> async_deploy_ref_to_production(
+    string project_id,
+    string? branch = null,
+    string? @ref = null,
+    ITransportSettings? options = null)
+{  
+      project_id = SdkUtils.EncodeParam(project_id);
+    return await AuthRequest<AsyncDeployResponse, Exception>(HttpMethod.Post, $"/projects/{project_id}/async_deploy_ref_to_production", new Values {
+      { "branch", branch },
+      { "ref", @ref }},null,options);
+  }
+
+  /// ### Check Status of Asynchronous Deploy
+  /// Get the status of an asynchronous deploy operation.
+  ///
+  /// GET /projects/{project_id}/deploy_status/{deployment_id} -> DeployStatusResponse
+  ///
+  /// <returns><c>DeployStatusResponse</c> Returns 200 if status was successfully retrieved (application/json)</returns>
+  ///
+  /// <param name="project_id">Id of project</param>
+  /// <param name="deployment_id">Id of deployment</param>
+  public async Task<SdkResponse<DeployStatusResponse, Exception>> async_deploy_status(
+    string project_id,
+    long deployment_id,
+    ITransportSettings? options = null)
+{  
+      project_id = SdkUtils.EncodeParam(project_id);
+    return await AuthRequest<DeployStatusResponse, Exception>(HttpMethod.Get, $"/projects/{project_id}/deploy_status/{deployment_id}", null,null,options);
   }
 
   /// ### Deploy LookML from this Development Mode Project to Production
@@ -9591,6 +9716,24 @@ namespace Looker.SDK.API40
 
   #region SelfService: Self Service Models
 
+  /// ### Get Allowed Connections under advanced connection governance
+  ///
+  /// This endpoint returns the list of allowed connection names for self-service models
+  /// when advanced connection governance is enabled.
+  ///
+  /// GET /self_service_models/allowed_connections -> string[]
+  ///
+  /// <returns><c>string[]</c> List of allowed connection names (application/json)</returns>
+  ///
+  /// <param name="google_sheets">Include connections allowed for Google Sheets.</param>
+  public async Task<SdkResponse<string[], Exception>> get_self_service_model_allowed_connections(
+    bool? google_sheets = null,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<string[], Exception>(HttpMethod.Get, "/self_service_models/allowed_connections", new Values {
+      { "google_sheets", google_sheets }},null,options);
+  }
+
   /// ### Update certification for a Self Service Explore
   ///
   /// PATCH /self_service_models/{model_name}/certification -> Certification
@@ -9830,6 +9973,7 @@ namespace Looker.SDK.API40
   /// <param name="sorts">Fields to sort by.</param>
   /// <param name="fields">Requested fields.</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
+  /// <param name="theme_type">Match theme type ('internal', 'embed', or 'all').</param>
   public async Task<SdkResponse<Theme[], Exception>> search_themes(
     string? id = null,
     string? name = null,
@@ -9840,6 +9984,7 @@ namespace Looker.SDK.API40
     string? sorts = null,
     string? fields = null,
     bool? filter_or = null,
+    string? theme_type = null,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<Theme[], Exception>(HttpMethod.Get, "/themes/search", new Values {
@@ -9851,7 +9996,8 @@ namespace Looker.SDK.API40
       { "offset", offset },
       { "sorts", sorts },
       { "fields", fields },
-      { "filter_or", filter_or }},null,options);
+      { "filter_or", filter_or },
+      { "theme_type", theme_type }},null,options);
   }
 
   /// ### Get the default theme
