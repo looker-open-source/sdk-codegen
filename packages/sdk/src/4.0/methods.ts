@@ -10156,12 +10156,12 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    * @param options one-time API call overrides
    *
    */
-  async run_inline_query(
+  async run_inline_query<T = string>(
     request: IRequestRunInlineQuery,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<string, IError | IValidationError>> {
+  ): Promise<SDKResponse<T, IError | IValidationError>> {
     request.result_format = encodeParam(request.result_format);
-    return this.post<string, IError | IValidationError>(
+    return this.post<T, IError | IValidationError>(
       `/queries/run/${request.result_format}`,
       {
         limit: request.limit,

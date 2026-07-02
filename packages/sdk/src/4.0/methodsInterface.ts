@@ -7182,10 +7182,10 @@ export interface ILooker40SDK extends IAPIMethods {
    * @param options one-time API call overrides
    *
    */
-  run_inline_query(
+  run_inline_query<T = string>(
     request: IRequestRunInlineQuery,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<string, IError | IValidationError>>;
+  ): Promise<SDKResponse<T, IError | IValidationError>>;
 
   /**
    * ### Run an URL encoded query.
