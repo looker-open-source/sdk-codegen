@@ -687,20 +687,25 @@ def test_conversational_analytics(sdk: mtds.Looker40SDK):
     try:
         # 1. Create a temporary Agent
         print("\nCreating temporary test agent...")
-        agent = sdk.create_agent(
-            body=ml.WriteAgent(
-                name="Temp SDK Test Agent",
-                category="conversation",
-                description="Temporary agent created for SDK integration tests",
-                sources=[ml.Source(model="thelook",explore="products")]
+        try:
+            agent = sdk.create_agent(
+                body=ml.WriteAgent(
+                    name="Temp SDK Test Agent",
+                    category="conversation",
+                    description="Temporary agent created for SDK integration tests",
+                    sources=[ml.Source(model="thelook",explore="products")]
+                )
             )
-        )
+        except error.SDKError as e:
+            if "Not found" in e.message or "Unsupported" in e.message:
+                pytest.skip(f"Conversational Analytics (Agents) is not enabled on this Looker instance: {e.message}")
+            raise
         assert isinstance(agent, ml.Agent)
         assert isinstance(agent.id, str)
         agent_id = agent.id
         print(f"✅ Created agent: {agent_id}")
 
-        # 2. Create a Conversation for this agent
+            # 2. Create a Conversation for this agent
         print("Creating conversation...")
         conv = sdk.create_conversation(
             body=ml.WriteConversation(
