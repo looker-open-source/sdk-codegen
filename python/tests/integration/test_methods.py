@@ -10,6 +10,7 @@ from PIL import Image  # type: ignore
 
 from looker_sdk.sdk.api40 import methods as mtds
 from looker_sdk.sdk.api40 import models as ml
+from looker_sdk import error
 
 
 @pytest.fixture(scope="module")
