@@ -68,7 +68,13 @@ else:
     def datetime_structure_hook(
         d: str, t: Type[datetime.datetime]
     ) -> datetime.datetime:
-        return datetime.datetime.strptime(d, DATETIME_FMT)
+        if d.endswith("Z"):
+            d = d[:-1] + "+00:00"
+        try:
+            return datetime.datetime.fromisoformat(d)
+        except ValueError:
+            return datetime.datetime.strptime(d, DATETIME_FMT)
+
 
 
 def datetime_unstructure_hook(dt):
