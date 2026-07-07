@@ -698,7 +698,7 @@ def test_conversational_analytics(sdk: mtds.Looker40SDK):
                 )
             )
         except error.SDKError as e:
-            if "Not found" in e.message or "Unsupported" in e.message:
+            if "not found" in e.message.lower() or "unsupported" in e.message.lower():
                 pytest.skip(f"Conversational Analytics (Agents) is not enabled on this Looker instance: {e.message}")
             raise
         assert isinstance(agent, ml.Agent)
