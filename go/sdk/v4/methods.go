@@ -7635,7 +7635,7 @@ func (l *LookerSDK) SearchThemes(request RequestSearchThemes,
 //
 // Deprecated: This method is deprecated.
 func (l *LookerSDK) DefaultTheme(
-	ts time.Time,
+	ts *time.Time,
 	options *rtl.ApiSettings) (Theme, error) {
 	var result Theme
 	err := l.AuthSession.Do(&result, "GET", "/4.0", "/themes/default", map[string]interface{}{"ts": ts}, nil, options)
@@ -7682,7 +7682,7 @@ func (l *LookerSDK) SetDefaultTheme(
 // GET /themes/default_theme -> Theme
 func (l *LookerSDK) DefaultThemeByType(
 	themeType string,
-	ts time.Time,
+	ts *time.Time,
 	options *rtl.ApiSettings) (Theme, error) {
 	var result Theme
 	err := l.AuthSession.Do(&result, "GET", "/4.0", "/themes/default_theme", map[string]interface{}{"ts": ts, "theme_type": themeType}, nil, options)
@@ -7742,7 +7742,7 @@ func (l *LookerSDK) ActiveThemes(request RequestActiveThemes,
 // GET /themes/theme_or_default -> Theme
 func (l *LookerSDK) ThemeOrDefault(
 	name string,
-	ts time.Time,
+	ts *time.Time,
 	options *rtl.ApiSettings) (Theme, error) {
 	var result Theme
 	err := l.AuthSession.Do(&result, "GET", "/4.0", "/themes/theme_or_default", map[string]interface{}{"name": name, "ts": ts}, nil, options)
