@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 458 API models: 361 Spec, 0 Request, 71 Write, 26 Enum
+/// 461 API models: 363 Spec, 0 Request, 72 Write, 26 Enum
 
 #nullable enable
 using System;
@@ -3423,6 +3423,54 @@ public class GitConnectionTestResult : SdkModel
   public string? status { get; set; } = null;
 }
 
+public class GitDiagnosticIssue : SdkModel
+{
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
+  public StringDictionary<bool>? can { get; set; } = null;
+  /// <summary>Unique ID of the diagnostic issue. (read-only)</summary>
+  public string? id { get; set; } = null;
+  /// <summary>Parent diagnostic report ID. (read-only)</summary>
+  public string? report_id { get; set; } = null;
+  /// <summary>Target Looker Project ID. (read-only)</summary>
+  public string? project_id { get; set; } = null;
+  /// <summary>Environment scope (developer/production). (read-only)</summary>
+  public string? project_type { get; set; } = null;
+  /// <summary>Git diagnostic issue category. (read-only)</summary>
+  public string? issue_type { get; set; } = null;
+  /// <summary>Version schema. (read-only)</summary>
+  public string? issue_version { get; set; } = null;
+  /// <summary>Current execution status. (read-only)</summary>
+  public string? state { get; set; } = null;
+  /// <summary>Creation timestamp. (read-only)</summary>
+  public DateTime? created_at { get; set; } = null;
+  /// <summary>Last update timestamp. (read-only)</summary>
+  public DateTime? updated_at { get; set; } = null;
+}
+
+public class GitDiagnosticReport : SdkModel
+{
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
+  public StringDictionary<bool>? can { get; set; } = null;
+  /// <summary>Unique ID of the git diagnostic report. (read-only)</summary>
+  public string? id { get; set; } = null;
+  /// <summary>Target Looker Project ID. (read-only)</summary>
+  public string? project_id { get; set; } = null;
+  /// <summary>ID of the user initiating the diagnosis. (read-only)</summary>
+  public string? user_id { get; set; } = null;
+  /// <summary>Raw lifecycle state. (read-only)</summary>
+  public string? state { get; set; } = null;
+  /// <summary>Status derived from state. (read-only)</summary>
+  public string? status { get; set; } = null;
+  /// <summary>Creation time. (read-only)</summary>
+  public DateTime? created_at { get; set; } = null;
+  /// <summary>Update time. (read-only)</summary>
+  public DateTime? updated_at { get; set; } = null;
+  /// <summary>Project structure type.</summary>
+  public string? project_type { get; set; } = null;
+  /// <summary>Diagnostic issues associated with this report. (read-only)</summary>
+  public GitDiagnosticIssue[]? issues { get; set; } = null;
+}
+
 public class GitStatus : SdkModel
 {
   /// <summary>Git action: add, delete, etc (read-only)</summary>
@@ -3457,6 +3505,20 @@ public class GoldenQuery : SdkModel
   public DateTime? created_at { get; set; } = null;
   /// <summary>Time when the question was last updated (read-only)</summary>
   public DateTime? last_updated_at { get; set; } = null;
+  /// <summary>The explore name of the golden query (read-only)</summary>
+  public string? explore { get; set; } = null;
+  /// <summary>The LookML model name of the golden query (read-only)</summary>
+  public string? model { get; set; } = null;
+  /// <summary>Fields of the associated Looker Query (read-only)</summary>
+  public string[]? fields { get; set; } = null;
+  /// <summary>Filters of the associated Looker Query (read-only)</summary>
+  public StringDictionary<string>? filters { get; set; } = null;
+  /// <summary>Sorts of the associated Looker Query (read-only)</summary>
+  public string[]? sorts { get; set; } = null;
+  /// <summary>Limit of the associated Looker Query (read-only)</summary>
+  public string? limit { get; set; } = null;
+  /// <summary>Client ID of the associated Looker Query (read-only)</summary>
+  public string? client_id { get; set; } = null;
 }
 
 public class Group : SdkModel
@@ -4448,6 +4510,8 @@ public class LookmlModelExploreField : SdkModel
   public Align? align { get; set; }
   /// <summary>An array of custom timeframes available for this field for filtering, if applicable. (read-only)</summary>
   public string[]? available_custom_timeframes { get; set; } = null;
+  /// <summary>A map of timeframe keys to their localized labels. (read-only)</summary>
+  public StringDictionary<string>? timeframe_labels { get; set; } = null;
   /// <summary>Whether it's possible to filter on this field. (read-only)</summary>
   public bool? can_filter { get; set; } = null;
   /// <summary>Field category Valid values are: "parameter", "filter", "measure", "dimension". (read-only)</summary>
@@ -6245,6 +6309,8 @@ public class ScheduledPlan : SdkModel
   public bool? run_once { get; set; } = null;
   /// <summary>Whether links back to Looker should be included in this ScheduledPlan</summary>
   public bool? include_links { get; set; } = null;
+  /// <summary>Whether to include a dashboard summary in the scheduled email</summary>
+  public bool? include_dashboard_summary { get; set; } = null;
   /// <summary>Custom url domain for the scheduled entity</summary>
   public string? custom_url_base { get; set; } = null;
   /// <summary>Custom url path and parameters for the scheduled entity</summary>
@@ -6419,6 +6485,8 @@ public class SelfServiceModelUploadData : SdkModel
   public string? drive_url { get; set; } = null;
   /// <summary>User ID of the uploaded data owner (read-only)</summary>
   public string? owner_id { get; set; } = null;
+  /// <summary>GUID of the visual canvas (read-only)</summary>
+  public string? canvas_guid { get; set; } = null;
 }
 
 public class ServiceAccount : SdkModel
@@ -6546,11 +6614,13 @@ public class Setting : SdkModel
   public string? content_certification_documentation_link { get; set; } = null;
   /// <summary>Allow content certification to be revoked on edits.</summary>
   public bool? revoke_certification_on_edits { get; set; } = null;
+  /// <summary>Automatically enable Multi-Factor Authentication for users.</summary>
+  public bool? automated_mfa_enabled { get; set; } = null;
   /// <summary>Allow content certification.</summary>
   public bool? is_content_certification_enabled { get; set; } = null;
   /// <summary>Allow auto certification of lookml content.</summary>
   public bool? auto_certify_lookml_content { get; set; } = null;
-  /// <summary>Toggle CA agent observability</summary>
+  /// <summary>Toggle Conversational Analytics Agent Token usage</summary>
   public bool? ca_agent_observability { get; set; } = null;
   public McpTools? mcp_tools { get; set; }
 }
@@ -8261,8 +8331,16 @@ public class WriteGitBranch : SdkModel
   public string? @ref { get; set; } = null;
 }
 
+/// Dynamic writeable type for GitDiagnosticReport removes:
+/// can, id, project_id, user_id, state, status, created_at, updated_at, issues
+public class WriteGitDiagnosticReport : SdkModel
+{
+  /// <summary>Project structure type.</summary>
+  public string? project_type { get; set; } = null;
+}
+
 /// Dynamic writeable type for GoldenQuery removes:
-/// can, id, query_id, created_by_user_id, last_updated_by_user_id, created_at, last_updated_at
+/// can, id, query_id, created_by_user_id, last_updated_by_user_id, created_at, last_updated_at, explore, model, fields, filters, sorts, limit, client_id
 public class WriteGoldenQuery : SdkModel
 {
   /// <summary>Variations of the golden question text</summary>
@@ -9100,6 +9178,8 @@ public class WriteScheduledPlan : SdkModel
   public bool? run_once { get; set; } = null;
   /// <summary>Whether links back to Looker should be included in this ScheduledPlan</summary>
   public bool? include_links { get; set; } = null;
+  /// <summary>Whether to include a dashboard summary in the scheduled email</summary>
+  public bool? include_dashboard_summary { get; set; } = null;
   /// <summary>Custom url domain for the scheduled entity</summary>
   public string? custom_url_base { get; set; } = null;
   /// <summary>Custom url path and parameters for the scheduled entity</summary>
@@ -9206,11 +9286,13 @@ public class WriteSetting : SdkModel
   public string? content_certification_documentation_link { get; set; } = null;
   /// <summary>Allow content certification to be revoked on edits.</summary>
   public bool? revoke_certification_on_edits { get; set; } = null;
+  /// <summary>Automatically enable Multi-Factor Authentication for users.</summary>
+  public bool? automated_mfa_enabled { get; set; } = null;
   /// <summary>Allow content certification.</summary>
   public bool? is_content_certification_enabled { get; set; } = null;
   /// <summary>Allow auto certification of lookml content.</summary>
   public bool? auto_certify_lookml_content { get; set; } = null;
-  /// <summary>Toggle CA agent observability</summary>
+  /// <summary>Toggle Conversational Analytics Agent Token usage</summary>
   public bool? ca_agent_observability { get; set; } = null;
   /// <summary>Dynamic writeable type for McpTools</summary>
   public WriteMcpTools? mcp_tools { get; set; }

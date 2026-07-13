@@ -25,7 +25,7 @@
  */
 
 /**
- * 458 API models: 361 Spec, 0 Request, 71 Write, 26 Enum
+ * 461 API models: 363 Spec, 0 Request, 72 Write, 26 Enum
  */
 
 
@@ -14334,6 +14334,216 @@ public struct GitConnectionTestResult: SDKModel {
 
 }
 
+public struct GitDiagnosticIssue: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _id = "id"
+        case _report_id = "report_id"
+        case _project_id = "project_id"
+        case _project_type = "project_type"
+        case _issue_type = "issue_type"
+        case _issue_version = "issue_version"
+        case _state = "state"
+        case created_at
+        case updated_at
+    }
+    /**
+     * Operations the current user is able to perform on this object (read-only)
+     */
+    public var can: StringDictionary<Bool>?
+
+    private var _id: AnyString?
+    /**
+     * Unique ID of the diagnostic issue. (read-only)
+     */
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
+    private var _report_id: AnyString?
+    /**
+     * Parent diagnostic report ID. (read-only)
+     */
+    public var report_id: String? {
+        get { _report_id?.value }
+        set { _report_id = newValue.map(AnyString.init) }
+    }
+
+    private var _project_id: AnyString?
+    /**
+     * Target Looker Project ID. (read-only)
+     */
+    public var project_id: String? {
+        get { _project_id?.value }
+        set { _project_id = newValue.map(AnyString.init) }
+    }
+
+    private var _project_type: AnyString?
+    /**
+     * Environment scope (developer/production). (read-only)
+     */
+    public var project_type: String? {
+        get { _project_type?.value }
+        set { _project_type = newValue.map(AnyString.init) }
+    }
+
+    private var _issue_type: AnyString?
+    /**
+     * Git diagnostic issue category. (read-only)
+     */
+    public var issue_type: String? {
+        get { _issue_type?.value }
+        set { _issue_type = newValue.map(AnyString.init) }
+    }
+
+    private var _issue_version: AnyString?
+    /**
+     * Version schema. (read-only)
+     */
+    public var issue_version: String? {
+        get { _issue_version?.value }
+        set { _issue_version = newValue.map(AnyString.init) }
+    }
+
+    private var _state: AnyString?
+    /**
+     * Current execution status. (read-only)
+     */
+    public var state: String? {
+        get { _state?.value }
+        set { _state = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Creation timestamp. (read-only)
+     */
+    public var created_at: Date?
+
+    /**
+     * Last update timestamp. (read-only)
+     */
+    public var updated_at: Date?
+
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, report_id: String? = nil, project_id: String? = nil, project_type: String? = nil, issue_type: String? = nil, issue_version: String? = nil, state: String? = nil, created_at: Date? = nil, updated_at: Date? = nil) {
+        self.can = can
+        self._id = id.map(AnyString.init)
+        self._report_id = report_id.map(AnyString.init)
+        self._project_id = project_id.map(AnyString.init)
+        self._project_type = project_type.map(AnyString.init)
+        self._issue_type = issue_type.map(AnyString.init)
+        self._issue_version = issue_version.map(AnyString.init)
+        self._state = state.map(AnyString.init)
+        self.created_at = created_at
+        self.updated_at = updated_at
+    }
+
+}
+
+public struct GitDiagnosticReport: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case _id = "id"
+        case _project_id = "project_id"
+        case _user_id = "user_id"
+        case _state = "state"
+        case _status = "status"
+        case created_at
+        case updated_at
+        case _project_type = "project_type"
+        case issues
+    }
+    /**
+     * Operations the current user is able to perform on this object (read-only)
+     */
+    public var can: StringDictionary<Bool>?
+
+    private var _id: AnyString?
+    /**
+     * Unique ID of the git diagnostic report. (read-only)
+     */
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
+    private var _project_id: AnyString?
+    /**
+     * Target Looker Project ID. (read-only)
+     */
+    public var project_id: String? {
+        get { _project_id?.value }
+        set { _project_id = newValue.map(AnyString.init) }
+    }
+
+    private var _user_id: AnyString?
+    /**
+     * ID of the user initiating the diagnosis. (read-only)
+     */
+    public var user_id: String? {
+        get { _user_id?.value }
+        set { _user_id = newValue.map(AnyString.init) }
+    }
+
+    private var _state: AnyString?
+    /**
+     * Raw lifecycle state. (read-only)
+     */
+    public var state: String? {
+        get { _state?.value }
+        set { _state = newValue.map(AnyString.init) }
+    }
+
+    private var _status: AnyString?
+    /**
+     * Status derived from state. (read-only)
+     */
+    public var status: String? {
+        get { _status?.value }
+        set { _status = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Creation time. (read-only)
+     */
+    public var created_at: Date?
+
+    /**
+     * Update time. (read-only)
+     */
+    public var updated_at: Date?
+
+    private var _project_type: AnyString?
+    /**
+     * Project structure type.
+     */
+    public var project_type: String? {
+        get { _project_type?.value }
+        set { _project_type = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Diagnostic issues associated with this report. (read-only)
+     */
+    public var issues: [GitDiagnosticIssue]?
+
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, project_id: String? = nil, user_id: String? = nil, state: String? = nil, status: String? = nil, created_at: Date? = nil, updated_at: Date? = nil, project_type: String? = nil, issues: [GitDiagnosticIssue]? = nil) {
+        self.can = can
+        self._id = id.map(AnyString.init)
+        self._project_id = project_id.map(AnyString.init)
+        self._user_id = user_id.map(AnyString.init)
+        self._state = state.map(AnyString.init)
+        self._status = status.map(AnyString.init)
+        self.created_at = created_at
+        self.updated_at = updated_at
+        self._project_type = project_type.map(AnyString.init)
+        self.issues = issues
+    }
+
+}
+
 public struct GitStatus: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -14392,6 +14602,13 @@ public struct GoldenQuery: SDKModel {
         case _last_updated_by_user_id = "last_updated_by_user_id"
         case created_at
         case last_updated_at
+        case _explore = "explore"
+        case _model = "model"
+        case _fields = "fields"
+        case filters
+        case _sorts = "sorts"
+        case _limit = "limit"
+        case _client_id = "client_id"
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -14467,7 +14684,66 @@ public struct GoldenQuery: SDKModel {
      */
     public var last_updated_at: Date?
 
-    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, query_id: Int64? = nil, questions: [String]? = nil, answer: String? = nil, is_active: Bool? = nil, created_by_user_id: Int64? = nil, last_updated_by_user_id: Int64? = nil, created_at: Date? = nil, last_updated_at: Date? = nil) {
+    private var _explore: AnyString?
+    /**
+     * The explore name of the golden query (read-only)
+     */
+    public var explore: String? {
+        get { _explore?.value }
+        set { _explore = newValue.map(AnyString.init) }
+    }
+
+    private var _model: AnyString?
+    /**
+     * The LookML model name of the golden query (read-only)
+     */
+    public var model: String? {
+        get { _model?.value }
+        set { _model = newValue.map(AnyString.init) }
+    }
+
+    private var _fields: [AnyString]?
+    /**
+     * Fields of the associated Looker Query (read-only)
+     */
+    public var fields: [String]? {
+        get { if let v = _fields { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _fields = v.map { AnyString.init($0) } } else { _fields = nil } }
+    }
+
+    /**
+     * Filters of the associated Looker Query (read-only)
+     */
+    public var filters: StringDictionary<AnyCodable>?
+
+    private var _sorts: [AnyString]?
+    /**
+     * Sorts of the associated Looker Query (read-only)
+     */
+    public var sorts: [String]? {
+        get { if let v = _sorts { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _sorts = v.map { AnyString.init($0) } } else { _sorts = nil } }
+    }
+
+    private var _limit: AnyString?
+    /**
+     * Limit of the associated Looker Query (read-only)
+     */
+    public var limit: String? {
+        get { _limit?.value }
+        set { _limit = newValue.map(AnyString.init) }
+    }
+
+    private var _client_id: AnyString?
+    /**
+     * Client ID of the associated Looker Query (read-only)
+     */
+    public var client_id: String? {
+        get { _client_id?.value }
+        set { _client_id = newValue.map(AnyString.init) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, id: Int64? = nil, query_id: Int64? = nil, questions: [String]? = nil, answer: String? = nil, is_active: Bool? = nil, created_by_user_id: Int64? = nil, last_updated_by_user_id: Int64? = nil, created_at: Date? = nil, last_updated_at: Date? = nil, explore: String? = nil, model: String? = nil, fields: [String]? = nil, filters: StringDictionary<AnyCodable>? = nil, sorts: [String]? = nil, limit: String? = nil, client_id: String? = nil) {
         self.can = can
         self._id = id.map(AnyInt.init)
         self._query_id = query_id.map(AnyInt.init)
@@ -14478,6 +14754,13 @@ public struct GoldenQuery: SDKModel {
         self._last_updated_by_user_id = last_updated_by_user_id.map(AnyInt.init)
         self.created_at = created_at
         self.last_updated_at = last_updated_at
+        self._explore = explore.map(AnyString.init)
+        self._model = model.map(AnyString.init)
+        if let v = fields { _fields = v.map { AnyString.init($0) } } else { _fields = nil }
+        self.filters = filters
+        if let v = sorts { _sorts = v.map { AnyString.init($0) } } else { _sorts = nil }
+        self._limit = limit.map(AnyString.init)
+        self._client_id = client_id.map(AnyString.init)
     }
 
 }
@@ -18606,6 +18889,7 @@ public struct LookmlModelExploreField: SDKModel {
     private enum CodingKeys : String, CodingKey {
         case align
         case _available_custom_timeframes = "available_custom_timeframes"
+        case timeframe_labels
         case can_filter
         case category
         case _default_filter_value = "default_filter_value"
@@ -18681,6 +18965,11 @@ public struct LookmlModelExploreField: SDKModel {
         get { if let v = _available_custom_timeframes { return v.map { $0.value } } else { return nil } }
         set { if let v = newValue { _available_custom_timeframes = v.map { AnyString.init($0) } } else { _available_custom_timeframes = nil } }
     }
+
+    /**
+     * A map of timeframe keys to their localized labels. (read-only)
+     */
+    public var timeframe_labels: StringDictionary<AnyCodable>?
 
     /**
      * Whether it's possible to filter on this field. (read-only)
@@ -19102,9 +19391,10 @@ public struct LookmlModelExploreField: SDKModel {
      */
     public var convert_tz: Bool?
 
-    public init(align: Align? = nil, available_custom_timeframes: [String]? = nil, can_filter: Bool? = nil, category: Category? = nil, default_filter_value: String? = nil, description: String? = nil, dimension_group: String? = nil, drill_fields: [String]? = nil, enumerations: [LookmlModelExploreFieldEnumeration]? = nil, error: String? = nil, field_group_label: String? = nil, field_group_variant: String? = nil, fill_style: FillStyle? = nil, fiscal_month_offset: Int64? = nil, has_allowed_values: Bool? = nil, has_drills_metadata: Bool? = nil, hidden: Bool? = nil, is_filter: Bool? = nil, is_fiscal: Bool? = nil, is_numeric: Bool? = nil, is_timeframe: Bool? = nil, can_time_filter: Bool? = nil, time_interval: LookmlModelExploreFieldTimeInterval? = nil, label: String? = nil, label_from_parameter: String? = nil, label_short: String? = nil, lookml_link: String? = nil, links: [LookmlFieldLink]? = nil, map_layer: LookmlModelExploreFieldMapLayer? = nil, measure: Bool? = nil, name: String? = nil, strict_value_format: Bool? = nil, parameter: Bool? = nil, period_over_period_params: LookmlModelExploreFieldPeriodOverPeriodParams? = nil, permanent: Bool? = nil, primary_key: Bool? = nil, project_name: String? = nil, requires_refresh_on_sort: Bool? = nil, scope: String? = nil, sortable: Bool? = nil, source_file: String? = nil, source_file_path: String? = nil, sql: String? = nil, sql_case: [LookmlModelExploreFieldSqlCase]? = nil, filters: [LookmlModelExploreFieldMeasureFilters]? = nil, suggest_dimension: String? = nil, suggest_explore: String? = nil, suggestable: Bool? = nil, suggestions: [String]? = nil, synonyms: [String]? = nil, tags: [String]? = nil, type: String? = nil, user_attribute_filter_types: [UserAttributeFilterTypes]? = nil, value_format: String? = nil, value_format_name: String? = nil, view: String? = nil, view_label: String? = nil, `dynamic`: Bool? = nil, week_start_day: WeekStartDay? = nil, times_used: Int64? = nil, original_view: String? = nil, datatype: String? = nil, convert_tz: Bool? = nil) {
+    public init(align: Align? = nil, available_custom_timeframes: [String]? = nil, timeframe_labels: StringDictionary<AnyCodable>? = nil, can_filter: Bool? = nil, category: Category? = nil, default_filter_value: String? = nil, description: String? = nil, dimension_group: String? = nil, drill_fields: [String]? = nil, enumerations: [LookmlModelExploreFieldEnumeration]? = nil, error: String? = nil, field_group_label: String? = nil, field_group_variant: String? = nil, fill_style: FillStyle? = nil, fiscal_month_offset: Int64? = nil, has_allowed_values: Bool? = nil, has_drills_metadata: Bool? = nil, hidden: Bool? = nil, is_filter: Bool? = nil, is_fiscal: Bool? = nil, is_numeric: Bool? = nil, is_timeframe: Bool? = nil, can_time_filter: Bool? = nil, time_interval: LookmlModelExploreFieldTimeInterval? = nil, label: String? = nil, label_from_parameter: String? = nil, label_short: String? = nil, lookml_link: String? = nil, links: [LookmlFieldLink]? = nil, map_layer: LookmlModelExploreFieldMapLayer? = nil, measure: Bool? = nil, name: String? = nil, strict_value_format: Bool? = nil, parameter: Bool? = nil, period_over_period_params: LookmlModelExploreFieldPeriodOverPeriodParams? = nil, permanent: Bool? = nil, primary_key: Bool? = nil, project_name: String? = nil, requires_refresh_on_sort: Bool? = nil, scope: String? = nil, sortable: Bool? = nil, source_file: String? = nil, source_file_path: String? = nil, sql: String? = nil, sql_case: [LookmlModelExploreFieldSqlCase]? = nil, filters: [LookmlModelExploreFieldMeasureFilters]? = nil, suggest_dimension: String? = nil, suggest_explore: String? = nil, suggestable: Bool? = nil, suggestions: [String]? = nil, synonyms: [String]? = nil, tags: [String]? = nil, type: String? = nil, user_attribute_filter_types: [UserAttributeFilterTypes]? = nil, value_format: String? = nil, value_format_name: String? = nil, view: String? = nil, view_label: String? = nil, `dynamic`: Bool? = nil, week_start_day: WeekStartDay? = nil, times_used: Int64? = nil, original_view: String? = nil, datatype: String? = nil, convert_tz: Bool? = nil) {
         self.align = align
         if let v = available_custom_timeframes { _available_custom_timeframes = v.map { AnyString.init($0) } } else { _available_custom_timeframes = nil }
+        self.timeframe_labels = timeframe_labels
         self.can_filter = can_filter
         self.category = category
         self._default_filter_value = default_filter_value.map(AnyString.init)
@@ -25756,6 +26046,7 @@ public struct ScheduledPlan: SDKModel {
         case scheduled_plan_destination
         case run_once
         case include_links
+        case include_dashboard_summary
         case _custom_url_base = "custom_url_base"
         case _custom_url_params = "custom_url_params"
         case _custom_url_label = "custom_url_label"
@@ -25913,6 +26204,11 @@ public struct ScheduledPlan: SDKModel {
      */
     public var include_links: Bool?
 
+    /**
+     * Whether to include a dashboard summary in the scheduled email
+     */
+    public var include_dashboard_summary: Bool?
+
     private var _custom_url_base: AnyString?
     /**
      * Custom url domain for the scheduled entity
@@ -26055,7 +26351,7 @@ public struct ScheduledPlan: SDKModel {
      */
     public var can: StringDictionary<Bool>?
 
-    public init(name: String? = nil, user_id: String? = nil, run_as_recipient: Bool? = nil, enabled: Bool? = nil, look_id: String? = nil, dashboard_id: String? = nil, lookml_dashboard_id: String? = nil, filters_string: String? = nil, dashboard_filters: String? = nil, require_results: Bool? = nil, require_no_results: Bool? = nil, require_change: Bool? = nil, send_all_results: Bool? = nil, crontab: String? = nil, datagroup: String? = nil, timezone: String? = nil, scheduled_plan_destination: [ScheduledPlanDestination]? = nil, run_once: Bool? = nil, include_links: Bool? = nil, custom_url_base: String? = nil, custom_url_params: String? = nil, custom_url_label: String? = nil, show_custom_url: Bool? = nil, pdf_paper_size: String? = nil, pdf_landscape: Bool? = nil, embed: Bool? = nil, color_theme: String? = nil, long_tables: Bool? = nil, pdf_page_breaks: Bool? = nil, tab_ids: [String]? = nil, inline_table_width: Int64? = nil, query_id: String? = nil, id: String? = nil, created_at: Date? = nil, updated_at: Date? = nil, title: String? = nil, user: UserPublic? = nil, next_run_at: Date? = nil, last_run_at: Date? = nil, can: StringDictionary<Bool>? = nil) {
+    public init(name: String? = nil, user_id: String? = nil, run_as_recipient: Bool? = nil, enabled: Bool? = nil, look_id: String? = nil, dashboard_id: String? = nil, lookml_dashboard_id: String? = nil, filters_string: String? = nil, dashboard_filters: String? = nil, require_results: Bool? = nil, require_no_results: Bool? = nil, require_change: Bool? = nil, send_all_results: Bool? = nil, crontab: String? = nil, datagroup: String? = nil, timezone: String? = nil, scheduled_plan_destination: [ScheduledPlanDestination]? = nil, run_once: Bool? = nil, include_links: Bool? = nil, include_dashboard_summary: Bool? = nil, custom_url_base: String? = nil, custom_url_params: String? = nil, custom_url_label: String? = nil, show_custom_url: Bool? = nil, pdf_paper_size: String? = nil, pdf_landscape: Bool? = nil, embed: Bool? = nil, color_theme: String? = nil, long_tables: Bool? = nil, pdf_page_breaks: Bool? = nil, tab_ids: [String]? = nil, inline_table_width: Int64? = nil, query_id: String? = nil, id: String? = nil, created_at: Date? = nil, updated_at: Date? = nil, title: String? = nil, user: UserPublic? = nil, next_run_at: Date? = nil, last_run_at: Date? = nil, can: StringDictionary<Bool>? = nil) {
         self._name = name.map(AnyString.init)
         self._user_id = user_id.map(AnyString.init)
         self.run_as_recipient = run_as_recipient
@@ -26075,6 +26371,7 @@ public struct ScheduledPlan: SDKModel {
         self.scheduled_plan_destination = scheduled_plan_destination
         self.run_once = run_once
         self.include_links = include_links
+        self.include_dashboard_summary = include_dashboard_summary
         self._custom_url_base = custom_url_base.map(AnyString.init)
         self._custom_url_params = custom_url_params.map(AnyString.init)
         self._custom_url_label = custom_url_label.map(AnyString.init)
@@ -26568,6 +26865,7 @@ public struct SelfServiceModelUploadData: SDKModel {
         case _upload_type = "upload_type"
         case _drive_url = "drive_url"
         case _owner_id = "owner_id"
+        case _canvas_guid = "canvas_guid"
     }
     private var _upload_type: AnyString?
     /**
@@ -26596,10 +26894,20 @@ public struct SelfServiceModelUploadData: SDKModel {
         set { _owner_id = newValue.map(AnyString.init) }
     }
 
-    public init(upload_type: String? = nil, drive_url: String? = nil, owner_id: String? = nil) {
+    private var _canvas_guid: AnyString?
+    /**
+     * GUID of the visual canvas (read-only)
+     */
+    public var canvas_guid: String? {
+        get { _canvas_guid?.value }
+        set { _canvas_guid = newValue.map(AnyString.init) }
+    }
+
+    public init(upload_type: String? = nil, drive_url: String? = nil, owner_id: String? = nil, canvas_guid: String? = nil) {
         self._upload_type = upload_type.map(AnyString.init)
         self._drive_url = drive_url.map(AnyString.init)
         self._owner_id = owner_id.map(AnyString.init)
+        self._canvas_guid = canvas_guid.map(AnyString.init)
     }
 
 }
@@ -26958,6 +27266,7 @@ public struct Setting: SDKModel {
         case _managed_certificate_uri = "managed_certificate_uri"
         case _content_certification_documentation_link = "content_certification_documentation_link"
         case revoke_certification_on_edits
+        case automated_mfa_enabled
         case is_content_certification_enabled
         case auto_certify_lookml_content
         case ca_agent_observability
@@ -27116,6 +27425,11 @@ public struct Setting: SDKModel {
     public var revoke_certification_on_edits: Bool?
 
     /**
+     * Automatically enable Multi-Factor Authentication for users.
+     */
+    public var automated_mfa_enabled: Bool?
+
+    /**
      * Allow content certification.
      */
     public var is_content_certification_enabled: Bool?
@@ -27126,13 +27440,13 @@ public struct Setting: SDKModel {
     public var auto_certify_lookml_content: Bool?
 
     /**
-     * Toggle CA agent observability
+     * Toggle Conversational Analytics Agent Token usage
      */
     public var ca_agent_observability: Bool?
 
     public var mcp_tools: McpTools?
 
-    public init(instance_config: InstanceConfig? = nil, extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_site: String? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_enabled: Bool? = nil, embed_config: EmbedConfig? = nil, login_notification_enabled: Bool? = nil, login_notification_text: String? = nil, dashboard_auto_refresh_restriction: Bool? = nil, dashboard_auto_refresh_minimum_interval: String? = nil, managed_certificate_uri: [String]? = nil, content_certification_documentation_link: String? = nil, revoke_certification_on_edits: Bool? = nil, is_content_certification_enabled: Bool? = nil, auto_certify_lookml_content: Bool? = nil, ca_agent_observability: Bool? = nil, mcp_tools: McpTools? = nil) {
+    public init(instance_config: InstanceConfig? = nil, extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_site: String? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: PrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_enabled: Bool? = nil, embed_config: EmbedConfig? = nil, login_notification_enabled: Bool? = nil, login_notification_text: String? = nil, dashboard_auto_refresh_restriction: Bool? = nil, dashboard_auto_refresh_minimum_interval: String? = nil, managed_certificate_uri: [String]? = nil, content_certification_documentation_link: String? = nil, revoke_certification_on_edits: Bool? = nil, automated_mfa_enabled: Bool? = nil, is_content_certification_enabled: Bool? = nil, auto_certify_lookml_content: Bool? = nil, ca_agent_observability: Bool? = nil, mcp_tools: McpTools? = nil) {
         self.instance_config = instance_config
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
@@ -27160,6 +27474,7 @@ public struct Setting: SDKModel {
         if let v = managed_certificate_uri { _managed_certificate_uri = v.map { AnyString.init($0) } } else { _managed_certificate_uri = nil }
         self._content_certification_documentation_link = content_certification_documentation_link.map(AnyString.init)
         self.revoke_certification_on_edits = revoke_certification_on_edits
+        self.automated_mfa_enabled = automated_mfa_enabled
         self.is_content_certification_enabled = is_content_certification_enabled
         self.auto_certify_lookml_content = auto_certify_lookml_content
         self.ca_agent_observability = ca_agent_observability
@@ -33763,8 +34078,32 @@ public struct WriteGitBranch: SDKModel {
 }
 
 /**
+ * Dynamic writeable type for GitDiagnosticReport removes:
+ * can, id, project_id, user_id, state, status, created_at, updated_at, issues
+ */
+public struct WriteGitDiagnosticReport: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _project_type = "project_type"
+    }
+    private var _project_type: AnyString?
+    /**
+     * Project structure type.
+     */
+    public var project_type: String? {
+        get { _project_type?.value }
+        set { _project_type = newValue.map(AnyString.init) }
+    }
+
+    public init(project_type: String? = nil) {
+        self._project_type = project_type.map(AnyString.init)
+    }
+
+}
+
+/**
  * Dynamic writeable type for GoldenQuery removes:
- * can, id, query_id, created_by_user_id, last_updated_by_user_id, created_at, last_updated_at
+ * can, id, query_id, created_by_user_id, last_updated_by_user_id, created_at, last_updated_at, explore, model, fields, filters, sorts, limit, client_id
  */
 public struct WriteGoldenQuery: SDKModel {
 
@@ -36356,6 +36695,7 @@ public struct WriteScheduledPlan: SDKModel {
         case scheduled_plan_destination
         case run_once
         case include_links
+        case include_dashboard_summary
         case _custom_url_base = "custom_url_base"
         case _custom_url_params = "custom_url_params"
         case _custom_url_label = "custom_url_label"
@@ -36505,6 +36845,11 @@ public struct WriteScheduledPlan: SDKModel {
      */
     public var include_links: Bool?
 
+    /**
+     * Whether to include a dashboard summary in the scheduled email
+     */
+    public var include_dashboard_summary: Bool?
+
     private var _custom_url_base: AnyString?
     /**
      * Custom url domain for the scheduled entity
@@ -36602,7 +36947,7 @@ public struct WriteScheduledPlan: SDKModel {
         set { _query_id = newValue.map(AnyString.init) }
     }
 
-    public init(name: String? = nil, user_id: String? = nil, run_as_recipient: Bool? = nil, enabled: Bool? = nil, look_id: String? = nil, dashboard_id: String? = nil, lookml_dashboard_id: String? = nil, filters_string: String? = nil, dashboard_filters: String? = nil, require_results: Bool? = nil, require_no_results: Bool? = nil, require_change: Bool? = nil, send_all_results: Bool? = nil, crontab: String? = nil, datagroup: String? = nil, timezone: String? = nil, scheduled_plan_destination: [ScheduledPlanDestination]? = nil, run_once: Bool? = nil, include_links: Bool? = nil, custom_url_base: String? = nil, custom_url_params: String? = nil, custom_url_label: String? = nil, show_custom_url: Bool? = nil, pdf_paper_size: String? = nil, pdf_landscape: Bool? = nil, embed: Bool? = nil, color_theme: String? = nil, long_tables: Bool? = nil, pdf_page_breaks: Bool? = nil, tab_ids: [String]? = nil, inline_table_width: Int64? = nil, query_id: String? = nil) {
+    public init(name: String? = nil, user_id: String? = nil, run_as_recipient: Bool? = nil, enabled: Bool? = nil, look_id: String? = nil, dashboard_id: String? = nil, lookml_dashboard_id: String? = nil, filters_string: String? = nil, dashboard_filters: String? = nil, require_results: Bool? = nil, require_no_results: Bool? = nil, require_change: Bool? = nil, send_all_results: Bool? = nil, crontab: String? = nil, datagroup: String? = nil, timezone: String? = nil, scheduled_plan_destination: [ScheduledPlanDestination]? = nil, run_once: Bool? = nil, include_links: Bool? = nil, include_dashboard_summary: Bool? = nil, custom_url_base: String? = nil, custom_url_params: String? = nil, custom_url_label: String? = nil, show_custom_url: Bool? = nil, pdf_paper_size: String? = nil, pdf_landscape: Bool? = nil, embed: Bool? = nil, color_theme: String? = nil, long_tables: Bool? = nil, pdf_page_breaks: Bool? = nil, tab_ids: [String]? = nil, inline_table_width: Int64? = nil, query_id: String? = nil) {
         self._name = name.map(AnyString.init)
         self._user_id = user_id.map(AnyString.init)
         self.run_as_recipient = run_as_recipient
@@ -36622,6 +36967,7 @@ public struct WriteScheduledPlan: SDKModel {
         self.scheduled_plan_destination = scheduled_plan_destination
         self.run_once = run_once
         self.include_links = include_links
+        self.include_dashboard_summary = include_dashboard_summary
         self._custom_url_base = custom_url_base.map(AnyString.init)
         self._custom_url_params = custom_url_params.map(AnyString.init)
         self._custom_url_label = custom_url_label.map(AnyString.init)
@@ -36751,6 +37097,7 @@ public struct WriteSetting: SDKModel {
         case _managed_certificate_uri = "managed_certificate_uri"
         case _content_certification_documentation_link = "content_certification_documentation_link"
         case revoke_certification_on_edits
+        case automated_mfa_enabled
         case is_content_certification_enabled
         case auto_certify_lookml_content
         case ca_agent_observability
@@ -36887,6 +37234,11 @@ public struct WriteSetting: SDKModel {
     public var revoke_certification_on_edits: Bool?
 
     /**
+     * Automatically enable Multi-Factor Authentication for users.
+     */
+    public var automated_mfa_enabled: Bool?
+
+    /**
      * Allow content certification.
      */
     public var is_content_certification_enabled: Bool?
@@ -36897,7 +37249,7 @@ public struct WriteSetting: SDKModel {
     public var auto_certify_lookml_content: Bool?
 
     /**
-     * Toggle CA agent observability
+     * Toggle Conversational Analytics Agent Token usage
      */
     public var ca_agent_observability: Bool?
 
@@ -36906,7 +37258,7 @@ public struct WriteSetting: SDKModel {
      */
     public var mcp_tools: WriteMcpTools?
 
-    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_config: WriteEmbedConfig? = nil, dashboard_auto_refresh_restriction: Bool? = nil, dashboard_auto_refresh_minimum_interval: String? = nil, managed_certificate_uri: [String]? = nil, content_certification_documentation_link: String? = nil, revoke_certification_on_edits: Bool? = nil, is_content_certification_enabled: Bool? = nil, auto_certify_lookml_content: Bool? = nil, ca_agent_observability: Bool? = nil, mcp_tools: WriteMcpTools? = nil) {
+    public init(extension_framework_enabled: Bool? = nil, extension_load_url_enabled: Bool? = nil, marketplace_auto_install_enabled: Bool? = nil, marketplace_automation: MarketplaceAutomation? = nil, marketplace_enabled: Bool? = nil, marketplace_terms_accepted: Bool? = nil, privatelabel_configuration: WritePrivatelabelConfiguration? = nil, custom_welcome_email: CustomWelcomeEmail? = nil, onboarding_enabled: Bool? = nil, timezone: String? = nil, allow_user_timezones: Bool? = nil, data_connector_default_enabled: Bool? = nil, host_url: String? = nil, override_warnings: Bool? = nil, email_domain_allowlist: [String]? = nil, embed_cookieless_v2: Bool? = nil, embed_config: WriteEmbedConfig? = nil, dashboard_auto_refresh_restriction: Bool? = nil, dashboard_auto_refresh_minimum_interval: String? = nil, managed_certificate_uri: [String]? = nil, content_certification_documentation_link: String? = nil, revoke_certification_on_edits: Bool? = nil, automated_mfa_enabled: Bool? = nil, is_content_certification_enabled: Bool? = nil, auto_certify_lookml_content: Bool? = nil, ca_agent_observability: Bool? = nil, mcp_tools: WriteMcpTools? = nil) {
         self.extension_framework_enabled = extension_framework_enabled
         self.extension_load_url_enabled = extension_load_url_enabled
         self.marketplace_auto_install_enabled = marketplace_auto_install_enabled
@@ -36929,6 +37281,7 @@ public struct WriteSetting: SDKModel {
         if let v = managed_certificate_uri { _managed_certificate_uri = v.map { AnyString.init($0) } } else { _managed_certificate_uri = nil }
         self._content_certification_documentation_link = content_certification_documentation_link.map(AnyString.init)
         self.revoke_certification_on_edits = revoke_certification_on_edits
+        self.automated_mfa_enabled = automated_mfa_enabled
         self.is_content_certification_enabled = is_content_certification_enabled
         self.auto_certify_lookml_content = auto_certify_lookml_content
         self.ca_agent_observability = ca_agent_observability
