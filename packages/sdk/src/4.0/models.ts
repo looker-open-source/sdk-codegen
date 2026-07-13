@@ -25,7 +25,7 @@
  */
 
 /**
- * 534 API models: 361 Spec, 76 Request, 71 Write, 26 Enum
+ * 537 API models: 363 Spec, 76 Request, 72 Write, 26 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl';
@@ -5696,6 +5696,92 @@ export interface IGitConnectionTestResult {
   status?: string | null;
 }
 
+export interface IGitDiagnosticIssue {
+  /**
+   * Operations the current user is able to perform on this object (read-only)
+   */
+  can?: IDictionary<boolean>;
+  /**
+   * Unique ID of the diagnostic issue. (read-only)
+   */
+  id?: string;
+  /**
+   * Parent diagnostic report ID. (read-only)
+   */
+  report_id?: string | null;
+  /**
+   * Target Looker Project ID. (read-only)
+   */
+  project_id?: string | null;
+  /**
+   * Environment scope (developer/production). (read-only)
+   */
+  project_type?: string | null;
+  /**
+   * Git diagnostic issue category. (read-only)
+   */
+  issue_type?: string | null;
+  /**
+   * Version schema. (read-only)
+   */
+  issue_version?: string | null;
+  /**
+   * Current execution status. (read-only)
+   */
+  state?: string | null;
+  /**
+   * Creation timestamp. (read-only)
+   */
+  created_at?: Date | null;
+  /**
+   * Last update timestamp. (read-only)
+   */
+  updated_at?: Date | null;
+}
+
+export interface IGitDiagnosticReport {
+  /**
+   * Operations the current user is able to perform on this object (read-only)
+   */
+  can?: IDictionary<boolean>;
+  /**
+   * Unique ID of the git diagnostic report. (read-only)
+   */
+  id?: string;
+  /**
+   * Target Looker Project ID. (read-only)
+   */
+  project_id?: string | null;
+  /**
+   * ID of the user initiating the diagnosis. (read-only)
+   */
+  user_id?: string | null;
+  /**
+   * Raw lifecycle state. (read-only)
+   */
+  state?: string | null;
+  /**
+   * Status derived from state. (read-only)
+   */
+  status?: string | null;
+  /**
+   * Creation time. (read-only)
+   */
+  created_at?: Date | null;
+  /**
+   * Update time. (read-only)
+   */
+  updated_at?: Date | null;
+  /**
+   * Project structure type.
+   */
+  project_type?: string | null;
+  /**
+   * Diagnostic issues associated with this report. (read-only)
+   */
+  issues?: IGitDiagnosticIssue[] | null;
+}
+
 export interface IGitStatus {
   /**
    * Git action: add, delete, etc (read-only)
@@ -5756,6 +5842,34 @@ export interface IGoldenQuery {
    * Time when the question was last updated (read-only)
    */
   last_updated_at?: Date | null;
+  /**
+   * The explore name of the golden query (read-only)
+   */
+  explore?: string | null;
+  /**
+   * The LookML model name of the golden query (read-only)
+   */
+  model?: string | null;
+  /**
+   * Fields of the associated Looker Query (read-only)
+   */
+  fields?: string[] | null;
+  /**
+   * Filters of the associated Looker Query (read-only)
+   */
+  filters?: IDictionary<string> | null;
+  /**
+   * Sorts of the associated Looker Query (read-only)
+   */
+  sorts?: string[] | null;
+  /**
+   * Limit of the associated Looker Query (read-only)
+   */
+  limit?: string | null;
+  /**
+   * Client ID of the associated Looker Query (read-only)
+   */
+  client_id?: string | null;
 }
 
 export interface IGroup {
@@ -7452,6 +7566,10 @@ export interface ILookmlModelExploreField {
    * An array of custom timeframes available for this field for filtering, if applicable. (read-only)
    */
   available_custom_timeframes?: string[] | null;
+  /**
+   * A map of timeframe keys to their localized labels. (read-only)
+   */
+  timeframe_labels?: IDictionary<string> | null;
   /**
    * Whether it's possible to filter on this field. (read-only)
    */
@@ -9802,6 +9920,10 @@ export interface IRequestActiveThemes {
    * Timestamp representing the target datetime for the active period. Defaults to 'now'
    */
   ts?: Date | null;
+  /**
+   * Theme type.
+   */
+  theme_type?: string | null;
   /**
    * Requested fields.
    */
@@ -13120,6 +13242,10 @@ export interface IScheduledPlan {
    */
   include_links?: boolean;
   /**
+   * Whether to include a dashboard summary in the scheduled email
+   */
+  include_dashboard_summary?: boolean;
+  /**
    * Custom url domain for the scheduled entity
    */
   custom_url_base?: string | null;
@@ -13404,6 +13530,10 @@ export interface ISelfServiceModelUploadData {
    * User ID of the uploaded data owner (read-only)
    */
   owner_id?: string | null;
+  /**
+   * GUID of the visual canvas (read-only)
+   */
+  canvas_guid?: string | null;
 }
 
 export interface IServiceAccount {
@@ -13634,6 +13764,10 @@ export interface ISetting {
    */
   revoke_certification_on_edits?: boolean;
   /**
+   * Automatically enable Multi-Factor Authentication for users.
+   */
+  automated_mfa_enabled?: boolean;
+  /**
    * Allow content certification.
    */
   is_content_certification_enabled?: boolean;
@@ -13642,7 +13776,7 @@ export interface ISetting {
    */
   auto_certify_lookml_content?: boolean;
   /**
-   * Toggle CA agent observability
+   * Toggle Conversational Analytics Agent Token usage
    */
   ca_agent_observability?: boolean;
   mcp_tools?: IMcpTools;
@@ -16410,8 +16544,19 @@ export interface IWriteGitBranch {
 }
 
 /**
+ * Dynamic writeable type for GitDiagnosticReport removes:
+ * can, id, project_id, user_id, state, status, created_at, updated_at, issues
+ */
+export interface IWriteGitDiagnosticReport {
+  /**
+   * Project structure type.
+   */
+  project_type?: string | null;
+}
+
+/**
  * Dynamic writeable type for GoldenQuery removes:
- * can, id, query_id, created_by_user_id, last_updated_by_user_id, created_at, last_updated_at
+ * can, id, query_id, created_by_user_id, last_updated_by_user_id, created_at, last_updated_at, explore, model, fields, filters, sorts, limit, client_id
  */
 export interface IWriteGoldenQuery {
   /**
@@ -17709,6 +17854,10 @@ export interface IWriteScheduledPlan {
    */
   include_links?: boolean;
   /**
+   * Whether to include a dashboard summary in the scheduled email
+   */
+  include_dashboard_summary?: boolean;
+  /**
    * Custom url domain for the scheduled entity
    */
   custom_url_base?: string | null;
@@ -17894,6 +18043,10 @@ export interface IWriteSetting {
    */
   revoke_certification_on_edits?: boolean;
   /**
+   * Automatically enable Multi-Factor Authentication for users.
+   */
+  automated_mfa_enabled?: boolean;
+  /**
    * Allow content certification.
    */
   is_content_certification_enabled?: boolean;
@@ -17902,7 +18055,7 @@ export interface IWriteSetting {
    */
   auto_certify_lookml_content?: boolean;
   /**
-   * Toggle CA agent observability
+   * Toggle Conversational Analytics Agent Token usage
    */
   ca_agent_observability?: boolean;
   /**

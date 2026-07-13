@@ -25,7 +25,7 @@
  */
 
 /**
- * 512 API methods
+ * 518 API methods
  */
 
 
@@ -2868,6 +2868,7 @@ open class LookerSDK: APIMethods {
      *  - onboarding_enabled
      *  - privatelabel_configuration
      *  - revoke_certification_on_edits
+     *  - automated_mfa_enabled
      *  - timezone
      *  - host_url
      *  - email_domain_allowlist
@@ -2914,6 +2915,7 @@ open class LookerSDK: APIMethods {
      *  - onboarding_enabled
      *  - privatelabel_configuration
      *  - revoke_certification_on_edits
+     *  - automated_mfa_enabled
      *  - timezone
      *  - host_url
      *  - email_domain_allowlist
@@ -9032,6 +9034,75 @@ open class LookerSDK: APIMethods {
     }
 
     /**
+     * ### Initiate Git Diagnosis Suite
+     *
+     * POST /projects/{project_id}/git_diagnostic_report -> GitDiagnosticReport
+     */
+    public func create_git_diagnostic_report(
+        /**
+         * @param {String} project_id Looker Project ID
+         */
+        _ project_id: String,
+        /**
+         * @param {WriteGitDiagnosticReport} body
+         */
+        _ body: WriteGitDiagnosticReport,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<GitDiagnosticReport, SDKError> {
+        let path_project_id = encodeParam(project_id)
+        let result: SDKResponse<GitDiagnosticReport, SDKError> = self.post("/projects/\(path_project_id)/git_diagnostic_report", nil, try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Retrieve Live Git Diagnostic Suite Execution Status
+     *
+     * GET /projects/{project_id}/git_diagnostic_report/{report_id} -> GitDiagnosticReport
+     */
+    public func get_git_diagnostic_report(
+        /**
+         * @param {String} project_id Looker Project ID
+         */
+        _ project_id: String,
+        /**
+         * @param {String} report_id Report ID
+         */
+        _ report_id: String,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<GitDiagnosticReport, SDKError> {
+        let path_project_id = encodeParam(project_id)
+        let path_report_id = encodeParam(report_id)
+        let result: SDKResponse<GitDiagnosticReport, SDKError> = self.get("/projects/\(path_project_id)/git_diagnostic_report/\(path_report_id)", nil, nil, options)
+        return result
+    }
+
+    /**
+     * ### Repair Git Configuration Issues
+     *
+     * POST /projects/{project_id}/git_diagnostic_report/{report_id}/repair -> GitDiagnosticReport
+     */
+    public func repair_git_diagnostic_report(
+        /**
+         * @param {String} project_id Looker Project ID
+         */
+        _ project_id: String,
+        /**
+         * @param {String} report_id Report ID
+         */
+        _ report_id: String,
+        /**
+         * @param {WriteGitDiagnosticReport} body
+         */
+        _ body: WriteGitDiagnosticReport,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<GitDiagnosticReport, SDKError> {
+        let path_project_id = encodeParam(project_id)
+        let path_report_id = encodeParam(report_id)
+        let result: SDKResponse<GitDiagnosticReport, SDKError> = self.post("/projects/\(path_project_id)/git_diagnostic_report/\(path_report_id)/repair", nil, try! self.encode(body), options)
+        return result
+    }
+
+    /**
      * ### Configure Repository Credential for a remote dependency
      *
      * Admin required.
@@ -11418,6 +11489,23 @@ open class LookerSDK: APIMethods {
     }
 
     /**
+     * ### Get Generated LookML for a Self Service Model
+     *
+     * GET /self_service_models/{model_name}/lookml -> String
+     */
+    public func get_self_service_model_lookml(
+        /**
+         * @param {String} model_name Name of self service model
+         */
+        _ model_name: String,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<String, SDKError> {
+        let path_model_name = encodeParam(model_name)
+        let result: SDKResponse<String, SDKError> = self.get("/self_service_models/\(path_model_name)/lookml", nil, nil, options)
+        return result
+    }
+
+    /**
      * ### Update certification for a Self Service Explore
      *
      * PATCH /self_service_models/{model_name}/certification -> Certification
@@ -11717,6 +11805,8 @@ open class LookerSDK: APIMethods {
     /**
      * ### Get the default theme
      *
+     * This endpoint is deprecated. [Get Default Theme (with type)](#!/Theme/default_theme_by_type) should be used instead.
+     *
      * Returns the active theme object set as the default.
      *
      * The **default** theme name can be set in the UI on the Admin|Theme UI page
@@ -11725,6 +11815,7 @@ open class LookerSDK: APIMethods {
      *
      * GET /themes/default -> Theme
      */
+    @available(*, deprecated)
     public func default_theme(
         /**
          * @param {Date} ts Timestamp representing the target datetime for the active period. Defaults to 'now'
@@ -11740,6 +11831,8 @@ open class LookerSDK: APIMethods {
     /**
      * ### Set the global default theme by theme name
      *
+     * This endpoint is deprecated. [Set Default Theme (with type)](#!/Theme/set_default_theme_by_type) should be used instead.
+     *
      * Only Admin users can call this function.
      *
      * Only an active theme with no expiration (`end_at` not set) can be assigned as the default theme. As long as a theme has an active record with no expiration, it can be set as the default.
@@ -11752,6 +11845,7 @@ open class LookerSDK: APIMethods {
      *
      * PUT /themes/default -> Theme
      */
+    @available(*, deprecated)
     public func set_default_theme(
         /**
          * @param {String} name Name of theme to set as default
@@ -11761,6 +11855,66 @@ open class LookerSDK: APIMethods {
     ) -> SDKResponse<Theme, SDKError> {
         let result: SDKResponse<Theme, SDKError> = self.put("/themes/default", 
             ["name": name], nil, options)
+        return result
+    }
+
+    /**
+     * ### Get the default theme
+     *
+     * Returns the active theme object set as the default.
+     *
+     * The **default** theme name can be set in the UI on the Admin|Theme UI page
+     *
+     * The optional `ts` parameter can specify a different timestamp than "now." If specified, it returns the default theme at the time indicated.
+     *
+     * The optional `theme_type` parameter can specify the theme type to select for.
+     *
+     * GET /themes/default_theme -> Theme
+     */
+    public func default_theme_by_type(
+        /**
+         * @param {String} theme_type Theme type.
+         */
+        _ theme_type: String,
+        /**
+         * @param {Date} ts Timestamp representing the target datetime for the active period. Defaults to 'now'
+         */
+        ts: Date? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Theme, SDKError> {
+        let result: SDKResponse<Theme, SDKError> = self.get("/themes/default_theme", 
+            ["ts": ts as Any?, "theme_type": theme_type], nil, options)
+        return result
+    }
+
+    /**
+     * ### Set the global default theme by theme name
+     *
+     * Only Admin users can call this function.
+     *
+     * Only an active theme with no expiration (`end_at` not set) can be assigned as the default theme. As long as a theme has an active record with no expiration, it can be set as the default.
+     *
+     * [Create Theme](#!/Theme/create) has detailed information on rules for default and active themes
+     *
+     * Returns the new specified default theme object.
+     *
+     * The optional `theme_type` parameter can specify the theme type to select for.
+     *
+     * PUT /themes/default_theme -> Theme
+     */
+    public func set_default_theme_by_type(
+        /**
+         * @param {String} name Name of theme to set as default
+         */
+        _ name: String,
+        /**
+         * @param {String} theme_type Theme type.
+         */
+        _ theme_type: String,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Theme, SDKError> {
+        let result: SDKResponse<Theme, SDKError> = self.put("/themes/default_theme", 
+            ["name": name, "theme_type": theme_type], nil, options)
         return result
     }
 
@@ -11787,13 +11941,17 @@ open class LookerSDK: APIMethods {
          */
         ts: Date? = nil,
         /**
+         * @param {String} theme_type Theme type.
+         */
+        theme_type: String? = nil,
+        /**
          * @param {String} fields Requested fields.
          */
         fields: String? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<[Theme], SDKError> {
         let result: SDKResponse<[Theme], SDKError> = self.get("/themes/active", 
-            ["name": name, "ts": ts as Any?, "fields": fields], nil, options)
+            ["name": name, "ts": ts as Any?, "theme_type": theme_type, "fields": fields], nil, options)
         return result
     }
 
