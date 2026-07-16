@@ -23,6 +23,7 @@ The full details of all Looker API 4.0 endpoints are listed in [Looker Docs](htt
 ## Dashboard : Manage Dashboards
 
 - [Soft delete dashboard](soft_delete_dashboard.py)
+- [Create dashboard filter](create_dashboard_filter.py)
 
 ## Query : Run and Manage Queries
 
