@@ -373,7 +373,7 @@ export const methodRefs = (api: IApiModel, refs: KeyList): IMethod[] => {
 };
 
 /**
- * Resolve a list of method keys into an IType[] in alphabetical order by name
+ * Resolve a list of type keys into an IType[] in alphabetical order by name
  * @param api model to use
  * @param refs references to models
  * @returns Populated method list. Anything not matched is skipped
