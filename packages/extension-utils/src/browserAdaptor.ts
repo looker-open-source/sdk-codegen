@@ -92,4 +92,8 @@ export class BrowserAdaptor
   logError(_error: Error, _componentStack: string): void {
     // noop - error logging for standalone applications TBD
   }
+
+  resolveRouteToAbsoluteUrl(pathname: string, search = '') {
+    return `${window.location.origin}${pathname}${search}`;
+  }
 }
