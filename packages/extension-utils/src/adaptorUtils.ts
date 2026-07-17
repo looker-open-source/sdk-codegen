@@ -61,6 +61,8 @@ export interface IEnvironmentAdaptor extends IAuthAdaptor {
   openBrowserWindow: (url: string, target?: string) => void;
   /** error logger */
   logError: (error: Error, componentStack: string) => void;
+  /** Resolves a path to a fully qualified URL for the environment host */
+  resolveRouteToAbsoluteUrl(pathname: string, search?: string): string;
 }
 
 /**
@@ -134,6 +136,10 @@ export const getEnvAdaptor = () => {
   if (!extensionAdaptor) {
     throw new Error('Environment adaptor not initialized.');
   }
+  return extensionAdaptor;
+};
+
+export const tryGetEnvAdaptor = () => {
   return extensionAdaptor;
 };
 
