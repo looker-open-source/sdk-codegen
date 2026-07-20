@@ -129,4 +129,13 @@ type HyphenType struct {
       expect(actual).toEqual(expected);
     });
   });
+
+  describe('methods', () => {
+    it('handles optional date-time parameters as pointers', () => {
+      const method = apiTestModel.methods.theme_or_default;
+      expect(method).toBeDefined();
+      const actual = gen.declareMethod(indent, method);
+      expect(actual).toContain('ts *time.Time');
+    });
+  });
 });

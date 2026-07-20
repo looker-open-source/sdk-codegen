@@ -25,7 +25,7 @@
  */
 
 /**
- * 512 API methods
+ * 518 API methods
  */
 
 import type {
@@ -130,6 +130,7 @@ import type {
   IGitBranch,
   IGitConnectionTest,
   IGitConnectionTestResult,
+  IGitDiagnosticReport,
   IGoldenQuery,
   IGroup,
   IGroupHierarchy,
@@ -325,6 +326,7 @@ import type {
   IWriteEmbedSecret,
   IWriteExternalOauthApplication,
   IWriteGitBranch,
+  IWriteGitDiagnosticReport,
   IWriteGoldenQuery,
   IWriteGroup,
   IWriteIntegration,
@@ -3547,6 +3549,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *  - onboarding_enabled
    *  - privatelabel_configuration
    *  - revoke_certification_on_edits
+   *  - automated_mfa_enabled
    *  - timezone
    *  - host_url
    *  - email_domain_allowlist
@@ -3597,6 +3600,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *  - onboarding_enabled
    *  - privatelabel_configuration
    *  - revoke_certification_on_edits
+   *  - automated_mfa_enabled
    *  - timezone
    *  - host_url
    *  - email_domain_allowlist
@@ -9696,6 +9700,82 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   }
 
   /**
+   * ### Initiate Git Diagnosis Suite
+   *
+   * POST /projects/{project_id}/git_diagnostic_report -> IGitDiagnosticReport
+   *
+   * @param project_id Looker Project ID
+   * @param body Partial<IWriteGitDiagnosticReport>
+   * @param options one-time API call overrides
+   *
+   */
+  async create_git_diagnostic_report(
+    project_id: string,
+    body: Partial<IWriteGitDiagnosticReport>,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IGitDiagnosticReport, IError | IValidationError>> {
+    project_id = encodeParam(project_id);
+    return this.post<IGitDiagnosticReport, IError | IValidationError>(
+      `/projects/${project_id}/git_diagnostic_report`,
+      null,
+      body,
+      options
+    );
+  }
+
+  /**
+   * ### Retrieve Live Git Diagnostic Suite Execution Status
+   *
+   * GET /projects/{project_id}/git_diagnostic_report/{report_id} -> IGitDiagnosticReport
+   *
+   * @param project_id Looker Project ID
+   * @param report_id Report ID
+   * @param options one-time API call overrides
+   *
+   */
+  async get_git_diagnostic_report(
+    project_id: string,
+    report_id: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IGitDiagnosticReport, IError>> {
+    project_id = encodeParam(project_id);
+    report_id = encodeParam(report_id);
+    return this.get<IGitDiagnosticReport, IError>(
+      `/projects/${project_id}/git_diagnostic_report/${report_id}`,
+      null,
+      null,
+      options
+    );
+  }
+
+  /**
+   * ### Repair Git Configuration Issues
+   *
+   * POST /projects/{project_id}/git_diagnostic_report/{report_id}/repair -> IGitDiagnosticReport
+   *
+   * @param project_id Looker Project ID
+   * @param report_id Report ID
+   * @param body Partial<IWriteGitDiagnosticReport>
+   * @param options one-time API call overrides
+   *
+   */
+  async repair_git_diagnostic_report(
+    project_id: string,
+    report_id: string,
+    body: Partial<IWriteGitDiagnosticReport>,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IGitDiagnosticReport, IError | IValidationError>> {
+    project_id = encodeParam(project_id);
+    report_id = encodeParam(report_id);
+    return this.post<IGitDiagnosticReport, IError | IValidationError>(
+      `/projects/${project_id}/git_diagnostic_report/${report_id}/repair`,
+      null,
+      body,
+      options
+    );
+  }
+
+  /**
    * ### Configure Repository Credential for a remote dependency
    *
    * Admin required.
@@ -11953,6 +12033,28 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   }
 
   /**
+   * ### Get Generated LookML for a Self Service Model
+   *
+   * GET /self_service_models/{model_name}/lookml -> string
+   *
+   * @param model_name Name of self service model
+   * @param options one-time API call overrides
+   *
+   */
+  async get_self_service_model_lookml(
+    model_name: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string, IError>> {
+    model_name = encodeParam(model_name);
+    return this.get<string, IError>(
+      `/self_service_models/${model_name}/lookml`,
+      null,
+      null,
+      options
+    );
+  }
+
+  /**
    * ### Update certification for a Self Service Explore
    *
    * PATCH /self_service_models/{model_name}/certification -> ICertification
@@ -12256,6 +12358,8 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   /**
    * ### Get the default theme
    *
+   * This endpoint is deprecated. [Get Default Theme (with type)](#!/Theme/default_theme_by_type) should be used instead.
+   *
    * Returns the active theme object set as the default.
    *
    * The **default** theme name can be set in the UI on the Admin|Theme UI page
@@ -12263,6 +12367,8 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    * The optional `ts` parameter can specify a different timestamp than "now." If specified, it returns the default theme at the time indicated.
    *
    * GET /themes/default -> ITheme
+   *
+   * @deprecated
    *
    * @param ts Timestamp representing the target datetime for the active period. Defaults to 'now'
    * @param options one-time API call overrides
@@ -12278,6 +12384,8 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   /**
    * ### Set the global default theme by theme name
    *
+   * This endpoint is deprecated. [Set Default Theme (with type)](#!/Theme/set_default_theme_by_type) should be used instead.
+   *
    * Only Admin users can call this function.
    *
    * Only an active theme with no expiration (`end_at` not set) can be assigned as the default theme. As long as a theme has an active record with no expiration, it can be set as the default.
@@ -12290,6 +12398,8 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    * PUT /themes/default -> ITheme
    *
+   * @deprecated
+   *
    * @param name Name of theme to set as default
    * @param options one-time API call overrides
    *
@@ -12301,6 +12411,70 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
     return this.put<ITheme, IError | IValidationError>(
       '/themes/default',
       { name },
+      null,
+      options
+    );
+  }
+
+  /**
+   * ### Get the default theme
+   *
+   * Returns the active theme object set as the default.
+   *
+   * The **default** theme name can be set in the UI on the Admin|Theme UI page
+   *
+   * The optional `ts` parameter can specify a different timestamp than "now." If specified, it returns the default theme at the time indicated.
+   *
+   * The optional `theme_type` parameter can specify the theme type to select for.
+   *
+   * GET /themes/default_theme -> ITheme
+   *
+   * @param theme_type Theme type.
+   * @param ts Timestamp representing the target datetime for the active period. Defaults to 'now'
+   * @param options one-time API call overrides
+   *
+   */
+  async default_theme_by_type(
+    theme_type: string,
+    ts?: Date,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ITheme, IError | IValidationError>> {
+    return this.get<ITheme, IError | IValidationError>(
+      '/themes/default_theme',
+      { ts, theme_type },
+      null,
+      options
+    );
+  }
+
+  /**
+   * ### Set the global default theme by theme name
+   *
+   * Only Admin users can call this function.
+   *
+   * Only an active theme with no expiration (`end_at` not set) can be assigned as the default theme. As long as a theme has an active record with no expiration, it can be set as the default.
+   *
+   * [Create Theme](#!/Theme/create) has detailed information on rules for default and active themes
+   *
+   * Returns the new specified default theme object.
+   *
+   * The optional `theme_type` parameter can specify the theme type to select for.
+   *
+   * PUT /themes/default_theme -> ITheme
+   *
+   * @param name Name of theme to set as default
+   * @param theme_type Theme type.
+   * @param options one-time API call overrides
+   *
+   */
+  async set_default_theme_by_type(
+    name: string,
+    theme_type: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ITheme, IError | IValidationError>> {
+    return this.put<ITheme, IError | IValidationError>(
+      '/themes/default_theme',
+      { name, theme_type },
       null,
       options
     );
@@ -12326,10 +12500,15 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   async active_themes(
     request: IRequestActiveThemes,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ITheme[], IError>> {
-    return this.get<ITheme[], IError>(
+  ): Promise<SDKResponse<ITheme[], IError | IValidationError>> {
+    return this.get<ITheme[], IError | IValidationError>(
       '/themes/active',
-      { name: request.name, ts: request.ts, fields: request.fields },
+      {
+        name: request.name,
+        ts: request.ts,
+        theme_type: request.theme_type,
+        fields: request.fields,
+      },
       null,
       options
     );

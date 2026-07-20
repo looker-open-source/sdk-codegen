@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [26.12.0](https://github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v26.10.0...looker_sdk-v26.12.0) (2026-07-13)
+
+
+### Features
+
+* generate SDKs for Looker 26.12 ([#1734](https://github.com/looker-open-source/sdk-codegen/issues/1734)) ([854bb4f](https://github.com/looker-open-source/sdk-codegen/commit/854bb4f16096758cae4a1616f96f46ec2fbb4140))
+* python conversational analytics timestamp ([#1733](https://github.com/looker-open-source/sdk-codegen/issues/1733)) ([ad54373](https://github.com/looker-open-source/sdk-codegen/commit/ad5437350cf2dc00ccaa350e01468f2abaead349))
+* **python:** add conversational analytics chat support and fix datetime parsing ([ac92db1](https://github.com/looker-open-source/sdk-codegen/commit/ac92db16f64dee8080002b30713e6bd2c4ed83a6))
+
 ## [26.10.0](https://github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v26.8.0...looker_sdk-v26.10.0) (2026-06-08)
 
 

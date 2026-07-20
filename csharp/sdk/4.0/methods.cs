@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 512 API methods
+/// 518 API methods
 
 #nullable enable
 using System;
@@ -2519,6 +2519,7 @@ namespace Looker.SDK.API40
   ///  - onboarding_enabled
   ///  - privatelabel_configuration
   ///  - revoke_certification_on_edits
+  ///  - automated_mfa_enabled
   ///  - timezone
   ///  - host_url
   ///  - email_domain_allowlist
@@ -2563,6 +2564,7 @@ namespace Looker.SDK.API40
   ///  - onboarding_enabled
   ///  - privatelabel_configuration
   ///  - revoke_certification_on_edits
+  ///  - automated_mfa_enabled
   ///  - timezone
   ///  - host_url
   ///  - email_domain_allowlist
@@ -7667,6 +7669,59 @@ namespace Looker.SDK.API40
       { "tag_message", tag_message }},body,options);
   }
 
+  /// ### Initiate Git Diagnosis Suite
+  ///
+  /// POST /projects/{project_id}/git_diagnostic_report -> GitDiagnosticReport
+  ///
+  /// <returns><c>GitDiagnosticReport</c> GitDiagnosticReport (application/json)</returns>
+  ///
+  /// <param name="project_id">Looker Project ID</param>
+  public async Task<SdkResponse<GitDiagnosticReport, Exception>> create_git_diagnostic_report(
+    string project_id,
+    WriteGitDiagnosticReport body,
+    ITransportSettings? options = null)
+{  
+      project_id = SdkUtils.EncodeParam(project_id);
+    return await AuthRequest<GitDiagnosticReport, Exception>(HttpMethod.Post, $"/projects/{project_id}/git_diagnostic_report", null,body,options);
+  }
+
+  /// ### Retrieve Live Git Diagnostic Suite Execution Status
+  ///
+  /// GET /projects/{project_id}/git_diagnostic_report/{report_id} -> GitDiagnosticReport
+  ///
+  /// <returns><c>GitDiagnosticReport</c> GitDiagnosticReport (application/json)</returns>
+  ///
+  /// <param name="project_id">Looker Project ID</param>
+  /// <param name="report_id">Report ID</param>
+  public async Task<SdkResponse<GitDiagnosticReport, Exception>> get_git_diagnostic_report(
+    string project_id,
+    string report_id,
+    ITransportSettings? options = null)
+{  
+      project_id = SdkUtils.EncodeParam(project_id);
+      report_id = SdkUtils.EncodeParam(report_id);
+    return await AuthRequest<GitDiagnosticReport, Exception>(HttpMethod.Get, $"/projects/{project_id}/git_diagnostic_report/{report_id}", null,null,options);
+  }
+
+  /// ### Repair Git Configuration Issues
+  ///
+  /// POST /projects/{project_id}/git_diagnostic_report/{report_id}/repair -> GitDiagnosticReport
+  ///
+  /// <returns><c>GitDiagnosticReport</c> GitDiagnosticReport (application/json)</returns>
+  ///
+  /// <param name="project_id">Looker Project ID</param>
+  /// <param name="report_id">Report ID</param>
+  public async Task<SdkResponse<GitDiagnosticReport, Exception>> repair_git_diagnostic_report(
+    string project_id,
+    string report_id,
+    WriteGitDiagnosticReport body,
+    ITransportSettings? options = null)
+{  
+      project_id = SdkUtils.EncodeParam(project_id);
+      report_id = SdkUtils.EncodeParam(report_id);
+    return await AuthRequest<GitDiagnosticReport, Exception>(HttpMethod.Post, $"/projects/{project_id}/git_diagnostic_report/{report_id}/repair", null,body,options);
+  }
+
   /// ### Configure Repository Credential for a remote dependency
   ///
   /// Admin required.
@@ -9734,6 +9789,21 @@ namespace Looker.SDK.API40
       { "google_sheets", google_sheets }},null,options);
   }
 
+  /// ### Get Generated LookML for a Self Service Model
+  ///
+  /// GET /self_service_models/{model_name}/lookml -> string
+  ///
+  /// <returns><c>string</c> Self service lookml (application/json)</returns>
+  ///
+  /// <param name="model_name">Name of self service model</param>
+  public async Task<SdkResponse<string, Exception>> get_self_service_model_lookml(
+    string model_name,
+    ITransportSettings? options = null)
+{  
+      model_name = SdkUtils.EncodeParam(model_name);
+    return await AuthRequest<string, Exception>(HttpMethod.Get, $"/self_service_models/{model_name}/lookml", null,null,options);
+  }
+
   /// ### Update certification for a Self Service Explore
   ///
   /// PATCH /self_service_models/{model_name}/certification -> Certification
@@ -10002,6 +10072,8 @@ namespace Looker.SDK.API40
 
   /// ### Get the default theme
   ///
+  /// This endpoint is deprecated. [Get Default Theme (with type)](#!/Theme/default_theme_by_type) should be used instead.
+  ///
   /// Returns the active theme object set as the default.
   ///
   /// The **default** theme name can be set in the UI on the Admin|Theme UI page
@@ -10013,6 +10085,7 @@ namespace Looker.SDK.API40
   /// <returns><c>Theme</c> Theme (application/json)</returns>
   ///
   /// <param name="ts">Timestamp representing the target datetime for the active period. Defaults to 'now'</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<Theme, Exception>> default_theme(
     DateTime? ts = null,
     ITransportSettings? options = null)
@@ -10022,6 +10095,8 @@ namespace Looker.SDK.API40
   }
 
   /// ### Set the global default theme by theme name
+  ///
+  /// This endpoint is deprecated. [Set Default Theme (with type)](#!/Theme/set_default_theme_by_type) should be used instead.
   ///
   /// Only Admin users can call this function.
   ///
@@ -10038,12 +10113,67 @@ namespace Looker.SDK.API40
   /// <returns><c>Theme</c> Theme (application/json)</returns>
   ///
   /// <param name="name">Name of theme to set as default</param>
+  [Obsolete("Deprecated")]
   public async Task<SdkResponse<Theme, Exception>> set_default_theme(
     string name,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<Theme, Exception>(HttpMethod.Put, "/themes/default", new Values {
       { "name", name }},null,options);
+  }
+
+  /// ### Get the default theme
+  ///
+  /// Returns the active theme object set as the default.
+  ///
+  /// The **default** theme name can be set in the UI on the Admin|Theme UI page
+  ///
+  /// The optional `ts` parameter can specify a different timestamp than "now." If specified, it returns the default theme at the time indicated.
+  ///
+  /// The optional `theme_type` parameter can specify the theme type to select for.
+  ///
+  /// GET /themes/default_theme -> Theme
+  ///
+  /// <returns><c>Theme</c> Theme (application/json)</returns>
+  ///
+  /// <param name="ts">Timestamp representing the target datetime for the active period. Defaults to 'now'</param>
+  /// <param name="theme_type">Theme type.</param>
+  public async Task<SdkResponse<Theme, Exception>> default_theme_by_type(
+    string theme_type,
+    DateTime? ts = null,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<Theme, Exception>(HttpMethod.Get, "/themes/default_theme", new Values {
+      { "ts", ts },
+      { "theme_type", theme_type }},null,options);
+  }
+
+  /// ### Set the global default theme by theme name
+  ///
+  /// Only Admin users can call this function.
+  ///
+  /// Only an active theme with no expiration (`end_at` not set) can be assigned as the default theme. As long as a theme has an active record with no expiration, it can be set as the default.
+  ///
+  /// [Create Theme](#!/Theme/create) has detailed information on rules for default and active themes
+  ///
+  /// Returns the new specified default theme object.
+  ///
+  /// The optional `theme_type` parameter can specify the theme type to select for.
+  ///
+  /// PUT /themes/default_theme -> Theme
+  ///
+  /// <returns><c>Theme</c> Theme (application/json)</returns>
+  ///
+  /// <param name="name">Name of theme to set as default</param>
+  /// <param name="theme_type">Theme type.</param>
+  public async Task<SdkResponse<Theme, Exception>> set_default_theme_by_type(
+    string name,
+    string theme_type,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<Theme, Exception>(HttpMethod.Put, "/themes/default_theme", new Values {
+      { "name", name },
+      { "theme_type", theme_type }},null,options);
   }
 
   /// ### Get active themes
@@ -10062,16 +10192,19 @@ namespace Looker.SDK.API40
   ///
   /// <param name="name">Name of theme</param>
   /// <param name="ts">Timestamp representing the target datetime for the active period. Defaults to 'now'</param>
+  /// <param name="theme_type">Theme type.</param>
   /// <param name="fields">Requested fields.</param>
   public async Task<SdkResponse<Theme[], Exception>> active_themes(
     string? name = null,
     DateTime? ts = null,
+    string? theme_type = null,
     string? fields = null,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<Theme[], Exception>(HttpMethod.Get, "/themes/active", new Values {
       { "name", name },
       { "ts", ts },
+      { "theme_type", theme_type },
       { "fields", fields }},null,options);
   }
 
