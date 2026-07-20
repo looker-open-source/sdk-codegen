@@ -10890,13 +10890,13 @@ export const run_query = async (
  * @param options one-time API call overrides
  *
  */
-export const run_inline_query = async (
+export const run_inline_query = async <T = string>(
   sdk: IAPIMethods,
   request: IRequestRunInlineQuery,
   options?: Partial<ITransportSettings>
-): Promise<SDKResponse<string, IError | IValidationError>> => {
+): Promise<SDKResponse<T, IError | IValidationError>> => {
   request.result_format = encodeParam(request.result_format);
-  return sdk.post<string, IError | IValidationError>(
+  return sdk.post<T, IError | IValidationError>(
     `/queries/run/${request.result_format}`,
     {
       limit: request.limit,
