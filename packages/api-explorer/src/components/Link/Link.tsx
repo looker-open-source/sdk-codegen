@@ -24,10 +24,76 @@
 
  */
 
-import { NavLink } from 'react-router-dom';
+import type { FC, MouseEvent } from 'react';
+import React from 'react';
+import { NavLink, useHistory, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
+import { tryGetEnvAdaptor } from '@looker/extension-utils';
 
-export const Link = styled(NavLink)`
+export interface LinkProps {
+  to: string;
+  exact?: boolean;
+  activeClassName?: string;
+  className?: string;
+}
+
+const LinkComponent: FC<LinkProps> = ({
+  to,
+  exact,
+  activeClassName,
+  className,
+  children,
+  ...props
+}) => {
+  const adaptor = tryGetEnvAdaptor();
+  const history = useHistory();
+  const location = useLocation();
+
+  if (adaptor && adaptor.isExtension()) {
+    const absoluteUrl = adaptor.resolveRouteToAbsoluteUrl(to);
+
+    const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
+      const isRegularClick =
+        e.button === 0 && !e.metaKey && !e.ctrlKey && !e.altKey && !e.shiftKey;
+
+      if (isRegularClick) {
+        e.preventDefault();
+        history.push(to);
+      }
+    };
+
+    const isActive = exact
+      ? location.pathname === to
+      : location.pathname.startsWith(to);
+    const activeClass = isActive ? activeClassName || 'active' : '';
+    const combinedClassName = `${className || ''} ${activeClass}`.trim();
+
+    return (
+      <a
+        href={absoluteUrl}
+        onClick={handleClick}
+        className={combinedClassName}
+        {...props}
+      >
+        {children}
+      </a>
+    );
+  }
+
+  return (
+    <NavLink
+      to={to}
+      exact={exact}
+      activeClassName={activeClassName}
+      className={className}
+      {...props}
+    >
+      {children}
+    </NavLink>
+  );
+};
+
+export const Link = styled(LinkComponent)`
   text-decoration: none;
   color: inherit;
 
