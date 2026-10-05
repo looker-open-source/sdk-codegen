@@ -29,6 +29,7 @@ def test_string_mode(string_content_types):
     for content_type in string_content_types:
         assert transport.response_mode(content_type) == transport.ResponseMode.STRING
 
+
 def test_binary_mode(binary_content_types):
     for content_type in binary_content_types:
         assert transport.response_mode(content_type) == transport.ResponseMode.BINARY

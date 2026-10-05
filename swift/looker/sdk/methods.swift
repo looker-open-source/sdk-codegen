@@ -5182,7 +5182,7 @@ open class LookerSDK: APIMethods {
      *
      * Returns the image content for a dashboard element.
      *
-     * GET /dashboards/{dashboard_id}/images/{image_slug} -> binary
+     * GET /dashboards/{dashboard_id}/images/{image_slug} -> String
      *
      * **Note**: Binary content may be returned by this method.
      */
@@ -5196,10 +5196,10 @@ open class LookerSDK: APIMethods {
          */
         _ image_slug: String,
         options: ITransportSettings? = nil
-    ) -> SDKResponse<binary, SDKError> {
+    ) -> SDKResponse<String, SDKError> {
         let path_dashboard_id = encodeParam(dashboard_id)
         let path_image_slug = encodeParam(image_slug)
-        let result: SDKResponse<binary, SDKError> = self.get("/dashboards/\(path_dashboard_id)/images/\(path_image_slug)", nil, nil, options)
+        let result: SDKResponse<String, SDKError> = self.get("/dashboards/\(path_dashboard_id)/images/\(path_image_slug)", nil, nil, options)
         return result
     }
 

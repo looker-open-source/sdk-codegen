@@ -20,8 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-"""Base model for all generated models
-"""
+"""Base model for all generated models"""
 
 import collections
 import datetime
@@ -41,7 +40,7 @@ except ImportError:
     from typing import _ForwardRef as ForwardRef  # type: ignore
 
 
-EXPLICIT_NULL = cast(Any, "EXPLICIT_NULL")  # type:ignore
+EXPLICIT_NULL = cast(Any, "EXPLICIT_NULL")  # type: ignore
 
 
 class Model:
@@ -230,6 +229,6 @@ class DelimSequence(collections.UserList, Sequence[T]):
             f"{self.suffix}"
         )
 
+
 class URLSearchParams(dict):
     pass
-

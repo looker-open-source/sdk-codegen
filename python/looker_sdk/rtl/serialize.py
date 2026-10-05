@@ -20,8 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-"""Deserialize API response into models
-"""
+"""Deserialize API response into models"""
+
 import datetime
 import enum
 import functools
@@ -80,7 +80,7 @@ def deserialize(
 def serialize(*, api_model: TModelOrSequence, converter: cattr.Converter) -> bytes:
     """Translate api_model into formdata encoded json bytes"""
     data = converter.unstructure(api_model)  # type: ignore
-    return json.dumps(data,default=lambda o: o.__dict__).encode("utf-8")  # type: ignore
+    return json.dumps(data, default=lambda o: o.__dict__).encode("utf-8")  # type: ignore
 
 
 def forward_ref_structure_hook(context, converter, data, forward_ref):
@@ -109,6 +109,7 @@ def translate_keys_structure_hook(converter, data, model_type):
     new_data = hooks.tr_data_keys(data)
     ret = converter.structure_attrs_fromdict(new_data, model_type)
     return ret
+
 
 converter40 = cattr.Converter()
 deserialize40 = functools.partial(deserialize, converter=converter40)

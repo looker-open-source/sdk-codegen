@@ -4456,15 +4456,15 @@ namespace Looker.SDK.API40
   ///
   /// Returns the image content for a dashboard element.
   ///
-  /// GET /dashboards/{dashboard_id}/images/{image_slug} -> binary
+  /// GET /dashboards/{dashboard_id}/images/{image_slug} -> string
   ///
   /// **Note**: Binary content may be returned by this method.
   ///
   /// <returns>
-  /// <c>binary</c> Image content (image/svg+xml)
-  /// <c>binary</c> Image content (image/png)
-  /// <c>binary</c> Image content (image/jpeg)
-  /// <c>binary</c> Image content (image/gif)
+  /// <c>string</c> Image content (image/svg+xml)
+  /// <c>string</c> Image content (image/png)
+  /// <c>string</c> Image content (image/jpeg)
+  /// <c>string</c> Image content (image/gif)
   /// </returns>
   ///
   /// <param name="dashboard_id">Id of dashboard</param>

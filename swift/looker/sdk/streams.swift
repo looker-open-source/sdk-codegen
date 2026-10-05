@@ -5180,7 +5180,7 @@ open class LookerSDKStream: APIMethods {
      *
      * Returns the image content for a dashboard element.
      *
-     * GET /dashboards/{dashboard_id}/images/{image_slug} -> binary
+     * GET /dashboards/{dashboard_id}/images/{image_slug} -> String
      *
      * **Note**: Binary content may be returned by this method.
      */

@@ -76,7 +76,6 @@ else:
             return datetime.datetime.strptime(d, DATETIME_FMT)
 
 
-
 def datetime_unstructure_hook(dt):
     return dt.strftime(DATETIME_FMT)
 

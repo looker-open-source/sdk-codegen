@@ -3560,16 +3560,16 @@ func (l *LookerSDK) DeleteDashboard(
 //
 // Returns the image content for a dashboard element.
 //
-// GET /dashboards/{dashboard_id}/images/{image_slug} -> binary
+// GET /dashboards/{dashboard_id}/images/{image_slug} -> string
 //
 // **Note**: Binary content may be returned by this method.
 func (l *LookerSDK) GetDashboardImage(
 	dashboardId string,
 	imageSlug string,
-	options *rtl.ApiSettings) (binary, error) {
+	options *rtl.ApiSettings) (string, error) {
 	dashboardId = url.PathEscape(dashboardId)
 	imageSlug = url.PathEscape(imageSlug)
-	var result binary
+	var result string
 	err := l.AuthSession.Do(&result, "GET", "/4.0", fmt.Sprintf("/dashboards/%v/images/%v", dashboardId, imageSlug), nil, nil, options)
 	return result, err
 

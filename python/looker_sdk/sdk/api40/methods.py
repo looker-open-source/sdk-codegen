@@ -5747,7 +5747,7 @@ class Looker40SDK(api_methods.APIMethods):
     #
     # Returns the image content for a dashboard element.
     #
-    # GET /dashboards/{dashboard_id}/images/{image_slug} -> Union[mdls.binary, bytes]
+    # GET /dashboards/{dashboard_id}/images/{image_slug} -> Union[str, bytes]
     def get_dashboard_image(
         self,
         # Id of dashboard
@@ -5755,15 +5755,15 @@ class Looker40SDK(api_methods.APIMethods):
         # Slug of image
         image_slug: str,
         transport_options: Optional[transport.TransportOptions] = None,
-    ) -> Union[mdls.binary, bytes]:
+    ) -> Union[str, bytes]:
         """Get Dashboard Image"""
         dashboard_id = self.encode_path_param(dashboard_id)
         image_slug = self.encode_path_param(image_slug)
         response = cast(
-            Union[mdls.binary, bytes],
+            Union[str, bytes],
             self.get(
                 path=f"/dashboards/{dashboard_id}/images/{image_slug}",
-                structure=Union[mdls.binary, bytes],  # type: ignore
+                structure=Union[str, bytes],  # type: ignore
                 transport_options=transport_options,
             ),
         )

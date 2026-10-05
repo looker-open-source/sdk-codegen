@@ -302,7 +302,7 @@ def test_it_creates_and_runs_query(
         assert isinstance(query, ml.Query)
         assert query.id
         assert isinstance(query.id, str)
-        assert query.id != '0'
+        assert query.id != "0"
 
         sql = sdk.run_query(query.id, "sql")
         assert "SELECT" in sql
@@ -649,37 +649,39 @@ def get_query_id(
         query_id = None
     return query_id
 
+
 @pytest.mark.skip(reason="TODO: This breaks CI right now")
 def test_validate_theme(sdk: mtds.Looker40SDK):
-    
+
     valid_theme_response = sdk.validate_theme(
-        body = ml.WriteTheme(
-            name = 'valid_theme',
-            settings = ml.ThemeSettings(
-                show_filters_bar = False,
-                show_title = False,
-                tile_shadow = False,
-                font_family = 'Arial',
-            )
+        body=ml.WriteTheme(
+            name="valid_theme",
+            settings=ml.ThemeSettings(
+                show_filters_bar=False,
+                show_title=False,
+                tile_shadow=False,
+                font_family="Arial",
+            ),
         )
     )
     assert valid_theme_response == ""
-    
+
     try:
         sdk.validate_theme(
-            body = ml.WriteTheme(
-                settings = ml.ThemeSettings(
-                    show_filters_bar = False,
-                    show_title = False,
-                    tile_shadow = False,
-                    font_family = 'Arial;',
+            body=ml.WriteTheme(
+                settings=ml.ThemeSettings(
+                    show_filters_bar=False,
+                    show_title=False,
+                    tile_shadow=False,
+                    font_family="Arial;",
                 )
             )
         )
-    except Exception as e:        
+    except Exception as e:
         assert e.message is not None
         assert e.message != ""
         assert len(e.errors) == 3
+
 
 def test_conversational_analytics(sdk: mtds.Looker40SDK):
     """Test conversational analytics flow: create agent, conversation, chat, and cleanup."""
@@ -694,25 +696,27 @@ def test_conversational_analytics(sdk: mtds.Looker40SDK):
                     name="Temp SDK Test Agent",
                     category="conversation",
                     description="Temporary agent created for SDK integration tests",
-                    sources=[ml.Source(model="thelook",explore="products")]
+                    sources=[ml.Source(model="thelook", explore="products")],
                 )
             )
         except error.SDKError as e:
             if "not found" in e.message.lower() or "unsupported" in e.message.lower():
-                pytest.skip(f"Conversational Analytics (Agents) is not enabled on this Looker instance: {e.message}")
+                pytest.skip(
+                    f"Conversational Analytics (Agents) is not enabled on this Looker instance: {e.message}"
+                )
             raise
         assert isinstance(agent, ml.Agent)
         assert isinstance(agent.id, str)
         agent_id = agent.id
         print(f"✅ Created agent: {agent_id}")
 
-            # 2. Create a Conversation for this agent
+        # 2. Create a Conversation for this agent
         print("Creating conversation...")
         conv = sdk.create_conversation(
             body=ml.WriteConversation(
                 agent_id=agent_id,
                 name="SDK Integration Test Conversation",
-                category="conversation"
+                category="conversation",
             )
         )
         assert isinstance(conv, ml.Conversation)
@@ -724,16 +728,16 @@ def test_conversational_analytics(sdk: mtds.Looker40SDK):
         print("Sending chat message...")
         chat_req = ml.ConversationalAnalyticsChatRequest(
             conversation_id=conv_id,
-            user_message="Hello, this is an automated integration test."
+            user_message="Hello, this is an automated integration test.",
         )
         chat_res = sdk.conversational_analytics_chat(body=chat_req)
-        
+
         # Verify we got a list of chat messages back
         assert isinstance(chat_res, list)
         assert len(chat_res) > 0
         assert isinstance(chat_res[0], ml.ChatMessage)
         print(f"✅ Successfully chatted. Received {len(chat_res)} response parts.")
-        
+
     finally:
         # Cleanup (runs even if assertions fail)
         print("Cleaning up...")
@@ -742,7 +746,9 @@ def test_conversational_analytics(sdk: mtds.Looker40SDK):
                 sdk.delete_conversation(conv_id)
                 print(f"✅ Deleted conversation {conv_id}")
             except Exception as e:
-                print(f"⚠️ Cleanup warning: Failed to delete conversation {conv_id}: {e}")
+                print(
+                    f"⚠️ Cleanup warning: Failed to delete conversation {conv_id}: {e}"
+                )
         if agent_id:
             try:
                 sdk.delete_agent(agent_id)
