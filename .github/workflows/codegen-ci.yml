@@ -22,9 +22,6 @@ on:
 
   workflow_dispatch:
 
-permissions:
-  checks: write
-
 env:
   LOOKERSDK_BASE_URL: https://localhost:20000
   LOOKERSDK_VERIFY_SSL: false
@@ -33,6 +30,8 @@ env:
 jobs:
 
   unit:
+    permissions:
+      checks: write
     env:
       JEST_JUNIT_OUTPUT_DIR: results/sdk-codegen
       JEST_JUNIT_OUTPUT_NAME: ubuntu-latest.sdk-codegen15x.xml
@@ -70,10 +69,12 @@ jobs:
         # TODO: can we cache some layers of the image for faster download?
         # we probably don't want to cache the final image for IP security...
         run: |
-          docker pull --quiet us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ fromJson(vars.PRIMARY_LOOKER_VERSION)[0] }}
+          docker pull --quiet us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${PRIMARY_LOOKER_VERSION}
           # set $LOOKER_OPTS to --no-ssl if we want to turn off ssl
-          docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ fromJson(vars.PRIMARY_LOOKER_VERSION)[0] }}
+          docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${PRIMARY_LOOKER_VERSION}
           docker logs -f looker-sdk-codegen-ci --until=30s &
+        env:
+          PRIMARY_LOOKER_VERSION: ${{ fromJson(vars.PRIMARY_LOOKER_VERSION)[0] }}
 
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:

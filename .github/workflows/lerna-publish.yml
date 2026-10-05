@@ -12,6 +12,8 @@ on:
 
 jobs:
   publish:
+    permissions:
+      contents: read
     if: >
       (github.event.inputs) ||
       (startsWith(github.event.release.tag_name, 'sdk-codegen-all') &&
@@ -46,14 +48,17 @@ jobs:
 
       - name: Pull and run Looker docker image
         run: |
-          docker pull --quiet us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ fromJson(vars.PRIMARY_LOOKER_VERSION)[0] }}
-          docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${{ fromJson(vars.PRIMARY_LOOKER_VERSION)[0] }}
+          docker pull --quiet us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${PRIMARY_LOOKER_VERSION}
+          docker run --name looker-sdk-codegen-ci -d -p 10000:9999 -p 20000:19999 us-west1-docker.pkg.dev/cloud-looker-sdk-codegen-cicd/looker/${PRIMARY_LOOKER_VERSION}
           docker logs -f looker-sdk-codegen-ci --until=30s &
+        env:
+          PRIMARY_LOOKER_VERSION: ${{ fromJson(vars.PRIMARY_LOOKER_VERSION)[0] }}
 
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22.x
           registry-url: https://wombat-dressing-room.appspot.com
+          package-manager-cache: false
 
       - name: Install dependencies and build
         run: |

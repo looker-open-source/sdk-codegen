@@ -26,15 +26,14 @@ on:
 
   workflow_dispatch:
 
-permissions:
-  checks: write
-
 env:
   TS_JUNIT_OUTPUT_DIR: results/apix
 
 jobs:
   unit:
     name: Unit - ${{ matrix.os }} / Node ${{ matrix.node-version }}
+    permissions:
+      checks: write
     env:
       JEST_JUNIT_OUTPUT_DIR: results/apix
       JEST_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.apix${{ matrix.node-version }}.xml

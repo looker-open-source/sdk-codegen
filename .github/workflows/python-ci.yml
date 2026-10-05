@@ -24,7 +24,7 @@ env:
   TOX_JUNIT_OUTPUT_DIR: results
 
 permissions:
-  checks: write
+  contents: read
 
 jobs:
   typecheck:

@@ -16,6 +16,8 @@ defaults:
 
 jobs:
   publish:
+    permissions:
+      contents: read
     if: >
       (github.event.inputs) ||
       (startsWith(github.event.release.tag_name, 'looker_sdk') &&
@@ -37,8 +39,8 @@ jobs:
           pip install wheel
           python setup.py sdist bdist_wheel
 
-      - uses: pypa/gh-action-pypi-publish@54b39fb9371c0b3a6f9f14bb8a67394defc7a806 # v1.4.1
+      - uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e # v1.13.0
         with:
           user: __token__
-          password: ${{ secrets.PYPI_API_TOKEN }}
+          password: ${{ secrets.PYPI_API_TOKEN }} # zizmor: ignore[use-trusted-publishing]
           packages_dir: python/dist/
