@@ -37,7 +37,12 @@ from typing import (
 )
 
 import cattr
-from cattrs.cols import is_sequence, list_structure_factory
+
+try:
+    from cattrs.cols import is_sequence, list_structure_factory
+except ImportError:
+    is_sequence = None  # type: ignore
+    list_structure_factory = None  # type: ignore
 
 from looker_sdk.rtl import model, hooks
 
@@ -68,7 +73,10 @@ def deserialize(
     except json.JSONDecodeError as ex:
         raise DeserializeError(f"Bad json {ex}")
     try:
-        converter.register_structure_hook_factory(is_sequence, list_structure_factory)
+        if is_sequence is not None and list_structure_factory is not None:
+            converter.register_structure_hook_factory(
+                is_sequence, list_structure_factory
+            )
         response: TDeserializeReturn = converter.structure(  # type: ignore
             data, structure
         )
