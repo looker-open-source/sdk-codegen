@@ -69,11 +69,8 @@ jobs:
           name: ${{ env.JUNIT_ARTIFACT_DIR }}-${{ matrix.os }}-${{ matrix.go-version }}
           path: ${{ env.JUNIT_OUTPUT_DIR }}
 
-  setup:
-    uses: looker-open-source/reusable-actions/.github/workflows/supported-versions.yml@main
-
   integration:
-    needs: [setup, unit]
+    needs: [unit]
     name: Integration - ${{ matrix.os }} / Looker.${{ matrix.looker }}
     env:
       LOOKERSDK_CLIENT_ID: ${{ secrets.LOOKERSDK_CLIENT_ID }}
@@ -89,7 +86,7 @@ jobs:
         os:
           - ubuntu
         looker:
-          ${{ fromJson(needs.setup.outputs.matrix_json) }}
+          ${{ fromJson(vars.SUPPORTED_LOOKER_VERSIONS) }}
 
           # TODO uncomment `include:` when either macos or windows works to satisfaction.
           #include:

@@ -27,9 +27,6 @@ permissions:
   checks: write
 
 jobs:
-  setup:
-    uses: looker-open-source/reusable-actions/.github/workflows/supported-versions.yml@main
-
   typecheck:
     name: Mypy
     runs-on: ubuntu-latest
@@ -107,7 +104,7 @@ jobs:
           path: python/results/
 
   integration:
-    needs: [unit, setup]
+    needs: [unit]
     name: Integration - ${{ matrix.os }} / Looker.${{ matrix.looker }}
     env:
       TOX_JUNIT_OUTPUT_NAME: ${{ matrix.os }}.Looker-${{ matrix.looker }}.py3.x
@@ -127,7 +124,7 @@ jobs:
         os:
           - large-ubuntu
         looker:
-          ${{ fromJson(needs.setup.outputs.matrix_json) }}
+          ${{ fromJson(vars.SUPPORTED_LOOKER_VERSIONS) }}
 
           # TODO uncomment `include:` when either macos or windows works to satisfaction.
           #include:
