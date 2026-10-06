@@ -295,13 +295,20 @@ open class AuthSession(
         if (sudoId.isNotBlank()) {
             val token = activeToken()
             val sudoToken =
-                transport.request<AuthToken>(HttpMethod.POST, "/login/$newId") { requestSettings ->
-                    val headers = requestSettings.headers.toMutableMap()
-                    if (token.accessToken.isNotBlank()) {
-                        headers["Authorization"] = "token ${token.accessToken}"
-                    }
-                    requestSettings.copy(headers = headers)
-                }
+                transport.request<AuthToken>(
+                    HttpMethod.POST,
+                    "/login/$newId",
+                    authenticator = { requestSettings ->
+                        val headers = requestSettings.headers.toMutableMap()
+                        fetchIapToken()?.let { iapToken ->
+                            headers["Proxy-Authorization"] = "Bearer $iapToken"
+                        }
+                        if (token.accessToken.isNotBlank()) {
+                            headers["Authorization"] = "token ${token.accessToken}"
+                        }
+                        requestSettings.copy(headers = headers)
+                    },
+                )
             this.sudoToken = ok(sudoToken)
         }
         return activeToken()
