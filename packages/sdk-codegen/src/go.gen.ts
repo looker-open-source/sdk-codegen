@@ -442,21 +442,27 @@ ${goImport}
     const mt = this.nullStr;
     const ktTypes: Record<string, IMappedType> = {
       any: { default: mt, name: 'interface{}' },
+      binary: { default: mt, name: 'string' },
       boolean: { default: mt, name: 'bool' },
       byte: { default: mt, name: 'byte' },
       date: { default: '', name: 'time.Time' },
       datetime: { default: '', name: 'time.Time' },
       double: { default: mt, name: 'float64' },
+      email: { default: mt, name: 'string' },
       float: { default: mt, name: 'float32' },
+      hostname: { default: mt, name: 'string' },
       int32: { default: mt, name: 'int32' },
       int64: { default: mt, name: 'int64' },
       integer: { default: mt, name: 'int' },
+      ipv4: { default: mt, name: 'string' },
+      ipv6: { default: mt, name: 'string' },
       number: { default: mt, name: 'float64' },
       object: { default: mt, name: 'interface{}' },
       password: { default: mt, name: 'string' },
       string: { default: mt, name: 'string' },
       uri: { default: mt, name: 'url.URL' },
       url: { default: mt, name: 'url.URL' },
+      uuid: { default: mt, name: 'string' },
       void: { default: mt, name: 'Void' }, // todo: check how to handle Void
     };
 

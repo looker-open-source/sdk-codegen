@@ -20,8 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-"""AuthToken
-"""
+"""AuthToken"""
+
 from typing import Optional, Type, Union
 import datetime
 
@@ -66,7 +66,8 @@ class AuthToken:
     """Used to instantiate or check expiry of an AccessToken object"""
 
     def __init__(
-        self, token: Optional[AccessToken] = None,
+        self,
+        token: Optional[AccessToken] = None,
     ):
         self.lag_time = 10
         self.access_token: str = ""

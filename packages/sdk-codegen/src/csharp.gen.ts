@@ -454,21 +454,27 @@ ${indent}${this.reserve(value.toString())}`;
 
     const csTypes: Record<string, IMappedType> = {
       any: { default: this.nullStr, name: 'object', optional },
+      binary: { default: quotes, name: 'string', optional },
       boolean: { default: mt, name: 'bool', optional },
       byte: { default: mt, name: 'byte', optional },
       date: { default: mt, name: 'DateTime', optional },
       datetime: { default: mt, name: 'DateTime', optional },
       double: { default: mt, name: 'double', optional },
+      email: { default: quotes, name: 'string', optional },
       float: { default: mt, name: 'float', optional },
+      hostname: { default: quotes, name: 'string', optional },
       int32: { default: mt, name: 'int', optional },
       int64: { default: mt, name: 'long', optional },
       integer: { default: mt, name: 'int', optional },
+      ipv4: { default: quotes, name: 'string', optional },
+      ipv6: { default: quotes, name: 'string', optional },
       number: { default: mt, name: 'double', optional },
       object: { default: this.nullStr, name: 'object', optional },
       password: { default: quotes, name: 'Password', optional },
       string: { default: quotes, name: 'string', optional },
       uri: { default: quotes, name: 'Url', optional },
       url: { default: quotes, name: 'Url', optional },
+      uuid: { default: quotes, name: 'string', optional },
       void: { default: mt, name: 'void' },
     };
 
