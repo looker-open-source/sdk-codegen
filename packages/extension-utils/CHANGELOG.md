@@ -338,6 +338,23 @@
     * @looker/extension-sdk-react bumped from 26.10.0 to 26.12.0
     * @looker/sdk bumped from 26.10.0 to 26.12.0
 
+## [0.1.66](https://github.com/looker-open-source/sdk-codegen/compare/extension-utils-v0.1.65...extension-utils-v0.1.66) (2026-10-06)
+
+
+### Bug Fixes
+
+* **api-explorer:** resolve extension routes to absolute Looker host URLs ([#1735](https://github.com/looker-open-source/sdk-codegen/issues/1735)) ([1ea66cc](https://github.com/looker-open-source/sdk-codegen/commit/1ea66ccaa9f986683657e45d7af5938add42c69e))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from 0.1.55 to 0.1.56
+    * @looker/extension-sdk bumped from 26.12.0 to 26.18.0
+    * @looker/extension-sdk-react bumped from 26.12.0 to 26.18.0
+    * @looker/sdk bumped from 26.12.0 to 26.18.0
+
 ## [0.1.49](https://github.com/looker-open-source/sdk-codegen/compare/extension-utils-v0.1.48...extension-utils-v0.1.49) (2025-02-06)
 
 
