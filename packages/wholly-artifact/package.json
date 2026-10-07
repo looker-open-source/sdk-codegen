@@ -43,8 +43,8 @@
   "dependencies": {
     "@looker/sdk-rtl": "21.6.5",
     "@looker/sdk": "26.18.0",
-    "lodash": "4.17.21",
-    "uuid": "9.0.1"
+    "lodash": "4.18.1",
+    "uuid": "14.0.0"
   },
   "keywords": [
     "Looker",
