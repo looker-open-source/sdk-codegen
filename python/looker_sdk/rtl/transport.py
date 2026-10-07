@@ -20,8 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-"""Types and abstract base class for transport implementations.
-"""
+"""Types and abstract base class for transport implementations."""
+
 import abc
 import enum
 import re

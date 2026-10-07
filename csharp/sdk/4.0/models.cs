@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 461 API models: 363 Spec, 0 Request, 72 Write, 26 Enum
+/// 442 API models: 343 Spec, 0 Request, 73 Write, 26 Enum
 
 #nullable enable
 using System;
@@ -95,6 +95,20 @@ public class Agent : SdkModel
   /// <summary>Studio Agent ID (if this agent was migrated) (read-only)</summary>
   public string? studio_agent_id { get; set; } = null;
   public WorkflowParams? workflow_params { get; set; }
+  /// <summary>Whether the agent is defined in LookML (read-only)</summary>
+  public bool? is_lookml { get; set; } = null;
+  /// <summary>LookML Agent ID (read-only)</summary>
+  public string? lookml_agent_id { get; set; } = null;
+  /// <summary>URI to edit the LookML definition of this agent (read-only)</summary>
+  public string? lookml_edit_uri { get; set; } = null;
+}
+
+public class AgentLookml : SdkModel
+{
+  /// <summary>Id of Agent (read-only)</summary>
+  public string? agent_id { get; set; } = null;
+  /// <summary>lookml of UDD Agent (read-only)</summary>
+  public string? lookml { get; set; } = null;
 }
 
 public class Alert : SdkModel
@@ -373,64 +387,6 @@ public class ArtifactUsage : SdkModel
   public long max_size { get; set; }
   /// <summary>The currently used storage size in bytes of the entire artifact store. (read-only)</summary>
   public long usage { get; set; }
-}
-
-public class AssertValidatorErrorItem : SdkModel
-{
-  public AssertValidatorTestError? assert_error { get; set; }
-  public GenericError? generic_error { get; set; }
-}
-
-public class AssertValidatorResult : SdkModel
-{
-  /// <summary>Name of the validator (assert) (read-only)</summary>
-  public string? name { get; set; } = null;
-  /// <summary>Status of the validation (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)</summary>
-  public string? status { get; set; } = null;
-  /// <summary>Results of the validation (read-only)</summary>
-  public AssertValidatorTestedExplore[]? results { get; set; } = null;
-}
-
-public class AssertValidatorTestedExplore : SdkModel
-{
-  /// <summary>Total number of failed data tests (read-only)</summary>
-  public long? error_count { get; set; } = null;
-  /// <summary>Details of data tests that failed validation (read-only)</summary>
-  public AssertValidatorErrorItem[]? errors { get; set; } = null;
-  /// <summary>Total number of successful data tests (read-only)</summary>
-  public string? success_count { get; set; } = null;
-  /// <summary>Details of data tests that passed validation (read-only)</summary>
-  public AssertValidatorTestSuccess[]? successes { get; set; } = null;
-}
-
-public class AssertValidatorTestError : SdkModel
-{
-  /// <summary>LookML model that contains the data test (read-only)</summary>
-  public string? model { get; set; } = null;
-  /// <summary>LookML Explore that is used as the explore_source for the data test (read-only)</summary>
-  public string? explore { get; set; } = null;
-  /// <summary>Name of the data test (read-only)</summary>
-  public string? test_name { get; set; } = null;
-  /// <summary>URL to the Explore (read-only)</summary>
-  public string? explore_url { get; set; } = null;
-  /// <summary>URL to the LookML file where the data test is defined (read-only)</summary>
-  public string? lookml_url { get; set; } = null;
-  /// <summary>Message returned by the data test (read-only)</summary>
-  public string? message { get; set; } = null;
-}
-
-public class AssertValidatorTestSuccess : SdkModel
-{
-  /// <summary>LookML model that contains the data test (read-only)</summary>
-  public string? model { get; set; } = null;
-  /// <summary>LookML Explore that is used as the explore_source for the data test (read-only)</summary>
-  public string? explore { get; set; } = null;
-  /// <summary>Name of the data test (read-only)</summary>
-  public string? test_name { get; set; } = null;
-  /// <summary>URL to the Explore (read-only)</summary>
-  public string? explore_url { get; set; } = null;
-  /// <summary>URL to the LookML file where the data test is defined (read-only)</summary>
-  public string? lookml_url { get; set; } = null;
 }
 
 public class AsyncDeployResponse : SdkModel
@@ -734,18 +690,6 @@ public class CIAssertValidatorTestSuccess : SdkModel
   public string? lookml_url { get; set; } = null;
 }
 
-public class CIChangeRequest : SdkModel
-{
-  /// <summary>Numeric identifier of the change request (read-only)</summary>
-  public long? change_request_number { get; set; } = null;
-  /// <summary>URL of the change request (read-only)</summary>
-  public string? change_request_url { get; set; } = null;
-  /// <summary>Name of the change request (read-only)</summary>
-  public string? change_request_name { get; set; } = null;
-  /// <summary>For PR-triggered CI runs, the URL to the change request commit that triggered the run. (read-only)</summary>
-  public string? change_request_commits_url { get; set; } = null;
-}
-
 public class CIContentValidatorContentError : SdkModel
 {
   /// <summary>A URI reference that identifies the problem type</summary>
@@ -824,18 +768,6 @@ public class CIGenericError : SdkModel
   public string? status { get; set; } = null;
   /// <summary>URI reference that identifies the specific occurrence of the problem</summary>
   public string? instance { get; set; } = null;
-}
-
-public class CIGitState : SdkModel
-{
-  /// <summary>Git branch that the CI run validates (read-only)</summary>
-  public string? branch { get; set; } = null;
-  /// <summary>Git repository that contains the Git branch being validated (read-only)</summary>
-  public string? repository { get; set; } = null;
-  /// <summary>Git commit that the CI run validates (read-only)</summary>
-  public string? commit_ref { get; set; } = null;
-  /// <summary>For incremental runs, the Git branch that the CI run compares against during validation (read-only)</summary>
-  public string? target { get; set; } = null;
 }
 
 public class CILookMLValidatorError : SdkModel
@@ -931,6 +863,12 @@ public class CIRun : SdkModel
   public string? git_status_url { get; set; } = null;
   /// <summary>Git target URL of the CI run</summary>
   public string? git_target_url { get; set; } = null;
+  /// <summary>Git branch name in dbt Cloud</summary>
+  public string? dbt_cloud_git_branch_name { get; set; } = null;
+  /// <summary>Git commit ref in dbt Cloud</summary>
+  public string? dbt_cloud_git_commit_ref { get; set; } = null;
+  /// <summary>Git repository name in dbt Cloud</summary>
+  public string? dbt_cloud_git_repository_name { get; set; } = null;
   /// <summary>Time and date that the CI run was created (read-only)</summary>
   public DateTime? created_at { get; set; } = null;
   /// <summary>Time and date that the CI run was started (read-only)</summary>
@@ -949,6 +887,8 @@ public class CIRun : SdkModel
   public string? run_url { get; set; } = null;
   /// <summary>User attributes for the CI run (read-only)</summary>
   public CIRunUserAttribute[]? user_attributes { get; set; } = null;
+  /// <summary>Map of upstream project names to commit SHAs or git/PR configuration objects pinned for the CI run (read-only)</summary>
+  public StringDictionary<object>? project_imports { get; set; } = null;
 }
 
 public class CIRunResult : SdkModel
@@ -961,6 +901,8 @@ public class CIRunResult : SdkModel
   public CIGenericError? content_error { get; set; }
   public CILookMLValidatorResult? lookml_result { get; set; }
   public CIGenericError? lookml_error { get; set; }
+  public CIStyleValidatorResult? style_result { get; set; }
+  public CIGenericError? style_error { get; set; }
   public CIGenericError? generic_error { get; set; }
 }
 
@@ -972,18 +914,6 @@ public class CIRunUserAttribute : SdkModel
   public string? name { get; set; } = null;
   /// <summary>Value of the user attribute</summary>
   public string? value { get; set; } = null;
-}
-
-public class CIScheduleTrigger : SdkModel
-{
-  /// <summary>Whether the CI run schedule is active (read-only)</summary>
-  public bool? enabled { get; set; } = null;
-  /// <summary>For scheduled runs, day of the week that the CI run is scheduled (read-only)</summary>
-  public string? day { get; set; } = null;
-  /// <summary>For schedules runs, the hour of the day (24 hour format) that the CI run is scheduled (read-only)</summary>
-  public string? hour { get; set; } = null;
-  /// <summary>For scheduled runs, how often the CI run is scheduled to run (hourly, daily, weekly) (read-only)</summary>
-  public string? frequency { get; set; } = null;
 }
 
 public class CISqlValidatorError : SdkModel
@@ -1046,6 +976,74 @@ public class CISqlValidatorTestedExplore : SdkModel
   public long? error_count { get; set; } = null;
   /// <summary>Details of the LookML that failed SQL validation</summary>
   public CISqlValidatorErrorItem[]? errors { get; set; } = null;
+}
+
+public class CIStyleValidatorError : SdkModel
+{
+  /// <summary>A URI reference that identifies the problem type</summary>
+  public string? type { get; set; } = null;
+  /// <summary>Overview of the error</summary>
+  public string? title { get; set; } = null;
+  /// <summary>Detail of the error</summary>
+  public string? detail { get; set; } = null;
+  /// <summary>The HTTP status code for the problem</summary>
+  public string? status { get; set; } = null;
+  /// <summary>URI reference that identifies the specific occurrence of the problem</summary>
+  public string? instance { get; set; } = null;
+  /// <summary>LookML model that contains the error</summary>
+  public string? model { get; set; } = null;
+  /// <summary>LookML Explore that contains the error</summary>
+  public string? explore { get; set; } = null;
+  /// <summary>LookML field that caused the error</summary>
+  public string? field_name { get; set; } = null;
+  /// <summary>Message returned by the style validator</summary>
+  public string? message { get; set; } = null;
+  /// <summary>Severity of the error (warning, error, fatal, info, success)</summary>
+  public string? severity { get; set; } = null;
+  /// <summary>Line number of the error in the LookML file</summary>
+  public long? line_number { get; set; } = null;
+  /// <summary>Character offset of the error in the LookML file</summary>
+  public long? character { get; set; } = null;
+  /// <summary>URL to the LookML that caused the error</summary>
+  public string? lookml_url { get; set; } = null;
+  /// <summary>IDE folder path to the LookML file that caused the error</summary>
+  public string? file_path { get; set; } = null;
+  /// <summary>Name of the style rule</summary>
+  public string? rule_name { get; set; } = null;
+  /// <summary>Type of LookML entity evaluated</summary>
+  public string? entity_type { get; set; } = null;
+  /// <summary>Name of LookML entity evaluated</summary>
+  public string? entity_name { get; set; } = null;
+  /// <summary>Whether the error was newly introduced</summary>
+  public bool? is_incremental { get; set; } = null;
+  /// <summary>Deterministic fingerprint of the violation</summary>
+  public string? error_id { get; set; } = null;
+  /// <summary>URL to documentation for the style rule</summary>
+  public string? documentation_url { get; set; } = null;
+  /// <summary>LookML source code snippet lines surrounding the error</summary>
+  public string[]? context { get; set; } = null;
+  /// <summary>Line number where the context code snippet begins</summary>
+  public long? context_line_number { get; set; } = null;
+}
+
+public class CIStyleValidatorErrorItem : SdkModel
+{
+  public CIStyleValidatorError? style_error { get; set; }
+  public CIGenericError? generic_error { get; set; }
+}
+
+public class CIStyleValidatorResult : SdkModel
+{
+  /// <summary>Name of the validator (style)</summary>
+  public string? name { get; set; } = null;
+  /// <summary>Whether the validation was incremental</summary>
+  public bool? incremental { get; set; } = null;
+  /// <summary>Status of the validation (unknown, failed, passed, skipped, errored, cancelled, queued, running)</summary>
+  public string? status { get; set; } = null;
+  /// <summary>Total number of failed style validations</summary>
+  public long? error_count { get; set; } = null;
+  /// <summary>Details of the LookML that failed style validation</summary>
+  public CIStyleValidatorErrorItem[]? errors { get; set; } = null;
 }
 
 public class ColorCollection : SdkModel
@@ -1236,6 +1234,8 @@ public class ContentSearch : SdkModel
   public string? certification_status { get; set; } = null;
   /// <summary>Name of the parent folder of the content (read-only)</summary>
   public string? parent_folder_name { get; set; } = null;
+  /// <summary>Name of the parent project of the content (read-only)</summary>
+  public string? parent_project_name { get; set; } = null;
 }
 
 public class ContentSummary : SdkModel
@@ -1457,38 +1457,6 @@ public class ContentValidationScheduledPlan : SdkModel
   public string? id { get; set; } = null;
 }
 
-public class ContentValidatorContentError : SdkModel
-{
-  /// <summary>A URI reference that identifies the problem type (read-only)</summary>
-  public string? type { get; set; } = null;
-  /// <summary>Overview of the error (read-only)</summary>
-  public string? title { get; set; } = null;
-  /// <summary>Detail of the error (read-only)</summary>
-  public string? detail { get; set; } = null;
-  /// <summary>The HTTP status code for the problem (read-only)</summary>
-  public string? status { get; set; } = null;
-  /// <summary>URI reference that identifies the specific occurrence of the problem (read-only)</summary>
-  public string? instance { get; set; } = null;
-  /// <summary>LookML model that contains the error (read-only)</summary>
-  public string? model { get; set; } = null;
-  /// <summary>LookML Explore that contains the error (read-only)</summary>
-  public string? explore { get; set; } = null;
-  /// <summary>LookML field that caused the error (read-only)</summary>
-  public string? field_name { get; set; } = null;
-  /// <summary>Type of the content (dashboard, look) (read-only)</summary>
-  public string? content_type { get; set; } = null;
-  /// <summary>Folder of the content (read-only)</summary>
-  public string? folder { get; set; } = null;
-  /// <summary>URL of the content (read-only)</summary>
-  public string? url { get; set; } = null;
-  /// <summary>Type of the tile (dashboard_element, dashboard_filter) (read-only)</summary>
-  public string? tile_type { get; set; } = null;
-  /// <summary>Title of the tile (read-only)</summary>
-  public string? tile_title { get; set; } = null;
-  /// <summary>Message returned by the content validator (read-only)</summary>
-  public string? message { get; set; } = null;
-}
-
 public class ContentValidatorError : SdkModel
 {
   public ContentValidationLook? look { get; set; }
@@ -1503,32 +1471,6 @@ public class ContentValidatorError : SdkModel
   public ContentValidationError[]? errors { get; set; } = null;
   /// <summary>An id unique to this piece of content for this validation run (read-only)</summary>
   public string? id { get; set; } = null;
-}
-
-public class ContentValidatorErrorItem : SdkModel
-{
-  public ContentValidatorContentError? content_error { get; set; }
-  public GenericError? generic_error { get; set; }
-}
-
-public class ContentValidatorResult : SdkModel
-{
-  /// <summary>Name of the validator (content) (read-only)</summary>
-  public string? name { get; set; } = null;
-  /// <summary>Whether the validation was incremental (read-only)</summary>
-  public bool? incremental { get; set; } = null;
-  /// <summary>Status of the validation (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)</summary>
-  public string? status { get; set; } = null;
-  /// <summary>Results of the content validation (read-only)</summary>
-  public ContentValidatorTestedExplore[]? result { get; set; } = null;
-}
-
-public class ContentValidatorTestedExplore : SdkModel
-{
-  /// <summary>Total number of failed content validations (read-only)</summary>
-  public long? error_count { get; set; } = null;
-  /// <summary>Details of the content that failed validation (read-only)</summary>
-  public ContentValidatorErrorItem[]? errors { get; set; } = null;
 }
 
 public class ContentView : SdkModel
@@ -1563,6 +1505,10 @@ public class Context : SdkModel
 {
   /// <summary>Agent instructions</summary>
   public string? instructions { get; set; } = null;
+  /// <summary>Show analytical details in preview</summary>
+  public bool? show_analytical_details { get; set; } = null;
+  /// <summary>Show debug info in preview</summary>
+  public bool? show_debug { get; set; } = null;
 }
 
 public class ContinuousPalette : SdkModel
@@ -1642,24 +1588,6 @@ public class CostEstimate : SdkModel
   public string? message { get; set; } = null;
 }
 
-public class CreateCIRunRequest : SdkModel
-{
-  /// <summary>ID of the CI suite</summary>
-  public string? suite_id { get; set; } = null;
-  /// <summary>Branch that the CI run should validate. Omit to test production.</summary>
-  public string? branch { get; set; } = null;
-  /// <summary>Commit that the CI run should validate. Omit to test production.</summary>
-  public string? commit { get; set; } = null;
-}
-
-public class CreateCIRunResponse : SdkModel
-{
-  /// <summary>ID of the CI run (read-only)</summary>
-  public string? run_id { get; set; } = null;
-  /// <summary>Status of the CI run (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)</summary>
-  public string? status { get; set; } = null;
-}
-
 public class CreateContinuousIntegrationRunRequest : SdkModel
 {
   /// <summary>The suite ID.</summary>
@@ -1670,6 +1598,8 @@ public class CreateContinuousIntegrationRunRequest : SdkModel
   public string? commit { get; set; } = null;
   /// <summary>User attributes to override for the CI run.</summary>
   public UserAttributeOverride[]? user_attributes { get; set; } = null;
+  /// <summary>Map of upstream project names to commit SHAs or git configurations to pin for the CI run.</summary>
+  public StringDictionary<object>? project_imports { get; set; } = null;
 }
 
 /// WARNING: no writeable properties found for POST, PUT, or PATCH
@@ -2160,6 +2090,8 @@ public class Dashboard : SdkModel
   public bool? is_owner_disabled { get; set; } = null;
   /// <summary>Relative URL of the dashboard (read-only)</summary>
   public string? url { get; set; } = null;
+  /// <summary>The layout granularity to apply to this dashboard (ie: default or granular)</summary>
+  public string? layout_granularity { get; set; } = null;
   /// <summary>Whether to preserve the desktop layout on mobile viewports. i.e. don't force a single column layout on mobile.</summary>
   public bool? preserve_desktop_layout { get; set; } = null;
   public DashboardDownloadSettings? download_settings { get; set; }
@@ -2191,6 +2123,22 @@ public class DashboardAppearance : SdkModel
   public string? key_color { get; set; } = null;
   /// <summary>Whether to modernize visualizations on this dashboard</summary>
   public bool? modern_vis2026 { get; set; } = null;
+  /// <summary>Toggle to show dashboard header. Defaults to true.</summary>
+  public bool? show_dashboard_header { get; set; } = null;
+  /// <summary>Toggle to show dashboard title. Defaults to true.</summary>
+  public bool? show_title { get; set; } = null;
+  /// <summary>Toggle to show filters bar. Defaults to true.</summary>
+  public bool? show_filters_bar { get; set; } = null;
+  /// <summary>Toggle to show filters toggle button. Defaults to true.</summary>
+  public bool? show_filters_toggle { get; set; } = null;
+  /// <summary>Toggle to show reload data icon/button. Defaults to true.</summary>
+  public bool? show_reload_data_icon { get; set; } = null;
+  /// <summary>Toggle to show dashboard actions menu. Defaults to true.</summary>
+  public bool? show_dashboard_menu { get; set; } = null;
+  /// <summary>Toggle to show last updated indicator. Defaults to true.</summary>
+  public bool? show_last_updated_indicator { get; set; } = null;
+  /// <summary>Background image opacity (0.0 to 1.0)</summary>
+  public float? background_opacity { get; set; } = null;
 }
 
 public class DashboardBase : SdkModel
@@ -2242,6 +2190,8 @@ public class DashboardDownloadSettings : SdkModel
   public long? rows_limit { get; set; } = null;
   /// <summary>Columns limit</summary>
   public long? columns_limit { get; set; } = null;
+  /// <summary>Append Excel metadata</summary>
+  public bool? append_excel_metadata { get; set; } = null;
 }
 
 public class DashboardElement : SdkModel
@@ -2256,6 +2206,8 @@ public class DashboardElement : SdkModel
   public string? dashboard_id { get; set; } = null;
   /// <summary>Id of Dashboard Layout</summary>
   public string? dashboard_layout_id { get; set; } = null;
+  /// <summary>ID of the group to place this element under in the layout (read-only)</summary>
+  public string? group_id { get; set; } = null;
   /// <summary>Relative path of URI of LookML file to edit the dashboard element (LookML dashboard only). (read-only)</summary>
   public string? edit_uri { get; set; } = null;
   /// <summary>Unique Id (read-only)</summary>
@@ -2310,6 +2262,10 @@ public class DashboardElement : SdkModel
   /// <summary>Custom ARIA description text</summary>
   public string? aria_description { get; set; } = null;
   public Certification? certification_metadata { get; set; }
+  /// <summary>ID of Dashboard Image</summary>
+  public string? image_id { get; set; } = null;
+  /// <summary>Images (read-only)</summary>
+  public Image[]? images { get; set; } = null;
 }
 
 public class DashboardFilter : SdkModel
@@ -2414,6 +2370,8 @@ public class DashboardLayoutComponent : SdkModel
   public long? granular_width { get; set; } = null;
   /// <summary>Height (granular layout)</summary>
   public long? granular_height { get; set; } = null;
+  /// <summary>Id of parent Dashboard Layout Component group</summary>
+  public string? group_id { get; set; } = null;
 }
 
 public class DashboardLookml : SdkModel
@@ -2591,6 +2549,8 @@ public class DBConnection : SdkModel
   public Snippet[]? snippets { get; set; } = null;
   /// <summary>True if PDTs are enabled on this connection (read-only)</summary>
   public bool? pdts_enabled { get; set; } = null;
+  /// <summary>ID of the LookML project to which this connection is scoped. Excluding or passing 'NULL' in this field makes the connection global. Beware that once configured this field cannot be modified.</summary>
+  public string? project_id { get; set; } = null;
   /// <summary>Requested JDBC driver version name</summary>
   public string? named_driver_version_requested { get; set; } = null;
   /// <summary>Resolved JDBC driver version (read-only)</summary>
@@ -2605,6 +2565,8 @@ public class DBConnection : SdkModel
   public string? password { get; set; } = null;
   /// <summary>Whether or not the password is present (read-only)</summary>
   public bool? has_password { get; set; } = null;
+  /// <summary>Whether Service Account OAuth authentication is enabled for this connection</summary>
+  public bool? service_account_auth_enabled { get; set; } = null;
   /// <summary>Whether the connection uses OAuth for authentication. (read-only)</summary>
   public bool? uses_oauth { get; set; } = null;
   /// <summary>Whether the connection uses key-pair for authentication.</summary>
@@ -2615,6 +2577,8 @@ public class DBConnection : SdkModel
   public bool? uses_service_auth { get; set; } = null;
   /// <summary>(Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).</summary>
   public string? certificate { get; set; } = null;
+  /// <summary>The name of the user attribute containing the connection certificate.</summary>
+  public string? user_attr_certificate { get; set; } = null;
   /// <summary>(Write-Only) Certificate keyfile type - .json, .p8 or .p12</summary>
   public string? file_type { get; set; } = null;
   /// <summary>Database name</summary>
@@ -2723,6 +2687,8 @@ public class DBConnectionBase : SdkModel
   public Snippet[]? snippets { get; set; } = null;
   /// <summary>True if PDTs are enabled on this connection (read-only)</summary>
   public bool? pdts_enabled { get; set; } = null;
+  /// <summary>ID of the LookML project to which this connection is scoped. Excluding or passing 'NULL' in this field makes the connection global. Beware that once configured this field cannot be modified.</summary>
+  public string? project_id { get; set; } = null;
 }
 
 public class DBConnectionOverride : SdkModel
@@ -2931,6 +2897,8 @@ public class DialectInfoOptions : SdkModel
   public bool? cost_estimate { get; set; } = null;
   /// <summary>Disable this connection. This will prevent any queries from running on this connection. (read-only)</summary>
   public bool? disabled { get; set; } = null;
+  /// <summary>Disable query holding for this connection. (read-only)</summary>
+  public bool? query_holding_disabled { get; set; } = null;
   /// <summary>Can disable query context comments (read-only)</summary>
   public bool? disable_context_comment { get; set; } = null;
   /// <summary>Host is required (read-only)</summary>
@@ -2967,6 +2935,8 @@ public class DialectInfoOptions : SdkModel
   public bool? username_required { get; set; } = null;
   /// <summary>Has support for connection pooling (read-only)</summary>
   public bool? supports_connection_pooling { get; set; } = null;
+  /// <summary>Has user attribute certificate support (read-only)</summary>
+  public bool? user_attribute_certificate { get; set; } = null;
 }
 
 public class DigestEmails : SdkModel
@@ -3017,6 +2987,8 @@ public class EmbedConfig : SdkModel
   public bool? embed_content_navigation { get; set; } = null;
   /// <summary>Is embed content management enabled for this Looker</summary>
   public bool? embed_content_management { get; set; } = null;
+  /// <summary>Default net new visualizations in embedded context to Modern theme (read-only)</summary>
+  public bool? embed_vis_modernization_default { get; set; } = null;
   /// <summary>When true, prohibits the use of Looker login pages in non-Looker iframes. When false, Looker login pages may be used in non-Looker hosted iframes.</summary>
   public bool? strict_sameorigin_for_login { get; set; } = null;
   /// <summary>When true, filters are enabled on embedded Looks</summary>
@@ -3349,20 +3321,6 @@ public enum Format
   vector_tile_region
 }
 
-public class GenericError : SdkModel
-{
-  /// <summary>A URI reference that identifies the problem type (read-only)</summary>
-  public string? type { get; set; } = null;
-  /// <summary>Overview of the error (read-only)</summary>
-  public string? title { get; set; } = null;
-  /// <summary>Detail of the error (read-only)</summary>
-  public string? detail { get; set; } = null;
-  /// <summary>The HTTP status code for the problem (read-only)</summary>
-  public string? status { get; set; } = null;
-  /// <summary>URI reference that identifies the specific occurrence of the problem (read-only)</summary>
-  public string? instance { get; set; } = null;
-}
-
 public class GitBranch : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
@@ -3423,54 +3381,6 @@ public class GitConnectionTestResult : SdkModel
   public string? status { get; set; } = null;
 }
 
-public class GitDiagnosticIssue : SdkModel
-{
-  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
-  public StringDictionary<bool>? can { get; set; } = null;
-  /// <summary>Unique ID of the diagnostic issue. (read-only)</summary>
-  public string? id { get; set; } = null;
-  /// <summary>Parent diagnostic report ID. (read-only)</summary>
-  public string? report_id { get; set; } = null;
-  /// <summary>Target Looker Project ID. (read-only)</summary>
-  public string? project_id { get; set; } = null;
-  /// <summary>Environment scope (developer/production). (read-only)</summary>
-  public string? project_type { get; set; } = null;
-  /// <summary>Git diagnostic issue category. (read-only)</summary>
-  public string? issue_type { get; set; } = null;
-  /// <summary>Version schema. (read-only)</summary>
-  public string? issue_version { get; set; } = null;
-  /// <summary>Current execution status. (read-only)</summary>
-  public string? state { get; set; } = null;
-  /// <summary>Creation timestamp. (read-only)</summary>
-  public DateTime? created_at { get; set; } = null;
-  /// <summary>Last update timestamp. (read-only)</summary>
-  public DateTime? updated_at { get; set; } = null;
-}
-
-public class GitDiagnosticReport : SdkModel
-{
-  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
-  public StringDictionary<bool>? can { get; set; } = null;
-  /// <summary>Unique ID of the git diagnostic report. (read-only)</summary>
-  public string? id { get; set; } = null;
-  /// <summary>Target Looker Project ID. (read-only)</summary>
-  public string? project_id { get; set; } = null;
-  /// <summary>ID of the user initiating the diagnosis. (read-only)</summary>
-  public string? user_id { get; set; } = null;
-  /// <summary>Raw lifecycle state. (read-only)</summary>
-  public string? state { get; set; } = null;
-  /// <summary>Status derived from state. (read-only)</summary>
-  public string? status { get; set; } = null;
-  /// <summary>Creation time. (read-only)</summary>
-  public DateTime? created_at { get; set; } = null;
-  /// <summary>Update time. (read-only)</summary>
-  public DateTime? updated_at { get; set; } = null;
-  /// <summary>Project structure type.</summary>
-  public string? project_type { get; set; } = null;
-  /// <summary>Diagnostic issues associated with this report. (read-only)</summary>
-  public GitDiagnosticIssue[]? issues { get; set; } = null;
-}
-
 public class GitStatus : SdkModel
 {
   /// <summary>Git action: add, delete, etc (read-only)</summary>
@@ -3495,7 +3405,7 @@ public class GoldenQuery : SdkModel
   public string[]? questions { get; set; } = null;
   /// <summary>The Explore URL representing the answer to the question</summary>
   public string? answer { get; set; } = null;
-  /// <summary>Whether this golden question should be utilized by the agent</summary>
+  /// <summary>Whether this golden question should be utilized by the agent (read-only)</summary>
   public bool? is_active { get; set; } = null;
   /// <summary>ID of the user who created the question (read-only)</summary>
   public long? created_by_user_id { get; set; } = null;
@@ -3519,6 +3429,10 @@ public class GoldenQuery : SdkModel
   public string? limit { get; set; } = null;
   /// <summary>Client ID of the associated Looker Query (read-only)</summary>
   public string? client_id { get; set; } = null;
+  /// <summary>Pivots of the associated Looker Query (read-only)</summary>
+  public string[]? pivots { get; set; } = null;
+  /// <summary>Dynamic fields of the associated Looker Query (read-only)</summary>
+  public string? dynamic_fields { get; set; } = null;
 }
 
 public class Group : SdkModel
@@ -3695,6 +3609,26 @@ public class HomepageSection : SdkModel
   public string? description { get; set; } = null;
   /// <summary>ids of the homepage items the user can see in the order they should be displayed (read-only)</summary>
   public string[]? visible_item_order { get; set; } = null;
+}
+
+public class Image : SdkModel
+{
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
+  public StringDictionary<bool>? can { get; set; } = null;
+  /// <summary>Unique Id (read-only)</summary>
+  public string? id { get; set; } = null;
+  /// <summary>Original file name (read-only)</summary>
+  public string? file_name { get; set; } = null;
+  /// <summary>Image format (e.g. PNG, JPG) (read-only)</summary>
+  public string? format { get; set; } = null;
+  /// <summary>Accessibility label</summary>
+  public string? label { get; set; } = null;
+  /// <summary>URL of the image (read-only)</summary>
+  public string? url { get; set; } = null;
+  /// <summary>Creation timestamp (read-only)</summary>
+  public DateTime? created_at { get; set; } = null;
+  /// <summary>Update timestamp (read-only)</summary>
+  public DateTime? updated_at { get; set; } = null;
 }
 
 public class ImportedProject : SdkModel
@@ -4820,54 +4754,6 @@ public class LookmlTestResult : SdkModel
   public bool? success { get; set; } = null;
 }
 
-public class LookMLValidatorError : SdkModel
-{
-  /// <summary>A URI reference that identifies the problem type (read-only)</summary>
-  public string? type { get; set; } = null;
-  /// <summary>Overview of the error (read-only)</summary>
-  public string? title { get; set; } = null;
-  /// <summary>Detail of the error (read-only)</summary>
-  public string? detail { get; set; } = null;
-  /// <summary>The HTTP status code for the problem (read-only)</summary>
-  public string? status { get; set; } = null;
-  /// <summary>URI reference that identifies the specific occurrence of the problem (read-only)</summary>
-  public string? instance { get; set; } = null;
-  /// <summary>LookML model that contains the error (read-only)</summary>
-  public string? model { get; set; } = null;
-  /// <summary>LookML Explore that contains the error (read-only)</summary>
-  public string? explore { get; set; } = null;
-  /// <summary>LookML field that caused the error (read-only)</summary>
-  public string? field_name { get; set; } = null;
-  /// <summary>Message returned by the LookML validator (read-only)</summary>
-  public string? message { get; set; } = null;
-  /// <summary>Severity of the error (warning, error, fatal, info, success) (read-only)</summary>
-  public string? severity { get; set; } = null;
-  /// <summary>Line number of the error in the LookML file (read-only)</summary>
-  public string? line_number { get; set; } = null;
-  /// <summary>URL to the LookML that caused the error (read-only)</summary>
-  public string? lookml_url { get; set; } = null;
-  /// <summary>IDE folder path to the LookML file that caused the error (read-only)</summary>
-  public string? file_path { get; set; } = null;
-}
-
-public class LookMLValidatorErrorItem : SdkModel
-{
-  public LookMLValidatorError? lookml_error { get; set; }
-  public GenericError? generic_error { get; set; }
-}
-
-public class LookMLValidatorResult : SdkModel
-{
-  /// <summary>Name of the validator (lookml) (read-only)</summary>
-  public string? name { get; set; } = null;
-  /// <summary>Status of the validation (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)</summary>
-  public string? status { get; set; } = null;
-  /// <summary>Total number of failed LookML validations (read-only)</summary>
-  public long? error_count { get; set; } = null;
-  /// <summary>Details of the LookML that failed validation (read-only)</summary>
-  public LookMLValidatorErrorItem[]? errors { get; set; } = null;
-}
-
 public class LookModel : SdkModel
 {
   /// <summary>Model Id (read-only)</summary>
@@ -5066,6 +4952,7 @@ public class McpTools : SdkModel
   public McpToolSetting? get_dashboards { get; set; }
   public McpToolSetting? get_dimensions { get; set; }
   public McpToolSetting? get_explores { get; set; }
+  public McpToolSetting? get_field_value_suggestions { get; set; }
   public McpToolSetting? get_filters { get; set; }
   public McpToolSetting? get_looks { get; set; }
   public McpToolSetting? get_measures { get; set; }
@@ -5092,6 +4979,8 @@ public class McpTools : SdkModel
   public McpToolSetting? get_lookml_tests { get; set; }
   public McpToolSetting? run_lookml_tests { get; set; }
   public McpToolSetting? create_view_from_table { get; set; }
+  public McpToolSetting? render_visualization { get; set; }
+  public McpToolSetting? render_dashboard { get; set; }
 }
 
 public class McpToolSetting : SdkModel
@@ -5291,8 +5180,10 @@ public class OauthClientApp : SdkModel
   public StringDictionary<bool>? can { get; set; } = null;
   /// <summary>The globally unique id of this application (read-only)</summary>
   public string? client_guid { get; set; } = null;
-  /// <summary>The uri with which this application will receive an auth code by browser redirect.</summary>
+  /// <summary>(DEPRECATED) The uri with which this application will receive an auth code by browser redirect. (DEPRECATED: Use redirect_uris instead)</summary>
   public string? redirect_uri { get; set; } = null;
+  /// <summary>The authorized uris for which this application will receive an auth code by browser redirect.</summary>
+  public string[]? redirect_uris { get; set; } = null;
   /// <summary>The application's display name</summary>
   public string? display_name { get; set; } = null;
   /// <summary>A description of the application that will be displayed to users</summary>
@@ -5597,6 +5488,112 @@ public class Project : SdkModel
   public string? dependency_status { get; set; } = null;
 }
 
+public class ProjectCISuite : SdkModel
+{
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
+  public StringDictionary<bool>? can { get; set; } = null;
+  /// <summary>ID of the CI suite (read-only)</summary>
+  public string? id { get; set; } = null;
+  /// <summary>Name of the CI suite</summary>
+  public string? name { get; set; } = null;
+  /// <summary>ID of the LookML project (read-only)</summary>
+  public string? project_id { get; set; } = null;
+  /// <summary>Time and date that the CI suite was created (read-only)</summary>
+  public DateTime? created_at { get; set; } = null;
+  /// <summary>Time and date that the CI suite was updated (read-only)</summary>
+  public DateTime? updated_at { get; set; } = null;
+  /// <summary>Whether the CI suite schedule trigger is active</summary>
+  public bool? schedule_trigger_is_enabled { get; set; } = null;
+  /// <summary>Crontab that the CI suite is scheduled to run</summary>
+  public string? schedule_trigger_crontab { get; set; } = null;
+  /// <summary>Timezone for the CI suite schedule</summary>
+  public string? schedule_trigger_timezone { get; set; } = null;
+  /// <summary>Whether alerting is enabled for the CI suite</summary>
+  public bool? alerting_enabled { get; set; } = null;
+  /// <summary>Email addresses to send alerts to</summary>
+  public string[]? alert_email_addresses { get; set; } = null;
+  /// <summary>Whether to alert on failed status</summary>
+  public bool? alert_on_failed_status { get; set; } = null;
+  /// <summary>Whether to alert on error status</summary>
+  public bool? alert_on_error_status { get; set; } = null;
+  /// <summary>Whether to alert on passed status</summary>
+  public bool? alert_on_passed_status { get; set; } = null;
+  /// <summary>Whether to alert on cancelled status</summary>
+  public bool? alert_on_cancelled_status { get; set; } = null;
+  /// <summary>Whether the CI suite change request trigger is active</summary>
+  public bool? change_request_trigger_is_enabled { get; set; } = null;
+  /// <summary>ID of the hook that triggers the CI Suite to run (read-only)</summary>
+  public string? change_request_trigger_hook_id { get; set; } = null;
+  /// <summary>Git branch that should be compared against when the CI suite is run, used when the run is incremental</summary>
+  public string? change_request_trigger_target_branch { get; set; } = null;
+  /// <summary>GUID of the CI suite (read-only)</summary>
+  public string? guid { get; set; } = null;
+  /// <summary>Whether the CI suite dbt Cloud trigger is active</summary>
+  public bool? dbt_cloud_trigger_is_enabled { get; set; } = null;
+  /// <summary>Job ID of the dbt Cloud job</summary>
+  public long? dbt_cloud_trigger_job_id { get; set; } = null;
+  /// <summary>User Attribute ID used for schema substitution</summary>
+  public string? dbt_cloud_trigger_user_attribute_id { get; set; } = null;
+  /// <summary>Webhook ID registered in dbt Cloud (read-only)</summary>
+  public string? dbt_cloud_webhook_id { get; set; } = null;
+  /// <summary>(Write-Only) Webhook secret used to authenticate incoming webhook requests</summary>
+  public string? webhook_secret { get; set; } = null;
+  /// <summary>Whether the CI suite has a webhook secret configured (read-only)</summary>
+  public bool? has_webhook_secret { get; set; } = null;
+  /// <summary>Whether assert validation is enabled for the CI suite</summary>
+  public bool? assert_validator_config_is_enabled { get; set; } = null;
+  /// <summary>Number of tests that should run concurrently during assert validation</summary>
+  public long? assert_validator_config_concurrency { get; set; } = null;
+  /// <summary>Explores that assert validation should run for (model_name/explore_name)</summary>
+  public string[]? assert_validator_config_selectors { get; set; } = null;
+  /// <summary>Explores that should be excluded from assert validation (model_name/explore_name)</summary>
+  public string[]? assert_validator_config_exclusions { get; set; } = null;
+  /// <summary>Whether content validation is enabled for the CI suite</summary>
+  public bool? content_validator_config_is_enabled { get; set; } = null;
+  /// <summary>Whether content validation should ignore personal folders</summary>
+  public bool? content_validator_config_exclude_personal { get; set; } = null;
+  /// <summary>Whether content should validate incrementally</summary>
+  public bool? content_validator_config_incremental { get; set; } = null;
+  /// <summary>Folders whose content should not be validated</summary>
+  public string[]? content_validator_config_exclude_folders { get; set; } = null;
+  /// <summary>Folders whose content should be validated</summary>
+  public string[]? content_validator_config_include_folders { get; set; } = null;
+  /// <summary>Explores whose content should be validated (model_name/explore_name)</summary>
+  public string[]? content_validator_config_selectors { get; set; } = null;
+  /// <summary>Explores that should be excluded from content validation (model_name/explore_name)</summary>
+  public string[]? content_validator_config_exclusions { get; set; } = null;
+  /// <summary>Whether LookML validation is enabled for the CI suite</summary>
+  public bool? lookml_validator_config_is_enabled { get; set; } = null;
+  /// <summary>Severity of the error that the LookML validator should report (warning, error, fatal, info, success)</summary>
+  public string? lookml_validator_config_severity { get; set; } = null;
+  /// <summary>Amount of time after which LookML Validation should stop running</summary>
+  public long? lookml_validator_config_timeout { get; set; } = null;
+  /// <summary>Whether LookML Style Validator is enabled for the CI suite</summary>
+  public bool? style_validator_config_is_enabled { get; set; } = null;
+  /// <summary>Whether LookML Style Validator should run incrementally on changed LookML files only</summary>
+  public bool? style_validator_config_incremental { get; set; } = null;
+  /// <summary>Whether SQL validation is enabled for the CI suite</summary>
+  public bool? sql_validator_config_is_enabled { get; set; } = null;
+  /// <summary>Whether SQL validation should stop after the first failure</summary>
+  public bool? sql_validator_config_fail_fast { get; set; } = null;
+  /// <summary>Whether SQL should validate incrementally</summary>
+  public bool? sql_validator_config_incremental { get; set; } = null;
+  /// <summary>Whether SQL validation should ignore hidden fields</summary>
+  public bool? sql_validator_config_ignore_hidden { get; set; } = null;
+  /// <summary>Number of queries that should run concurrently during SQL validation</summary>
+  public long? sql_validator_config_query_concurrency { get; set; } = null;
+  /// <summary>The max number of rows that should be returned for each query</summary>
+  public long? sql_validator_config_chunk_size { get; set; } = null;
+  /// <summary>Explores whose sql should be validated (model_name/explore_name)</summary>
+  public string[]? sql_validator_config_selectors { get; set; } = null;
+  /// <summary>Explores that should be excluded from SQL validation (model_name/explore_name)</summary>
+  public string[]? sql_validator_config_exclusions { get; set; } = null;
+  /// <summary>Whether the CI suite upstream project imports trigger is active</summary>
+  public bool? upstream_trigger_is_enabled { get; set; } = null;
+  /// <summary>Names of upstream projects subscribed for pull request triggers</summary>
+  public string[]? upstream_projects { get; set; } = null;
+}
+
 public class ProjectError : SdkModel
 {
   /// <summary>A stable token that uniquely identifies this class of error, ignoring parameter values. Error message text may vary due to parameters or localization, but error codes do not. For example, a "File not found" error will have the same error code regardless of the filename in question or the user's display language (read-only)</summary>
@@ -5644,11 +5641,6 @@ public class ProjectFile : SdkModel
   /// <summary>State of editability for the file. (read-only)</summary>
   public bool? editable { get; set; } = null;
   public GitStatus? git_status { get; set; }
-}
-
-public class ProjectRun : SdkModel
-{
-  public Run? run { get; set; }
 }
 
 public class ProjectValidation : SdkModel
@@ -6032,38 +6024,6 @@ public class RoleSearch : SdkModel
   public string? users_url { get; set; } = null;
 }
 
-public class Run : SdkModel
-{
-  /// <summary>ID of the CI run (read-only)</summary>
-  public string? run_id { get; set; } = null;
-  /// <summary>Time and date that the CI run was initiated (read-only)</summary>
-  public DateTime? created_at { get; set; } = null;
-  /// <summary>Time and date that the CI run began executing (read-only)</summary>
-  public DateTime? started_at { get; set; } = null;
-  /// <summary>Time and date that the CI run completed (read-only)</summary>
-  public DateTime? finished_at { get; set; } = null;
-  /// <summary>Git provider URL where you can view the commit status. This is the status URL that you specify when you create a CI suite (read-only)</summary>
-  public string? status_url { get; set; } = null;
-  /// <summary>Status of the CI run (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)</summary>
-  public string? status { get; set; } = null;
-  /// <summary>Git service for CI run (e.g. GitHub) (read-only)</summary>
-  public string? git_service { get; set; } = null;
-  public CIGitState? git_state { get; set; }
-  public RunResult? result { get; set; }
-  public CIScheduleTrigger? schedule { get; set; }
-  /// <summary>Git branch that the CI run compares against during validation, used for incremental runs (read-only)</summary>
-  public string? target_branch { get; set; } = null;
-  /// <summary>Name of the CI suite (read-only)</summary>
-  public string? title { get; set; } = null;
-  /// <summary>Trigger for CI run (unknown, manual, schedule, change_request) (read-only)</summary>
-  public string? trigger { get; set; } = null;
-  public CIChangeRequest? change_request { get; set; }
-  /// <summary>ID of the CI suite (read-only)</summary>
-  public string? suite_id { get; set; } = null;
-  /// <summary>Username of the user who triggered the CI run, if the CI run was manually triggered (read-only)</summary>
-  public string? username { get; set; } = null;
-}
-
 public class RunningQueries : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
@@ -6106,19 +6066,6 @@ public class RunningQueries : SdkModel
   public string? sql { get; set; } = null;
   /// <summary>SQL text of the SQL Interface query as run (read-only)</summary>
   public string? sql_interface_sql { get; set; } = null;
-}
-
-public class RunResult : SdkModel
-{
-  public SqlValidatorResult? sql_result { get; set; }
-  public GenericError? sql_error { get; set; }
-  public AssertValidatorResult? assert_result { get; set; }
-  public GenericError? assert_error { get; set; }
-  public ContentValidatorResult? content_result { get; set; }
-  public GenericError? content_error { get; set; }
-  public LookMLValidatorResult? lookml_result { get; set; }
-  public GenericError? lookml_error { get; set; }
-  public GenericError? generic_error { get; set; }
 }
 
 public class SamlConfig : SdkModel
@@ -6331,6 +6278,8 @@ public class ScheduledPlan : SdkModel
   public bool? long_tables { get; set; } = null;
   /// <summary>Whether or not to add page breaks between tabs</summary>
   public bool? pdf_page_breaks { get; set; } = null;
+  /// <summary>Whether or not to include filters context</summary>
+  public bool? include_filters { get; set; } = null;
   /// <summary>IDs of tabs to render (ID on a UDD and a tab label on lookml dashboards)</summary>
   public string[]? tab_ids { get; set; } = null;
   /// <summary>The pixel width at which we render the inline table visualizations</summary>
@@ -6345,11 +6294,15 @@ public class ScheduledPlan : SdkModel
   public DateTime? updated_at { get; set; } = null;
   /// <summary>Title (read-only)</summary>
   public string? title { get; set; } = null;
+  /// <summary>Title of the underlying content (Dashboard, Look, LookML Dashboard, or Explore) associated with this ScheduledPlan (read-only)</summary>
+  public string? content_title { get; set; } = null;
   public UserPublic? user { get; set; }
   /// <summary>When the ScheduledPlan will next run (null if running once) (read-only)</summary>
   public DateTime? next_run_at { get; set; } = null;
   /// <summary>When the ScheduledPlan was last run (read-only)</summary>
   public DateTime? last_run_at { get; set; } = null;
+  /// <summary>Status of the last run for this ScheduledPlan (read-only)</summary>
+  public string? last_run_status { get; set; } = null;
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
 }
@@ -6376,6 +6329,8 @@ public class ScheduledPlanDestination : SdkModel
   public string? parameters { get; set; } = null;
   /// <summary>(Write-Only) JSON object containing secret parameters for external scheduling. For Amazon S3, this requires a key and value for secret_access_key. For SFTP, this requires a key and value for password.</summary>
   public string? secret_parameters { get; set; } = null;
+  /// <summary>Whether or not to include filters context</summary>
+  public bool? include_filters { get; set; } = null;
   /// <summary>Optional message to be included in scheduled emails</summary>
   public string? message { get; set; } = null;
 }
@@ -6597,6 +6552,8 @@ public class Setting : SdkModel
   public string[]? email_domain_allowlist { get; set; } = null;
   /// <summary>(DEPRECATED) Use embed_config.embed_cookieless_v2 instead. If embed_config.embed_cookieless_v2 is specified, it overrides this value.</summary>
   public bool? embed_cookieless_v2 { get; set; } = null;
+  /// <summary>Default net new visualizations in embedded context to Modern theme</summary>
+  public bool? embed_vis_modernization_default { get; set; } = null;
   /// <summary>True if embedding is enabled https://docs.cloud.google.com/looker/docs/r/looker-core-feature-embed, false otherwise (read-only)</summary>
   public bool? embed_enabled { get; set; } = null;
   public EmbedConfig? embed_config { get; set; }
@@ -6762,68 +6719,6 @@ public class SqlQueryCreate : SdkModel
   public string? sql { get; set; } = null;
   /// <summary>Visualization configuration properties. These properties are typically opaque and differ based on the type of visualization used. There is no specified set of allowed keys. The values can be any type supported by JSON. A "type" key with a string value is often present, and is used by Looker to determine which visualization to present. Visualizations ignore unknown vis_config properties.</summary>
   public StringDictionary<object>? vis_config { get; set; } = null;
-}
-
-public class SqlValidatorError : SdkModel
-{
-  /// <summary>A URI reference that identifies the problem type (read-only)</summary>
-  public string? type { get; set; } = null;
-  /// <summary>Overview of the error (read-only)</summary>
-  public string? title { get; set; } = null;
-  /// <summary>Detail of the error (read-only)</summary>
-  public string? detail { get; set; } = null;
-  /// <summary>The HTTP status code for the problem (read-only)</summary>
-  public string? status { get; set; } = null;
-  /// <summary>URI reference that identifies the specific occurrence of the problem (read-only)</summary>
-  public string? instance { get; set; } = null;
-  /// <summary>LookML model that contains the Explore that failed SQL validation (read-only)</summary>
-  public string? model { get; set; } = null;
-  /// <summary>LookML Explore that failed SQL validation (read-only)</summary>
-  public string? explore { get; set; } = null;
-  /// <summary>Message returned by the SQL validation (read-only)</summary>
-  public string? message { get; set; } = null;
-  /// <summary>URL to the Explore (read-only)</summary>
-  public string? explore_url { get; set; } = null;
-  /// <summary>URL to the LookML that caused the error (read-only)</summary>
-  public string? lookml_url { get; set; } = null;
-  /// <summary>LookML dimension that caused the error (read-only)</summary>
-  public string? dimension { get; set; } = null;
-  /// <summary>Line of the error in the LookML file (read-only)</summary>
-  public string? line_number { get; set; } = null;
-}
-
-public class SqlValidatorErrorItem : SdkModel
-{
-  public SqlValidatorError? sql_error { get; set; }
-  public GenericError? generic_error { get; set; }
-}
-
-public class SqlValidatorResult : SdkModel
-{
-  /// <summary>Name of the validator (sql) (read-only)</summary>
-  public string? name { get; set; } = null;
-  /// <summary>Whether the validation was incremental (read-only)</summary>
-  public bool? incremental { get; set; } = null;
-  /// <summary>Status of the validation (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)</summary>
-  public string? status { get; set; } = null;
-  /// <summary>The results of tested Explores (read-only)</summary>
-  public SqlValidatorTestedExplore[]? result { get; set; } = null;
-}
-
-public class SqlValidatorTestedExplore : SdkModel
-{
-  /// <summary>LookML model that was tested (read-only)</summary>
-  public string? model { get; set; } = null;
-  /// <summary>LookML Explore that was tested (read-only)</summary>
-  public string? explore { get; set; } = null;
-  /// <summary>Status of the validation (unknown, failed, passed, skipped, errored, cancelled, queued, running) (read-only)</summary>
-  public string? status { get; set; } = null;
-  /// <summary>Reason the validation was skipped (read-only)</summary>
-  public string? skip_reason { get; set; } = null;
-  /// <summary>Total number of failed validations (read-only)</summary>
-  public long? error_count { get; set; } = null;
-  /// <summary>Details of the LookML that failed SQL validation (read-only)</summary>
-  public SqlValidatorErrorItem[]? errors { get; set; } = null;
 }
 
 public class SshPublicKey : SdkModel
@@ -7040,6 +6935,12 @@ public class ThemeSettings : SdkModel
 {
   /// <summary>Default background color</summary>
   public string? background_color { get; set; } = null;
+  /// <summary>URL for background image</summary>
+  public string? background_image_url { get; set; } = null;
+  /// <summary>Optional. ID of theme background image.</summary>
+  public string? background_image_id { get; set; } = null;
+  /// <summary>Background image opacity (0.0 to 1.0).</summary>
+  public float? background_opacity { get; set; } = null;
   /// <summary>Base font size for scaling fonts (only supported by legacy dashboards)</summary>
   public string? base_font_size { get; set; } = null;
   /// <summary>Optional. ID of color collection to use with the theme. Use an empty string for none.</summary>
@@ -7248,7 +7149,7 @@ public class UserAttribute : SdkModel
   public string name { get; set; } = "";
   /// <summary>Human-friendly label for user attribute</summary>
   public string label { get; set; } = "";
-  /// <summary>Type of user attribute ("string", "number", "datetime", "yesno", "zipcode", "advanced_filter_string", "advanced_filter_number")</summary>
+  /// <summary>Type of user attribute ("string", "number", "datetime", "yesno", "zipcode", "advanced_filter_string", "advanced_filter_number", "file")</summary>
   public string type { get; set; } = "";
   /// <summary>Default value for when no value is set on the user</summary>
   public string? default_value { get; set; } = null;
@@ -7344,6 +7245,40 @@ public class UserAttributeWithValue : SdkModel
   public string? source { get; set; } = null;
   /// <summary>If this user attribute is hidden, allowed list of destinations to which it may be sent. (read-only)</summary>
   public string? hidden_value_domain_whitelist { get; set; } = null;
+}
+
+public class UserDbConnection : SdkModel
+{
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
+  public StringDictionary<bool>? can { get; set; } = null;
+  /// <summary>ID of the connection (read-only)</summary>
+  public string? id { get; set; } = null;
+  /// <summary>Name of the connection (must match virtual namespace pattern) (read-only)</summary>
+  public string? name { get; set; } = null;
+  /// <summary>ID of the user who owns the connection (read-only)</summary>
+  public long? user_id { get; set; } = null;
+  /// <summary>Database dialect name (read-only)</summary>
+  public string? dialect { get; set; } = null;
+  /// <summary>Authentication type (oauth, service_account, password) (read-only)</summary>
+  public string? auth_type { get; set; } = null;
+  /// <summary>Host name/address of server (read-only)</summary>
+  public string? host { get; set; } = null;
+  /// <summary>Port number on server (read-only)</summary>
+  public string? port { get; set; } = null;
+  /// <summary>Database name (read-only)</summary>
+  public string? database { get; set; } = null;
+  /// <summary>Schema name (read-only)</summary>
+  public string? schema { get; set; } = null;
+  /// <summary>Additional JDBC parameters (read-only)</summary>
+  public string? jdbc_additional_params { get; set; } = null;
+  /// <summary>OAuth application ID (if auth_type is oauth) (read-only)</summary>
+  public long? oauth_application_id { get; set; } = null;
+  /// <summary>Whether this connection is enabled</summary>
+  public bool? enabled { get; set; } = null;
+  /// <summary>When the connection was created (read-only)</summary>
+  public DateTime? created_at { get; set; } = null;
+  /// <summary>When the connection was last updated (read-only)</summary>
+  public DateTime? updated_at { get; set; } = null;
 }
 
 public class UserEmailOnly : SdkModel
@@ -7515,7 +7450,7 @@ public class Workspace : SdkModel
 }
 
 /// Dynamic writeable type for Agent removes:
-/// can, id, created_by_name, created_by_first_name, created_by_last_name, created_by_avatar_url, has_inaccessible_source, golden_queries, created_at, updated_at, content_metadata_id, studio_agent_id
+/// can, id, created_by_name, created_by_first_name, created_by_last_name, created_by_avatar_url, has_inaccessible_source, golden_queries, created_at, updated_at, content_metadata_id, studio_agent_id, is_lookml, lookml_agent_id, lookml_edit_uri
 public class WriteAgent : SdkModel
 {
   /// <summary>User that created the Agent</summary>
@@ -7755,7 +7690,7 @@ public class WriteConversation : SdkModel
   public bool? deleted { get; set; } = null;
   /// <summary>
   /// Dynamic writeable type for Agent removes:
-  /// can, id, created_by_name, created_by_first_name, created_by_last_name, created_by_avatar_url, has_inaccessible_source, golden_queries, created_at, updated_at, content_metadata_id, studio_agent_id
+  /// can, id, created_by_name, created_by_first_name, created_by_last_name, created_by_avatar_url, has_inaccessible_source, golden_queries, created_at, updated_at, content_metadata_id, studio_agent_id, is_lookml, lookml_agent_id, lookml_edit_uri
   /// </summary>
   public WriteAgent? conversation_agent { get; set; }
 }
@@ -7910,6 +7845,8 @@ public class WriteDashboard : SdkModel
   /// <summary>Title color</summary>
   public string? title_color { get; set; } = null;
   public DashboardAppearance? appearance { get; set; }
+  /// <summary>The layout granularity to apply to this dashboard (ie: default or granular)</summary>
+  public string? layout_granularity { get; set; } = null;
   /// <summary>Whether to preserve the desktop layout on mobile viewports. i.e. don't force a single column layout on mobile.</summary>
   public bool? preserve_desktop_layout { get; set; } = null;
   public DashboardDownloadSettings? download_settings { get; set; }
@@ -7932,7 +7869,7 @@ public class WriteDashboardBase : SdkModel
 }
 
 /// Dynamic writeable type for DashboardElement removes:
-/// can, body_text_as_html, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html
+/// can, body_text_as_html, group_id, edit_uri, id, lookml_link_id, note_text_as_html, refresh_interval_to_i, alert_count, title_text_as_html, subtitle_text_as_html, images
 public class WriteDashboardElement : SdkModel
 {
   /// <summary>Text tile body text</summary>
@@ -7995,6 +7932,8 @@ public class WriteDashboardElement : SdkModel
   /// ui_status, user_name, updated_at
   /// </summary>
   public WriteCertification? certification_metadata { get; set; }
+  /// <summary>ID of Dashboard Image</summary>
+  public string? image_id { get; set; } = null;
 }
 
 /// Dynamic writeable type for DashboardFilter removes:
@@ -8077,6 +8016,8 @@ public class WriteDashboardLayoutComponent : SdkModel
   public long? granular_width { get; set; } = null;
   /// <summary>Height (granular layout)</summary>
   public long? granular_height { get; set; } = null;
+  /// <summary>Id of parent Dashboard Layout Component group</summary>
+  public string? group_id { get; set; } = null;
 }
 
 /// Dynamic writeable type for DashboardLookml removes:
@@ -8105,6 +8046,8 @@ public class WriteDBConnection : SdkModel
 {
   /// <summary>Name of the connection. Also used as the unique identifier</summary>
   public string? name { get; set; } = null;
+  /// <summary>ID of the LookML project to which this connection is scoped. Excluding or passing 'NULL' in this field makes the connection global. Beware that once configured this field cannot be modified.</summary>
+  public string? project_id { get; set; } = null;
   /// <summary>Requested JDBC driver version name</summary>
   public string? named_driver_version_requested { get; set; } = null;
   /// <summary>Host name/address of server; or the string 'localhost' in case of a connection over an SSH tunnel.</summary>
@@ -8115,10 +8058,14 @@ public class WriteDBConnection : SdkModel
   public string? username { get; set; } = null;
   /// <summary>(Write-Only) Password for server authentication</summary>
   public string? password { get; set; } = null;
+  /// <summary>Whether Service Account OAuth authentication is enabled for this connection</summary>
+  public bool? service_account_auth_enabled { get; set; } = null;
   /// <summary>Whether the connection uses key-pair for authentication.</summary>
   public bool? uses_key_pair_auth { get; set; } = null;
   /// <summary>(Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).</summary>
   public string? certificate { get; set; } = null;
+  /// <summary>The name of the user attribute containing the connection certificate.</summary>
+  public string? user_attr_certificate { get; set; } = null;
   /// <summary>(Write-Only) Certificate keyfile type - .json, .p8 or .p12</summary>
   public string? file_type { get; set; } = null;
   /// <summary>Database name</summary>
@@ -8253,7 +8200,7 @@ public class WriteDBConnectionOverride : SdkModel
 }
 
 /// Dynamic writeable type for EmbedConfig removes:
-/// permissions, embed_enabled
+/// embed_vis_modernization_default, permissions, embed_enabled
 public class WriteEmbedConfig : SdkModel
 {
   /// <summary>List of domains to allow for embedding</summary>
@@ -8331,24 +8278,14 @@ public class WriteGitBranch : SdkModel
   public string? @ref { get; set; } = null;
 }
 
-/// Dynamic writeable type for GitDiagnosticReport removes:
-/// can, id, project_id, user_id, state, status, created_at, updated_at, issues
-public class WriteGitDiagnosticReport : SdkModel
-{
-  /// <summary>Project structure type.</summary>
-  public string? project_type { get; set; } = null;
-}
-
 /// Dynamic writeable type for GoldenQuery removes:
-/// can, id, query_id, created_by_user_id, last_updated_by_user_id, created_at, last_updated_at, explore, model, fields, filters, sorts, limit, client_id
+/// can, id, query_id, is_active, created_by_user_id, last_updated_by_user_id, created_at, last_updated_at, explore, model, fields, filters, sorts, limit, client_id, pivots, dynamic_fields
 public class WriteGoldenQuery : SdkModel
 {
   /// <summary>Variations of the golden question text</summary>
   public string[]? questions { get; set; } = null;
   /// <summary>The Explore URL representing the answer to the question</summary>
   public string? answer { get; set; } = null;
-  /// <summary>Whether this golden question should be utilized by the agent</summary>
-  public bool? is_active { get; set; } = null;
 }
 
 /// Dynamic writeable type for Group removes:
@@ -8626,6 +8563,11 @@ public class WriteMcpTools : SdkModel
   /// Dynamic writeable type for McpToolSetting removes:
   /// description, category, access_level
   /// </summary>
+  public WriteMcpToolSetting? get_field_value_suggestions { get; set; }
+  /// <summary>
+  /// Dynamic writeable type for McpToolSetting removes:
+  /// description, category, access_level
+  /// </summary>
   public WriteMcpToolSetting? get_filters { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
@@ -8752,6 +8694,16 @@ public class WriteMcpTools : SdkModel
   /// description, category, access_level
   /// </summary>
   public WriteMcpToolSetting? create_view_from_table { get; set; }
+  /// <summary>
+  /// Dynamic writeable type for McpToolSetting removes:
+  /// description, category, access_level
+  /// </summary>
+  public WriteMcpToolSetting? render_visualization { get; set; }
+  /// <summary>
+  /// Dynamic writeable type for McpToolSetting removes:
+  /// description, category, access_level
+  /// </summary>
+  public WriteMcpToolSetting? render_dashboard { get; set; }
 }
 
 /// Dynamic writeable type for McpToolSetting removes:
@@ -8808,8 +8760,10 @@ public class WriteModelSet : SdkModel
 /// can, client_guid, tokens_invalid_before, activated_users
 public class WriteOauthClientApp : SdkModel
 {
-  /// <summary>The uri with which this application will receive an auth code by browser redirect.</summary>
+  /// <summary>(DEPRECATED) The uri with which this application will receive an auth code by browser redirect. (DEPRECATED: Use redirect_uris instead)</summary>
   public string? redirect_uri { get; set; } = null;
+  /// <summary>The authorized uris for which this application will receive an auth code by browser redirect.</summary>
+  public string[]? redirect_uris { get; set; } = null;
   /// <summary>The application's display name</summary>
   public string? display_name { get; set; } = null;
   /// <summary>A description of the application that will be displayed to users</summary>
@@ -8976,6 +8930,96 @@ public class WriteProject : SdkModel
   public string? dependency_status { get; set; } = null;
 }
 
+/// Dynamic writeable type for ProjectCISuite removes:
+/// can, id, project_id, created_at, updated_at, change_request_trigger_hook_id, guid, dbt_cloud_webhook_id, has_webhook_secret
+public class WriteProjectCISuite : SdkModel
+{
+  /// <summary>Name of the CI suite</summary>
+  public string? name { get; set; } = null;
+  /// <summary>Whether the CI suite schedule trigger is active</summary>
+  public bool? schedule_trigger_is_enabled { get; set; } = null;
+  /// <summary>Crontab that the CI suite is scheduled to run</summary>
+  public string? schedule_trigger_crontab { get; set; } = null;
+  /// <summary>Timezone for the CI suite schedule</summary>
+  public string? schedule_trigger_timezone { get; set; } = null;
+  /// <summary>Whether alerting is enabled for the CI suite</summary>
+  public bool? alerting_enabled { get; set; } = null;
+  /// <summary>Email addresses to send alerts to</summary>
+  public string[]? alert_email_addresses { get; set; } = null;
+  /// <summary>Whether to alert on failed status</summary>
+  public bool? alert_on_failed_status { get; set; } = null;
+  /// <summary>Whether to alert on error status</summary>
+  public bool? alert_on_error_status { get; set; } = null;
+  /// <summary>Whether to alert on passed status</summary>
+  public bool? alert_on_passed_status { get; set; } = null;
+  /// <summary>Whether to alert on cancelled status</summary>
+  public bool? alert_on_cancelled_status { get; set; } = null;
+  /// <summary>Whether the CI suite change request trigger is active</summary>
+  public bool? change_request_trigger_is_enabled { get; set; } = null;
+  /// <summary>Git branch that should be compared against when the CI suite is run, used when the run is incremental</summary>
+  public string? change_request_trigger_target_branch { get; set; } = null;
+  /// <summary>Whether the CI suite dbt Cloud trigger is active</summary>
+  public bool? dbt_cloud_trigger_is_enabled { get; set; } = null;
+  /// <summary>Job ID of the dbt Cloud job</summary>
+  public long? dbt_cloud_trigger_job_id { get; set; } = null;
+  /// <summary>User Attribute ID used for schema substitution</summary>
+  public string? dbt_cloud_trigger_user_attribute_id { get; set; } = null;
+  /// <summary>(Write-Only) Webhook secret used to authenticate incoming webhook requests</summary>
+  public string? webhook_secret { get; set; } = null;
+  /// <summary>Whether assert validation is enabled for the CI suite</summary>
+  public bool? assert_validator_config_is_enabled { get; set; } = null;
+  /// <summary>Number of tests that should run concurrently during assert validation</summary>
+  public long? assert_validator_config_concurrency { get; set; } = null;
+  /// <summary>Explores that assert validation should run for (model_name/explore_name)</summary>
+  public string[]? assert_validator_config_selectors { get; set; } = null;
+  /// <summary>Explores that should be excluded from assert validation (model_name/explore_name)</summary>
+  public string[]? assert_validator_config_exclusions { get; set; } = null;
+  /// <summary>Whether content validation is enabled for the CI suite</summary>
+  public bool? content_validator_config_is_enabled { get; set; } = null;
+  /// <summary>Whether content validation should ignore personal folders</summary>
+  public bool? content_validator_config_exclude_personal { get; set; } = null;
+  /// <summary>Whether content should validate incrementally</summary>
+  public bool? content_validator_config_incremental { get; set; } = null;
+  /// <summary>Folders whose content should not be validated</summary>
+  public string[]? content_validator_config_exclude_folders { get; set; } = null;
+  /// <summary>Folders whose content should be validated</summary>
+  public string[]? content_validator_config_include_folders { get; set; } = null;
+  /// <summary>Explores whose content should be validated (model_name/explore_name)</summary>
+  public string[]? content_validator_config_selectors { get; set; } = null;
+  /// <summary>Explores that should be excluded from content validation (model_name/explore_name)</summary>
+  public string[]? content_validator_config_exclusions { get; set; } = null;
+  /// <summary>Whether LookML validation is enabled for the CI suite</summary>
+  public bool? lookml_validator_config_is_enabled { get; set; } = null;
+  /// <summary>Severity of the error that the LookML validator should report (warning, error, fatal, info, success)</summary>
+  public string? lookml_validator_config_severity { get; set; } = null;
+  /// <summary>Amount of time after which LookML Validation should stop running</summary>
+  public long? lookml_validator_config_timeout { get; set; } = null;
+  /// <summary>Whether LookML Style Validator is enabled for the CI suite</summary>
+  public bool? style_validator_config_is_enabled { get; set; } = null;
+  /// <summary>Whether LookML Style Validator should run incrementally on changed LookML files only</summary>
+  public bool? style_validator_config_incremental { get; set; } = null;
+  /// <summary>Whether SQL validation is enabled for the CI suite</summary>
+  public bool? sql_validator_config_is_enabled { get; set; } = null;
+  /// <summary>Whether SQL validation should stop after the first failure</summary>
+  public bool? sql_validator_config_fail_fast { get; set; } = null;
+  /// <summary>Whether SQL should validate incrementally</summary>
+  public bool? sql_validator_config_incremental { get; set; } = null;
+  /// <summary>Whether SQL validation should ignore hidden fields</summary>
+  public bool? sql_validator_config_ignore_hidden { get; set; } = null;
+  /// <summary>Number of queries that should run concurrently during SQL validation</summary>
+  public long? sql_validator_config_query_concurrency { get; set; } = null;
+  /// <summary>The max number of rows that should be returned for each query</summary>
+  public long? sql_validator_config_chunk_size { get; set; } = null;
+  /// <summary>Explores whose sql should be validated (model_name/explore_name)</summary>
+  public string[]? sql_validator_config_selectors { get; set; } = null;
+  /// <summary>Explores that should be excluded from SQL validation (model_name/explore_name)</summary>
+  public string[]? sql_validator_config_exclusions { get; set; } = null;
+  /// <summary>Whether the CI suite upstream project imports trigger is active</summary>
+  public bool? upstream_trigger_is_enabled { get; set; } = null;
+  /// <summary>Names of upstream projects subscribed for pull request triggers</summary>
+  public string[]? upstream_projects { get; set; } = null;
+}
+
 /// Dynamic writeable type for Query removes:
 /// can, id, slug, share_url, expanded_share_url, url, has_table_calculations
 public class WriteQuery : SdkModel
@@ -9137,7 +9181,7 @@ public class WriteSamlConfig : SdkModel
 }
 
 /// Dynamic writeable type for ScheduledPlan removes:
-/// id, created_at, updated_at, title, user, next_run_at, last_run_at, can
+/// id, created_at, updated_at, title, content_title, user, next_run_at, last_run_at, last_run_status, can
 public class WriteScheduledPlan : SdkModel
 {
   /// <summary>Name of this scheduled plan</summary>
@@ -9200,6 +9244,8 @@ public class WriteScheduledPlan : SdkModel
   public bool? long_tables { get; set; } = null;
   /// <summary>Whether or not to add page breaks between tabs</summary>
   public bool? pdf_page_breaks { get; set; } = null;
+  /// <summary>Whether or not to include filters context</summary>
+  public bool? include_filters { get; set; } = null;
   /// <summary>IDs of tabs to render (ID on a UDD and a tab label on lookml dashboards)</summary>
   public string[]? tab_ids { get; set; } = null;
   /// <summary>The pixel width at which we render the inline table visualizations</summary>
@@ -9271,9 +9317,11 @@ public class WriteSetting : SdkModel
   public string[]? email_domain_allowlist { get; set; } = null;
   /// <summary>(DEPRECATED) Use embed_config.embed_cookieless_v2 instead. If embed_config.embed_cookieless_v2 is specified, it overrides this value.</summary>
   public bool? embed_cookieless_v2 { get; set; } = null;
+  /// <summary>Default net new visualizations in embedded context to Modern theme</summary>
+  public bool? embed_vis_modernization_default { get; set; } = null;
   /// <summary>
   /// Dynamic writeable type for EmbedConfig removes:
-  /// permissions, embed_enabled
+  /// embed_vis_modernization_default, permissions, embed_enabled
   /// </summary>
   public WriteEmbedConfig? embed_config { get; set; }
   /// <summary>Toggle Dashboard Auto Refresh restriction</summary>
@@ -9384,7 +9432,7 @@ public class WriteUserAttribute : SdkModel
   public string name { get; set; } = "";
   /// <summary>Human-friendly label for user attribute</summary>
   public string label { get; set; } = "";
-  /// <summary>Type of user attribute ("string", "number", "datetime", "yesno", "zipcode", "advanced_filter_string", "advanced_filter_number")</summary>
+  /// <summary>Type of user attribute ("string", "number", "datetime", "yesno", "zipcode", "advanced_filter_string", "advanced_filter_number", "file")</summary>
   public string type { get; set; } = "";
   /// <summary>Default value for when no value is set on the user</summary>
   public string? default_value { get; set; } = null;
@@ -9408,6 +9456,14 @@ public class WriteUserAttributeWithValue : SdkModel
 {
   /// <summary>Value of attribute for user</summary>
   public string? value { get; set; } = null;
+}
+
+/// Dynamic writeable type for UserDbConnection removes:
+/// can, id, name, user_id, dialect, auth_type, host, port, database, schema, jdbc_additional_params, oauth_application_id, created_at, updated_at
+public class WriteUserDbConnection : SdkModel
+{
+  /// <summary>Whether this connection is enabled</summary>
+  public bool? enabled { get; set; } = null;
 }
 
 /// Dynamic writeable type for WhitelabelConfiguration removes:

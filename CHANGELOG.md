@@ -1,5 +1,18 @@
 # Changelog
 
+## [26.18.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v26.12.0...sdk-codegen-all-v26.18.0) (2026-10-06)
+
+
+### Features
+
+* generate SDKs for Looker 26.18 ([#1743](https://github.com/looker-open-source/sdk-codegen/issues/1743)) ([0647c97](https://github.com/looker-open-source/sdk-codegen/commit/0647c974496773adddde017052814414c9aeb300))
+
+
+### Bug Fixes
+
+* **api-explorer:** resolve extension routes to absolute Looker host URLs ([#1735](https://github.com/looker-open-source/sdk-codegen/issues/1735)) ([1ea66cc](https://github.com/looker-open-source/sdk-codegen/commit/1ea66ccaa9f986683657e45d7af5938add42c69e))
+* Kotlin login_user method works properly now ([#1744](https://github.com/looker-open-source/sdk-codegen/issues/1744)) ([351ee3f](https://github.com/looker-open-source/sdk-codegen/commit/351ee3f7544315eea0b0e134c67c221275406745))
+
 ## [26.12.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v26.10.0...sdk-codegen-all-v26.12.0) (2026-07-13)
 
 
