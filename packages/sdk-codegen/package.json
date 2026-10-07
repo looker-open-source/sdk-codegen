@@ -1,6 +1,6 @@
 {
   "name": "@looker/sdk-codegen",
-  "version": "26.12.0",
+  "version": "26.18.0",
   "description": "Looker SDK Codegen core",
   "main": "lib/index.js",
   "module": "lib/esm/index.js",
@@ -41,8 +41,8 @@
   },
   "gitHead": "308cb8c61290837e71345a5ef6fb17be9285990e",
   "devDependencies": {
-    "lodash": "4.17.21",
+    "lodash": "4.18.1",
     "@types/blueimp-md5": "2.18.2",
-    "@looker/sdk-codegen-utils": "21.0.35"
+    "@looker/sdk-codegen-utils": "21.0.36"
   }
 }

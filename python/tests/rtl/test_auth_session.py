@@ -38,8 +38,7 @@ def config_file(tmpdir_factory, monkeypatch):
     for setting in ["BASE_URL", "CLIENT_ID", "CLIENT_SECRET"]:
         monkeypatch.delenv(f"LOOKERSDK_{setting}", raising=False)
     filename = tmpdir_factory.mktemp("settings").join("looker.ini")
-    filename.write(
-        """
+    filename.write("""
 [Looker]
 # Base URL for API. Do not include /api/* in the url
 base_url=https://host1.looker.com:19999
@@ -59,8 +58,7 @@ base_url=https://host1.looker.com:19999
 base_url=https://host1.looker.com:19999
 client_id=
 client_secret=
-        """
-    )
+        """)
     return filename
 
 

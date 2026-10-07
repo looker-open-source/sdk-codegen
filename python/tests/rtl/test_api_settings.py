@@ -36,8 +36,7 @@ def config_file(monkeypatch, tmpdir_factory):
     monkeypatch.delenv("LOOKERSDK_CLIENT_ID", raising=False)
     monkeypatch.delenv("LOOKERSDK_CLIENT_SECRET", raising=False)
     filename = tmpdir_factory.mktemp("settings").join("looker.ini")
-    filename.write(
-        """
+    filename.write("""
 [Looker]
 # Base URL for API. Do not include /api/* in the url
 base_url=https://host1.looker.com:19999
@@ -66,8 +65,7 @@ base_url=""
 [QUOTED_CONFIG_VARS]
 base_url="https://host4.looker.com:19999"
 verify_ssl='false'
-"""
-    )
+""")
     return filename
 
 
@@ -193,7 +191,8 @@ def test_configure_with_no_file(monkeypatch):
     monkeypatch.setenv("LOOKERSDK_CLIENT_SECRET", "secret123")
 
     settings = api_settings.ApiSettings(
-        filename="", env_prefix="LOOKERSDK",
+        filename="",
+        env_prefix="LOOKERSDK",
     )  # explicitly setting config_file to falsey
     assert settings.base_url == "https://host1.looker.com:19999"
     data = vars(settings)

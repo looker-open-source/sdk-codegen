@@ -20,8 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-"""Functionality for making authenticated API calls
-"""
+"""Functionality for making authenticated API calls"""
+
 import datetime
 import re
 import urllib.parse
@@ -33,7 +33,6 @@ from looker_sdk.rtl import model
 from looker_sdk.rtl import serialize
 from looker_sdk.rtl import transport
 from looker_sdk.rtl import auth_session
-
 
 TBody = Optional[
     Union[
@@ -90,11 +89,11 @@ class APIMethods:
             try:
                 sdk_error = self.deserialize(data=value, structure=error.SDKError)  # type: ignore
                 helper = error.ErrorDocHelper()
-                (sdk_error.error_doc_url, sdk_error.error_doc) = (
-                    helper.parse_and_lookup(sdk_error.documentation_url)
+                sdk_error.error_doc_url, sdk_error.error_doc = helper.parse_and_lookup(
+                    sdk_error.documentation_url
                 )
                 for e in sdk_error.errors:
-                    (e.error_doc_url, e.error_doc) = helper.parse_and_lookup(
+                    e.error_doc_url, e.error_doc = helper.parse_and_lookup(
                         e.documentation_url
                     )
             except serialize.DeserializeError:
@@ -158,7 +157,9 @@ class APIMethods:
         return self._return(response, structure)
 
     def _get_serialized(
-        self, body: TBody, transport_options: Optional[transport.TransportOptions] = None
+        self,
+        body: TBody,
+        transport_options: Optional[transport.TransportOptions] = None,
     ) -> Optional[bytes]:
         serialized: Optional[bytes]
         if isinstance(body, str):
@@ -194,7 +195,9 @@ class APIMethods:
                 transport_options = {}
             if "headers" not in transport_options:
                 transport_options["headers"] = {}
-            transport_options["headers"]["Content-Type"] = "application/x-www-form-urlencoded"
+            transport_options["headers"][
+                "Content-Type"
+            ] = "application/x-www-form-urlencoded"
         serialized = self._get_serialized(body, transport_options)
         response = self.transport.request(
             transport.HttpMethod.POST,
@@ -221,7 +224,9 @@ class APIMethods:
                 transport_options = {}
             if "headers" not in transport_options:
                 transport_options["headers"] = {}
-            transport_options["headers"]["Content-Type"] = "application/x-www-form-urlencoded"
+            transport_options["headers"][
+                "Content-Type"
+            ] = "application/x-www-form-urlencoded"
         serialized = self._get_serialized(body, transport_options)
         response = self.transport.request(
             transport.HttpMethod.PATCH,
@@ -248,7 +253,9 @@ class APIMethods:
                 transport_options = {}
             if "headers" not in transport_options:
                 transport_options["headers"] = {}
-            transport_options["headers"]["Content-Type"] = "application/x-www-form-urlencoded"
+            transport_options["headers"][
+                "Content-Type"
+            ] = "application/x-www-form-urlencoded"
         serialized = self._get_serialized(body, transport_options)
         response = self.transport.request(
             transport.HttpMethod.PUT,

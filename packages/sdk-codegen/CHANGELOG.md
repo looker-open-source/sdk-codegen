@@ -113,6 +113,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * devDependencies
     * @looker/sdk-codegen-utils bumped from 21.0.33 to 21.0.34
 
+## [26.18.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v26.12.0...sdk-codegen-v26.18.0) (2026-10-06)
+
+
+### Features
+
+* generate SDKs for Looker 26.18 ([#1743](https://github.com/looker-open-source/sdk-codegen/issues/1743)) ([0647c97](https://github.com/looker-open-source/sdk-codegen/commit/0647c974496773adddde017052814414c9aeb300))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen-utils bumped from 21.0.35 to 21.0.36
+
 ## [26.12.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v21.11.4...sdk-codegen-v26.12.0) (2026-07-13)
 
 

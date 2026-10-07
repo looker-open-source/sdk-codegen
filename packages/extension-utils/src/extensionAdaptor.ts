@@ -99,4 +99,13 @@ export class ExtensionAdaptor
       message: componentStack,
     } as ErrorEvent);
   }
+
+  resolveRouteToAbsoluteUrl(pathname: string, search = '') {
+    const { lookerHostData } = this.extensionSdk;
+    if (lookerHostData) {
+      const { hostOrigin, extensionId } = lookerHostData;
+      return `${hostOrigin}/extensions/${extensionId}${pathname}${search}`;
+    }
+    return `${pathname}${search}`;
+  }
 }
