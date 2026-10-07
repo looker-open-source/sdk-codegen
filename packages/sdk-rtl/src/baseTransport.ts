@@ -205,10 +205,10 @@ export abstract class BaseTransport implements ITransport {
       }
     }
 
-    let signaller;
+    let signaller: AbortSignal | undefined;
     if (AbortSignal.timeout) {
       const ms = sdkTimeout(options) * 1000;
-      let signaller = AbortSignal.timeout(ms);
+      signaller = AbortSignal.timeout(ms);
       if ('signal' in options && options.signal) {
         // AbortSignal.any may not be available, tolerate its absence
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -216,7 +216,6 @@ export abstract class BaseTransport implements ITransport {
         if (AbortSignal.any) {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           signaller = AbortSignal.any([options.signal, signaller]);
         } else {
           console.debug(
@@ -224,11 +223,13 @@ export abstract class BaseTransport implements ITransport {
           );
           console.debug({ AbortSignal });
         }
-      } else {
-        console.debug(
-          'AbortSignal.timeout is not defined. Timeout will use default behavior'
-        );
       }
+    } else {
+      // No timeout support on this runtime: still honor a caller-supplied cancel signal
+      signaller = options.signal;
+      console.debug(
+        'AbortSignal.timeout is not defined. Timeout will use default behavior'
+      );
     }
 
     let props: IRequestProps = {
