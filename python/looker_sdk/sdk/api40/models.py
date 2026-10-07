@@ -5849,6 +5849,7 @@ class DBConnection(model.Model):
         p4sa_name: The name of P4SA service account that is associated with the Looker instance
         query_holding_disabled: Disable query holding for this connection.
         service_name: Service name used for connections with TNS enabled
+        disabled: Disable database connection
     """
 
     can: Optional[MutableMapping[str, bool]] = None
@@ -5919,6 +5920,7 @@ class DBConnection(model.Model):
     p4sa_name: Optional[str] = None
     query_holding_disabled: Optional[bool] = None
     service_name: Optional[str] = None
+    disabled: Optional[bool] = None
 
     def __init__(
         self,
@@ -5990,7 +5992,8 @@ class DBConnection(model.Model):
         bq_roles_verified: Optional[bool] = None,
         p4sa_name: Optional[str] = None,
         query_holding_disabled: Optional[bool] = None,
-        service_name: Optional[str] = None
+        service_name: Optional[str] = None,
+        disabled: Optional[bool] = None
     ):
         self.can = can
         self.name = name
@@ -6060,6 +6063,7 @@ class DBConnection(model.Model):
         self.p4sa_name = p4sa_name
         self.query_holding_disabled = query_holding_disabled
         self.service_name = service_name
+        self.disabled = disabled
 
 
 @attr.s(auto_attribs=True, init=False)
@@ -17835,6 +17839,7 @@ class WriteDBConnection(model.Model):
             bq_roles_verified: When true, represents that all project roles have been verified.
             query_holding_disabled: Disable query holding for this connection.
             service_name: Service name used for connections with TNS enabled
+            disabled: Disable database connection
     """
 
     name: Optional[str] = None
@@ -17887,6 +17892,7 @@ class WriteDBConnection(model.Model):
     bq_roles_verified: Optional[bool] = None
     query_holding_disabled: Optional[bool] = None
     service_name: Optional[str] = None
+    disabled: Optional[bool] = None
 
     def __init__(
         self,
@@ -17940,7 +17946,8 @@ class WriteDBConnection(model.Model):
         bq_storage_project_id: Optional[str] = None,
         bq_roles_verified: Optional[bool] = None,
         query_holding_disabled: Optional[bool] = None,
-        service_name: Optional[str] = None
+        service_name: Optional[str] = None,
+        disabled: Optional[bool] = None
     ):
         self.name = name
         self.project_id = project_id
@@ -17992,6 +17999,7 @@ class WriteDBConnection(model.Model):
         self.bq_roles_verified = bq_roles_verified
         self.query_holding_disabled = query_holding_disabled
         self.service_name = service_name
+        self.disabled = disabled
 
 
 @attr.s(auto_attribs=True, init=False)
