@@ -451,9 +451,10 @@ let response = await sdk.ok(sdk.${method.name}(`;
         params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : '';
     }
     const callback = `callback: (response: Response) => Promise<${mapped.name}>,`;
+    const generics = streamer ? '' : this.methodGenericParams(method);
     const header =
       this.commentHeader(indent, headComment) +
-      `${indent}async ${method.name}(` +
+      `${indent}async ${method.name}${generics}(` +
       (streamer ? `\n${bump}${callback}` : '');
     const returns = streamer ? '' : `: ${this.returnType(indent, method)}`;
 
@@ -495,14 +496,52 @@ let response = await sdk.ok(sdk.${method.name}(`;
   }
 
   /**
+   * Methods whose declared response type is a generic `string` but whose
+   * actual runtime shape depends on a `result_format` request parameter
+   * (e.g. 'json' returns a parsed object/array, not a string). The Looker
+   * API spec does not document per-format response shapes, so these are
+   * special-cased here to expose a generic type parameter instead of the
+   * inaccurate hardcoded `string` return type.
+   *
+   * See https://github.com/looker-open-source/sdk-codegen/issues/1703
+   */
+  private static readonly formatDependentStringMethods = new Set([
+    'run_inline_query',
+  ]);
+
+  /**
+   * `true` if this method should expose a `<T = string>` generic instead of
+   * a hardcoded `string` return type
+   */
+  hasGenericResponse(method: IMethod): boolean {
+    return TypescriptGen.formatDependentStringMethods.has(method.name);
+  }
+
+  /**
+   * The generic type parameter declaration to splice between a method's
+   * name and its parameter list, or '' if the method has no generic response
+   */
+  methodGenericParams(method: IMethod): string {
+    return this.hasGenericResponse(method) ? '<T = string>' : '';
+  }
+
+  /**
+   * The name to use for the method's response type, honoring the generic
+   * response override for format-dependent methods
+   */
+  responseTypeName(method: IMethod): string {
+    if (this.hasGenericResponse(method)) return 'T';
+    return this.typeMap(method.type).name;
+  }
+
+  /**
    * Return type declaration for the method
    * @param indent
    * @param method
    */
   returnType(indent: string, method: IMethod): string {
-    const mapped = this.typeMap(method.type);
     const errors = this.errorResponses(indent, method);
-    return `Promise<SDKResponse<${mapped.name}, ${errors}>>`;
+    return `Promise<SDKResponse<${this.responseTypeName(method)}, ${errors}>>`;
   }
 
   customHeaderComment(term: string, method: IMethod, params: string[] = []) {
@@ -650,9 +689,10 @@ ${indent}})`;
       fragment =
         params.length > 0 ? `\n${params.join(this.paramDelimiter)}` : '';
     }
+    const generics = this.methodGenericParams(method);
     const header =
       this.commentHeader(indent, headComment) +
-      `${indent}export const ${method.name} = async (`;
+      `${indent}export const ${method.name} = async ${generics}(`;
     const returns = this.returnType(indent, method);
 
     return (
@@ -836,13 +876,12 @@ ${indent}})`;
 
   httpCall(indent: string, method: IMethod) {
     const request = this.useRequest(method) ? 'request.' : '';
-    const mapped = this.typeMap(method.type);
     const bump = this.bumper(indent);
     const args = this.httpArgs(bump, method);
     const errors = this.errorResponses(indent, method);
     return (
       `${indent}return ${this.it(method.httpMethod.toLowerCase())}` +
-      `<${mapped.name}, ${errors}>(` +
+      `<${this.responseTypeName(method)}, ${errors}>(` +
       this.httpPath(method.endpoint, request) +
       `${args ? ', ' + args : ''})`
     );
