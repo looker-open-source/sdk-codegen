@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [21.6.6](https://github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.6.5...sdk-rtl-v21.6.6) (2026-10-07)
+
+
+### Bug Fixes
+
+* **sdk-rtl:** widen IAccessToken.refresh_token to accept null ([#1736](https://github.com/looker-open-source/sdk-codegen/issues/1736)) ([cbd7f4f](https://github.com/looker-open-source/sdk-codegen/commit/cbd7f4fae159a0eddba8ed110cb0981e0797b27e))
+
 ## [21.6.5](https://github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.6.4...sdk-rtl-v21.6.5) (2026-03-25)
 
 
