@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 442 API models: 343 Spec, 0 Request, 73 Write, 26 Enum
+/// 445 API models: 346 Spec, 0 Request, 73 Write, 26 Enum
 
 #nullable enable
 using System;
@@ -49,6 +49,18 @@ public class AccessToken : SdkModel
   public long? expires_in { get; set; } = null;
   /// <summary>Refresh token which can be used to obtain a new access token (read-only)</summary>
   public string? refresh_token { get; set; } = null;
+}
+
+public class ActiveColorCollections : SdkModel
+{
+  /// <summary>ID of default color collection (read-only)</summary>
+  public string? default_collection_id { get; set; } = null;
+  /// <summary>Legacy default colors if defined (read-only)</summary>
+  public string[]? default_colors { get; set; } = null;
+  /// <summary>Active custom color collections (read-only)</summary>
+  public ColorCollection[]? custom { get; set; } = null;
+  /// <summary>Active standard color collections (read-only)</summary>
+  public ColorCollection[]? standard { get; set; } = null;
 }
 
 public class Agent : SdkModel
@@ -887,7 +899,7 @@ public class CIRun : SdkModel
   public string? run_url { get; set; } = null;
   /// <summary>User attributes for the CI run (read-only)</summary>
   public CIRunUserAttribute[]? user_attributes { get; set; } = null;
-  /// <summary>Map of upstream project names to commit SHAs or git/PR configuration objects pinned for the CI run (read-only)</summary>
+  /// <summary>Map of upstream project names to the commit ref pinned for the CI run (read-only)</summary>
   public StringDictionary<object>? project_imports { get; set; } = null;
 }
 
@@ -2094,6 +2106,8 @@ public class Dashboard : SdkModel
   public string? layout_granularity { get; set; } = null;
   /// <summary>Whether to preserve the desktop layout on mobile viewports. i.e. don't force a single column layout on mobile.</summary>
   public bool? preserve_desktop_layout { get; set; } = null;
+  /// <summary>Dashboard style. Allowed values are "classic", "modern"</summary>
+  public string? style { get; set; } = null;
   public DashboardDownloadSettings? download_settings { get; set; }
 }
 
@@ -2567,6 +2581,8 @@ public class DBConnection : SdkModel
   public bool? has_password { get; set; } = null;
   /// <summary>Whether Service Account OAuth authentication is enabled for this connection</summary>
   public bool? service_account_auth_enabled { get; set; } = null;
+  /// <summary>Service Account OAuth authentication credential rules for this connection</summary>
+  public DBConnectionServiceAccountRule[]? service_account_rules { get; set; } = null;
   /// <summary>Whether the connection uses OAuth for authentication. (read-only)</summary>
   public bool? uses_oauth { get; set; } = null;
   /// <summary>Whether the connection uses key-pair for authentication.</summary>
@@ -2739,6 +2755,30 @@ public class DBConnectionOverride : SdkModel
   public string? pdt_after_connect_statements { get; set; } = null;
   /// <summary>Service name used for connections with TNS enabled</summary>
   public string? pdt_service_name { get; set; } = null;
+}
+
+public class DBConnectionServiceAccountRule : SdkModel
+{
+  /// <summary>Unique ID of the service account rule (read-only)</summary>
+  public string? id { get; set; } = null;
+  /// <summary>ID of the associated database connection (read-only)</summary>
+  public string? db_connection_id { get; set; } = null;
+  /// <summary>Looker group ID associated with this rule (nil for default rule)</summary>
+  public string? group_id { get; set; } = null;
+  /// <summary>Whether this rule is the default fallback rule for the connection</summary>
+  public bool? is_default { get; set; } = null;
+  /// <summary>Evaluation priority order for the rule (lower numbers evaluated first)</summary>
+  public long? priority { get; set; } = null;
+  /// <summary>Type of credential (e.g. GCP_SERVICE_ACCOUNT_KEY_JSON)</summary>
+  public string? credential_type { get; set; } = null;
+  /// <summary>(Write-Only) Base64 or raw JSON service account key for authentication</summary>
+  public string? certificate { get; set; } = null;
+  /// <summary>Whether credentials have been configured for this rule (read-only)</summary>
+  public bool? has_credentials { get; set; } = null;
+  /// <summary>Timestamp when the rule was created (read-only)</summary>
+  public DateTime? created_at { get; set; } = null;
+  /// <summary>Timestamp when the rule was last updated (read-only)</summary>
+  public DateTime? updated_at { get; set; } = null;
 }
 
 public class DBConnectionTestResult : SdkModel
@@ -3197,6 +3237,10 @@ public class ExternalOauthApplication : SdkModel
   public string? tenant_id { get; set; } = null;
   /// <summary>The database dialect for this application.</summary>
   public string? dialect_name { get; set; } = null;
+  /// <summary>The OAuth provider for this application (e.g., 'entra'). Null for standard dialect OAuth.</summary>
+  public string? provider { get; set; } = null;
+  /// <summary>Space-delimited OAuth scopes to request when authorizing users. Required when provider is 'entra': the Snowflake resource application's scope, e.g. 'api://<application-id-uri>/session:role-any' (offline_access is added automatically).</summary>
+  public string? scopes { get; set; } = null;
   /// <summary>Whether this application supports bi-directional data access.</summary>
   public bool? bi_directional_data_access { get; set; } = null;
   /// <summary>Creation time for this application (read-only)</summary>
@@ -4951,6 +4995,7 @@ public class McpTools : SdkModel
   public McpToolSetting? get_connections { get; set; }
   public McpToolSetting? get_dashboards { get; set; }
   public McpToolSetting? get_dimensions { get; set; }
+  public McpToolSetting? get_explore { get; set; }
   public McpToolSetting? get_explores { get; set; }
   public McpToolSetting? get_field_value_suggestions { get; set; }
   public McpToolSetting? get_filters { get; set; }
@@ -5075,6 +5120,8 @@ public class MobileSettings : SdkModel
   public bool? mobile_app_integration { get; set; } = null;
   /// <summary>Specifies feature flag and state relevant to mobile. (read-only)</summary>
   public MobileFeatureFlags[]? mobile_feature_flags { get; set; } = null;
+  /// <summary>Specifies whether enhanced search is enabled on this instance. (read-only)</summary>
+  public bool? enhanced_search_enabled { get; set; } = null;
 }
 
 public class MobileToken : SdkModel
@@ -7061,10 +7108,28 @@ public class UpdateFolder : SdkModel
   public string? parent_id { get; set; } = null;
 }
 
+public class UploadedModel : SdkModel
+{
+  /// <summary>The internal, unique name of the model</summary>
+  public string? model_name { get; set; } = null;
+  /// <summary>The explore name in the model (read-only)</summary>
+  public string? explore { get; set; } = null;
+  /// <summary>The user-desired friendly name for the model</summary>
+  public string? explore_label { get; set; } = null;
+  /// <summary>The original filename provided by the user</summary>
+  public string? uploaded_data_name { get; set; } = null;
+  /// <summary>UNIX timestamp at which this upload was created. (read-only)</summary>
+  public long? created_at { get; set; } = null;
+  /// <summary>Id of the user who created this upload. (read-only)</summary>
+  public long? uploader { get; set; } = null;
+}
+
 public class User : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
   public StringDictionary<bool>? can { get; set; } = null;
+  /// <summary>Evaluated abilities and permissions for UI capability gating. The abilities property is not returned by default. Please explicitly request this attribute if needed via the fields query param. (read-only)</summary>
+  public StringDictionary<object>? abilities { get; set; } = null;
   /// <summary>URL for the avatar image (may be generic) (read-only)</summary>
   public string? avatar_url { get; set; } = null;
   /// <summary>URL for the avatar image (may be generic), does not specify size (read-only)</summary>
@@ -7135,6 +7200,8 @@ public class User : SdkModel
   public bool? is_service_account { get; set; } = null;
   /// <summary>The display name of the service account. This field is omitted for non service account users. (read-only)</summary>
   public string? service_account_name { get; set; } = null;
+  /// <summary>Indicates if this user is an embed user. (read-only)</summary>
+  public bool? is_embed_user { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
   public string? url { get; set; } = null;
 }
@@ -7255,6 +7322,8 @@ public class UserDbConnection : SdkModel
   public string? id { get; set; } = null;
   /// <summary>Name of the connection (must match virtual namespace pattern) (read-only)</summary>
   public string? name { get; set; } = null;
+  /// <summary>User-specified display label for the connection (read-only)</summary>
+  public string? label { get; set; } = null;
   /// <summary>ID of the user who owns the connection (read-only)</summary>
   public long? user_id { get; set; } = null;
   /// <summary>Database dialect name (read-only)</summary>
@@ -7331,6 +7400,10 @@ public class UserPublic : SdkModel
   public string? display_name { get; set; } = null;
   /// <summary>URL for the avatar image (may be generic) (read-only)</summary>
   public string? avatar_url { get; set; } = null;
+  /// <summary>Indicates if this user is a service account. (read-only)</summary>
+  public bool? is_service_account { get; set; } = null;
+  /// <summary>Indicates if this user is an embed user. (read-only)</summary>
+  public bool? is_embed_user { get; set; } = null;
   /// <summary>Link to get this item (read-only)</summary>
   public string? url { get; set; } = null;
 }
@@ -7849,6 +7922,8 @@ public class WriteDashboard : SdkModel
   public string? layout_granularity { get; set; } = null;
   /// <summary>Whether to preserve the desktop layout on mobile viewports. i.e. don't force a single column layout on mobile.</summary>
   public bool? preserve_desktop_layout { get; set; } = null;
+  /// <summary>Dashboard style. Allowed values are "classic", "modern"</summary>
+  public string? style { get; set; } = null;
   public DashboardDownloadSettings? download_settings { get; set; }
 }
 
@@ -8060,6 +8135,8 @@ public class WriteDBConnection : SdkModel
   public string? password { get; set; } = null;
   /// <summary>Whether Service Account OAuth authentication is enabled for this connection</summary>
   public bool? service_account_auth_enabled { get; set; } = null;
+  /// <summary>Service Account OAuth authentication credential rules for this connection</summary>
+  public DBConnectionServiceAccountRule[]? service_account_rules { get; set; } = null;
   /// <summary>Whether the connection uses key-pair for authentication.</summary>
   public bool? uses_key_pair_auth { get; set; } = null;
   /// <summary>(Write-Only) Base64 encoded Certificate body for server authentication (when appropriate for dialect).</summary>
@@ -8254,6 +8331,10 @@ public class WriteExternalOauthApplication : SdkModel
   public string? tenant_id { get; set; } = null;
   /// <summary>The database dialect for this application.</summary>
   public string? dialect_name { get; set; } = null;
+  /// <summary>The OAuth provider for this application (e.g., 'entra'). Null for standard dialect OAuth.</summary>
+  public string? provider { get; set; } = null;
+  /// <summary>Space-delimited OAuth scopes to request when authorizing users. Required when provider is 'entra': the Snowflake resource application's scope, e.g. 'api://<application-id-uri>/session:role-any' (offline_access is added automatically).</summary>
+  public string? scopes { get; set; } = null;
   /// <summary>Whether this application supports bi-directional data access.</summary>
   public bool? bi_directional_data_access { get; set; } = null;
 }
@@ -8554,6 +8635,11 @@ public class WriteMcpTools : SdkModel
   /// description, category, access_level
   /// </summary>
   public WriteMcpToolSetting? get_dimensions { get; set; }
+  /// <summary>
+  /// Dynamic writeable type for McpToolSetting removes:
+  /// description, category, access_level
+  /// </summary>
+  public WriteMcpToolSetting? get_explore { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
   /// description, category, access_level
@@ -9398,7 +9484,7 @@ public class WriteTheme : SdkModel
 }
 
 /// Dynamic writeable type for User removes:
-/// can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, credentials_workforce, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, is_service_account, service_account_name, url
+/// can, abilities, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, credentials_workforce, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, is_service_account, service_account_name, is_embed_user, url
 public class WriteUser : SdkModel
 {
   /// <summary>
@@ -9459,7 +9545,7 @@ public class WriteUserAttributeWithValue : SdkModel
 }
 
 /// Dynamic writeable type for UserDbConnection removes:
-/// can, id, name, user_id, dialect, auth_type, host, port, database, schema, jdbc_additional_params, oauth_application_id, created_at, updated_at
+/// can, id, name, label, user_id, dialect, auth_type, host, port, database, schema, jdbc_additional_params, oauth_application_id, created_at, updated_at
 public class WriteUserDbConnection : SdkModel
 {
   /// <summary>Whether this connection is enabled</summary>

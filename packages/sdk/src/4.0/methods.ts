@@ -25,7 +25,7 @@
  */
 
 /**
- * 529 API methods
+ * 532 API methods
  */
 
 import type {
@@ -44,6 +44,7 @@ import { sdkVersion } from '../constants';
 import type { ILooker40SDK } from './methodsInterface';
 import type {
   IAccessToken,
+  IActiveColorCollections,
   IAgent,
   IAgentLookml,
   IAlert,
@@ -287,6 +288,7 @@ import type {
   ITimezone,
   IUpdateArtifact,
   IUpdateFolder,
+  IUploadedModel,
   IUser,
   IUserAttribute,
   IUserAttributeGroupValue,
@@ -432,7 +434,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async search_alerts(
-    request: IRequestSearchAlerts,
+    request: IRequestSearchAlerts = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IAlert[], IError>> {
     return this.get<IAlert[], IError>(
@@ -635,7 +637,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async alert_notifications(
-    request: IRequestAlertNotifications,
+    request: IRequestAlertNotifications = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IAlertNotifications[], IError>> {
     return this.get<IAlertNotifications[], IError>(
@@ -710,7 +712,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async login(
-    request: IRequestLogin,
+    request: IRequestLogin = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IAccessToken, IError>> {
     return this.post<IAccessToken, IError>(
@@ -819,7 +821,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async artifact_namespaces(
-    request: IRequestArtifactNamespaces,
+    request: IRequestArtifactNamespaces = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IArtifactNamespace[], IError | IValidationError>> {
     return this.get<IArtifactNamespace[], IError | IValidationError>(
@@ -2446,7 +2448,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async search_user_login_lockouts(
-    request: IRequestSearchUserLoginLockouts,
+    request: IRequestSearchUserLoginLockouts = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IUserLoginLockout[], IError>> {
     return this.get<IUserLoginLockout[], IError>(
@@ -2565,7 +2567,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async search_boards(
-    request: IRequestSearchBoards,
+    request: IRequestSearchBoards = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IBoard[], IError>> {
     return this.get<IBoard[], IError>(
@@ -2673,7 +2675,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async all_board_items(
-    request: IRequestAllBoardItems,
+    request: IRequestAllBoardItems = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IBoardItem[], IError>> {
     return this.get<IBoardItem[], IError>(
@@ -2793,7 +2795,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async all_board_sections(
-    request: IRequestAllBoardSections,
+    request: IRequestAllBoardSections = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IBoardSection[], IError>> {
     return this.get<IBoardSection[], IError>(
@@ -3054,6 +3056,25 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
     return this.put<IColorCollection, IError | IValidationError>(
       '/color_collections/default',
       { collection_id },
+      null,
+      options
+    );
+  }
+
+  /**
+   * Get active color collections including default, custom, and standard collections for visualization rendering and theming. Accessible to all authenticated users.
+   *
+   * GET /color_collections/active -> IActiveColorCollections
+   *
+   * @param options one-time API call overrides
+   *
+   */
+  async color_collections_active(
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IActiveColorCollections, IError>> {
+    return this.get<IActiveColorCollections, IError>(
+      '/color_collections/active',
+      null,
       null,
       options
     );
@@ -4034,7 +4055,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async all_external_oauth_applications(
-    request: IRequestAllExternalOauthApplications,
+    request: IRequestAllExternalOauthApplications = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IExternalOauthApplication[], IError>> {
     return this.get<IExternalOauthApplication[], IError>(
@@ -4539,7 +4560,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async search_content_favorites(
-    request: IRequestSearchContentFavorites,
+    request: IRequestSearchContentFavorites = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IContentFavorite[], IError>> {
     return this.get<IContentFavorite[], IError>(
@@ -4844,7 +4865,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async content_summary(
-    request: IRequestContentSummary,
+    request: IRequestContentSummary = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IContentSummary[], IError | IValidationError>> {
     return this.get<IContentSummary[], IError | IValidationError>(
@@ -4911,7 +4932,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async content_validation(
-    request: IRequestContentValidation,
+    request: IRequestContentValidation = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IContentValidation, IError | IValidationError>> {
     return this.get<IContentValidation, IError | IValidationError>(
@@ -4957,7 +4978,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async search_content_views(
-    request: IRequestSearchContentViews,
+    request: IRequestSearchContentViews = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IContentView[], IError>> {
     return this.get<IContentView[], IError>(
@@ -5036,7 +5057,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async search_agents(
-    request: IRequestSearchAgents,
+    request: IRequestSearchAgents = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IAgent[], IError>> {
     return this.get<IAgent[], IError>(
@@ -5386,7 +5407,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async search_conversations(
-    request: IRequestSearchConversations,
+    request: IRequestSearchConversations = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IConversation[], IError>> {
     return this.get<IConversation[], IError>(
@@ -5710,7 +5731,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async search_dashboards(
-    request: IRequestSearchDashboards,
+    request: IRequestSearchDashboards = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IDashboard[], IError>> {
     return this.get<IDashboard[], IError>(
@@ -6000,7 +6021,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async search_lookml_dashboards(
-    request: IRequestSearchLookmlDashboards,
+    request: IRequestSearchLookmlDashboards = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IDashboardLookml, IError>> {
     return this.get<IDashboardLookml, IError>(
@@ -6243,7 +6264,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async search_dashboard_elements(
-    request: IRequestSearchDashboardElements,
+    request: IRequestSearchDashboardElements = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IDashboardElement[], IError>> {
     return this.get<IDashboardElement[], IError>(
@@ -6850,6 +6871,31 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
 
   //#endregion Datagroup: Manage Datagroups
 
+  //#region DataUpload: Data Upload
+
+  /**
+   * ### Upload data for self-service modeling
+   *
+   * Uploads a CSV or Excel file to the specified connection and creates a self-service model.
+   *
+   * POST /self_service_models/upload -> IUploadedModel
+   *
+   * @param options one-time API call overrides
+   *
+   */
+  async upload_data(
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IUploadedModel, IError | IValidationError>> {
+    return this.post<IUploadedModel, IError | IValidationError>(
+      '/self_service_models/upload',
+      null,
+      null,
+      options
+    );
+  }
+
+  //#endregion DataUpload: Data Upload
+
   //#region DerivedTable: View Derived Table graphs
 
   /**
@@ -6984,7 +7030,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async search_folders(
-    request: IRequestSearchFolders,
+    request: IRequestSearchFolders = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IFolder[], IError>> {
     return this.get<IFolder[], IError>(
@@ -7289,7 +7335,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async all_groups(
-    request: IRequestAllGroups,
+    request: IRequestAllGroups = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IGroup[], IError>> {
     return this.get<IGroup[], IError>(
@@ -7366,7 +7412,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async search_groups(
-    request: IRequestSearchGroups,
+    request: IRequestSearchGroups = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IGroup[], IError>> {
     return this.get<IGroup[], IError>(
@@ -7421,7 +7467,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async search_groups_with_roles(
-    request: IRequestSearchGroupsWithRoles,
+    request: IRequestSearchGroupsWithRoles = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IGroupSearch[], IError>> {
     return this.get<IGroupSearch[], IError>(
@@ -7477,7 +7523,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async search_groups_with_hierarchy(
-    request: IRequestSearchGroupsWithHierarchy,
+    request: IRequestSearchGroupsWithHierarchy = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IGroupHierarchy[], IError>> {
     return this.get<IGroupHierarchy[], IError>(
@@ -7983,7 +8029,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async all_integrations(
-    request: IRequestAllIntegrations,
+    request: IRequestAllIntegrations = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IIntegration[], IError>> {
     return this.get<IIntegration[], IError>(
@@ -8218,7 +8264,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async search_looks(
-    request: IRequestSearchLooks,
+    request: IRequestSearchLooks = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ILook[], IError>> {
     return this.get<ILook[], IError>(
@@ -8503,7 +8549,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async all_lookml_models(
-    request: IRequestAllLookmlModels,
+    request: IRequestAllLookmlModels = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ILookmlModel[], IError>> {
     return this.get<ILookmlModel[], IError>(
@@ -11081,7 +11127,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async search_reports(
-    request: IRequestSearchReports,
+    request: IRequestSearchReports = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IReport[], IError>> {
     return this.get<IReport[], IError>(
@@ -11137,7 +11183,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async search_model_sets(
-    request: IRequestSearchModelSets,
+    request: IRequestSearchModelSets = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IModelSet[], IError>> {
     return this.get<IModelSet[], IError>(
@@ -11316,7 +11362,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async search_permission_sets(
-    request: IRequestSearchPermissionSets,
+    request: IRequestSearchPermissionSets = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IPermissionSet[], IError>> {
     return this.get<IPermissionSet[], IError>(
@@ -11462,7 +11508,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async all_roles(
-    request: IRequestAllRoles,
+    request: IRequestAllRoles = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IRole[], IError>> {
     return this.get<IRole[], IError>(
@@ -11531,7 +11577,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async search_roles(
-    request: IRequestSearchRoles,
+    request: IRequestSearchRoles = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IRole[], IError>> {
     return this.get<IRole[], IError>(
@@ -11587,7 +11633,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async search_roles_with_user_count(
-    request: IRequestSearchRolesWithUserCount,
+    request: IRequestSearchRolesWithUserCount = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IRoleSearch[], IError>> {
     return this.get<IRoleSearch[], IError>(
@@ -11936,7 +11982,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async all_scheduled_plans(
-    request: IRequestAllScheduledPlans,
+    request: IRequestAllScheduledPlans = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IScheduledPlan[], IError | IValidationError>> {
     return this.get<IScheduledPlan[], IError | IValidationError>(
@@ -12106,7 +12152,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async search_scheduled_plans(
-    request: IRequestSearchScheduledPlans,
+    request: IRequestSearchScheduledPlans = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IScheduledPlan[], IError | IValidationError>> {
     return this.get<IScheduledPlan[], IError | IValidationError>(
@@ -12645,7 +12691,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async search_themes(
-    request: IRequestSearchThemes,
+    request: IRequestSearchThemes = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ITheme[], IError | IValidationError>> {
     return this.get<ITheme[], IError | IValidationError>(
@@ -12810,7 +12856,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async active_themes(
-    request: IRequestActiveThemes,
+    request: IRequestActiveThemes = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ITheme[], IError | IValidationError>> {
     return this.get<ITheme[], IError | IValidationError>(
@@ -13005,7 +13051,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async search_credentials_email(
-    request: IRequestSearchCredentialsEmail,
+    request: IRequestSearchCredentialsEmail = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ICredentialsEmailSearch[], IError>> {
     return this.get<ICredentialsEmailSearch[], IError>(
@@ -13069,9 +13115,9 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
     body: Partial<IWriteCredentialsEmail>,
     fields?: string,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ICredentialsEmail, IError>> {
+  ): Promise<SDKResponse<ICredentialsEmail, IError | IValidationError>> {
     user_id = encodeParam(user_id);
-    return this.post<ICredentialsEmail, IError>(
+    return this.post<ICredentialsEmail, IError | IValidationError>(
       `/users/${user_id}/credentials_email`,
       { fields },
       body,
@@ -13097,9 +13143,9 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
     body: Partial<IWriteCredentialsEmail>,
     fields?: string,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ICredentialsEmail, IError>> {
+  ): Promise<SDKResponse<ICredentialsEmail, IError | IValidationError>> {
     user_id = encodeParam(user_id);
-    return this.patch<ICredentialsEmail, IError>(
+    return this.patch<ICredentialsEmail, IError | IValidationError>(
       `/users/${user_id}/credentials_email`,
       { fields },
       body,
@@ -13292,6 +13338,52 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
   }
 
   /**
+   * ### OpenID Connect (OIDC) authentication login information for the specified user.
+   *
+   * GET /users/{user_id}/credentials_oidc -> ICredentialsOIDC
+   *
+   * @param user_id Id of user
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  async user_credentials_oidc(
+    user_id: string,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ICredentialsOIDC, IError>> {
+    user_id = encodeParam(user_id);
+    return this.get<ICredentialsOIDC, IError>(
+      `/users/${user_id}/credentials_oidc`,
+      { fields },
+      null,
+      options
+    );
+  }
+
+  /**
+   * ### Delete OpenID Connect (OIDC) authentication login information for the specified user.
+   *
+   * DELETE /users/{user_id}/credentials_oidc -> string
+   *
+   * @param user_id Id of user
+   * @param options one-time API call overrides
+   *
+   */
+  async delete_user_credentials_oidc(
+    user_id: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string, IError>> {
+    user_id = encodeParam(user_id);
+    return this.delete<string, IError>(
+      `/users/${user_id}/credentials_oidc`,
+      null,
+      null,
+      options
+    );
+  }
+
+  /**
    * ### Saml authentication login information for the specified user.
    *
    * GET /users/{user_id}/credentials_saml -> ICredentialsSaml
@@ -13441,7 +13533,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async all_users(
-    request: IRequestAllUsers,
+    request: IRequestAllUsers = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IUser[], IError>> {
     return this.get<IUser[], IError>(
@@ -13522,7 +13614,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async search_users(
-    request: IRequestSearchUsers,
+    request: IRequestSearchUsers = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IUser[], IError>> {
     return this.get<IUser[], IError>(
@@ -13843,52 +13935,6 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
     user_id = encodeParam(user_id);
     return this.delete<string, IError>(
       `/users/${user_id}/credentials_ldap`,
-      null,
-      null,
-      options
-    );
-  }
-
-  /**
-   * ### OpenID Connect (OIDC) authentication login information for the specified user.
-   *
-   * GET /users/{user_id}/credentials_oidc -> ICredentialsOIDC
-   *
-   * @param user_id Id of user
-   * @param fields Requested fields.
-   * @param options one-time API call overrides
-   *
-   */
-  async user_credentials_oidc(
-    user_id: string,
-    fields?: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ICredentialsOIDC, IError>> {
-    user_id = encodeParam(user_id);
-    return this.get<ICredentialsOIDC, IError>(
-      `/users/${user_id}/credentials_oidc`,
-      { fields },
-      null,
-      options
-    );
-  }
-
-  /**
-   * ### OpenID Connect (OIDC) authentication login information for the specified user.
-   *
-   * DELETE /users/{user_id}/credentials_oidc -> string
-   *
-   * @param user_id Id of user
-   * @param options one-time API call overrides
-   *
-   */
-  async delete_user_credentials_oidc(
-    user_id: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<string, IError>> {
-    user_id = encodeParam(user_id);
-    return this.delete<string, IError>(
-      `/users/${user_id}/credentials_oidc`,
       null,
       null,
       options
@@ -14428,7 +14474,7 @@ export class Looker40SDK extends APIMethods implements ILooker40SDK {
    *
    */
   async all_user_attributes(
-    request: IRequestAllUserAttributes,
+    request: IRequestAllUserAttributes = {},
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IUserAttribute[], IError>> {
     return this.get<IUserAttribute[], IError>(

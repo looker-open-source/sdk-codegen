@@ -25,7 +25,7 @@
  */
 
 /**
- * 520 API models: 343 Spec, 78 Request, 73 Write, 26 Enum
+ * 523 API models: 346 Spec, 78 Request, 73 Write, 26 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl';
@@ -51,6 +51,25 @@ export interface IAccessToken {
    * Refresh token which can be used to obtain a new access token (read-only)
    */
   refresh_token?: string | null;
+}
+
+export interface IActiveColorCollections {
+  /**
+   * ID of default color collection (read-only)
+   */
+  default_collection_id?: string | null;
+  /**
+   * Legacy default colors if defined (read-only)
+   */
+  default_colors?: string[] | null;
+  /**
+   * Active custom color collections (read-only)
+   */
+  custom?: IColorCollection[] | null;
+  /**
+   * Active standard color collections (read-only)
+   */
+  standard?: IColorCollection[] | null;
 }
 
 export interface IAgent {
@@ -1427,7 +1446,7 @@ export interface ICIRun {
    */
   user_attributes?: ICIRunUserAttribute[] | null;
   /**
-   * Map of upstream project names to commit SHAs or git/PR configuration objects pinned for the CI run (read-only)
+   * Map of upstream project names to the commit ref pinned for the CI run (read-only)
    */
   project_imports?: IDictionary<any> | null;
 }
@@ -3470,6 +3489,10 @@ export interface IDashboard {
    * Whether to preserve the desktop layout on mobile viewports. i.e. don't force a single column layout on mobile.
    */
   preserve_desktop_layout?: boolean;
+  /**
+   * Dashboard style. Allowed values are "classic", "modern"
+   */
+  style?: string | null;
   download_settings?: IDashboardDownloadSettings;
 }
 
@@ -4283,6 +4306,10 @@ export interface IDBConnection {
    */
   service_account_auth_enabled?: boolean;
   /**
+   * Service Account OAuth authentication credential rules for this connection
+   */
+  service_account_rules?: IDBConnectionServiceAccountRule[] | null;
+  /**
    * Whether the connection uses OAuth for authentication. (read-only)
    */
   uses_oauth?: boolean;
@@ -4614,6 +4641,49 @@ export interface IDBConnectionOverride {
    * Service name used for connections with TNS enabled
    */
   pdt_service_name?: string | null;
+}
+
+export interface IDBConnectionServiceAccountRule {
+  /**
+   * Unique ID of the service account rule (read-only)
+   */
+  id?: string;
+  /**
+   * ID of the associated database connection (read-only)
+   */
+  db_connection_id?: string | null;
+  /**
+   * Looker group ID associated with this rule (nil for default rule)
+   */
+  group_id?: string | null;
+  /**
+   * Whether this rule is the default fallback rule for the connection
+   */
+  is_default?: boolean;
+  /**
+   * Evaluation priority order for the rule (lower numbers evaluated first)
+   */
+  priority?: number | null;
+  /**
+   * Type of credential (e.g. GCP_SERVICE_ACCOUNT_KEY_JSON)
+   */
+  credential_type?: string | null;
+  /**
+   * (Write-Only) Base64 or raw JSON service account key for authentication
+   */
+  certificate?: string | null;
+  /**
+   * Whether credentials have been configured for this rule (read-only)
+   */
+  has_credentials?: boolean;
+  /**
+   * Timestamp when the rule was created (read-only)
+   */
+  created_at?: Date | null;
+  /**
+   * Timestamp when the rule was last updated (read-only)
+   */
+  updated_at?: Date | null;
 }
 
 export interface IDBConnectionTestResult {
@@ -5351,6 +5421,14 @@ export interface IExternalOauthApplication {
    * The database dialect for this application.
    */
   dialect_name?: string | null;
+  /**
+   * The OAuth provider for this application (e.g., 'entra'). Null for standard dialect OAuth.
+   */
+  provider?: string | null;
+  /**
+   * Space-delimited OAuth scopes to request when authorizing users. Required when provider is 'entra': the Snowflake resource application's scope, e.g. 'api://<application-id-uri>/session:role-any' (offline_access is added automatically).
+   */
+  scopes?: string | null;
   /**
    * Whether this application supports bi-directional data access.
    */
@@ -8370,6 +8448,7 @@ export interface IMcpTools {
   get_connections?: IMcpToolSetting;
   get_dashboards?: IMcpToolSetting;
   get_dimensions?: IMcpToolSetting;
+  get_explore?: IMcpToolSetting;
   get_explores?: IMcpToolSetting;
   get_field_value_suggestions?: IMcpToolSetting;
   get_filters?: IMcpToolSetting;
@@ -8553,6 +8632,10 @@ export interface IMobileSettings {
    * Specifies feature flag and state relevant to mobile. (read-only)
    */
   mobile_feature_flags?: IMobileFeatureFlags[] | null;
+  /**
+   * Specifies whether enhanced search is enabled on this instance. (read-only)
+   */
+  enhanced_search_enabled?: boolean;
 }
 
 export interface IMobileToken {
@@ -12554,7 +12637,7 @@ export interface IRequestSearchUsers {
    */
   can_manage_api3_creds?: boolean | null;
   /**
-   * Search for service account users. Send true to get only service accounts, or false to get all other types of users. Availability of this filter is limited to users with permission to view complete user details.
+   * Search for service account users. Send true to get only service accounts, or false to get all other types of users.
    */
   is_service_account?: boolean | null;
 }
@@ -14599,11 +14682,42 @@ export interface IUpdateFolder {
   parent_id?: string;
 }
 
+export interface IUploadedModel {
+  /**
+   * The internal, unique name of the model
+   */
+  model_name?: string | null;
+  /**
+   * The explore name in the model (read-only)
+   */
+  explore?: string | null;
+  /**
+   * The user-desired friendly name for the model
+   */
+  explore_label?: string | null;
+  /**
+   * The original filename provided by the user
+   */
+  uploaded_data_name?: string | null;
+  /**
+   * UNIX timestamp at which this upload was created. (read-only)
+   */
+  created_at?: number | null;
+  /**
+   * Id of the user who created this upload. (read-only)
+   */
+  uploader?: number | null;
+}
+
 export interface IUser {
   /**
    * Operations the current user is able to perform on this object (read-only)
    */
   can?: IDictionary<boolean>;
+  /**
+   * Evaluated abilities and permissions for UI capability gating. The abilities property is not returned by default. Please explicitly request this attribute if needed via the fields query param. (read-only)
+   */
+  abilities?: IDictionary<any> | null;
   /**
    * URL for the avatar image (may be generic) (read-only)
    */
@@ -14736,6 +14850,10 @@ export interface IUser {
    * The display name of the service account. This field is omitted for non service account users. (read-only)
    */
   service_account_name?: string | null;
+  /**
+   * Indicates if this user is an embed user. (read-only)
+   */
+  is_embed_user?: boolean;
   /**
    * Link to get this item (read-only)
    */
@@ -14922,6 +15040,10 @@ export interface IUserDbConnection {
    */
   name?: string | null;
   /**
+   * User-specified display label for the connection (read-only)
+   */
+  label?: string | null;
+  /**
    * ID of the user who owns the connection (read-only)
    */
   user_id?: number | null;
@@ -15053,6 +15175,14 @@ export interface IUserPublic {
    * URL for the avatar image (may be generic) (read-only)
    */
   avatar_url?: string;
+  /**
+   * Indicates if this user is a service account. (read-only)
+   */
+  is_service_account?: boolean;
+  /**
+   * Indicates if this user is an embed user. (read-only)
+   */
+  is_embed_user?: boolean;
   /**
    * Link to get this item (read-only)
    */
@@ -15888,6 +16018,10 @@ export interface IWriteDashboard {
    * Whether to preserve the desktop layout on mobile viewports. i.e. don't force a single column layout on mobile.
    */
   preserve_desktop_layout?: boolean;
+  /**
+   * Dashboard style. Allowed values are "classic", "modern"
+   */
+  style?: string | null;
   download_settings?: IDashboardDownloadSettings | null;
 }
 
@@ -16239,6 +16373,10 @@ export interface IWriteDBConnection {
    * Whether Service Account OAuth authentication is enabled for this connection
    */
   service_account_auth_enabled?: boolean;
+  /**
+   * Service Account OAuth authentication credential rules for this connection
+   */
+  service_account_rules?: IDBConnectionServiceAccountRule[] | null;
   /**
    * Whether the connection uses key-pair for authentication.
    */
@@ -16600,6 +16738,14 @@ export interface IWriteExternalOauthApplication {
    * The database dialect for this application.
    */
   dialect_name?: string | null;
+  /**
+   * The OAuth provider for this application (e.g., 'entra'). Null for standard dialect OAuth.
+   */
+  provider?: string | null;
+  /**
+   * Space-delimited OAuth scopes to request when authorizing users. Required when provider is 'entra': the Snowflake resource application's scope, e.g. 'api://<application-id-uri>/session:role-any' (offline_access is added automatically).
+   */
+  scopes?: string | null;
   /**
    * Whether this application supports bi-directional data access.
    */
@@ -17046,6 +17192,11 @@ export interface IWriteMcpTools {
    * description, category, access_level
    */
   get_dimensions?: IWriteMcpToolSetting | null;
+  /**
+   * Dynamic writeable type for McpToolSetting removes:
+   * description, category, access_level
+   */
+  get_explore?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
    * description, category, access_level
@@ -18427,7 +18578,7 @@ export interface IWriteTheme {
 
 /**
  * Dynamic writeable type for User removes:
- * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, credentials_workforce, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, is_service_account, service_account_name, url
+ * can, abilities, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, credentials_workforce, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, is_service_account, service_account_name, is_embed_user, url
  */
 export interface IWriteUser {
   /**
@@ -18529,7 +18680,7 @@ export interface IWriteUserAttributeWithValue {
 
 /**
  * Dynamic writeable type for UserDbConnection removes:
- * can, id, name, user_id, dialect, auth_type, host, port, database, schema, jdbc_additional_params, oauth_application_id, created_at, updated_at
+ * can, id, name, label, user_id, dialect, auth_type, host, port, database, schema, jdbc_additional_params, oauth_application_id, created_at, updated_at
  */
 export interface IWriteUserDbConnection {
   /**

@@ -437,10 +437,11 @@ let response = await sdk.ok(sdk.${method.name}(`;
       // use the request type that will be generated in models.ts
       // No longer using Partial<T> by default here because required and optional are supposed to be accurate
       // However, for update methods (iow, patch) Partial<T> is still necessary since only the delta gets set
+      const defaultValue = method.requiredParams.length === 0 ? ' = {}' : '';
       fragment =
         method.httpMethod === 'PATCH'
-          ? `request: Partial<I${requestType}>`
-          : `request: I${requestType}`;
+          ? `request: Partial<I${requestType}>${defaultValue}`
+          : `request: I${requestType}${defaultValue}`;
       params.push(fragment);
       fragment = params.join(', ');
     } else {
@@ -637,10 +638,11 @@ ${indent}})`;
       // use the request type that will be generated in models.ts
       // No longer using Partial<T> by default here because required and optional are supposed to be accurate
       // However, for update methods (iow, patch) Partial<T> is still necessary since only the delta gets set
+      const defaultValue = method.requiredParams.length === 0 ? ' = {}' : '';
       fragment =
         method.httpMethod === 'PATCH'
-          ? `request: Partial<I${requestType}>`
-          : `request: I${requestType}`;
+          ? `request: Partial<I${requestType}>${defaultValue}`
+          : `request: I${requestType}${defaultValue}`;
       params.push(fragment);
       fragment = params.join(', ');
     } else {
@@ -679,6 +681,7 @@ ${indent}})`;
   declareInterface(indent: string, method: IMethod): string {
     let sig = this.methodSignature(indent, method).trimRight();
     sig = sig.replace(/^\s*async /gm, '');
+    sig = sig.replace(/request: (Partial<I[^>]+>|I\w+) = \{\}/, 'request?: $1');
     sig = sig.substring(0, sig.length - 2);
     return `${sig}\n`;
   }

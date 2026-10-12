@@ -1242,6 +1242,84 @@ fetch_integration_form(
       const actual = gen.declareInterface(indent, method);
       expect(actual).toEqual(expected);
     });
+
+    it('method with optional request', () => {
+      const method = apiTestModel.methods.active_themes;
+      const expected = `/**
+ * ### Get active themes
+ *
+ * Returns an array of active themes.
+ *
+ * If the \`name\` parameter is specified, it will return an array with one theme if it's active and found.
+ *
+ * The optional \`ts\` parameter can specify a different timestamp than "now."
+ *
+ * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+ *
+ * GET /themes/active -> ITheme[]
+ *
+ * @param request composed interface "IRequestActiveThemes" for complex method parameters
+ * @param options one-time API call overrides
+ *
+ */
+async active_themes(request: IRequestActiveThemes = {}, options?: Partial<ITransportSettings>): Promise<SDKResponse<ITheme[], IError>> {
+  return this.get<ITheme[], IError>('/themes/active', {name: request.name, ts: request.ts, fields: request.fields}, null, options)
+}`;
+      const actual = gen.declareMethod(indent, method);
+      expect(actual).toEqual(expected);
+    });
+
+    it('function with optional request', () => {
+      const method = apiTestModel.methods.active_themes;
+      const expected = `/**
+ * ### Get active themes
+ *
+ * Returns an array of active themes.
+ *
+ * If the \`name\` parameter is specified, it will return an array with one theme if it's active and found.
+ *
+ * The optional \`ts\` parameter can specify a different timestamp than "now."
+ *
+ * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+ *
+ * GET /themes/active -> ITheme[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestActiveThemes" for complex method parameters
+ * @param options one-time API call overrides
+ *
+ */
+export const active_themes = async (sdk: IAPIMethods, request: IRequestActiveThemes = {}, options?: Partial<ITransportSettings>): Promise<SDKResponse<ITheme[], IError>> => {
+  return sdk.get<ITheme[], IError>('/themes/active', {name: request.name, ts: request.ts, fields: request.fields}, null, options)
+}`;
+      const actual = gen.declareFunction(indent, method);
+      expect(actual).toEqual(expected);
+    });
+
+    it('interface with optional request', () => {
+      const method = apiTestModel.methods.active_themes;
+      const expected = `/**
+ * ### Get active themes
+ *
+ * Returns an array of active themes.
+ *
+ * If the \`name\` parameter is specified, it will return an array with one theme if it's active and found.
+ *
+ * The optional \`ts\` parameter can specify a different timestamp than "now."
+ *
+ * **Note**: Custom themes needs to be enabled by Looker. Unless custom themes are enabled, only the automatically generated default theme can be used. Please contact your Account Manager or help.looker.com to update your license for this feature.
+ *
+ * GET /themes/active -> ITheme[]
+ *
+ * @param request composed interface "IRequestActiveThemes" for complex method parameters
+ * @param options one-time API call overrides
+ *
+ */
+active_themes(request?: IRequestActiveThemes, options?: Partial<ITransportSettings>): Promise<SDKResponse<ITheme[], IError>>
+`;
+      const actual = gen.declareInterface(indent, method);
+      expect(actual).toEqual(expected);
+    });
   });
 
   describe('type creation', () => {

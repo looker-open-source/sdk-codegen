@@ -25,7 +25,7 @@
  */
 
 /**
- * 529 API methods
+ * 532 API methods
  */
 
 
@@ -2485,6 +2485,18 @@ open class LookerSDKStream: APIMethods {
     ) -> SDKResponse<Data, SDKError> {
         let result: SDKResponse<Data, SDKError> = self.put("/color_collections/default", 
             ["collection_id": collection_id], nil, options)
+        return result
+    }
+
+    /**
+     * Get active color collections including default, custom, and standard collections for visualization rendering and theming. Accessible to all authenticated users.
+     *
+     * GET /color_collections/active -> ActiveColorCollections
+     */
+    public func color_collections_active(
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.get("/color_collections/active", nil, nil, options)
         return result
     }
 
@@ -6044,6 +6056,24 @@ open class LookerSDKStream: APIMethods {
     ) -> SDKResponse<Data, SDKError> {
         let path_datagroup_id = encodeParam(datagroup_id)
         let result: SDKResponse<Data, SDKError> = self.patch("/datagroups/\(path_datagroup_id)", nil, try! self.encode(body), options)
+        return result
+    }
+
+
+
+    // MARK DataUpload: Data Upload
+
+    /**
+     * ### Upload data for self-service modeling
+     *
+     * Uploads a CSV or Excel file to the specified connection and creates a self-service model.
+     *
+     * POST /self_service_models/upload -> UploadedModel
+     */
+    public func upload_data(
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let result: SDKResponse<Data, SDKError> = self.post("/self_service_models/upload", nil, nil, options)
         return result
     }
 
@@ -12725,6 +12755,45 @@ open class LookerSDKStream: APIMethods {
     }
 
     /**
+     * ### OpenID Connect (OIDC) authentication login information for the specified user.
+     *
+     * GET /users/{user_id}/credentials_oidc -> CredentialsOIDC
+     */
+    public func user_credentials_oidc(
+        /**
+         * @param {String} user_id Id of user
+         */
+        _ user_id: String,
+        /**
+         * @param {String} fields Requested fields.
+         */
+        fields: String? = nil,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let path_user_id = encodeParam(user_id)
+        let result: SDKResponse<Data, SDKError> = self.get("/users/\(path_user_id)/credentials_oidc", 
+            ["fields": fields], nil, options)
+        return result
+    }
+
+    /**
+     * ### Delete OpenID Connect (OIDC) authentication login information for the specified user.
+     *
+     * DELETE /users/{user_id}/credentials_oidc -> String
+     */
+    public func delete_user_credentials_oidc(
+        /**
+         * @param {String} user_id Id of user
+         */
+        _ user_id: String,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<Data, SDKError> {
+        let path_user_id = encodeParam(user_id)
+        let result: SDKResponse<Data, SDKError> = self.delete("/users/\(path_user_id)/credentials_oidc", nil, nil, options)
+        return result
+    }
+
+    /**
      * ### Saml authentication login information for the specified user.
      *
      * GET /users/{user_id}/credentials_saml -> CredentialsSaml
@@ -13021,7 +13090,7 @@ open class LookerSDKStream: APIMethods {
          */
         can_manage_api3_creds: Bool? = nil,
         /**
-         * @param {Bool} is_service_account Search for service account users. Send true to get only service accounts, or false to get all other types of users. Availability of this filter is limited to users with permission to view complete user details.
+         * @param {Bool} is_service_account Search for service account users. Send true to get only service accounts, or false to get all other types of users.
          */
         is_service_account: Bool? = nil,
         options: ITransportSettings? = nil
@@ -13336,45 +13405,6 @@ open class LookerSDKStream: APIMethods {
     ) -> SDKResponse<Data, SDKError> {
         let path_user_id = encodeParam(user_id)
         let result: SDKResponse<Data, SDKError> = self.delete("/users/\(path_user_id)/credentials_ldap", nil, nil, options)
-        return result
-    }
-
-    /**
-     * ### OpenID Connect (OIDC) authentication login information for the specified user.
-     *
-     * GET /users/{user_id}/credentials_oidc -> CredentialsOIDC
-     */
-    public func user_credentials_oidc(
-        /**
-         * @param {String} user_id Id of user
-         */
-        _ user_id: String,
-        /**
-         * @param {String} fields Requested fields.
-         */
-        fields: String? = nil,
-        options: ITransportSettings? = nil
-    ) -> SDKResponse<Data, SDKError> {
-        let path_user_id = encodeParam(user_id)
-        let result: SDKResponse<Data, SDKError> = self.get("/users/\(path_user_id)/credentials_oidc", 
-            ["fields": fields], nil, options)
-        return result
-    }
-
-    /**
-     * ### OpenID Connect (OIDC) authentication login information for the specified user.
-     *
-     * DELETE /users/{user_id}/credentials_oidc -> String
-     */
-    public func delete_user_credentials_oidc(
-        /**
-         * @param {String} user_id Id of user
-         */
-        _ user_id: String,
-        options: ITransportSettings? = nil
-    ) -> SDKResponse<Data, SDKError> {
-        let path_user_id = encodeParam(user_id)
-        let result: SDKResponse<Data, SDKError> = self.delete("/users/\(path_user_id)/credentials_oidc", nil, nil, options)
         return result
     }
 
