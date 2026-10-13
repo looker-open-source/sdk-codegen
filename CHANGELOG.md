@@ -1,5 +1,17 @@
 # Changelog
 
+## [26.20.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v26.18.0...sdk-codegen-all-v26.20.0) (2026-10-13)
+
+
+### Features
+
+* generate SDKs for Looker 26.20 ([#1747](https://github.com/looker-open-source/sdk-codegen/issues/1747)) ([9112808](https://github.com/looker-open-source/sdk-codegen/commit/91128089a074cc92ac75edebccdbf6e32e8f756f))
+
+
+### Bug Fixes
+
+* **sdk-rtl:** widen IAccessToken.refresh_token to accept null ([#1736](https://github.com/looker-open-source/sdk-codegen/issues/1736)) ([cbd7f4f](https://github.com/looker-open-source/sdk-codegen/commit/cbd7f4fae159a0eddba8ed110cb0981e0797b27e))
+
 ## [26.18.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v26.12.0...sdk-codegen-all-v26.18.0) (2026-10-06)
 
 
