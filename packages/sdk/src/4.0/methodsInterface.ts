@@ -25,7 +25,7 @@
  */
 
 /**
- * 529 API methods
+ * 532 API methods
  */
 
 import type {
@@ -41,6 +41,7 @@ import type {
  */
 import type {
   IAccessToken,
+  IActiveColorCollections,
   IAgent,
   IAgentLookml,
   IAlert,
@@ -284,6 +285,7 @@ import type {
   ITimezone,
   IUpdateArtifact,
   IUpdateFolder,
+  IUploadedModel,
   IUser,
   IUserAttribute,
   IUserAttributeGroupValue,
@@ -403,7 +405,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_alerts(
-    request: IRequestSearchAlerts,
+    request?: IRequestSearchAlerts,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IAlert[], IError>>;
 
@@ -546,7 +548,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   alert_notifications(
-    request: IRequestAlertNotifications,
+    request?: IRequestAlertNotifications,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IAlertNotifications[], IError>>;
 
@@ -606,7 +608,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   login(
-    request: IRequestLogin,
+    request?: IRequestLogin,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IAccessToken, IError>>;
 
@@ -688,7 +690,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   artifact_namespaces(
-    request: IRequestArtifactNamespaces,
+    request?: IRequestArtifactNamespaces,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IArtifactNamespace[], IError | IValidationError>>;
 
@@ -1903,7 +1905,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_user_login_lockouts(
-    request: IRequestSearchUserLoginLockouts,
+    request?: IRequestSearchUserLoginLockouts,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IUserLoginLockout[], IError>>;
 
@@ -1986,7 +1988,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_boards(
-    request: IRequestSearchBoards,
+    request?: IRequestSearchBoards,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IBoard[], IError>>;
 
@@ -2048,7 +2050,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   all_board_items(
-    request: IRequestAllBoardItems,
+    request?: IRequestAllBoardItems,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IBoardItem[], IError>>;
 
@@ -2126,7 +2128,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   all_board_sections(
-    request: IRequestAllBoardSections,
+    request?: IRequestAllBoardSections,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IBoardSection[], IError>>;
 
@@ -2311,6 +2313,18 @@ export interface ILooker40SDK extends IAPIMethods {
     collection_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IColorCollection, IError | IValidationError>>;
+
+  /**
+   * Get active color collections including default, custom, and standard collections for visualization rendering and theming. Accessible to all authenticated users.
+   *
+   * GET /color_collections/active -> IActiveColorCollections
+   *
+   * @param options one-time API call overrides
+   *
+   */
+  color_collections_active(
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IActiveColorCollections, IError>>;
 
   /**
    * ### Get a Color Collection by ID
@@ -3007,7 +3021,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   all_external_oauth_applications(
-    request: IRequestAllExternalOauthApplications,
+    request?: IRequestAllExternalOauthApplications,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IExternalOauthApplication[], IError>>;
 
@@ -3351,7 +3365,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_content_favorites(
-    request: IRequestSearchContentFavorites,
+    request?: IRequestSearchContentFavorites,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IContentFavorite[], IError>>;
 
@@ -3544,7 +3558,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   content_summary(
-    request: IRequestContentSummary,
+    request?: IRequestContentSummary,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IContentSummary[], IError | IValidationError>>;
 
@@ -3581,7 +3595,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   content_validation(
-    request: IRequestContentValidation,
+    request?: IRequestContentValidation,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IContentValidation, IError | IValidationError>>;
 
@@ -3616,7 +3630,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_content_views(
-    request: IRequestSearchContentViews,
+    request?: IRequestSearchContentViews,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IContentView[], IError>>;
 
@@ -3665,7 +3679,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_agents(
-    request: IRequestSearchAgents,
+    request?: IRequestSearchAgents,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IAgent[], IError>>;
 
@@ -3905,7 +3919,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_conversations(
-    request: IRequestSearchConversations,
+    request?: IRequestSearchConversations,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IConversation[], IError>>;
 
@@ -4139,7 +4153,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_dashboards(
-    request: IRequestSearchDashboards,
+    request?: IRequestSearchDashboards,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IDashboard[], IError>>;
 
@@ -4343,7 +4357,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_lookml_dashboards(
-    request: IRequestSearchLookmlDashboards,
+    request?: IRequestSearchLookmlDashboards,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IDashboardLookml, IError>>;
 
@@ -4517,7 +4531,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_dashboard_elements(
-    request: IRequestSearchDashboardElements,
+    request?: IRequestSearchDashboardElements,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IDashboardElement[], IError>>;
 
@@ -4919,6 +4933,24 @@ export interface ILooker40SDK extends IAPIMethods {
 
   //#endregion Datagroup: Manage Datagroups
 
+  //#region DataUpload: Data Upload
+
+  /**
+   * ### Upload data for self-service modeling
+   *
+   * Uploads a CSV or Excel file to the specified connection and creates a self-service model.
+   *
+   * POST /self_service_models/upload -> IUploadedModel
+   *
+   * @param options one-time API call overrides
+   *
+   */
+  upload_data(
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IUploadedModel, IError | IValidationError>>;
+
+  //#endregion DataUpload: Data Upload
+
   //#region DerivedTable: View Derived Table graphs
 
   /**
@@ -5007,7 +5039,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_folders(
-    request: IRequestSearchFolders,
+    request?: IRequestSearchFolders,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IFolder[], IError>>;
 
@@ -5198,7 +5230,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   all_groups(
-    request: IRequestAllGroups,
+    request?: IRequestAllGroups,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IGroup[], IError>>;
 
@@ -5251,7 +5283,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_groups(
-    request: IRequestSearchGroups,
+    request?: IRequestSearchGroups,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IGroup[], IError>>;
 
@@ -5288,7 +5320,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_groups_with_roles(
-    request: IRequestSearchGroupsWithRoles,
+    request?: IRequestSearchGroupsWithRoles,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IGroupSearch[], IError>>;
 
@@ -5326,7 +5358,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_groups_with_hierarchy(
-    request: IRequestSearchGroupsWithHierarchy,
+    request?: IRequestSearchGroupsWithHierarchy,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IGroupHierarchy[], IError>>;
 
@@ -5654,7 +5686,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   all_integrations(
-    request: IRequestAllIntegrations,
+    request?: IRequestAllIntegrations,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IIntegration[], IError>>;
 
@@ -5831,7 +5863,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_looks(
-    request: IRequestSearchLooks,
+    request?: IRequestSearchLooks,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ILook[], IError>>;
 
@@ -6020,7 +6052,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   all_lookml_models(
-    request: IRequestAllLookmlModels,
+    request?: IRequestAllLookmlModels,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ILookmlModel[], IError>>;
 
@@ -7831,7 +7863,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_reports(
-    request: IRequestSearchReports,
+    request?: IRequestSearchReports,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IReport[], IError>>;
 
@@ -7870,7 +7902,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_model_sets(
-    request: IRequestSearchModelSets,
+    request?: IRequestSearchModelSets,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IModelSet[], IError>>;
 
@@ -7991,7 +8023,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_permission_sets(
-    request: IRequestSearchPermissionSets,
+    request?: IRequestSearchPermissionSets,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IPermissionSet[], IError>>;
 
@@ -8081,7 +8113,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   all_roles(
-    request: IRequestAllRoles,
+    request?: IRequestAllRoles,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IRole[], IError>>;
 
@@ -8132,7 +8164,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_roles(
-    request: IRequestSearchRoles,
+    request?: IRequestSearchRoles,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IRole[], IError>>;
 
@@ -8170,7 +8202,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_roles_with_user_count(
-    request: IRequestSearchRolesWithUserCount,
+    request?: IRequestSearchRolesWithUserCount,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IRoleSearch[], IError>>;
 
@@ -8417,7 +8449,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   all_scheduled_plans(
-    request: IRequestAllScheduledPlans,
+    request?: IRequestAllScheduledPlans,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IScheduledPlan[], IError | IValidationError>>;
 
@@ -8562,7 +8594,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_scheduled_plans(
-    request: IRequestSearchScheduledPlans,
+    request?: IRequestSearchScheduledPlans,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IScheduledPlan[], IError | IValidationError>>;
 
@@ -8966,7 +8998,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_themes(
-    request: IRequestSearchThemes,
+    request?: IRequestSearchThemes,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ITheme[], IError | IValidationError>>;
 
@@ -9090,7 +9122,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   active_themes(
-    request: IRequestActiveThemes,
+    request?: IRequestActiveThemes,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ITheme[], IError | IValidationError>>;
 
@@ -9235,7 +9267,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_credentials_email(
-    request: IRequestSearchCredentialsEmail,
+    request?: IRequestSearchCredentialsEmail,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ICredentialsEmailSearch[], IError>>;
 
@@ -9275,7 +9307,7 @@ export interface ILooker40SDK extends IAPIMethods {
     body: Partial<IWriteCredentialsEmail>,
     fields?: string,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ICredentialsEmail, IError>>;
+  ): Promise<SDKResponse<ICredentialsEmail, IError | IValidationError>>;
 
   /**
    * ### Email/password login information for the specified user.
@@ -9295,7 +9327,7 @@ export interface ILooker40SDK extends IAPIMethods {
     body: Partial<IWriteCredentialsEmail>,
     fields?: string,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ICredentialsEmail, IError>>;
+  ): Promise<SDKResponse<ICredentialsEmail, IError | IValidationError>>;
 
   /**
    * ### Email/password login information for the specified user.
@@ -9426,6 +9458,36 @@ export interface ILooker40SDK extends IAPIMethods {
   ): Promise<SDKResponse<string, IError>>;
 
   /**
+   * ### OpenID Connect (OIDC) authentication login information for the specified user.
+   *
+   * GET /users/{user_id}/credentials_oidc -> ICredentialsOIDC
+   *
+   * @param user_id Id of user
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  user_credentials_oidc(
+    user_id: string,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ICredentialsOIDC, IError>>;
+
+  /**
+   * ### Delete OpenID Connect (OIDC) authentication login information for the specified user.
+   *
+   * DELETE /users/{user_id}/credentials_oidc -> string
+   *
+   * @param user_id Id of user
+   * @param options one-time API call overrides
+   *
+   */
+  delete_user_credentials_oidc(
+    user_id: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string, IError>>;
+
+  /**
    * ### Saml authentication login information for the specified user.
    *
    * GET /users/{user_id}/credentials_saml -> ICredentialsSaml
@@ -9533,7 +9595,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   all_users(
-    request: IRequestAllUsers,
+    request?: IRequestAllUsers,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IUser[], IError>>;
 
@@ -9592,7 +9654,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_users(
-    request: IRequestSearchUsers,
+    request?: IRequestSearchUsers,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IUser[], IError>>;
 
@@ -9802,36 +9864,6 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   delete_user_credentials_ldap(
-    user_id: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<string, IError>>;
-
-  /**
-   * ### OpenID Connect (OIDC) authentication login information for the specified user.
-   *
-   * GET /users/{user_id}/credentials_oidc -> ICredentialsOIDC
-   *
-   * @param user_id Id of user
-   * @param fields Requested fields.
-   * @param options one-time API call overrides
-   *
-   */
-  user_credentials_oidc(
-    user_id: string,
-    fields?: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ICredentialsOIDC, IError>>;
-
-  /**
-   * ### OpenID Connect (OIDC) authentication login information for the specified user.
-   *
-   * DELETE /users/{user_id}/credentials_oidc -> string
-   *
-   * @param user_id Id of user
-   * @param options one-time API call overrides
-   *
-   */
-  delete_user_credentials_oidc(
     user_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>;
@@ -10202,7 +10234,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   all_user_attributes(
-    request: IRequestAllUserAttributes,
+    request?: IRequestAllUserAttributes,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IUserAttribute[], IError>>;
 

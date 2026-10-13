@@ -25,7 +25,7 @@
  */
 
 /**
- * 529 API methods
+ * 532 API methods
  */
 
 import type {
@@ -43,6 +43,7 @@ import { APIMethods, agentPrefix, encodeParam } from '@looker/sdk-rtl';
 import { sdkVersion } from '../constants';
 import type {
   IAccessToken,
+  IActiveColorCollections,
   IAgent,
   IAgentLookml,
   IAlert,
@@ -285,6 +286,7 @@ import type {
   ITimezone,
   IUpdateArtifact,
   IUpdateFolder,
+  IUploadedModel,
   IUser,
   IUserAttribute,
   IUserAttributeGroupValue,
@@ -441,7 +443,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async search_alerts(
     callback: (response: Response) => Promise<IAlert[]>,
-    request: IRequestSearchAlerts,
+    request: IRequestSearchAlerts = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IAlert[]>(
@@ -677,7 +679,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async alert_notifications(
     callback: (response: Response) => Promise<IAlertNotifications[]>,
-    request: IRequestAlertNotifications,
+    request: IRequestAlertNotifications = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IAlertNotifications[]>(
@@ -760,7 +762,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async login(
     callback: (response: Response) => Promise<IAccessToken>,
-    request: IRequestLogin,
+    request: IRequestLogin = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IAccessToken>(
@@ -890,7 +892,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async artifact_namespaces(
     callback: (response: Response) => Promise<IArtifactNamespace[]>,
-    request: IRequestArtifactNamespaces,
+    request: IRequestArtifactNamespaces = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IArtifactNamespace[]>(
@@ -2752,7 +2754,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async search_user_login_lockouts(
     callback: (response: Response) => Promise<IUserLoginLockout[]>,
-    request: IRequestSearchUserLoginLockouts,
+    request: IRequestSearchUserLoginLockouts = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IUserLoginLockout[]>(
@@ -2892,7 +2894,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async search_boards(
     callback: (response: Response) => Promise<IBoard[]>,
-    request: IRequestSearchBoards,
+    request: IRequestSearchBoards = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IBoard[]>(
@@ -3016,7 +3018,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async all_board_items(
     callback: (response: Response) => Promise<IBoardItem[]>,
-    request: IRequestAllBoardItems,
+    request: IRequestAllBoardItems = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IBoardItem[]>(
@@ -3156,7 +3158,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async all_board_sections(
     callback: (response: Response) => Promise<IBoardSection[]>,
-    request: IRequestAllBoardSections,
+    request: IRequestAllBoardSections = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IBoardSection[]>(
@@ -3459,6 +3461,29 @@ export class Looker40SDKStream extends APIMethods {
       'PUT',
       '/color_collections/default',
       { collection_id },
+      null,
+      options
+    );
+  }
+
+  /**
+   * Get active color collections including default, custom, and standard collections for visualization rendering and theming. Accessible to all authenticated users.
+   *
+   * GET /color_collections/active -> IActiveColorCollections
+   *
+   * @param callback streaming output function
+   * @param options one-time API call overrides
+   *
+   */
+  async color_collections_active(
+    callback: (response: Response) => Promise<IActiveColorCollections>,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<IActiveColorCollections>(
+      callback,
+      'GET',
+      '/color_collections/active',
+      null,
       null,
       options
     );
@@ -4601,7 +4626,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async all_external_oauth_applications(
     callback: (response: Response) => Promise<IExternalOauthApplication[]>,
-    request: IRequestAllExternalOauthApplications,
+    request: IRequestAllExternalOauthApplications = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IExternalOauthApplication[]>(
@@ -5185,7 +5210,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async search_content_favorites(
     callback: (response: Response) => Promise<IContentFavorite[]>,
-    request: IRequestSearchContentFavorites,
+    request: IRequestSearchContentFavorites = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IContentFavorite[]>(
@@ -5538,7 +5563,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async content_summary(
     callback: (response: Response) => Promise<IContentSummary[]>,
-    request: IRequestContentSummary,
+    request: IRequestContentSummary = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IContentSummary[]>(
@@ -5613,7 +5638,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async content_validation(
     callback: (response: Response) => Promise<IContentValidation>,
-    request: IRequestContentValidation,
+    request: IRequestContentValidation = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IContentValidation>(
@@ -5663,7 +5688,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async search_content_views(
     callback: (response: Response) => Promise<IContentView[]>,
-    request: IRequestSearchContentViews,
+    request: IRequestSearchContentViews = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IContentView[]>(
@@ -5750,7 +5775,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async search_agents(
     callback: (response: Response) => Promise<IAgent[]>,
-    request: IRequestSearchAgents,
+    request: IRequestSearchAgents = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IAgent[]>(
@@ -6148,7 +6173,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async search_conversations(
     callback: (response: Response) => Promise<IConversation[]>,
-    request: IRequestSearchConversations,
+    request: IRequestSearchConversations = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IConversation[]>(
@@ -6516,7 +6541,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async search_dashboards(
     callback: (response: Response) => Promise<IDashboard[]>,
-    request: IRequestSearchDashboards,
+    request: IRequestSearchDashboards = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IDashboard[]>(
@@ -6838,7 +6863,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async search_lookml_dashboards(
     callback: (response: Response) => Promise<IDashboardLookml>,
-    request: IRequestSearchLookmlDashboards,
+    request: IRequestSearchLookmlDashboards = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IDashboardLookml>(
@@ -7113,7 +7138,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async search_dashboard_elements(
     callback: (response: Response) => Promise<IDashboardElement[]>,
-    request: IRequestSearchDashboardElements,
+    request: IRequestSearchDashboardElements = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IDashboardElement[]>(
@@ -7825,6 +7850,35 @@ export class Looker40SDKStream extends APIMethods {
 
   //#endregion Datagroup: Manage Datagroups
 
+  //#region DataUpload: Data Upload
+
+  /**
+   * ### Upload data for self-service modeling
+   *
+   * Uploads a CSV or Excel file to the specified connection and creates a self-service model.
+   *
+   * POST /self_service_models/upload -> IUploadedModel
+   *
+   * @param callback streaming output function
+   * @param options one-time API call overrides
+   *
+   */
+  async upload_data(
+    callback: (response: Response) => Promise<IUploadedModel>,
+    options?: Partial<ITransportSettings>
+  ) {
+    return this.authStream<IUploadedModel>(
+      callback,
+      'POST',
+      '/self_service_models/upload',
+      null,
+      null,
+      options
+    );
+  }
+
+  //#endregion DataUpload: Data Upload
+
   //#region DerivedTable: View Derived Table graphs
 
   /**
@@ -7981,7 +8035,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async search_folders(
     callback: (response: Response) => Promise<IFolder[]>,
-    request: IRequestSearchFolders,
+    request: IRequestSearchFolders = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IFolder[]>(
@@ -8334,7 +8388,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async all_groups(
     callback: (response: Response) => Promise<IGroup[]>,
-    request: IRequestAllGroups,
+    request: IRequestAllGroups = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IGroup[]>(
@@ -8419,7 +8473,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async search_groups(
     callback: (response: Response) => Promise<IGroup[]>,
-    request: IRequestSearchGroups,
+    request: IRequestSearchGroups = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IGroup[]>(
@@ -8478,7 +8532,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async search_groups_with_roles(
     callback: (response: Response) => Promise<IGroupSearch[]>,
-    request: IRequestSearchGroupsWithRoles,
+    request: IRequestSearchGroupsWithRoles = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IGroupSearch[]>(
@@ -8538,7 +8592,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async search_groups_with_hierarchy(
     callback: (response: Response) => Promise<IGroupHierarchy[]>,
-    request: IRequestSearchGroupsWithHierarchy,
+    request: IRequestSearchGroupsWithHierarchy = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IGroupHierarchy[]>(
@@ -9122,7 +9176,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async all_integrations(
     callback: (response: Response) => Promise<IIntegration[]>,
-    request: IRequestAllIntegrations,
+    request: IRequestAllIntegrations = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IIntegration[]>(
@@ -9394,7 +9448,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async search_looks(
     callback: (response: Response) => Promise<ILook[]>,
-    request: IRequestSearchLooks,
+    request: IRequestSearchLooks = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ILook[]>(
@@ -9711,7 +9765,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async all_lookml_models(
     callback: (response: Response) => Promise<ILookmlModel[]>,
-    request: IRequestAllLookmlModels,
+    request: IRequestAllLookmlModels = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ILookmlModel[]>(
@@ -12626,7 +12680,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async search_reports(
     callback: (response: Response) => Promise<IReport[]>,
-    request: IRequestSearchReports,
+    request: IRequestSearchReports = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IReport[]>(
@@ -12686,7 +12740,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async search_model_sets(
     callback: (response: Response) => Promise<IModelSet[]>,
-    request: IRequestSearchModelSets,
+    request: IRequestSearchModelSets = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IModelSet[]>(
@@ -12898,7 +12952,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async search_permission_sets(
     callback: (response: Response) => Promise<IPermissionSet[]>,
-    request: IRequestSearchPermissionSets,
+    request: IRequestSearchPermissionSets = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IPermissionSet[]>(
@@ -13068,7 +13122,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async all_roles(
     callback: (response: Response) => Promise<IRole[]>,
-    request: IRequestAllRoles,
+    request: IRequestAllRoles = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IRole[]>(
@@ -13145,7 +13199,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async search_roles(
     callback: (response: Response) => Promise<IRole[]>,
-    request: IRequestSearchRoles,
+    request: IRequestSearchRoles = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IRole[]>(
@@ -13205,7 +13259,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async search_roles_with_user_count(
     callback: (response: Response) => Promise<IRoleSearch[]>,
-    request: IRequestSearchRolesWithUserCount,
+    request: IRequestSearchRolesWithUserCount = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IRoleSearch[]>(
@@ -13607,7 +13661,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async all_scheduled_plans(
     callback: (response: Response) => Promise<IScheduledPlan[]>,
-    request: IRequestAllScheduledPlans,
+    request: IRequestAllScheduledPlans = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IScheduledPlan[]>(
@@ -13789,7 +13843,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async search_scheduled_plans(
     callback: (response: Response) => Promise<IScheduledPlan[]>,
-    request: IRequestSearchScheduledPlans,
+    request: IRequestSearchScheduledPlans = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IScheduledPlan[]>(
@@ -14398,7 +14452,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async search_themes(
     callback: (response: Response) => Promise<ITheme[]>,
-    request: IRequestSearchThemes,
+    request: IRequestSearchThemes = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ITheme[]>(
@@ -14588,7 +14642,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async active_themes(
     callback: (response: Response) => Promise<ITheme[]>,
-    request: IRequestActiveThemes,
+    request: IRequestActiveThemes = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ITheme[]>(
@@ -14807,7 +14861,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async search_credentials_email(
     callback: (response: Response) => Promise<ICredentialsEmailSearch[]>,
-    request: IRequestSearchCredentialsEmail,
+    request: IRequestSearchCredentialsEmail = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<ICredentialsEmailSearch[]>(
@@ -15136,6 +15190,60 @@ export class Looker40SDKStream extends APIMethods {
   }
 
   /**
+   * ### OpenID Connect (OIDC) authentication login information for the specified user.
+   *
+   * GET /users/{user_id}/credentials_oidc -> ICredentialsOIDC
+   *
+   * @param callback streaming output function
+   * @param user_id Id of user
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  async user_credentials_oidc(
+    callback: (response: Response) => Promise<ICredentialsOIDC>,
+    user_id: string,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    user_id = encodeParam(user_id);
+    return this.authStream<ICredentialsOIDC>(
+      callback,
+      'GET',
+      `/users/${user_id}/credentials_oidc`,
+      { fields },
+      null,
+      options
+    );
+  }
+
+  /**
+   * ### Delete OpenID Connect (OIDC) authentication login information for the specified user.
+   *
+   * DELETE /users/{user_id}/credentials_oidc -> string
+   *
+   * @param callback streaming output function
+   * @param user_id Id of user
+   * @param options one-time API call overrides
+   *
+   */
+  async delete_user_credentials_oidc(
+    callback: (response: Response) => Promise<string>,
+    user_id: string,
+    options?: Partial<ITransportSettings>
+  ) {
+    user_id = encodeParam(user_id);
+    return this.authStream<string>(
+      callback,
+      'DELETE',
+      `/users/${user_id}/credentials_oidc`,
+      null,
+      null,
+      options
+    );
+  }
+
+  /**
    * ### Saml authentication login information for the specified user.
    *
    * GET /users/{user_id}/credentials_saml -> ICredentialsSaml
@@ -15316,7 +15424,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async all_users(
     callback: (response: Response) => Promise<IUser[]>,
-    request: IRequestAllUsers,
+    request: IRequestAllUsers = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IUser[]>(
@@ -15405,7 +15513,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async search_users(
     callback: (response: Response) => Promise<IUser[]>,
-    request: IRequestSearchUsers,
+    request: IRequestSearchUsers = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IUser[]>(
@@ -15764,60 +15872,6 @@ export class Looker40SDKStream extends APIMethods {
       callback,
       'DELETE',
       `/users/${user_id}/credentials_ldap`,
-      null,
-      null,
-      options
-    );
-  }
-
-  /**
-   * ### OpenID Connect (OIDC) authentication login information for the specified user.
-   *
-   * GET /users/{user_id}/credentials_oidc -> ICredentialsOIDC
-   *
-   * @param callback streaming output function
-   * @param user_id Id of user
-   * @param fields Requested fields.
-   * @param options one-time API call overrides
-   *
-   */
-  async user_credentials_oidc(
-    callback: (response: Response) => Promise<ICredentialsOIDC>,
-    user_id: string,
-    fields?: string,
-    options?: Partial<ITransportSettings>
-  ) {
-    user_id = encodeParam(user_id);
-    return this.authStream<ICredentialsOIDC>(
-      callback,
-      'GET',
-      `/users/${user_id}/credentials_oidc`,
-      { fields },
-      null,
-      options
-    );
-  }
-
-  /**
-   * ### OpenID Connect (OIDC) authentication login information for the specified user.
-   *
-   * DELETE /users/{user_id}/credentials_oidc -> string
-   *
-   * @param callback streaming output function
-   * @param user_id Id of user
-   * @param options one-time API call overrides
-   *
-   */
-  async delete_user_credentials_oidc(
-    callback: (response: Response) => Promise<string>,
-    user_id: string,
-    options?: Partial<ITransportSettings>
-  ) {
-    user_id = encodeParam(user_id);
-    return this.authStream<string>(
-      callback,
-      'DELETE',
-      `/users/${user_id}/credentials_oidc`,
       null,
       null,
       options
@@ -16435,7 +16489,7 @@ export class Looker40SDKStream extends APIMethods {
    */
   async all_user_attributes(
     callback: (response: Response) => Promise<IUserAttribute[]>,
-    request: IRequestAllUserAttributes,
+    request: IRequestAllUserAttributes = {},
     options?: Partial<ITransportSettings>
   ) {
     return this.authStream<IUserAttribute[]>(

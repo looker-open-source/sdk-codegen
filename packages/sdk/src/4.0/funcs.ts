@@ -25,7 +25,7 @@
  */
 
 /**
- * 529 API methods
+ * 532 API methods
  */
 
 import type {
@@ -46,6 +46,7 @@ import { encodeParam, functionalSdk } from '@looker/sdk-rtl';
 import { sdkVersion } from '../constants';
 import type {
   IAccessToken,
+  IActiveColorCollections,
   IAgent,
   IAgentLookml,
   IAlert,
@@ -289,6 +290,7 @@ import type {
   ITimezone,
   IUpdateArtifact,
   IUpdateFolder,
+  IUploadedModel,
   IUser,
   IUserAttribute,
   IUserAttributeGroupValue,
@@ -437,7 +439,7 @@ export const unfollow_alert = async (
  */
 export const search_alerts = async (
   sdk: IAPIMethods,
-  request: IRequestSearchAlerts,
+  request: IRequestSearchAlerts = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IAlert[], IError>> => {
   return sdk.get<IAlert[], IError>(
@@ -649,7 +651,7 @@ export const enqueue_alert = async (
  */
 export const alert_notifications = async (
   sdk: IAPIMethods,
-  request: IRequestAlertNotifications,
+  request: IRequestAlertNotifications = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IAlertNotifications[], IError>> => {
   return sdk.get<IAlertNotifications[], IError>(
@@ -728,7 +730,7 @@ export const read_alert_notification = async (
  */
 export const login = async (
   sdk: IAPIMethods,
-  request: IRequestLogin,
+  request: IRequestLogin = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IAccessToken, IError>> => {
   return sdk.post<IAccessToken, IError>(
@@ -845,7 +847,7 @@ export const artifact_usage = async (
  */
 export const artifact_namespaces = async (
   sdk: IAPIMethods,
-  request: IRequestArtifactNamespaces,
+  request: IRequestArtifactNamespaces = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IArtifactNamespace[], IError | IValidationError>> => {
   return sdk.get<IArtifactNamespace[], IError | IValidationError>(
@@ -2581,7 +2583,7 @@ export const all_user_login_lockouts = async (
  */
 export const search_user_login_lockouts = async (
   sdk: IAPIMethods,
-  request: IRequestSearchUserLoginLockouts,
+  request: IRequestSearchUserLoginLockouts = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUserLoginLockout[], IError>> => {
   return sdk.get<IUserLoginLockout[], IError>(
@@ -2708,7 +2710,7 @@ export const create_board = async (
  */
 export const search_boards = async (
   sdk: IAPIMethods,
-  request: IRequestSearchBoards,
+  request: IRequestSearchBoards = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IBoard[], IError>> => {
   return sdk.get<IBoard[], IError>(
@@ -2819,7 +2821,7 @@ export const delete_board = async (
  */
 export const all_board_items = async (
   sdk: IAPIMethods,
-  request: IRequestAllBoardItems,
+  request: IRequestAllBoardItems = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IBoardItem[], IError>> => {
   return sdk.get<IBoardItem[], IError>(
@@ -2949,7 +2951,7 @@ export const delete_board_item = async (
  */
 export const all_board_sections = async (
   sdk: IAPIMethods,
-  request: IRequestAllBoardSections,
+  request: IRequestAllBoardSections = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IBoardSection[], IError>> => {
   return sdk.get<IBoardSection[], IError>(
@@ -3230,6 +3232,27 @@ export const set_default_color_collection = async (
   return sdk.put<IColorCollection, IError | IValidationError>(
     '/color_collections/default',
     { collection_id },
+    null,
+    options
+  );
+};
+
+/**
+ * Get active color collections including default, custom, and standard collections for visualization rendering and theming. Accessible to all authenticated users.
+ *
+ * GET /color_collections/active -> IActiveColorCollections
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
+ */
+export const color_collections_active = async (
+  sdk: IAPIMethods,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IActiveColorCollections, IError>> => {
+  return sdk.get<IActiveColorCollections, IError>(
+    '/color_collections/active',
+    null,
     null,
     options
   );
@@ -4287,7 +4310,7 @@ export const all_dialect_infos = async (
  */
 export const all_external_oauth_applications = async (
   sdk: IAPIMethods,
-  request: IRequestAllExternalOauthApplications,
+  request: IRequestAllExternalOauthApplications = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IExternalOauthApplication[], IError>> => {
   return sdk.get<IExternalOauthApplication[], IError>(
@@ -4829,7 +4852,7 @@ export const delete_user_db_connection = async (
  */
 export const search_content_favorites = async (
   sdk: IAPIMethods,
-  request: IRequestSearchContentFavorites,
+  request: IRequestSearchContentFavorites = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IContentFavorite[], IError>> => {
   return sdk.get<IContentFavorite[], IError>(
@@ -5158,7 +5181,7 @@ export const search_content = async (
  */
 export const content_summary = async (
   sdk: IAPIMethods,
-  request: IRequestContentSummary,
+  request: IRequestContentSummary = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IContentSummary[], IError | IValidationError>> => {
   return sdk.get<IContentSummary[], IError | IValidationError>(
@@ -5229,7 +5252,7 @@ export const content_thumbnail = async (
  */
 export const content_validation = async (
   sdk: IAPIMethods,
-  request: IRequestContentValidation,
+  request: IRequestContentValidation = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IContentValidation, IError | IValidationError>> => {
   return sdk.get<IContentValidation, IError | IValidationError>(
@@ -5277,7 +5300,7 @@ export const content_validation = async (
  */
 export const search_content_views = async (
   sdk: IAPIMethods,
-  request: IRequestSearchContentViews,
+  request: IRequestSearchContentViews = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IContentView[], IError>> => {
   return sdk.get<IContentView[], IError>(
@@ -5360,7 +5383,7 @@ export const vector_thumbnail = async (
  */
 export const search_agents = async (
   sdk: IAPIMethods,
-  request: IRequestSearchAgents,
+  request: IRequestSearchAgents = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IAgent[], IError>> => {
   return sdk.get<IAgent[], IError>(
@@ -5729,7 +5752,7 @@ export const get_conversation_message_responses = async (
  */
 export const search_conversations = async (
   sdk: IAPIMethods,
-  request: IRequestSearchConversations,
+  request: IRequestSearchConversations = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IConversation[], IError>> => {
   return sdk.get<IConversation[], IError>(
@@ -6075,7 +6098,7 @@ export const create_dashboard = async (
  */
 export const search_dashboards = async (
   sdk: IAPIMethods,
-  request: IRequestSearchDashboards,
+  request: IRequestSearchDashboards = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDashboard[], IError>> => {
   return sdk.get<IDashboard[], IError>(
@@ -6381,7 +6404,7 @@ export const dashboard_aggregate_table_lookml = async (
  */
 export const search_lookml_dashboards = async (
   sdk: IAPIMethods,
-  request: IRequestSearchLookmlDashboards,
+  request: IRequestSearchLookmlDashboards = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDashboardLookml, IError>> => {
   return sdk.get<IDashboardLookml, IError>(
@@ -6640,7 +6663,7 @@ export const update_lookml_certification = async (
  */
 export const search_dashboard_elements = async (
   sdk: IAPIMethods,
-  request: IRequestSearchDashboardElements,
+  request: IRequestSearchDashboardElements = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDashboardElement[], IError>> => {
   return sdk.get<IDashboardElement[], IError>(
@@ -7297,6 +7320,33 @@ export const update_datagroup = async (
 
 //#endregion Datagroup: Manage Datagroups
 
+//#region DataUpload: Data Upload
+
+/**
+ * ### Upload data for self-service modeling
+ *
+ * Uploads a CSV or Excel file to the specified connection and creates a self-service model.
+ *
+ * POST /self_service_models/upload -> IUploadedModel
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
+ */
+export const upload_data = async (
+  sdk: IAPIMethods,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IUploadedModel, IError | IValidationError>> => {
+  return sdk.post<IUploadedModel, IError | IValidationError>(
+    '/self_service_models/upload',
+    null,
+    null,
+    options
+  );
+};
+
+//#endregion DataUpload: Data Upload
+
 //#region DerivedTable: View Derived Table graphs
 
 /**
@@ -7443,7 +7493,7 @@ export const stop_pdt_build = async (
  */
 export const search_folders = async (
   sdk: IAPIMethods,
-  request: IRequestSearchFolders,
+  request: IRequestSearchFolders = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IFolder[], IError>> => {
   return sdk.get<IFolder[], IError>(
@@ -7767,7 +7817,7 @@ export const folder_dashboards = async (
  */
 export const all_groups = async (
   sdk: IAPIMethods,
-  request: IRequestAllGroups,
+  request: IRequestAllGroups = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroup[], IError>> => {
   return sdk.get<IGroup[], IError>(
@@ -7848,7 +7898,7 @@ export const create_group = async (
  */
 export const search_groups = async (
   sdk: IAPIMethods,
-  request: IRequestSearchGroups,
+  request: IRequestSearchGroups = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroup[], IError>> => {
   return sdk.get<IGroup[], IError>(
@@ -7905,7 +7955,7 @@ export const search_groups = async (
  */
 export const search_groups_with_roles = async (
   sdk: IAPIMethods,
-  request: IRequestSearchGroupsWithRoles,
+  request: IRequestSearchGroupsWithRoles = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroupSearch[], IError>> => {
   return sdk.get<IGroupSearch[], IError>(
@@ -7963,7 +8013,7 @@ export const search_groups_with_roles = async (
  */
 export const search_groups_with_hierarchy = async (
   sdk: IAPIMethods,
-  request: IRequestSearchGroupsWithHierarchy,
+  request: IRequestSearchGroupsWithHierarchy = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroupHierarchy[], IError>> => {
   return sdk.get<IGroupHierarchy[], IError>(
@@ -8506,7 +8556,7 @@ export const accept_integration_hub_legal_agreement = async (
  */
 export const all_integrations = async (
   sdk: IAPIMethods,
-  request: IRequestAllIntegrations,
+  request: IRequestAllIntegrations = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IIntegration[], IError>> => {
   return sdk.get<IIntegration[], IError>(
@@ -8754,7 +8804,7 @@ export const create_look = async (
  */
 export const search_looks = async (
   sdk: IAPIMethods,
-  request: IRequestSearchLooks,
+  request: IRequestSearchLooks = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILook[], IError>> => {
   return sdk.get<ILook[], IError>(
@@ -9050,7 +9100,7 @@ export const update_look_certification = async (
  */
 export const all_lookml_models = async (
   sdk: IAPIMethods,
-  request: IRequestAllLookmlModels,
+  request: IRequestAllLookmlModels = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILookmlModel[], IError>> => {
   return sdk.get<ILookmlModel[], IError>(
@@ -11788,7 +11838,7 @@ export const create_dashboard_element_render_task = async (
  */
 export const search_reports = async (
   sdk: IAPIMethods,
-  request: IRequestSearchReports,
+  request: IRequestSearchReports = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IReport[], IError>> => {
   return sdk.get<IReport[], IError>(
@@ -11846,7 +11896,7 @@ export const search_reports = async (
  */
 export const search_model_sets = async (
   sdk: IAPIMethods,
-  request: IRequestSearchModelSets,
+  request: IRequestSearchModelSets = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IModelSet[], IError>> => {
   return sdk.get<IModelSet[], IError>(
@@ -12034,7 +12084,7 @@ export const all_permissions = async (
  */
 export const search_permission_sets = async (
   sdk: IAPIMethods,
-  request: IRequestSearchPermissionSets,
+  request: IRequestSearchPermissionSets = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IPermissionSet[], IError>> => {
   return sdk.get<IPermissionSet[], IError>(
@@ -12192,7 +12242,7 @@ export const create_permission_set = async (
  */
 export const all_roles = async (
   sdk: IAPIMethods,
-  request: IRequestAllRoles,
+  request: IRequestAllRoles = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IRole[], IError>> => {
   return sdk.get<IRole[], IError>(
@@ -12265,7 +12315,7 @@ export const create_role = async (
  */
 export const search_roles = async (
   sdk: IAPIMethods,
-  request: IRequestSearchRoles,
+  request: IRequestSearchRoles = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IRole[], IError>> => {
   return sdk.get<IRole[], IError>(
@@ -12323,7 +12373,7 @@ export const search_roles = async (
  */
 export const search_roles_with_user_count = async (
   sdk: IAPIMethods,
-  request: IRequestSearchRolesWithUserCount,
+  request: IRequestSearchRolesWithUserCount = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IRoleSearch[], IError>> => {
   return sdk.get<IRoleSearch[], IError>(
@@ -12691,7 +12741,7 @@ export const delete_scheduled_plan = async (
  */
 export const all_scheduled_plans = async (
   sdk: IAPIMethods,
-  request: IRequestAllScheduledPlans,
+  request: IRequestAllScheduledPlans = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IScheduledPlan[], IError | IValidationError>> => {
   return sdk.get<IScheduledPlan[], IError | IValidationError>(
@@ -12867,7 +12917,7 @@ export const scheduled_plan_run_once = async (
  */
 export const search_scheduled_plans = async (
   sdk: IAPIMethods,
-  request: IRequestSearchScheduledPlans,
+  request: IRequestSearchScheduledPlans = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IScheduledPlan[], IError | IValidationError>> => {
   return sdk.get<IScheduledPlan[], IError | IValidationError>(
@@ -13436,7 +13486,7 @@ export const create_theme = async (
  */
 export const search_themes = async (
   sdk: IAPIMethods,
-  request: IRequestSearchThemes,
+  request: IRequestSearchThemes = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ITheme[], IError | IValidationError>> => {
   return sdk.get<ITheme[], IError | IValidationError>(
@@ -13611,7 +13661,7 @@ export const set_default_theme_by_type = async (
  */
 export const active_themes = async (
   sdk: IAPIMethods,
-  request: IRequestActiveThemes,
+  request: IRequestActiveThemes = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ITheme[], IError | IValidationError>> => {
   return sdk.get<ITheme[], IError | IValidationError>(
@@ -13813,7 +13863,7 @@ export const delete_theme = async (
  */
 export const search_credentials_email = async (
   sdk: IAPIMethods,
-  request: IRequestSearchCredentialsEmail,
+  request: IRequestSearchCredentialsEmail = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsEmailSearch[], IError>> => {
   return sdk.get<ICredentialsEmailSearch[], IError>(
@@ -13881,9 +13931,9 @@ export const create_user_credentials_email = async (
   body: Partial<IWriteCredentialsEmail>,
   fields?: string,
   options?: Partial<ITransportSettings>
-): Promise<SDKResponse<ICredentialsEmail, IError>> => {
+): Promise<SDKResponse<ICredentialsEmail, IError | IValidationError>> => {
   user_id = encodeParam(user_id);
-  return sdk.post<ICredentialsEmail, IError>(
+  return sdk.post<ICredentialsEmail, IError | IValidationError>(
     `/users/${user_id}/credentials_email`,
     { fields },
     body,
@@ -13911,9 +13961,9 @@ export const update_user_credentials_email = async (
   body: Partial<IWriteCredentialsEmail>,
   fields?: string,
   options?: Partial<ITransportSettings>
-): Promise<SDKResponse<ICredentialsEmail, IError>> => {
+): Promise<SDKResponse<ICredentialsEmail, IError | IValidationError>> => {
   user_id = encodeParam(user_id);
-  return sdk.patch<ICredentialsEmail, IError>(
+  return sdk.patch<ICredentialsEmail, IError | IValidationError>(
     `/users/${user_id}/credentials_email`,
     { fields },
     body,
@@ -14120,6 +14170,56 @@ export const delete_user_credentials_looker_openid = async (
 };
 
 /**
+ * ### OpenID Connect (OIDC) authentication login information for the specified user.
+ *
+ * GET /users/{user_id}/credentials_oidc -> ICredentialsOIDC
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id Id of user
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
+ */
+export const user_credentials_oidc = async (
+  sdk: IAPIMethods,
+  user_id: string,
+  fields?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<ICredentialsOIDC, IError>> => {
+  user_id = encodeParam(user_id);
+  return sdk.get<ICredentialsOIDC, IError>(
+    `/users/${user_id}/credentials_oidc`,
+    { fields },
+    null,
+    options
+  );
+};
+
+/**
+ * ### Delete OpenID Connect (OIDC) authentication login information for the specified user.
+ *
+ * DELETE /users/{user_id}/credentials_oidc -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id Id of user
+ * @param options one-time API call overrides
+ *
+ */
+export const delete_user_credentials_oidc = async (
+  sdk: IAPIMethods,
+  user_id: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<string, IError>> => {
+  user_id = encodeParam(user_id);
+  return sdk.delete<string, IError>(
+    `/users/${user_id}/credentials_oidc`,
+    null,
+    null,
+    options
+  );
+};
+
+/**
  * ### Saml authentication login information for the specified user.
  *
  * GET /users/{user_id}/credentials_saml -> ICredentialsSaml
@@ -14283,7 +14383,7 @@ export const me = async (
  */
 export const all_users = async (
   sdk: IAPIMethods,
-  request: IRequestAllUsers,
+  request: IRequestAllUsers = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUser[], IError>> => {
   return sdk.get<IUser[], IError>(
@@ -14368,7 +14468,7 @@ export const create_user = async (
  */
 export const search_users = async (
   sdk: IAPIMethods,
-  request: IRequestSearchUsers,
+  request: IRequestSearchUsers = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUser[], IError>> => {
   return sdk.get<IUser[], IError>(
@@ -14697,56 +14797,6 @@ export const delete_user_credentials_ldap = async (
   user_id = encodeParam(user_id);
   return sdk.delete<string, IError>(
     `/users/${user_id}/credentials_ldap`,
-    null,
-    null,
-    options
-  );
-};
-
-/**
- * ### OpenID Connect (OIDC) authentication login information for the specified user.
- *
- * GET /users/{user_id}/credentials_oidc -> ICredentialsOIDC
- *
- * @param sdk IAPIMethods implementation
- * @param user_id Id of user
- * @param fields Requested fields.
- * @param options one-time API call overrides
- *
- */
-export const user_credentials_oidc = async (
-  sdk: IAPIMethods,
-  user_id: string,
-  fields?: string,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<ICredentialsOIDC, IError>> => {
-  user_id = encodeParam(user_id);
-  return sdk.get<ICredentialsOIDC, IError>(
-    `/users/${user_id}/credentials_oidc`,
-    { fields },
-    null,
-    options
-  );
-};
-
-/**
- * ### OpenID Connect (OIDC) authentication login information for the specified user.
- *
- * DELETE /users/{user_id}/credentials_oidc -> string
- *
- * @param sdk IAPIMethods implementation
- * @param user_id Id of user
- * @param options one-time API call overrides
- *
- */
-export const delete_user_credentials_oidc = async (
-  sdk: IAPIMethods,
-  user_id: string,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<string, IError>> => {
-  user_id = encodeParam(user_id);
-  return sdk.delete<string, IError>(
-    `/users/${user_id}/credentials_oidc`,
     null,
     null,
     options
@@ -15326,7 +15376,7 @@ export const create_service_account = async (
  */
 export const all_user_attributes = async (
   sdk: IAPIMethods,
-  request: IRequestAllUserAttributes,
+  request: IRequestAllUserAttributes = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUserAttribute[], IError>> => {
   return sdk.get<IUserAttribute[], IError>(

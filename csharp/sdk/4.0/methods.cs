@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 529 API methods
+/// 532 API methods
 
 #nullable enable
 using System;
@@ -2178,6 +2178,18 @@ namespace Looker.SDK.API40
 {  
     return await AuthRequest<ColorCollection, Exception>(HttpMethod.Put, "/color_collections/default", new Values {
       { "collection_id", collection_id }},null,options);
+  }
+
+  /// Get active color collections including default, custom, and standard collections for visualization rendering and theming. Accessible to all authenticated users.
+  ///
+  /// GET /color_collections/active -> ActiveColorCollections
+  ///
+  /// <returns><c>ActiveColorCollections</c> Active Color Collections (application/json)</returns>
+  ///
+  public async Task<SdkResponse<ActiveColorCollections, Exception>> color_collections_active(
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<ActiveColorCollections, Exception>(HttpMethod.Get, "/color_collections/active", null,null,options);
   }
 
   /// ### Get a Color Collection by ID
@@ -5181,6 +5193,27 @@ namespace Looker.SDK.API40
   }
 
   #endregion Datagroup: Manage Datagroups
+
+  #region DataUpload: Data Upload
+
+  /// ### Upload data for self-service modeling
+  ///
+  /// Uploads a CSV or Excel file to the specified connection and creates a self-service model.
+  ///
+  /// POST /self_service_models/upload -> UploadedModel
+  ///
+  /// <returns><c>UploadedModel</c> Created self-service model metadata. (application/json)</returns>
+  ///
+  /// <param name="file">The CSV or Excel file to upload.</param>
+  /// <param name="connection_id">The connection ID to upload to. Defaults to the default upload connection.</param>
+  /// <param name="sheet_index">(Optional) The index of the sheet to upload (for Excel files).</param>
+  public async Task<SdkResponse<UploadedModel, Exception>> upload_data(
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<UploadedModel, Exception>(HttpMethod.Post, "/self_service_models/upload", null,null,options);
+  }
+
+  #endregion DataUpload: Data Upload
 
   #region DerivedTable: View Derived Table graphs
 
@@ -10863,6 +10896,39 @@ namespace Looker.SDK.API40
     return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/users/{user_id}/credentials_looker_openid", null,null,options);
   }
 
+  /// ### OpenID Connect (OIDC) authentication login information for the specified user.
+  ///
+  /// GET /users/{user_id}/credentials_oidc -> CredentialsOIDC
+  ///
+  /// <returns><c>CredentialsOIDC</c> OIDC Auth Credential (application/json)</returns>
+  ///
+  /// <param name="user_id">Id of user</param>
+  /// <param name="fields">Requested fields.</param>
+  public async Task<SdkResponse<CredentialsOIDC, Exception>> user_credentials_oidc(
+    string user_id,
+    string? fields = null,
+    ITransportSettings? options = null)
+{  
+      user_id = SdkUtils.EncodeParam(user_id);
+    return await AuthRequest<CredentialsOIDC, Exception>(HttpMethod.Get, $"/users/{user_id}/credentials_oidc", new Values {
+      { "fields", fields }},null,options);
+  }
+
+  /// ### Delete OpenID Connect (OIDC) authentication login information for the specified user.
+  ///
+  /// DELETE /users/{user_id}/credentials_oidc -> string
+  ///
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  ///
+  /// <param name="user_id">Id of user</param>
+  public async Task<SdkResponse<string, Exception>> delete_user_credentials_oidc(
+    string user_id,
+    ITransportSettings? options = null)
+{  
+      user_id = SdkUtils.EncodeParam(user_id);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/users/{user_id}/credentials_oidc", null,null,options);
+  }
+
   /// ### Saml authentication login information for the specified user.
   ///
   /// GET /users/{user_id}/credentials_saml -> CredentialsSaml
@@ -11071,7 +11137,7 @@ namespace Looker.SDK.API40
   /// <param name="content_metadata_id">Search for users who have access to this content_metadata item</param>
   /// <param name="group_id">Search for users who are direct members of this group</param>
   /// <param name="can_manage_api3_creds">Search for users who can manage API3 credentials. Availability of this filter is limited to users with permission to view complete user details. This is an experimental feature and may not yet be available on your instance.</param>
-  /// <param name="is_service_account">Search for service account users. Send true to get only service accounts, or false to get all other types of users. Availability of this filter is limited to users with permission to view complete user details.</param>
+  /// <param name="is_service_account">Search for service account users. Send true to get only service accounts, or false to get all other types of users.</param>
   public async Task<SdkResponse<User[], Exception>> search_users(
     string? fields = null,
     long? page = null,
@@ -11373,39 +11439,6 @@ namespace Looker.SDK.API40
 {  
       user_id = SdkUtils.EncodeParam(user_id);
     return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/users/{user_id}/credentials_ldap", null,null,options);
-  }
-
-  /// ### OpenID Connect (OIDC) authentication login information for the specified user.
-  ///
-  /// GET /users/{user_id}/credentials_oidc -> CredentialsOIDC
-  ///
-  /// <returns><c>CredentialsOIDC</c> OIDC Auth Credential (application/json)</returns>
-  ///
-  /// <param name="user_id">Id of user</param>
-  /// <param name="fields">Requested fields.</param>
-  public async Task<SdkResponse<CredentialsOIDC, Exception>> user_credentials_oidc(
-    string user_id,
-    string? fields = null,
-    ITransportSettings? options = null)
-{  
-      user_id = SdkUtils.EncodeParam(user_id);
-    return await AuthRequest<CredentialsOIDC, Exception>(HttpMethod.Get, $"/users/{user_id}/credentials_oidc", new Values {
-      { "fields", fields }},null,options);
-  }
-
-  /// ### OpenID Connect (OIDC) authentication login information for the specified user.
-  ///
-  /// DELETE /users/{user_id}/credentials_oidc -> string
-  ///
-  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
-  ///
-  /// <param name="user_id">Id of user</param>
-  public async Task<SdkResponse<string, Exception>> delete_user_credentials_oidc(
-    string user_id,
-    ITransportSettings? options = null)
-{  
-      user_id = SdkUtils.EncodeParam(user_id);
-    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/users/{user_id}/credentials_oidc", null,null,options);
   }
 
   /// ### API login information for the specified user. This is for the newer API keys that can be added for any user.

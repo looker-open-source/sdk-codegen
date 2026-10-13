@@ -25,7 +25,7 @@
  */
 
 /**
- * 442 API models: 343 Spec, 0 Request, 73 Write, 26 Enum
+ * 445 API models: 346 Spec, 0 Request, 73 Write, 26 Enum
  */
 
 
@@ -82,6 +82,51 @@ public struct AccessToken: SDKModel {
         self._token_type = token_type.map(AnyString.init)
         self._expires_in = expires_in.map(AnyInt.init)
         self._refresh_token = refresh_token.map(AnyString.init)
+    }
+
+}
+
+public struct ActiveColorCollections: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _default_collection_id = "default_collection_id"
+        case _default_colors = "default_colors"
+        case custom
+        case standard
+    }
+    private var _default_collection_id: AnyString?
+    /**
+     * ID of default color collection (read-only)
+     */
+    public var default_collection_id: String? {
+        get { _default_collection_id?.value }
+        set { _default_collection_id = newValue.map(AnyString.init) }
+    }
+
+    private var _default_colors: [AnyString]?
+    /**
+     * Legacy default colors if defined (read-only)
+     */
+    public var default_colors: [String]? {
+        get { if let v = _default_colors { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _default_colors = v.map { AnyString.init($0) } } else { _default_colors = nil } }
+    }
+
+    /**
+     * Active custom color collections (read-only)
+     */
+    public var custom: [ColorCollection]?
+
+    /**
+     * Active standard color collections (read-only)
+     */
+    public var standard: [ColorCollection]?
+
+    public init(default_collection_id: String? = nil, default_colors: [String]? = nil, custom: [ColorCollection]? = nil, standard: [ColorCollection]? = nil) {
+        self._default_collection_id = default_collection_id.map(AnyString.init)
+        if let v = default_colors { _default_colors = v.map { AnyString.init($0) } } else { _default_colors = nil }
+        self.custom = custom
+        self.standard = standard
     }
 
 }
@@ -3587,7 +3632,7 @@ public struct CIRun: SDKModel {
     public var user_attributes: [CIRunUserAttribute]?
 
     /**
-     * Map of upstream project names to commit SHAs or git/PR configuration objects pinned for the CI run (read-only)
+     * Map of upstream project names to the commit ref pinned for the CI run (read-only)
      */
     public var project_imports: StringDictionary<AnyCodable>?
 
@@ -8413,6 +8458,7 @@ public struct Dashboard: SDKModel {
         case _url = "url"
         case _layout_granularity = "layout_granularity"
         case preserve_desktop_layout
+        case _style = "style"
         case download_settings
     }
     /**
@@ -8794,9 +8840,18 @@ public struct Dashboard: SDKModel {
      */
     public var preserve_desktop_layout: Bool?
 
+    private var _style: AnyString?
+    /**
+     * Dashboard style. Allowed values are "classic", "modern"
+     */
+    public var style: String? {
+        get { _style?.value }
+        set { _style = newValue.map(AnyString.init) }
+    }
+
     public var download_settings: DashboardDownloadSettings?
 
-    public init(can: StringDictionary<Bool>? = nil, content_favorite_id: String? = nil, content_metadata_id: String? = nil, description: String? = nil, hidden: Bool? = nil, id: String? = nil, model: LookModel? = nil, query_timezone: String? = nil, readonly: Bool? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, folder: FolderBase? = nil, title: String? = nil, user_id: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, certification_metadata: Certification? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, chat_enabled: Bool? = nil, background_color: String? = nil, created_at: Date? = nil, crossfilter_enabled: Bool? = nil, dashboard_elements: [DashboardElement]? = nil, dashboard_filters: [DashboardFilter]? = nil, dashboard_layouts: [DashboardLayout]? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, edit_uri: String? = nil, enable_viz_full_screen: Bool? = nil, favorite_count: Int64? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, last_accessed_at: Date? = nil, last_viewed_at: Date? = nil, updated_at: Date? = nil, last_updater_id: String? = nil, last_updater_name: String? = nil, user_name: String? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, view_count: Int64? = nil, appearance: DashboardAppearance? = nil, usage_count: Int64? = nil, is_owner_disabled: Bool? = nil, url: String? = nil, layout_granularity: String? = nil, preserve_desktop_layout: Bool? = nil, download_settings: DashboardDownloadSettings? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, content_favorite_id: String? = nil, content_metadata_id: String? = nil, description: String? = nil, hidden: Bool? = nil, id: String? = nil, model: LookModel? = nil, query_timezone: String? = nil, readonly: Bool? = nil, refresh_interval: String? = nil, refresh_interval_to_i: Int64? = nil, folder: FolderBase? = nil, title: String? = nil, user_id: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, certification_metadata: Certification? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, chat_enabled: Bool? = nil, background_color: String? = nil, created_at: Date? = nil, crossfilter_enabled: Bool? = nil, dashboard_elements: [DashboardElement]? = nil, dashboard_filters: [DashboardFilter]? = nil, dashboard_layouts: [DashboardLayout]? = nil, deleted: Bool? = nil, deleted_at: Date? = nil, deleter_id: String? = nil, edit_uri: String? = nil, enable_viz_full_screen: Bool? = nil, favorite_count: Int64? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, last_accessed_at: Date? = nil, last_viewed_at: Date? = nil, updated_at: Date? = nil, last_updater_id: String? = nil, last_updater_name: String? = nil, user_name: String? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, view_count: Int64? = nil, appearance: DashboardAppearance? = nil, usage_count: Int64? = nil, is_owner_disabled: Bool? = nil, url: String? = nil, layout_granularity: String? = nil, preserve_desktop_layout: Bool? = nil, style: String? = nil, download_settings: DashboardDownloadSettings? = nil) {
         self.can = can
         self._content_favorite_id = content_favorite_id.map(AnyString.init)
         self._content_metadata_id = content_metadata_id.map(AnyString.init)
@@ -8852,6 +8907,7 @@ public struct Dashboard: SDKModel {
         self._url = url.map(AnyString.init)
         self._layout_granularity = layout_granularity.map(AnyString.init)
         self.preserve_desktop_layout = preserve_desktop_layout
+        self._style = style.map(AnyString.init)
         self.download_settings = download_settings
     }
 
@@ -10800,6 +10856,7 @@ public struct DBConnection: SDKModel {
         case _password = "password"
         case has_password
         case service_account_auth_enabled
+        case service_account_rules
         case uses_oauth
         case uses_key_pair_auth
         case uses_instance_oauth
@@ -10953,6 +11010,11 @@ public struct DBConnection: SDKModel {
      * Whether Service Account OAuth authentication is enabled for this connection
      */
     public var service_account_auth_enabled: Bool?
+
+    /**
+     * Service Account OAuth authentication credential rules for this connection
+     */
+    public var service_account_rules: [DBConnectionServiceAccountRule]?
 
     /**
      * Whether the connection uses OAuth for authentication. (read-only)
@@ -11345,7 +11407,7 @@ public struct DBConnection: SDKModel {
         set { _service_name = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, project_id: String? = nil, named_driver_version_requested: String? = nil, named_driver_version_actual: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, has_password: Bool? = nil, service_account_auth_enabled: Bool? = nil, uses_oauth: Bool? = nil, uses_key_pair_auth: Bool? = nil, uses_instance_oauth: Bool? = nil, uses_service_auth: Bool? = nil, certificate: String? = nil, user_attr_certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, tmp_db_host: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, supports_data_studio_link: Bool? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, default_bq_connection: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil, p4sa_name: String? = nil, query_holding_disabled: Bool? = nil, service_name: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, project_id: String? = nil, named_driver_version_requested: String? = nil, named_driver_version_actual: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, has_password: Bool? = nil, service_account_auth_enabled: Bool? = nil, service_account_rules: [DBConnectionServiceAccountRule]? = nil, uses_oauth: Bool? = nil, uses_key_pair_auth: Bool? = nil, uses_instance_oauth: Bool? = nil, uses_service_auth: Bool? = nil, certificate: String? = nil, user_attr_certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, tmp_db_host: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, supports_data_studio_link: Bool? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, default_bq_connection: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil, p4sa_name: String? = nil, query_holding_disabled: Bool? = nil, service_name: String? = nil) {
         self.can = can
         self._name = name.map(AnyString.init)
         self.dialect = dialect
@@ -11360,6 +11422,7 @@ public struct DBConnection: SDKModel {
         self._password = password.map(AnyString.init)
         self.has_password = has_password
         self.service_account_auth_enabled = service_account_auth_enabled
+        self.service_account_rules = service_account_rules
         self.uses_oauth = uses_oauth
         self.uses_key_pair_auth = uses_key_pair_auth
         self.uses_instance_oauth = uses_instance_oauth
@@ -11728,6 +11791,109 @@ public struct DBConnectionOverride: SDKModel {
         self._after_connect_statements = after_connect_statements.map(AnyString.init)
         self._pdt_after_connect_statements = pdt_after_connect_statements.map(AnyString.init)
         self._pdt_service_name = pdt_service_name.map(AnyString.init)
+    }
+
+}
+
+public struct DBConnectionServiceAccountRule: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _id = "id"
+        case _db_connection_id = "db_connection_id"
+        case _group_id = "group_id"
+        case is_default
+        case _priority = "priority"
+        case _credential_type = "credential_type"
+        case _certificate = "certificate"
+        case has_credentials
+        case created_at
+        case updated_at
+    }
+    private var _id: AnyString?
+    /**
+     * Unique ID of the service account rule (read-only)
+     */
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
+    private var _db_connection_id: AnyString?
+    /**
+     * ID of the associated database connection (read-only)
+     */
+    public var db_connection_id: String? {
+        get { _db_connection_id?.value }
+        set { _db_connection_id = newValue.map(AnyString.init) }
+    }
+
+    private var _group_id: AnyString?
+    /**
+     * Looker group ID associated with this rule (nil for default rule)
+     */
+    public var group_id: String? {
+        get { _group_id?.value }
+        set { _group_id = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Whether this rule is the default fallback rule for the connection
+     */
+    public var is_default: Bool?
+
+    private var _priority: AnyInt?
+    /**
+     * Evaluation priority order for the rule (lower numbers evaluated first)
+     */
+    public var priority: Int64? {
+        get { _priority?.value }
+        set { _priority = newValue.map(AnyInt.init) }
+    }
+
+    private var _credential_type: AnyString?
+    /**
+     * Type of credential (e.g. GCP_SERVICE_ACCOUNT_KEY_JSON)
+     */
+    public var credential_type: String? {
+        get { _credential_type?.value }
+        set { _credential_type = newValue.map(AnyString.init) }
+    }
+
+    private var _certificate: AnyString?
+    /**
+     * (Write-Only) Base64 or raw JSON service account key for authentication
+     */
+    public var certificate: String? {
+        get { _certificate?.value }
+        set { _certificate = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Whether credentials have been configured for this rule (read-only)
+     */
+    public var has_credentials: Bool?
+
+    /**
+     * Timestamp when the rule was created (read-only)
+     */
+    public var created_at: Date?
+
+    /**
+     * Timestamp when the rule was last updated (read-only)
+     */
+    public var updated_at: Date?
+
+    public init(id: String? = nil, db_connection_id: String? = nil, group_id: String? = nil, is_default: Bool? = nil, priority: Int64? = nil, credential_type: String? = nil, certificate: String? = nil, has_credentials: Bool? = nil, created_at: Date? = nil, updated_at: Date? = nil) {
+        self._id = id.map(AnyString.init)
+        self._db_connection_id = db_connection_id.map(AnyString.init)
+        self._group_id = group_id.map(AnyString.init)
+        self.is_default = is_default
+        self._priority = priority.map(AnyInt.init)
+        self._credential_type = credential_type.map(AnyString.init)
+        self._certificate = certificate.map(AnyString.init)
+        self.has_credentials = has_credentials
+        self.created_at = created_at
+        self.updated_at = updated_at
     }
 
 }
@@ -13391,6 +13557,8 @@ public struct ExternalOauthApplication: SDKModel {
         case _client_secret = "client_secret"
         case _tenant_id = "tenant_id"
         case _dialect_name = "dialect_name"
+        case _provider = "provider"
+        case _scopes = "scopes"
         case bi_directional_data_access
         case created_at
     }
@@ -13453,6 +13621,24 @@ public struct ExternalOauthApplication: SDKModel {
         set { _dialect_name = newValue.map(AnyString.init) }
     }
 
+    private var _provider: AnyString?
+    /**
+     * The OAuth provider for this application (e.g., 'entra'). Null for standard dialect OAuth.
+     */
+    public var provider: String? {
+        get { _provider?.value }
+        set { _provider = newValue.map(AnyString.init) }
+    }
+
+    private var _scopes: AnyString?
+    /**
+     * Space-delimited OAuth scopes to request when authorizing users. Required when provider is 'entra': the Snowflake resource application's scope, e.g. 'api://<application-id-uri>/session:role-any' (offline_access is added automatically).
+     */
+    public var scopes: String? {
+        get { _scopes?.value }
+        set { _scopes = newValue.map(AnyString.init) }
+    }
+
     /**
      * Whether this application supports bi-directional data access.
      */
@@ -13463,7 +13649,7 @@ public struct ExternalOauthApplication: SDKModel {
      */
     public var created_at: Date?
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, client_id: String? = nil, client_secret: String? = nil, tenant_id: String? = nil, dialect_name: String? = nil, bi_directional_data_access: Bool? = nil, created_at: Date? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, client_id: String? = nil, client_secret: String? = nil, tenant_id: String? = nil, dialect_name: String? = nil, provider: String? = nil, scopes: String? = nil, bi_directional_data_access: Bool? = nil, created_at: Date? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
         self._name = name.map(AnyString.init)
@@ -13471,6 +13657,8 @@ public struct ExternalOauthApplication: SDKModel {
         self._client_secret = client_secret.map(AnyString.init)
         self._tenant_id = tenant_id.map(AnyString.init)
         self._dialect_name = dialect_name.map(AnyString.init)
+        self._provider = provider.map(AnyString.init)
+        self._scopes = scopes.map(AnyString.init)
         self.bi_directional_data_access = bi_directional_data_access
         self.created_at = created_at
     }
@@ -20778,6 +20966,8 @@ public struct McpTools: SDKModel {
 
     public var get_dimensions: McpToolSetting?
 
+    public var get_explore: McpToolSetting?
+
     public var get_explores: McpToolSetting?
 
     public var get_field_value_suggestions: McpToolSetting?
@@ -20838,7 +21028,7 @@ public struct McpTools: SDKModel {
 
     public var render_dashboard: McpToolSetting?
 
-    public init(enable_all: Bool? = nil, add_dashboard_element: McpToolSetting? = nil, add_dashboard_filter: McpToolSetting? = nil, create_project_file: McpToolSetting? = nil, delete_project_file: McpToolSetting? = nil, dev_mode: McpToolSetting? = nil, generate_embed_url: McpToolSetting? = nil, get_connection_databases: McpToolSetting? = nil, get_connection_schemas: McpToolSetting? = nil, get_connection_table_columns: McpToolSetting? = nil, get_connection_tables: McpToolSetting? = nil, get_connections: McpToolSetting? = nil, get_dashboards: McpToolSetting? = nil, get_dimensions: McpToolSetting? = nil, get_explores: McpToolSetting? = nil, get_field_value_suggestions: McpToolSetting? = nil, get_filters: McpToolSetting? = nil, get_looks: McpToolSetting? = nil, get_measures: McpToolSetting? = nil, get_models: McpToolSetting? = nil, get_parameters: McpToolSetting? = nil, get_project_file: McpToolSetting? = nil, get_project_files: McpToolSetting? = nil, get_projects: McpToolSetting? = nil, health_analyze: McpToolSetting? = nil, health_pulse: McpToolSetting? = nil, health_vacuum: McpToolSetting? = nil, make_dashboard: McpToolSetting? = nil, make_look: McpToolSetting? = nil, query: McpToolSetting? = nil, query_sql: McpToolSetting? = nil, query_url: McpToolSetting? = nil, run_dashboard: McpToolSetting? = nil, run_look: McpToolSetting? = nil, update_project_file: McpToolSetting? = nil, validate_project: McpToolSetting? = nil, get_project_directories: McpToolSetting? = nil, create_project_directory: McpToolSetting? = nil, delete_project_directory: McpToolSetting? = nil, get_lookml_tests: McpToolSetting? = nil, run_lookml_tests: McpToolSetting? = nil, create_view_from_table: McpToolSetting? = nil, render_visualization: McpToolSetting? = nil, render_dashboard: McpToolSetting? = nil) {
+    public init(enable_all: Bool? = nil, add_dashboard_element: McpToolSetting? = nil, add_dashboard_filter: McpToolSetting? = nil, create_project_file: McpToolSetting? = nil, delete_project_file: McpToolSetting? = nil, dev_mode: McpToolSetting? = nil, generate_embed_url: McpToolSetting? = nil, get_connection_databases: McpToolSetting? = nil, get_connection_schemas: McpToolSetting? = nil, get_connection_table_columns: McpToolSetting? = nil, get_connection_tables: McpToolSetting? = nil, get_connections: McpToolSetting? = nil, get_dashboards: McpToolSetting? = nil, get_dimensions: McpToolSetting? = nil, get_explore: McpToolSetting? = nil, get_explores: McpToolSetting? = nil, get_field_value_suggestions: McpToolSetting? = nil, get_filters: McpToolSetting? = nil, get_looks: McpToolSetting? = nil, get_measures: McpToolSetting? = nil, get_models: McpToolSetting? = nil, get_parameters: McpToolSetting? = nil, get_project_file: McpToolSetting? = nil, get_project_files: McpToolSetting? = nil, get_projects: McpToolSetting? = nil, health_analyze: McpToolSetting? = nil, health_pulse: McpToolSetting? = nil, health_vacuum: McpToolSetting? = nil, make_dashboard: McpToolSetting? = nil, make_look: McpToolSetting? = nil, query: McpToolSetting? = nil, query_sql: McpToolSetting? = nil, query_url: McpToolSetting? = nil, run_dashboard: McpToolSetting? = nil, run_look: McpToolSetting? = nil, update_project_file: McpToolSetting? = nil, validate_project: McpToolSetting? = nil, get_project_directories: McpToolSetting? = nil, create_project_directory: McpToolSetting? = nil, delete_project_directory: McpToolSetting? = nil, get_lookml_tests: McpToolSetting? = nil, run_lookml_tests: McpToolSetting? = nil, create_view_from_table: McpToolSetting? = nil, render_visualization: McpToolSetting? = nil, render_dashboard: McpToolSetting? = nil) {
         self.enable_all = enable_all
         self.add_dashboard_element = add_dashboard_element
         self.add_dashboard_filter = add_dashboard_filter
@@ -20853,6 +21043,7 @@ public struct McpTools: SDKModel {
         self.get_connections = get_connections
         self.get_dashboards = get_dashboards
         self.get_dimensions = get_dimensions
+        self.get_explore = get_explore
         self.get_explores = get_explores
         self.get_field_value_suggestions = get_field_value_suggestions
         self.get_filters = get_filters
@@ -21263,10 +21454,16 @@ public struct MobileSettings: SDKModel {
      */
     public var mobile_feature_flags: [MobileFeatureFlags]?
 
-    public init(mobile_force_authentication: Bool? = nil, mobile_app_integration: Bool? = nil, mobile_feature_flags: [MobileFeatureFlags]? = nil) {
+    /**
+     * Specifies whether enhanced search is enabled on this instance. (read-only)
+     */
+    public var enhanced_search_enabled: Bool?
+
+    public init(mobile_force_authentication: Bool? = nil, mobile_app_integration: Bool? = nil, mobile_feature_flags: [MobileFeatureFlags]? = nil, enhanced_search_enabled: Bool? = nil) {
         self.mobile_force_authentication = mobile_force_authentication
         self.mobile_app_integration = mobile_app_integration
         self.mobile_feature_flags = mobile_feature_flags
+        self.enhanced_search_enabled = enhanced_search_enabled
     }
 
 }
@@ -29116,10 +29313,86 @@ public struct UpdateFolder: SDKModel {
 
 }
 
+public struct UploadedModel: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _model_name = "model_name"
+        case _explore = "explore"
+        case _explore_label = "explore_label"
+        case _uploaded_data_name = "uploaded_data_name"
+        case _created_at = "created_at"
+        case _uploader = "uploader"
+    }
+    private var _model_name: AnyString?
+    /**
+     * The internal, unique name of the model
+     */
+    public var model_name: String? {
+        get { _model_name?.value }
+        set { _model_name = newValue.map(AnyString.init) }
+    }
+
+    private var _explore: AnyString?
+    /**
+     * The explore name in the model (read-only)
+     */
+    public var explore: String? {
+        get { _explore?.value }
+        set { _explore = newValue.map(AnyString.init) }
+    }
+
+    private var _explore_label: AnyString?
+    /**
+     * The user-desired friendly name for the model
+     */
+    public var explore_label: String? {
+        get { _explore_label?.value }
+        set { _explore_label = newValue.map(AnyString.init) }
+    }
+
+    private var _uploaded_data_name: AnyString?
+    /**
+     * The original filename provided by the user
+     */
+    public var uploaded_data_name: String? {
+        get { _uploaded_data_name?.value }
+        set { _uploaded_data_name = newValue.map(AnyString.init) }
+    }
+
+    private var _created_at: AnyInt?
+    /**
+     * UNIX timestamp at which this upload was created. (read-only)
+     */
+    public var created_at: Int64? {
+        get { _created_at?.value }
+        set { _created_at = newValue.map(AnyInt.init) }
+    }
+
+    private var _uploader: AnyInt?
+    /**
+     * Id of the user who created this upload. (read-only)
+     */
+    public var uploader: Int64? {
+        get { _uploader?.value }
+        set { _uploader = newValue.map(AnyInt.init) }
+    }
+
+    public init(model_name: String? = nil, explore: String? = nil, explore_label: String? = nil, uploaded_data_name: String? = nil, created_at: Int64? = nil, uploader: Int64? = nil) {
+        self._model_name = model_name.map(AnyString.init)
+        self._explore = explore.map(AnyString.init)
+        self._explore_label = explore_label.map(AnyString.init)
+        self._uploaded_data_name = uploaded_data_name.map(AnyString.init)
+        self._created_at = created_at.map(AnyInt.init)
+        self._uploader = uploader.map(AnyInt.init)
+    }
+
+}
+
 public struct User: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
         case can
+        case abilities
         case _avatar_url = "avatar_url"
         case _avatar_url_without_sizing = "avatar_url_without_sizing"
         case credentials_api3
@@ -29159,12 +29432,18 @@ public struct User: SDKModel {
         case can_manage_api3_creds
         case is_service_account
         case _service_account_name = "service_account_name"
+        case is_embed_user
         case _url = "url"
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
      */
     public var can: StringDictionary<Bool>?
+
+    /**
+     * Evaluated abilities and permissions for UI capability gating. The abilities property is not returned by default. Please explicitly request this attribute if needed via the fields query param. (read-only)
+     */
+    public var abilities: StringDictionary<AnyCodable>?
 
     private var _avatar_url: AnyString?
     /**
@@ -29401,6 +29680,11 @@ public struct User: SDKModel {
         set { _service_account_name = newValue.map(AnyString.init) }
     }
 
+    /**
+     * Indicates if this user is an embed user. (read-only)
+     */
+    public var is_embed_user: Bool?
+
     private var _url: AnyString?
     /**
      * Link to get this item (read-only)
@@ -29410,8 +29694,9 @@ public struct User: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, avatar_url: String? = nil, avatar_url_without_sizing: String? = nil, credentials_api3: [CredentialsApi3]? = nil, credentials_email: CredentialsEmail? = nil, credentials_embed: [CredentialsEmbed]? = nil, credentials_google: CredentialsGoogle? = nil, credentials_ldap: CredentialsLDAP? = nil, credentials_looker_openid: CredentialsLookerOpenid? = nil, credentials_oidc: CredentialsOIDC? = nil, credentials_saml: CredentialsSaml? = nil, credentials_totp: CredentialsTotp? = nil, credentials_workforce: CredentialsWorkforce? = nil, display_name: String? = nil, email: String? = nil, embed_group_space_id: String? = nil, first_name: String? = nil, group_ids: [String]? = nil, home_folder_id: String? = nil, id: String? = nil, is_disabled: Bool? = nil, last_name: String? = nil, locale: String? = nil, looker_versions: [String]? = nil, models_dir_validated: Bool? = nil, personal_folder_id: String? = nil, presumed_looker_employee: Bool? = nil, role_ids: [String]? = nil, sessions: [Session]? = nil, ui_state: StringDictionary<AnyCodable>? = nil, verified_looker_employee: Bool? = nil, roles_externally_managed: Bool? = nil, allow_direct_roles: Bool? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, embed_group_folder_id: String? = nil, is_iam_admin: Bool? = nil, can_manage_api3_creds: Bool? = nil, is_service_account: Bool? = nil, service_account_name: String? = nil, url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, abilities: StringDictionary<AnyCodable>? = nil, avatar_url: String? = nil, avatar_url_without_sizing: String? = nil, credentials_api3: [CredentialsApi3]? = nil, credentials_email: CredentialsEmail? = nil, credentials_embed: [CredentialsEmbed]? = nil, credentials_google: CredentialsGoogle? = nil, credentials_ldap: CredentialsLDAP? = nil, credentials_looker_openid: CredentialsLookerOpenid? = nil, credentials_oidc: CredentialsOIDC? = nil, credentials_saml: CredentialsSaml? = nil, credentials_totp: CredentialsTotp? = nil, credentials_workforce: CredentialsWorkforce? = nil, display_name: String? = nil, email: String? = nil, embed_group_space_id: String? = nil, first_name: String? = nil, group_ids: [String]? = nil, home_folder_id: String? = nil, id: String? = nil, is_disabled: Bool? = nil, last_name: String? = nil, locale: String? = nil, looker_versions: [String]? = nil, models_dir_validated: Bool? = nil, personal_folder_id: String? = nil, presumed_looker_employee: Bool? = nil, role_ids: [String]? = nil, sessions: [Session]? = nil, ui_state: StringDictionary<AnyCodable>? = nil, verified_looker_employee: Bool? = nil, roles_externally_managed: Bool? = nil, allow_direct_roles: Bool? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, embed_group_folder_id: String? = nil, is_iam_admin: Bool? = nil, can_manage_api3_creds: Bool? = nil, is_service_account: Bool? = nil, service_account_name: String? = nil, is_embed_user: Bool? = nil, url: String? = nil) {
         self.can = can
+        self.abilities = abilities
         self._avatar_url = avatar_url.map(AnyString.init)
         self._avatar_url_without_sizing = avatar_url_without_sizing.map(AnyString.init)
         self.credentials_api3 = credentials_api3
@@ -29451,6 +29736,7 @@ public struct User: SDKModel {
         self.can_manage_api3_creds = can_manage_api3_creds
         self.is_service_account = is_service_account
         self._service_account_name = service_account_name.map(AnyString.init)
+        self.is_embed_user = is_embed_user
         self._url = url.map(AnyString.init)
     }
 
@@ -29846,6 +30132,7 @@ public struct UserDbConnection: SDKModel {
         case can
         case _id = "id"
         case _name = "name"
+        case _label = "label"
         case _user_id = "user_id"
         case _dialect = "dialect"
         case _auth_type = "auth_type"
@@ -29880,6 +30167,15 @@ public struct UserDbConnection: SDKModel {
     public var name: String? {
         get { _name?.value }
         set { _name = newValue.map(AnyString.init) }
+    }
+
+    private var _label: AnyString?
+    /**
+     * User-specified display label for the connection (read-only)
+     */
+    public var label: String? {
+        get { _label?.value }
+        set { _label = newValue.map(AnyString.init) }
     }
 
     private var _user_id: AnyInt?
@@ -29978,10 +30274,11 @@ public struct UserDbConnection: SDKModel {
      */
     public var updated_at: Date?
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, user_id: Int64? = nil, dialect: String? = nil, auth_type: String? = nil, host: String? = nil, port: String? = nil, database: String? = nil, schema: String? = nil, jdbc_additional_params: String? = nil, oauth_application_id: Int64? = nil, enabled: Bool? = nil, created_at: Date? = nil, updated_at: Date? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, label: String? = nil, user_id: Int64? = nil, dialect: String? = nil, auth_type: String? = nil, host: String? = nil, port: String? = nil, database: String? = nil, schema: String? = nil, jdbc_additional_params: String? = nil, oauth_application_id: Int64? = nil, enabled: Bool? = nil, created_at: Date? = nil, updated_at: Date? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
         self._name = name.map(AnyString.init)
+        self._label = label.map(AnyString.init)
         self._user_id = user_id.map(AnyInt.init)
         self._dialect = dialect.map(AnyString.init)
         self._auth_type = auth_type.map(AnyString.init)
@@ -30162,6 +30459,8 @@ public struct UserPublic: SDKModel {
         case _last_name = "last_name"
         case _display_name = "display_name"
         case _avatar_url = "avatar_url"
+        case is_service_account
+        case is_embed_user
         case _url = "url"
     }
     /**
@@ -30214,6 +30513,16 @@ public struct UserPublic: SDKModel {
         set { _avatar_url = newValue.map(AnyString.init) }
     }
 
+    /**
+     * Indicates if this user is a service account. (read-only)
+     */
+    public var is_service_account: Bool?
+
+    /**
+     * Indicates if this user is an embed user. (read-only)
+     */
+    public var is_embed_user: Bool?
+
     private var _url: AnyString?
     /**
      * Link to get this item (read-only)
@@ -30223,13 +30532,15 @@ public struct UserPublic: SDKModel {
         set { _url = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, first_name: String? = nil, last_name: String? = nil, display_name: String? = nil, avatar_url: String? = nil, url: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, first_name: String? = nil, last_name: String? = nil, display_name: String? = nil, avatar_url: String? = nil, is_service_account: Bool? = nil, is_embed_user: Bool? = nil, url: String? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
         self._first_name = first_name.map(AnyString.init)
         self._last_name = last_name.map(AnyString.init)
         self._display_name = display_name.map(AnyString.init)
         self._avatar_url = avatar_url.map(AnyString.init)
+        self.is_service_account = is_service_account
+        self.is_embed_user = is_embed_user
         self._url = url.map(AnyString.init)
     }
 
@@ -31899,6 +32210,7 @@ public struct WriteDashboard: SDKModel {
         case appearance
         case _layout_granularity = "layout_granularity"
         case preserve_desktop_layout
+        case _style = "style"
         case download_settings
     }
     private var _description: AnyString?
@@ -32114,9 +32426,18 @@ public struct WriteDashboard: SDKModel {
      */
     public var preserve_desktop_layout: Bool?
 
+    private var _style: AnyString?
+    /**
+     * Dashboard style. Allowed values are "classic", "modern"
+     */
+    public var style: String? {
+        get { _style?.value }
+        set { _style = newValue.map(AnyString.init) }
+    }
+
     public var download_settings: DashboardDownloadSettings?
 
-    public init(description: String? = nil, hidden: Bool? = nil, query_timezone: String? = nil, refresh_interval: String? = nil, folder: WriteFolderBase? = nil, title: String? = nil, user_id: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, certification_metadata: WriteCertification? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, chat_enabled: Bool? = nil, background_color: String? = nil, crossfilter_enabled: Bool? = nil, deleted: Bool? = nil, enable_viz_full_screen: Bool? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, appearance: DashboardAppearance? = nil, layout_granularity: String? = nil, preserve_desktop_layout: Bool? = nil, download_settings: DashboardDownloadSettings? = nil) {
+    public init(description: String? = nil, hidden: Bool? = nil, query_timezone: String? = nil, refresh_interval: String? = nil, folder: WriteFolderBase? = nil, title: String? = nil, user_id: String? = nil, slug: String? = nil, preferred_viewer: String? = nil, certification_metadata: WriteCertification? = nil, alert_sync_with_dashboard_filter_enabled: Bool? = nil, chat_enabled: Bool? = nil, background_color: String? = nil, crossfilter_enabled: Bool? = nil, deleted: Bool? = nil, enable_viz_full_screen: Bool? = nil, filters_bar_collapsed: Bool? = nil, filters_location_top: Bool? = nil, load_configuration: String? = nil, lookml_link_id: String? = nil, show_filters_bar: Bool? = nil, show_title: Bool? = nil, folder_id: String? = nil, text_tile_text_color: String? = nil, tile_background_color: String? = nil, tile_text_color: String? = nil, title_color: String? = nil, appearance: DashboardAppearance? = nil, layout_granularity: String? = nil, preserve_desktop_layout: Bool? = nil, style: String? = nil, download_settings: DashboardDownloadSettings? = nil) {
         self._description = description.map(AnyString.init)
         self.hidden = hidden
         self._query_timezone = query_timezone.map(AnyString.init)
@@ -32147,6 +32468,7 @@ public struct WriteDashboard: SDKModel {
         self.appearance = appearance
         self._layout_granularity = layout_granularity.map(AnyString.init)
         self.preserve_desktop_layout = preserve_desktop_layout
+        self._style = style.map(AnyString.init)
         self.download_settings = download_settings
     }
 
@@ -32915,6 +33237,7 @@ public struct WriteDBConnection: SDKModel {
         case _username = "username"
         case _password = "password"
         case service_account_auth_enabled
+        case service_account_rules
         case uses_key_pair_auth
         case _certificate = "certificate"
         case _user_attr_certificate = "user_attr_certificate"
@@ -33025,6 +33348,11 @@ public struct WriteDBConnection: SDKModel {
      * Whether Service Account OAuth authentication is enabled for this connection
      */
     public var service_account_auth_enabled: Bool?
+
+    /**
+     * Service Account OAuth authentication credential rules for this connection
+     */
+    public var service_account_rules: [DBConnectionServiceAccountRule]?
 
     /**
      * Whether the connection uses key-pair for authentication.
@@ -33341,7 +33669,7 @@ public struct WriteDBConnection: SDKModel {
         set { _service_name = newValue.map(AnyString.init) }
     }
 
-    public init(name: String? = nil, project_id: String? = nil, named_driver_version_requested: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, service_account_auth_enabled: Bool? = nil, uses_key_pair_auth: Bool? = nil, certificate: String? = nil, user_attr_certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, tmp_db_host: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: WriteDBConnectionOverride? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil, query_holding_disabled: Bool? = nil, service_name: String? = nil) {
+    public init(name: String? = nil, project_id: String? = nil, named_driver_version_requested: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, service_account_auth_enabled: Bool? = nil, service_account_rules: [DBConnectionServiceAccountRule]? = nil, uses_key_pair_auth: Bool? = nil, certificate: String? = nil, user_attr_certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, tmp_db_host: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: WriteDBConnectionOverride? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil, query_holding_disabled: Bool? = nil, service_name: String? = nil) {
         self._name = name.map(AnyString.init)
         self._project_id = project_id.map(AnyString.init)
         self._named_driver_version_requested = named_driver_version_requested.map(AnyString.init)
@@ -33350,6 +33678,7 @@ public struct WriteDBConnection: SDKModel {
         self._username = username.map(AnyString.init)
         self._password = password.map(AnyString.init)
         self.service_account_auth_enabled = service_account_auth_enabled
+        self.service_account_rules = service_account_rules
         self.uses_key_pair_auth = uses_key_pair_auth
         self._certificate = certificate.map(AnyString.init)
         self._user_attr_certificate = user_attr_certificate.map(AnyString.init)
@@ -33807,6 +34136,8 @@ public struct WriteExternalOauthApplication: SDKModel {
         case _client_secret = "client_secret"
         case _tenant_id = "tenant_id"
         case _dialect_name = "dialect_name"
+        case _provider = "provider"
+        case _scopes = "scopes"
         case bi_directional_data_access
     }
     private var _name: AnyString?
@@ -33854,17 +34185,37 @@ public struct WriteExternalOauthApplication: SDKModel {
         set { _dialect_name = newValue.map(AnyString.init) }
     }
 
+    private var _provider: AnyString?
+    /**
+     * The OAuth provider for this application (e.g., 'entra'). Null for standard dialect OAuth.
+     */
+    public var provider: String? {
+        get { _provider?.value }
+        set { _provider = newValue.map(AnyString.init) }
+    }
+
+    private var _scopes: AnyString?
+    /**
+     * Space-delimited OAuth scopes to request when authorizing users. Required when provider is 'entra': the Snowflake resource application's scope, e.g. 'api://<application-id-uri>/session:role-any' (offline_access is added automatically).
+     */
+    public var scopes: String? {
+        get { _scopes?.value }
+        set { _scopes = newValue.map(AnyString.init) }
+    }
+
     /**
      * Whether this application supports bi-directional data access.
      */
     public var bi_directional_data_access: Bool?
 
-    public init(name: String? = nil, client_id: String? = nil, client_secret: String? = nil, tenant_id: String? = nil, dialect_name: String? = nil, bi_directional_data_access: Bool? = nil) {
+    public init(name: String? = nil, client_id: String? = nil, client_secret: String? = nil, tenant_id: String? = nil, dialect_name: String? = nil, provider: String? = nil, scopes: String? = nil, bi_directional_data_access: Bool? = nil) {
         self._name = name.map(AnyString.init)
         self._client_id = client_id.map(AnyString.init)
         self._client_secret = client_secret.map(AnyString.init)
         self._tenant_id = tenant_id.map(AnyString.init)
         self._dialect_name = dialect_name.map(AnyString.init)
+        self._provider = provider.map(AnyString.init)
+        self._scopes = scopes.map(AnyString.init)
         self.bi_directional_data_access = bi_directional_data_access
     }
 
@@ -34774,6 +35125,12 @@ public struct WriteMcpTools: SDKModel {
      * Dynamic writeable type for McpToolSetting removes:
      * description, category, access_level
      */
+    public var get_explore: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level
+     */
     public var get_explores: WriteMcpToolSetting?
 
     /**
@@ -34950,7 +35307,7 @@ public struct WriteMcpTools: SDKModel {
      */
     public var render_dashboard: WriteMcpToolSetting?
 
-    public init(enable_all: Bool? = nil, add_dashboard_element: WriteMcpToolSetting? = nil, add_dashboard_filter: WriteMcpToolSetting? = nil, create_project_file: WriteMcpToolSetting? = nil, delete_project_file: WriteMcpToolSetting? = nil, dev_mode: WriteMcpToolSetting? = nil, generate_embed_url: WriteMcpToolSetting? = nil, get_connection_databases: WriteMcpToolSetting? = nil, get_connection_schemas: WriteMcpToolSetting? = nil, get_connection_table_columns: WriteMcpToolSetting? = nil, get_connection_tables: WriteMcpToolSetting? = nil, get_connections: WriteMcpToolSetting? = nil, get_dashboards: WriteMcpToolSetting? = nil, get_dimensions: WriteMcpToolSetting? = nil, get_explores: WriteMcpToolSetting? = nil, get_field_value_suggestions: WriteMcpToolSetting? = nil, get_filters: WriteMcpToolSetting? = nil, get_looks: WriteMcpToolSetting? = nil, get_measures: WriteMcpToolSetting? = nil, get_models: WriteMcpToolSetting? = nil, get_parameters: WriteMcpToolSetting? = nil, get_project_file: WriteMcpToolSetting? = nil, get_project_files: WriteMcpToolSetting? = nil, get_projects: WriteMcpToolSetting? = nil, health_analyze: WriteMcpToolSetting? = nil, health_pulse: WriteMcpToolSetting? = nil, health_vacuum: WriteMcpToolSetting? = nil, make_dashboard: WriteMcpToolSetting? = nil, make_look: WriteMcpToolSetting? = nil, query: WriteMcpToolSetting? = nil, query_sql: WriteMcpToolSetting? = nil, query_url: WriteMcpToolSetting? = nil, run_dashboard: WriteMcpToolSetting? = nil, run_look: WriteMcpToolSetting? = nil, update_project_file: WriteMcpToolSetting? = nil, validate_project: WriteMcpToolSetting? = nil, get_project_directories: WriteMcpToolSetting? = nil, create_project_directory: WriteMcpToolSetting? = nil, delete_project_directory: WriteMcpToolSetting? = nil, get_lookml_tests: WriteMcpToolSetting? = nil, run_lookml_tests: WriteMcpToolSetting? = nil, create_view_from_table: WriteMcpToolSetting? = nil, render_visualization: WriteMcpToolSetting? = nil, render_dashboard: WriteMcpToolSetting? = nil) {
+    public init(enable_all: Bool? = nil, add_dashboard_element: WriteMcpToolSetting? = nil, add_dashboard_filter: WriteMcpToolSetting? = nil, create_project_file: WriteMcpToolSetting? = nil, delete_project_file: WriteMcpToolSetting? = nil, dev_mode: WriteMcpToolSetting? = nil, generate_embed_url: WriteMcpToolSetting? = nil, get_connection_databases: WriteMcpToolSetting? = nil, get_connection_schemas: WriteMcpToolSetting? = nil, get_connection_table_columns: WriteMcpToolSetting? = nil, get_connection_tables: WriteMcpToolSetting? = nil, get_connections: WriteMcpToolSetting? = nil, get_dashboards: WriteMcpToolSetting? = nil, get_dimensions: WriteMcpToolSetting? = nil, get_explore: WriteMcpToolSetting? = nil, get_explores: WriteMcpToolSetting? = nil, get_field_value_suggestions: WriteMcpToolSetting? = nil, get_filters: WriteMcpToolSetting? = nil, get_looks: WriteMcpToolSetting? = nil, get_measures: WriteMcpToolSetting? = nil, get_models: WriteMcpToolSetting? = nil, get_parameters: WriteMcpToolSetting? = nil, get_project_file: WriteMcpToolSetting? = nil, get_project_files: WriteMcpToolSetting? = nil, get_projects: WriteMcpToolSetting? = nil, health_analyze: WriteMcpToolSetting? = nil, health_pulse: WriteMcpToolSetting? = nil, health_vacuum: WriteMcpToolSetting? = nil, make_dashboard: WriteMcpToolSetting? = nil, make_look: WriteMcpToolSetting? = nil, query: WriteMcpToolSetting? = nil, query_sql: WriteMcpToolSetting? = nil, query_url: WriteMcpToolSetting? = nil, run_dashboard: WriteMcpToolSetting? = nil, run_look: WriteMcpToolSetting? = nil, update_project_file: WriteMcpToolSetting? = nil, validate_project: WriteMcpToolSetting? = nil, get_project_directories: WriteMcpToolSetting? = nil, create_project_directory: WriteMcpToolSetting? = nil, delete_project_directory: WriteMcpToolSetting? = nil, get_lookml_tests: WriteMcpToolSetting? = nil, run_lookml_tests: WriteMcpToolSetting? = nil, create_view_from_table: WriteMcpToolSetting? = nil, render_visualization: WriteMcpToolSetting? = nil, render_dashboard: WriteMcpToolSetting? = nil) {
         self.enable_all = enable_all
         self.add_dashboard_element = add_dashboard_element
         self.add_dashboard_filter = add_dashboard_filter
@@ -34965,6 +35322,7 @@ public struct WriteMcpTools: SDKModel {
         self.get_connections = get_connections
         self.get_dashboards = get_dashboards
         self.get_dimensions = get_dimensions
+        self.get_explore = get_explore
         self.get_explores = get_explores
         self.get_field_value_suggestions = get_field_value_suggestions
         self.get_filters = get_filters
@@ -37760,7 +38118,7 @@ public struct WriteTheme: SDKModel {
 
 /**
  * Dynamic writeable type for User removes:
- * can, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, credentials_workforce, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, is_service_account, service_account_name, url
+ * can, abilities, avatar_url, avatar_url_without_sizing, credentials_api3, credentials_embed, credentials_google, credentials_ldap, credentials_looker_openid, credentials_oidc, credentials_saml, credentials_totp, credentials_workforce, display_name, email, embed_group_space_id, group_ids, id, looker_versions, personal_folder_id, presumed_looker_employee, role_ids, sessions, verified_looker_employee, roles_externally_managed, allow_direct_roles, allow_normal_group_membership, allow_roles_from_normal_groups, embed_group_folder_id, is_iam_admin, is_service_account, service_account_name, is_embed_user, url
  */
 public struct WriteUser: SDKModel {
 
@@ -37988,7 +38346,7 @@ public struct WriteUserAttributeWithValue: SDKModel {
 
 /**
  * Dynamic writeable type for UserDbConnection removes:
- * can, id, name, user_id, dialect, auth_type, host, port, database, schema, jdbc_additional_params, oauth_application_id, created_at, updated_at
+ * can, id, name, label, user_id, dialect, auth_type, host, port, database, schema, jdbc_additional_params, oauth_application_id, created_at, updated_at
  */
 public struct WriteUserDbConnection: SDKModel {
     /**
