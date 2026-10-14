@@ -50,7 +50,7 @@ jobs:
       matrix:
         os:
           - ubuntu
-        node-version: [20.x, 22.x]
+        node-version: [22.x, 24.x]
 
     steps:
       - name: Cancel Previous Runs
@@ -129,7 +129,7 @@ jobs:
     runs-on: ${{ matrix.os }}-latest
     strategy:
       matrix:
-        node-version: [20.x, 22.x]
+        node-version: [22.x, 24.x]
         os:
           - ubuntu
         looker: ${{ fromJson(vars.PRIMARY_LOOKER_VERSION) }}
@@ -205,7 +205,7 @@ jobs:
           path: artifacts
 
       - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@d0a4676d0e0b938bc201470d88276b7c74c712b3 # v2
+        uses: EnricoMi/publish-unit-test-result-action@d0a4676d0e0b938bc201470d88276b7c74c712b3 # v2.24.0
         with:
           # Cosmetic issue with `check_name` being associated to the wrong
           # workflow: https://github.com/EnricoMi/publish-unit-test-result-action/issues/12
