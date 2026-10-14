@@ -104,6 +104,13 @@ public enum PermissionType: String, Codable {
       gen.noComment = false;
       expect(actual).toEqual(expected);
     });
+
+    it('maps binary type to String', () => {
+      const type = apiTestModel.types.binary;
+      expect(type).toBeDefined();
+      const mapped = gen.typeMap(type);
+      expect(mapped.name).toEqual('String');
+    });
   });
 
   describe('special handling', () => {

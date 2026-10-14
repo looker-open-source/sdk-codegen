@@ -3,6 +3,8 @@ name: Fix NPM info
 on:
   workflow_dispatch:
 
+permissions: {}
+
 jobs:
 
   fix:

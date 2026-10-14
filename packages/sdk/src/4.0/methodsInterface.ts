@@ -25,7 +25,7 @@
  */
 
 /**
- * 518 API methods
+ * 532 API methods
  */
 
 import type {
@@ -41,7 +41,9 @@ import type {
  */
 import type {
   IAccessToken,
+  IActiveColorCollections,
   IAgent,
+  IAgentLookml,
   IAlert,
   IAlertNotifications,
   IAlertPatch,
@@ -72,8 +74,6 @@ import type {
   IConversationalAnalyticsChatRequest,
   IConversationMessage,
   ICostEstimate,
-  ICreateCIRunRequest,
-  ICreateCIRunResponse,
   ICreateContinuousIntegrationRunRequest,
   ICreateCostEstimate,
   ICreateCredentialsApi3,
@@ -127,7 +127,6 @@ import type {
   IGitBranch,
   IGitConnectionTest,
   IGitConnectionTestResult,
-  IGitDiagnosticReport,
   IGoldenQuery,
   IGroup,
   IGroupHierarchy,
@@ -168,8 +167,8 @@ import type {
   IPermission,
   IPermissionSet,
   IProject,
+  IProjectCISuite,
   IProjectFile,
-  IProjectRun,
   IProjectValidation,
   IProjectValidationCache,
   IProjectWorkspace,
@@ -208,6 +207,7 @@ import type {
   IRequestDeployRefToProduction,
   IRequestFolderChildren,
   IRequestFolderChildrenSearch,
+  IRequestGetContinuousIntegrationSuites,
   IRequestGraphDerivedTablesForModel,
   IRequestGraphDerivedTablesForView,
   IRequestLogin,
@@ -229,6 +229,7 @@ import type {
   IRequestSearchContent,
   IRequestSearchContentFavorites,
   IRequestSearchContentViews,
+  IRequestSearchContinuousIntegrationRuns,
   IRequestSearchConversations,
   IRequestSearchCredentialsEmail,
   IRequestSearchDashboardElements,
@@ -284,10 +285,12 @@ import type {
   ITimezone,
   IUpdateArtifact,
   IUpdateFolder,
+  IUploadedModel,
   IUser,
   IUserAttribute,
   IUserAttributeGroupValue,
   IUserAttributeWithValue,
+  IUserDbConnection,
   IUserEmailOnly,
   IUserLoginLockout,
   IUserPublic,
@@ -323,7 +326,6 @@ import type {
   IWriteEmbedSecret,
   IWriteExternalOauthApplication,
   IWriteGitBranch,
-  IWriteGitDiagnosticReport,
   IWriteGoldenQuery,
   IWriteGroup,
   IWriteIntegration,
@@ -342,6 +344,7 @@ import type {
   IWritePasswordConfig,
   IWritePermissionSet,
   IWriteProject,
+  IWriteProjectCISuite,
   IWriteQuery,
   IWriteRepositoryCredential,
   IWriteRole,
@@ -357,6 +360,7 @@ import type {
   IWriteUser,
   IWriteUserAttribute,
   IWriteUserAttributeWithValue,
+  IWriteUserDbConnection,
   IWriteWhitelabelConfiguration,
 } from './models';
 
@@ -401,7 +405,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_alerts(
-    request: IRequestSearchAlerts,
+    request?: IRequestSearchAlerts,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IAlert[], IError>>;
 
@@ -544,7 +548,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   alert_notifications(
-    request: IRequestAlertNotifications,
+    request?: IRequestAlertNotifications,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IAlertNotifications[], IError>>;
 
@@ -604,7 +608,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   login(
-    request: IRequestLogin,
+    request?: IRequestLogin,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IAccessToken, IError>>;
 
@@ -686,7 +690,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   artifact_namespaces(
-    request: IRequestArtifactNamespaces,
+    request?: IRequestArtifactNamespaces,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IArtifactNamespace[], IError | IValidationError>>;
 
@@ -1901,7 +1905,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_user_login_lockouts(
-    request: IRequestSearchUserLoginLockouts,
+    request?: IRequestSearchUserLoginLockouts,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IUserLoginLockout[], IError>>;
 
@@ -1984,7 +1988,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_boards(
-    request: IRequestSearchBoards,
+    request?: IRequestSearchBoards,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IBoard[], IError>>;
 
@@ -2046,7 +2050,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   all_board_items(
-    request: IRequestAllBoardItems,
+    request?: IRequestAllBoardItems,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IBoardItem[], IError>>;
 
@@ -2124,7 +2128,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   all_board_sections(
-    request: IRequestAllBoardSections,
+    request?: IRequestAllBoardSections,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IBoardSection[], IError>>;
 
@@ -2309,6 +2313,18 @@ export interface ILooker40SDK extends IAPIMethods {
     collection_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IColorCollection, IError | IValidationError>>;
+
+  /**
+   * Get active color collections including default, custom, and standard collections for visualization rendering and theming. Accessible to all authenticated users.
+   *
+   * GET /color_collections/active -> IActiveColorCollections
+   *
+   * @param options one-time API call overrides
+   *
+   */
+  color_collections_active(
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IActiveColorCollections, IError>>;
 
   /**
    * ### Get a Color Collection by ID
@@ -2660,6 +2676,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *  - host_url
    *  - email_domain_allowlist
    *  - embed_cookieless_v2
+   *  - embed_vis_modernization_default
    *  - embed_enabled
    *  - embed_config
    *  - mcp_tools
@@ -2704,6 +2721,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *  - host_url
    *  - email_domain_allowlist
    *  - embed_cookieless_v2
+   *  - embed_vis_modernization_default
    *  - embed_enabled
    *  - embed_config
    *  - mcp_tools
@@ -3003,7 +3021,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   all_external_oauth_applications(
-    request: IRequestAllExternalOauthApplications,
+    request?: IRequestAllExternalOauthApplications,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IExternalOauthApplication[], IError>>;
 
@@ -3262,6 +3280,56 @@ export interface ILooker40SDK extends IAPIMethods {
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ISshPublicKey, IError>>;
 
+  /**
+   * ### Get All User DB Connections
+   *
+   * Returns a list of user DB connections.
+   *
+   * GET /user_db_connections -> IUserDbConnection[]
+   *
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  all_user_db_connections(
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IUserDbConnection[], IError>>;
+
+  /**
+   * ### Update User DB Connection
+   *
+   * Updates an existing user DB connection (only enabling/disabling is allowed via the write limits in UserDbConnectionMapper).
+   *
+   * PATCH /user_db_connections/{user_db_connection_id} -> IUserDbConnection
+   *
+   * @param user_db_connection_id Id of user DB connection
+   * @param body Partial<IWriteUserDbConnection>
+   * @param options one-time API call overrides
+   *
+   */
+  update_user_db_connection(
+    user_db_connection_id: string,
+    body: Partial<IWriteUserDbConnection>,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IUserDbConnection, IError | IValidationError>>;
+
+  /**
+   * ### Delete User DB Connection
+   *
+   * Deletes an existing user DB connection.
+   *
+   * DELETE /user_db_connections/{user_db_connection_id} -> void
+   *
+   * @param user_db_connection_id Id of user DB connection
+   * @param options one-time API call overrides
+   *
+   */
+  delete_user_db_connection(
+    user_db_connection_id: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<void, IError>>;
+
   //#endregion Connection: Manage Database Connections
 
   //#region Content: Manage Content
@@ -3297,7 +3365,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_content_favorites(
-    request: IRequestSearchContentFavorites,
+    request?: IRequestSearchContentFavorites,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IContentFavorite[], IError>>;
 
@@ -3490,7 +3558,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   content_summary(
-    request: IRequestContentSummary,
+    request?: IRequestContentSummary,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IContentSummary[], IError | IValidationError>>;
 
@@ -3527,7 +3595,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   content_validation(
-    request: IRequestContentValidation,
+    request?: IRequestContentValidation,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IContentValidation, IError | IValidationError>>;
 
@@ -3562,7 +3630,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_content_views(
-    request: IRequestSearchContentViews,
+    request?: IRequestSearchContentViews,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IContentView[], IError>>;
 
@@ -3611,7 +3679,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_agents(
-    request: IRequestSearchAgents,
+    request?: IRequestSearchAgents,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IAgent[], IError>>;
 
@@ -3689,6 +3757,22 @@ export interface ILooker40SDK extends IAPIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IAgent, IError | IValidationError>>;
+
+  /**
+   * ### Get LookML of a UDD Agent
+   *
+   * Returns the LookML representation of a user-defined (UDD) agent.
+   *
+   * GET /agents/lookml/{agent_id} -> IAgentLookml
+   *
+   * @param agent_id Id of agent
+   * @param options one-time API call overrides
+   *
+   */
+  agent_lookml(
+    agent_id: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IAgentLookml, IError>>;
 
   /**
    * ### Get All Conversation Messages
@@ -3795,6 +3879,30 @@ export interface ILooker40SDK extends IAPIMethods {
   ): Promise<SDKResponse<IConversationMessage, IError | IValidationError>>;
 
   /**
+   * ### Get Agent Responses for User Message
+   *
+   * Get all agent response messages generated for a specific user prompt.
+   *
+   * An agent response often consists of multiple message blocks (such as text explanations,
+   * visualizations, and follow-up suggestions). This endpoint returns all response messages
+   * following the specified user message up to the next user prompt.
+   *
+   * GET /conversations/{conversation_id}/messages/{user_message_id}/responses -> IConversationMessage[]
+   *
+   * @param conversation_id Conversation ID
+   * @param user_message_id User Conversation Message ID
+   * @param fields Requested fields
+   * @param options one-time API call overrides
+   *
+   */
+  get_conversation_message_responses(
+    conversation_id: string,
+    user_message_id: string,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IConversationMessage[], IError>>;
+
+  /**
    * ### Search Conversations
    *
    * Returns an array of conversation objects that match the specified search criteria.
@@ -3811,7 +3919,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_conversations(
-    request: IRequestSearchConversations,
+    request?: IRequestSearchConversations,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IConversation[], IError>>;
 
@@ -4045,7 +4153,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_dashboards(
-    request: IRequestSearchDashboards,
+    request?: IRequestSearchDashboards,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IDashboard[], IError>>;
 
@@ -4172,6 +4280,27 @@ export interface ILooker40SDK extends IAPIMethods {
   ): Promise<SDKResponse<string, IError>>;
 
   /**
+   * ### Get Dashboard Image
+   *
+   * Returns the image content for a dashboard element.
+   *
+   * GET /dashboards/{dashboard_id}/images/{image_slug} -> string
+   *
+   * @remarks
+   * **NOTE**: Binary content may be returned by this function.
+   *
+   * @param dashboard_id Id of dashboard
+   * @param image_slug Slug of image
+   * @param options one-time API call overrides
+   *
+   */
+  get_dashboard_image(
+    dashboard_id: string,
+    image_slug: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string, IError>>;
+
+  /**
    * ### Get Aggregate Table LookML for Each Query on a Dashboard
    *
    * Returns a JSON object that contains the dashboard id and Aggregate Table lookml
@@ -4215,6 +4344,8 @@ export interface ILooker40SDK extends IAPIMethods {
    * Boolean search params accept only "true" and "false" as values.
    *
    *
+   * **Note:** When searching and sorting by `title`, the search uses the `dashboard_name` defined in the LookML code, rather than the user-facing display title.
+   *
    * The parameters `limit`, and `offset` are recommended for fetching results in page-size chunks.
    *
    * Get a **single LookML dashboard** by id with [dashboard_lookml()](#!/Dashboard/dashboard_lookml)
@@ -4226,7 +4357,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_lookml_dashboards(
-    request: IRequestSearchLookmlDashboards,
+    request?: IRequestSearchLookmlDashboards,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IDashboardLookml, IError>>;
 
@@ -4258,12 +4389,14 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * @param dashboard_id Dashboard id to move.
    * @param folder_id Folder id to move to.
+   * @param project_name LookML project name, used to disambiguate dashboards with the same model and dashboard name across projects.
    * @param options one-time API call overrides
    *
    */
   move_dashboard(
     dashboard_id: string,
     folder_id: string,
+    project_name?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IDashboard, IError | IValidationError>>;
 
@@ -4398,7 +4531,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_dashboard_elements(
-    request: IRequestSearchDashboardElements,
+    request?: IRequestSearchDashboardElements,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IDashboardElement[], IError>>;
 
@@ -4800,6 +4933,24 @@ export interface ILooker40SDK extends IAPIMethods {
 
   //#endregion Datagroup: Manage Datagroups
 
+  //#region DataUpload: Data Upload
+
+  /**
+   * ### Upload data for self-service modeling
+   *
+   * Uploads a CSV or Excel file to the specified connection and creates a self-service model.
+   *
+   * POST /self_service_models/upload -> IUploadedModel
+   *
+   * @param options one-time API call overrides
+   *
+   */
+  upload_data(
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IUploadedModel, IError | IValidationError>>;
+
+  //#endregion DataUpload: Data Upload
+
   //#region DerivedTable: View Derived Table graphs
 
   /**
@@ -4888,7 +5039,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_folders(
-    request: IRequestSearchFolders,
+    request?: IRequestSearchFolders,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IFolder[], IError>>;
 
@@ -5079,7 +5230,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   all_groups(
-    request: IRequestAllGroups,
+    request?: IRequestAllGroups,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IGroup[], IError>>;
 
@@ -5132,7 +5283,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_groups(
-    request: IRequestSearchGroups,
+    request?: IRequestSearchGroups,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IGroup[], IError>>;
 
@@ -5169,7 +5320,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_groups_with_roles(
-    request: IRequestSearchGroupsWithRoles,
+    request?: IRequestSearchGroupsWithRoles,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IGroupSearch[], IError>>;
 
@@ -5207,7 +5358,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_groups_with_hierarchy(
-    request: IRequestSearchGroupsWithHierarchy,
+    request?: IRequestSearchGroupsWithHierarchy,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IGroupHierarchy[], IError>>;
 
@@ -5535,7 +5686,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   all_integrations(
-    request: IRequestAllIntegrations,
+    request?: IRequestAllIntegrations,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IIntegration[], IError>>;
 
@@ -5712,7 +5863,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_looks(
-    request: IRequestSearchLooks,
+    request?: IRequestSearchLooks,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ILook[], IError>>;
 
@@ -5812,6 +5963,8 @@ export interface ILooker40SDK extends IAPIMethods {
    * | png | A PNG image of the visualization of the query
    * | jpg | A JPG image of the visualization of the query
    *
+   * **Note**: Streaming queries only write results to the cache when using the `json_detail` format. Queries in other formats only populate the cache if they cannot be streamed (such as when table calculations or row totals are present). Once cached, all result formats can retrieve results from the cache.
+   *
    * GET /looks/{look_id}/run/{result_format} -> string
    *
    * @remarks
@@ -5899,7 +6052,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   all_lookml_models(
-    request: IRequestAllLookmlModels,
+    request?: IRequestAllLookmlModels,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ILookmlModel[], IError>>;
 
@@ -6157,48 +6310,108 @@ export interface ILooker40SDK extends IAPIMethods {
   //#region Project: Manage Projects
 
   /**
-   * ### Fetches a CI Run.
+   * ### Search Continuous Integration Runs for a project.
    *
-   * This endpoint is deprecated. [Get Continuous Integration Run](#!/Project/get_continuous_integration_run) should be used instead.
+   * Returns an array of Continuous Integration Run objects that match the specified search criteria.
    *
-   * GET /projects/{project_id}/ci/runs/{run_id} -> IProjectRun
+   * GET /projects/{project_id}/continuous_integration/runs/search -> ICIRun[]
    *
-   * @deprecated
-   *
-   * @param project_id Project Id
-   * @param run_id Run Id
-   * @param fields Requested fields
+   * @param request composed interface "IRequestSearchContinuousIntegrationRuns" for complex method parameters
    * @param options one-time API call overrides
    *
    */
-  get_ci_run(
-    project_id: string,
-    run_id: string,
-    fields?: string,
+  search_continuous_integration_runs(
+    request: IRequestSearchContinuousIntegrationRuns,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IProjectRun, IError>>;
+  ): Promise<SDKResponse<ICIRun[], IError>>;
 
   /**
-   * ### Creates a CI Run.
+   * ### Fetches Multiple CI Suite Configurations for Project.
    *
-   * This endpoint is deprecated. [Create Continuous Integration Run](#!/Project/create_continuous_integration_run) should be used instead.
+   * GET /projects/{project_id}/continuous_integration/suites -> IProjectCISuite[]
    *
-   * POST /projects/{project_id}/ci/run -> ICreateCIRunResponse
+   * @param request composed interface "IRequestGetContinuousIntegrationSuites" for complex method parameters
+   * @param options one-time API call overrides
    *
-   * @deprecated
+   */
+  get_continuous_integration_suites(
+    request: IRequestGetContinuousIntegrationSuites,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IProjectCISuite[], IError>>;
+
+  /**
+   * ### Fetches a CI Suite Configuration.
+   *
+   * POST /projects/{project_id}/continuous_integration/suites -> IProjectCISuite
    *
    * @param project_id Project Id
-   * @param body Partial<ICreateCIRunRequest>
+   * @param body Partial<IWriteProjectCISuite>
    * @param fields Requested fields
    * @param options one-time API call overrides
    *
    */
-  create_ci_run(
+  create_continuous_integration_suite(
     project_id: string,
-    body: Partial<ICreateCIRunRequest>,
+    body: Partial<IWriteProjectCISuite>,
     fields?: string,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ICreateCIRunResponse, IError | IValidationError>>;
+  ): Promise<SDKResponse<IProjectCISuite, IError | IValidationError>>;
+
+  /**
+   * ### Fetches a CI Suite Configuration.
+   *
+   * GET /projects/{project_id}/continuous_integration/suites/{suite_id} -> IProjectCISuite
+   *
+   * @param project_id Project Id
+   * @param suite_id Suite Id
+   * @param fields Requested fields
+   * @param options one-time API call overrides
+   *
+   */
+  get_continuous_integration_suite(
+    project_id: string,
+    suite_id: string,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IProjectCISuite, IError>>;
+
+  /**
+   * ### Updates a Continuous Integration Suite.
+   *
+   * PATCH /projects/{project_id}/continuous_integration/suites/{suite_id} -> IProjectCISuite
+   *
+   * @param project_id Project Id
+   * @param suite_id Suite Id
+   * @param body Partial<IWriteProjectCISuite>
+   * @param fields Requested fields
+   * @param options one-time API call overrides
+   *
+   */
+  update_continuous_integration_suite(
+    project_id: string,
+    suite_id: string,
+    body: Partial<IWriteProjectCISuite>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IProjectCISuite, IError | IValidationError>>;
+
+  /**
+   * ### Deletes a Continuous Integration Suite.
+   *
+   * DELETE /projects/{project_id}/continuous_integration/suites/{suite_id} -> string
+   *
+   * @param project_id Project Id
+   * @param suite_id Suite Id
+   * @param fields Requested fields
+   * @param options one-time API call overrides
+   *
+   */
+  delete_continuous_integration_suite(
+    project_id: string,
+    suite_id: string,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string, IError>>;
 
   /**
    * ### Creates and queues a Continuous Integration Run.
@@ -6214,6 +6427,24 @@ export interface ILooker40SDK extends IAPIMethods {
   create_continuous_integration_run(
     project_id: string,
     body: Partial<ICreateContinuousIntegrationRunRequest>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ICIRun, IError | IValidationError>>;
+
+  /**
+   * ### Duplicates and queues a Continuous Integration Run.
+   *
+   * POST /projects/{project_id}/continuous_integration/runs/{run_id}/duplicate -> ICIRun
+   *
+   * @param project_id Project Id
+   * @param run_id Run ID to duplicate and re-run
+   * @param fields Requested fields
+   * @param options one-time API call overrides
+   *
+   */
+  duplicate_continuous_integration_run(
+    project_id: string,
+    run_id: string,
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ICIRun, IError | IValidationError>>;
@@ -6235,6 +6466,22 @@ export interface ILooker40SDK extends IAPIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ICIRun, IError>>;
+
+  /**
+   * ### Cancels a Continuous Integration Run.
+   *
+   * DELETE /projects/{project_id}/continuous_integration/runs/{run_id} -> string
+   *
+   * @param project_id Project Id
+   * @param run_id Run Id
+   * @param options one-time API call overrides
+   *
+   */
+  cancel_continuous_integration_run(
+    project_id: string,
+    run_id: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string, IError>>;
 
   /**
    * ### Generate Lockfile for All LookML Dependencies
@@ -6484,6 +6731,36 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   reset_project_to_remote(
+    project_id: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string, IError | IValidationError>>;
+
+  /**
+   * ### Pull from Production
+   * Pulls changes from the remote production branch into the current development workspace.
+   *
+   * POST /projects/{project_id}/pull_from_production -> string
+   *
+   * @param project_id Id of project
+   * @param options one-time API call overrides
+   *
+   */
+  pull_project_from_production(
+    project_id: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string, IError | IValidationError>>;
+
+  /**
+   * ### Pull from Remote
+   * Pulls changes from the remote tracking branch of the currently active branch into the local development workspace.
+   *
+   * POST /projects/{project_id}/pull_from_remote -> string
+   *
+   * @param project_id Id of project
+   * @param options one-time API call overrides
+   *
+   */
+  pull_project_from_remote(
     project_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError | IValidationError>>;
@@ -6839,56 +7116,6 @@ export interface ILooker40SDK extends IAPIMethods {
   ): Promise<SDKResponse<IProject, IError | IValidationError>>;
 
   /**
-   * ### Initiate Git Diagnosis Suite
-   *
-   * POST /projects/{project_id}/git_diagnostic_report -> IGitDiagnosticReport
-   *
-   * @param project_id Looker Project ID
-   * @param body Partial<IWriteGitDiagnosticReport>
-   * @param options one-time API call overrides
-   *
-   */
-  create_git_diagnostic_report(
-    project_id: string,
-    body: Partial<IWriteGitDiagnosticReport>,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IGitDiagnosticReport, IError | IValidationError>>;
-
-  /**
-   * ### Retrieve Live Git Diagnostic Suite Execution Status
-   *
-   * GET /projects/{project_id}/git_diagnostic_report/{report_id} -> IGitDiagnosticReport
-   *
-   * @param project_id Looker Project ID
-   * @param report_id Report ID
-   * @param options one-time API call overrides
-   *
-   */
-  get_git_diagnostic_report(
-    project_id: string,
-    report_id: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IGitDiagnosticReport, IError>>;
-
-  /**
-   * ### Repair Git Configuration Issues
-   *
-   * POST /projects/{project_id}/git_diagnostic_report/{report_id}/repair -> IGitDiagnosticReport
-   *
-   * @param project_id Looker Project ID
-   * @param report_id Report ID
-   * @param body Partial<IWriteGitDiagnosticReport>
-   * @param options one-time API call overrides
-   *
-   */
-  repair_git_diagnostic_report(
-    project_id: string,
-    report_id: string,
-    body: Partial<IWriteGitDiagnosticReport>,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IGitDiagnosticReport, IError | IValidationError>>;
-
-  /**
    * ### Configure Repository Credential for a remote dependency
    *
    * Admin required.
@@ -6959,6 +7186,8 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * Use [query_task(query_task_id)](#!/Query/query_task) to check the execution status of the query task.
    * After the query task status reaches "Complete", use [query_task_results(query_task_id)](#!/Query/query_task_results) to fetch the results of the query.
+   *
+   * **Note**: Streaming queries only write results to the cache when using the `json_detail` format. Queries in other formats only populate the cache if they cannot be streamed (such as when table calculations or row totals are present). Once cached, all result formats can retrieve results from the cache.
    *
    * POST /query_tasks -> IQueryTask
    *
@@ -7160,6 +7389,8 @@ export interface ILooker40SDK extends IAPIMethods {
    * | png | A PNG image of the visualization of the query
    * | jpg | A JPG image of the visualization of the query
    *
+   * **Note**: Streaming queries only write results to the cache when using the `json_detail` format. Queries in other formats only populate the cache if they cannot be streamed (such as when table calculations or row totals are present). Once cached, all result formats can retrieve results from the cache.
+   *
    * GET /queries/{query_id}/run/{result_format} -> string
    *
    * @remarks
@@ -7226,6 +7457,8 @@ export interface ILooker40SDK extends IAPIMethods {
    * | sql | Returns the generated SQL rather than running the query
    * | png | A PNG image of the visualization of the query
    * | jpg | A JPG image of the visualization of the query
+   *
+   * **Note**: Streaming queries only write results to the cache when using the `json_detail` format. Queries in other formats only populate the cache if they cannot be streamed (such as when table calculations or row totals are present). Once cached, all result formats can retrieve results from the cache.
    *
    * POST /queries/run/{result_format} -> string
    *
@@ -7295,6 +7528,8 @@ export interface ILooker40SDK extends IAPIMethods {
    * | sql | Returns the generated SQL rather than running the query
    * | png | A PNG image of the visualization of the query
    * | jpg | A JPG image of the visualization of the query
+   *
+   * **Note**: Streaming queries only write results to the cache when using the `json_detail` format. Queries in other formats only populate the cache if they cannot be streamed (such as when table calculations or row totals are present). Once cached, all result formats can retrieve results from the cache.
    *
    * GET /queries/models/{model_name}/views/{view_name}/run/{result_format} -> string
    *
@@ -7628,7 +7863,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_reports(
-    request: IRequestSearchReports,
+    request?: IRequestSearchReports,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IReport[], IError>>;
 
@@ -7667,7 +7902,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_model_sets(
-    request: IRequestSearchModelSets,
+    request?: IRequestSearchModelSets,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IModelSet[], IError>>;
 
@@ -7715,7 +7950,7 @@ export interface ILooker40SDK extends IAPIMethods {
   delete_model_set(
     model_set_id: string,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<string, IError>>;
+  ): Promise<SDKResponse<string, IError | IValidationError>>;
 
   /**
    * ### Get information about all model sets.
@@ -7788,7 +8023,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_permission_sets(
-    request: IRequestSearchPermissionSets,
+    request?: IRequestSearchPermissionSets,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IPermissionSet[], IError>>;
 
@@ -7837,7 +8072,7 @@ export interface ILooker40SDK extends IAPIMethods {
   delete_permission_set(
     permission_set_id: string,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<string, IError>>;
+  ): Promise<SDKResponse<string, IError | IValidationError>>;
 
   /**
    * ### Get information about all permission sets.
@@ -7878,7 +8113,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   all_roles(
-    request: IRequestAllRoles,
+    request?: IRequestAllRoles,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IRole[], IError>>;
 
@@ -7929,7 +8164,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_roles(
-    request: IRequestSearchRoles,
+    request?: IRequestSearchRoles,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IRole[], IError>>;
 
@@ -7967,7 +8202,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_roles_with_user_count(
-    request: IRequestSearchRolesWithUserCount,
+    request?: IRequestSearchRolesWithUserCount,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IRoleSearch[], IError>>;
 
@@ -8214,7 +8449,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   all_scheduled_plans(
-    request: IRequestAllScheduledPlans,
+    request?: IRequestAllScheduledPlans,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IScheduledPlan[], IError | IValidationError>>;
 
@@ -8359,7 +8594,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_scheduled_plans(
-    request: IRequestSearchScheduledPlans,
+    request?: IRequestSearchScheduledPlans,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IScheduledPlan[], IError | IValidationError>>;
 
@@ -8763,7 +8998,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_themes(
-    request: IRequestSearchThemes,
+    request?: IRequestSearchThemes,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ITheme[], IError | IValidationError>>;
 
@@ -8887,7 +9122,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   active_themes(
-    request: IRequestActiveThemes,
+    request?: IRequestActiveThemes,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ITheme[], IError | IValidationError>>;
 
@@ -9032,9 +9267,309 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_credentials_email(
-    request: IRequestSearchCredentialsEmail,
+    request?: IRequestSearchCredentialsEmail,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ICredentialsEmailSearch[], IError>>;
+
+  /**
+   * ### Email/password login information for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * GET /users/{user_id}/credentials_email -> ICredentialsEmail
+   *
+   * @param user_id Id of user
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  user_credentials_email(
+    user_id: string,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ICredentialsEmail, IError>>;
+
+  /**
+   * ### Email/password login information for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * POST /users/{user_id}/credentials_email -> ICredentialsEmail
+   *
+   * @param user_id Id of user
+   * @param body Partial<IWriteCredentialsEmail>
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  create_user_credentials_email(
+    user_id: string,
+    body: Partial<IWriteCredentialsEmail>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ICredentialsEmail, IError | IValidationError>>;
+
+  /**
+   * ### Email/password login information for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * PATCH /users/{user_id}/credentials_email -> ICredentialsEmail
+   *
+   * @param user_id Id of user
+   * @param body Partial<IWriteCredentialsEmail>
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  update_user_credentials_email(
+    user_id: string,
+    body: Partial<IWriteCredentialsEmail>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ICredentialsEmail, IError | IValidationError>>;
+
+  /**
+   * ### Email/password login information for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * DELETE /users/{user_id}/credentials_email -> string
+   *
+   * @param user_id Id of user
+   * @param options one-time API call overrides
+   *
+   */
+  delete_user_credentials_email(
+    user_id: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string, IError>>;
+
+  /**
+   * ### Create a password reset token.
+   * This will create a cryptographically secure random password reset token for the user.
+   * If the user already has a password reset token then this invalidates the old token and creates a new one.
+   * The token is expressed as the 'password_reset_url' of the user's email/password credential object.
+   * This takes an optional 'expires' param to indicate if the new token should be an expiring token.
+   * Tokens that expire are typically used for self-service password resets for existing users.
+   * Invitation emails for new users typically are not set to expire.
+   * The expire period is always 60 minutes when expires is enabled.
+   * This method can be called with an empty body.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * POST /users/{user_id}/credentials_email/password_reset -> ICredentialsEmail
+   *
+   * @param request composed interface "IRequestCreateUserCredentialsEmailPasswordReset" for complex method parameters
+   * @param options one-time API call overrides
+   *
+   */
+  create_user_credentials_email_password_reset(
+    request: IRequestCreateUserCredentialsEmailPasswordReset,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ICredentialsEmail, IError>>;
+
+  /**
+   * ### Send a password reset token.
+   * This will send a password reset email to the user. If a password reset token does not already exist
+   * for this user, it will create one and then send it.
+   * If the user has not yet set up their account, it will send a setup email to the user.
+   * The URL sent in the email is expressed as the 'password_reset_url' of the user's email/password credential object.
+   * Password reset URLs will expire in 60 minutes.
+   * This method can be called with an empty body.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * POST /users/{user_id}/credentials_email/send_password_reset -> ICredentialsEmail
+   *
+   * @param user_id Id of user
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  send_user_credentials_email_password_reset(
+    user_id: string,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ICredentialsEmail, IError>>;
+
+  /**
+   * ### Google authentication login information for the specified user.
+   *
+   * GET /users/{user_id}/credentials_google -> ICredentialsGoogle
+   *
+   * @param user_id Id of user
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  user_credentials_google(
+    user_id: string,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ICredentialsGoogle, IError>>;
+
+  /**
+   * ### Delete Google authentication login information for the specified user.
+   *
+   * DELETE /users/{user_id}/credentials_google -> string
+   *
+   * @param user_id Id of user
+   * @param options one-time API call overrides
+   *
+   */
+  delete_user_credentials_google(
+    user_id: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string, IError>>;
+
+  /**
+   * ### Looker Openid login information for the specified user. Used by Looker Analysts.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * GET /users/{user_id}/credentials_looker_openid -> ICredentialsLookerOpenid
+   *
+   * @param user_id Id of user
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  user_credentials_looker_openid(
+    user_id: string,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ICredentialsLookerOpenid, IError>>;
+
+  /**
+   * ### Looker Openid login information for the specified user. Used by Looker Analysts.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * DELETE /users/{user_id}/credentials_looker_openid -> string
+   *
+   * @param user_id Id of user
+   * @param options one-time API call overrides
+   *
+   */
+  delete_user_credentials_looker_openid(
+    user_id: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string, IError>>;
+
+  /**
+   * ### OpenID Connect (OIDC) authentication login information for the specified user.
+   *
+   * GET /users/{user_id}/credentials_oidc -> ICredentialsOIDC
+   *
+   * @param user_id Id of user
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  user_credentials_oidc(
+    user_id: string,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ICredentialsOIDC, IError>>;
+
+  /**
+   * ### Delete OpenID Connect (OIDC) authentication login information for the specified user.
+   *
+   * DELETE /users/{user_id}/credentials_oidc -> string
+   *
+   * @param user_id Id of user
+   * @param options one-time API call overrides
+   *
+   */
+  delete_user_credentials_oidc(
+    user_id: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string, IError>>;
+
+  /**
+   * ### Saml authentication login information for the specified user.
+   *
+   * GET /users/{user_id}/credentials_saml -> ICredentialsSaml
+   *
+   * @param user_id Id of user
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  user_credentials_saml(
+    user_id: string,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ICredentialsSaml, IError>>;
+
+  /**
+   * ### Delete Saml authentication login information for the specified user.
+   *
+   * DELETE /users/{user_id}/credentials_saml -> string
+   *
+   * @param user_id Id of user
+   * @param options one-time API call overrides
+   *
+   */
+  delete_user_credentials_saml(
+    user_id: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string, IError>>;
+
+  /**
+   * ### Get two-factor login information for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * GET /users/{user_id}/credentials_totp -> ICredentialsTotp
+   *
+   * @param user_id Id of user
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  user_credentials_totp(
+    user_id: string,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ICredentialsTotp, IError>>;
+
+  /**
+   * ### Create two-factor login information for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * POST /users/{user_id}/credentials_totp -> ICredentialsTotp
+   *
+   * @param user_id Id of user
+   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
+   * @param fields Requested fields.
+   * @param options one-time API call overrides
+   *
+   */
+  create_user_credentials_totp(
+    user_id: string,
+    body?: Partial<ICredentialsTotp>,
+    fields?: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<ICredentialsTotp, IError | IValidationError>>;
+
+  /**
+   * ### Delete two-factor login information for the specified user.
+   *
+   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * DELETE /users/{user_id}/credentials_totp -> string
+   *
+   * @param user_id Id of user
+   * @param options one-time API call overrides
+   *
+   */
+  delete_user_credentials_totp(
+    user_id: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string, IError>>;
 
   /**
    * ### Get information about the current user; i.e. the user account currently calling the API.
@@ -9060,7 +9595,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   all_users(
-    request: IRequestAllUsers,
+    request?: IRequestAllUsers,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IUser[], IError>>;
 
@@ -9119,7 +9654,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   search_users(
-    request: IRequestSearchUsers,
+    request?: IRequestSearchUsers,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IUser[], IError>>;
 
@@ -9189,7 +9724,7 @@ export interface ILooker40SDK extends IAPIMethods {
    * * Their reports, Looks and dashboards will be moved to Trash.
    * * Any public URLs owned by them will no longer work.
    * * Schedules created by the users or that use their content will be deleted.
-   * * Alerts will continue to run, but will not be visible or editable from the dashboard.
+   * * Alerts owned by the users will be deleted.
    *
    * The user cannot delete themselves.
    * The last administrator user cannot be deleted.
@@ -9284,7 +9819,7 @@ export interface ILooker40SDK extends IAPIMethods {
    * * Their reports, Looks and dashboards will be moved to Trash.
    * * Any public URLs owned by them will no longer work.
    * * Schedules created by the service account or that use their content will be deleted.
-   * * Alerts will continue to run, but will not be visible or editable from the dashboard.
+   * * Alerts owned by the service account will be deleted.
    *
    * The service account cannot delete itself.
    *
@@ -9295,134 +9830,6 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   delete_service_account(
-    user_id: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<string, IError>>;
-
-  /**
-   * ### Email/password login information for the specified user.
-   *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-   *
-   * GET /users/{user_id}/credentials_email -> ICredentialsEmail
-   *
-   * @param user_id Id of user
-   * @param fields Requested fields.
-   * @param options one-time API call overrides
-   *
-   */
-  user_credentials_email(
-    user_id: string,
-    fields?: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ICredentialsEmail, IError>>;
-
-  /**
-   * ### Email/password login information for the specified user.
-   *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-   *
-   * POST /users/{user_id}/credentials_email -> ICredentialsEmail
-   *
-   * @param user_id Id of user
-   * @param body Partial<IWriteCredentialsEmail>
-   * @param fields Requested fields.
-   * @param options one-time API call overrides
-   *
-   */
-  create_user_credentials_email(
-    user_id: string,
-    body: Partial<IWriteCredentialsEmail>,
-    fields?: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ICredentialsEmail, IError | IValidationError>>;
-
-  /**
-   * ### Email/password login information for the specified user.
-   *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-   *
-   * PATCH /users/{user_id}/credentials_email -> ICredentialsEmail
-   *
-   * @param user_id Id of user
-   * @param body Partial<IWriteCredentialsEmail>
-   * @param fields Requested fields.
-   * @param options one-time API call overrides
-   *
-   */
-  update_user_credentials_email(
-    user_id: string,
-    body: Partial<IWriteCredentialsEmail>,
-    fields?: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ICredentialsEmail, IError | IValidationError>>;
-
-  /**
-   * ### Email/password login information for the specified user.
-   *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-   *
-   * DELETE /users/{user_id}/credentials_email -> string
-   *
-   * @param user_id Id of user
-   * @param options one-time API call overrides
-   *
-   */
-  delete_user_credentials_email(
-    user_id: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<string, IError>>;
-
-  /**
-   * ### Two-factor login information for the specified user.
-   *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-   *
-   * GET /users/{user_id}/credentials_totp -> ICredentialsTotp
-   *
-   * @param user_id Id of user
-   * @param fields Requested fields.
-   * @param options one-time API call overrides
-   *
-   */
-  user_credentials_totp(
-    user_id: string,
-    fields?: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ICredentialsTotp, IError>>;
-
-  /**
-   * ### Two-factor login information for the specified user.
-   *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-   *
-   * POST /users/{user_id}/credentials_totp -> ICredentialsTotp
-   *
-   * @param user_id Id of user
-   * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
-   * @param fields Requested fields.
-   * @param options one-time API call overrides
-   *
-   */
-  create_user_credentials_totp(
-    user_id: string,
-    body?: Partial<ICredentialsTotp>,
-    fields?: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ICredentialsTotp, IError | IValidationError>>;
-
-  /**
-   * ### Two-factor login information for the specified user.
-   *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-   *
-   * DELETE /users/{user_id}/credentials_totp -> string
-   *
-   * @param user_id Id of user
-   * @param options one-time API call overrides
-   *
-   */
-  delete_user_credentials_totp(
     user_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>;
@@ -9457,96 +9864,6 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   delete_user_credentials_ldap(
-    user_id: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<string, IError>>;
-
-  /**
-   * ### Google authentication login information for the specified user.
-   *
-   * GET /users/{user_id}/credentials_google -> ICredentialsGoogle
-   *
-   * @param user_id Id of user
-   * @param fields Requested fields.
-   * @param options one-time API call overrides
-   *
-   */
-  user_credentials_google(
-    user_id: string,
-    fields?: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ICredentialsGoogle, IError>>;
-
-  /**
-   * ### Google authentication login information for the specified user.
-   *
-   * DELETE /users/{user_id}/credentials_google -> string
-   *
-   * @param user_id Id of user
-   * @param options one-time API call overrides
-   *
-   */
-  delete_user_credentials_google(
-    user_id: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<string, IError>>;
-
-  /**
-   * ### Saml authentication login information for the specified user.
-   *
-   * GET /users/{user_id}/credentials_saml -> ICredentialsSaml
-   *
-   * @param user_id Id of user
-   * @param fields Requested fields.
-   * @param options one-time API call overrides
-   *
-   */
-  user_credentials_saml(
-    user_id: string,
-    fields?: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ICredentialsSaml, IError>>;
-
-  /**
-   * ### Saml authentication login information for the specified user.
-   *
-   * DELETE /users/{user_id}/credentials_saml -> string
-   *
-   * @param user_id Id of user
-   * @param options one-time API call overrides
-   *
-   */
-  delete_user_credentials_saml(
-    user_id: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<string, IError>>;
-
-  /**
-   * ### OpenID Connect (OIDC) authentication login information for the specified user.
-   *
-   * GET /users/{user_id}/credentials_oidc -> ICredentialsOIDC
-   *
-   * @param user_id Id of user
-   * @param fields Requested fields.
-   * @param options one-time API call overrides
-   *
-   */
-  user_credentials_oidc(
-    user_id: string,
-    fields?: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ICredentialsOIDC, IError>>;
-
-  /**
-   * ### OpenID Connect (OIDC) authentication login information for the specified user.
-   *
-   * DELETE /users/{user_id}/credentials_oidc -> string
-   *
-   * @param user_id Id of user
-   * @param options one-time API call overrides
-   *
-   */
-  delete_user_credentials_oidc(
     user_id: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>;
@@ -9694,40 +10011,6 @@ export interface ILooker40SDK extends IAPIMethods {
   ): Promise<SDKResponse<ICredentialsEmbed[], IError>>;
 
   /**
-   * ### Looker Openid login information for the specified user. Used by Looker Analysts.
-   *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-   *
-   * GET /users/{user_id}/credentials_looker_openid -> ICredentialsLookerOpenid
-   *
-   * @param user_id Id of user
-   * @param fields Requested fields.
-   * @param options one-time API call overrides
-   *
-   */
-  user_credentials_looker_openid(
-    user_id: string,
-    fields?: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ICredentialsLookerOpenid, IError>>;
-
-  /**
-   * ### Looker Openid login information for the specified user. Used by Looker Analysts.
-   *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-   *
-   * DELETE /users/{user_id}/credentials_looker_openid -> string
-   *
-   * @param user_id Id of user
-   * @param options one-time API call overrides
-   *
-   */
-  delete_user_credentials_looker_openid(
-    user_id: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<string, IError>>;
-
-  /**
    * ### Web login session for the specified user.
    *
    * GET /users/{user_id}/sessions/{session_id} -> ISession
@@ -9776,30 +10059,6 @@ export interface ILooker40SDK extends IAPIMethods {
     fields?: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<ISession[], IError>>;
-
-  /**
-   * ### Create a password reset token.
-   * This will create a cryptographically secure random password reset token for the user.
-   * If the user already has a password reset token then this invalidates the old token and creates a new one.
-   * The token is expressed as the 'password_reset_url' of the user's email/password credential object.
-   * This takes an optional 'expires' param to indicate if the new token should be an expiring token.
-   * Tokens that expire are typically used for self-service password resets for existing users.
-   * Invitation emails for new users typically are not set to expire.
-   * The expire period is always 60 minutes when expires is enabled.
-   * This method can be called with an empty body.
-   *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-   *
-   * POST /users/{user_id}/credentials_email/password_reset -> ICredentialsEmail
-   *
-   * @param request composed interface "IRequestCreateUserCredentialsEmailPasswordReset" for complex method parameters
-   * @param options one-time API call overrides
-   *
-   */
-  create_user_credentials_email_password_reset(
-    request: IRequestCreateUserCredentialsEmailPasswordReset,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ICredentialsEmail, IError>>;
 
   /**
    * ### Get information about roles of a given user
@@ -9904,30 +10163,6 @@ export interface ILooker40SDK extends IAPIMethods {
   ): Promise<SDKResponse<void, IError>>;
 
   /**
-   * ### Send a password reset token.
-   * This will send a password reset email to the user. If a password reset token does not already exist
-   * for this user, it will create one and then send it.
-   * If the user has not yet set up their account, it will send a setup email to the user.
-   * The URL sent in the email is expressed as the 'password_reset_url' of the user's email/password credential object.
-   * Password reset URLs will expire in 60 minutes.
-   * This method can be called with an empty body.
-   *
-   * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
-   *
-   * POST /users/{user_id}/credentials_email/send_password_reset -> ICredentialsEmail
-   *
-   * @param user_id Id of user
-   * @param fields Requested fields.
-   * @param options one-time API call overrides
-   *
-   */
-  send_user_credentials_email_password_reset(
-    user_id: string,
-    fields?: string,
-    options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<ICredentialsEmail, IError>>;
-
-  /**
    * ### Change a disabled user's email addresses
    *
    * Allows the admin to change the email addresses for all the user's
@@ -9999,7 +10234,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    */
   all_user_attributes(
-    request: IRequestAllUserAttributes,
+    request?: IRequestAllUserAttributes,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IUserAttribute[], IError>>;
 

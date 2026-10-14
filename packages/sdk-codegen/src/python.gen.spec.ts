@@ -911,6 +911,13 @@ class MergeFields(model.Model):
         self.field_name = field_name
         self.source_field_name = source_field_name`);
     });
+
+    it('maps binary type to str', () => {
+      const type = apiTestModel.types.binary;
+      expect(type).toBeDefined();
+      const mapped = gen.typeMapMethods(type);
+      expect(mapped.name).toEqual('str');
+    });
   });
 
   describe('makeTheCall', () => {

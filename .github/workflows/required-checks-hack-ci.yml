@@ -37,9 +37,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Repo Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
 
-      - uses: tony84727/changed-file-filter@v0.2.3
+      - uses: tony84727/changed-file-filter@20844f4c78ebd318b4e17fae8078b0d04547b13a # v0.2.3
         id: filter
         with:
           filters: |
@@ -90,7 +92,7 @@ jobs:
 
       - name: Debug info
         run: |
-          echo "${{ toJSON(steps.filter.outputs) }}"
+          echo "${STEPS_FILTER_OUTPUTS}"
           echo "apix: ${STEPS_FILTER_OUTPUTS_APIX}"
           echo "codegen: ${STEPS_FILTER_OUTPUTS_CODEGEN}"
           echo "hackathon: ${STEPS_FILTER_OUTPUTS_HACKATHON}"
@@ -99,6 +101,7 @@ jobs:
           echo "tssdk: ${STEPS_FILTER_OUTPUTS_TSSDK}"
           echo "gosdk: ${STEPS_FILTER_OUTPUTS_GOSDK}"
         env:
+          STEPS_FILTER_OUTPUTS: ${{ toJSON(steps.filter.outputs) }}
           STEPS_FILTER_OUTPUTS_APIX: ${{ steps.filter.outputs.apix }}
           STEPS_FILTER_OUTPUTS_CODEGEN: ${{ steps.filter.outputs.codegen }}
           STEPS_FILTER_OUTPUTS_HACKATHON: ${{ steps.filter.outputs.hackathon }}

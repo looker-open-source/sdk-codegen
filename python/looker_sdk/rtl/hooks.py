@@ -26,6 +26,8 @@ import keyword
 import sys
 from typing import Type
 
+import attr
+
 
 def unstructure_hook(converter, api_model):
     """cattr unstructure hook
@@ -35,6 +37,7 @@ def unstructure_hook(converter, api_model):
     EXPLICIT_NULL fields to None so that we only send null
     in the json for fields the caller set EXPLICIT_NULL on.
     """
+    attr.resolve_types(api_model.__class__)
     data = converter.unstructure_attrs_asdict(api_model)
     for key, value in data.copy().items():
         if value is None:
@@ -74,7 +77,6 @@ else:
             return datetime.datetime.fromisoformat(d)
         except ValueError:
             return datetime.datetime.strptime(d, DATETIME_FMT)
-
 
 
 def datetime_unstructure_hook(dt):

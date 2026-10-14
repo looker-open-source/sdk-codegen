@@ -25,7 +25,7 @@
  */
 
 /**
- * 518 API methods
+ * 532 API methods
  */
 
 import type {
@@ -46,7 +46,9 @@ import { encodeParam, functionalSdk } from '@looker/sdk-rtl';
 import { sdkVersion } from '../constants';
 import type {
   IAccessToken,
+  IActiveColorCollections,
   IAgent,
+  IAgentLookml,
   IAlert,
   IAlertNotifications,
   IAlertPatch,
@@ -77,8 +79,6 @@ import type {
   IConversationalAnalyticsChatRequest,
   IConversationMessage,
   ICostEstimate,
-  ICreateCIRunRequest,
-  ICreateCIRunResponse,
   ICreateContinuousIntegrationRunRequest,
   ICreateCostEstimate,
   ICreateCredentialsApi3,
@@ -132,7 +132,6 @@ import type {
   IGitBranch,
   IGitConnectionTest,
   IGitConnectionTestResult,
-  IGitDiagnosticReport,
   IGoldenQuery,
   IGroup,
   IGroupHierarchy,
@@ -173,8 +172,8 @@ import type {
   IPermission,
   IPermissionSet,
   IProject,
+  IProjectCISuite,
   IProjectFile,
-  IProjectRun,
   IProjectValidation,
   IProjectValidationCache,
   IProjectWorkspace,
@@ -213,6 +212,7 @@ import type {
   IRequestDeployRefToProduction,
   IRequestFolderChildren,
   IRequestFolderChildrenSearch,
+  IRequestGetContinuousIntegrationSuites,
   IRequestGraphDerivedTablesForModel,
   IRequestGraphDerivedTablesForView,
   IRequestLogin,
@@ -234,6 +234,7 @@ import type {
   IRequestSearchContent,
   IRequestSearchContentFavorites,
   IRequestSearchContentViews,
+  IRequestSearchContinuousIntegrationRuns,
   IRequestSearchConversations,
   IRequestSearchCredentialsEmail,
   IRequestSearchDashboardElements,
@@ -289,10 +290,12 @@ import type {
   ITimezone,
   IUpdateArtifact,
   IUpdateFolder,
+  IUploadedModel,
   IUser,
   IUserAttribute,
   IUserAttributeGroupValue,
   IUserAttributeWithValue,
+  IUserDbConnection,
   IUserEmailOnly,
   IUserLoginLockout,
   IUserPublic,
@@ -328,7 +331,6 @@ import type {
   IWriteEmbedSecret,
   IWriteExternalOauthApplication,
   IWriteGitBranch,
-  IWriteGitDiagnosticReport,
   IWriteGoldenQuery,
   IWriteGroup,
   IWriteIntegration,
@@ -347,6 +349,7 @@ import type {
   IWritePasswordConfig,
   IWritePermissionSet,
   IWriteProject,
+  IWriteProjectCISuite,
   IWriteQuery,
   IWriteRepositoryCredential,
   IWriteRole,
@@ -362,6 +365,7 @@ import type {
   IWriteUser,
   IWriteUserAttribute,
   IWriteUserAttributeWithValue,
+  IWriteUserDbConnection,
   IWriteWhitelabelConfiguration,
 } from './models';
 
@@ -435,7 +439,7 @@ export const unfollow_alert = async (
  */
 export const search_alerts = async (
   sdk: IAPIMethods,
-  request: IRequestSearchAlerts,
+  request: IRequestSearchAlerts = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IAlert[], IError>> => {
   return sdk.get<IAlert[], IError>(
@@ -647,7 +651,7 @@ export const enqueue_alert = async (
  */
 export const alert_notifications = async (
   sdk: IAPIMethods,
-  request: IRequestAlertNotifications,
+  request: IRequestAlertNotifications = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IAlertNotifications[], IError>> => {
   return sdk.get<IAlertNotifications[], IError>(
@@ -726,7 +730,7 @@ export const read_alert_notification = async (
  */
 export const login = async (
   sdk: IAPIMethods,
-  request: IRequestLogin,
+  request: IRequestLogin = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IAccessToken, IError>> => {
   return sdk.post<IAccessToken, IError>(
@@ -843,7 +847,7 @@ export const artifact_usage = async (
  */
 export const artifact_namespaces = async (
   sdk: IAPIMethods,
-  request: IRequestArtifactNamespaces,
+  request: IRequestArtifactNamespaces = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IArtifactNamespace[], IError | IValidationError>> => {
   return sdk.get<IArtifactNamespace[], IError | IValidationError>(
@@ -2579,7 +2583,7 @@ export const all_user_login_lockouts = async (
  */
 export const search_user_login_lockouts = async (
   sdk: IAPIMethods,
-  request: IRequestSearchUserLoginLockouts,
+  request: IRequestSearchUserLoginLockouts = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUserLoginLockout[], IError>> => {
   return sdk.get<IUserLoginLockout[], IError>(
@@ -2706,7 +2710,7 @@ export const create_board = async (
  */
 export const search_boards = async (
   sdk: IAPIMethods,
-  request: IRequestSearchBoards,
+  request: IRequestSearchBoards = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IBoard[], IError>> => {
   return sdk.get<IBoard[], IError>(
@@ -2817,7 +2821,7 @@ export const delete_board = async (
  */
 export const all_board_items = async (
   sdk: IAPIMethods,
-  request: IRequestAllBoardItems,
+  request: IRequestAllBoardItems = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IBoardItem[], IError>> => {
   return sdk.get<IBoardItem[], IError>(
@@ -2947,7 +2951,7 @@ export const delete_board_item = async (
  */
 export const all_board_sections = async (
   sdk: IAPIMethods,
-  request: IRequestAllBoardSections,
+  request: IRequestAllBoardSections = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IBoardSection[], IError>> => {
   return sdk.get<IBoardSection[], IError>(
@@ -3228,6 +3232,27 @@ export const set_default_color_collection = async (
   return sdk.put<IColorCollection, IError | IValidationError>(
     '/color_collections/default',
     { collection_id },
+    null,
+    options
+  );
+};
+
+/**
+ * Get active color collections including default, custom, and standard collections for visualization rendering and theming. Accessible to all authenticated users.
+ *
+ * GET /color_collections/active -> IActiveColorCollections
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
+ */
+export const color_collections_active = async (
+  sdk: IAPIMethods,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IActiveColorCollections, IError>> => {
+  return sdk.get<IActiveColorCollections, IError>(
+    '/color_collections/active',
+    null,
     null,
     options
   );
@@ -3772,6 +3797,7 @@ export const mobile_settings = async (
  *  - host_url
  *  - email_domain_allowlist
  *  - embed_cookieless_v2
+ *  - embed_vis_modernization_default
  *  - embed_enabled
  *  - embed_config
  *  - mcp_tools
@@ -3825,6 +3851,7 @@ export const get_setting = async (
  *  - host_url
  *  - email_domain_allowlist
  *  - embed_cookieless_v2
+ *  - embed_vis_modernization_default
  *  - embed_enabled
  *  - embed_config
  *  - mcp_tools
@@ -4283,7 +4310,7 @@ export const all_dialect_infos = async (
  */
 export const all_external_oauth_applications = async (
   sdk: IAPIMethods,
-  request: IRequestAllExternalOauthApplications,
+  request: IRequestAllExternalOauthApplications = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IExternalOauthApplication[], IError>> => {
   return sdk.get<IExternalOauthApplication[], IError>(
@@ -4709,6 +4736,85 @@ export const ssh_public_key = async (
   return sdk.get<ISshPublicKey, IError>('/ssh_public_key', null, null, options);
 };
 
+/**
+ * ### Get All User DB Connections
+ *
+ * Returns a list of user DB connections.
+ *
+ * GET /user_db_connections -> IUserDbConnection[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
+ */
+export const all_user_db_connections = async (
+  sdk: IAPIMethods,
+  fields?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IUserDbConnection[], IError>> => {
+  return sdk.get<IUserDbConnection[], IError>(
+    '/user_db_connections',
+    { fields },
+    null,
+    options
+  );
+};
+
+/**
+ * ### Update User DB Connection
+ *
+ * Updates an existing user DB connection (only enabling/disabling is allowed via the write limits in UserDbConnectionMapper).
+ *
+ * PATCH /user_db_connections/{user_db_connection_id} -> IUserDbConnection
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_db_connection_id Id of user DB connection
+ * @param body Partial<IWriteUserDbConnection>
+ * @param options one-time API call overrides
+ *
+ */
+export const update_user_db_connection = async (
+  sdk: IAPIMethods,
+  user_db_connection_id: string,
+  body: Partial<IWriteUserDbConnection>,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IUserDbConnection, IError | IValidationError>> => {
+  user_db_connection_id = encodeParam(user_db_connection_id);
+  return sdk.patch<IUserDbConnection, IError | IValidationError>(
+    `/user_db_connections/${user_db_connection_id}`,
+    null,
+    body,
+    options
+  );
+};
+
+/**
+ * ### Delete User DB Connection
+ *
+ * Deletes an existing user DB connection.
+ *
+ * DELETE /user_db_connections/{user_db_connection_id} -> void
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_db_connection_id Id of user DB connection
+ * @param options one-time API call overrides
+ *
+ */
+export const delete_user_db_connection = async (
+  sdk: IAPIMethods,
+  user_db_connection_id: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<void, IError>> => {
+  user_db_connection_id = encodeParam(user_db_connection_id);
+  return sdk.delete<void, IError>(
+    `/user_db_connections/${user_db_connection_id}`,
+    null,
+    null,
+    options
+  );
+};
+
 //#endregion Connection: Manage Database Connections
 
 //#region Content: Manage Content
@@ -4746,7 +4852,7 @@ export const ssh_public_key = async (
  */
 export const search_content_favorites = async (
   sdk: IAPIMethods,
-  request: IRequestSearchContentFavorites,
+  request: IRequestSearchContentFavorites = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IContentFavorite[], IError>> => {
   return sdk.get<IContentFavorite[], IError>(
@@ -5075,7 +5181,7 @@ export const search_content = async (
  */
 export const content_summary = async (
   sdk: IAPIMethods,
-  request: IRequestContentSummary,
+  request: IRequestContentSummary = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IContentSummary[], IError | IValidationError>> => {
   return sdk.get<IContentSummary[], IError | IValidationError>(
@@ -5146,7 +5252,7 @@ export const content_thumbnail = async (
  */
 export const content_validation = async (
   sdk: IAPIMethods,
-  request: IRequestContentValidation,
+  request: IRequestContentValidation = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IContentValidation, IError | IValidationError>> => {
   return sdk.get<IContentValidation, IError | IValidationError>(
@@ -5194,7 +5300,7 @@ export const content_validation = async (
  */
 export const search_content_views = async (
   sdk: IAPIMethods,
-  request: IRequestSearchContentViews,
+  request: IRequestSearchContentViews = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IContentView[], IError>> => {
   return sdk.get<IContentView[], IError>(
@@ -5277,7 +5383,7 @@ export const vector_thumbnail = async (
  */
 export const search_agents = async (
   sdk: IAPIMethods,
-  request: IRequestSearchAgents,
+  request: IRequestSearchAgents = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IAgent[], IError>> => {
   return sdk.get<IAgent[], IError>(
@@ -5406,6 +5512,32 @@ export const update_agent = async (
     `/agents/${agent_id}`,
     { fields },
     body,
+    options
+  );
+};
+
+/**
+ * ### Get LookML of a UDD Agent
+ *
+ * Returns the LookML representation of a user-defined (UDD) agent.
+ *
+ * GET /agents/lookml/{agent_id} -> IAgentLookml
+ *
+ * @param sdk IAPIMethods implementation
+ * @param agent_id Id of agent
+ * @param options one-time API call overrides
+ *
+ */
+export const agent_lookml = async (
+  sdk: IAPIMethods,
+  agent_id: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IAgentLookml, IError>> => {
+  agent_id = encodeParam(agent_id);
+  return sdk.get<IAgentLookml, IError>(
+    `/agents/lookml/${agent_id}`,
+    null,
+    null,
     options
   );
 };
@@ -5567,6 +5699,41 @@ export const update_conversation_message = async (
 };
 
 /**
+ * ### Get Agent Responses for User Message
+ *
+ * Get all agent response messages generated for a specific user prompt.
+ *
+ * An agent response often consists of multiple message blocks (such as text explanations,
+ * visualizations, and follow-up suggestions). This endpoint returns all response messages
+ * following the specified user message up to the next user prompt.
+ *
+ * GET /conversations/{conversation_id}/messages/{user_message_id}/responses -> IConversationMessage[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param conversation_id Conversation ID
+ * @param user_message_id User Conversation Message ID
+ * @param fields Requested fields
+ * @param options one-time API call overrides
+ *
+ */
+export const get_conversation_message_responses = async (
+  sdk: IAPIMethods,
+  conversation_id: string,
+  user_message_id: string,
+  fields?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IConversationMessage[], IError>> => {
+  conversation_id = encodeParam(conversation_id);
+  user_message_id = encodeParam(user_message_id);
+  return sdk.get<IConversationMessage[], IError>(
+    `/conversations/${conversation_id}/messages/${user_message_id}/responses`,
+    { fields },
+    null,
+    options
+  );
+};
+
+/**
  * ### Search Conversations
  *
  * Returns an array of conversation objects that match the specified search criteria.
@@ -5585,7 +5752,7 @@ export const update_conversation_message = async (
  */
 export const search_conversations = async (
   sdk: IAPIMethods,
-  request: IRequestSearchConversations,
+  request: IRequestSearchConversations = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IConversation[], IError>> => {
   return sdk.get<IConversation[], IError>(
@@ -5931,7 +6098,7 @@ export const create_dashboard = async (
  */
 export const search_dashboards = async (
   sdk: IAPIMethods,
-  request: IRequestSearchDashboards,
+  request: IRequestSearchDashboards = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDashboard[], IError>> => {
   return sdk.get<IDashboard[], IError>(
@@ -6137,6 +6304,38 @@ export const delete_dashboard = async (
 };
 
 /**
+ * ### Get Dashboard Image
+ *
+ * Returns the image content for a dashboard element.
+ *
+ * GET /dashboards/{dashboard_id}/images/{image_slug} -> string
+ *
+ * @remarks
+ * **NOTE**: Binary content may be returned by this function.
+ *
+ * @param sdk IAPIMethods implementation
+ * @param dashboard_id Id of dashboard
+ * @param image_slug Slug of image
+ * @param options one-time API call overrides
+ *
+ */
+export const get_dashboard_image = async (
+  sdk: IAPIMethods,
+  dashboard_id: string,
+  image_slug: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<string, IError>> => {
+  dashboard_id = encodeParam(dashboard_id);
+  image_slug = encodeParam(image_slug);
+  return sdk.get<string, IError>(
+    `/dashboards/${dashboard_id}/images/${image_slug}`,
+    null,
+    null,
+    options
+  );
+};
+
+/**
  * ### Get Aggregate Table LookML for Each Query on a Dashboard
  *
  * Returns a JSON object that contains the dashboard id and Aggregate Table lookml
@@ -6190,6 +6389,8 @@ export const dashboard_aggregate_table_lookml = async (
  * Boolean search params accept only "true" and "false" as values.
  *
  *
+ * **Note:** When searching and sorting by `title`, the search uses the `dashboard_name` defined in the LookML code, rather than the user-facing display title.
+ *
  * The parameters `limit`, and `offset` are recommended for fetching results in page-size chunks.
  *
  * Get a **single LookML dashboard** by id with [dashboard_lookml()](#!/Dashboard/dashboard_lookml)
@@ -6203,7 +6404,7 @@ export const dashboard_aggregate_table_lookml = async (
  */
 export const search_lookml_dashboards = async (
   sdk: IAPIMethods,
-  request: IRequestSearchLookmlDashboards,
+  request: IRequestSearchLookmlDashboards = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDashboardLookml, IError>> => {
   return sdk.get<IDashboardLookml, IError>(
@@ -6261,6 +6462,7 @@ export const dashboard_lookml = async (
  * @param sdk IAPIMethods implementation
  * @param dashboard_id Dashboard id to move.
  * @param folder_id Folder id to move to.
+ * @param project_name LookML project name, used to disambiguate dashboards with the same model and dashboard name across projects.
  * @param options one-time API call overrides
  *
  */
@@ -6268,12 +6470,13 @@ export const move_dashboard = async (
   sdk: IAPIMethods,
   dashboard_id: string,
   folder_id: string,
+  project_name?: string,
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDashboard, IError | IValidationError>> => {
   dashboard_id = encodeParam(dashboard_id);
   return sdk.patch<IDashboard, IError | IValidationError>(
     `/dashboards/${dashboard_id}/move`,
-    { folder_id },
+    { folder_id, project_name },
     null,
     options
   );
@@ -6460,7 +6663,7 @@ export const update_lookml_certification = async (
  */
 export const search_dashboard_elements = async (
   sdk: IAPIMethods,
-  request: IRequestSearchDashboardElements,
+  request: IRequestSearchDashboardElements = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IDashboardElement[], IError>> => {
   return sdk.get<IDashboardElement[], IError>(
@@ -7117,6 +7320,33 @@ export const update_datagroup = async (
 
 //#endregion Datagroup: Manage Datagroups
 
+//#region DataUpload: Data Upload
+
+/**
+ * ### Upload data for self-service modeling
+ *
+ * Uploads a CSV or Excel file to the specified connection and creates a self-service model.
+ *
+ * POST /self_service_models/upload -> IUploadedModel
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
+ */
+export const upload_data = async (
+  sdk: IAPIMethods,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IUploadedModel, IError | IValidationError>> => {
+  return sdk.post<IUploadedModel, IError | IValidationError>(
+    '/self_service_models/upload',
+    null,
+    null,
+    options
+  );
+};
+
+//#endregion DataUpload: Data Upload
+
 //#region DerivedTable: View Derived Table graphs
 
 /**
@@ -7263,7 +7493,7 @@ export const stop_pdt_build = async (
  */
 export const search_folders = async (
   sdk: IAPIMethods,
-  request: IRequestSearchFolders,
+  request: IRequestSearchFolders = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IFolder[], IError>> => {
   return sdk.get<IFolder[], IError>(
@@ -7587,7 +7817,7 @@ export const folder_dashboards = async (
  */
 export const all_groups = async (
   sdk: IAPIMethods,
-  request: IRequestAllGroups,
+  request: IRequestAllGroups = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroup[], IError>> => {
   return sdk.get<IGroup[], IError>(
@@ -7668,7 +7898,7 @@ export const create_group = async (
  */
 export const search_groups = async (
   sdk: IAPIMethods,
-  request: IRequestSearchGroups,
+  request: IRequestSearchGroups = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroup[], IError>> => {
   return sdk.get<IGroup[], IError>(
@@ -7725,7 +7955,7 @@ export const search_groups = async (
  */
 export const search_groups_with_roles = async (
   sdk: IAPIMethods,
-  request: IRequestSearchGroupsWithRoles,
+  request: IRequestSearchGroupsWithRoles = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroupSearch[], IError>> => {
   return sdk.get<IGroupSearch[], IError>(
@@ -7783,7 +8013,7 @@ export const search_groups_with_roles = async (
  */
 export const search_groups_with_hierarchy = async (
   sdk: IAPIMethods,
-  request: IRequestSearchGroupsWithHierarchy,
+  request: IRequestSearchGroupsWithHierarchy = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IGroupHierarchy[], IError>> => {
   return sdk.get<IGroupHierarchy[], IError>(
@@ -8326,7 +8556,7 @@ export const accept_integration_hub_legal_agreement = async (
  */
 export const all_integrations = async (
   sdk: IAPIMethods,
-  request: IRequestAllIntegrations,
+  request: IRequestAllIntegrations = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IIntegration[], IError>> => {
   return sdk.get<IIntegration[], IError>(
@@ -8574,7 +8804,7 @@ export const create_look = async (
  */
 export const search_looks = async (
   sdk: IAPIMethods,
-  request: IRequestSearchLooks,
+  request: IRequestSearchLooks = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILook[], IError>> => {
   return sdk.get<ILook[], IError>(
@@ -8725,6 +8955,8 @@ export const delete_look = async (
  * | png | A PNG image of the visualization of the query
  * | jpg | A JPG image of the visualization of the query
  *
+ * **Note**: Streaming queries only write results to the cache when using the `json_detail` format. Queries in other formats only populate the cache if they cannot be streamed (such as when table calculations or row totals are present). Once cached, all result formats can retrieve results from the cache.
+ *
  * GET /looks/{look_id}/run/{result_format} -> string
  *
  * @remarks
@@ -8868,7 +9100,7 @@ export const update_look_certification = async (
  */
 export const all_lookml_models = async (
   sdk: IAPIMethods,
-  request: IRequestAllLookmlModels,
+  request: IRequestAllLookmlModels = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ILookmlModel[], IError>> => {
   return sdk.get<ILookmlModel[], IError>(
@@ -9299,32 +9531,120 @@ export const connection_cost_estimate = async (
 //#region Project: Manage Projects
 
 /**
- * ### Fetches a CI Run.
+ * ### Search Continuous Integration Runs for a project.
  *
- * This endpoint is deprecated. [Get Continuous Integration Run](#!/Project/get_continuous_integration_run) should be used instead.
+ * Returns an array of Continuous Integration Run objects that match the specified search criteria.
  *
- * GET /projects/{project_id}/ci/runs/{run_id} -> IProjectRun
+ * GET /projects/{project_id}/continuous_integration/runs/search -> ICIRun[]
  *
- * @deprecated
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestSearchContinuousIntegrationRuns" for complex method parameters
+ * @param options one-time API call overrides
+ *
+ */
+export const search_continuous_integration_runs = async (
+  sdk: IAPIMethods,
+  request: IRequestSearchContinuousIntegrationRuns,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<ICIRun[], IError>> => {
+  request.project_id = encodeParam(request.project_id);
+  return sdk.get<ICIRun[], IError>(
+    `/projects/${request.project_id}/continuous_integration/runs/search`,
+    {
+      fields: request.fields,
+      suite_id: request.suite_id,
+      status: request.status,
+      user_id: request.user_id,
+      trigger_type: request.trigger_type,
+      limit: request.limit,
+      offset: request.offset,
+      sorts: request.sorts,
+    },
+    null,
+    options
+  );
+};
+
+/**
+ * ### Fetches Multiple CI Suite Configurations for Project.
+ *
+ * GET /projects/{project_id}/continuous_integration/suites -> IProjectCISuite[]
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestGetContinuousIntegrationSuites" for complex method parameters
+ * @param options one-time API call overrides
+ *
+ */
+export const get_continuous_integration_suites = async (
+  sdk: IAPIMethods,
+  request: IRequestGetContinuousIntegrationSuites,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IProjectCISuite[], IError>> => {
+  request.project_id = encodeParam(request.project_id);
+  return sdk.get<IProjectCISuite[], IError>(
+    `/projects/${request.project_id}/continuous_integration/suites`,
+    {
+      fields: request.fields,
+      limit: request.limit,
+      offset: request.offset,
+      created_at: request.created_at,
+    },
+    null,
+    options
+  );
+};
+
+/**
+ * ### Fetches a CI Suite Configuration.
+ *
+ * POST /projects/{project_id}/continuous_integration/suites -> IProjectCISuite
  *
  * @param sdk IAPIMethods implementation
  * @param project_id Project Id
- * @param run_id Run Id
+ * @param body Partial<IWriteProjectCISuite>
  * @param fields Requested fields
  * @param options one-time API call overrides
  *
  */
-export const get_ci_run = async (
+export const create_continuous_integration_suite = async (
   sdk: IAPIMethods,
   project_id: string,
-  run_id: string,
+  body: Partial<IWriteProjectCISuite>,
   fields?: string,
   options?: Partial<ITransportSettings>
-): Promise<SDKResponse<IProjectRun, IError>> => {
+): Promise<SDKResponse<IProjectCISuite, IError | IValidationError>> => {
   project_id = encodeParam(project_id);
-  run_id = encodeParam(run_id);
-  return sdk.get<IProjectRun, IError>(
-    `/projects/${project_id}/ci/runs/${run_id}`,
+  return sdk.post<IProjectCISuite, IError | IValidationError>(
+    `/projects/${project_id}/continuous_integration/suites`,
+    { fields },
+    body,
+    options
+  );
+};
+
+/**
+ * ### Fetches a CI Suite Configuration.
+ *
+ * GET /projects/{project_id}/continuous_integration/suites/{suite_id} -> IProjectCISuite
+ *
+ * @param sdk IAPIMethods implementation
+ * @param project_id Project Id
+ * @param suite_id Suite Id
+ * @param fields Requested fields
+ * @param options one-time API call overrides
+ *
+ */
+export const get_continuous_integration_suite = async (
+  sdk: IAPIMethods,
+  project_id: string,
+  suite_id: string,
+  fields?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IProjectCISuite, IError>> => {
+  project_id = encodeParam(project_id);
+  suite_id = encodeParam(suite_id);
+  return sdk.get<IProjectCISuite, IError>(
+    `/projects/${project_id}/continuous_integration/suites/${suite_id}`,
     { fields },
     null,
     options
@@ -9332,33 +9652,61 @@ export const get_ci_run = async (
 };
 
 /**
- * ### Creates a CI Run.
+ * ### Updates a Continuous Integration Suite.
  *
- * This endpoint is deprecated. [Create Continuous Integration Run](#!/Project/create_continuous_integration_run) should be used instead.
- *
- * POST /projects/{project_id}/ci/run -> ICreateCIRunResponse
- *
- * @deprecated
+ * PATCH /projects/{project_id}/continuous_integration/suites/{suite_id} -> IProjectCISuite
  *
  * @param sdk IAPIMethods implementation
  * @param project_id Project Id
- * @param body Partial<ICreateCIRunRequest>
+ * @param suite_id Suite Id
+ * @param body Partial<IWriteProjectCISuite>
  * @param fields Requested fields
  * @param options one-time API call overrides
  *
  */
-export const create_ci_run = async (
+export const update_continuous_integration_suite = async (
   sdk: IAPIMethods,
   project_id: string,
-  body: Partial<ICreateCIRunRequest>,
+  suite_id: string,
+  body: Partial<IWriteProjectCISuite>,
   fields?: string,
   options?: Partial<ITransportSettings>
-): Promise<SDKResponse<ICreateCIRunResponse, IError | IValidationError>> => {
+): Promise<SDKResponse<IProjectCISuite, IError | IValidationError>> => {
   project_id = encodeParam(project_id);
-  return sdk.post<ICreateCIRunResponse, IError | IValidationError>(
-    `/projects/${project_id}/ci/run`,
+  suite_id = encodeParam(suite_id);
+  return sdk.patch<IProjectCISuite, IError | IValidationError>(
+    `/projects/${project_id}/continuous_integration/suites/${suite_id}`,
     { fields },
     body,
+    options
+  );
+};
+
+/**
+ * ### Deletes a Continuous Integration Suite.
+ *
+ * DELETE /projects/{project_id}/continuous_integration/suites/{suite_id} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param project_id Project Id
+ * @param suite_id Suite Id
+ * @param fields Requested fields
+ * @param options one-time API call overrides
+ *
+ */
+export const delete_continuous_integration_suite = async (
+  sdk: IAPIMethods,
+  project_id: string,
+  suite_id: string,
+  fields?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<string, IError>> => {
+  project_id = encodeParam(project_id);
+  suite_id = encodeParam(suite_id);
+  return sdk.delete<string, IError>(
+    `/projects/${project_id}/continuous_integration/suites/${suite_id}`,
+    { fields },
+    null,
     options
   );
 };
@@ -9392,6 +9740,35 @@ export const create_continuous_integration_run = async (
 };
 
 /**
+ * ### Duplicates and queues a Continuous Integration Run.
+ *
+ * POST /projects/{project_id}/continuous_integration/runs/{run_id}/duplicate -> ICIRun
+ *
+ * @param sdk IAPIMethods implementation
+ * @param project_id Project Id
+ * @param run_id Run ID to duplicate and re-run
+ * @param fields Requested fields
+ * @param options one-time API call overrides
+ *
+ */
+export const duplicate_continuous_integration_run = async (
+  sdk: IAPIMethods,
+  project_id: string,
+  run_id: string,
+  fields?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<ICIRun, IError | IValidationError>> => {
+  project_id = encodeParam(project_id);
+  run_id = encodeParam(run_id);
+  return sdk.post<ICIRun, IError | IValidationError>(
+    `/projects/${project_id}/continuous_integration/runs/${run_id}/duplicate`,
+    { fields },
+    null,
+    options
+  );
+};
+
+/**
  * ### Gets a Continuous Integration run.
  *
  * GET /projects/{project_id}/continuous_integration/runs/{run_id} -> ICIRun
@@ -9415,6 +9792,33 @@ export const get_continuous_integration_run = async (
   return sdk.get<ICIRun, IError>(
     `/projects/${project_id}/continuous_integration/runs/${run_id}`,
     { fields },
+    null,
+    options
+  );
+};
+
+/**
+ * ### Cancels a Continuous Integration Run.
+ *
+ * DELETE /projects/{project_id}/continuous_integration/runs/{run_id} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param project_id Project Id
+ * @param run_id Run Id
+ * @param options one-time API call overrides
+ *
+ */
+export const cancel_continuous_integration_run = async (
+  sdk: IAPIMethods,
+  project_id: string,
+  run_id: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<string, IError>> => {
+  project_id = encodeParam(project_id);
+  run_id = encodeParam(run_id);
+  return sdk.delete<string, IError>(
+    `/projects/${project_id}/continuous_integration/runs/${run_id}`,
+    null,
     null,
     options
   );
@@ -9798,6 +10202,56 @@ export const reset_project_to_remote = async (
   project_id = encodeParam(project_id);
   return sdk.post<string, IError | IValidationError>(
     `/projects/${project_id}/reset_to_remote`,
+    null,
+    null,
+    options
+  );
+};
+
+/**
+ * ### Pull from Production
+ * Pulls changes from the remote production branch into the current development workspace.
+ *
+ * POST /projects/{project_id}/pull_from_production -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param project_id Id of project
+ * @param options one-time API call overrides
+ *
+ */
+export const pull_project_from_production = async (
+  sdk: IAPIMethods,
+  project_id: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<string, IError | IValidationError>> => {
+  project_id = encodeParam(project_id);
+  return sdk.post<string, IError | IValidationError>(
+    `/projects/${project_id}/pull_from_production`,
+    null,
+    null,
+    options
+  );
+};
+
+/**
+ * ### Pull from Remote
+ * Pulls changes from the remote tracking branch of the currently active branch into the local development workspace.
+ *
+ * POST /projects/{project_id}/pull_from_remote -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param project_id Id of project
+ * @param options one-time API call overrides
+ *
+ */
+export const pull_project_from_remote = async (
+  sdk: IAPIMethods,
+  project_id: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<string, IError | IValidationError>> => {
+  project_id = encodeParam(project_id);
+  return sdk.post<string, IError | IValidationError>(
+    `/projects/${project_id}/pull_from_remote`,
     null,
     null,
     options
@@ -10325,88 +10779,6 @@ export const tag_ref = async (
 };
 
 /**
- * ### Initiate Git Diagnosis Suite
- *
- * POST /projects/{project_id}/git_diagnostic_report -> IGitDiagnosticReport
- *
- * @param sdk IAPIMethods implementation
- * @param project_id Looker Project ID
- * @param body Partial<IWriteGitDiagnosticReport>
- * @param options one-time API call overrides
- *
- */
-export const create_git_diagnostic_report = async (
-  sdk: IAPIMethods,
-  project_id: string,
-  body: Partial<IWriteGitDiagnosticReport>,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<IGitDiagnosticReport, IError | IValidationError>> => {
-  project_id = encodeParam(project_id);
-  return sdk.post<IGitDiagnosticReport, IError | IValidationError>(
-    `/projects/${project_id}/git_diagnostic_report`,
-    null,
-    body,
-    options
-  );
-};
-
-/**
- * ### Retrieve Live Git Diagnostic Suite Execution Status
- *
- * GET /projects/{project_id}/git_diagnostic_report/{report_id} -> IGitDiagnosticReport
- *
- * @param sdk IAPIMethods implementation
- * @param project_id Looker Project ID
- * @param report_id Report ID
- * @param options one-time API call overrides
- *
- */
-export const get_git_diagnostic_report = async (
-  sdk: IAPIMethods,
-  project_id: string,
-  report_id: string,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<IGitDiagnosticReport, IError>> => {
-  project_id = encodeParam(project_id);
-  report_id = encodeParam(report_id);
-  return sdk.get<IGitDiagnosticReport, IError>(
-    `/projects/${project_id}/git_diagnostic_report/${report_id}`,
-    null,
-    null,
-    options
-  );
-};
-
-/**
- * ### Repair Git Configuration Issues
- *
- * POST /projects/{project_id}/git_diagnostic_report/{report_id}/repair -> IGitDiagnosticReport
- *
- * @param sdk IAPIMethods implementation
- * @param project_id Looker Project ID
- * @param report_id Report ID
- * @param body Partial<IWriteGitDiagnosticReport>
- * @param options one-time API call overrides
- *
- */
-export const repair_git_diagnostic_report = async (
-  sdk: IAPIMethods,
-  project_id: string,
-  report_id: string,
-  body: Partial<IWriteGitDiagnosticReport>,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<IGitDiagnosticReport, IError | IValidationError>> => {
-  project_id = encodeParam(project_id);
-  report_id = encodeParam(report_id);
-  return sdk.post<IGitDiagnosticReport, IError | IValidationError>(
-    `/projects/${project_id}/git_diagnostic_report/${report_id}/repair`,
-    null,
-    body,
-    options
-  );
-};
-
-/**
  * ### Configure Repository Credential for a remote dependency
  *
  * Admin required.
@@ -10509,6 +10881,8 @@ export const get_all_repository_credentials = async (
  *
  * Use [query_task(query_task_id)](#!/Query/query_task) to check the execution status of the query task.
  * After the query task status reaches "Complete", use [query_task_results(query_task_id)](#!/Query/query_task_results) to fetch the results of the query.
+ *
+ * **Note**: Streaming queries only write results to the cache when using the `json_detail` format. Queries in other formats only populate the cache if they cannot be streamed (such as when table calculations or row totals are present). Once cached, all result formats can retrieve results from the cache.
  *
  * POST /query_tasks -> IQueryTask
  *
@@ -10789,6 +11163,8 @@ export const create_query = async (
  * | png | A PNG image of the visualization of the query
  * | jpg | A JPG image of the visualization of the query
  *
+ * **Note**: Streaming queries only write results to the cache when using the `json_detail` format. Queries in other formats only populate the cache if they cannot be streamed (such as when table calculations or row totals are present). Once cached, all result formats can retrieve results from the cache.
+ *
  * GET /queries/{query_id}/run/{result_format} -> string
  *
  * @remarks
@@ -10879,6 +11255,8 @@ export const run_query = async (
  * | sql | Returns the generated SQL rather than running the query
  * | png | A PNG image of the visualization of the query
  * | jpg | A JPG image of the visualization of the query
+ *
+ * **Note**: Streaming queries only write results to the cache when using the `json_detail` format. Queries in other formats only populate the cache if they cannot be streamed (such as when table calculations or row totals are present). Once cached, all result formats can retrieve results from the cache.
  *
  * POST /queries/run/{result_format} -> string
  *
@@ -10971,6 +11349,8 @@ export const run_inline_query = async <T = string>(
  * | sql | Returns the generated SQL rather than running the query
  * | png | A PNG image of the visualization of the query
  * | jpg | A JPG image of the visualization of the query
+ *
+ * **Note**: Streaming queries only write results to the cache when using the `json_detail` format. Queries in other formats only populate the cache if they cannot be streamed (such as when table calculations or row totals are present). Once cached, all result formats can retrieve results from the cache.
  *
  * GET /queries/models/{model_name}/views/{view_name}/run/{result_format} -> string
  *
@@ -11458,7 +11838,7 @@ export const create_dashboard_element_render_task = async (
  */
 export const search_reports = async (
   sdk: IAPIMethods,
-  request: IRequestSearchReports,
+  request: IRequestSearchReports = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IReport[], IError>> => {
   return sdk.get<IReport[], IError>(
@@ -11516,7 +11896,7 @@ export const search_reports = async (
  */
 export const search_model_sets = async (
   sdk: IAPIMethods,
-  request: IRequestSearchModelSets,
+  request: IRequestSearchModelSets = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IModelSet[], IError>> => {
   return sdk.get<IModelSet[], IError>(
@@ -11604,9 +11984,9 @@ export const delete_model_set = async (
   sdk: IAPIMethods,
   model_set_id: string,
   options?: Partial<ITransportSettings>
-): Promise<SDKResponse<string, IError>> => {
+): Promise<SDKResponse<string, IError | IValidationError>> => {
   model_set_id = encodeParam(model_set_id);
-  return sdk.delete<string, IError>(
+  return sdk.delete<string, IError | IValidationError>(
     `/model_sets/${model_set_id}`,
     null,
     null,
@@ -11704,7 +12084,7 @@ export const all_permissions = async (
  */
 export const search_permission_sets = async (
   sdk: IAPIMethods,
-  request: IRequestSearchPermissionSets,
+  request: IRequestSearchPermissionSets = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IPermissionSet[], IError>> => {
   return sdk.get<IPermissionSet[], IError>(
@@ -11793,9 +12173,9 @@ export const delete_permission_set = async (
   sdk: IAPIMethods,
   permission_set_id: string,
   options?: Partial<ITransportSettings>
-): Promise<SDKResponse<string, IError>> => {
+): Promise<SDKResponse<string, IError | IValidationError>> => {
   permission_set_id = encodeParam(permission_set_id);
-  return sdk.delete<string, IError>(
+  return sdk.delete<string, IError | IValidationError>(
     `/permission_sets/${permission_set_id}`,
     null,
     null,
@@ -11862,7 +12242,7 @@ export const create_permission_set = async (
  */
 export const all_roles = async (
   sdk: IAPIMethods,
-  request: IRequestAllRoles,
+  request: IRequestAllRoles = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IRole[], IError>> => {
   return sdk.get<IRole[], IError>(
@@ -11935,7 +12315,7 @@ export const create_role = async (
  */
 export const search_roles = async (
   sdk: IAPIMethods,
-  request: IRequestSearchRoles,
+  request: IRequestSearchRoles = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IRole[], IError>> => {
   return sdk.get<IRole[], IError>(
@@ -11993,7 +12373,7 @@ export const search_roles = async (
  */
 export const search_roles_with_user_count = async (
   sdk: IAPIMethods,
-  request: IRequestSearchRolesWithUserCount,
+  request: IRequestSearchRolesWithUserCount = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IRoleSearch[], IError>> => {
   return sdk.get<IRoleSearch[], IError>(
@@ -12361,7 +12741,7 @@ export const delete_scheduled_plan = async (
  */
 export const all_scheduled_plans = async (
   sdk: IAPIMethods,
-  request: IRequestAllScheduledPlans,
+  request: IRequestAllScheduledPlans = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IScheduledPlan[], IError | IValidationError>> => {
   return sdk.get<IScheduledPlan[], IError | IValidationError>(
@@ -12537,7 +12917,7 @@ export const scheduled_plan_run_once = async (
  */
 export const search_scheduled_plans = async (
   sdk: IAPIMethods,
-  request: IRequestSearchScheduledPlans,
+  request: IRequestSearchScheduledPlans = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IScheduledPlan[], IError | IValidationError>> => {
   return sdk.get<IScheduledPlan[], IError | IValidationError>(
@@ -12558,6 +12938,10 @@ export const search_scheduled_plans = async (
       recipient: request.recipient,
       destination_type: request.destination_type,
       delivery_format: request.delivery_format,
+      all_states: request.all_states,
+      run_once: request.run_once,
+      enabled: request.enabled,
+      last_run_status: request.last_run_status,
       filter_or: request.filter_or,
     },
     null,
@@ -13102,7 +13486,7 @@ export const create_theme = async (
  */
 export const search_themes = async (
   sdk: IAPIMethods,
-  request: IRequestSearchThemes,
+  request: IRequestSearchThemes = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ITheme[], IError | IValidationError>> => {
   return sdk.get<ITheme[], IError | IValidationError>(
@@ -13277,7 +13661,7 @@ export const set_default_theme_by_type = async (
  */
 export const active_themes = async (
   sdk: IAPIMethods,
-  request: IRequestActiveThemes,
+  request: IRequestActiveThemes = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ITheme[], IError | IValidationError>> => {
   return sdk.get<ITheme[], IError | IValidationError>(
@@ -13479,7 +13863,7 @@ export const delete_theme = async (
  */
 export const search_credentials_email = async (
   sdk: IAPIMethods,
-  request: IRequestSearchCredentialsEmail,
+  request: IRequestSearchCredentialsEmail = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<ICredentialsEmailSearch[], IError>> => {
   return sdk.get<ICredentialsEmailSearch[], IError>(
@@ -13494,6 +13878,476 @@ export const search_credentials_email = async (
       emails: request.emails,
       filter_or: request.filter_or,
     },
+    null,
+    options
+  );
+};
+
+/**
+ * ### Email/password login information for the specified user.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+ *
+ * GET /users/{user_id}/credentials_email -> ICredentialsEmail
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id Id of user
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
+ */
+export const user_credentials_email = async (
+  sdk: IAPIMethods,
+  user_id: string,
+  fields?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<ICredentialsEmail, IError>> => {
+  user_id = encodeParam(user_id);
+  return sdk.get<ICredentialsEmail, IError>(
+    `/users/${user_id}/credentials_email`,
+    { fields },
+    null,
+    options
+  );
+};
+
+/**
+ * ### Email/password login information for the specified user.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+ *
+ * POST /users/{user_id}/credentials_email -> ICredentialsEmail
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id Id of user
+ * @param body Partial<IWriteCredentialsEmail>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
+ */
+export const create_user_credentials_email = async (
+  sdk: IAPIMethods,
+  user_id: string,
+  body: Partial<IWriteCredentialsEmail>,
+  fields?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<ICredentialsEmail, IError | IValidationError>> => {
+  user_id = encodeParam(user_id);
+  return sdk.post<ICredentialsEmail, IError | IValidationError>(
+    `/users/${user_id}/credentials_email`,
+    { fields },
+    body,
+    options
+  );
+};
+
+/**
+ * ### Email/password login information for the specified user.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+ *
+ * PATCH /users/{user_id}/credentials_email -> ICredentialsEmail
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id Id of user
+ * @param body Partial<IWriteCredentialsEmail>
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
+ */
+export const update_user_credentials_email = async (
+  sdk: IAPIMethods,
+  user_id: string,
+  body: Partial<IWriteCredentialsEmail>,
+  fields?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<ICredentialsEmail, IError | IValidationError>> => {
+  user_id = encodeParam(user_id);
+  return sdk.patch<ICredentialsEmail, IError | IValidationError>(
+    `/users/${user_id}/credentials_email`,
+    { fields },
+    body,
+    options
+  );
+};
+
+/**
+ * ### Email/password login information for the specified user.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+ *
+ * DELETE /users/{user_id}/credentials_email -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id Id of user
+ * @param options one-time API call overrides
+ *
+ */
+export const delete_user_credentials_email = async (
+  sdk: IAPIMethods,
+  user_id: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<string, IError>> => {
+  user_id = encodeParam(user_id);
+  return sdk.delete<string, IError>(
+    `/users/${user_id}/credentials_email`,
+    null,
+    null,
+    options
+  );
+};
+
+/**
+ * ### Create a password reset token.
+ * This will create a cryptographically secure random password reset token for the user.
+ * If the user already has a password reset token then this invalidates the old token and creates a new one.
+ * The token is expressed as the 'password_reset_url' of the user's email/password credential object.
+ * This takes an optional 'expires' param to indicate if the new token should be an expiring token.
+ * Tokens that expire are typically used for self-service password resets for existing users.
+ * Invitation emails for new users typically are not set to expire.
+ * The expire period is always 60 minutes when expires is enabled.
+ * This method can be called with an empty body.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+ *
+ * POST /users/{user_id}/credentials_email/password_reset -> ICredentialsEmail
+ *
+ * @param sdk IAPIMethods implementation
+ * @param request composed interface "IRequestCreateUserCredentialsEmailPasswordReset" for complex method parameters
+ * @param options one-time API call overrides
+ *
+ */
+export const create_user_credentials_email_password_reset = async (
+  sdk: IAPIMethods,
+  request: IRequestCreateUserCredentialsEmailPasswordReset,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<ICredentialsEmail, IError>> => {
+  request.user_id = encodeParam(request.user_id);
+  return sdk.post<ICredentialsEmail, IError>(
+    `/users/${request.user_id}/credentials_email/password_reset`,
+    { expires: request.expires, fields: request.fields },
+    null,
+    options
+  );
+};
+
+/**
+ * ### Send a password reset token.
+ * This will send a password reset email to the user. If a password reset token does not already exist
+ * for this user, it will create one and then send it.
+ * If the user has not yet set up their account, it will send a setup email to the user.
+ * The URL sent in the email is expressed as the 'password_reset_url' of the user's email/password credential object.
+ * Password reset URLs will expire in 60 minutes.
+ * This method can be called with an empty body.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+ *
+ * POST /users/{user_id}/credentials_email/send_password_reset -> ICredentialsEmail
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id Id of user
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
+ */
+export const send_user_credentials_email_password_reset = async (
+  sdk: IAPIMethods,
+  user_id: string,
+  fields?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<ICredentialsEmail, IError>> => {
+  user_id = encodeParam(user_id);
+  return sdk.post<ICredentialsEmail, IError>(
+    `/users/${user_id}/credentials_email/send_password_reset`,
+    { fields },
+    null,
+    options
+  );
+};
+
+/**
+ * ### Google authentication login information for the specified user.
+ *
+ * GET /users/{user_id}/credentials_google -> ICredentialsGoogle
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id Id of user
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
+ */
+export const user_credentials_google = async (
+  sdk: IAPIMethods,
+  user_id: string,
+  fields?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<ICredentialsGoogle, IError>> => {
+  user_id = encodeParam(user_id);
+  return sdk.get<ICredentialsGoogle, IError>(
+    `/users/${user_id}/credentials_google`,
+    { fields },
+    null,
+    options
+  );
+};
+
+/**
+ * ### Delete Google authentication login information for the specified user.
+ *
+ * DELETE /users/{user_id}/credentials_google -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id Id of user
+ * @param options one-time API call overrides
+ *
+ */
+export const delete_user_credentials_google = async (
+  sdk: IAPIMethods,
+  user_id: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<string, IError>> => {
+  user_id = encodeParam(user_id);
+  return sdk.delete<string, IError>(
+    `/users/${user_id}/credentials_google`,
+    null,
+    null,
+    options
+  );
+};
+
+/**
+ * ### Looker Openid login information for the specified user. Used by Looker Analysts.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+ *
+ * GET /users/{user_id}/credentials_looker_openid -> ICredentialsLookerOpenid
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id Id of user
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
+ */
+export const user_credentials_looker_openid = async (
+  sdk: IAPIMethods,
+  user_id: string,
+  fields?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<ICredentialsLookerOpenid, IError>> => {
+  user_id = encodeParam(user_id);
+  return sdk.get<ICredentialsLookerOpenid, IError>(
+    `/users/${user_id}/credentials_looker_openid`,
+    { fields },
+    null,
+    options
+  );
+};
+
+/**
+ * ### Looker Openid login information for the specified user. Used by Looker Analysts.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+ *
+ * DELETE /users/{user_id}/credentials_looker_openid -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id Id of user
+ * @param options one-time API call overrides
+ *
+ */
+export const delete_user_credentials_looker_openid = async (
+  sdk: IAPIMethods,
+  user_id: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<string, IError>> => {
+  user_id = encodeParam(user_id);
+  return sdk.delete<string, IError>(
+    `/users/${user_id}/credentials_looker_openid`,
+    null,
+    null,
+    options
+  );
+};
+
+/**
+ * ### OpenID Connect (OIDC) authentication login information for the specified user.
+ *
+ * GET /users/{user_id}/credentials_oidc -> ICredentialsOIDC
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id Id of user
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
+ */
+export const user_credentials_oidc = async (
+  sdk: IAPIMethods,
+  user_id: string,
+  fields?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<ICredentialsOIDC, IError>> => {
+  user_id = encodeParam(user_id);
+  return sdk.get<ICredentialsOIDC, IError>(
+    `/users/${user_id}/credentials_oidc`,
+    { fields },
+    null,
+    options
+  );
+};
+
+/**
+ * ### Delete OpenID Connect (OIDC) authentication login information for the specified user.
+ *
+ * DELETE /users/{user_id}/credentials_oidc -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id Id of user
+ * @param options one-time API call overrides
+ *
+ */
+export const delete_user_credentials_oidc = async (
+  sdk: IAPIMethods,
+  user_id: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<string, IError>> => {
+  user_id = encodeParam(user_id);
+  return sdk.delete<string, IError>(
+    `/users/${user_id}/credentials_oidc`,
+    null,
+    null,
+    options
+  );
+};
+
+/**
+ * ### Saml authentication login information for the specified user.
+ *
+ * GET /users/{user_id}/credentials_saml -> ICredentialsSaml
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id Id of user
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
+ */
+export const user_credentials_saml = async (
+  sdk: IAPIMethods,
+  user_id: string,
+  fields?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<ICredentialsSaml, IError>> => {
+  user_id = encodeParam(user_id);
+  return sdk.get<ICredentialsSaml, IError>(
+    `/users/${user_id}/credentials_saml`,
+    { fields },
+    null,
+    options
+  );
+};
+
+/**
+ * ### Delete Saml authentication login information for the specified user.
+ *
+ * DELETE /users/{user_id}/credentials_saml -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id Id of user
+ * @param options one-time API call overrides
+ *
+ */
+export const delete_user_credentials_saml = async (
+  sdk: IAPIMethods,
+  user_id: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<string, IError>> => {
+  user_id = encodeParam(user_id);
+  return sdk.delete<string, IError>(
+    `/users/${user_id}/credentials_saml`,
+    null,
+    null,
+    options
+  );
+};
+
+/**
+ * ### Get two-factor login information for the specified user.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+ *
+ * GET /users/{user_id}/credentials_totp -> ICredentialsTotp
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id Id of user
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
+ */
+export const user_credentials_totp = async (
+  sdk: IAPIMethods,
+  user_id: string,
+  fields?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<ICredentialsTotp, IError>> => {
+  user_id = encodeParam(user_id);
+  return sdk.get<ICredentialsTotp, IError>(
+    `/users/${user_id}/credentials_totp`,
+    { fields },
+    null,
+    options
+  );
+};
+
+/**
+ * ### Create two-factor login information for the specified user.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+ *
+ * POST /users/{user_id}/credentials_totp -> ICredentialsTotp
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id Id of user
+ * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
+ * @param fields Requested fields.
+ * @param options one-time API call overrides
+ *
+ */
+export const create_user_credentials_totp = async (
+  sdk: IAPIMethods,
+  user_id: string,
+  body?: Partial<ICredentialsTotp>,
+  fields?: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<ICredentialsTotp, IError | IValidationError>> => {
+  user_id = encodeParam(user_id);
+  return sdk.post<ICredentialsTotp, IError | IValidationError>(
+    `/users/${user_id}/credentials_totp`,
+    { fields },
+    body,
+    options
+  );
+};
+
+/**
+ * ### Delete two-factor login information for the specified user.
+ *
+ * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+ *
+ * DELETE /users/{user_id}/credentials_totp -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param user_id Id of user
+ * @param options one-time API call overrides
+ *
+ */
+export const delete_user_credentials_totp = async (
+  sdk: IAPIMethods,
+  user_id: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<string, IError>> => {
+  user_id = encodeParam(user_id);
+  return sdk.delete<string, IError>(
+    `/users/${user_id}/credentials_totp`,
+    null,
     null,
     options
   );
@@ -13529,7 +14383,7 @@ export const me = async (
  */
 export const all_users = async (
   sdk: IAPIMethods,
-  request: IRequestAllUsers,
+  request: IRequestAllUsers = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUser[], IError>> => {
   return sdk.get<IUser[], IError>(
@@ -13614,7 +14468,7 @@ export const create_user = async (
  */
 export const search_users = async (
   sdk: IAPIMethods,
-  request: IRequestSearchUsers,
+  request: IRequestSearchUsers = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUser[], IError>> => {
   return sdk.get<IUser[], IError>(
@@ -13749,7 +14603,7 @@ export const update_user = async (
  * * Their reports, Looks and dashboards will be moved to Trash.
  * * Any public URLs owned by them will no longer work.
  * * Schedules created by the users or that use their content will be deleted.
- * * Alerts will continue to run, but will not be visible or editable from the dashboard.
+ * * Alerts owned by the users will be deleted.
  *
  * The user cannot delete themselves.
  * The last administrator user cannot be deleted.
@@ -13870,7 +14724,7 @@ export const update_service_account = async (
  * * Their reports, Looks and dashboards will be moved to Trash.
  * * Any public URLs owned by them will no longer work.
  * * Schedules created by the service account or that use their content will be deleted.
- * * Alerts will continue to run, but will not be visible or editable from the dashboard.
+ * * Alerts owned by the service account will be deleted.
  *
  * The service account cannot delete itself.
  *
@@ -13889,204 +14743,6 @@ export const delete_service_account = async (
   user_id = encodeParam(user_id);
   return sdk.delete<string, IError>(
     `/users/service_accounts/${user_id}`,
-    null,
-    null,
-    options
-  );
-};
-
-/**
- * ### Email/password login information for the specified user.
- *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
- *
- * GET /users/{user_id}/credentials_email -> ICredentialsEmail
- *
- * @param sdk IAPIMethods implementation
- * @param user_id Id of user
- * @param fields Requested fields.
- * @param options one-time API call overrides
- *
- */
-export const user_credentials_email = async (
-  sdk: IAPIMethods,
-  user_id: string,
-  fields?: string,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<ICredentialsEmail, IError>> => {
-  user_id = encodeParam(user_id);
-  return sdk.get<ICredentialsEmail, IError>(
-    `/users/${user_id}/credentials_email`,
-    { fields },
-    null,
-    options
-  );
-};
-
-/**
- * ### Email/password login information for the specified user.
- *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
- *
- * POST /users/{user_id}/credentials_email -> ICredentialsEmail
- *
- * @param sdk IAPIMethods implementation
- * @param user_id Id of user
- * @param body Partial<IWriteCredentialsEmail>
- * @param fields Requested fields.
- * @param options one-time API call overrides
- *
- */
-export const create_user_credentials_email = async (
-  sdk: IAPIMethods,
-  user_id: string,
-  body: Partial<IWriteCredentialsEmail>,
-  fields?: string,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<ICredentialsEmail, IError | IValidationError>> => {
-  user_id = encodeParam(user_id);
-  return sdk.post<ICredentialsEmail, IError | IValidationError>(
-    `/users/${user_id}/credentials_email`,
-    { fields },
-    body,
-    options
-  );
-};
-
-/**
- * ### Email/password login information for the specified user.
- *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
- *
- * PATCH /users/{user_id}/credentials_email -> ICredentialsEmail
- *
- * @param sdk IAPIMethods implementation
- * @param user_id Id of user
- * @param body Partial<IWriteCredentialsEmail>
- * @param fields Requested fields.
- * @param options one-time API call overrides
- *
- */
-export const update_user_credentials_email = async (
-  sdk: IAPIMethods,
-  user_id: string,
-  body: Partial<IWriteCredentialsEmail>,
-  fields?: string,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<ICredentialsEmail, IError | IValidationError>> => {
-  user_id = encodeParam(user_id);
-  return sdk.patch<ICredentialsEmail, IError | IValidationError>(
-    `/users/${user_id}/credentials_email`,
-    { fields },
-    body,
-    options
-  );
-};
-
-/**
- * ### Email/password login information for the specified user.
- *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
- *
- * DELETE /users/{user_id}/credentials_email -> string
- *
- * @param sdk IAPIMethods implementation
- * @param user_id Id of user
- * @param options one-time API call overrides
- *
- */
-export const delete_user_credentials_email = async (
-  sdk: IAPIMethods,
-  user_id: string,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<string, IError>> => {
-  user_id = encodeParam(user_id);
-  return sdk.delete<string, IError>(
-    `/users/${user_id}/credentials_email`,
-    null,
-    null,
-    options
-  );
-};
-
-/**
- * ### Two-factor login information for the specified user.
- *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
- *
- * GET /users/{user_id}/credentials_totp -> ICredentialsTotp
- *
- * @param sdk IAPIMethods implementation
- * @param user_id Id of user
- * @param fields Requested fields.
- * @param options one-time API call overrides
- *
- */
-export const user_credentials_totp = async (
-  sdk: IAPIMethods,
-  user_id: string,
-  fields?: string,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<ICredentialsTotp, IError>> => {
-  user_id = encodeParam(user_id);
-  return sdk.get<ICredentialsTotp, IError>(
-    `/users/${user_id}/credentials_totp`,
-    { fields },
-    null,
-    options
-  );
-};
-
-/**
- * ### Two-factor login information for the specified user.
- *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
- *
- * POST /users/{user_id}/credentials_totp -> ICredentialsTotp
- *
- * @param sdk IAPIMethods implementation
- * @param user_id Id of user
- * @param body WARNING: no writeable properties found for POST, PUT, or PATCH
- * @param fields Requested fields.
- * @param options one-time API call overrides
- *
- */
-export const create_user_credentials_totp = async (
-  sdk: IAPIMethods,
-  user_id: string,
-  body?: Partial<ICredentialsTotp>,
-  fields?: string,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<ICredentialsTotp, IError | IValidationError>> => {
-  user_id = encodeParam(user_id);
-  return sdk.post<ICredentialsTotp, IError | IValidationError>(
-    `/users/${user_id}/credentials_totp`,
-    { fields },
-    body,
-    options
-  );
-};
-
-/**
- * ### Two-factor login information for the specified user.
- *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
- *
- * DELETE /users/{user_id}/credentials_totp -> string
- *
- * @param sdk IAPIMethods implementation
- * @param user_id Id of user
- * @param options one-time API call overrides
- *
- */
-export const delete_user_credentials_totp = async (
-  sdk: IAPIMethods,
-  user_id: string,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<string, IError>> => {
-  user_id = encodeParam(user_id);
-  return sdk.delete<string, IError>(
-    `/users/${user_id}/credentials_totp`,
     null,
     null,
     options
@@ -14141,156 +14797,6 @@ export const delete_user_credentials_ldap = async (
   user_id = encodeParam(user_id);
   return sdk.delete<string, IError>(
     `/users/${user_id}/credentials_ldap`,
-    null,
-    null,
-    options
-  );
-};
-
-/**
- * ### Google authentication login information for the specified user.
- *
- * GET /users/{user_id}/credentials_google -> ICredentialsGoogle
- *
- * @param sdk IAPIMethods implementation
- * @param user_id Id of user
- * @param fields Requested fields.
- * @param options one-time API call overrides
- *
- */
-export const user_credentials_google = async (
-  sdk: IAPIMethods,
-  user_id: string,
-  fields?: string,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<ICredentialsGoogle, IError>> => {
-  user_id = encodeParam(user_id);
-  return sdk.get<ICredentialsGoogle, IError>(
-    `/users/${user_id}/credentials_google`,
-    { fields },
-    null,
-    options
-  );
-};
-
-/**
- * ### Google authentication login information for the specified user.
- *
- * DELETE /users/{user_id}/credentials_google -> string
- *
- * @param sdk IAPIMethods implementation
- * @param user_id Id of user
- * @param options one-time API call overrides
- *
- */
-export const delete_user_credentials_google = async (
-  sdk: IAPIMethods,
-  user_id: string,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<string, IError>> => {
-  user_id = encodeParam(user_id);
-  return sdk.delete<string, IError>(
-    `/users/${user_id}/credentials_google`,
-    null,
-    null,
-    options
-  );
-};
-
-/**
- * ### Saml authentication login information for the specified user.
- *
- * GET /users/{user_id}/credentials_saml -> ICredentialsSaml
- *
- * @param sdk IAPIMethods implementation
- * @param user_id Id of user
- * @param fields Requested fields.
- * @param options one-time API call overrides
- *
- */
-export const user_credentials_saml = async (
-  sdk: IAPIMethods,
-  user_id: string,
-  fields?: string,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<ICredentialsSaml, IError>> => {
-  user_id = encodeParam(user_id);
-  return sdk.get<ICredentialsSaml, IError>(
-    `/users/${user_id}/credentials_saml`,
-    { fields },
-    null,
-    options
-  );
-};
-
-/**
- * ### Saml authentication login information for the specified user.
- *
- * DELETE /users/{user_id}/credentials_saml -> string
- *
- * @param sdk IAPIMethods implementation
- * @param user_id Id of user
- * @param options one-time API call overrides
- *
- */
-export const delete_user_credentials_saml = async (
-  sdk: IAPIMethods,
-  user_id: string,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<string, IError>> => {
-  user_id = encodeParam(user_id);
-  return sdk.delete<string, IError>(
-    `/users/${user_id}/credentials_saml`,
-    null,
-    null,
-    options
-  );
-};
-
-/**
- * ### OpenID Connect (OIDC) authentication login information for the specified user.
- *
- * GET /users/{user_id}/credentials_oidc -> ICredentialsOIDC
- *
- * @param sdk IAPIMethods implementation
- * @param user_id Id of user
- * @param fields Requested fields.
- * @param options one-time API call overrides
- *
- */
-export const user_credentials_oidc = async (
-  sdk: IAPIMethods,
-  user_id: string,
-  fields?: string,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<ICredentialsOIDC, IError>> => {
-  user_id = encodeParam(user_id);
-  return sdk.get<ICredentialsOIDC, IError>(
-    `/users/${user_id}/credentials_oidc`,
-    { fields },
-    null,
-    options
-  );
-};
-
-/**
- * ### OpenID Connect (OIDC) authentication login information for the specified user.
- *
- * DELETE /users/{user_id}/credentials_oidc -> string
- *
- * @param sdk IAPIMethods implementation
- * @param user_id Id of user
- * @param options one-time API call overrides
- *
- */
-export const delete_user_credentials_oidc = async (
-  sdk: IAPIMethods,
-  user_id: string,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<string, IError>> => {
-  user_id = encodeParam(user_id);
-  return sdk.delete<string, IError>(
-    `/users/${user_id}/credentials_oidc`,
     null,
     null,
     options
@@ -14525,60 +15031,6 @@ export const all_user_credentials_embeds = async (
 };
 
 /**
- * ### Looker Openid login information for the specified user. Used by Looker Analysts.
- *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
- *
- * GET /users/{user_id}/credentials_looker_openid -> ICredentialsLookerOpenid
- *
- * @param sdk IAPIMethods implementation
- * @param user_id Id of user
- * @param fields Requested fields.
- * @param options one-time API call overrides
- *
- */
-export const user_credentials_looker_openid = async (
-  sdk: IAPIMethods,
-  user_id: string,
-  fields?: string,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<ICredentialsLookerOpenid, IError>> => {
-  user_id = encodeParam(user_id);
-  return sdk.get<ICredentialsLookerOpenid, IError>(
-    `/users/${user_id}/credentials_looker_openid`,
-    { fields },
-    null,
-    options
-  );
-};
-
-/**
- * ### Looker Openid login information for the specified user. Used by Looker Analysts.
- *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
- *
- * DELETE /users/{user_id}/credentials_looker_openid -> string
- *
- * @param sdk IAPIMethods implementation
- * @param user_id Id of user
- * @param options one-time API call overrides
- *
- */
-export const delete_user_credentials_looker_openid = async (
-  sdk: IAPIMethods,
-  user_id: string,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<string, IError>> => {
-  user_id = encodeParam(user_id);
-  return sdk.delete<string, IError>(
-    `/users/${user_id}/credentials_looker_openid`,
-    null,
-    null,
-    options
-  );
-};
-
-/**
  * ### Web login session for the specified user.
  *
  * GET /users/{user_id}/sessions/{session_id} -> ISession
@@ -14655,40 +15107,6 @@ export const all_user_sessions = async (
   return sdk.get<ISession[], IError>(
     `/users/${user_id}/sessions`,
     { fields },
-    null,
-    options
-  );
-};
-
-/**
- * ### Create a password reset token.
- * This will create a cryptographically secure random password reset token for the user.
- * If the user already has a password reset token then this invalidates the old token and creates a new one.
- * The token is expressed as the 'password_reset_url' of the user's email/password credential object.
- * This takes an optional 'expires' param to indicate if the new token should be an expiring token.
- * Tokens that expire are typically used for self-service password resets for existing users.
- * Invitation emails for new users typically are not set to expire.
- * The expire period is always 60 minutes when expires is enabled.
- * This method can be called with an empty body.
- *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
- *
- * POST /users/{user_id}/credentials_email/password_reset -> ICredentialsEmail
- *
- * @param sdk IAPIMethods implementation
- * @param request composed interface "IRequestCreateUserCredentialsEmailPasswordReset" for complex method parameters
- * @param options one-time API call overrides
- *
- */
-export const create_user_credentials_email_password_reset = async (
-  sdk: IAPIMethods,
-  request: IRequestCreateUserCredentialsEmailPasswordReset,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<ICredentialsEmail, IError>> => {
-  request.user_id = encodeParam(request.user_id);
-  return sdk.post<ICredentialsEmail, IError>(
-    `/users/${request.user_id}/credentials_email/password_reset`,
-    { expires: request.expires, fields: request.fields },
     null,
     options
   );
@@ -14857,40 +15275,6 @@ export const delete_user_attribute_user_value = async (
 };
 
 /**
- * ### Send a password reset token.
- * This will send a password reset email to the user. If a password reset token does not already exist
- * for this user, it will create one and then send it.
- * If the user has not yet set up their account, it will send a setup email to the user.
- * The URL sent in the email is expressed as the 'password_reset_url' of the user's email/password credential object.
- * Password reset URLs will expire in 60 minutes.
- * This method can be called with an empty body.
- *
- * Calls to this endpoint may be denied by [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
- *
- * POST /users/{user_id}/credentials_email/send_password_reset -> ICredentialsEmail
- *
- * @param sdk IAPIMethods implementation
- * @param user_id Id of user
- * @param fields Requested fields.
- * @param options one-time API call overrides
- *
- */
-export const send_user_credentials_email_password_reset = async (
-  sdk: IAPIMethods,
-  user_id: string,
-  fields?: string,
-  options?: Partial<ITransportSettings>
-): Promise<SDKResponse<ICredentialsEmail, IError>> => {
-  user_id = encodeParam(user_id);
-  return sdk.post<ICredentialsEmail, IError>(
-    `/users/${user_id}/credentials_email/send_password_reset`,
-    { fields },
-    null,
-    options
-  );
-};
-
-/**
  * ### Change a disabled user's email addresses
  *
  * Allows the admin to change the email addresses for all the user's
@@ -14992,7 +15376,7 @@ export const create_service_account = async (
  */
 export const all_user_attributes = async (
   sdk: IAPIMethods,
-  request: IRequestAllUserAttributes,
+  request: IRequestAllUserAttributes = {},
   options?: Partial<ITransportSettings>
 ): Promise<SDKResponse<IUserAttribute[], IError>> => {
   return sdk.get<IUserAttribute[], IError>(

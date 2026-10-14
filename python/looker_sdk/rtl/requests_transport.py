@@ -20,8 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-"""Transport implementation using requests package.
-"""
+"""Transport implementation using requests package."""
 
 import logging
 from typing import cast, Callable, Dict, MutableMapping, Optional

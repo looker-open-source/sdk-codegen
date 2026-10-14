@@ -20,8 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-"""Deserialize API response into models
-"""
+"""Deserialize API response into models"""
+
 import datetime
 import enum
 import functools
@@ -37,7 +37,12 @@ from typing import (
 )
 
 import cattr
-from cattrs.cols import is_sequence, list_structure_factory
+
+try:
+    from cattrs.cols import is_sequence, list_structure_factory
+except ImportError:
+    is_sequence = None  # type: ignore
+    list_structure_factory = None  # type: ignore
 
 from looker_sdk.rtl import model, hooks
 
@@ -68,7 +73,10 @@ def deserialize(
     except json.JSONDecodeError as ex:
         raise DeserializeError(f"Bad json {ex}")
     try:
-        converter.register_structure_hook_factory(is_sequence, list_structure_factory)
+        if is_sequence is not None and list_structure_factory is not None:
+            converter.register_structure_hook_factory(
+                is_sequence, list_structure_factory
+            )
         response: TDeserializeReturn = converter.structure(  # type: ignore
             data, structure
         )
@@ -80,7 +88,7 @@ def deserialize(
 def serialize(*, api_model: TModelOrSequence, converter: cattr.Converter) -> bytes:
     """Translate api_model into formdata encoded json bytes"""
     data = converter.unstructure(api_model)  # type: ignore
-    return json.dumps(data,default=lambda o: o.__dict__).encode("utf-8")  # type: ignore
+    return json.dumps(data, default=lambda o: o.__dict__).encode("utf-8")  # type: ignore
 
 
 def forward_ref_structure_hook(context, converter, data, forward_ref):
@@ -109,6 +117,7 @@ def translate_keys_structure_hook(converter, data, model_type):
     new_data = hooks.tr_data_keys(data)
     ret = converter.structure_attrs_fromdict(new_data, model_type)
     return ret
+
 
 converter40 = cattr.Converter()
 deserialize40 = functools.partial(deserialize, converter=converter40)

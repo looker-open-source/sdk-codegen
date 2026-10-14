@@ -32,8 +32,7 @@ from looker_sdk.rtl import transport
 
 @attr.s(auto_attribs=True)
 class Response:
-    """Fake requests.Response
-    """
+    """Fake requests.Response"""
 
     ok: bool
     content: bytes
@@ -41,8 +40,7 @@ class Response:
 
 
 class Session:
-    """Fake requests.Session
-    """
+    """Fake requests.Session"""
 
     def __init__(self, ret_val, error=False):
         self.headers = {}
@@ -50,8 +48,7 @@ class Session:
         self.error = error
 
     def request(self, method, url, auth, params, data, headers, timeout):
-        """Fake request.Session.request
-        """
+        """Fake request.Session.request"""
         if self.error:
             raise IOError((54, "Connection reset by peer"))
         return self.ret_val
@@ -59,8 +56,7 @@ class Session:
 
 @attr.s(auto_attribs=True, kw_only=True)
 class TransportSettings:
-    """Fake TransportSettings
-    """
+    """Fake TransportSettings"""
 
     base_url: str = ""
     verify_ssl: bool = True
@@ -78,8 +74,7 @@ def settings():
 
 
 def test_configure(settings):
-    """Test configuration creates instance.
-    """
+    """Test configuration creates instance."""
 
     test = requests_transport.RequestsTransport.configure(settings)
     assert isinstance(test, requests_transport.RequestsTransport)
@@ -117,8 +112,7 @@ def test_request_ok(
     expected_response_mode: transport.ResponseMode,
     expected_encoding: str,
 ):
-    """Test basic successful round trip
-    """
+    """Test basic successful round trip"""
     value = b"yay!"
     ret_val = Response(
         ok=True, content=value, headers=requests.structures.CaseInsensitiveDict(headers)
@@ -142,8 +136,7 @@ def test_request_not_ok(
     expected_response_mode: transport.ResponseMode,
     expected_encoding: str,
 ):
-    """Test API error response
-    """
+    """Test API error response"""
     value = b"Some API error"
     ret_val = Response(
         ok=False,
@@ -161,8 +154,7 @@ def test_request_not_ok(
 
 
 def test_request_error(settings):
-    """Test network error response
-    """
+    """Test network error response"""
     session = cast(requests.Session, Session(None, True))
     test = requests_transport.RequestsTransport(settings, session)
     resp = test.request(transport.HttpMethod.GET, "/some/path")

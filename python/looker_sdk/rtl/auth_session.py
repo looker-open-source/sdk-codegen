@@ -20,8 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-"""AuthSession to provide automatic authentication
-"""
+"""AuthSession to provide automatic authentication"""
+
 import hashlib
 import secrets
 from typing import cast, Dict, Optional, Union

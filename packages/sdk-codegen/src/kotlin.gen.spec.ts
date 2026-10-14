@@ -98,6 +98,13 @@ data class HyphenType (
 ) : Serializable`;
       expect(actual).toEqual(expected);
     });
+
+    it('maps binary type to String', () => {
+      const type = apiTestModel.types.binary;
+      expect(type).toBeDefined();
+      const mapped = gen.typeMap(type);
+      expect(mapped.name).toEqual('String');
+    });
   });
 
   it('deprecated method with deprecated params', () => {

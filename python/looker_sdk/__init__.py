@@ -45,6 +45,7 @@ def _settings(
         env_prefix=constants.environment_prefix,
     )
 
+
 def init40(
     config_file: str = "looker.ini",
     section: Optional[str] = None,

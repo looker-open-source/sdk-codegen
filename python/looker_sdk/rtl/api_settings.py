@@ -23,6 +23,7 @@
 """Load settings from .ini file and create an ApiSettings object
 with the settings as attributes
 """
+
 import configparser as cp
 import os
 import sys
@@ -49,8 +50,7 @@ class SettingsConfig(TypedDict, total=False):
 
 
 class PApiSettings(transport.PTransportSettings, Protocol):
-    def read_config(self) -> SettingsConfig:
-        ...
+    def read_config(self) -> SettingsConfig: ...
 
 
 _DEFAULT_INIS = ["looker.ini", "../looker.ini"]
@@ -141,9 +141,9 @@ class ApiSettings(PApiSettings):
         self, data: SettingsConfig, overrides: Dict[str, str]
     ) -> SettingsConfig:
         # https://github.com/python/mypy/issues/6262
-        for setting in SettingsConfig.__annotations__.keys(): # type: ignore
+        for setting in SettingsConfig.__annotations__.keys():  # type: ignore
             if setting in overrides:
-                data[setting] = overrides[setting] # type: ignore
+                data[setting] = overrides[setting]  # type: ignore
         return data
 
     def _override_from_env(self) -> Dict[str, str]:
@@ -171,8 +171,7 @@ class ApiSettings(PApiSettings):
         return overrides
 
     def _clean_input(self, data: SettingsConfig) -> SettingsConfig:
-        """Remove surrounding quotes and discard empty strings.
-        """
+        """Remove surrounding quotes and discard empty strings."""
         cleaned = {}
         for setting, value in data.items():
             if setting in self.deprecated_settings:

@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [26.20.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-v26.18.0...sdk-v26.20.0) (2026-10-13)
+
+
+### Features
+
+* generate SDKs for Looker 26.20 ([#1747](https://github.com/looker-open-source/sdk-codegen/issues/1747)) ([9112808](https://github.com/looker-open-source/sdk-codegen/commit/91128089a074cc92ac75edebccdbf6e32e8f756f))
+
+
+### Bug Fixes
+
+* **sdk-rtl:** widen IAccessToken.refresh_token to accept null ([#1736](https://github.com/looker-open-source/sdk-codegen/issues/1736)) ([cbd7f4f](https://github.com/looker-open-source/sdk-codegen/commit/cbd7f4fae159a0eddba8ed110cb0981e0797b27e))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from 21.6.5 to 21.6.6
+
+## [26.18.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-v26.12.0...sdk-v26.18.0) (2026-10-06)
+
+
+### Features
+
+* generate SDKs for Looker 26.18 ([#1743](https://github.com/looker-open-source/sdk-codegen/issues/1743)) ([0647c97](https://github.com/looker-open-source/sdk-codegen/commit/0647c974496773adddde017052814414c9aeb300))
+
 ## [26.12.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-v26.10.0...sdk-v26.12.0) (2026-07-13)
 
 

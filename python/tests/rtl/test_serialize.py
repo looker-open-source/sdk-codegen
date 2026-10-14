@@ -710,6 +710,7 @@ def test_serialize_partial():
     ).encode("utf-8")
     assert sr.serialize(api_model=model, converter=converter) == expected
 
+
 @pytest.mark.skip(reason="TODO: This breaks CI right now")
 def test_serialize_explict_null():
     """Send json null for model field EXPLICIT_NULL values."""
@@ -768,3 +769,34 @@ def test_safe_enum_deserialization():
         sr.deserialize(data=json.dumps(data), structure=Model, converter=converter)
         == model
     )
+
+
+def test_serialize_forward_ref_unresolved_model():
+    @attr.s(auto_attribs=True, init=False)
+    class UnresolvedModel(ml.Model):
+        list_enum1: Optional[Sequence["Enum1"]] = None
+        opt_model_no_refs1: Optional["ModelNoRefs1"] = None
+        name: Optional[str] = None
+
+        def __init__(
+            self,
+            *,
+            list_enum1: Optional[Sequence["Enum1"]] = None,
+            opt_model_no_refs1: Optional["ModelNoRefs1"] = None,
+            name: Optional[str] = None,
+        ):
+            self.list_enum1 = list_enum1
+            self.opt_model_no_refs1 = opt_model_no_refs1
+            self.name = name
+
+    model = UnresolvedModel(
+        list_enum1=[Enum1.entry1],
+        name="my-name",
+    )
+    expected = json.dumps(
+        {
+            "list_enum1": ["entry1"],
+            "name": "my-name",
+        }
+    ).encode("utf-8")
+    assert sr.serialize40(api_model=model) == expected

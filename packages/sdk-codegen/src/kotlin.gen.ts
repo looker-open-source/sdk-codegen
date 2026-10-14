@@ -553,21 +553,27 @@ ${props.join(this.propDelimiter)}
     const asString: CodeAssignment = (_, v) => `"${v}"`;
     const ktTypes: Record<string, IMappedType> = {
       any: { default: mt, name: 'Any' },
+      binary: { default: mt, name: 'String', asVal: asString },
       boolean: { default: mt, name: 'Boolean' },
       byte: { default: mt, name: 'binary' },
       date: { default: mt, name: 'Date' },
       datetime: { default: mt, name: 'Date' },
       double: { default: mt, name: 'Double' },
+      email: { default: mt, name: 'String', asVal: asString },
       float: { default: mt, name: 'Float' },
+      hostname: { default: mt, name: 'String', asVal: asString },
       int32: { default: mt, name: 'Int' },
       int64: { default: mt, name: 'Long' },
       integer: { default: mt, name: 'Int' },
+      ipv4: { default: mt, name: 'String', asVal: asString },
+      ipv6: { default: mt, name: 'String', asVal: asString },
       number: { default: mt, name: 'Double' },
       object: { default: mt, name: 'Any' },
       password: { default: mt, name: 'Password', asVal: asString },
       string: { default: mt, name: 'String', asVal: asString },
       uri: { default: mt, name: 'UriString', asVal: asString },
       url: { default: mt, name: 'UrlString', asVal: asString },
+      uuid: { default: mt, name: 'String', asVal: asString },
       void: { default: mt, name: 'Void', asVal: (_i, _v: any) => 'String' },
     };
 

@@ -48,7 +48,7 @@ export interface IAccessToken {
   /**
    * Refresh token which can be used to obtain a new access token (read-only)
    */
-  refresh_token?: string;
+  refresh_token?: string | null;
 }
 
 /**

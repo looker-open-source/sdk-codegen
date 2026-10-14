@@ -537,20 +537,27 @@ ${this.hooks.join('\n')}
     const asString: CodeAssignment = (_, v) => `"${v}"`;
     const pythonTypes: Record<string, IMappedType> = {
       any: { default: this.nullStr, name: 'Any' },
+      binary: { default: this.nullStr, name: 'str', asVal: asString },
       boolean: { default: this.nullStr, name: 'bool' },
       byte: { default: this.nullStr, name: 'bytes' },
       date: { default: this.nullStr, name: 'datetime.datetime' },
       datetime: { default: this.nullStr, name: 'datetime.datetime' },
       double: { default: this.nullStr, name: 'float' },
+      email: { default: this.nullStr, name: 'str', asVal: asString },
       float: { default: this.nullStr, name: 'float' },
+      hostname: { default: this.nullStr, name: 'str', asVal: asString },
       int32: { default: this.nullStr, name: 'int' },
       int64: { default: this.nullStr, name: 'int' },
       integer: { default: this.nullStr, name: 'int' },
+      ipv4: { default: this.nullStr, name: 'str', asVal: asString },
+      ipv6: { default: this.nullStr, name: 'str', asVal: asString },
       number: { default: this.nullStr, name: 'float' },
       password: { default: this.nullStr, name: 'str', asVal: asString },
       string: { default: this.nullStr, name: 'str', asVal: asString },
       object: { default: this.nullStr, name: 'str', asVal: asString },
       uri: { default: this.nullStr, name: 'str', asVal: asString },
+      url: { default: this.nullStr, name: 'str', asVal: asString },
+      uuid: { default: this.nullStr, name: 'str', asVal: asString },
       void: { default: this.nullStr, name: 'None' },
     };
 
