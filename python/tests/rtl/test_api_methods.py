@@ -214,3 +214,16 @@ def test_api_versioned_url_is_built_properly(
     api: api_methods.APIMethods, method_path: str, expected_url: str
 ):
     assert api._path(method_path).endswith(expected_url)
+
+
+@pytest.mark.parametrize(
+    "value, expected",
+    [
+        ("foo/bar", "foo%2Fbar"),
+        ("foo%2Fbar", "foo%2Fbar"),
+        ("foo/bar?baz%20qux", "foo%2Fbar%3Fbaz%20qux"),
+        ("foo/bar%20baz", "foo%2Fbar%20baz"),
+    ],
+)
+def test_encode_path_param(api: api_methods.APIMethods, value: str, expected: str):
+    assert api.encode_path_param(value) == expected

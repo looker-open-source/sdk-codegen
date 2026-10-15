@@ -225,9 +225,7 @@ fun encodeParam(value: Any?): String {
         }
     try {
         val decoded = URLDecoder.decode(encoded, utf8)
-        if (encoded == decoded) {
-            encoded = URLEncoder.encode(encoded, utf8)
-        }
+        encoded = URLEncoder.encode(decoded, utf8)
     } catch (e: IllegalArgumentException) {
         encoded = URLEncoder.encode(encoded, utf8)
     } catch (e: Exception) {

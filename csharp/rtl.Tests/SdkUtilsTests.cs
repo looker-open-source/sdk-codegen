@@ -147,6 +147,7 @@ namespace sdkrtl.Tests
             // Assert.Equal("2020-01-01T14%3A48%3A00.000Z", Transport.EncodeParam(date));
             Assert.Equal("foo%2Fbar", SdkUtils.EncodeParam("foo%2Fbar"));
             Assert.Equal("foo%2Fbar", SdkUtils.EncodeParam("foo/bar"));
+            Assert.Equal("foo%2Fbar%3Fbaz+qux", SdkUtils.EncodeParam("foo/bar?baz%20qux"));
             var actual = SdkUtils.EncodeParam(true);
             Assert.Equal("true", actual);
             actual = SdkUtils.EncodeParam(2.3);

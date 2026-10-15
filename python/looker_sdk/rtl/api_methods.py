@@ -133,9 +133,7 @@ class APIMethods:
 
     @staticmethod
     def encode_path_param(value: str) -> str:
-        if value == urllib.parse.unquote(value):
-            value = urllib.parse.quote(value, safe="")
-        return value
+        return urllib.parse.quote(urllib.parse.unquote(value), safe="")
 
     def get(
         self,

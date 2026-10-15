@@ -603,13 +603,11 @@ export function encodeParam(value: any) {
   // decodeURIComponent throws URIError if there is a % character
   // without it being part of an encoded
   try {
-    const decoded = decodeURIComponent(value);
-    if (value === decoded) {
-      encoded = encodeURIComponent(value);
-    }
+    const decoded = decodeURIComponent(encoded);
+    encoded = encodeURIComponent(decoded);
   } catch (e) {
     if (e instanceof URIError) {
-      encoded = encodeURIComponent(value);
+      encoded = encodeURIComponent(encoded);
     } else {
       throw e;
     }

@@ -80,6 +80,7 @@ class TestTransport {
         assertEquals("2020-01-01T14%3A48%3A00.000Z", encodeParam(today))
         assertEquals("foo%2Fbar", encodeParam("foo%2Fbar"))
         assertEquals("foo%2Fbar", encodeParam("foo/bar"))
+        assertEquals("foo%2Fbar%3Fbaz+qux", encodeParam("foo/bar?baz%20qux"))
         assertEquals("true", encodeParam(true))
         assertEquals("2.3", encodeParam(2.3))
     }
