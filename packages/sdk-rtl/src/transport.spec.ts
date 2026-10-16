@@ -91,10 +91,11 @@ describe('Transport', () => {
     expect(encodeParam(today)).toEqual('2020-01-01T14%3A48%3A00.000Z');
     expect(encodeParam('foo%2Fbar')).toEqual('foo%2Fbar');
     expect(encodeParam('foo/bar')).toEqual('foo%2Fbar');
+    expect(encodeParam('foo/bar?baz%20qux')).toEqual('foo%2Fbar%3Fbaz%20qux');
     expect(encodeParam(true)).toEqual('true');
     expect(encodeParam(2.3)).toEqual('2.3');
     expect(encodeParam({ created_date: 'this year to second' })).toEqual(
-      '{"created_date":"this year to second"}'
+      '%7B%22created_date%22%3A%22this%20year%20to%20second%22%7D'
     );
   });
 });

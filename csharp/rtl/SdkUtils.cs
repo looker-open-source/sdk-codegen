@@ -114,10 +114,7 @@ namespace Looker.RTL
             }
 
             var decoded = WebUtility.UrlDecode(encoded);
-            if (encoded == decoded)
-            {
-                encoded = WebUtility.UrlEncode(encoded);
-            }
+            encoded = WebUtility.UrlEncode(decoded);
 
             return encoded;
         }
