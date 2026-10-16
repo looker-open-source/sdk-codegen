@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [26.20.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-v26.20.0...sdk-v26.20.1) (2026-10-16)
+
+
+### Bug Fixes
+
+* **sdk-codegen:** make run_inline_query response type generic ([#1730](https://github.com/looker-open-source/sdk-codegen/issues/1730)) ([#1759](https://github.com/looker-open-source/sdk-codegen/issues/1759)) ([b5f4b3d](https://github.com/looker-open-source/sdk-codegen/commit/b5f4b3d993f40b3cb2c990da78cbe6bc6e2b3f27))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from 21.6.6 to 21.6.7
+
 ## [26.20.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-v26.18.0...sdk-v26.20.0) (2026-10-13)
 
 
