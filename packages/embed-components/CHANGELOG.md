@@ -1,5 +1,23 @@
 # Changelog
 
+## [26.20.1](https://github.com/looker-open-source/sdk-codegen/compare/embed-components-v26.20.0...embed-components-v26.20.1) (2026-10-16)
+
+
+### Miscellaneous Chores
+
+* **embed-components:** Synchronize undefined versions
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/embed-services bumped from 26.20.0 to 26.20.1
+    * @looker/sdk bumped from 26.20.0 to 26.20.1
+    * @looker/sdk-rtl bumped from 21.6.6 to 21.6.7
+  * devDependencies
+    * @looker/sdk-node bumped from 26.20.0 to 26.20.1
+
 ## [26.20.0](https://github.com/looker-open-source/sdk-codegen/compare/embed-components-v26.18.0...embed-components-v26.20.0) (2026-10-13)
 
 
