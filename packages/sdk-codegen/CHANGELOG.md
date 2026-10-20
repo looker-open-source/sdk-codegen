@@ -113,6 +113,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * devDependencies
     * @looker/sdk-codegen-utils bumped from 21.0.33 to 21.0.34
 
+## [26.20.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v26.20.0...sdk-codegen-v26.20.1) (2026-10-20)
+
+
+### Bug Fixes
+
+* **sdk-codegen:** make run_inline_query response type generic ([#1730](https://github.com/looker-open-source/sdk-codegen/issues/1730)) ([#1759](https://github.com/looker-open-source/sdk-codegen/issues/1759)) ([b5f4b3d](https://github.com/looker-open-source/sdk-codegen/commit/b5f4b3d993f40b3cb2c990da78cbe6bc6e2b3f27))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from 21.6.6 to 21.6.7
+  * devDependencies
+    * @looker/sdk-codegen-utils bumped from 21.0.37 to 21.0.38
+
 ## [26.20.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v26.18.0...sdk-codegen-v26.20.0) (2026-10-13)
 
 
