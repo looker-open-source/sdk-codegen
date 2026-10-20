@@ -1,5 +1,13 @@
 # Changelog
 
+## [26.20.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v26.20.0...sdk-codegen-all-v26.20.1) (2026-10-20)
+
+
+### Bug Fixes
+
+* ensure partially encoded path parameters are fully URL-encoded ([#1762](https://github.com/looker-open-source/sdk-codegen/issues/1762)) ([c17e0cc](https://github.com/looker-open-source/sdk-codegen/commit/c17e0cc4a7b0e92b349ead280efabb9d5a7e4581))
+* **sdk-codegen:** make run_inline_query response type generic ([#1730](https://github.com/looker-open-source/sdk-codegen/issues/1730)) ([#1759](https://github.com/looker-open-source/sdk-codegen/issues/1759)) ([b5f4b3d](https://github.com/looker-open-source/sdk-codegen/commit/b5f4b3d993f40b3cb2c990da78cbe6bc6e2b3f27))
+
 ## [26.20.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v26.18.0...sdk-codegen-all-v26.20.0) (2026-10-13)
 
 
