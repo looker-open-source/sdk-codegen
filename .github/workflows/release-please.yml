@@ -10,8 +10,6 @@ jobs:
     permissions:
       contents: read
     steps:
-      - uses: google-github-actions/release-please-action@c078ea33917ab8cfa5300e48f4b7e6b16606aede # v3.7.8
+      - uses: googleapis/release-please-action@5c625bfb5d1ff62eadeeb3772007f7f66fdcf071 # v4.4.1
         with:
-          command: manifest
-          monorepo-tags: true
           token: ${{ secrets.LOS_AUTO_BOT_RP_TOKEN }}
