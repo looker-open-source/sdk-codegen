@@ -103,15 +103,15 @@ class ErrorDocHelper:
     )
     pattern = re.compile(RE_PATTERN, flags=re.IGNORECASE)
 
-    def get_index(self, url: str = ERROR_CODES_URL) -> None:
-        r = requests.get(f"{url}index.json")
+    def get_index(self, url: str = ERROR_CODES_URL, timeout: int = 10) -> None:
+        r = requests.get(f"{url}index.json", timeout=timeout)
         self.lookup_dict = json.loads(r.text)
 
     def lookup(
-        self, url: str = ERROR_CODES_URL, code: str = "", path: str = ""
+        self, url: str = ERROR_CODES_URL, code: str = "", path: str = "", timeout: int = 10
     ) -> Tuple[str, str]:
         if len(self.lookup_dict) == 0:
-            self.get_index(url=url)
+            self.get_index(url=url, timeout=timeout)
 
         error_doc_url: str = ""
         error_doc: str = ""
@@ -128,13 +128,13 @@ class ErrorDocHelper:
                     error_doc = f"### No documentation found for {code}"
 
         if error_doc_url:
-            r = requests.get(f"{self.ERROR_CODES_URL}{error_doc_url}")
+            r = requests.get(f"{self.ERROR_CODES_URL}{error_doc_url}", timeout=timeout)
             error_doc = r.text
 
         return (f"{self.ERROR_CODES_URL}{error_doc_url}", error_doc)
 
     def parse_and_lookup(
-        self, error_url: str, url: str = ERROR_CODES_URL
+        self, error_url: str, url: str = ERROR_CODES_URL, timeout: int = 10
     ) -> Tuple[str, str]:
         m = re.search(self.RE_PATTERN, error_url)
         if not m:
@@ -143,6 +143,6 @@ class ErrorDocHelper:
         code: str = cast(Tuple[str, str, str, str], m.groups())[2]
         path: str = cast(Tuple[str, str, str, str], m.groups())[3]
         try:
-            return self.lookup(url=url, code=code, path=path)
+            return self.lookup(url=url, code=code, path=path, timeout=timeout)
         except requests.exceptions.RequestException:
             return ("", "")
