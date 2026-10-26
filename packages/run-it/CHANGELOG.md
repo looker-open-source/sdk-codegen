@@ -370,6 +370,20 @@
     * @looker/sdk-codegen-utils bumped from 21.0.36 to 21.0.37
     * @looker/sdk-rtl bumped from 21.6.5 to 21.6.6
 
+## [0.9.91](https://github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.90...run-it-v0.9.91) (2026-10-26)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from 0.1.57 to 0.1.58
+    * @looker/extension-utils bumped from 0.1.67 to 0.1.68
+    * @looker/sdk bumped from 26.20.0 to 26.22.0
+    * @looker/sdk-codegen bumped from 26.20.0 to 26.20.1
+    * @looker/sdk-codegen-utils bumped from 21.0.37 to 21.0.38
+    * @looker/sdk-rtl bumped from 21.6.6 to 21.6.7
+
 ## [0.9.83](https://github.com/looker-open-source/sdk-codegen/compare/run-it-v0.9.82...run-it-v0.9.83) (2026-03-11)
 
 

@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [26.22.0](https://github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v26.20.0...looker_sdk-v26.22.0) (2026-10-26)
+
+
+### Features
+
+* generate SDKs for Looker 26.22 ([#1765](https://github.com/looker-open-source/sdk-codegen/issues/1765)) ([ad0a156](https://github.com/looker-open-source/sdk-codegen/commit/ad0a156742c6ddeca18729f3c2b63ec95f8bac9c))
+
+
+### Bug Fixes
+
+* ensure partially encoded path parameters are fully URL-encoded ([#1762](https://github.com/looker-open-source/sdk-codegen/issues/1762)) ([c17e0cc](https://github.com/looker-open-source/sdk-codegen/commit/c17e0cc4a7b0e92b349ead280efabb9d5a7e4581))
+
 ## [26.20.0](https://github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v26.18.0...looker_sdk-v26.20.0) (2026-10-13)
 
 

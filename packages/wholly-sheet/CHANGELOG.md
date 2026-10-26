@@ -373,6 +373,18 @@
   * devDependencies
     * @looker/sdk-node bumped from 26.18.0 to 26.20.0
 
+## [0.5.87](https://github.com/looker-open-source/sdk-codegen/compare/wholly-sheet-v0.5.86...wholly-sheet-v0.5.87) (2026-10-26)
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from 26.20.0 to 26.22.0
+    * @looker/sdk-rtl bumped from 21.6.6 to 21.6.7
+  * devDependencies
+    * @looker/sdk-node bumped from 26.20.0 to 26.22.0
+
 ## [0.5.62](https://github.com/looker-open-source/sdk-codegen/compare/wholly-sheet-v0.5.61...wholly-sheet-v0.5.62) (2024-09-14)
 
 
