@@ -1,25 +1,26 @@
 #!/bin/sh
 
 check_looker() {
-  status=$(curl --silent --insecure --write "%{http_code}" \
-    --data "client_id=$LOOKERSDK_CLIENT_ID&client_secret=$LOOKERSDK_CLIENT_SECRET"\
-    $LOOKERSDK_BASE_URL/api/${LOOKERSDK_API_VERSION:-4.0}/login\
+  status=$(curl --silent --insecure --write-out "%{http_code}" \
+    --data "client_id=$LOOKERSDK_CLIENT_ID&client_secret=$LOOKERSDK_CLIENT_SECRET" \
+    "$LOOKERSDK_BASE_URL/api/${LOOKERSDK_API_VERSION:-4.0}/login" \
     -o /dev/null)
+  status=${status:-0}
 }
 
 MAX_RETRIES=160
 ATTEMPTS=1
 status=0
 check_looker
-while [ $status -ne 200 ];
+while [ "$status" -ne 200 ];
 do
   RETRY_MSG="after $ATTEMPTS attempts: $(expr $MAX_RETRIES - $ATTEMPTS) retries remaining."
-  if [ $ATTEMPTS -ge $MAX_RETRIES ];
+  if [ "$ATTEMPTS" -ge "$MAX_RETRIES" ];
   then
     echo 'Looker took too long to start'
     exit 1
   else
-    if [ $status -ne 0 ];
+    if [ "$status" -ne 0 ];
     then
       echo "Received status($status) from Looker $RETRY_MSG"
     else

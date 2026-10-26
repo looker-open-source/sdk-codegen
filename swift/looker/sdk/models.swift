@@ -25,7 +25,7 @@
  */
 
 /**
- * 445 API models: 346 Spec, 0 Request, 73 Write, 26 Enum
+ * 451 API models: 351 Spec, 0 Request, 74 Write, 26 Enum
  */
 
 
@@ -9262,6 +9262,7 @@ public struct DashboardDownloadSettings: SDKModel {
         case _rows_limit = "rows_limit"
         case _columns_limit = "columns_limit"
         case append_excel_metadata
+        case include_filters
     }
     private var _format_option: AnyString?
     /**
@@ -9322,7 +9323,12 @@ public struct DashboardDownloadSettings: SDKModel {
      */
     public var append_excel_metadata: Bool?
 
-    public init(format_option: String? = nil, value_options: String? = nil, result_options: String? = nil, limit_options: String? = nil, rows_limit: Int64? = nil, columns_limit: Int64? = nil, append_excel_metadata: Bool? = nil) {
+    /**
+     * Include filter context in PNG downloads
+     */
+    public var include_filters: Bool?
+
+    public init(format_option: String? = nil, value_options: String? = nil, result_options: String? = nil, limit_options: String? = nil, rows_limit: Int64? = nil, columns_limit: Int64? = nil, append_excel_metadata: Bool? = nil, include_filters: Bool? = nil) {
         self._format_option = format_option.map(AnyString.init)
         self._value_options = value_options.map(AnyString.init)
         self._result_options = result_options.map(AnyString.init)
@@ -9330,6 +9336,7 @@ public struct DashboardDownloadSettings: SDKModel {
         self._rows_limit = rows_limit.map(AnyInt.init)
         self._columns_limit = columns_limit.map(AnyInt.init)
         self.append_excel_metadata = append_excel_metadata
+        self.include_filters = include_filters
     }
 
 }
@@ -12664,6 +12671,7 @@ public struct EmbedConfig: SDKModel {
         case embed_cookieless_v2
         case embed_content_navigation
         case embed_content_management
+        case embed_show_tile_filter_information
         case embed_vis_modernization_default
         case strict_sameorigin_for_login
         case look_filters
@@ -12728,6 +12736,11 @@ public struct EmbedConfig: SDKModel {
     public var embed_content_management: Bool?
 
     /**
+     * When true, filter information is shown on embedded dashboard tiles
+     */
+    public var embed_show_tile_filter_information: Bool?
+
+    /**
      * Default net new visualizations in embedded context to Modern theme (read-only)
      */
     public var embed_vis_modernization_default: Bool?
@@ -12757,7 +12770,7 @@ public struct EmbedConfig: SDKModel {
      */
     public var embed_enabled: Bool?
 
-    public init(domain_allowlist: [String]? = nil, alert_url_allowlist: [String]? = nil, alert_url_param_owner: String? = nil, alert_url_label: String? = nil, sso_auth_enabled: Bool? = nil, embed_cookieless_v2: Bool? = nil, embed_content_navigation: Bool? = nil, embed_content_management: Bool? = nil, embed_vis_modernization_default: Bool? = nil, strict_sameorigin_for_login: Bool? = nil, look_filters: Bool? = nil, hide_look_navigation: Bool? = nil, permissions: StringDictionary<AnyCodable>? = nil, embed_enabled: Bool? = nil) {
+    public init(domain_allowlist: [String]? = nil, alert_url_allowlist: [String]? = nil, alert_url_param_owner: String? = nil, alert_url_label: String? = nil, sso_auth_enabled: Bool? = nil, embed_cookieless_v2: Bool? = nil, embed_content_navigation: Bool? = nil, embed_content_management: Bool? = nil, embed_show_tile_filter_information: Bool? = nil, embed_vis_modernization_default: Bool? = nil, strict_sameorigin_for_login: Bool? = nil, look_filters: Bool? = nil, hide_look_navigation: Bool? = nil, permissions: StringDictionary<AnyCodable>? = nil, embed_enabled: Bool? = nil) {
         if let v = domain_allowlist { _domain_allowlist = v.map { AnyString.init($0) } } else { _domain_allowlist = nil }
         if let v = alert_url_allowlist { _alert_url_allowlist = v.map { AnyString.init($0) } } else { _alert_url_allowlist = nil }
         self._alert_url_param_owner = alert_url_param_owner.map(AnyString.init)
@@ -12766,6 +12779,7 @@ public struct EmbedConfig: SDKModel {
         self.embed_cookieless_v2 = embed_cookieless_v2
         self.embed_content_navigation = embed_content_navigation
         self.embed_content_management = embed_content_management
+        self.embed_show_tile_filter_information = embed_show_tile_filter_information
         self.embed_vis_modernization_default = embed_vis_modernization_default
         self.strict_sameorigin_for_login = strict_sameorigin_for_login
         self.look_filters = look_filters
@@ -30911,6 +30925,382 @@ public struct WorkflowParams: SDKModel {
 
 }
 
+public struct WorkforceConfig: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case can
+        case enabled
+        case _new_user_migration_types = "new_user_migration_types"
+        case _test_slug = "test_slug"
+        case modified_at
+        case _modified_by = "modified_by"
+        case default_new_user_roles
+        case _default_new_user_role_ids = "default_new_user_role_ids"
+        case default_new_user_groups
+        case _default_new_user_group_ids = "default_new_user_group_ids"
+        case set_roles_from_groups
+        case groups
+        case groups_with_role_ids
+        case user_attributes
+        case user_attributes_with_ids
+        case allow_normal_group_membership
+        case allow_roles_from_normal_groups
+        case allow_direct_roles
+        case auth_requires_role
+        case bypass_login_page
+        case _url = "url"
+    }
+    /**
+     * Operations the current user is able to perform on this object (read-only)
+     */
+    public var can: StringDictionary<Bool>?
+
+    /**
+     * Enable/Disable Workforce authentication for the server. This property cannot be modified on Looker (Google Cloud core) instances. Manage this setting via the instance configuration page instead.
+     */
+    public var enabled: Bool?
+
+    private var _new_user_migration_types: AnyString?
+    /**
+     * Merge first-time workforce login to existing user account by email addresses. When a user logs in for the first time via workforce this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
+     */
+    public var new_user_migration_types: String? {
+        get { _new_user_migration_types?.value }
+        set { _new_user_migration_types = newValue.map(AnyString.init) }
+    }
+
+    private var _test_slug: AnyString?
+    /**
+     * Slug to identify configurations that are created in order to run a Workforce config test (read-only)
+     */
+    public var test_slug: String? {
+        get { _test_slug?.value }
+        set { _test_slug = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * When this config was last modified (read-only)
+     */
+    public var modified_at: Date?
+
+    private var _modified_by: AnyString?
+    /**
+     * User id of user who last modified this config (read-only)
+     */
+    public var modified_by: String? {
+        get { _modified_by?.value }
+        set { _modified_by = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * (Read-only) Roles that will be applied to new users the first time they login via Workforce (read-only)
+     */
+    public var default_new_user_roles: [Role]?
+
+    private var _default_new_user_role_ids: [AnyString]?
+    /**
+     * (Write-Only) Array of ids of roles that will be applied to new users the first time they login via Workforce
+     */
+    public var default_new_user_role_ids: [String]? {
+        get { if let v = _default_new_user_role_ids { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _default_new_user_role_ids = v.map { AnyString.init($0) } } else { _default_new_user_role_ids = nil } }
+    }
+
+    /**
+     * (Read-only) Groups that will be applied to new users the first time they login via Workforce (read-only)
+     */
+    public var default_new_user_groups: [LkGroup]?
+
+    private var _default_new_user_group_ids: [AnyString]?
+    /**
+     * (Write-Only) Array of ids of groups that will be applied to new users the first time they login via Workforce
+     */
+    public var default_new_user_group_ids: [String]? {
+        get { if let v = _default_new_user_group_ids { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _default_new_user_group_ids = v.map { AnyString.init($0) } } else { _default_new_user_group_ids = nil } }
+    }
+
+    /**
+     * Set user roles in Looker based on groups from Workforce
+     */
+    public var set_roles_from_groups: Bool?
+
+    /**
+     * (Read-only) Array of mappings between Workforce Groups and Looker Roles (read-only)
+     */
+    public var groups: [WorkforceGroupRead]?
+
+    /**
+     * (Read/Write) Array of mappings between Workforce Groups and arrays of Looker Role ids
+     */
+    public var groups_with_role_ids: [WorkforceGroupWrite]?
+
+    /**
+     * (Read-only) Array of mappings between Workforce User Attributes and Looker User Attributes (read-only)
+     */
+    public var user_attributes: [WorkforceUserAttributeRead]?
+
+    /**
+     * (Read/Write) Array of mappings between Workforce User Attributes and arrays of Looker User Attribute ids
+     */
+    public var user_attributes_with_ids: [WorkforceUserAttributeWrite]?
+
+    /**
+     * Allow Workforce auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
+     */
+    public var allow_normal_group_membership: Bool?
+
+    /**
+     * Workforce auth'd users will inherit roles from non-reflected Looker groups.
+     */
+    public var allow_roles_from_normal_groups: Bool?
+
+    /**
+     * Allows roles to be directly assigned to Workforce auth'd users.
+     */
+    public var allow_direct_roles: Bool?
+
+    /**
+     * Users will not be allowed to login at all unless a role for them is found in Workforce if set to true
+     */
+    public var auth_requires_role: Bool?
+
+    /**
+     * Bypass the login page and redirect to Workforce Identity Federation if set to true
+     */
+    public var bypass_login_page: Bool?
+
+    private var _url: AnyString?
+    /**
+     * Link to get this item (read-only)
+     */
+    public var url: String? {
+        get { _url?.value }
+        set { _url = newValue.map(AnyString.init) }
+    }
+
+    public init(can: StringDictionary<Bool>? = nil, enabled: Bool? = nil, new_user_migration_types: String? = nil, test_slug: String? = nil, modified_at: Date? = nil, modified_by: String? = nil, default_new_user_roles: [Role]? = nil, default_new_user_role_ids: [String]? = nil, default_new_user_groups: [LkGroup]? = nil, default_new_user_group_ids: [String]? = nil, set_roles_from_groups: Bool? = nil, groups: [WorkforceGroupRead]? = nil, groups_with_role_ids: [WorkforceGroupWrite]? = nil, user_attributes: [WorkforceUserAttributeRead]? = nil, user_attributes_with_ids: [WorkforceUserAttributeWrite]? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, allow_direct_roles: Bool? = nil, auth_requires_role: Bool? = nil, bypass_login_page: Bool? = nil, url: String? = nil) {
+        self.can = can
+        self.enabled = enabled
+        self._new_user_migration_types = new_user_migration_types.map(AnyString.init)
+        self._test_slug = test_slug.map(AnyString.init)
+        self.modified_at = modified_at
+        self._modified_by = modified_by.map(AnyString.init)
+        self.default_new_user_roles = default_new_user_roles
+        if let v = default_new_user_role_ids { _default_new_user_role_ids = v.map { AnyString.init($0) } } else { _default_new_user_role_ids = nil }
+        self.default_new_user_groups = default_new_user_groups
+        if let v = default_new_user_group_ids { _default_new_user_group_ids = v.map { AnyString.init($0) } } else { _default_new_user_group_ids = nil }
+        self.set_roles_from_groups = set_roles_from_groups
+        self.groups = groups
+        self.groups_with_role_ids = groups_with_role_ids
+        self.user_attributes = user_attributes
+        self.user_attributes_with_ids = user_attributes_with_ids
+        self.allow_normal_group_membership = allow_normal_group_membership
+        self.allow_roles_from_normal_groups = allow_roles_from_normal_groups
+        self.allow_direct_roles = allow_direct_roles
+        self.auth_requires_role = auth_requires_role
+        self.bypass_login_page = bypass_login_page
+        self._url = url.map(AnyString.init)
+    }
+
+}
+
+public struct WorkforceGroupRead: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _id = "id"
+        case _looker_group_id = "looker_group_id"
+        case _looker_group_name = "looker_group_name"
+        case _name = "name"
+        case roles
+    }
+    private var _id: AnyString?
+    /**
+     * Unique Id (read-only)
+     */
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
+    private var _looker_group_id: AnyString?
+    /**
+     * Unique Id of group in Looker (read-only)
+     */
+    public var looker_group_id: String? {
+        get { _looker_group_id?.value }
+        set { _looker_group_id = newValue.map(AnyString.init) }
+    }
+
+    private var _looker_group_name: AnyString?
+    /**
+     * Name of group in Looker (read-only)
+     */
+    public var looker_group_name: String? {
+        get { _looker_group_name?.value }
+        set { _looker_group_name = newValue.map(AnyString.init) }
+    }
+
+    private var _name: AnyString?
+    /**
+     * Name of group in Workforce (read-only)
+     */
+    public var name: String? {
+        get { _name?.value }
+        set { _name = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Looker Roles (read-only)
+     */
+    public var roles: [Role]?
+
+    public init(id: String? = nil, looker_group_id: String? = nil, looker_group_name: String? = nil, name: String? = nil, roles: [Role]? = nil) {
+        self._id = id.map(AnyString.init)
+        self._looker_group_id = looker_group_id.map(AnyString.init)
+        self._looker_group_name = looker_group_name.map(AnyString.init)
+        self._name = name.map(AnyString.init)
+        self.roles = roles
+    }
+
+}
+
+public struct WorkforceGroupWrite: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _id = "id"
+        case _looker_group_id = "looker_group_id"
+        case _looker_group_name = "looker_group_name"
+        case _name = "name"
+        case _role_ids = "role_ids"
+    }
+    private var _id: AnyString?
+    /**
+     * Unique Id
+     */
+    public var id: String? {
+        get { _id?.value }
+        set { _id = newValue.map(AnyString.init) }
+    }
+
+    private var _looker_group_id: AnyString?
+    /**
+     * Unique Id of group in Looker (read-only)
+     */
+    public var looker_group_id: String? {
+        get { _looker_group_id?.value }
+        set { _looker_group_id = newValue.map(AnyString.init) }
+    }
+
+    private var _looker_group_name: AnyString?
+    /**
+     * Name of group in Looker
+     */
+    public var looker_group_name: String? {
+        get { _looker_group_name?.value }
+        set { _looker_group_name = newValue.map(AnyString.init) }
+    }
+
+    private var _name: AnyString?
+    /**
+     * Name of group in Workforce
+     */
+    public var name: String? {
+        get { _name?.value }
+        set { _name = newValue.map(AnyString.init) }
+    }
+
+    private var _role_ids: [AnyString]?
+    /**
+     * Looker Role Ids
+     */
+    public var role_ids: [String]? {
+        get { if let v = _role_ids { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _role_ids = v.map { AnyString.init($0) } } else { _role_ids = nil } }
+    }
+
+    public init(id: String? = nil, looker_group_id: String? = nil, looker_group_name: String? = nil, name: String? = nil, role_ids: [String]? = nil) {
+        self._id = id.map(AnyString.init)
+        self._looker_group_id = looker_group_id.map(AnyString.init)
+        self._looker_group_name = looker_group_name.map(AnyString.init)
+        self._name = name.map(AnyString.init)
+        if let v = role_ids { _role_ids = v.map { AnyString.init($0) } } else { _role_ids = nil }
+    }
+
+}
+
+public struct WorkforceUserAttributeRead: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _name = "name"
+        case required
+        case user_attributes
+    }
+    private var _name: AnyString?
+    /**
+     * Name of User Attribute in Workforce (read-only)
+     */
+    public var name: String? {
+        get { _name?.value }
+        set { _name = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Required to be in Workforce assertion for login to be allowed to succeed (read-only)
+     */
+    public var required: Bool?
+
+    /**
+     * Looker User Attributes (read-only)
+     */
+    public var user_attributes: [UserAttribute]?
+
+    public init(name: String? = nil, required: Bool? = nil, user_attributes: [UserAttribute]? = nil) {
+        self._name = name.map(AnyString.init)
+        self.required = required
+        self.user_attributes = user_attributes
+    }
+
+}
+
+public struct WorkforceUserAttributeWrite: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case _name = "name"
+        case required
+        case _user_attribute_ids = "user_attribute_ids"
+    }
+    private var _name: AnyString?
+    /**
+     * Name of User Attribute in Workforce
+     */
+    public var name: String? {
+        get { _name?.value }
+        set { _name = newValue.map(AnyString.init) }
+    }
+
+    /**
+     * Required to be in Workforce assertion for login to be allowed to succeed
+     */
+    public var required: Bool?
+
+    private var _user_attribute_ids: [AnyString]?
+    /**
+     * Looker User Attribute Ids
+     */
+    public var user_attribute_ids: [String]? {
+        get { if let v = _user_attribute_ids { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _user_attribute_ids = v.map { AnyString.init($0) } } else { _user_attribute_ids = nil } }
+    }
+
+    public init(name: String? = nil, required: Bool? = nil, user_attribute_ids: [String]? = nil) {
+        self._name = name.map(AnyString.init)
+        self.required = required
+        if let v = user_attribute_ids { _user_attribute_ids = v.map { AnyString.init($0) } } else { _user_attribute_ids = nil }
+    }
+
+}
+
 public struct Workspace: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -33995,6 +34385,7 @@ public struct WriteEmbedConfig: SDKModel {
         case embed_cookieless_v2
         case embed_content_navigation
         case embed_content_management
+        case embed_show_tile_filter_information
         case strict_sameorigin_for_login
         case look_filters
         case hide_look_navigation
@@ -34056,6 +34447,11 @@ public struct WriteEmbedConfig: SDKModel {
     public var embed_content_management: Bool?
 
     /**
+     * When true, filter information is shown on embedded dashboard tiles
+     */
+    public var embed_show_tile_filter_information: Bool?
+
+    /**
      * When true, prohibits the use of Looker login pages in non-Looker iframes. When false, Looker login pages may be used in non-Looker hosted iframes.
      */
     public var strict_sameorigin_for_login: Bool?
@@ -34070,7 +34466,7 @@ public struct WriteEmbedConfig: SDKModel {
      */
     public var hide_look_navigation: Bool?
 
-    public init(domain_allowlist: [String]? = nil, alert_url_allowlist: [String]? = nil, alert_url_param_owner: String? = nil, alert_url_label: String? = nil, sso_auth_enabled: Bool? = nil, embed_cookieless_v2: Bool? = nil, embed_content_navigation: Bool? = nil, embed_content_management: Bool? = nil, strict_sameorigin_for_login: Bool? = nil, look_filters: Bool? = nil, hide_look_navigation: Bool? = nil) {
+    public init(domain_allowlist: [String]? = nil, alert_url_allowlist: [String]? = nil, alert_url_param_owner: String? = nil, alert_url_label: String? = nil, sso_auth_enabled: Bool? = nil, embed_cookieless_v2: Bool? = nil, embed_content_navigation: Bool? = nil, embed_content_management: Bool? = nil, embed_show_tile_filter_information: Bool? = nil, strict_sameorigin_for_login: Bool? = nil, look_filters: Bool? = nil, hide_look_navigation: Bool? = nil) {
         if let v = domain_allowlist { _domain_allowlist = v.map { AnyString.init($0) } } else { _domain_allowlist = nil }
         if let v = alert_url_allowlist { _alert_url_allowlist = v.map { AnyString.init($0) } } else { _alert_url_allowlist = nil }
         self._alert_url_param_owner = alert_url_param_owner.map(AnyString.init)
@@ -34079,6 +34475,7 @@ public struct WriteEmbedConfig: SDKModel {
         self.embed_cookieless_v2 = embed_cookieless_v2
         self.embed_content_navigation = embed_content_navigation
         self.embed_content_management = embed_content_management
+        self.embed_show_tile_filter_information = embed_show_tile_filter_information
         self.strict_sameorigin_for_login = strict_sameorigin_for_login
         self.look_filters = look_filters
         self.hide_look_navigation = hide_look_navigation
@@ -38472,6 +38869,115 @@ public struct WriteWhitelabelConfiguration: SDKModel {
         self.alerts_logo = alerts_logo
         self.alerts_links = alerts_links
         self.folders_mentions = folders_mentions
+    }
+
+}
+
+/**
+ * Dynamic writeable type for WorkforceConfig removes:
+ * can, test_slug, modified_at, modified_by, default_new_user_roles, default_new_user_groups, groups, user_attributes, url
+ */
+public struct WriteWorkforceConfig: SDKModel {
+
+    private enum CodingKeys : String, CodingKey {
+        case enabled
+        case _new_user_migration_types = "new_user_migration_types"
+        case _default_new_user_role_ids = "default_new_user_role_ids"
+        case _default_new_user_group_ids = "default_new_user_group_ids"
+        case set_roles_from_groups
+        case groups_with_role_ids
+        case user_attributes_with_ids
+        case allow_normal_group_membership
+        case allow_roles_from_normal_groups
+        case allow_direct_roles
+        case auth_requires_role
+        case bypass_login_page
+    }
+    /**
+     * Enable/Disable Workforce authentication for the server. This property cannot be modified on Looker (Google Cloud core) instances. Manage this setting via the instance configuration page instead.
+     */
+    public var enabled: Bool?
+
+    private var _new_user_migration_types: AnyString?
+    /**
+     * Merge first-time workforce login to existing user account by email addresses. When a user logs in for the first time via workforce this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
+     */
+    public var new_user_migration_types: String? {
+        get { _new_user_migration_types?.value }
+        set { _new_user_migration_types = newValue.map(AnyString.init) }
+    }
+
+    private var _default_new_user_role_ids: [AnyString]?
+    /**
+     * (Write-Only) Array of ids of roles that will be applied to new users the first time they login via Workforce
+     */
+    public var default_new_user_role_ids: [String]? {
+        get { if let v = _default_new_user_role_ids { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _default_new_user_role_ids = v.map { AnyString.init($0) } } else { _default_new_user_role_ids = nil } }
+    }
+
+    private var _default_new_user_group_ids: [AnyString]?
+    /**
+     * (Write-Only) Array of ids of groups that will be applied to new users the first time they login via Workforce
+     */
+    public var default_new_user_group_ids: [String]? {
+        get { if let v = _default_new_user_group_ids { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _default_new_user_group_ids = v.map { AnyString.init($0) } } else { _default_new_user_group_ids = nil } }
+    }
+
+    /**
+     * Set user roles in Looker based on groups from Workforce
+     */
+    public var set_roles_from_groups: Bool?
+
+    /**
+     * (Read/Write) Array of mappings between Workforce Groups and arrays of Looker Role ids
+     */
+    public var groups_with_role_ids: [WorkforceGroupWrite]?
+
+    /**
+     * (Read/Write) Array of mappings between Workforce User Attributes and arrays of Looker User Attribute ids
+     */
+    public var user_attributes_with_ids: [WorkforceUserAttributeWrite]?
+
+    /**
+     * Allow Workforce auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
+     */
+    public var allow_normal_group_membership: Bool?
+
+    /**
+     * Workforce auth'd users will inherit roles from non-reflected Looker groups.
+     */
+    public var allow_roles_from_normal_groups: Bool?
+
+    /**
+     * Allows roles to be directly assigned to Workforce auth'd users.
+     */
+    public var allow_direct_roles: Bool?
+
+    /**
+     * Users will not be allowed to login at all unless a role for them is found in Workforce if set to true
+     */
+    public var auth_requires_role: Bool?
+
+    /**
+     * Bypass the login page and redirect to Workforce Identity Federation if set to true
+     */
+    public var bypass_login_page: Bool?
+
+    public init(enabled: Bool? = nil, new_user_migration_types: String? = nil, default_new_user_role_ids: [String]? = nil, default_new_user_group_ids: [String]? = nil, set_roles_from_groups: Bool? = nil, groups_with_role_ids: [WorkforceGroupWrite]? = nil, user_attributes_with_ids: [WorkforceUserAttributeWrite]? = nil, allow_normal_group_membership: Bool? = nil, allow_roles_from_normal_groups: Bool? = nil, allow_direct_roles: Bool? = nil, auth_requires_role: Bool? = nil, bypass_login_page: Bool? = nil) {
+        self.enabled = enabled
+        self._new_user_migration_types = new_user_migration_types.map(AnyString.init)
+        if let v = default_new_user_role_ids { _default_new_user_role_ids = v.map { AnyString.init($0) } } else { _default_new_user_role_ids = nil }
+        if let v = default_new_user_group_ids { _default_new_user_group_ids = v.map { AnyString.init($0) } } else { _default_new_user_group_ids = nil }
+        self.set_roles_from_groups = set_roles_from_groups
+        self.groups_with_role_ids = groups_with_role_ids
+        self.user_attributes_with_ids = user_attributes_with_ids
+        self.allow_normal_group_membership = allow_normal_group_membership
+        self.allow_roles_from_normal_groups = allow_roles_from_normal_groups
+        self.allow_direct_roles = allow_direct_roles
+        self.auth_requires_role = auth_requires_role
+        self.bypass_login_page = bypass_login_page
     }
 
 }

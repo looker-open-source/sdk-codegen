@@ -25,7 +25,7 @@
  */
 
 /**
- * 523 API models: 346 Spec, 78 Request, 73 Write, 26 Enum
+ * 529 API models: 351 Spec, 78 Request, 74 Write, 26 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl';
@@ -3665,6 +3665,10 @@ export interface IDashboardDownloadSettings {
    * Append Excel metadata
    */
   append_excel_metadata?: boolean | null;
+  /**
+   * Include filter context in PNG downloads
+   */
+  include_filters?: boolean | null;
 }
 
 export interface IDashboardElement {
@@ -5078,6 +5082,10 @@ export interface IEmbedConfig {
    * Is embed content management enabled for this Looker
    */
   embed_content_management?: boolean;
+  /**
+   * When true, filter information is shown on embedded dashboard tiles
+   */
+  embed_show_tile_filter_information?: boolean;
   /**
    * Default net new visualizations in embedded context to Modern theme (read-only)
    */
@@ -15341,6 +15349,169 @@ export interface IWorkflowParams {
   destination?: IWorkflowDestination;
 }
 
+export interface IWorkforceConfig {
+  /**
+   * Operations the current user is able to perform on this object (read-only)
+   */
+  can?: IDictionary<boolean>;
+  /**
+   * Enable/Disable Workforce authentication for the server. This property cannot be modified on Looker (Google Cloud core) instances. Manage this setting via the instance configuration page instead.
+   */
+  enabled?: boolean;
+  /**
+   * Merge first-time workforce login to existing user account by email addresses. When a user logs in for the first time via workforce this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
+   */
+  new_user_migration_types?: string | null;
+  /**
+   * Slug to identify configurations that are created in order to run a Workforce config test (read-only)
+   */
+  test_slug?: string | null;
+  /**
+   * When this config was last modified (read-only)
+   */
+  modified_at?: Date | null;
+  /**
+   * User id of user who last modified this config (read-only)
+   */
+  modified_by?: string | null;
+  /**
+   * (Read-only) Roles that will be applied to new users the first time they login via Workforce (read-only)
+   */
+  default_new_user_roles?: IRole[] | null;
+  /**
+   * (Write-Only) Array of ids of roles that will be applied to new users the first time they login via Workforce
+   */
+  default_new_user_role_ids?: string[] | null;
+  /**
+   * (Read-only) Groups that will be applied to new users the first time they login via Workforce (read-only)
+   */
+  default_new_user_groups?: IGroup[] | null;
+  /**
+   * (Write-Only) Array of ids of groups that will be applied to new users the first time they login via Workforce
+   */
+  default_new_user_group_ids?: string[] | null;
+  /**
+   * Set user roles in Looker based on groups from Workforce
+   */
+  set_roles_from_groups?: boolean;
+  /**
+   * (Read-only) Array of mappings between Workforce Groups and Looker Roles (read-only)
+   */
+  groups?: IWorkforceGroupRead[] | null;
+  /**
+   * (Read/Write) Array of mappings between Workforce Groups and arrays of Looker Role ids
+   */
+  groups_with_role_ids?: IWorkforceGroupWrite[] | null;
+  /**
+   * (Read-only) Array of mappings between Workforce User Attributes and Looker User Attributes (read-only)
+   */
+  user_attributes?: IWorkforceUserAttributeRead[] | null;
+  /**
+   * (Read/Write) Array of mappings between Workforce User Attributes and arrays of Looker User Attribute ids
+   */
+  user_attributes_with_ids?: IWorkforceUserAttributeWrite[] | null;
+  /**
+   * Allow Workforce auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
+   */
+  allow_normal_group_membership?: boolean;
+  /**
+   * Workforce auth'd users will inherit roles from non-reflected Looker groups.
+   */
+  allow_roles_from_normal_groups?: boolean;
+  /**
+   * Allows roles to be directly assigned to Workforce auth'd users.
+   */
+  allow_direct_roles?: boolean;
+  /**
+   * Users will not be allowed to login at all unless a role for them is found in Workforce if set to true
+   */
+  auth_requires_role?: boolean;
+  /**
+   * Bypass the login page and redirect to Workforce Identity Federation if set to true
+   */
+  bypass_login_page?: boolean;
+  /**
+   * Link to get this item (read-only)
+   */
+  url?: string | null;
+}
+
+export interface IWorkforceGroupRead {
+  /**
+   * Unique Id (read-only)
+   */
+  id?: string;
+  /**
+   * Unique Id of group in Looker (read-only)
+   */
+  looker_group_id?: string | null;
+  /**
+   * Name of group in Looker (read-only)
+   */
+  looker_group_name?: string | null;
+  /**
+   * Name of group in Workforce (read-only)
+   */
+  name?: string | null;
+  /**
+   * Looker Roles (read-only)
+   */
+  roles?: IRole[] | null;
+}
+
+export interface IWorkforceGroupWrite {
+  /**
+   * Unique Id
+   */
+  id?: string | null;
+  /**
+   * Unique Id of group in Looker (read-only)
+   */
+  looker_group_id?: string | null;
+  /**
+   * Name of group in Looker
+   */
+  looker_group_name?: string | null;
+  /**
+   * Name of group in Workforce
+   */
+  name?: string | null;
+  /**
+   * Looker Role Ids
+   */
+  role_ids?: string[] | null;
+}
+
+export interface IWorkforceUserAttributeRead {
+  /**
+   * Name of User Attribute in Workforce (read-only)
+   */
+  name?: string | null;
+  /**
+   * Required to be in Workforce assertion for login to be allowed to succeed (read-only)
+   */
+  required?: boolean;
+  /**
+   * Looker User Attributes (read-only)
+   */
+  user_attributes?: IUserAttribute[] | null;
+}
+
+export interface IWorkforceUserAttributeWrite {
+  /**
+   * Name of User Attribute in Workforce
+   */
+  name?: string | null;
+  /**
+   * Required to be in Workforce assertion for login to be allowed to succeed
+   */
+  required?: boolean;
+  /**
+   * Looker User Attribute Ids
+   */
+  user_attribute_ids?: string[] | null;
+}
+
 export interface IWorkspace {
   /**
    * Operations the current user is able to perform on this object (read-only)
@@ -16680,6 +16851,10 @@ export interface IWriteEmbedConfig {
    * Is embed content management enabled for this Looker
    */
   embed_content_management?: boolean;
+  /**
+   * When true, filter information is shown on embedded dashboard tiles
+   */
+  embed_show_tile_filter_information?: boolean;
   /**
    * When true, prohibits the use of Looker login pages in non-Looker iframes. When false, Looker login pages may be used in non-Looker hosted iframes.
    */
@@ -18746,4 +18921,59 @@ export interface IWriteWhitelabelConfiguration {
    * Remove Looker mentions in home folder page when you don’t have any items saved
    */
   folders_mentions?: boolean;
+}
+
+/**
+ * Dynamic writeable type for WorkforceConfig removes:
+ * can, test_slug, modified_at, modified_by, default_new_user_roles, default_new_user_groups, groups, user_attributes, url
+ */
+export interface IWriteWorkforceConfig {
+  /**
+   * Enable/Disable Workforce authentication for the server. This property cannot be modified on Looker (Google Cloud core) instances. Manage this setting via the instance configuration page instead.
+   */
+  enabled?: boolean;
+  /**
+   * Merge first-time workforce login to existing user account by email addresses. When a user logs in for the first time via workforce this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'
+   */
+  new_user_migration_types?: string | null;
+  /**
+   * (Write-Only) Array of ids of roles that will be applied to new users the first time they login via Workforce
+   */
+  default_new_user_role_ids?: string[] | null;
+  /**
+   * (Write-Only) Array of ids of groups that will be applied to new users the first time they login via Workforce
+   */
+  default_new_user_group_ids?: string[] | null;
+  /**
+   * Set user roles in Looker based on groups from Workforce
+   */
+  set_roles_from_groups?: boolean;
+  /**
+   * (Read/Write) Array of mappings between Workforce Groups and arrays of Looker Role ids
+   */
+  groups_with_role_ids?: IWorkforceGroupWrite[] | null;
+  /**
+   * (Read/Write) Array of mappings between Workforce User Attributes and arrays of Looker User Attribute ids
+   */
+  user_attributes_with_ids?: IWorkforceUserAttributeWrite[] | null;
+  /**
+   * Allow Workforce auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.
+   */
+  allow_normal_group_membership?: boolean;
+  /**
+   * Workforce auth'd users will inherit roles from non-reflected Looker groups.
+   */
+  allow_roles_from_normal_groups?: boolean;
+  /**
+   * Allows roles to be directly assigned to Workforce auth'd users.
+   */
+  allow_direct_roles?: boolean;
+  /**
+   * Users will not be allowed to login at all unless a role for them is found in Workforce if set to true
+   */
+  auth_requires_role?: boolean;
+  /**
+   * Bypass the login page and redirect to Workforce Identity Federation if set to true
+   */
+  bypass_login_page?: boolean;
 }
