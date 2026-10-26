@@ -54,10 +54,10 @@ jobs:
         env:
           PRIMARY_LOOKER_VERSION: ${{ fromJson(vars.PRIMARY_LOOKER_VERSION)[0] }}
 
-      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      - name: Set up Node
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24.x
-          registry-url: https://wombat-dressing-room.appspot.com
           package-manager-cache: false
 
       - name: Install dependencies and build
@@ -83,6 +83,13 @@ jobs:
       - name: Check that Looker is ready
         run: |
           ${{ github.workspace }}/.github/scripts/wait_for_looker.sh
+
+      - name: Configure Wombat registry
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24.x
+          registry-url: https://wombat-dressing-room.appspot.com
+          package-manager-cache: false
 
       - name: Publish to NPM registry
         run: npx lerna publish from-package --yes --no-verify-access
