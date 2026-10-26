@@ -6,7 +6,7 @@
     },
     {
       "type": "linked-versions",
-      "group-name": "calendar versioned sdks",
+      "groupName": "calendar versioned sdks",
       "components": [
         "embed-components",
         "embed-services",
