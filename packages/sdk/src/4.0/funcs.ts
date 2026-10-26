@@ -25,7 +25,7 @@
  */
 
 /**
- * 532 API methods
+ * 537 API methods
  */
 
 import type {
@@ -302,6 +302,7 @@ import type {
   IValidationError,
   IWelcomeEmailTest,
   IWhitelabelConfiguration,
+  IWorkforceConfig,
   IWorkspace,
   IWriteAgent,
   IWriteAlert,
@@ -367,6 +368,7 @@ import type {
   IWriteUserAttributeWithValue,
   IWriteUserDbConnection,
   IWriteWhitelabelConfiguration,
+  IWriteWorkforceConfig,
 } from './models';
 
 /**
@@ -2626,6 +2628,149 @@ export const delete_user_login_lockout = async (
     `/user_login_lockout/${key}`,
     null,
     null,
+    options
+  );
+};
+
+/**
+ * ### Get the Workforce configuration.
+ *
+ * Looker (Google Cloud core) can be optionally configured to authenticate users with Workforce Identity Federation using an external identity provider (IdP).
+ *
+ * Only Looker administrators can read and update the Workforce configuration.
+ *
+ * Configuring Workforce impacts authentication for all users. This configuration should be done carefully.
+ *
+ * Looker maintains a single Workforce configuration. It can be read and updated. Updates only succeed if the new state will be valid (in the sense that all required fields are populated); it is up to you to ensure that the configuration is appropriate and correct).
+ *
+ * Workforce is enabled or disabled in the instance settings, not using the **enabled** field. The configuration is only available while Workforce is enabled.
+ *
+ * Calls to this endpoint may only be available for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+ *
+ * GET /workforce_config -> IWorkforceConfig
+ *
+ * @param sdk IAPIMethods implementation
+ * @param options one-time API call overrides
+ *
+ */
+export const workforce_config = async (
+  sdk: IAPIMethods,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IWorkforceConfig, IError>> => {
+  return sdk.get<IWorkforceConfig, IError>(
+    '/workforce_config',
+    null,
+    null,
+    options
+  );
+};
+
+/**
+ * ### Update the Workforce configuration.
+ *
+ * Configuring Workforce impacts authentication for all users. This configuration should be done carefully.
+ *
+ * Only Looker administrators can read and update the Workforce configuration.
+ *
+ * Workforce is enabled or disabled in the instance settings, not using the **enabled** field. The configuration is only available while Workforce is enabled.
+ *
+ * It is **highly** recommended that any Workforce setting changes be tested using the APIs below before being set globally.
+ *
+ * Calls to this endpoint may only be available for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+ *
+ * PATCH /workforce_config -> IWorkforceConfig
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteWorkforceConfig>
+ * @param options one-time API call overrides
+ *
+ */
+export const update_workforce_config = async (
+  sdk: IAPIMethods,
+  body: Partial<IWriteWorkforceConfig>,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IWorkforceConfig, IError | IValidationError>> => {
+  return sdk.patch<IWorkforceConfig, IError | IValidationError>(
+    '/workforce_config',
+    null,
+    body,
+    options
+  );
+};
+
+/**
+ * ### Get a Workforce test configuration by test_slug.
+ *
+ * Calls to this endpoint may only be available for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+ *
+ * GET /workforce_test_configs/{test_slug} -> IWorkforceConfig
+ *
+ * @param sdk IAPIMethods implementation
+ * @param test_slug Slug of test config
+ * @param options one-time API call overrides
+ *
+ */
+export const workforce_test_config = async (
+  sdk: IAPIMethods,
+  test_slug: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IWorkforceConfig, IError>> => {
+  test_slug = encodeParam(test_slug);
+  return sdk.get<IWorkforceConfig, IError>(
+    `/workforce_test_configs/${test_slug}`,
+    null,
+    null,
+    options
+  );
+};
+
+/**
+ * ### Delete a Workforce test configuration.
+ *
+ * Calls to this endpoint may only be available for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+ *
+ * DELETE /workforce_test_configs/{test_slug} -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param test_slug Slug of test config
+ * @param options one-time API call overrides
+ *
+ */
+export const delete_workforce_test_config = async (
+  sdk: IAPIMethods,
+  test_slug: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<string, IError>> => {
+  test_slug = encodeParam(test_slug);
+  return sdk.delete<string, IError>(
+    `/workforce_test_configs/${test_slug}`,
+    null,
+    null,
+    options
+  );
+};
+
+/**
+ * ### Create a Workforce test configuration.
+ *
+ * Calls to this endpoint may only be available for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+ *
+ * POST /workforce_test_configs -> IWorkforceConfig
+ *
+ * @param sdk IAPIMethods implementation
+ * @param body Partial<IWriteWorkforceConfig>
+ * @param options one-time API call overrides
+ *
+ */
+export const create_workforce_test_config = async (
+  sdk: IAPIMethods,
+  body: Partial<IWriteWorkforceConfig>,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<IWorkforceConfig, IError | IValidationError>> => {
+  return sdk.post<IWorkforceConfig, IError | IValidationError>(
+    '/workforce_test_configs',
+    null,
+    body,
     options
   );
 };
@@ -6395,7 +6540,7 @@ export const dashboard_aggregate_table_lookml = async (
  *
  * Get a **single LookML dashboard** by id with [dashboard_lookml()](#!/Dashboard/dashboard_lookml)
  *
- * GET /dashboards/lookml/search -> IDashboardLookml
+ * GET /dashboards/lookml/search -> IDashboard[]
  *
  * @param sdk IAPIMethods implementation
  * @param request composed interface "IRequestSearchLookmlDashboards" for complex method parameters
@@ -6406,8 +6551,8 @@ export const search_lookml_dashboards = async (
   sdk: IAPIMethods,
   request: IRequestSearchLookmlDashboards = {},
   options?: Partial<ITransportSettings>
-): Promise<SDKResponse<IDashboardLookml, IError>> => {
-  return sdk.get<IDashboardLookml, IError>(
+): Promise<SDKResponse<IDashboard[], IError>> => {
+  return sdk.get<IDashboard[], IError>(
     '/dashboards/lookml/search',
     {
       folder_id: request.folder_id,

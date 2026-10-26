@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 532 API methods
+/// 537 API methods
 
 #nullable enable
 using System;
@@ -1720,6 +1720,102 @@ namespace Looker.SDK.API40
 {  
       key = SdkUtils.EncodeParam(key);
     return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/user_login_lockout/{key}", null,null,options);
+  }
+
+  /// ### Get the Workforce configuration.
+  ///
+  /// Looker (Google Cloud core) can be optionally configured to authenticate users with Workforce Identity Federation using an external identity provider (IdP).
+  ///
+  /// Only Looker administrators can read and update the Workforce configuration.
+  ///
+  /// Configuring Workforce impacts authentication for all users. This configuration should be done carefully.
+  ///
+  /// Looker maintains a single Workforce configuration. It can be read and updated. Updates only succeed if the new state will be valid (in the sense that all required fields are populated); it is up to you to ensure that the configuration is appropriate and correct).
+  ///
+  /// Workforce is enabled or disabled in the instance settings, not using the **enabled** field. The configuration is only available while Workforce is enabled.
+  ///
+  /// Calls to this endpoint may only be available for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
+  /// GET /workforce_config -> WorkforceConfig
+  ///
+  /// <returns><c>WorkforceConfig</c> Workforce Configuration. (application/json)</returns>
+  ///
+  public async Task<SdkResponse<WorkforceConfig, Exception>> workforce_config(
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<WorkforceConfig, Exception>(HttpMethod.Get, "/workforce_config", null,null,options);
+  }
+
+  /// ### Update the Workforce configuration.
+  ///
+  /// Configuring Workforce impacts authentication for all users. This configuration should be done carefully.
+  ///
+  /// Only Looker administrators can read and update the Workforce configuration.
+  ///
+  /// Workforce is enabled or disabled in the instance settings, not using the **enabled** field. The configuration is only available while Workforce is enabled.
+  ///
+  /// It is **highly** recommended that any Workforce setting changes be tested using the APIs below before being set globally.
+  ///
+  /// Calls to this endpoint may only be available for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
+  /// PATCH /workforce_config -> WorkforceConfig
+  ///
+  /// <returns><c>WorkforceConfig</c> New state for Workforce Configuration. (application/json)</returns>
+  ///
+  public async Task<SdkResponse<WorkforceConfig, Exception>> update_workforce_config(
+    WriteWorkforceConfig body,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<WorkforceConfig, Exception>(HttpMethod.Patch, "/workforce_config", null,body,options);
+  }
+
+  /// ### Get a Workforce test configuration by test_slug.
+  ///
+  /// Calls to this endpoint may only be available for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
+  /// GET /workforce_test_configs/{test_slug} -> WorkforceConfig
+  ///
+  /// <returns><c>WorkforceConfig</c> Workforce test config. (application/json)</returns>
+  ///
+  /// <param name="test_slug">Slug of test config</param>
+  public async Task<SdkResponse<WorkforceConfig, Exception>> workforce_test_config(
+    string test_slug,
+    ITransportSettings? options = null)
+{  
+      test_slug = SdkUtils.EncodeParam(test_slug);
+    return await AuthRequest<WorkforceConfig, Exception>(HttpMethod.Get, $"/workforce_test_configs/{test_slug}", null,null,options);
+  }
+
+  /// ### Delete a Workforce test configuration.
+  ///
+  /// Calls to this endpoint may only be available for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
+  /// DELETE /workforce_test_configs/{test_slug} -> string
+  ///
+  /// <returns><c>string</c> Test config succssfully deleted. (application/json)</returns>
+  ///
+  /// <param name="test_slug">Slug of test config</param>
+  public async Task<SdkResponse<string, Exception>> delete_workforce_test_config(
+    string test_slug,
+    ITransportSettings? options = null)
+{  
+      test_slug = SdkUtils.EncodeParam(test_slug);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/workforce_test_configs/{test_slug}", null,null,options);
+  }
+
+  /// ### Create a Workforce test configuration.
+  ///
+  /// Calls to this endpoint may only be available for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+  ///
+  /// POST /workforce_test_configs -> WorkforceConfig
+  ///
+  /// <returns><c>WorkforceConfig</c> Workforce test config (application/json)</returns>
+  ///
+  public async Task<SdkResponse<WorkforceConfig, Exception>> create_workforce_test_config(
+    WriteWorkforceConfig body,
+    ITransportSettings? options = null)
+{  
+    return await AuthRequest<WorkforceConfig, Exception>(HttpMethod.Post, "/workforce_test_configs", null,body,options);
   }
 
   #endregion Auth: Manage User Authentication Configuration
@@ -4541,9 +4637,9 @@ namespace Looker.SDK.API40
   ///
   /// Get a **single LookML dashboard** by id with [dashboard_lookml()](#!/Dashboard/dashboard_lookml)
   ///
-  /// GET /dashboards/lookml/search -> DashboardLookml
+  /// GET /dashboards/lookml/search -> Dashboard[]
   ///
-  /// <returns><c>DashboardLookml</c> dashboards (application/json)</returns>
+  /// <returns><c>Dashboard[]</c> dashboards (application/json)</returns>
   ///
   /// <param name="folder_id">Filter on a particular folder.</param>
   /// <param name="title">Match LookML Dashboard title. Note: This matches on the dashboard_name defined in the LookML code, not the display title.</param>
@@ -4552,7 +4648,7 @@ namespace Looker.SDK.API40
   /// <param name="limit">Number of results to return. (used with offset and takes priority over page and per_page)</param>
   /// <param name="offset">Number of results to skip before returning any. (used with limit and takes priority over page and per_page)</param>
   /// <param name="sorts">One or more fields to sort by. Sortable fields: [:title, :id, :folder_id, :content_favorite_id, :content_metadata_id, :certification_status]. Note: Sorting by title sorts by the dashboard_name defined in the LookML code, not the display title.</param>
-  public async Task<SdkResponse<DashboardLookml, Exception>> search_lookml_dashboards(
+  public async Task<SdkResponse<Dashboard[], Exception>> search_lookml_dashboards(
     string? folder_id = null,
     string? title = null,
     string? content_favorite_id = null,
@@ -4562,7 +4658,7 @@ namespace Looker.SDK.API40
     string? sorts = null,
     ITransportSettings? options = null)
 {  
-    return await AuthRequest<DashboardLookml, Exception>(HttpMethod.Get, "/dashboards/lookml/search", new Values {
+    return await AuthRequest<Dashboard[], Exception>(HttpMethod.Get, "/dashboards/lookml/search", new Values {
       { "folder_id", folder_id },
       { "title", title },
       { "content_favorite_id", content_favorite_id },

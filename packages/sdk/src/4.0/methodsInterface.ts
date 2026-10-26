@@ -25,7 +25,7 @@
  */
 
 /**
- * 532 API methods
+ * 537 API methods
  */
 
 import type {
@@ -297,6 +297,7 @@ import type {
   IValidationError,
   IWelcomeEmailTest,
   IWhitelabelConfiguration,
+  IWorkforceConfig,
   IWorkspace,
   IWriteAgent,
   IWriteAlert,
@@ -362,6 +363,7 @@ import type {
   IWriteUserAttributeWithValue,
   IWriteUserDbConnection,
   IWriteWhitelabelConfiguration,
+  IWriteWorkforceConfig,
 } from './models';
 
 export interface ILooker40SDK extends IAPIMethods {
@@ -1922,6 +1924,102 @@ export interface ILooker40SDK extends IAPIMethods {
     key: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<string, IError>>;
+
+  /**
+   * ### Get the Workforce configuration.
+   *
+   * Looker (Google Cloud core) can be optionally configured to authenticate users with Workforce Identity Federation using an external identity provider (IdP).
+   *
+   * Only Looker administrators can read and update the Workforce configuration.
+   *
+   * Configuring Workforce impacts authentication for all users. This configuration should be done carefully.
+   *
+   * Looker maintains a single Workforce configuration. It can be read and updated. Updates only succeed if the new state will be valid (in the sense that all required fields are populated); it is up to you to ensure that the configuration is appropriate and correct).
+   *
+   * Workforce is enabled or disabled in the instance settings, not using the **enabled** field. The configuration is only available while Workforce is enabled.
+   *
+   * Calls to this endpoint may only be available for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * GET /workforce_config -> IWorkforceConfig
+   *
+   * @param options one-time API call overrides
+   *
+   */
+  workforce_config(
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IWorkforceConfig, IError>>;
+
+  /**
+   * ### Update the Workforce configuration.
+   *
+   * Configuring Workforce impacts authentication for all users. This configuration should be done carefully.
+   *
+   * Only Looker administrators can read and update the Workforce configuration.
+   *
+   * Workforce is enabled or disabled in the instance settings, not using the **enabled** field. The configuration is only available while Workforce is enabled.
+   *
+   * It is **highly** recommended that any Workforce setting changes be tested using the APIs below before being set globally.
+   *
+   * Calls to this endpoint may only be available for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * PATCH /workforce_config -> IWorkforceConfig
+   *
+   * @param body Partial<IWriteWorkforceConfig>
+   * @param options one-time API call overrides
+   *
+   */
+  update_workforce_config(
+    body: Partial<IWriteWorkforceConfig>,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IWorkforceConfig, IError | IValidationError>>;
+
+  /**
+   * ### Get a Workforce test configuration by test_slug.
+   *
+   * Calls to this endpoint may only be available for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * GET /workforce_test_configs/{test_slug} -> IWorkforceConfig
+   *
+   * @param test_slug Slug of test config
+   * @param options one-time API call overrides
+   *
+   */
+  workforce_test_config(
+    test_slug: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IWorkforceConfig, IError>>;
+
+  /**
+   * ### Delete a Workforce test configuration.
+   *
+   * Calls to this endpoint may only be available for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * DELETE /workforce_test_configs/{test_slug} -> string
+   *
+   * @param test_slug Slug of test config
+   * @param options one-time API call overrides
+   *
+   */
+  delete_workforce_test_config(
+    test_slug: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string, IError>>;
+
+  /**
+   * ### Create a Workforce test configuration.
+   *
+   * Calls to this endpoint may only be available for [Looker (Google Cloud core)](https://docs.cloud.google.com/looker/docs/r/looker-core/overview).
+   *
+   * POST /workforce_test_configs -> IWorkforceConfig
+   *
+   * @param body Partial<IWriteWorkforceConfig>
+   * @param options one-time API call overrides
+   *
+   */
+  create_workforce_test_config(
+    body: Partial<IWriteWorkforceConfig>,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<IWorkforceConfig, IError | IValidationError>>;
 
   //#endregion Auth: Manage User Authentication Configuration
 
@@ -4350,7 +4448,7 @@ export interface ILooker40SDK extends IAPIMethods {
    *
    * Get a **single LookML dashboard** by id with [dashboard_lookml()](#!/Dashboard/dashboard_lookml)
    *
-   * GET /dashboards/lookml/search -> IDashboardLookml
+   * GET /dashboards/lookml/search -> IDashboard[]
    *
    * @param request composed interface "IRequestSearchLookmlDashboards" for complex method parameters
    * @param options one-time API call overrides
@@ -4359,7 +4457,7 @@ export interface ILooker40SDK extends IAPIMethods {
   search_lookml_dashboards(
     request?: IRequestSearchLookmlDashboards,
     options?: Partial<ITransportSettings>
-  ): Promise<SDKResponse<IDashboardLookml, IError>>;
+  ): Promise<SDKResponse<IDashboard[], IError>>;
 
   /**
    * ### Get lookml of a UDD

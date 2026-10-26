@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 445 API models: 346 Spec, 0 Request, 73 Write, 26 Enum
+/// 451 API models: 351 Spec, 0 Request, 74 Write, 26 Enum
 
 #nullable enable
 using System;
@@ -2206,6 +2206,8 @@ public class DashboardDownloadSettings : SdkModel
   public long? columns_limit { get; set; } = null;
   /// <summary>Append Excel metadata</summary>
   public bool? append_excel_metadata { get; set; } = null;
+  /// <summary>Include filter context in PNG downloads</summary>
+  public bool? include_filters { get; set; } = null;
 }
 
 public class DashboardElement : SdkModel
@@ -3027,6 +3029,8 @@ public class EmbedConfig : SdkModel
   public bool? embed_content_navigation { get; set; } = null;
   /// <summary>Is embed content management enabled for this Looker</summary>
   public bool? embed_content_management { get; set; } = null;
+  /// <summary>When true, filter information is shown on embedded dashboard tiles</summary>
+  public bool? embed_show_tile_filter_information { get; set; } = null;
   /// <summary>Default net new visualizations in embedded context to Modern theme (read-only)</summary>
   public bool? embed_vis_modernization_default { get; set; } = null;
   /// <summary>When true, prohibits the use of Looker login pages in non-Looker iframes. When false, Looker login pages may be used in non-Looker hosted iframes.</summary>
@@ -7512,6 +7516,100 @@ public class WorkflowParams : SdkModel
   public WorkflowDestination? destination { get; set; }
 }
 
+public class WorkforceConfig : SdkModel
+{
+  /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
+  public StringDictionary<bool>? can { get; set; } = null;
+  /// <summary>Enable/Disable Workforce authentication for the server. This property cannot be modified on Looker (Google Cloud core) instances. Manage this setting via the instance configuration page instead.</summary>
+  public bool? enabled { get; set; } = null;
+  /// <summary>Merge first-time workforce login to existing user account by email addresses. When a user logs in for the first time via workforce this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'</summary>
+  public string? new_user_migration_types { get; set; } = null;
+  /// <summary>Slug to identify configurations that are created in order to run a Workforce config test (read-only)</summary>
+  public string? test_slug { get; set; } = null;
+  /// <summary>When this config was last modified (read-only)</summary>
+  public DateTime? modified_at { get; set; } = null;
+  /// <summary>User id of user who last modified this config (read-only)</summary>
+  public string? modified_by { get; set; } = null;
+  /// <summary>(Read-only) Roles that will be applied to new users the first time they login via Workforce (read-only)</summary>
+  public Role[]? default_new_user_roles { get; set; } = null;
+  /// <summary>(Write-Only) Array of ids of roles that will be applied to new users the first time they login via Workforce</summary>
+  public string[]? default_new_user_role_ids { get; set; } = null;
+  /// <summary>(Read-only) Groups that will be applied to new users the first time they login via Workforce (read-only)</summary>
+  public Group[]? default_new_user_groups { get; set; } = null;
+  /// <summary>(Write-Only) Array of ids of groups that will be applied to new users the first time they login via Workforce</summary>
+  public string[]? default_new_user_group_ids { get; set; } = null;
+  /// <summary>Set user roles in Looker based on groups from Workforce</summary>
+  public bool? set_roles_from_groups { get; set; } = null;
+  /// <summary>(Read-only) Array of mappings between Workforce Groups and Looker Roles (read-only)</summary>
+  public WorkforceGroupRead[]? groups { get; set; } = null;
+  /// <summary>(Read/Write) Array of mappings between Workforce Groups and arrays of Looker Role ids</summary>
+  public WorkforceGroupWrite[]? groups_with_role_ids { get; set; } = null;
+  /// <summary>(Read-only) Array of mappings between Workforce User Attributes and Looker User Attributes (read-only)</summary>
+  public WorkforceUserAttributeRead[]? user_attributes { get; set; } = null;
+  /// <summary>(Read/Write) Array of mappings between Workforce User Attributes and arrays of Looker User Attribute ids</summary>
+  public WorkforceUserAttributeWrite[]? user_attributes_with_ids { get; set; } = null;
+  /// <summary>Allow Workforce auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.</summary>
+  public bool? allow_normal_group_membership { get; set; } = null;
+  /// <summary>Workforce auth'd users will inherit roles from non-reflected Looker groups.</summary>
+  public bool? allow_roles_from_normal_groups { get; set; } = null;
+  /// <summary>Allows roles to be directly assigned to Workforce auth'd users.</summary>
+  public bool? allow_direct_roles { get; set; } = null;
+  /// <summary>Users will not be allowed to login at all unless a role for them is found in Workforce if set to true</summary>
+  public bool? auth_requires_role { get; set; } = null;
+  /// <summary>Bypass the login page and redirect to Workforce Identity Federation if set to true</summary>
+  public bool? bypass_login_page { get; set; } = null;
+  /// <summary>Link to get this item (read-only)</summary>
+  public string? url { get; set; } = null;
+}
+
+public class WorkforceGroupRead : SdkModel
+{
+  /// <summary>Unique Id (read-only)</summary>
+  public string? id { get; set; } = null;
+  /// <summary>Unique Id of group in Looker (read-only)</summary>
+  public string? looker_group_id { get; set; } = null;
+  /// <summary>Name of group in Looker (read-only)</summary>
+  public string? looker_group_name { get; set; } = null;
+  /// <summary>Name of group in Workforce (read-only)</summary>
+  public string? name { get; set; } = null;
+  /// <summary>Looker Roles (read-only)</summary>
+  public Role[]? roles { get; set; } = null;
+}
+
+public class WorkforceGroupWrite : SdkModel
+{
+  /// <summary>Unique Id</summary>
+  public string? id { get; set; } = null;
+  /// <summary>Unique Id of group in Looker (read-only)</summary>
+  public string? looker_group_id { get; set; } = null;
+  /// <summary>Name of group in Looker</summary>
+  public string? looker_group_name { get; set; } = null;
+  /// <summary>Name of group in Workforce</summary>
+  public string? name { get; set; } = null;
+  /// <summary>Looker Role Ids</summary>
+  public string[]? role_ids { get; set; } = null;
+}
+
+public class WorkforceUserAttributeRead : SdkModel
+{
+  /// <summary>Name of User Attribute in Workforce (read-only)</summary>
+  public string? name { get; set; } = null;
+  /// <summary>Required to be in Workforce assertion for login to be allowed to succeed (read-only)</summary>
+  public bool? required { get; set; } = null;
+  /// <summary>Looker User Attributes (read-only)</summary>
+  public UserAttribute[]? user_attributes { get; set; } = null;
+}
+
+public class WorkforceUserAttributeWrite : SdkModel
+{
+  /// <summary>Name of User Attribute in Workforce</summary>
+  public string? name { get; set; } = null;
+  /// <summary>Required to be in Workforce assertion for login to be allowed to succeed</summary>
+  public bool? required { get; set; } = null;
+  /// <summary>Looker User Attribute Ids</summary>
+  public string[]? user_attribute_ids { get; set; } = null;
+}
+
 public class Workspace : SdkModel
 {
   /// <summary>Operations the current user is able to perform on this object (read-only)</summary>
@@ -8296,6 +8394,8 @@ public class WriteEmbedConfig : SdkModel
   public bool? embed_content_navigation { get; set; } = null;
   /// <summary>Is embed content management enabled for this Looker</summary>
   public bool? embed_content_management { get; set; } = null;
+  /// <summary>When true, filter information is shown on embedded dashboard tiles</summary>
+  public bool? embed_show_tile_filter_information { get; set; } = null;
   /// <summary>When true, prohibits the use of Looker login pages in non-Looker iframes. When false, Looker login pages may be used in non-Looker hosted iframes.</summary>
   public bool? strict_sameorigin_for_login { get; set; } = null;
   /// <summary>When true, filters are enabled on embedded Looks</summary>
@@ -9582,6 +9682,36 @@ public class WriteWhitelabelConfiguration : SdkModel
   public bool? alerts_links { get; set; } = null;
   /// <summary>Remove Looker mentions in home folder page when you don’t have any items saved</summary>
   public bool? folders_mentions { get; set; } = null;
+}
+
+/// Dynamic writeable type for WorkforceConfig removes:
+/// can, test_slug, modified_at, modified_by, default_new_user_roles, default_new_user_groups, groups, user_attributes, url
+public class WriteWorkforceConfig : SdkModel
+{
+  /// <summary>Enable/Disable Workforce authentication for the server. This property cannot be modified on Looker (Google Cloud core) instances. Manage this setting via the instance configuration page instead.</summary>
+  public bool? enabled { get; set; } = null;
+  /// <summary>Merge first-time workforce login to existing user account by email addresses. When a user logs in for the first time via workforce this option will connect this user into their existing account by finding the account with a matching email address by testing the given types of credentials for existing users. Otherwise a new user account will be created for the user. This list (if provided) must be a comma separated list of string like 'email,ldap,google'</summary>
+  public string? new_user_migration_types { get; set; } = null;
+  /// <summary>(Write-Only) Array of ids of roles that will be applied to new users the first time they login via Workforce</summary>
+  public string[]? default_new_user_role_ids { get; set; } = null;
+  /// <summary>(Write-Only) Array of ids of groups that will be applied to new users the first time they login via Workforce</summary>
+  public string[]? default_new_user_group_ids { get; set; } = null;
+  /// <summary>Set user roles in Looker based on groups from Workforce</summary>
+  public bool? set_roles_from_groups { get; set; } = null;
+  /// <summary>(Read/Write) Array of mappings between Workforce Groups and arrays of Looker Role ids</summary>
+  public WorkforceGroupWrite[]? groups_with_role_ids { get; set; } = null;
+  /// <summary>(Read/Write) Array of mappings between Workforce User Attributes and arrays of Looker User Attribute ids</summary>
+  public WorkforceUserAttributeWrite[]? user_attributes_with_ids { get; set; } = null;
+  /// <summary>Allow Workforce auth'd users to be members of non-reflected Looker groups. If 'false', user will be removed from non-reflected groups on login.</summary>
+  public bool? allow_normal_group_membership { get; set; } = null;
+  /// <summary>Workforce auth'd users will inherit roles from non-reflected Looker groups.</summary>
+  public bool? allow_roles_from_normal_groups { get; set; } = null;
+  /// <summary>Allows roles to be directly assigned to Workforce auth'd users.</summary>
+  public bool? allow_direct_roles { get; set; } = null;
+  /// <summary>Users will not be allowed to login at all unless a role for them is found in Workforce if set to true</summary>
+  public bool? auth_requires_role { get; set; } = null;
+  /// <summary>Bypass the login page and redirect to Workforce Identity Federation if set to true</summary>
+  public bool? bypass_login_page { get; set; } = null;
 }
 
 }
