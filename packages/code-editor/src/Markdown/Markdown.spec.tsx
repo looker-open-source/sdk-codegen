@@ -132,4 +132,15 @@ After.
     // eslint-disable-next-line testing-library/no-container
     expect(container.querySelector('td')?.innerHTML).toContain('begin_at');
   });
+
+  test('it strips unsafe raw html', () => {
+    const markdown = `Text <iframe src="javascript:alert(1)"></iframe>
+<iframe srcdoc="<script>alert(1)</script>"></iframe>
+<script>alert(1)</script>
+<form action="javascript:alert(1)"><button>go</button></form>`;
+    const { container } = renderWithTheme(<Markdown source={markdown} />);
+    // eslint-disable-next-line testing-library/no-container
+    expect(container.querySelector('iframe, script, form')).toBeNull();
+    expect(screen.getByText(/Text/)).toBeInTheDocument();
+  });
 });

@@ -29,6 +29,7 @@ import React from 'react';
 import styled from 'styled-components';
 import ReactMarkdown from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
+import rehypeSanitize from 'rehype-sanitize';
 import gfm from 'remark-gfm';
 import { Link, TableBody, TableHead, TableRow } from '@looker/components';
 
@@ -132,7 +133,7 @@ export const Markdown = ({
     <MarkdownWrapper onClick={handleClick}>
       <ReactMarkdown
         remarkPlugins={[gfm] as any}
-        rehypePlugins={[rehypeRaw] as any}
+        rehypePlugins={[rehypeRaw, rehypeSanitize] as any}
         transformLinkUri={transformLinkUri}
         components={components}
       >
