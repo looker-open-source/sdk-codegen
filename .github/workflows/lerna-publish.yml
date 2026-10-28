@@ -95,36 +95,82 @@ jobs:
         id: exit_gate_auth
         uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3.0.0
         with:
-          token_format: 'access_token'
           workload_identity_provider: ${{ env.WIF_PROVIDER }}
 
-      - name: Stage packages to OSS Exit Gate Artifact Registry
+      - name: Stage and trigger OSS Exit Gate NPM release
         env:
-          ACCESS_TOKEN: ${{ steps.exit_gate_auth.outputs.access_token }}
-        run: |
-          set -euo pipefail
-          cat << EOF > "$HOME/.npmrc"
-          registry=${EXIT_GATE_AR_URL}
-          //us-npm.pkg.dev/oss-exit-gate-prod/looker-sdk-codegen--npm/:always-auth=true
-          //us-npm.pkg.dev/oss-exit-gate-prod/looker-sdk-codegen--npm/:_authToken=${ACCESS_TOKEN}
-          EOF
-          trap 'rm -f "$HOME/.npmrc"' EXIT
-          npx lerna publish from-package --yes --no-verify-access --registry "${EXIT_GATE_AR_URL}"
-
-      - name: Trigger OSS Exit Gate NPM release
-        env:
+          ACCESS_TOKEN: ${{ steps.exit_gate_auth.outputs.auth_token }}
           RUN_ID: ${{ github.run_id }}
           RUN_ATTEMPT: ${{ github.run_attempt }}
         run: |
           set -euo pipefail
-          PACKAGES_JSON=$(jq -s '[.[] | select(.private != true and (.name | startswith("@looker/"))) | {name: .name, version: .version}]' packages/*/package.json)
-          jq -n --argjson pkgs "${PACKAGES_JSON}" '{
+          trap 'rm -f "$HOME/.npmrc" manifest.json' EXIT
+
+          # 1. Run root prepublishOnly check (jest packages/sdk-rtl)
+          yarn prepublishOnly
+
+          # 2. Identify non-private @looker/* packages not yet published on registry.npmjs.org
+          UNPUBLISHED_PKGS="[]"
+          for pkg_json in packages/*/package.json; do
+            PRIVATE=$(jq -r '.private // false' "$pkg_json")
+            NAME=$(jq -r '.name' "$pkg_json")
+            VERSION=$(jq -r '.version' "$pkg_json")
+            PKG_DIR=$(dirname "$pkg_json")
+
+            if [[ "$PRIVATE" == "true" || "$NAME" != @looker/* ]]; then
+              continue
+            fi
+
+            # Check public npm registry before configuring AR .npmrc
+            if npm view "${NAME}@${VERSION}" version --registry https://registry.npmjs.org >/dev/null 2>&1; then
+              echo "Skipping ${NAME}@${VERSION} (already published on npmjs.org)"
+            else
+              echo "Queueing ${NAME}@${VERSION} for staging"
+              SHORT_NAME="${NAME#@looker/}"
+              UNPUBLISHED_PKGS=$(jq -c \
+                --arg dir "$PKG_DIR" \
+                --arg name "$SHORT_NAME" \
+                --arg version "$VERSION" \
+                '. + [{dir: $dir, name: $name, version: $version}]' <<< "$UNPUBLISHED_PKGS")
+            fi
+          done
+
+          COUNT=$(jq 'length' <<< "$UNPUBLISHED_PKGS")
+          if [[ "$COUNT" -eq 0 ]]; then
+            echo "All package versions are already published on npmjs.org. Nothing to release."
+            exit 0
+          fi
+
+          # 3. Configure .npmrc for OSS Exit Gate Artifact Registry
+          AR_HOST_PATH="${EXIT_GATE_AR_URL#https:}"
+          AR_HOST_PATH="${AR_HOST_PATH%/}/"
+          umask 077
+          printf '%s\n' \
+            "@looker:registry=${EXIT_GATE_AR_URL}" \
+            "${AR_HOST_PATH}:_authToken=${ACCESS_TOKEN}" \
+            "${AR_HOST_PATH}:always-auth=true" > "$HOME/.npmrc"
+
+          # 4. Stage only the new package versions to the OSS Exit Gate Artifact Registry
+          for row in $(jq -r '.[] | @base64' <<< "$UNPUBLISHED_PKGS"); do
+            PKG_DIR=$(base64 --decode <<< "$row" | jq -r '.dir')
+            echo "Staging ${PKG_DIR} to ${EXIT_GATE_AR_URL}..."
+            npm publish "./${PKG_DIR}" --registry "${EXIT_GATE_AR_URL}"
+          done
+
+          # 5. Generate and upload manifest.json to trigger OSS Exit Gate
+          jq -n --argjson pkgs "$UNPUBLISHED_PKGS" '{
             publish_all: false,
             publishing_groups: [
               {
-                packages: $pkgs
+                namespace: "@looker",
+                packages: ($pkgs | map({name: .name, version: .version}))
               }
             ]
           }' > manifest.json
+
+          echo "Generated manifest.json:"
+          cat manifest.json
+
+          unset CLOUDSDK_CORE_PROJECT
           gcloud storage cp manifest.json \
             "${EXIT_GATE_MANIFEST_GCS}/manifest-${RUN_ID}-${RUN_ATTEMPT}.json"
