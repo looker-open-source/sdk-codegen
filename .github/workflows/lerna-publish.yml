@@ -1,3 +1,4 @@
+# Publish NPM packages via OSS Exit Gate (D11: looker-sdk-codegen/npm — b/576685161, b/576678670).
 name: Publish NPM Packages
 
 on:
@@ -10,10 +11,13 @@ on:
         description: 'commit/tag/branch to release from'
         required: true
 
+permissions: read-all
+
 jobs:
   publish:
     permissions:
       contents: read
+      id-token: write
     if: >
       (github.event.inputs) ||
       (startsWith(github.event.release.tag_name, 'sdk-codegen-all') &&
@@ -25,14 +29,17 @@ jobs:
       LOOKERSDK_VERIFY_SSL: false
       LOOKERSDK_CLIENT_ID: ${{ secrets.LOOKERSDK_CLIENT_ID }}
       LOOKERSDK_CLIENT_SECRET: ${{ secrets.LOOKERSDK_CLIENT_SECRET }}
+      WIF_PROVIDER: 'projects/305452601764/locations/global/workloadIdentityPools/builders/providers/github'
+      EXIT_GATE_AR_URL: 'https://us-npm.pkg.dev/oss-exit-gate-prod/looker-sdk-codegen--npm/'
+      EXIT_GATE_MANIFEST_GCS: 'gs://oss-exit-gate-prod-projects-bucket/looker-sdk-codegen/npm/manifests'
     steps:
       - name: Clone repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-          ref: ${{  github.event.release.tag_name || github.event.inputs.ref }}
+          ref: ${{ github.event.release.tag_name || github.event.inputs.ref }}
 
-      - name: Authenticate to Google Cloud
+      - name: Authenticate to Google Cloud (CI Docker Image Pull)
         uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3.0.0
         with:
           credentials_json: ${{ secrets.GCP_AR_READER_SA_KEY }}
@@ -82,16 +89,42 @@ jobs:
 
       - name: Check that Looker is ready
         run: |
-          ${{ github.workspace }}/.github/scripts/wait_for_looker.sh
+          ${GITHUB_WORKSPACE}/.github/scripts/wait_for_looker.sh
 
-      - name: Configure Wombat registry
-        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+      - name: Authenticate to Google Cloud (OSS Exit Gate WIF)
+        id: exit_gate_auth
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # v3.0.0
         with:
-          node-version: 24.x
-          registry-url: https://wombat-dressing-room.appspot.com
-          package-manager-cache: false
+          token_format: 'access_token'
+          workload_identity_provider: ${{ env.WIF_PROVIDER }}
 
-      - name: Publish to NPM registry
-        run: npx lerna publish from-package --yes --no-verify-access
+      - name: Stage packages to OSS Exit Gate Artifact Registry
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN_RELEASE_BACKED }}
+          ACCESS_TOKEN: ${{ steps.exit_gate_auth.outputs.access_token }}
+        run: |
+          set -euo pipefail
+          cat << EOF > "$HOME/.npmrc"
+          registry=${EXIT_GATE_AR_URL}
+          //us-npm.pkg.dev/oss-exit-gate-prod/looker-sdk-codegen--npm/:always-auth=true
+          //us-npm.pkg.dev/oss-exit-gate-prod/looker-sdk-codegen--npm/:_authToken=${ACCESS_TOKEN}
+          EOF
+          trap 'rm -f "$HOME/.npmrc"' EXIT
+          npx lerna publish from-package --yes --no-verify-access --registry "${EXIT_GATE_AR_URL}"
+
+      - name: Trigger OSS Exit Gate NPM release
+        env:
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+        run: |
+          set -euo pipefail
+          PACKAGES_JSON=$(jq -s '[.[] | select(.private != true and (.name | startswith("@looker/"))) | {name: .name, version: .version}]' packages/*/package.json)
+          jq -n --argjson pkgs "${PACKAGES_JSON}" '{
+            publish_all: false,
+            publishing_groups: [
+              {
+                packages: $pkgs
+              }
+            ]
+          }' > manifest.json
+          gcloud storage cp manifest.json \
+            "${EXIT_GATE_MANIFEST_GCS}/manifest-${RUN_ID}-${RUN_ATTEMPT}.json"
