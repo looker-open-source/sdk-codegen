@@ -127,10 +127,6 @@ open class AuthSession: IAuthSession {
         // If we've got sudo logged in, log 'em out
         _ = self.sudoLogout()
 
-        if (newId != self.sudoId) {
-            self.sudoId = newId
-        }
-
         if (!self._authToken.isActive()) {
             self.reset()
             let section = self.settings.readConfig(nil)
@@ -149,6 +145,11 @@ open class AuthSession: IAuthSession {
             )
             let token = try? self.ok(response)
             _ = self._authToken.setToken(token!)
+        }
+
+        // Assign new requested sudo id after reset() above, which clears it
+        if (newId != self.sudoId) {
+            self.sudoId = newId
         }
 
         if (!self.sudoId.isEmpty) {
