@@ -63,6 +63,27 @@ export const Markdown = ({
     return undefined;
   };
 
+  const getLinkPathname = (href: string): string => {
+    if (!href || href.startsWith('#')) return '';
+    try {
+      if (/^[a-z][a-z0-9+.-]*:/i.test(href)) {
+        if (
+          typeof window !== 'undefined' &&
+          /^https?:/i.test(window.location.protocol)
+        ) {
+          const parsed = new URL(href);
+          return parsed.origin === window.location.origin
+            ? parsed.pathname
+            : '';
+        }
+        return '';
+      }
+      return new URL(href, 'http://localhost').pathname;
+    } catch {
+      return '';
+    }
+  };
+
   const handleClick = (e: BaseSyntheticEvent) => {
     e.preventDefault();
     if (linkClickHandler) {
@@ -70,7 +91,7 @@ export const Markdown = ({
       const a = findAnchor(e.target);
       const href = a?.getAttribute('href') || '';
       if (a && href && isSafeHref(href)) {
-        linkClickHandler(a.getAttribute('pathname') || '', href);
+        linkClickHandler(getLinkPathname(href), href);
       }
     }
   };

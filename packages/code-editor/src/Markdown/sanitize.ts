@@ -192,12 +192,15 @@ const sanitizeProperties = (
     } else if (key === 'src') {
       if (!isSafeUrl(value, SAFE_SRC_SCHEMES)) continue;
     } else if (key === 'className') {
-      const classes = Array.isArray(value)
-        ? value.filter(
-            (cls): cls is string =>
-              typeof cls === 'string' && /^language-[\w-]+$/.test(cls)
-          )
+      const classList = Array.isArray(value)
+        ? value
+        : typeof value === 'string'
+        ? value.split(/\s+/)
         : [];
+      const classes = classList.filter(
+        (cls): cls is string =>
+          typeof cls === 'string' && /^language-[\w-]+$/.test(cls)
+      );
       if (classes.length === 0) continue;
       clean[key] = classes;
       continue;

@@ -25,10 +25,11 @@
  */
 
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import { renderWithTheme } from '@looker/components-test-utils';
 
 import { Markdown } from './Markdown';
+import { rehypeSanitizeMarkdown } from './sanitize';
 
 describe('Markdown', () => {
   test('it renders markdown', () => {
@@ -193,5 +194,53 @@ After.
     expect(checkboxes[1]).not.toBeChecked();
     expect(checkboxes[1]).toBeDisabled();
     expect(screen.queryByRole('link')).not.toBeInTheDocument();
+  });
+
+  test('it passes internal pathname to linkClickHandler for relative links and empty pathname for external links', () => {
+    const linkClickHandler = jest.fn();
+    renderWithTheme(
+      <Markdown
+        source={
+          '[internal](/4.0/methods/Dashboard/create_dashboard?sdk=py) [external](https://example.com/4.0/methods/Dashboard/create_dashboard)'
+        }
+        linkClickHandler={linkClickHandler}
+      />
+    );
+    fireEvent.click(screen.getByText('internal'));
+    expect(linkClickHandler).toHaveBeenLastCalledWith(
+      '/4.0/methods/Dashboard/create_dashboard',
+      '/4.0/methods/Dashboard/create_dashboard?sdk=py'
+    );
+
+    fireEvent.click(screen.getByText('external'));
+    expect(linkClickHandler).toHaveBeenLastCalledWith(
+      '',
+      'https://example.com/4.0/methods/Dashboard/create_dashboard'
+    );
+  });
+
+  test('rehypeSanitizeMarkdown preserves language-* classes from both string and array className properties', () => {
+    const sanitize = rehypeSanitizeMarkdown();
+    const tree = sanitize({
+      type: 'root',
+      children: [
+        {
+          type: 'element',
+          tagName: 'code',
+          properties: { className: 'language-json custom-class' },
+          children: [],
+        },
+        {
+          type: 'element',
+          tagName: 'code',
+          properties: { className: ['language-ts', 'other-class'] },
+          children: [],
+        },
+      ],
+    });
+    expect(tree.children?.[0]?.properties?.className).toEqual([
+      'language-json',
+    ]);
+    expect(tree.children?.[1]?.properties?.className).toEqual(['language-ts']);
   });
 });
