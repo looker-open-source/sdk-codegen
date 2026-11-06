@@ -42,8 +42,16 @@ export type ErrorCodeIndex = Record<string, IErrorDocItem>;
 export const ErrorDocNotFound = '### No documentation found for ';
 
 /** API error document_url link pattern */
-const ErrorDocPatternExpression = String.raw`(?<redirector>(https:\/\/docs\.looker\.com\/r|https:\/\/cloud\.google\.com\/looker\/docs\/r)?\/err\/)(?<apiVersion>.*)\/(?<statusCode>\d{3})(?<apiPath>.*)`;
+const ErrorDocPatternExpression = String.raw`^(?<redirector>(https:\/\/docs\.looker\.com\/r|https:\/\/cloud\.google\.com\/looker\/docs\/r)?\/err\/)(?<apiVersion>[\w.-]+)\/(?<statusCode>\d{3})(?<apiPath>(?:\/[\w/:{}.-]+)?)$`;
 export const ErrorDocRx = RegExp(ErrorDocPatternExpression, 'i');
+
+const escapeHtml = (value = ''): string =>
+  String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 
 export interface IErrorDocLink {
   /** base redirector url */
@@ -178,14 +186,16 @@ export class ErrorDoc implements IErrorDoc {
   }
 
   private notFound(key: string): string {
-    return `${ErrorDocNotFound}${key}`;
+    return `${ErrorDocNotFound}${escapeHtml(key)}`;
   }
 
   async getContent(url: string): Promise<string> {
     try {
       return await this.getter(this.sdk, url);
-    } catch (e: any) {
-      return Promise.resolve(this.notFound(e.message));
+    } catch (e: unknown) {
+      const message =
+        e instanceof Error ? e.message : String(e ?? 'Unknown error');
+      return Promise.resolve(this.notFound(message));
     }
   }
 

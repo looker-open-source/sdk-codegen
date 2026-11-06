@@ -128,4 +128,20 @@ describe('DocMarkdown', () => {
     renderWithReduxProvider(<DocMarkdown source={markdown} specKey={'4.0'} />);
     expect(screen.getByText('const noop = () => null')).toBeInTheDocument();
   });
+
+  test('it validates link URIs when search highlights overlap scheme or path', () => {
+    const store = createTestStore({
+      settings: { searchPattern: 'script' },
+    });
+    renderWithReduxProvider(
+      <DocMarkdown
+        source={
+          '[matched scheme](javascript:void(0)) [encoded mark](java%3Cmark%3Escript:void(0)) <a href="/<mark>/example.com/path">host relative</a>'
+        }
+        specKey={'4.0'}
+      />,
+      store
+    );
+    expect(screen.queryByRole('link')).not.toBeInTheDocument();
+  });
 });

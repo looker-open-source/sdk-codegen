@@ -55,39 +55,48 @@ export const DocResponses = ({ api, method, errorCode }: DocResponsesProps) => {
   const responseTree = buildResponseTree(responses);
   const tabNames = Object.keys(responseTree);
 
-  let defaultTabId = tabNames[0];
-
-  if (errorCode) {
-    const pattern = new RegExp(`${errorCode}: \\w+`);
-    tabNames.forEach(el => {
-      if (pattern.test(el)) {
-        defaultTabId = el;
-      }
-    });
-  }
+  const validErrorCode =
+    errorCode && /^\d{3}$/.test(errorCode) ? errorCode : undefined;
+  const matchedErrorTab = validErrorCode
+    ? tabNames.find(el => el.startsWith(`${validErrorCode}:`))
+    : undefined;
+  const defaultTabId = matchedErrorTab ?? tabNames[0];
 
   useEffect(() => {
-    if (!errorCode) return;
+    let cancelled = false;
+    setErrorContent('');
+    if (!validErrorCode || !matchedErrorTab) {
+      return () => {
+        cancelled = true;
+      };
+    }
 
     const getErrorContent = async () => {
-      const docUrl = `/err/4.0/${errorCode}/${method.httpMethod.toLocaleLowerCase()}${
+      const docUrl = `/err/4.0/${validErrorCode}/${method.httpMethod.toLocaleLowerCase()}${
         method.endpoint
       }`;
       const adaptor = getEnvAdaptor();
       const errDoc = new ErrorDoc(adaptor.sdk, apiErrorDisplayFetch);
       const content = await errDoc.content(docUrl);
-      setErrorContent(content);
+      if (!cancelled) {
+        setErrorContent(content);
+      }
     };
     getErrorContent();
-  }, [errorCode]);
+
+    return () => {
+      cancelled = true;
+    };
+  }, [matchedErrorTab, validErrorCode, method.endpoint, method.httpMethod]);
 
   if (responses.length === 0) return <></>;
 
   return (
     <CollapserCard heading="Response Models" id="response models">
-      <Tabs2 defaultTabId={defaultTabId}>
+      <Tabs2 key={`${method.id}-${defaultTabId}`} defaultTabId={defaultTabId}>
         {Object.entries(responseTree).map(([statusCode, response]) => {
-          const errorTab = errorCode && statusCode === defaultTabId;
+          const errorTab =
+            Boolean(matchedErrorTab) && statusCode === matchedErrorTab;
           return (
             <Tab2 key={statusCode} id={statusCode} label={statusCode}>
               <DocResponseTypes api={api} responses={response} />

@@ -132,4 +132,66 @@ After.
     // eslint-disable-next-line testing-library/no-container
     expect(container.querySelector('td')?.innerHTML).toContain('begin_at');
   });
+
+  test('it filters disallowed raw HTML elements and inline event attributes', () => {
+    const { container } = renderWithTheme(
+      <Markdown
+        source={
+          '### Section Heading\n<iframe>embedded</iframe><script>noop()</script><svg onload="noop()"></svg><img src="https://example.com/a.png" onerror="noop()">'
+        }
+      />
+    );
+    expect(
+      screen.getByRole('heading', {
+        name: 'Section Heading',
+      })
+    ).toBeInTheDocument();
+    // eslint-disable-next-line testing-library/no-container
+    expect(container.querySelector('iframe')).toBeNull();
+    // eslint-disable-next-line testing-library/no-container
+    expect(container.querySelector('script')).toBeNull();
+    // eslint-disable-next-line testing-library/no-container
+    expect(container.querySelector('svg')).toBeNull();
+    // eslint-disable-next-line testing-library/no-container
+    const img = container.querySelector('img');
+    expect(img).not.toBeNull();
+    expect(img).not.toHaveAttribute('onerror');
+  });
+
+  test('it unwraps links and omits images with disallowed URI schemes', () => {
+    const { container } = renderWithTheme(
+      <Markdown
+        source={
+          '<a href="javascript:void(0)" onclick="noop()">inline link</a> <a href="  JaVa\nScRiPt:void(0)">mixed case</a> [markdown link](javascript:void(0)) [highlighted scheme](java%3Cmark%3Escript:void(0)) [double backslash](\\\\\\\\example.com/path) <a href="/\\example.com/path">mixed slash</a> <img src="data:text/plain,hello">'
+        }
+      />
+    );
+    expect(screen.getByText(/inline link/)).toBeInTheDocument();
+    expect(screen.getByText(/mixed case/)).toBeInTheDocument();
+    expect(screen.getByText(/markdown link/)).toBeInTheDocument();
+    expect(screen.getByText(/highlighted scheme/)).toBeInTheDocument();
+    expect(screen.getByText(/double backslash/)).toBeInTheDocument();
+    expect(screen.getByText(/mixed slash/)).toBeInTheDocument();
+    expect(screen.queryByRole('link')).not.toBeInTheDocument();
+    // eslint-disable-next-line testing-library/no-container
+    expect(container.querySelector('a')).toBeNull();
+    // eslint-disable-next-line testing-library/no-container
+    expect(container.querySelector('img')).toBeNull();
+  });
+
+  test('it validates URIs returned by transformLinkUri and preserves GFM task lists', () => {
+    renderWithTheme(
+      <Markdown
+        source={'- [x] done\n- [ ] todo\n\n[relative link](/docs)'}
+        transformLinkUri={() => 'javascript:void(0)'}
+      />
+    );
+    const checkboxes = screen.getAllByRole('checkbox');
+    expect(checkboxes).toHaveLength(2);
+    expect(checkboxes[0]).toBeChecked();
+    expect(checkboxes[0]).toBeDisabled();
+    expect(checkboxes[1]).not.toBeChecked();
+    expect(checkboxes[1]).toBeDisabled();
+    expect(screen.queryByRole('link')).not.toBeInTheDocument();
+  });
 });

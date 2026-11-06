@@ -33,6 +33,7 @@ import gfm from 'remark-gfm';
 import { Link, TableBody, TableHead, TableRow } from '@looker/components';
 
 import { CodeDisplay } from '../CodeDisplay';
+import { isSafeHref, rehypeSanitizeMarkdown } from './sanitize';
 import { prepareCodeText, qualifyMarkdownText } from './utils';
 import { TableCell } from './TableCell';
 import { MDHeading, MDList, MDListItem, MDParagraph, MDTable } from './common';
@@ -67,13 +68,18 @@ export const Markdown = ({
     if (linkClickHandler) {
       // Could be a <mark> tag wrapped by an anchor
       const a = findAnchor(e.target);
-      if (a) {
-        linkClickHandler(
-          a.getAttribute('pathname') || '',
-          a.getAttribute('href') || ''
-        );
+      const href = a?.getAttribute('href') || '';
+      if (a && href && isSafeHref(href)) {
+        linkClickHandler(a.getAttribute('pathname') || '', href);
       }
     }
+  };
+
+  const safeTransformLinkUri = (uri: string) => {
+    const transformed = transformLinkUri ? transformLinkUri(uri) : uri;
+    return isSafeHref(transformed)
+      ? transformed
+      : (undefined as unknown as string);
   };
 
   const heading = ({
@@ -132,8 +138,8 @@ export const Markdown = ({
     <MarkdownWrapper onClick={handleClick}>
       <ReactMarkdown
         remarkPlugins={[gfm] as any}
-        rehypePlugins={[rehypeRaw] as any}
-        transformLinkUri={transformLinkUri}
+        rehypePlugins={[rehypeRaw, rehypeSanitizeMarkdown] as any}
+        transformLinkUri={safeTransformLinkUri}
         components={components}
       >
         {qualifyMarkdownText(source, pattern ?? '')}

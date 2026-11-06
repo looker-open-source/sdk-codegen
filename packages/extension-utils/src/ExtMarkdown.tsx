@@ -53,8 +53,10 @@ export const ExtMarkdown: FC<ExtMarkdownProps> = ({
   paragraphOverride,
 }) => {
   const openBrowserWindow = (_pathname: string, href: string) => {
-    const adaptor = getEnvAdaptor();
-    adaptor.openBrowserWindow(href);
+    if (/^https?:\/\//i.test(href)) {
+      const adaptor = getEnvAdaptor();
+      adaptor.openBrowserWindow(href);
+    }
   };
 
   return (
