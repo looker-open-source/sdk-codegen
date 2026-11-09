@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [21.6.8](https://github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.6.7...sdk-rtl-v21.6.8) (2026-11-09)
+
+
+### Bug Fixes
+
+* validate error status codes and sanitize rendered markdown HTML ([#1780](https://github.com/looker-open-source/sdk-codegen/issues/1780)) ([02cef82](https://github.com/looker-open-source/sdk-codegen/commit/02cef822f696c6d00167f0e28c22c35b1f8ef4d3))
+
 ## [21.6.7](https://github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.6.6...sdk-rtl-v21.6.7) (2026-10-26)
 
 

@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [26.24.0](https://github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v26.22.0...looker_sdk-v26.24.0) (2026-11-09)
+
+
+### Features
+
+* generate SDKs for Looker 26.24 ([#1782](https://github.com/looker-open-source/sdk-codegen/issues/1782)) ([4adbcc2](https://github.com/looker-open-source/sdk-codegen/commit/4adbcc24b74b87b7aed567b257c6abac3e866e2e))
+
 ## [26.22.0](https://github.com/looker-open-source/sdk-codegen/compare/looker_sdk-v26.20.0...looker_sdk-v26.22.0) (2026-10-26)
 
 
