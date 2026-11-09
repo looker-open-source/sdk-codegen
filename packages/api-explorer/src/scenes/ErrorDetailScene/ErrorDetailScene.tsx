@@ -41,11 +41,12 @@ interface ErrorDetailSceneProps {
  */
 export const ErrorDetailScene = ({ api }: ErrorDetailSceneProps) => {
   const match = useRouteMatch<{
+    0?: string;
     specKey: string;
     statusCode: string;
     verb: string;
   }>(`/:specKey/err/:statusCode/:verb/*`);
-  const methodPath = match?.path ?? '';
+  const methodPath = match?.params[0] ?? '';
   const adaptor = getEnvAdaptor();
   const errorDoc = new ErrorDoc(adaptor.sdk);
   const restPath = errorDoc.specPath(methodPath);
@@ -53,6 +54,8 @@ export const ErrorDetailScene = ({ api }: ErrorDetailSceneProps) => {
   const methodId = `${match?.params.verb} /${restPath}`.toLocaleLowerCase();
   const specKey = match?.params.specKey;
   const statusCode = match?.params.statusCode;
+  const validStatusCode =
+    statusCode && /^\d{3}$/.test(statusCode) ? statusCode : undefined;
 
   const method = Object.values(api.methods).find(
     method => method.id.toLocaleLowerCase() === methodId
@@ -63,9 +66,16 @@ export const ErrorDetailScene = ({ api }: ErrorDetailSceneProps) => {
 
   const { buildPathWithGlobalParams } = useNavigation();
 
+  const targetPath =
+    methodTag && methodName
+      ? `/${specKey}/methods/${methodTag}/${methodName}`
+      : `/${specKey}/methods`;
+
   const redirectPath = buildPathWithGlobalParams(
-    `/${specKey}/methods/${methodTag}/${methodName}`,
-    { e: statusCode }
+    targetPath,
+    methodTag && methodName && validStatusCode
+      ? { e: validStatusCode }
+      : undefined
   );
 
   return <Redirect to={redirectPath} />;

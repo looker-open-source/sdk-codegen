@@ -116,6 +116,14 @@ describe('ErrorDoc', () => {
       [partial404, '## Generic 404', 2], // valid mock url and content that defaults to generic message so load will be called twice
       [internal, `${no}422/post/bogus/bulk`, 1], // invalid, default to not found
       [external, `${no}429/delete/bogus/{namespace}/purge`, 1], // invalid, default to not found
+      ['https://docs.looker.com/r/err/4.0/404', '## Generic 404', 2],
+      [
+        'https://docs.looker.com/r/err/4.0/404-invalid',
+        `${no}bad error code link`,
+        0,
+      ],
+      ['/err/4.0/404<b>/post/login', `${no}bad error code link`, 0],
+      ['/err/4.0/404/post/login<span>', `${no}bad error code link`, 0],
       ['', `${no}bad error code link`, 0], // just bad all around
     ])('url:"%s" should be "%s"', async (url, expected, called) => {
       const index = `_index`; // use this to access the private property
@@ -123,6 +131,36 @@ describe('ErrorDoc', () => {
       const actual = await errDoc.content(url);
       expect(requestMock).toHaveBeenCalledTimes(called);
       await expect(actual).toMatch(expected);
+    });
+
+    it('escapes HTML characters in getContent error messages', async () => {
+      const failingDoc = new ErrorDoc(api, async () => {
+        throw new Error('Unexpected <response> & "details"');
+      });
+      const actual = await failingDoc.getContent(
+        `${ErrorCodesUrl}login_404.md`
+      );
+      expect(actual).toEqual(
+        `${no}Unexpected &lt;response&gt; &amp; &quot;details&quot;`
+      );
+    });
+
+    it('handles non-Error rejections in getContent', async () => {
+      const stringRejectDoc = new ErrorDoc(api, () =>
+        // eslint-disable-next-line prefer-promise-reject-errors
+        Promise.reject('request <aborted>')
+      );
+      await expect(
+        stringRejectDoc.getContent(`${ErrorCodesUrl}login_404.md`)
+      ).resolves.toEqual(`${no}request &lt;aborted&gt;`);
+
+      const emptyRejectDoc = new ErrorDoc(api, () =>
+        // eslint-disable-next-line prefer-promise-reject-errors
+        Promise.reject(undefined)
+      );
+      await expect(
+        emptyRejectDoc.getContent(`${ErrorCodesUrl}login_404.md`)
+      ).resolves.toEqual(`${no}Unknown error`);
     });
   });
 

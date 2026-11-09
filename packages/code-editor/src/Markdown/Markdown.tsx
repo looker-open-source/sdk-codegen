@@ -33,6 +33,7 @@ import gfm from 'remark-gfm';
 import { Link, TableBody, TableHead, TableRow } from '@looker/components';
 
 import { CodeDisplay } from '../CodeDisplay';
+import { isSafeHref, rehypeSanitizeMarkdown } from './sanitize';
 import { prepareCodeText, qualifyMarkdownText } from './utils';
 import { TableCell } from './TableCell';
 import { MDHeading, MDList, MDListItem, MDParagraph, MDTable } from './common';
@@ -62,18 +63,44 @@ export const Markdown = ({
     return undefined;
   };
 
+  const getLinkPathname = (href: string): string => {
+    if (!href || href.startsWith('#')) return '';
+    try {
+      if (/^[a-z][a-z0-9+.-]*:/i.test(href)) {
+        if (
+          typeof window !== 'undefined' &&
+          /^https?:/i.test(window.location.protocol)
+        ) {
+          const parsed = new URL(href);
+          return parsed.origin === window.location.origin
+            ? parsed.pathname
+            : '';
+        }
+        return '';
+      }
+      return new URL(href, 'http://localhost').pathname;
+    } catch {
+      return '';
+    }
+  };
+
   const handleClick = (e: BaseSyntheticEvent) => {
     e.preventDefault();
     if (linkClickHandler) {
       // Could be a <mark> tag wrapped by an anchor
       const a = findAnchor(e.target);
-      if (a) {
-        linkClickHandler(
-          a.getAttribute('pathname') || '',
-          a.getAttribute('href') || ''
-        );
+      const href = a?.getAttribute('href') || '';
+      if (a && href && isSafeHref(href)) {
+        linkClickHandler(getLinkPathname(href), href);
       }
     }
+  };
+
+  const safeTransformLinkUri = (uri: string) => {
+    const transformed = transformLinkUri ? transformLinkUri(uri) : uri;
+    return isSafeHref(transformed)
+      ? transformed
+      : (undefined as unknown as string);
   };
 
   const heading = ({
@@ -132,8 +159,8 @@ export const Markdown = ({
     <MarkdownWrapper onClick={handleClick}>
       <ReactMarkdown
         remarkPlugins={[gfm] as any}
-        rehypePlugins={[rehypeRaw] as any}
-        transformLinkUri={transformLinkUri}
+        rehypePlugins={[rehypeRaw, rehypeSanitizeMarkdown] as any}
+        transformLinkUri={safeTransformLinkUri}
         components={components}
       >
         {qualifyMarkdownText(source, pattern ?? '')}

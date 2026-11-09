@@ -150,4 +150,54 @@ See [HTTP 404 - Not Found](https://docs.looker.com/r/reference/looker-http-codes
 
     global.fetch = fetcher;
   });
+
+  test('ignores non-numeric errorCode values', () => {
+    const fetcher = global.fetch;
+    const fetchSpy = jest.fn();
+    global.fetch = fetchSpy as unknown as typeof global.fetch;
+
+    const { container } = renderWithRouter(
+      <DocResponses api={api} method={api.methods.login} errorCode="404<del>" />
+    );
+    expect(screen.getByText('Response Models')).toBeInTheDocument();
+    expect(fetchSpy).not.toHaveBeenCalled();
+    // eslint-disable-next-line testing-library/no-container
+    expect(container.querySelector('del')).toBeNull();
+    expect(
+      screen.queryByText(/No documentation found/i)
+    ).not.toBeInTheDocument();
+
+    global.fetch = fetcher;
+  });
+
+  test('ignores errorCode values with unescaped regex metacharacters', () => {
+    const fetcher = global.fetch;
+    const fetchSpy = jest.fn();
+    global.fetch = fetchSpy as unknown as typeof global.fetch;
+
+    renderWithRouter(
+      <DocResponses api={api} method={api.methods.login} errorCode="(" />
+    );
+    expect(screen.getByText('Response Models')).toBeInTheDocument();
+    expect(fetchSpy).not.toHaveBeenCalled();
+
+    global.fetch = fetcher;
+  });
+
+  test('does not render error fallback on default 200 tab for unmatched 3-digit codes', () => {
+    const fetcher = global.fetch;
+    const fetchSpy = jest.fn();
+    global.fetch = fetchSpy as unknown as typeof global.fetch;
+
+    renderWithRouter(
+      <DocResponses api={api} method={api.methods.login} errorCode="999" />
+    );
+    expect(screen.getByText('Response Models')).toBeInTheDocument();
+    expect(fetchSpy).not.toHaveBeenCalled();
+    expect(
+      screen.queryByText(/No documentation found/i)
+    ).not.toBeInTheDocument();
+
+    global.fetch = fetcher;
+  });
 });

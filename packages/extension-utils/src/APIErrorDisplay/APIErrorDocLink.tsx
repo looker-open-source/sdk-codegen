@@ -39,7 +39,7 @@ export const APIErrorDocLink = ({ docUrl }: APIErrorDocLinkProps) => {
     adaptor.openBrowserWindow(e.currentTarget.href);
   };
 
-  if (!docUrl) return <></>;
+  if (!docUrl || !/^https?:\/\//i.test(docUrl)) return <></>;
   return (
     <Link href={docUrl} key={docUrl} onClick={onClick}>
       More information

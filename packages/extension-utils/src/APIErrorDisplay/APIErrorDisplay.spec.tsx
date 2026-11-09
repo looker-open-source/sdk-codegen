@@ -187,4 +187,34 @@ describe('APIErrorDisplay', () => {
       expect(table).toHaveTextContent(e.code ?? '');
     });
   });
+
+  it('omits non-http documentation_url links and handles invalid error doc urls', async () => {
+    const nonHttpError: LookerSDKError = {
+      name: 'Error',
+      message: 'non-http link',
+      documentation_url: 'javascript:void(0)',
+    };
+    renderWithTheme(<APIErrorDisplay error={nonHttpError} />);
+    expect(screen.queryByRole('link')).not.toBeInTheDocument();
+
+    const invalidDocError: LookerSDKError = {
+      name: 'Error',
+      message: 'invalid doc link',
+      documentation_url: 'https://docs.looker.com/r/err/4.0/404/invalid<del>',
+    };
+    registerTestEnvAdaptor();
+    const { container } = renderWithTheme(
+      <APIErrorDisplay error={invalidDocError} showDoc={true} />
+    );
+    await waitFor(() => {
+      expect(
+        screen.getByRole('heading', {
+          name: 'No documentation found for bad error code link',
+        })
+      ).toBeInTheDocument();
+    });
+    // eslint-disable-next-line testing-library/no-container
+    expect(container.querySelector('del')).toBeNull();
+    unregisterEnvAdaptor();
+  });
 });
