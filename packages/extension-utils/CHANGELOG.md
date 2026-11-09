@@ -348,6 +348,24 @@
     * @looker/sdk bumped from 26.18.0 to 26.20.0
     * @looker/sdk-rtl bumped from 21.6.5 to 21.6.6
 
+## [0.1.69](https://github.com/looker-open-source/sdk-codegen/compare/extension-utils-v0.1.68...extension-utils-v0.1.69) (2026-11-09)
+
+
+### Bug Fixes
+
+* validate error status codes and sanitize rendered markdown HTML ([#1780](https://github.com/looker-open-source/sdk-codegen/issues/1780)) ([02cef82](https://github.com/looker-open-source/sdk-codegen/commit/02cef822f696c6d00167f0e28c22c35b1f8ef4d3))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from 0.1.58 to 0.1.59
+    * @looker/extension-sdk bumped from 26.22.0 to 26.24.0
+    * @looker/extension-sdk-react bumped from 26.22.0 to 26.24.0
+    * @looker/sdk bumped from 26.22.0 to 26.24.0
+    * @looker/sdk-rtl bumped from 21.6.7 to 21.6.8
+
 ## [0.1.68](https://github.com/looker-open-source/sdk-codegen/compare/extension-utils-v0.1.67...extension-utils-v0.1.68) (2026-10-26)
 
 

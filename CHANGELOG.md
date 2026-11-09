@@ -1,5 +1,17 @@
 # Changelog
 
+## [26.24.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v26.22.0...sdk-codegen-all-v26.24.0) (2026-11-09)
+
+
+### Features
+
+* generate SDKs for Looker 26.24 ([#1782](https://github.com/looker-open-source/sdk-codegen/issues/1782)) ([4adbcc2](https://github.com/looker-open-source/sdk-codegen/commit/4adbcc24b74b87b7aed567b257c6abac3e866e2e))
+
+
+### Bug Fixes
+
+* validate error status codes and sanitize rendered markdown HTML ([#1780](https://github.com/looker-open-source/sdk-codegen/issues/1780)) ([02cef82](https://github.com/looker-open-source/sdk-codegen/commit/02cef822f696c6d00167f0e28c22c35b1f8ef4d3))
+
 ## [26.22.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v26.20.0...sdk-codegen-all-v26.22.0) (2026-10-26)
 
 
