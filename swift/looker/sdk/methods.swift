@@ -25,7 +25,7 @@
  */
 
 /**
- * 537 API methods
+ * 538 API methods
  */
 
 
@@ -4418,10 +4418,18 @@ open class LookerSDK: APIMethods {
          * @param {String} primary_agent_id Match workflow agents with a particular primary agent (parent). Pass "null" to find agents with no primary agent.
          */
         primary_agent_id: String? = nil,
+        /**
+         * @param {String} dashboard_id Match or verify dashboard id for dashboard category agents.
+         */
+        dashboard_id: String? = nil,
+        /**
+         * @param {String} project_name LookML project name, used to disambiguate dashboards with the same model and dashboard name across projects.
+         */
+        project_name: String? = nil,
         options: ITransportSettings? = nil
     ) -> SDKResponse<[Agent], SDKError> {
         let result: SDKResponse<[Agent], SDKError> = self.get("/agents/search", 
-            ["id": id, "name": name, "description": description, "created_by_user_id": created_by_user_id, "fields": fields, "limit": limit, "category": category, "offset": offset, "sorts": sorts, "filter_or": filter_or as Any?, "not_owned_by": not_owned_by as Any?, "deleted": deleted as Any?, "primary_agent_id": primary_agent_id], nil, options)
+            ["id": id, "name": name, "description": description, "created_by_user_id": created_by_user_id, "fields": fields, "limit": limit, "category": category, "offset": offset, "sorts": sorts, "filter_or": filter_or as Any?, "not_owned_by": not_owned_by as Any?, "deleted": deleted as Any?, "primary_agent_id": primary_agent_id, "dashboard_id": dashboard_id, "project_name": project_name], nil, options)
         return result
     }
 
@@ -4768,7 +4776,7 @@ open class LookerSDK: APIMethods {
          */
         filter_or: Bool? = nil,
         /**
-         * @param {String} category Filter on conversation category. Can be a comma-separated list of categories.
+         * @param {String} category Filter on conversation category. If omitted, only Explore conversations are returned. Pass 'explore' for Explore conversations, 'dashboard' for dashboard conversations, or a comma-separated list such as 'explore,dashboard' for both.
          */
         category: String? = nil,
         /**
@@ -6074,6 +6082,26 @@ open class LookerSDK: APIMethods {
         options: ITransportSettings? = nil
     ) -> SDKResponse<Dashboard, SDKError> {
         let result: SDKResponse<Dashboard, SDKError> = self.post("/dashboard_filter_state", nil, try! self.encode(body), options)
+        return result
+    }
+
+    /**
+     * ### Delete Dashboard Filter State Bookmark
+     * Removes the current user's bookmark for the given filter state GUID.
+     * If the GUID is a shared bookmark, the caller must be able to edit the dashboard;
+     * the bookmark is unshared (no longer listed as shared) but the filter state itself is kept.
+     *
+     * DELETE /dashboard_filter_state/{guid}/bookmark -> String
+     */
+    public func delete_dashboard_filter_state_bookmark(
+        /**
+         * @param {String} guid GUID of the filter state
+         */
+        _ guid: String,
+        options: ITransportSettings? = nil
+    ) -> SDKResponse<String, SDKError> {
+        let path_guid = encodeParam(guid)
+        let result: SDKResponse<String, SDKError> = self.delete("/dashboard_filter_state/\(path_guid)/bookmark", nil, nil, options)
         return result
     }
 

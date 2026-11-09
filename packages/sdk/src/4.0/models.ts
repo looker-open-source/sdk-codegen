@@ -25,7 +25,7 @@
  */
 
 /**
- * 529 API models: 351 Spec, 78 Request, 74 Write, 26 Enum
+ * 530 API models: 351 Spec, 78 Request, 74 Write, 27 Enum
  */
 
 import type { IDictionary, DelimArray } from '@looker/sdk-rtl';
@@ -117,6 +117,14 @@ export interface IAgent {
    * Agent sources
    */
   sources?: ISource[];
+  /**
+   * Dashboard ID associated with the agent (UDD numeric or slug ID, or model::dashboard LookML dashboard ID)
+   */
+  dashboard_id?: string | null;
+  /**
+   * LookML project name associated with the dashboard, used to disambiguate LookML dashboards across projects
+   */
+  project_name?: string | null;
   /**
    * Has inaccessible source (read-only)
    */
@@ -2557,6 +2565,10 @@ export interface IConversationalAnalyticsChatRequest {
    * The text content of the most recent message in the conversation.
    */
   user_message: string;
+  /**
+   * Thinking mode for the agent. Defaults to "FAST" when omitted. Valid values are: "FAST", "THINKING".
+   */
+  thinking_mode?: ThinkingMode | null;
 }
 
 export interface IConversationMessage {
@@ -4482,6 +4494,10 @@ export interface IDBConnection {
    * When true, error PDTs will be retried every regenerator cycle
    */
   always_retry_failed_builds?: boolean | null;
+  /**
+   * After this many consecutive failed builds of a production PDT, queries that need to build it return its last build error instead of starting another build. Set to null to use the default (3). Doesn't apply when failed PDT builds are always retried.
+   */
+  pdt_build_retry_limit?: number | null;
   /**
    * Whether the connection should authenticate with the Application Default Credentials of the host environment (limited to GCP and certain dialects).
    */
@@ -8445,7 +8461,10 @@ export interface IMcpTools {
   enable_all?: boolean;
   add_dashboard_element?: IMcpToolSetting;
   add_dashboard_filter?: IMcpToolSetting;
+  create_dashboard_layout?: IMcpToolSetting;
+  create_git_branch?: IMcpToolSetting;
   create_project_file?: IMcpToolSetting;
+  delete_git_branch?: IMcpToolSetting;
   delete_project_file?: IMcpToolSetting;
   dev_mode?: IMcpToolSetting;
   generate_embed_url?: IMcpToolSetting;
@@ -8454,12 +8473,14 @@ export interface IMcpTools {
   get_connection_table_columns?: IMcpToolSetting;
   get_connection_tables?: IMcpToolSetting;
   get_connections?: IMcpToolSetting;
+  get_dashboard?: IMcpToolSetting;
   get_dashboards?: IMcpToolSetting;
   get_dimensions?: IMcpToolSetting;
   get_explore?: IMcpToolSetting;
   get_explores?: IMcpToolSetting;
   get_field_value_suggestions?: IMcpToolSetting;
   get_filters?: IMcpToolSetting;
+  get_git_branch?: IMcpToolSetting;
   get_looks?: IMcpToolSetting;
   get_measures?: IMcpToolSetting;
   get_models?: IMcpToolSetting;
@@ -8470,6 +8491,7 @@ export interface IMcpTools {
   health_analyze?: IMcpToolSetting;
   health_pulse?: IMcpToolSetting;
   health_vacuum?: IMcpToolSetting;
+  list_git_branches?: IMcpToolSetting;
   make_dashboard?: IMcpToolSetting;
   make_look?: IMcpToolSetting;
   query?: IMcpToolSetting;
@@ -8477,6 +8499,9 @@ export interface IMcpTools {
   query_url?: IMcpToolSetting;
   run_dashboard?: IMcpToolSetting;
   run_look?: IMcpToolSetting;
+  switch_git_branch?: IMcpToolSetting;
+  update_dashboard_element?: IMcpToolSetting;
+  update_dashboard_layout_component?: IMcpToolSetting;
   update_project_file?: IMcpToolSetting;
   validate_project?: IMcpToolSetting;
   get_project_directories?: IMcpToolSetting;
@@ -8506,6 +8531,10 @@ export interface IMcpToolSetting {
    * Tool access level (read-only)
    */
   access_level?: string | null;
+  /**
+   * Tools that this tool depends on (read-only)
+   */
+  dependencies?: string[] | null;
 }
 
 export interface IMergeFields {
@@ -9508,6 +9537,10 @@ export interface IProjectCISuite {
    * Names of upstream projects subscribed for pull request triggers
    */
   upstream_projects?: string[] | null;
+  /**
+   * User attribute overrides for the CI suite
+   */
+  user_attributes?: IUserAttributeOverride[] | null;
 }
 
 export interface IProjectError {
@@ -11312,6 +11345,14 @@ export interface IRequestSearchAgents {
    * Match workflow agents with a particular primary agent (parent). Pass "null" to find agents with no primary agent.
    */
   primary_agent_id?: string | null;
+  /**
+   * Match or verify dashboard id for dashboard category agents.
+   */
+  dashboard_id?: string | null;
+  /**
+   * LookML project name, used to disambiguate dashboards with the same model and dashboard name across projects.
+   */
+  project_name?: string | null;
 }
 
 /**
@@ -11693,7 +11734,7 @@ export interface IRequestSearchConversations {
    */
   filter_or?: boolean | null;
   /**
-   * Filter on conversation category. Can be a comma-separated list of categories.
+   * Filter on conversation category. If omitted, only Explore conversations are returned. Pass 'explore' for Explore conversations, 'dashboard' for dashboard conversations, or a comma-separated list such as 'explore,dashboard' for both.
    */
   category?: string | null;
   /**
@@ -14645,6 +14686,14 @@ export interface IThemeSettings {
   border_radius?: string;
 }
 
+/**
+ * Thinking mode for the agent. Defaults to "FAST" when omitted. Valid values are: "FAST", "THINKING". (Enum defined in ConversationalAnalyticsChatRequest)
+ */
+export enum ThinkingMode {
+  FAST = 'FAST',
+  THINKING = 'THINKING',
+}
+
 export interface ITimezone {
   /**
    * Timezone (read-only)
@@ -15552,6 +15601,14 @@ export interface IWriteAgent {
    * Agent sources
    */
   sources?: ISource[] | null;
+  /**
+   * Dashboard ID associated with the agent (UDD numeric or slug ID, or model::dashboard LookML dashboard ID)
+   */
+  dashboard_id?: string | null;
+  /**
+   * LookML project name associated with the dashboard, used to disambiguate LookML dashboards across projects
+   */
+  project_name?: string | null;
   /**
    * IDs of golden queries linked to the agent
    */
@@ -16682,6 +16739,10 @@ export interface IWriteDBConnection {
    */
   always_retry_failed_builds?: boolean | null;
   /**
+   * After this many consecutive failed builds of a production PDT, queries that need to build it return its last build error instead of starting another build. Set to null to use the default (3). Doesn't apply when failed PDT builds are always retried.
+   */
+  pdt_build_retry_limit?: number | null;
+  /**
    * Whether the connection should authenticate with the Application Default Credentials of the host environment (limited to GCP and certain dialects).
    */
   uses_application_default_credentials?: boolean | null;
@@ -17304,229 +17365,274 @@ export interface IWriteMcpTools {
   enable_all?: boolean;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   add_dashboard_element?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   add_dashboard_filter?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
+   */
+  create_dashboard_layout?: IWriteMcpToolSetting | null;
+  /**
+   * Dynamic writeable type for McpToolSetting removes:
+   * description, category, access_level, dependencies
+   */
+  create_git_branch?: IWriteMcpToolSetting | null;
+  /**
+   * Dynamic writeable type for McpToolSetting removes:
+   * description, category, access_level, dependencies
    */
   create_project_file?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
+   */
+  delete_git_branch?: IWriteMcpToolSetting | null;
+  /**
+   * Dynamic writeable type for McpToolSetting removes:
+   * description, category, access_level, dependencies
    */
   delete_project_file?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   dev_mode?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   generate_embed_url?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   get_connection_databases?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   get_connection_schemas?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   get_connection_table_columns?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   get_connection_tables?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   get_connections?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
+   */
+  get_dashboard?: IWriteMcpToolSetting | null;
+  /**
+   * Dynamic writeable type for McpToolSetting removes:
+   * description, category, access_level, dependencies
    */
   get_dashboards?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   get_dimensions?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   get_explore?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   get_explores?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   get_field_value_suggestions?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   get_filters?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
+   */
+  get_git_branch?: IWriteMcpToolSetting | null;
+  /**
+   * Dynamic writeable type for McpToolSetting removes:
+   * description, category, access_level, dependencies
    */
   get_looks?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   get_measures?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   get_models?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   get_parameters?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   get_project_file?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   get_project_files?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   get_projects?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   health_analyze?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   health_pulse?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   health_vacuum?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
+   */
+  list_git_branches?: IWriteMcpToolSetting | null;
+  /**
+   * Dynamic writeable type for McpToolSetting removes:
+   * description, category, access_level, dependencies
    */
   make_dashboard?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   make_look?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   query?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   query_sql?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   query_url?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   run_dashboard?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   run_look?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
+   */
+  switch_git_branch?: IWriteMcpToolSetting | null;
+  /**
+   * Dynamic writeable type for McpToolSetting removes:
+   * description, category, access_level, dependencies
+   */
+  update_dashboard_element?: IWriteMcpToolSetting | null;
+  /**
+   * Dynamic writeable type for McpToolSetting removes:
+   * description, category, access_level, dependencies
+   */
+  update_dashboard_layout_component?: IWriteMcpToolSetting | null;
+  /**
+   * Dynamic writeable type for McpToolSetting removes:
+   * description, category, access_level, dependencies
    */
   update_project_file?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   validate_project?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   get_project_directories?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   create_project_directory?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   delete_project_directory?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   get_lookml_tests?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   run_lookml_tests?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   create_view_from_table?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   render_visualization?: IWriteMcpToolSetting | null;
   /**
    * Dynamic writeable type for McpToolSetting removes:
-   * description, category, access_level
+   * description, category, access_level, dependencies
    */
   render_dashboard?: IWriteMcpToolSetting | null;
 }
 
 /**
  * Dynamic writeable type for McpToolSetting removes:
- * description, category, access_level
+ * description, category, access_level, dependencies
  */
 export interface IWriteMcpToolSetting {
   /**
@@ -18089,6 +18195,10 @@ export interface IWriteProjectCISuite {
    * Names of upstream projects subscribed for pull request triggers
    */
   upstream_projects?: string[] | null;
+  /**
+   * User attribute overrides for the CI suite
+   */
+  user_attributes?: IUserAttributeOverride[] | null;
 }
 
 /**
