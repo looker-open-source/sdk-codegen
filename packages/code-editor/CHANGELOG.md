@@ -156,6 +156,20 @@
   * devDependencies
     * @looker/sdk-codegen bumped from 26.18.0 to 26.20.0
 
+## [0.1.59](https://github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.58...code-editor-v0.1.59) (2026-11-09)
+
+
+### Bug Fixes
+
+* validate error status codes and sanitize rendered markdown HTML ([#1780](https://github.com/looker-open-source/sdk-codegen/issues/1780)) ([02cef82](https://github.com/looker-open-source/sdk-codegen/commit/02cef822f696c6d00167f0e28c22c35b1f8ef4d3))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * devDependencies
+    * @looker/sdk-codegen bumped from 26.20.1 to 26.20.2
+
 ## [0.1.58](https://github.com/looker-open-source/sdk-codegen/compare/code-editor-v0.1.57...code-editor-v0.1.58) (2026-10-26)
 
 
