@@ -25,7 +25,7 @@
  */
 
 /**
- * 537 API methods
+ * 538 API methods
  */
 
 import type {
@@ -5547,6 +5547,8 @@ export const search_agents = async (
       not_owned_by: request.not_owned_by,
       deleted: request.deleted,
       primary_agent_id: request.primary_agent_id,
+      dashboard_id: request.dashboard_id,
+      project_name: request.project_name,
     },
     null,
     options
@@ -7339,6 +7341,33 @@ export const create_dashboard_filter_state = async (
     '/dashboard_filter_state',
     null,
     body,
+    options
+  );
+};
+
+/**
+ * ### Delete Dashboard Filter State Bookmark
+ * Removes the current user's bookmark for the given filter state GUID.
+ * If the GUID is a shared bookmark, the caller must be able to edit the dashboard;
+ * the bookmark is unshared (no longer listed as shared) but the filter state itself is kept.
+ *
+ * DELETE /dashboard_filter_state/{guid}/bookmark -> string
+ *
+ * @param sdk IAPIMethods implementation
+ * @param guid GUID of the filter state
+ * @param options one-time API call overrides
+ *
+ */
+export const delete_dashboard_filter_state_bookmark = async (
+  sdk: IAPIMethods,
+  guid: string,
+  options?: Partial<ITransportSettings>
+): Promise<SDKResponse<string, IError>> => {
+  guid = encodeParam(guid);
+  return sdk.delete<string, IError>(
+    `/dashboard_filter_state/${guid}/bookmark`,
+    null,
+    null,
     options
   );
 };

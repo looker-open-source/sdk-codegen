@@ -25,7 +25,7 @@
  */
 
 /**
- * 451 API models: 351 Spec, 0 Request, 74 Write, 26 Enum
+ * 452 API models: 351 Spec, 0 Request, 74 Write, 27 Enum
  */
 
 
@@ -145,6 +145,8 @@ public struct Agent: SDKModel {
         case _description = "description"
         case _category = "category"
         case sources
+        case _dashboard_id = "dashboard_id"
+        case _project_name = "project_name"
         case has_inaccessible_source
         case golden_queries
         case _golden_query_ids = "golden_query_ids"
@@ -251,6 +253,24 @@ public struct Agent: SDKModel {
      */
     public var sources: [Source]?
 
+    private var _dashboard_id: AnyString?
+    /**
+     * Dashboard ID associated with the agent (UDD numeric or slug ID, or model::dashboard LookML dashboard ID)
+     */
+    public var dashboard_id: String? {
+        get { _dashboard_id?.value }
+        set { _dashboard_id = newValue.map(AnyString.init) }
+    }
+
+    private var _project_name: AnyString?
+    /**
+     * LookML project name associated with the dashboard, used to disambiguate LookML dashboards across projects
+     */
+    public var project_name: String? {
+        get { _project_name?.value }
+        set { _project_name = newValue.map(AnyString.init) }
+    }
+
     /**
      * Has inaccessible source (read-only)
      */
@@ -335,7 +355,7 @@ public struct Agent: SDKModel {
         set { _lookml_edit_uri = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, created_by_user_id: String? = nil, created_by_name: String? = nil, created_by_first_name: String? = nil, created_by_last_name: String? = nil, created_by_avatar_url: String? = nil, name: String? = nil, description: String? = nil, category: String? = nil, sources: [Source]? = nil, has_inaccessible_source: Bool? = nil, golden_queries: [GoldenQuery]? = nil, golden_query_ids: [Int64]? = nil, context: Context? = nil, deleted: Bool? = nil, created_at: Date? = nil, updated_at: Date? = nil, content_metadata_id: String? = nil, code_interpreter: Bool? = nil, studio_agent_id: String? = nil, workflow_params: WorkflowParams? = nil, is_lookml: Bool? = nil, lookml_agent_id: String? = nil, lookml_edit_uri: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, created_by_user_id: String? = nil, created_by_name: String? = nil, created_by_first_name: String? = nil, created_by_last_name: String? = nil, created_by_avatar_url: String? = nil, name: String? = nil, description: String? = nil, category: String? = nil, sources: [Source]? = nil, dashboard_id: String? = nil, project_name: String? = nil, has_inaccessible_source: Bool? = nil, golden_queries: [GoldenQuery]? = nil, golden_query_ids: [Int64]? = nil, context: Context? = nil, deleted: Bool? = nil, created_at: Date? = nil, updated_at: Date? = nil, content_metadata_id: String? = nil, code_interpreter: Bool? = nil, studio_agent_id: String? = nil, workflow_params: WorkflowParams? = nil, is_lookml: Bool? = nil, lookml_agent_id: String? = nil, lookml_edit_uri: String? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
         self._created_by_user_id = created_by_user_id.map(AnyString.init)
@@ -347,6 +367,8 @@ public struct Agent: SDKModel {
         self._description = description.map(AnyString.init)
         self._category = category.map(AnyString.init)
         self.sources = sources
+        self._dashboard_id = dashboard_id.map(AnyString.init)
+        self._project_name = project_name.map(AnyString.init)
         self.has_inaccessible_source = has_inaccessible_source
         self.golden_queries = golden_queries
         if let v = golden_query_ids { _golden_query_ids = v.map { AnyInt.init($0) } } else { _golden_query_ids = nil }
@@ -6503,6 +6525,7 @@ public struct ConversationalAnalyticsChatRequest: SDKModel {
     private enum CodingKeys : String, CodingKey {
         case _conversation_id = "conversation_id"
         case _user_message = "user_message"
+        case thinking_mode
     }
     private var _conversation_id: AnyString
     /**
@@ -6522,13 +6545,19 @@ public struct ConversationalAnalyticsChatRequest: SDKModel {
         set { _user_message = AnyString.init(newValue) }
     }
 
-    public init(conversation_id: String, user_message: String) {
+    /**
+     * Thinking mode for the agent. Defaults to "FAST" when omitted. Valid values are: "FAST", "THINKING".
+     */
+    public var thinking_mode: ThinkingMode?
+
+    public init(conversation_id: String, user_message: String, thinking_mode: ThinkingMode? = nil) {
         self._conversation_id = AnyString.init(conversation_id)
         self._user_message = AnyString.init(user_message)
+        self.thinking_mode = thinking_mode
     }
 
-    public init(_ conversation_id: String, _ user_message: String) {
-        self.init(conversation_id: conversation_id, user_message: user_message)
+    public init(_ conversation_id: String, _ user_message: String, thinking_mode: ThinkingMode? = nil) {
+        self.init(conversation_id: conversation_id, user_message: user_message, thinking_mode: thinking_mode)
     }
 
 }
@@ -10907,6 +10936,7 @@ public struct DBConnection: SDKModel {
         case disable_context_comment
         case _oauth_application_id = "oauth_application_id"
         case always_retry_failed_builds
+        case _pdt_build_retry_limit = "pdt_build_retry_limit"
         case uses_application_default_credentials
         case _impersonated_service_account = "impersonated_service_account"
         case cost_estimate_enabled
@@ -11343,6 +11373,15 @@ public struct DBConnection: SDKModel {
      */
     public var always_retry_failed_builds: Bool?
 
+    private var _pdt_build_retry_limit: AnyInt?
+    /**
+     * After this many consecutive failed builds of a production PDT, queries that need to build it return its last build error instead of starting another build. Set to null to use the default (3). Doesn't apply when failed PDT builds are always retried.
+     */
+    public var pdt_build_retry_limit: Int64? {
+        get { _pdt_build_retry_limit?.value }
+        set { _pdt_build_retry_limit = newValue.map(AnyInt.init) }
+    }
+
     /**
      * Whether the connection should authenticate with the Application Default Credentials of the host environment (limited to GCP and certain dialects).
      */
@@ -11414,7 +11453,7 @@ public struct DBConnection: SDKModel {
         set { _service_name = newValue.map(AnyString.init) }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, project_id: String? = nil, named_driver_version_requested: String? = nil, named_driver_version_actual: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, has_password: Bool? = nil, service_account_auth_enabled: Bool? = nil, service_account_rules: [DBConnectionServiceAccountRule]? = nil, uses_oauth: Bool? = nil, uses_key_pair_auth: Bool? = nil, uses_instance_oauth: Bool? = nil, uses_service_auth: Bool? = nil, certificate: String? = nil, user_attr_certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, tmp_db_host: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, supports_data_studio_link: Bool? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, default_bq_connection: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil, p4sa_name: String? = nil, query_holding_disabled: Bool? = nil, service_name: String? = nil) {
+    public init(can: StringDictionary<Bool>? = nil, name: String? = nil, dialect: Dialect? = nil, snippets: [Snippet]? = nil, pdts_enabled: Bool? = nil, project_id: String? = nil, named_driver_version_requested: String? = nil, named_driver_version_actual: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, has_password: Bool? = nil, service_account_auth_enabled: Bool? = nil, service_account_rules: [DBConnectionServiceAccountRule]? = nil, uses_oauth: Bool? = nil, uses_key_pair_auth: Bool? = nil, uses_instance_oauth: Bool? = nil, uses_service_auth: Bool? = nil, certificate: String? = nil, user_attr_certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, tmp_db_host: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, supports_data_studio_link: Bool? = nil, created_at: String? = nil, user_id: String? = nil, example: Bool? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, last_regen_at: String? = nil, last_reap_at: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: DBConnectionOverride? = nil, managed: Bool? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, pdt_build_retry_limit: Int64? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, default_bq_connection: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil, p4sa_name: String? = nil, query_holding_disabled: Bool? = nil, service_name: String? = nil) {
         self.can = can
         self._name = name.map(AnyString.init)
         self.dialect = dialect
@@ -11473,6 +11512,7 @@ public struct DBConnection: SDKModel {
         self.disable_context_comment = disable_context_comment
         self._oauth_application_id = oauth_application_id.map(AnyString.init)
         self.always_retry_failed_builds = always_retry_failed_builds
+        self._pdt_build_retry_limit = pdt_build_retry_limit.map(AnyInt.init)
         self.uses_application_default_credentials = uses_application_default_credentials
         self._impersonated_service_account = impersonated_service_account.map(AnyString.init)
         self.cost_estimate_enabled = cost_estimate_enabled
@@ -20958,7 +20998,13 @@ public struct McpTools: SDKModel {
 
     public var add_dashboard_filter: McpToolSetting?
 
+    public var create_dashboard_layout: McpToolSetting?
+
+    public var create_git_branch: McpToolSetting?
+
     public var create_project_file: McpToolSetting?
+
+    public var delete_git_branch: McpToolSetting?
 
     public var delete_project_file: McpToolSetting?
 
@@ -20976,6 +21022,8 @@ public struct McpTools: SDKModel {
 
     public var get_connections: McpToolSetting?
 
+    public var get_dashboard: McpToolSetting?
+
     public var get_dashboards: McpToolSetting?
 
     public var get_dimensions: McpToolSetting?
@@ -20987,6 +21035,8 @@ public struct McpTools: SDKModel {
     public var get_field_value_suggestions: McpToolSetting?
 
     public var get_filters: McpToolSetting?
+
+    public var get_git_branch: McpToolSetting?
 
     public var get_looks: McpToolSetting?
 
@@ -21008,6 +21058,8 @@ public struct McpTools: SDKModel {
 
     public var health_vacuum: McpToolSetting?
 
+    public var list_git_branches: McpToolSetting?
+
     public var make_dashboard: McpToolSetting?
 
     public var make_look: McpToolSetting?
@@ -21021,6 +21073,12 @@ public struct McpTools: SDKModel {
     public var run_dashboard: McpToolSetting?
 
     public var run_look: McpToolSetting?
+
+    public var switch_git_branch: McpToolSetting?
+
+    public var update_dashboard_element: McpToolSetting?
+
+    public var update_dashboard_layout_component: McpToolSetting?
 
     public var update_project_file: McpToolSetting?
 
@@ -21042,11 +21100,14 @@ public struct McpTools: SDKModel {
 
     public var render_dashboard: McpToolSetting?
 
-    public init(enable_all: Bool? = nil, add_dashboard_element: McpToolSetting? = nil, add_dashboard_filter: McpToolSetting? = nil, create_project_file: McpToolSetting? = nil, delete_project_file: McpToolSetting? = nil, dev_mode: McpToolSetting? = nil, generate_embed_url: McpToolSetting? = nil, get_connection_databases: McpToolSetting? = nil, get_connection_schemas: McpToolSetting? = nil, get_connection_table_columns: McpToolSetting? = nil, get_connection_tables: McpToolSetting? = nil, get_connections: McpToolSetting? = nil, get_dashboards: McpToolSetting? = nil, get_dimensions: McpToolSetting? = nil, get_explore: McpToolSetting? = nil, get_explores: McpToolSetting? = nil, get_field_value_suggestions: McpToolSetting? = nil, get_filters: McpToolSetting? = nil, get_looks: McpToolSetting? = nil, get_measures: McpToolSetting? = nil, get_models: McpToolSetting? = nil, get_parameters: McpToolSetting? = nil, get_project_file: McpToolSetting? = nil, get_project_files: McpToolSetting? = nil, get_projects: McpToolSetting? = nil, health_analyze: McpToolSetting? = nil, health_pulse: McpToolSetting? = nil, health_vacuum: McpToolSetting? = nil, make_dashboard: McpToolSetting? = nil, make_look: McpToolSetting? = nil, query: McpToolSetting? = nil, query_sql: McpToolSetting? = nil, query_url: McpToolSetting? = nil, run_dashboard: McpToolSetting? = nil, run_look: McpToolSetting? = nil, update_project_file: McpToolSetting? = nil, validate_project: McpToolSetting? = nil, get_project_directories: McpToolSetting? = nil, create_project_directory: McpToolSetting? = nil, delete_project_directory: McpToolSetting? = nil, get_lookml_tests: McpToolSetting? = nil, run_lookml_tests: McpToolSetting? = nil, create_view_from_table: McpToolSetting? = nil, render_visualization: McpToolSetting? = nil, render_dashboard: McpToolSetting? = nil) {
+    public init(enable_all: Bool? = nil, add_dashboard_element: McpToolSetting? = nil, add_dashboard_filter: McpToolSetting? = nil, create_dashboard_layout: McpToolSetting? = nil, create_git_branch: McpToolSetting? = nil, create_project_file: McpToolSetting? = nil, delete_git_branch: McpToolSetting? = nil, delete_project_file: McpToolSetting? = nil, dev_mode: McpToolSetting? = nil, generate_embed_url: McpToolSetting? = nil, get_connection_databases: McpToolSetting? = nil, get_connection_schemas: McpToolSetting? = nil, get_connection_table_columns: McpToolSetting? = nil, get_connection_tables: McpToolSetting? = nil, get_connections: McpToolSetting? = nil, get_dashboard: McpToolSetting? = nil, get_dashboards: McpToolSetting? = nil, get_dimensions: McpToolSetting? = nil, get_explore: McpToolSetting? = nil, get_explores: McpToolSetting? = nil, get_field_value_suggestions: McpToolSetting? = nil, get_filters: McpToolSetting? = nil, get_git_branch: McpToolSetting? = nil, get_looks: McpToolSetting? = nil, get_measures: McpToolSetting? = nil, get_models: McpToolSetting? = nil, get_parameters: McpToolSetting? = nil, get_project_file: McpToolSetting? = nil, get_project_files: McpToolSetting? = nil, get_projects: McpToolSetting? = nil, health_analyze: McpToolSetting? = nil, health_pulse: McpToolSetting? = nil, health_vacuum: McpToolSetting? = nil, list_git_branches: McpToolSetting? = nil, make_dashboard: McpToolSetting? = nil, make_look: McpToolSetting? = nil, query: McpToolSetting? = nil, query_sql: McpToolSetting? = nil, query_url: McpToolSetting? = nil, run_dashboard: McpToolSetting? = nil, run_look: McpToolSetting? = nil, switch_git_branch: McpToolSetting? = nil, update_dashboard_element: McpToolSetting? = nil, update_dashboard_layout_component: McpToolSetting? = nil, update_project_file: McpToolSetting? = nil, validate_project: McpToolSetting? = nil, get_project_directories: McpToolSetting? = nil, create_project_directory: McpToolSetting? = nil, delete_project_directory: McpToolSetting? = nil, get_lookml_tests: McpToolSetting? = nil, run_lookml_tests: McpToolSetting? = nil, create_view_from_table: McpToolSetting? = nil, render_visualization: McpToolSetting? = nil, render_dashboard: McpToolSetting? = nil) {
         self.enable_all = enable_all
         self.add_dashboard_element = add_dashboard_element
         self.add_dashboard_filter = add_dashboard_filter
+        self.create_dashboard_layout = create_dashboard_layout
+        self.create_git_branch = create_git_branch
         self.create_project_file = create_project_file
+        self.delete_git_branch = delete_git_branch
         self.delete_project_file = delete_project_file
         self.dev_mode = dev_mode
         self.generate_embed_url = generate_embed_url
@@ -21055,12 +21116,14 @@ public struct McpTools: SDKModel {
         self.get_connection_table_columns = get_connection_table_columns
         self.get_connection_tables = get_connection_tables
         self.get_connections = get_connections
+        self.get_dashboard = get_dashboard
         self.get_dashboards = get_dashboards
         self.get_dimensions = get_dimensions
         self.get_explore = get_explore
         self.get_explores = get_explores
         self.get_field_value_suggestions = get_field_value_suggestions
         self.get_filters = get_filters
+        self.get_git_branch = get_git_branch
         self.get_looks = get_looks
         self.get_measures = get_measures
         self.get_models = get_models
@@ -21071,6 +21134,7 @@ public struct McpTools: SDKModel {
         self.health_analyze = health_analyze
         self.health_pulse = health_pulse
         self.health_vacuum = health_vacuum
+        self.list_git_branches = list_git_branches
         self.make_dashboard = make_dashboard
         self.make_look = make_look
         self.query = query
@@ -21078,6 +21142,9 @@ public struct McpTools: SDKModel {
         self.query_url = query_url
         self.run_dashboard = run_dashboard
         self.run_look = run_look
+        self.switch_git_branch = switch_git_branch
+        self.update_dashboard_element = update_dashboard_element
+        self.update_dashboard_layout_component = update_dashboard_layout_component
         self.update_project_file = update_project_file
         self.validate_project = validate_project
         self.get_project_directories = get_project_directories
@@ -21099,6 +21166,7 @@ public struct McpToolSetting: SDKModel {
         case _description = "description"
         case _category = "category"
         case _access_level = "access_level"
+        case _dependencies = "dependencies"
     }
     /**
      * Is this tool enabled
@@ -21132,11 +21200,21 @@ public struct McpToolSetting: SDKModel {
         set { _access_level = newValue.map(AnyString.init) }
     }
 
-    public init(enabled: Bool? = nil, description: String? = nil, category: String? = nil, access_level: String? = nil) {
+    private var _dependencies: [AnyString]?
+    /**
+     * Tools that this tool depends on (read-only)
+     */
+    public var dependencies: [String]? {
+        get { if let v = _dependencies { return v.map { $0.value } } else { return nil } }
+        set { if let v = newValue { _dependencies = v.map { AnyString.init($0) } } else { _dependencies = nil } }
+    }
+
+    public init(enabled: Bool? = nil, description: String? = nil, category: String? = nil, access_level: String? = nil, dependencies: [String]? = nil) {
         self.enabled = enabled
         self._description = description.map(AnyString.init)
         self._category = category.map(AnyString.init)
         self._access_level = access_level.map(AnyString.init)
+        if let v = dependencies { _dependencies = v.map { AnyString.init($0) } } else { _dependencies = nil }
     }
 
 }
@@ -23054,6 +23132,7 @@ public struct ProjectCISuite: SDKModel {
         case _sql_validator_config_exclusions = "sql_validator_config_exclusions"
         case upstream_trigger_is_enabled
         case _upstream_projects = "upstream_projects"
+        case user_attributes
     }
     /**
      * Operations the current user is able to perform on this object (read-only)
@@ -23418,7 +23497,12 @@ public struct ProjectCISuite: SDKModel {
         set { if let v = newValue { _upstream_projects = v.map { AnyString.init($0) } } else { _upstream_projects = nil } }
     }
 
-    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, project_id: String? = nil, created_at: Date? = nil, updated_at: Date? = nil, schedule_trigger_is_enabled: Bool? = nil, schedule_trigger_crontab: String? = nil, schedule_trigger_timezone: String? = nil, alerting_enabled: Bool? = nil, alert_email_addresses: [String]? = nil, alert_on_failed_status: Bool? = nil, alert_on_error_status: Bool? = nil, alert_on_passed_status: Bool? = nil, alert_on_cancelled_status: Bool? = nil, change_request_trigger_is_enabled: Bool? = nil, change_request_trigger_hook_id: String? = nil, change_request_trigger_target_branch: String? = nil, guid: String? = nil, dbt_cloud_trigger_is_enabled: Bool? = nil, dbt_cloud_trigger_job_id: Int64? = nil, dbt_cloud_trigger_user_attribute_id: String? = nil, dbt_cloud_webhook_id: String? = nil, webhook_secret: String? = nil, has_webhook_secret: Bool? = nil, assert_validator_config_is_enabled: Bool? = nil, assert_validator_config_concurrency: Int64? = nil, assert_validator_config_selectors: [String]? = nil, assert_validator_config_exclusions: [String]? = nil, content_validator_config_is_enabled: Bool? = nil, content_validator_config_exclude_personal: Bool? = nil, content_validator_config_incremental: Bool? = nil, content_validator_config_exclude_folders: [String]? = nil, content_validator_config_include_folders: [String]? = nil, content_validator_config_selectors: [String]? = nil, content_validator_config_exclusions: [String]? = nil, lookml_validator_config_is_enabled: Bool? = nil, lookml_validator_config_severity: String? = nil, lookml_validator_config_timeout: Int64? = nil, style_validator_config_is_enabled: Bool? = nil, style_validator_config_incremental: Bool? = nil, sql_validator_config_is_enabled: Bool? = nil, sql_validator_config_fail_fast: Bool? = nil, sql_validator_config_incremental: Bool? = nil, sql_validator_config_ignore_hidden: Bool? = nil, sql_validator_config_query_concurrency: Int64? = nil, sql_validator_config_chunk_size: Int64? = nil, sql_validator_config_selectors: [String]? = nil, sql_validator_config_exclusions: [String]? = nil, upstream_trigger_is_enabled: Bool? = nil, upstream_projects: [String]? = nil) {
+    /**
+     * User attribute overrides for the CI suite
+     */
+    public var user_attributes: [UserAttributeOverride]?
+
+    public init(can: StringDictionary<Bool>? = nil, id: String? = nil, name: String? = nil, project_id: String? = nil, created_at: Date? = nil, updated_at: Date? = nil, schedule_trigger_is_enabled: Bool? = nil, schedule_trigger_crontab: String? = nil, schedule_trigger_timezone: String? = nil, alerting_enabled: Bool? = nil, alert_email_addresses: [String]? = nil, alert_on_failed_status: Bool? = nil, alert_on_error_status: Bool? = nil, alert_on_passed_status: Bool? = nil, alert_on_cancelled_status: Bool? = nil, change_request_trigger_is_enabled: Bool? = nil, change_request_trigger_hook_id: String? = nil, change_request_trigger_target_branch: String? = nil, guid: String? = nil, dbt_cloud_trigger_is_enabled: Bool? = nil, dbt_cloud_trigger_job_id: Int64? = nil, dbt_cloud_trigger_user_attribute_id: String? = nil, dbt_cloud_webhook_id: String? = nil, webhook_secret: String? = nil, has_webhook_secret: Bool? = nil, assert_validator_config_is_enabled: Bool? = nil, assert_validator_config_concurrency: Int64? = nil, assert_validator_config_selectors: [String]? = nil, assert_validator_config_exclusions: [String]? = nil, content_validator_config_is_enabled: Bool? = nil, content_validator_config_exclude_personal: Bool? = nil, content_validator_config_incremental: Bool? = nil, content_validator_config_exclude_folders: [String]? = nil, content_validator_config_include_folders: [String]? = nil, content_validator_config_selectors: [String]? = nil, content_validator_config_exclusions: [String]? = nil, lookml_validator_config_is_enabled: Bool? = nil, lookml_validator_config_severity: String? = nil, lookml_validator_config_timeout: Int64? = nil, style_validator_config_is_enabled: Bool? = nil, style_validator_config_incremental: Bool? = nil, sql_validator_config_is_enabled: Bool? = nil, sql_validator_config_fail_fast: Bool? = nil, sql_validator_config_incremental: Bool? = nil, sql_validator_config_ignore_hidden: Bool? = nil, sql_validator_config_query_concurrency: Int64? = nil, sql_validator_config_chunk_size: Int64? = nil, sql_validator_config_selectors: [String]? = nil, sql_validator_config_exclusions: [String]? = nil, upstream_trigger_is_enabled: Bool? = nil, upstream_projects: [String]? = nil, user_attributes: [UserAttributeOverride]? = nil) {
         self.can = can
         self._id = id.map(AnyString.init)
         self._name = name.map(AnyString.init)
@@ -23470,6 +23554,7 @@ public struct ProjectCISuite: SDKModel {
         if let v = sql_validator_config_exclusions { _sql_validator_config_exclusions = v.map { AnyString.init($0) } } else { _sql_validator_config_exclusions = nil }
         self.upstream_trigger_is_enabled = upstream_trigger_is_enabled
         if let v = upstream_projects { _upstream_projects = v.map { AnyString.init($0) } } else { _upstream_projects = nil }
+        self.user_attributes = user_attributes
     }
 
 }
@@ -29197,6 +29282,14 @@ public struct ThemeSettings: SDKModel {
 
 }
 
+/**
+ * Thinking mode for the agent. Defaults to "FAST" when omitted. Valid values are: "FAST", "THINKING". (Enum defined in ConversationalAnalyticsChatRequest)
+ */
+public enum ThinkingMode: String, Codable {
+    case FAST = "FAST"
+    case THINKING = "THINKING"
+}
+
 public struct Timezone: SDKModel {
 
     private enum CodingKeys : String, CodingKey {
@@ -31347,6 +31440,8 @@ public struct WriteAgent: SDKModel {
         case _description = "description"
         case _category = "category"
         case sources
+        case _dashboard_id = "dashboard_id"
+        case _project_name = "project_name"
         case _golden_query_ids = "golden_query_ids"
         case context
         case deleted
@@ -31394,6 +31489,24 @@ public struct WriteAgent: SDKModel {
      */
     public var sources: [Source]?
 
+    private var _dashboard_id: AnyString?
+    /**
+     * Dashboard ID associated with the agent (UDD numeric or slug ID, or model::dashboard LookML dashboard ID)
+     */
+    public var dashboard_id: String? {
+        get { _dashboard_id?.value }
+        set { _dashboard_id = newValue.map(AnyString.init) }
+    }
+
+    private var _project_name: AnyString?
+    /**
+     * LookML project name associated with the dashboard, used to disambiguate LookML dashboards across projects
+     */
+    public var project_name: String? {
+        get { _project_name?.value }
+        set { _project_name = newValue.map(AnyString.init) }
+    }
+
     private var _golden_query_ids: [AnyInt]?
     /**
      * IDs of golden queries linked to the agent
@@ -31417,12 +31530,14 @@ public struct WriteAgent: SDKModel {
 
     public var workflow_params: WorkflowParams?
 
-    public init(created_by_user_id: String? = nil, name: String? = nil, description: String? = nil, category: String? = nil, sources: [Source]? = nil, golden_query_ids: [Int64]? = nil, context: Context? = nil, deleted: Bool? = nil, code_interpreter: Bool? = nil, workflow_params: WorkflowParams? = nil) {
+    public init(created_by_user_id: String? = nil, name: String? = nil, description: String? = nil, category: String? = nil, sources: [Source]? = nil, dashboard_id: String? = nil, project_name: String? = nil, golden_query_ids: [Int64]? = nil, context: Context? = nil, deleted: Bool? = nil, code_interpreter: Bool? = nil, workflow_params: WorkflowParams? = nil) {
         self._created_by_user_id = created_by_user_id.map(AnyString.init)
         self._name = name.map(AnyString.init)
         self._description = description.map(AnyString.init)
         self._category = category.map(AnyString.init)
         self.sources = sources
+        self._dashboard_id = dashboard_id.map(AnyString.init)
+        self._project_name = project_name.map(AnyString.init)
         if let v = golden_query_ids { _golden_query_ids = v.map { AnyInt.init($0) } } else { _golden_query_ids = nil }
         self.context = context
         self.deleted = deleted
@@ -33661,6 +33776,7 @@ public struct WriteDBConnection: SDKModel {
         case disable_context_comment
         case _oauth_application_id = "oauth_application_id"
         case always_retry_failed_builds
+        case _pdt_build_retry_limit = "pdt_build_retry_limit"
         case uses_application_default_credentials
         case _impersonated_service_account = "impersonated_service_account"
         case cost_estimate_enabled
@@ -34002,6 +34118,15 @@ public struct WriteDBConnection: SDKModel {
      */
     public var always_retry_failed_builds: Bool?
 
+    private var _pdt_build_retry_limit: AnyInt?
+    /**
+     * After this many consecutive failed builds of a production PDT, queries that need to build it return its last build error instead of starting another build. Set to null to use the default (3). Doesn't apply when failed PDT builds are always retried.
+     */
+    public var pdt_build_retry_limit: Int64? {
+        get { _pdt_build_retry_limit?.value }
+        set { _pdt_build_retry_limit = newValue.map(AnyInt.init) }
+    }
+
     /**
      * Whether the connection should authenticate with the Application Default Credentials of the host environment (limited to GCP and certain dialects).
      */
@@ -34059,7 +34184,7 @@ public struct WriteDBConnection: SDKModel {
         set { _service_name = newValue.map(AnyString.init) }
     }
 
-    public init(name: String? = nil, project_id: String? = nil, named_driver_version_requested: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, service_account_auth_enabled: Bool? = nil, service_account_rules: [DBConnectionServiceAccountRule]? = nil, uses_key_pair_auth: Bool? = nil, certificate: String? = nil, user_attr_certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, tmp_db_host: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: WriteDBConnectionOverride? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil, query_holding_disabled: Bool? = nil, service_name: String? = nil) {
+    public init(name: String? = nil, project_id: String? = nil, named_driver_version_requested: String? = nil, host: String? = nil, port: String? = nil, username: String? = nil, password: String? = nil, service_account_auth_enabled: Bool? = nil, service_account_rules: [DBConnectionServiceAccountRule]? = nil, uses_key_pair_auth: Bool? = nil, certificate: String? = nil, user_attr_certificate: String? = nil, file_type: String? = nil, database: String? = nil, db_timezone: String? = nil, query_timezone: String? = nil, schema: String? = nil, max_connections: Int64? = nil, max_queries: Int64? = nil, max_queries_per_user: Int64? = nil, max_billing_gigabytes: String? = nil, ssl: Bool? = nil, verify_ssl: Bool? = nil, tmp_db_name: String? = nil, tmp_db_host: String? = nil, jdbc_additional_params: String? = nil, pool_timeout: Int64? = nil, dialect_name: String? = nil, user_db_credentials: Bool? = nil, user_attribute_fields: [String]? = nil, maintenance_cron: String? = nil, sql_runner_precache_tables: Bool? = nil, sql_writing_with_info_schema: Bool? = nil, after_connect_statements: String? = nil, pdt_context_override: WriteDBConnectionOverride? = nil, custom_local_port: Int64? = nil, tunnel_id: String? = nil, uses_tns: Bool? = nil, pdt_concurrency: Int64? = nil, disable_context_comment: Bool? = nil, oauth_application_id: String? = nil, always_retry_failed_builds: Bool? = nil, pdt_build_retry_limit: Int64? = nil, uses_application_default_credentials: Bool? = nil, impersonated_service_account: String? = nil, cost_estimate_enabled: Bool? = nil, pdt_api_control_enabled: Bool? = nil, connection_pooling: Bool? = nil, bq_storage_project_id: String? = nil, bq_roles_verified: Bool? = nil, query_holding_disabled: Bool? = nil, service_name: String? = nil) {
         self._name = name.map(AnyString.init)
         self._project_id = project_id.map(AnyString.init)
         self._named_driver_version_requested = named_driver_version_requested.map(AnyString.init)
@@ -34102,6 +34227,7 @@ public struct WriteDBConnection: SDKModel {
         self.disable_context_comment = disable_context_comment
         self._oauth_application_id = oauth_application_id.map(AnyString.init)
         self.always_retry_failed_builds = always_retry_failed_builds
+        self._pdt_build_retry_limit = pdt_build_retry_limit.map(AnyInt.init)
         self.uses_application_default_credentials = uses_application_default_credentials
         self._impersonated_service_account = impersonated_service_account.map(AnyString.init)
         self.cost_estimate_enabled = cost_estimate_enabled
@@ -35442,273 +35568,330 @@ public struct WriteMcpTools: SDKModel {
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var add_dashboard_element: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var add_dashboard_filter: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
+     */
+    public var create_dashboard_layout: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level, dependencies
+     */
+    public var create_git_branch: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level, dependencies
      */
     public var create_project_file: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
+     */
+    public var delete_git_branch: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level, dependencies
      */
     public var delete_project_file: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var dev_mode: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var generate_embed_url: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var get_connection_databases: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var get_connection_schemas: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var get_connection_table_columns: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var get_connection_tables: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var get_connections: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
+     */
+    public var get_dashboard: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level, dependencies
      */
     public var get_dashboards: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var get_dimensions: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var get_explore: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var get_explores: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var get_field_value_suggestions: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var get_filters: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
+     */
+    public var get_git_branch: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level, dependencies
      */
     public var get_looks: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var get_measures: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var get_models: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var get_parameters: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var get_project_file: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var get_project_files: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var get_projects: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var health_analyze: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var health_pulse: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var health_vacuum: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
+     */
+    public var list_git_branches: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level, dependencies
      */
     public var make_dashboard: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var make_look: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var query: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var query_sql: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var query_url: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var run_dashboard: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var run_look: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
+     */
+    public var switch_git_branch: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level, dependencies
+     */
+    public var update_dashboard_element: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level, dependencies
+     */
+    public var update_dashboard_layout_component: WriteMcpToolSetting?
+
+    /**
+     * Dynamic writeable type for McpToolSetting removes:
+     * description, category, access_level, dependencies
      */
     public var update_project_file: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var validate_project: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var get_project_directories: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var create_project_directory: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var delete_project_directory: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var get_lookml_tests: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var run_lookml_tests: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var create_view_from_table: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var render_visualization: WriteMcpToolSetting?
 
     /**
      * Dynamic writeable type for McpToolSetting removes:
-     * description, category, access_level
+     * description, category, access_level, dependencies
      */
     public var render_dashboard: WriteMcpToolSetting?
 
-    public init(enable_all: Bool? = nil, add_dashboard_element: WriteMcpToolSetting? = nil, add_dashboard_filter: WriteMcpToolSetting? = nil, create_project_file: WriteMcpToolSetting? = nil, delete_project_file: WriteMcpToolSetting? = nil, dev_mode: WriteMcpToolSetting? = nil, generate_embed_url: WriteMcpToolSetting? = nil, get_connection_databases: WriteMcpToolSetting? = nil, get_connection_schemas: WriteMcpToolSetting? = nil, get_connection_table_columns: WriteMcpToolSetting? = nil, get_connection_tables: WriteMcpToolSetting? = nil, get_connections: WriteMcpToolSetting? = nil, get_dashboards: WriteMcpToolSetting? = nil, get_dimensions: WriteMcpToolSetting? = nil, get_explore: WriteMcpToolSetting? = nil, get_explores: WriteMcpToolSetting? = nil, get_field_value_suggestions: WriteMcpToolSetting? = nil, get_filters: WriteMcpToolSetting? = nil, get_looks: WriteMcpToolSetting? = nil, get_measures: WriteMcpToolSetting? = nil, get_models: WriteMcpToolSetting? = nil, get_parameters: WriteMcpToolSetting? = nil, get_project_file: WriteMcpToolSetting? = nil, get_project_files: WriteMcpToolSetting? = nil, get_projects: WriteMcpToolSetting? = nil, health_analyze: WriteMcpToolSetting? = nil, health_pulse: WriteMcpToolSetting? = nil, health_vacuum: WriteMcpToolSetting? = nil, make_dashboard: WriteMcpToolSetting? = nil, make_look: WriteMcpToolSetting? = nil, query: WriteMcpToolSetting? = nil, query_sql: WriteMcpToolSetting? = nil, query_url: WriteMcpToolSetting? = nil, run_dashboard: WriteMcpToolSetting? = nil, run_look: WriteMcpToolSetting? = nil, update_project_file: WriteMcpToolSetting? = nil, validate_project: WriteMcpToolSetting? = nil, get_project_directories: WriteMcpToolSetting? = nil, create_project_directory: WriteMcpToolSetting? = nil, delete_project_directory: WriteMcpToolSetting? = nil, get_lookml_tests: WriteMcpToolSetting? = nil, run_lookml_tests: WriteMcpToolSetting? = nil, create_view_from_table: WriteMcpToolSetting? = nil, render_visualization: WriteMcpToolSetting? = nil, render_dashboard: WriteMcpToolSetting? = nil) {
+    public init(enable_all: Bool? = nil, add_dashboard_element: WriteMcpToolSetting? = nil, add_dashboard_filter: WriteMcpToolSetting? = nil, create_dashboard_layout: WriteMcpToolSetting? = nil, create_git_branch: WriteMcpToolSetting? = nil, create_project_file: WriteMcpToolSetting? = nil, delete_git_branch: WriteMcpToolSetting? = nil, delete_project_file: WriteMcpToolSetting? = nil, dev_mode: WriteMcpToolSetting? = nil, generate_embed_url: WriteMcpToolSetting? = nil, get_connection_databases: WriteMcpToolSetting? = nil, get_connection_schemas: WriteMcpToolSetting? = nil, get_connection_table_columns: WriteMcpToolSetting? = nil, get_connection_tables: WriteMcpToolSetting? = nil, get_connections: WriteMcpToolSetting? = nil, get_dashboard: WriteMcpToolSetting? = nil, get_dashboards: WriteMcpToolSetting? = nil, get_dimensions: WriteMcpToolSetting? = nil, get_explore: WriteMcpToolSetting? = nil, get_explores: WriteMcpToolSetting? = nil, get_field_value_suggestions: WriteMcpToolSetting? = nil, get_filters: WriteMcpToolSetting? = nil, get_git_branch: WriteMcpToolSetting? = nil, get_looks: WriteMcpToolSetting? = nil, get_measures: WriteMcpToolSetting? = nil, get_models: WriteMcpToolSetting? = nil, get_parameters: WriteMcpToolSetting? = nil, get_project_file: WriteMcpToolSetting? = nil, get_project_files: WriteMcpToolSetting? = nil, get_projects: WriteMcpToolSetting? = nil, health_analyze: WriteMcpToolSetting? = nil, health_pulse: WriteMcpToolSetting? = nil, health_vacuum: WriteMcpToolSetting? = nil, list_git_branches: WriteMcpToolSetting? = nil, make_dashboard: WriteMcpToolSetting? = nil, make_look: WriteMcpToolSetting? = nil, query: WriteMcpToolSetting? = nil, query_sql: WriteMcpToolSetting? = nil, query_url: WriteMcpToolSetting? = nil, run_dashboard: WriteMcpToolSetting? = nil, run_look: WriteMcpToolSetting? = nil, switch_git_branch: WriteMcpToolSetting? = nil, update_dashboard_element: WriteMcpToolSetting? = nil, update_dashboard_layout_component: WriteMcpToolSetting? = nil, update_project_file: WriteMcpToolSetting? = nil, validate_project: WriteMcpToolSetting? = nil, get_project_directories: WriteMcpToolSetting? = nil, create_project_directory: WriteMcpToolSetting? = nil, delete_project_directory: WriteMcpToolSetting? = nil, get_lookml_tests: WriteMcpToolSetting? = nil, run_lookml_tests: WriteMcpToolSetting? = nil, create_view_from_table: WriteMcpToolSetting? = nil, render_visualization: WriteMcpToolSetting? = nil, render_dashboard: WriteMcpToolSetting? = nil) {
         self.enable_all = enable_all
         self.add_dashboard_element = add_dashboard_element
         self.add_dashboard_filter = add_dashboard_filter
+        self.create_dashboard_layout = create_dashboard_layout
+        self.create_git_branch = create_git_branch
         self.create_project_file = create_project_file
+        self.delete_git_branch = delete_git_branch
         self.delete_project_file = delete_project_file
         self.dev_mode = dev_mode
         self.generate_embed_url = generate_embed_url
@@ -35717,12 +35900,14 @@ public struct WriteMcpTools: SDKModel {
         self.get_connection_table_columns = get_connection_table_columns
         self.get_connection_tables = get_connection_tables
         self.get_connections = get_connections
+        self.get_dashboard = get_dashboard
         self.get_dashboards = get_dashboards
         self.get_dimensions = get_dimensions
         self.get_explore = get_explore
         self.get_explores = get_explores
         self.get_field_value_suggestions = get_field_value_suggestions
         self.get_filters = get_filters
+        self.get_git_branch = get_git_branch
         self.get_looks = get_looks
         self.get_measures = get_measures
         self.get_models = get_models
@@ -35733,6 +35918,7 @@ public struct WriteMcpTools: SDKModel {
         self.health_analyze = health_analyze
         self.health_pulse = health_pulse
         self.health_vacuum = health_vacuum
+        self.list_git_branches = list_git_branches
         self.make_dashboard = make_dashboard
         self.make_look = make_look
         self.query = query
@@ -35740,6 +35926,9 @@ public struct WriteMcpTools: SDKModel {
         self.query_url = query_url
         self.run_dashboard = run_dashboard
         self.run_look = run_look
+        self.switch_git_branch = switch_git_branch
+        self.update_dashboard_element = update_dashboard_element
+        self.update_dashboard_layout_component = update_dashboard_layout_component
         self.update_project_file = update_project_file
         self.validate_project = validate_project
         self.get_project_directories = get_project_directories
@@ -35756,7 +35945,7 @@ public struct WriteMcpTools: SDKModel {
 
 /**
  * Dynamic writeable type for McpToolSetting removes:
- * description, category, access_level
+ * description, category, access_level, dependencies
  */
 public struct WriteMcpToolSetting: SDKModel {
     /**
@@ -36689,6 +36878,7 @@ public struct WriteProjectCISuite: SDKModel {
         case _sql_validator_config_exclusions = "sql_validator_config_exclusions"
         case upstream_trigger_is_enabled
         case _upstream_projects = "upstream_projects"
+        case user_attributes
     }
     private var _name: AnyString?
     /**
@@ -36988,7 +37178,12 @@ public struct WriteProjectCISuite: SDKModel {
         set { if let v = newValue { _upstream_projects = v.map { AnyString.init($0) } } else { _upstream_projects = nil } }
     }
 
-    public init(name: String? = nil, schedule_trigger_is_enabled: Bool? = nil, schedule_trigger_crontab: String? = nil, schedule_trigger_timezone: String? = nil, alerting_enabled: Bool? = nil, alert_email_addresses: [String]? = nil, alert_on_failed_status: Bool? = nil, alert_on_error_status: Bool? = nil, alert_on_passed_status: Bool? = nil, alert_on_cancelled_status: Bool? = nil, change_request_trigger_is_enabled: Bool? = nil, change_request_trigger_target_branch: String? = nil, dbt_cloud_trigger_is_enabled: Bool? = nil, dbt_cloud_trigger_job_id: Int64? = nil, dbt_cloud_trigger_user_attribute_id: String? = nil, webhook_secret: String? = nil, assert_validator_config_is_enabled: Bool? = nil, assert_validator_config_concurrency: Int64? = nil, assert_validator_config_selectors: [String]? = nil, assert_validator_config_exclusions: [String]? = nil, content_validator_config_is_enabled: Bool? = nil, content_validator_config_exclude_personal: Bool? = nil, content_validator_config_incremental: Bool? = nil, content_validator_config_exclude_folders: [String]? = nil, content_validator_config_include_folders: [String]? = nil, content_validator_config_selectors: [String]? = nil, content_validator_config_exclusions: [String]? = nil, lookml_validator_config_is_enabled: Bool? = nil, lookml_validator_config_severity: String? = nil, lookml_validator_config_timeout: Int64? = nil, style_validator_config_is_enabled: Bool? = nil, style_validator_config_incremental: Bool? = nil, sql_validator_config_is_enabled: Bool? = nil, sql_validator_config_fail_fast: Bool? = nil, sql_validator_config_incremental: Bool? = nil, sql_validator_config_ignore_hidden: Bool? = nil, sql_validator_config_query_concurrency: Int64? = nil, sql_validator_config_chunk_size: Int64? = nil, sql_validator_config_selectors: [String]? = nil, sql_validator_config_exclusions: [String]? = nil, upstream_trigger_is_enabled: Bool? = nil, upstream_projects: [String]? = nil) {
+    /**
+     * User attribute overrides for the CI suite
+     */
+    public var user_attributes: [UserAttributeOverride]?
+
+    public init(name: String? = nil, schedule_trigger_is_enabled: Bool? = nil, schedule_trigger_crontab: String? = nil, schedule_trigger_timezone: String? = nil, alerting_enabled: Bool? = nil, alert_email_addresses: [String]? = nil, alert_on_failed_status: Bool? = nil, alert_on_error_status: Bool? = nil, alert_on_passed_status: Bool? = nil, alert_on_cancelled_status: Bool? = nil, change_request_trigger_is_enabled: Bool? = nil, change_request_trigger_target_branch: String? = nil, dbt_cloud_trigger_is_enabled: Bool? = nil, dbt_cloud_trigger_job_id: Int64? = nil, dbt_cloud_trigger_user_attribute_id: String? = nil, webhook_secret: String? = nil, assert_validator_config_is_enabled: Bool? = nil, assert_validator_config_concurrency: Int64? = nil, assert_validator_config_selectors: [String]? = nil, assert_validator_config_exclusions: [String]? = nil, content_validator_config_is_enabled: Bool? = nil, content_validator_config_exclude_personal: Bool? = nil, content_validator_config_incremental: Bool? = nil, content_validator_config_exclude_folders: [String]? = nil, content_validator_config_include_folders: [String]? = nil, content_validator_config_selectors: [String]? = nil, content_validator_config_exclusions: [String]? = nil, lookml_validator_config_is_enabled: Bool? = nil, lookml_validator_config_severity: String? = nil, lookml_validator_config_timeout: Int64? = nil, style_validator_config_is_enabled: Bool? = nil, style_validator_config_incremental: Bool? = nil, sql_validator_config_is_enabled: Bool? = nil, sql_validator_config_fail_fast: Bool? = nil, sql_validator_config_incremental: Bool? = nil, sql_validator_config_ignore_hidden: Bool? = nil, sql_validator_config_query_concurrency: Int64? = nil, sql_validator_config_chunk_size: Int64? = nil, sql_validator_config_selectors: [String]? = nil, sql_validator_config_exclusions: [String]? = nil, upstream_trigger_is_enabled: Bool? = nil, upstream_projects: [String]? = nil, user_attributes: [UserAttributeOverride]? = nil) {
         self._name = name.map(AnyString.init)
         self.schedule_trigger_is_enabled = schedule_trigger_is_enabled
         self._schedule_trigger_crontab = schedule_trigger_crontab.map(AnyString.init)
@@ -37031,6 +37226,7 @@ public struct WriteProjectCISuite: SDKModel {
         if let v = sql_validator_config_exclusions { _sql_validator_config_exclusions = v.map { AnyString.init($0) } } else { _sql_validator_config_exclusions = nil }
         self.upstream_trigger_is_enabled = upstream_trigger_is_enabled
         if let v = upstream_projects { _upstream_projects = v.map { AnyString.init($0) } } else { _upstream_projects = nil }
+        self.user_attributes = user_attributes
     }
 
 }

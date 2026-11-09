@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 451 API models: 351 Spec, 0 Request, 74 Write, 26 Enum
+/// 452 API models: 351 Spec, 0 Request, 74 Write, 27 Enum
 
 #nullable enable
 using System;
@@ -87,6 +87,10 @@ public class Agent : SdkModel
   public string? category { get; set; } = null;
   /// <summary>Agent sources</summary>
   public Source[]? sources { get; set; } = null;
+  /// <summary>Dashboard ID associated with the agent (UDD numeric or slug ID, or model::dashboard LookML dashboard ID)</summary>
+  public string? dashboard_id { get; set; } = null;
+  /// <summary>LookML project name associated with the dashboard, used to disambiguate LookML dashboards across projects</summary>
+  public string? project_name { get; set; } = null;
   /// <summary>Has inaccessible source (read-only)</summary>
   public bool? has_inaccessible_source { get; set; } = null;
   /// <summary>Agent golden questions (read-only)</summary>
@@ -1572,6 +1576,9 @@ public class ConversationalAnalyticsChatRequest : SdkModel
   public string conversation_id { get; set; } = "";
   /// <summary>The text content of the most recent message in the conversation.</summary>
   public string user_message { get; set; } = "";
+  /// <summary>Thinking mode for the agent. Defaults to "FAST" when omitted. Valid values are: "FAST", "THINKING".</summary>
+  [JsonConverter(typeof(StringEnumConverter))]
+  public ThinkingMode? thinking_mode { get; set; }
 }
 
 public class ConversationMessage : SdkModel
@@ -2670,6 +2677,8 @@ public class DBConnection : SdkModel
   public string? oauth_application_id { get; set; } = null;
   /// <summary>When true, error PDTs will be retried every regenerator cycle</summary>
   public bool? always_retry_failed_builds { get; set; } = null;
+  /// <summary>After this many consecutive failed builds of a production PDT, queries that need to build it return its last build error instead of starting another build. Set to null to use the default (3). Doesn't apply when failed PDT builds are always retried.</summary>
+  public long? pdt_build_retry_limit { get; set; } = null;
   /// <summary>Whether the connection should authenticate with the Application Default Credentials of the host environment (limited to GCP and certain dialects).</summary>
   public bool? uses_application_default_credentials { get; set; } = null;
   /// <summary>An alternative Service Account to use for querying datasets (used primarily with `uses_application_default_credentials`) (limited to GCP and certain dialects).</summary>
@@ -4988,7 +4997,10 @@ public class McpTools : SdkModel
   public bool? enable_all { get; set; } = null;
   public McpToolSetting? add_dashboard_element { get; set; }
   public McpToolSetting? add_dashboard_filter { get; set; }
+  public McpToolSetting? create_dashboard_layout { get; set; }
+  public McpToolSetting? create_git_branch { get; set; }
   public McpToolSetting? create_project_file { get; set; }
+  public McpToolSetting? delete_git_branch { get; set; }
   public McpToolSetting? delete_project_file { get; set; }
   public McpToolSetting? dev_mode { get; set; }
   public McpToolSetting? generate_embed_url { get; set; }
@@ -4997,12 +5009,14 @@ public class McpTools : SdkModel
   public McpToolSetting? get_connection_table_columns { get; set; }
   public McpToolSetting? get_connection_tables { get; set; }
   public McpToolSetting? get_connections { get; set; }
+  public McpToolSetting? get_dashboard { get; set; }
   public McpToolSetting? get_dashboards { get; set; }
   public McpToolSetting? get_dimensions { get; set; }
   public McpToolSetting? get_explore { get; set; }
   public McpToolSetting? get_explores { get; set; }
   public McpToolSetting? get_field_value_suggestions { get; set; }
   public McpToolSetting? get_filters { get; set; }
+  public McpToolSetting? get_git_branch { get; set; }
   public McpToolSetting? get_looks { get; set; }
   public McpToolSetting? get_measures { get; set; }
   public McpToolSetting? get_models { get; set; }
@@ -5013,6 +5027,7 @@ public class McpTools : SdkModel
   public McpToolSetting? health_analyze { get; set; }
   public McpToolSetting? health_pulse { get; set; }
   public McpToolSetting? health_vacuum { get; set; }
+  public McpToolSetting? list_git_branches { get; set; }
   public McpToolSetting? make_dashboard { get; set; }
   public McpToolSetting? make_look { get; set; }
   public McpToolSetting? query { get; set; }
@@ -5020,6 +5035,9 @@ public class McpTools : SdkModel
   public McpToolSetting? query_url { get; set; }
   public McpToolSetting? run_dashboard { get; set; }
   public McpToolSetting? run_look { get; set; }
+  public McpToolSetting? switch_git_branch { get; set; }
+  public McpToolSetting? update_dashboard_element { get; set; }
+  public McpToolSetting? update_dashboard_layout_component { get; set; }
   public McpToolSetting? update_project_file { get; set; }
   public McpToolSetting? validate_project { get; set; }
   public McpToolSetting? get_project_directories { get; set; }
@@ -5042,6 +5060,8 @@ public class McpToolSetting : SdkModel
   public string? category { get; set; } = null;
   /// <summary>Tool access level (read-only)</summary>
   public string? access_level { get; set; } = null;
+  /// <summary>Tools that this tool depends on (read-only)</summary>
+  public string[]? dependencies { get; set; } = null;
 }
 
 public class MergeFields : SdkModel
@@ -5643,6 +5663,8 @@ public class ProjectCISuite : SdkModel
   public bool? upstream_trigger_is_enabled { get; set; } = null;
   /// <summary>Names of upstream projects subscribed for pull request triggers</summary>
   public string[]? upstream_projects { get; set; } = null;
+  /// <summary>User attribute overrides for the CI suite</summary>
+  public UserAttributeOverride[]? user_attributes { get; set; } = null;
 }
 
 public class ProjectError : SdkModel
@@ -7082,6 +7104,15 @@ public class ThemeSettings : SdkModel
   public string? border_radius { get; set; } = null;
 }
 
+/// Thinking mode for the agent. Defaults to "FAST" when omitted. Valid values are: "FAST", "THINKING". (Enum defined in ConversationalAnalyticsChatRequest)
+public enum ThinkingMode
+{
+  [EnumMember(Value = "FAST")]
+  FAST,
+  [EnumMember(Value = "THINKING")]
+  THINKING
+}
+
 public class Timezone : SdkModel
 {
   /// <summary>Timezone (read-only)</summary>
@@ -7634,6 +7665,10 @@ public class WriteAgent : SdkModel
   public string? category { get; set; } = null;
   /// <summary>Agent sources</summary>
   public Source[]? sources { get; set; } = null;
+  /// <summary>Dashboard ID associated with the agent (UDD numeric or slug ID, or model::dashboard LookML dashboard ID)</summary>
+  public string? dashboard_id { get; set; } = null;
+  /// <summary>LookML project name associated with the dashboard, used to disambiguate LookML dashboards across projects</summary>
+  public string? project_name { get; set; } = null;
   /// <summary>IDs of golden queries linked to the agent</summary>
   public long[]? golden_query_ids { get; set; } = null;
   public Context? context { get; set; }
@@ -8304,6 +8339,8 @@ public class WriteDBConnection : SdkModel
   public string? oauth_application_id { get; set; } = null;
   /// <summary>When true, error PDTs will be retried every regenerator cycle</summary>
   public bool? always_retry_failed_builds { get; set; } = null;
+  /// <summary>After this many consecutive failed builds of a production PDT, queries that need to build it return its last build error instead of starting another build. Set to null to use the default (3). Doesn't apply when failed PDT builds are always retried.</summary>
+  public long? pdt_build_retry_limit { get; set; } = null;
   /// <summary>Whether the connection should authenticate with the Application Default Credentials of the host environment (limited to GCP and certain dialects).</summary>
   public bool? uses_application_default_credentials { get; set; } = null;
   /// <summary>An alternative Service Account to use for querying datasets (used primarily with `uses_application_default_credentials`) (limited to GCP and certain dialects).</summary>
@@ -8672,228 +8709,273 @@ public class WriteMcpTools : SdkModel
   public bool? enable_all { get; set; } = null;
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? add_dashboard_element { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? add_dashboard_filter { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
+  /// </summary>
+  public WriteMcpToolSetting? create_dashboard_layout { get; set; }
+  /// <summary>
+  /// Dynamic writeable type for McpToolSetting removes:
+  /// description, category, access_level, dependencies
+  /// </summary>
+  public WriteMcpToolSetting? create_git_branch { get; set; }
+  /// <summary>
+  /// Dynamic writeable type for McpToolSetting removes:
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? create_project_file { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
+  /// </summary>
+  public WriteMcpToolSetting? delete_git_branch { get; set; }
+  /// <summary>
+  /// Dynamic writeable type for McpToolSetting removes:
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? delete_project_file { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? dev_mode { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? generate_embed_url { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? get_connection_databases { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? get_connection_schemas { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? get_connection_table_columns { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? get_connection_tables { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? get_connections { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
+  /// </summary>
+  public WriteMcpToolSetting? get_dashboard { get; set; }
+  /// <summary>
+  /// Dynamic writeable type for McpToolSetting removes:
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? get_dashboards { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? get_dimensions { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? get_explore { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? get_explores { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? get_field_value_suggestions { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? get_filters { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
+  /// </summary>
+  public WriteMcpToolSetting? get_git_branch { get; set; }
+  /// <summary>
+  /// Dynamic writeable type for McpToolSetting removes:
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? get_looks { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? get_measures { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? get_models { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? get_parameters { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? get_project_file { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? get_project_files { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? get_projects { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? health_analyze { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? health_pulse { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? health_vacuum { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
+  /// </summary>
+  public WriteMcpToolSetting? list_git_branches { get; set; }
+  /// <summary>
+  /// Dynamic writeable type for McpToolSetting removes:
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? make_dashboard { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? make_look { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? query { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? query_sql { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? query_url { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? run_dashboard { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? run_look { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
+  /// </summary>
+  public WriteMcpToolSetting? switch_git_branch { get; set; }
+  /// <summary>
+  /// Dynamic writeable type for McpToolSetting removes:
+  /// description, category, access_level, dependencies
+  /// </summary>
+  public WriteMcpToolSetting? update_dashboard_element { get; set; }
+  /// <summary>
+  /// Dynamic writeable type for McpToolSetting removes:
+  /// description, category, access_level, dependencies
+  /// </summary>
+  public WriteMcpToolSetting? update_dashboard_layout_component { get; set; }
+  /// <summary>
+  /// Dynamic writeable type for McpToolSetting removes:
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? update_project_file { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? validate_project { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? get_project_directories { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? create_project_directory { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? delete_project_directory { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? get_lookml_tests { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? run_lookml_tests { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? create_view_from_table { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? render_visualization { get; set; }
   /// <summary>
   /// Dynamic writeable type for McpToolSetting removes:
-  /// description, category, access_level
+  /// description, category, access_level, dependencies
   /// </summary>
   public WriteMcpToolSetting? render_dashboard { get; set; }
 }
 
 /// Dynamic writeable type for McpToolSetting removes:
-/// description, category, access_level
+/// description, category, access_level, dependencies
 public class WriteMcpToolSetting : SdkModel
 {
   /// <summary>Is this tool enabled</summary>
@@ -9204,6 +9286,8 @@ public class WriteProjectCISuite : SdkModel
   public bool? upstream_trigger_is_enabled { get; set; } = null;
   /// <summary>Names of upstream projects subscribed for pull request triggers</summary>
   public string[]? upstream_projects { get; set; } = null;
+  /// <summary>User attribute overrides for the CI suite</summary>
+  public UserAttributeOverride[]? user_attributes { get; set; } = null;
 }
 
 /// Dynamic writeable type for Query removes:

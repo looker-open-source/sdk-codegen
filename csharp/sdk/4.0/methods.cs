@@ -21,7 +21,7 @@
 /// SOFTWARE.
 ///
 
-/// 537 API methods
+/// 538 API methods
 
 #nullable enable
 using System;
@@ -3812,6 +3812,8 @@ namespace Looker.SDK.API40
   /// <param name="not_owned_by">Filter out the agents owned by the user passed at the :created_by_user_id params</param>
   /// <param name="deleted">Filter on soft deleted agents.</param>
   /// <param name="primary_agent_id">Match workflow agents with a particular primary agent (parent). Pass "null" to find agents with no primary agent.</param>
+  /// <param name="dashboard_id">Match or verify dashboard id for dashboard category agents.</param>
+  /// <param name="project_name">LookML project name, used to disambiguate dashboards with the same model and dashboard name across projects.</param>
   public async Task<SdkResponse<Agent[], Exception>> search_agents(
     string? id = null,
     string? name = null,
@@ -3826,6 +3828,8 @@ namespace Looker.SDK.API40
     bool? not_owned_by = null,
     bool? deleted = null,
     string? primary_agent_id = null,
+    string? dashboard_id = null,
+    string? project_name = null,
     ITransportSettings? options = null)
 {  
     return await AuthRequest<Agent[], Exception>(HttpMethod.Get, "/agents/search", new Values {
@@ -3841,7 +3845,9 @@ namespace Looker.SDK.API40
       { "filter_or", filter_or },
       { "not_owned_by", not_owned_by },
       { "deleted", deleted },
-      { "primary_agent_id", primary_agent_id }},null,options);
+      { "primary_agent_id", primary_agent_id },
+      { "dashboard_id", dashboard_id },
+      { "project_name", project_name }},null,options);
   }
 
   /// ### Create Agent
@@ -4104,7 +4110,7 @@ namespace Looker.SDK.API40
   /// <param name="offset">Number of results to skip before returning. (used with limit)</param>
   /// <param name="sorts">One or more fields to sort by. Sortable fields: [:id, :name, :user_id, :agent_id, :created_at, :updated_at, :category]</param>
   /// <param name="filter_or">Combine given search criteria in a boolean OR expression</param>
-  /// <param name="category">Filter on conversation category. Can be a comma-separated list of categories.</param>
+  /// <param name="category">Filter on conversation category. If omitted, only Explore conversations are returned. Pass 'explore' for Explore conversations, 'dashboard' for dashboard conversations, or a comma-separated list such as 'explore,dashboard' for both.</param>
   /// <param name="deleted">Filter on soft deleted conversations.</param>
   public async Task<SdkResponse<Conversation[], Exception>> search_conversations(
     string? id = null,
@@ -5209,6 +5215,24 @@ namespace Looker.SDK.API40
     ITransportSettings? options = null)
 {  
     return await AuthRequest<Dashboard, Exception>(HttpMethod.Post, "/dashboard_filter_state", null,body,options);
+  }
+
+  /// ### Delete Dashboard Filter State Bookmark
+  /// Removes the current user's bookmark for the given filter state GUID.
+  /// If the GUID is a shared bookmark, the caller must be able to edit the dashboard;
+  /// the bookmark is unshared (no longer listed as shared) but the filter state itself is kept.
+  ///
+  /// DELETE /dashboard_filter_state/{guid}/bookmark -> string
+  ///
+  /// <returns><c>string</c> Successfully deleted. (application/json)</returns>
+  ///
+  /// <param name="guid">GUID of the filter state</param>
+  public async Task<SdkResponse<string, Exception>> delete_dashboard_filter_state_bookmark(
+    string guid,
+    ITransportSettings? options = null)
+{  
+      guid = SdkUtils.EncodeParam(guid);
+    return await AuthRequest<string, Exception>(HttpMethod.Delete, $"/dashboard_filter_state/{guid}/bookmark", null,null,options);
   }
 
   #endregion Dashboard: Manage Dashboards

@@ -25,7 +25,7 @@
  */
 
 /**
- * 537 API methods
+ * 538 API methods
  */
 
 import type {
@@ -4950,6 +4950,23 @@ export interface ILooker40SDK extends IAPIMethods {
     body: string,
     options?: Partial<ITransportSettings>
   ): Promise<SDKResponse<IDashboard, IError | IValidationError>>;
+
+  /**
+   * ### Delete Dashboard Filter State Bookmark
+   * Removes the current user's bookmark for the given filter state GUID.
+   * If the GUID is a shared bookmark, the caller must be able to edit the dashboard;
+   * the bookmark is unshared (no longer listed as shared) but the filter state itself is kept.
+   *
+   * DELETE /dashboard_filter_state/{guid}/bookmark -> string
+   *
+   * @param guid GUID of the filter state
+   * @param options one-time API call overrides
+   *
+   */
+  delete_dashboard_filter_state_bookmark(
+    guid: string,
+    options?: Partial<ITransportSettings>
+  ): Promise<SDKResponse<string, IError>>;
 
   //#endregion Dashboard: Manage Dashboards
 
