@@ -151,11 +151,6 @@ export class NodeSession extends AuthSession {
     // for linty freshness, always logout sudo if set
     await this.sudoLogout();
 
-    if (newId !== this.sudoId) {
-      // Assign new requested sudo id
-      this.sudoId = newId || '';
-    }
-
     if (!this._authToken.isActive()) {
       this.reset();
       // only retain client API3 credentials for the lifetime of the login request
@@ -184,6 +179,11 @@ export class NodeSession extends AuthSession {
         )
       );
       this._authToken.setToken(token);
+    }
+
+    if (newId !== this.sudoId) {
+      // Assign new requested sudo id after reset() above, which clears it
+      this.sudoId = newId || '';
     }
 
     if (this.sudoId) {
