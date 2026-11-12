@@ -635,6 +635,164 @@ func TestAuthSession_Do_Timeout(t *testing.T) {
 			t.Errorf("Do() call did not error with context.DeadlineExceeded, got=%v", err)
 		}
 	})
+
+	t.Run("Do() follows Context set in AuthSession config", func(t *testing.T) {
+		mux := http.NewServeMux()
+		setupApi40Login(mux, foreverValidTestToken, http.StatusOK)
+		server := httptest.NewServer(mux)
+		defer server.Close()
+
+		mux.HandleFunc("/api"+apiVersion+path, func(w http.ResponseWriter, r *http.Request) {
+			time.Sleep(4 * time.Second)
+		})
+
+		ctx, cncl := context.WithTimeout(context.Background(), 1*time.Second)
+		defer cncl()
+
+		session := NewAuthSession(ApiSettings{
+			BaseUrl:    server.URL,
+			ApiVersion: apiVersion,
+			Context:    ctx,
+		})
+
+		err := session.Do(nil, "GET", apiVersion, path, nil, nil, nil)
+
+		if err == nil {
+			t.Errorf("Do() call did not error/timeout")
+		} else if !errors.Is(err, context.DeadlineExceeded) {
+			t.Errorf("Do() call did not error with context.DeadlineExceeded, got=%v", err)
+		}
+	})
+
+	t.Run("Do() follows Context set in Do()'s options", func(t *testing.T) {
+		mux := http.NewServeMux()
+		setupApi40Login(mux, foreverValidTestToken, http.StatusOK)
+		server := httptest.NewServer(mux)
+		defer server.Close()
+
+		mux.HandleFunc("/api"+apiVersion+path, func(w http.ResponseWriter, r *http.Request) {
+			time.Sleep(4 * time.Second)
+		})
+
+		ctx, cncl := context.WithTimeout(context.Background(), 1*time.Second)
+		defer cncl()
+
+		session := NewAuthSession(ApiSettings{
+			BaseUrl:    server.URL,
+			ApiVersion: apiVersion,
+		})
+
+		options := ApiSettings{
+			Context: ctx,
+		}
+
+		err := session.Do(nil, "GET", apiVersion, path, nil, nil, &options)
+
+		if err == nil {
+			t.Errorf("Do() call did not error/timeout")
+		} else if !errors.Is(err, context.DeadlineExceeded) {
+			t.Errorf("Do() call did not error with context.DeadlineExceeded, got=%v", err)
+		}
+	})
+
+	t.Run("Timeout set in Do()'s options overrides Authsession", func(t *testing.T) {
+		mux := http.NewServeMux()
+		setupApi40Login(mux, foreverValidTestToken, http.StatusOK)
+		server := httptest.NewServer(mux)
+		defer server.Close()
+
+		mux.HandleFunc("/api"+apiVersion+path, func(w http.ResponseWriter, r *http.Request) {
+			time.Sleep(4 * time.Second)
+		})
+
+		session := NewAuthSession(ApiSettings{
+			BaseUrl:    server.URL,
+			ApiVersion: apiVersion,
+			Timeout:    5,
+		})
+
+		options := ApiSettings{
+			Timeout: 1, //seconds
+		}
+
+		err := session.Do(nil, "GET", apiVersion, path, nil, nil, &options)
+
+		if err == nil {
+			t.Errorf("Do() call did not error/timeout")
+		} else if !errors.Is(err, context.DeadlineExceeded) {
+			t.Errorf("Do() call did not error with context.DeadlineExceeded, got=%v", err)
+		}
+	})
+
+	t.Run("Parent context timeout propagates to timeout child context", func(t *testing.T) {
+		mux := http.NewServeMux()
+		setupApi40Login(mux, foreverValidTestToken, http.StatusOK)
+		server := httptest.NewServer(mux)
+		defer server.Close()
+
+		mux.HandleFunc("/api"+apiVersion+path, func(w http.ResponseWriter, r *http.Request) {
+			time.Sleep(4 * time.Second)
+		})
+
+		ctx, cncl := context.WithTimeout(context.Background(), 1*time.Second)
+		defer cncl()
+
+		session := NewAuthSession(ApiSettings{
+			BaseUrl:    server.URL,
+			ApiVersion: apiVersion,
+			Context:    ctx,
+			Timeout:    5,
+		})
+
+		options := ApiSettings{
+			Timeout: 5,
+		}
+
+		err := session.Do(nil, "GET", apiVersion, path, nil, nil, &options)
+
+		if err == nil {
+			t.Errorf("Do() call did not error/timeout")
+		} else if !errors.Is(err, context.DeadlineExceeded) {
+			t.Errorf("Do() call did not error with context.DeadlineExceeded, got=%v", err)
+		}
+	})
+
+	t.Run("Parent context set in options overrides config ctx and propagates to child timout", func(t *testing.T) {
+		mux := http.NewServeMux()
+		setupApi40Login(mux, foreverValidTestToken, http.StatusOK)
+		server := httptest.NewServer(mux)
+		defer server.Close()
+
+		mux.HandleFunc("/api"+apiVersion+path, func(w http.ResponseWriter, r *http.Request) {
+			time.Sleep(4 * time.Second)
+		})
+
+		octx, ocncl := context.WithTimeout(context.Background(), 1*time.Second)
+		defer ocncl()
+
+		sctx, scncl := context.WithTimeout(context.Background(), 5*time.Second)
+		defer scncl()
+
+		session := NewAuthSession(ApiSettings{
+			BaseUrl:    server.URL,
+			ApiVersion: apiVersion,
+			Context:    sctx,
+			Timeout:    5,
+		})
+
+		options := ApiSettings{
+			Timeout: 5,
+			Context: octx,
+		}
+
+		err := session.Do(nil, "GET", apiVersion, path, nil, nil, &options)
+
+		if err == nil {
+			t.Errorf("Do() call did not error/timeout")
+		} else if !errors.Is(err, context.DeadlineExceeded) {
+			t.Errorf("Do() call did not error with context.DeadlineExceeded, got=%v", err)
+		}
+	})
 }
 
 func TestSetQuery(t *testing.T) {

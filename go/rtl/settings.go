@@ -1,11 +1,13 @@
 package rtl
 
 import (
+	"context"
 	"fmt"
-	"gopkg.in/ini.v1"
 	"os"
 	"strconv"
 	"strings"
+
+	"gopkg.in/ini.v1"
 )
 
 var defaultSectionName string = "Looker"
@@ -20,6 +22,7 @@ type ApiSettings struct {
 	ClientSecret string `ini:"client_secret"`
 	ApiVersion   string `ini:"api_version"`
 	Headers      map[string]string
+	Context      context.Context
 }
 
 var defaultSettings ApiSettings = ApiSettings{
