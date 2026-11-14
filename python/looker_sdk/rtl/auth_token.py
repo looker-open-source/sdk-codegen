@@ -74,9 +74,9 @@ class AuthToken:
         self.refresh_token: str = ""
         self.token_type: str = ""
         self.expires_in: int = 0
-        self.expires_at = datetime.datetime.now() + datetime.timedelta(
-            seconds=-self.lag_time
-        )
+        self.expires_at = datetime.datetime.now(
+            datetime.timezone.utc
+        ) + datetime.timedelta(seconds=-self.lag_time)
         if token is None:
             token = AccessToken()
         self.set_token(token)
@@ -84,19 +84,29 @@ class AuthToken:
     def set_token(self, token: AccessToken):
         """Assign the token and set its expiration."""
         self.access_token = token.access_token or ""
-        if isinstance(token, AccessToken):
-            self.refresh_token = token.refresh_token or ""
+        if isinstance(token, AccessToken) and token.refresh_token:
+            self.refresh_token = token.refresh_token
         self.token_type = token.token_type or ""
         self.expires_in = token.expires_in or 0
 
         lag = datetime.timedelta(seconds=-self.lag_time)
         if token.access_token and token.expires_in:
             lag = datetime.timedelta(seconds=token.expires_in - self.lag_time)
-        self.expires_at = datetime.datetime.now() + lag
+        self.expires_at = datetime.datetime.now(datetime.timezone.utc) + lag
+
+    def reset(self) -> None:
+        """Invalidate the current access token while preserving any refresh token."""
+        self.access_token = ""
+        self.expires_in = 0
+        self.expires_at = datetime.datetime.now(
+            datetime.timezone.utc
+        ) + datetime.timedelta(seconds=-self.lag_time)
 
     @property
     def is_active(self) -> bool:
         """True if authentication token has not timed out"""
-        if not self.expires_at:
+        if not self.access_token or not self.expires_at:
             return False
-        return self.expires_at > datetime.datetime.now()
+        if self.expires_at.tzinfo is None:
+            return self.expires_at > datetime.datetime.now()
+        return self.expires_at > datetime.datetime.now(datetime.timezone.utc)

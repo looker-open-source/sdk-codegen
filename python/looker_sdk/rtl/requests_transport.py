@@ -90,6 +90,7 @@ class RequestsTransport(transport.Transport):
                 resp.ok,
                 resp.content,
                 transport.response_mode(resp.headers.get("content-type")),
+                status_code=getattr(resp, "status_code", None),
             )
             encoding = cast(
                 Optional[str], requests.utils.get_encoding_from_headers(resp.headers)

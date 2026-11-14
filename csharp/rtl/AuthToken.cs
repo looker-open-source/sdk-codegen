@@ -41,7 +41,7 @@ namespace Looker.RTL
 
         public string? refresh_token { get; set; }
         // Give a 10 second expiration window to account for latency
-        public DateTime ExpiresAt { get; set; } = DateTime.Now.AddSeconds(-lagTime);
+        public DateTime ExpiresAt { get; set; } = DateTime.UtcNow.AddSeconds(-lagTime);
 
         public AuthToken() { }
 
@@ -68,7 +68,9 @@ namespace Looker.RTL
 
             expires_in = token.expires_in;
             access_token = token.access_token;
-            ExpiresAt = DateTime.Now.AddSeconds(expires_in > 0 ? expires_in - lagTime : -lagTime);
+            ExpiresAt = DateTime.UtcNow.AddSeconds(
+                access_token.IsFull() && expires_in > 0 ? expires_in - lagTime : -lagTime
+            );
         }
 
         /// <summary>
@@ -81,14 +83,17 @@ namespace Looker.RTL
             {
                 return false;
             }
-            return ExpiresAt > DateTime.Now;
+            var expiresAtUtc = ExpiresAt.Kind == DateTimeKind.Local
+                ? ExpiresAt.ToUniversalTime()
+                : ExpiresAt;
+            return expiresAtUtc > DateTime.UtcNow;
         }
 
         public AuthToken Reset()
         {
             access_token = null;
             expires_in = 0;
-            ExpiresAt = DateTime.Now.AddSeconds(-lagTime);
+            ExpiresAt = DateTime.UtcNow.AddSeconds(-lagTime);
             return this;
         }
     }

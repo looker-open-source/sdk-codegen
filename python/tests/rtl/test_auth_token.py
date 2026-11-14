@@ -20,6 +20,8 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
+import datetime
+
 from looker_sdk.rtl import auth_token
 
 
@@ -68,3 +70,26 @@ def test_lag_time_is_used():
 
     assert actual.expires_in == 11
     assert actual.is_active is True
+
+
+def test_uses_utc_for_expiration_and_reset_preserves_refresh_token():
+    """Confirm AuthToken uses timezone-aware UTC datetimes and reset preserves refresh_token."""
+    default_token = auth_token.AuthToken()
+    assert default_token.expires_at.tzinfo == datetime.timezone.utc
+    assert default_token.is_active is False
+
+    active = auth_token.AuthToken(
+        auth_token.AccessToken(
+            access_token="utc-token",
+            token_type="Bearer",
+            expires_in=3600,
+            refresh_token="refresh-me",
+        )
+    )
+    assert active.expires_at.tzinfo == datetime.timezone.utc
+    assert active.is_active is True
+
+    active.reset()
+    assert active.expires_at.tzinfo == datetime.timezone.utc
+    assert active.is_active is False
+    assert active.refresh_token == "refresh-me"

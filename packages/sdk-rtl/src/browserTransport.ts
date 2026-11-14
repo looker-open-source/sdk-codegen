@@ -285,7 +285,11 @@ export class BrowserTransport extends BaseTransport {
           error = { message: `Request failed: ${error}` };
         }
       }
-      const response: SDKResponse<TSuccess, TError> = { ok: false, error };
+      const response: SDKResponse<TSuccess, TError> = {
+        ok: false,
+        error,
+        statusCode: res.statusCode,
+      };
       return response;
     }
 

@@ -71,6 +71,11 @@ class AuthSession:
     def is_authenticated(self) -> bool:
         return self._is_authenticated(self.token)
 
+    def reset(self) -> None:
+        """Invalidate cached token(s) without clearing active sudo user or refresh token."""
+        self.token.reset()
+        self.sudo_token.reset()
+
     def _get_sudo_token(
         self, transport_options: transport.TransportOptions
     ) -> auth_token.AuthToken:

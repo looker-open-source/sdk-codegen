@@ -3,8 +3,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
-using Microsoft.VisualBasic.CompilerServices;
-using Xunit.Sdk;
 
 namespace Looker.RTL
 {
@@ -134,7 +132,7 @@ namespace Looker.RTL
 
             if (!_authToken.IsActive())
             {
-                Reset();
+                InvalidateTokens();
                 // only retain client API3 credentials for the lifetime of the login request
                 var section = Settings.ReadConfig();
                 var clientId = section["client_id"].ToString();
@@ -235,13 +233,13 @@ namespace Looker.RTL
 
         public async Task<object> GetToken()
         {
-            if (!IsAuthenticated()) await Login();
+            if (!IsAuthenticated()) await Login(SudoId);
             return ActiveToken;
         }
 
         public bool IsSudo()
         {
-            return SudoId.IsFull();
+            return SudoId.IsFull() && _sudoToken.IsActive();
         }
 
         public async Task<object> Login(string sudoId = null)
@@ -258,11 +256,19 @@ namespace Looker.RTL
             return ActiveToken;
         }
 
+        /// <summary>
+        /// Invalidates cached tokens without clearing the active SudoId
+        /// </summary>
+        public void InvalidateTokens()
+        {
+            _authToken.Reset();
+            _sudoToken.Reset();
+        }
+
         public void Reset()
         {
             SudoId = null;
-            _authToken.Reset();
-            _sudoToken.Reset();
+            InvalidateTokens();
         }
     }
 }
