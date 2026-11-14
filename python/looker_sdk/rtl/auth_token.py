@@ -107,6 +107,7 @@ class AuthToken:
         """True if authentication token has not timed out"""
         if not self.access_token or not self.expires_at:
             return False
+        now = datetime.datetime.now(datetime.timezone.utc)
         if self.expires_at.tzinfo is None:
-            return self.expires_at > datetime.datetime.now()
-        return self.expires_at > datetime.datetime.now(datetime.timezone.utc)
+            return self.expires_at > now.replace(tzinfo=None)
+        return self.expires_at > now

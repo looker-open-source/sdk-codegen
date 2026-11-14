@@ -30,6 +30,9 @@ import java.nio.charset.StandardCharsets
 
 @Suppress("UNCHECKED_CAST")
 open class APIMethods(val authSession: AuthSession) {
+    companion object {
+        private val AUTH_ENDPOINT_REGEX = Regex("^/?(login(/.*)?|logout)$", RegexOption.IGNORE_CASE)
+    }
 
     val authRequest = authSession::authenticate
 
@@ -42,7 +45,7 @@ open class APIMethods(val authSession: AuthSession) {
     }
 
     fun isAuthEndpoint(path: String): Boolean =
-        Regex("^/?(login(/.*)?|logout)$", RegexOption.IGNORE_CASE).matches(path)
+        AUTH_ENDPOINT_REGEX.matches(path)
 
     inline fun <reified T : Any> request(
         method: HttpMethod,

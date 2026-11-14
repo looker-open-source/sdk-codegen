@@ -93,3 +93,20 @@ def test_uses_utc_for_expiration_and_reset_preserves_refresh_token():
     assert active.expires_at.tzinfo == datetime.timezone.utc
     assert active.is_active is False
     assert active.refresh_token == "refresh-me"
+
+    # Naive expires_at is also evaluated against UTC
+    naive_utc_token = auth_token.AuthToken(
+        auth_token.AccessToken(
+            access_token="naive-utc-token",
+            token_type="Bearer",
+            expires_in=3600,
+        )
+    )
+    naive_utc_token.expires_at = datetime.datetime.now(
+        datetime.timezone.utc
+    ).replace(tzinfo=None) + datetime.timedelta(seconds=60)
+    assert naive_utc_token.is_active is True
+    naive_utc_token.expires_at = datetime.datetime.now(
+        datetime.timezone.utc
+    ).replace(tzinfo=None) - datetime.timedelta(seconds=1)
+    assert naive_utc_token.is_active is False
