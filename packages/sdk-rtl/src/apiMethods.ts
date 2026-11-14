@@ -32,7 +32,7 @@ import type {
   SDKResponse,
   Values,
 } from './transport';
-import { agentPrefix, sdkOk } from './transport';
+import { StatusCode, agentPrefix, sdkOk } from './transport';
 import type { IAuthSession } from './authSession';
 
 /**
@@ -161,6 +161,24 @@ export class APIMethods implements IAPIMethods {
     return `${base}${path}`; // path was relative
   }
 
+  private isAuthEndpoint(path: string): boolean {
+    return /^\/?(login(\/.*)?|logout)$/i.test(path);
+  }
+
+  private invalidateAuthSession(): boolean {
+    if (typeof this.authSession?.reset !== 'function') {
+      return false;
+    }
+    const savedSudoId = this.authSession.sudoId;
+    this.authSession.reset();
+    if (savedSudoId) {
+      this.authSession.sudoId = savedSudoId;
+    }
+    return typeof this.authSession.isAuthenticated === 'function'
+      ? !this.authSession.isAuthenticated()
+      : false;
+  }
+
   /**
    *
    * A helper method to add authentication to an API request for deserialization
@@ -182,15 +200,32 @@ export class APIMethods implements IAPIMethods {
     const authenticator = (init: any) => {
       return this.authSession.authenticate(init);
     };
-    path = this.makePath(path, options, authenticator);
-    return this.authSession.transport.request<TSuccess, TError>(
+    const fullPath = this.makePath(path, options, authenticator);
+    let response = await this.authSession.transport.request<TSuccess, TError>(
       method,
-      path,
+      fullPath,
       queryParams,
       body,
       authenticator,
       options
     );
+    if (!response.ok && response.statusCode === StatusCode.Unauthorized) {
+      const canRetryAuth = this.invalidateAuthSession();
+      if (canRetryAuth && !this.isAuthEndpoint(path)) {
+        response = await this.authSession.transport.request<TSuccess, TError>(
+          method,
+          fullPath,
+          queryParams,
+          body,
+          authenticator,
+          options
+        );
+        if (!response.ok && response.statusCode === StatusCode.Unauthorized) {
+          this.invalidateAuthSession();
+        }
+      }
+    }
+    return response;
   }
 
   /**
@@ -214,16 +249,35 @@ export class APIMethods implements IAPIMethods {
     const authenticator = (init: any) => {
       return this.authSession.authenticate(init);
     };
-    path = this.makePath(path, options, authenticator);
+    const fullPath = this.makePath(path, options, authenticator);
     return this.authSession.transport.stream<T>(
-      callback,
+      async (response: Response) => {
+        if (response.status === StatusCode.Unauthorized) {
+          const canRetryAuth = this.invalidateAuthSession();
+          if (canRetryAuth && !this.isAuthEndpoint(path)) {
+            return this.authSession.transport.stream<T>(
+              async (retryResponse: Response) => {
+                if (retryResponse.status === StatusCode.Unauthorized) {
+                  this.invalidateAuthSession();
+                }
+                return callback(retryResponse);
+              },
+              method,
+              fullPath,
+              queryParams,
+              body,
+              authenticator,
+              options
+            );
+          }
+        }
+        return callback(response);
+      },
       method,
-      path,
+      fullPath,
       queryParams,
       body,
-      (init: any) => {
-        return this.authSession.authenticate(init);
-      },
+      authenticator,
       options
     );
   }

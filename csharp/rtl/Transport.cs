@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Looker.RTL
@@ -62,13 +63,15 @@ namespace Looker.RTL
     public interface ISdkResponse<TSuccess, TError>
     {
         bool Ok { get; }
+        HttpStatusCode StatusCode { get; set; }
         TSuccess Value { get; set; }
         TError Error { get; set; }
     }
 
     public struct SdkResponse<TSuccess, TError> : ISdkResponse<TSuccess, TError>
     {
-        public bool Ok => Value != null;
+        public bool Ok => Error == null && Value != null;
+        public HttpStatusCode StatusCode { get; set; }
         public TSuccess Value { get; set; }
         public TError Error { get; set; }
     }
@@ -294,34 +297,170 @@ namespace Looker.RTL
             return result;
         }
 
+        private static TError BuildError<TError>(IRawResponse response, Exception ex = null)
+            where TError : class
+        {
+            if (ex != null)
+            {
+                if (ex is TError typedEx) return typedEx;
+                if (typeof(TError) == typeof(SdkError) || typeof(TError) == typeof(Exception))
+                {
+                    return new SdkError(ex.Message, response.StatusCode) as TError;
+                }
+
+                if (typeof(TError) == typeof(string))
+                {
+                    return ex.Message as TError;
+                }
+            }
+
+            var bodyText = response.Body switch
+            {
+                byte[] bytes => Encoding.UTF8.GetString(bytes),
+                null => "",
+                _ => response.Body.ToString() ?? ""
+            };
+
+            string message = null;
+            string docUrl = null;
+            if (bodyText.IsFull() &&
+                (response.ContentType?.StartsWith("application/json", StringComparison.OrdinalIgnoreCase) == true ||
+                 bodyText.TrimStart().StartsWith("{")))
+            {
+                try
+                {
+                    var jObj = JObject.Parse(bodyText);
+                    message = jObj["message"]?.ToString();
+                    docUrl = jObj["documentation_url"]?.ToString();
+                }
+                catch
+                {
+                    // Not a JSON object; fall back to raw bodyText
+                }
+            }
+
+            var fallbackMessage = bodyText.IsFull()
+                ? bodyText
+                : $"{(int)response.StatusCode} {response.StatusMessage}".Trim();
+            var finalMessage = message.IsFull() ? message : fallbackMessage;
+
+            if (typeof(TError) == typeof(Exception) || typeof(TError) == typeof(SdkError))
+            {
+                return new SdkError(finalMessage, response.StatusCode, docUrl) as TError;
+            }
+
+            if (typeof(TError) == typeof(string))
+            {
+                return finalMessage as TError;
+            }
+
+            if (bodyText.IsFull())
+            {
+                try
+                {
+                    var parsed = JsonConvert.DeserializeObject<TError>(bodyText);
+                    if (parsed != null) return parsed;
+                }
+                catch
+                {
+                    // Fall through
+                }
+            }
+
+            return new SdkError(finalMessage, response.StatusCode, docUrl) as TError;
+        }
+
         public static SdkResponse<TSuccess, TError> ParseResponse<TSuccess, TError>(IRawResponse response)
             where TSuccess : class where TError : class
         {
-            if (response.Body is Exception)
+            if (response.Body is Exception ex)
             {
-                return new SdkResponse<TSuccess, TError> { Error = response.Body as TError};
+                return new SdkResponse<TSuccess, TError>
+                {
+                    StatusCode = response.StatusCode,
+                    Error = BuildError<TError>(response, ex)
+                };
+            }
+
+            if (!response.Ok)
+            {
+                return new SdkResponse<TSuccess, TError>
+                {
+                    StatusCode = response.StatusCode,
+                    Error = BuildError<TError>(response)
+                };
             }
 
             switch (SdkUtils.ResponseMode(response.ContentType))
             {
                 case ResponseMode.Binary:
-                    return new SdkResponse<TSuccess, TError> {Value = response.Body as TSuccess};
-                case ResponseMode.String:
-                    if (response.ContentType.StartsWith("application/json"))
+                    if (typeof(TSuccess) == typeof(string) && response.Body is byte[] binBytes)
                     {
                         return new SdkResponse<TSuccess, TError>
                         {
-                            Value = JsonConvert.DeserializeObject<TSuccess>(response.Body.ToString())
+                            StatusCode = response.StatusCode,
+                            Value = Encoding.UTF8.GetString(binBytes) as TSuccess
                         };
                     }
-                    else
-                    {
-                        return new SdkResponse<TSuccess, TError> {Value = response.Body.ToString() as TSuccess};
-                    }
-                case ResponseMode.Unknown:
+
                     return new SdkResponse<TSuccess, TError>
                     {
-                        Error = JsonConvert.DeserializeObject<TError>(response.Body.ToString())
+                        StatusCode = response.StatusCode,
+                        Value = response.Body as TSuccess
+                    };
+                case ResponseMode.String:
+                    var strBody = response.Body?.ToString() ?? "";
+                    if (typeof(TSuccess) == typeof(string))
+                    {
+                        return new SdkResponse<TSuccess, TError>
+                        {
+                            StatusCode = response.StatusCode,
+                            Value = strBody as TSuccess
+                        };
+                    }
+
+                    if (response.ContentType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase))
+                    {
+                        try
+                        {
+                            return new SdkResponse<TSuccess, TError>
+                            {
+                                StatusCode = response.StatusCode,
+                                Value = JsonConvert.DeserializeObject<TSuccess>(strBody)
+                            };
+                        }
+                        catch (Exception parseEx)
+                        {
+                            return new SdkResponse<TSuccess, TError>
+                            {
+                                StatusCode = response.StatusCode,
+                                Error = BuildError<TError>(response, parseEx)
+                            };
+                        }
+                    }
+
+                    return new SdkResponse<TSuccess, TError>
+                    {
+                        StatusCode = response.StatusCode,
+                        Value = strBody as TSuccess
+                    };
+                case ResponseMode.Unknown:
+                    if (typeof(TSuccess) == typeof(string))
+                    {
+                        var unknownText = response.Body is byte[] unknownBytes
+                            ? Encoding.UTF8.GetString(unknownBytes)
+                            : response.Body?.ToString() ?? "";
+                        return new SdkResponse<TSuccess, TError>
+                        {
+                            StatusCode = response.StatusCode,
+                            Value = unknownText as TSuccess
+                        };
+                    }
+
+                    return new SdkResponse<TSuccess, TError>
+                    {
+                        StatusCode = response.StatusCode,
+                        Value = response.Body as TSuccess
                     };
                 default:
                     throw new ArgumentOutOfRangeException($"Unrecognized Content Type {response.ContentType}");

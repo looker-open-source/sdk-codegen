@@ -123,6 +123,111 @@ func TestAuthSession_Do_Authorization(t *testing.T) {
 			t.Errorf("Set Authorization Headers not correct, got= %v wanted= %v", recievedAuthHeaders, expectedAuthHeaders)
 		}
 	})
+
+	t.Run("Do() invalidates cached token and retries once on 401 Unauthorized", func(t *testing.T) {
+		mux := http.NewServeMux()
+		server := httptest.NewServer(mux)
+		defer server.Close()
+
+		loginCount := 0
+		receivedAuthHeaders := []string{}
+		receivedBodies := []string{}
+
+		mux.HandleFunc("/api/4.0/login", func(w http.ResponseWriter, r *http.Request) {
+			loginCount++
+			w.Header().Set("Content-Type", "application/json")
+			tok := AccessToken{
+				AccessToken: fmt.Sprintf("token_%d", loginCount),
+				ExpiresIn:   3600,
+				TokenType:   "Bearer",
+			}
+			s, _ := json.Marshal(tok)
+			fmt.Fprint(w, string(s))
+		})
+
+		mux.HandleFunc("/api"+apiVersion+path, func(w http.ResponseWriter, r *http.Request) {
+			authHeader := r.Header.Get("Authorization")
+			receivedAuthHeaders = append(receivedAuthHeaders, authHeader)
+			buf := make([]byte, 64)
+			n, _ := r.Body.Read(buf)
+			receivedBodies = append(receivedBodies, string(buf[:n]))
+			if authHeader == "Bearer token_1" {
+				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(http.StatusUnauthorized)
+				fmt.Fprint(w, `{"message":"Requires authentication."}`)
+				return
+			}
+			w.WriteHeader(http.StatusOK)
+			fmt.Fprint(w, "recovered")
+		})
+
+		session := NewAuthSession(ApiSettings{
+			BaseUrl:    server.URL,
+			ApiVersion: "4.0",
+		})
+
+		var r string
+		err := session.Do(&r, "POST", apiVersion, path, nil, "payload-body", nil)
+		if err != nil {
+			t.Fatalf("Do() call failed after 401 retry: %v", err)
+		}
+		if r != "recovered" {
+			t.Errorf("unexpected response: got=%q want=%q", r, "recovered")
+		}
+		if loginCount != 2 {
+			t.Errorf("expected 2 login calls, got=%d", loginCount)
+		}
+		expectedHeaders := []string{"Bearer token_1", "Bearer token_2"}
+		if !reflect.DeepEqual(receivedAuthHeaders, expectedHeaders) {
+			t.Errorf("unexpected Authorization headers: got=%v want=%v", receivedAuthHeaders, expectedHeaders)
+		}
+		expectedBodies := []string{"payload-body", "payload-body"}
+		if !reflect.DeepEqual(receivedBodies, expectedBodies) {
+			t.Errorf("request body not preserved on retry: got=%v want=%v", receivedBodies, expectedBodies)
+		}
+	})
+
+	t.Run("Do() does not loop infinitely on persistent 401 Unauthorized", func(t *testing.T) {
+		mux := http.NewServeMux()
+		server := httptest.NewServer(mux)
+		defer server.Close()
+
+		loginCount := 0
+		apiCount := 0
+
+		mux.HandleFunc("/api/4.0/login", func(w http.ResponseWriter, r *http.Request) {
+			loginCount++
+			w.Header().Set("Content-Type", "application/json")
+			tok := AccessToken{
+				AccessToken: fmt.Sprintf("token_%d", loginCount),
+				ExpiresIn:   3600,
+				TokenType:   "Bearer",
+			}
+			s, _ := json.Marshal(tok)
+			fmt.Fprint(w, string(s))
+		})
+
+		mux.HandleFunc("/api"+apiVersion+path, func(w http.ResponseWriter, r *http.Request) {
+			apiCount++
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusUnauthorized)
+			fmt.Fprint(w, `{"message":"Requires authentication."}`)
+		})
+
+		session := NewAuthSession(ApiSettings{
+			BaseUrl:    server.URL,
+			ApiVersion: "4.0",
+		})
+
+		var r string
+		err := session.Do(&r, "GET", apiVersion, path, nil, nil, nil)
+		if err == nil {
+			t.Fatal("expected error on persistent 401, got nil")
+		}
+		if apiCount != 2 {
+			t.Errorf("expected exactly 2 API attempts, got=%d", apiCount)
+		}
+	})
 }
 
 func TestAuthSession_Do_Parse(t *testing.T) {

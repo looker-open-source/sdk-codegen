@@ -28,6 +28,7 @@ import com.google.api.client.http.UrlEncodedContent
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.gson.JsonParser
 import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 open class AuthSession(
     open val apiSettings: ConfigurationProvider,
@@ -94,7 +95,7 @@ open class AuthSession(
         if (isIapConfigured == false) return null
 
         if (cachedIapToken != null && iapTokenExpiration != null) {
-            if (LocalDateTime.now().isBefore(iapTokenExpiration!!.minusMinutes(5))) {
+            if (LocalDateTime.now(ZoneOffset.UTC).isBefore(iapTokenExpiration!!.minusMinutes(5))) {
                 return cachedIapToken
             }
         }
@@ -160,7 +161,7 @@ open class AuthSession(
                     ?: throw RuntimeException("Could not find token in IAM JSON response")
 
                 cachedIapToken = token
-                iapTokenExpiration = LocalDateTime.now().plusMinutes(IAP_TOKEN_CACHE_MINUTES)
+                iapTokenExpiration = LocalDateTime.now(ZoneOffset.UTC).plusMinutes(IAP_TOKEN_CACHE_MINUTES)
                 token
             } finally {
                 connection.disconnect()
@@ -183,19 +184,24 @@ open class AuthSession(
      */
     open fun getToken(): AuthToken {
         if (!isAuthenticated()) {
-            return login()
+            return login(sudoId)
         }
         return activeToken()
     }
 
-    /** Reset the authentication session */
-    fun reset() {
-        sudoId = ""
+    /** Invalidate cached tokens without clearing active sudoId or refreshToken */
+    fun invalidateTokens() {
         authToken.reset()
         sudoToken.reset()
 
         cachedIapToken = null
         iapTokenExpiration = null
+    }
+
+    /** Reset the authentication session */
+    fun reset() {
+        sudoId = ""
+        invalidateTokens()
     }
 
     /**

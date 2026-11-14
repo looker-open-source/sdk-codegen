@@ -97,6 +97,7 @@ class Response:
     value: bytes
     response_mode: ResponseMode
     encoding: str = "utf-8"
+    status_code: Optional[int] = None
 
 
 _STRING_MODE = re.compile(constants.RESPONSE_STRING_MODE, re.IGNORECASE)

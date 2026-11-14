@@ -217,7 +217,7 @@ export class NodeTransport extends BaseTransport {
           error = { message: `Request failed: ${error}` };
         }
       }
-      response = { ok: false, error };
+      response = { ok: false, error, statusCode: res.statusCode };
       return response;
     }
     let result = await res.body;

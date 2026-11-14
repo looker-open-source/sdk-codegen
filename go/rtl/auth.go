@@ -10,6 +10,8 @@ import (
 	"net/url"
 	"os"
 	"reflect"
+	"strings"
+	"sync"
 	"time"
 
 	"golang.org/x/oauth2"
@@ -36,9 +38,43 @@ func (t *transportWithHeaders) RoundTrip(req *http.Request) (*http.Response, err
 	return t.Base.RoundTrip(req)
 }
 
+type resettableTokenSource struct {
+	mu  sync.Mutex
+	new func() oauth2.TokenSource
+	src oauth2.TokenSource
+}
+
+func newResettableTokenSource(factory func() oauth2.TokenSource) *resettableTokenSource {
+	return &resettableTokenSource{
+		new: factory,
+		src: factory(),
+	}
+}
+
+func (r *resettableTokenSource) Token() (*oauth2.Token, error) {
+	r.mu.Lock()
+	src := r.src
+	r.mu.Unlock()
+	return src.Token()
+}
+
+func (r *resettableTokenSource) Reset() {
+	r.mu.Lock()
+	r.src = r.new()
+	r.mu.Unlock()
+}
+
 type AuthSession struct {
-	Config ApiSettings
-	Client http.Client
+	Config      ApiSettings
+	Client      http.Client
+	tokenSource *resettableTokenSource
+}
+
+// Reset invalidates the cached OAuth2 access token so the next request re-authenticates.
+func (s *AuthSession) Reset() {
+	if s.tokenSource != nil {
+		s.tokenSource.Reset()
+	}
 }
 
 func NewAuthSession(config ApiSettings) *AuthSession {
@@ -74,16 +110,21 @@ func NewAuthSessionWithTransport(config ApiSettings, transport http.RoundTripper
 		&http.Client{Transport: appIdHeaderTransport},
 	)
 
+	tokenSource := newResettableTokenSource(func() oauth2.TokenSource {
+		return oauthConfig.TokenSource(ctx)
+	})
+
 	// Make use of oauth2 transport to handle token management
 	oauthTransport := &oauth2.Transport{
-		Source: oauthConfig.TokenSource(ctx),
+		Source: tokenSource,
 		// Will set "x-looker-appid" Header on all other requests
 		Base: appIdHeaderTransport,
 	}
 
 	return &AuthSession{
-		Config: config,
-		Client: http.Client{Transport: oauthTransport},
+		Config:      config,
+		Client:      http.Client{Transport: oauthTransport},
+		tokenSource: tokenSource,
 	}
 }
 
@@ -145,40 +186,64 @@ func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars m
 	ctx, cncl := context.WithTimeout(context.Background(), time.Second*time.Duration(timeoutInSeconds))
 	defer cncl()
 
-	// create new request
-	req, err := http.NewRequestWithContext(ctx, method, u, bytes.NewBufferString(bodyString))
+	newReq := func() (*http.Request, error) {
+		req, err := http.NewRequestWithContext(ctx, method, u, bytes.NewBufferString(bodyString))
+		if err != nil {
+			return nil, err
+		}
+
+		// set headers
+		req.Header.Set("Content-Type", contentTypeHeader)
+
+		if s.Config.AgentTag != "" {
+			req.Header.Set("User-Agent", s.Config.AgentTag)
+		}
+		if options != nil && options.AgentTag != "" {
+			req.Header.Set("User-Agent", options.AgentTag)
+		}
+
+		if s.Config.Headers != nil {
+			for key, value := range s.Config.Headers {
+				req.Header.Set(key, value)
+			}
+		}
+		if options != nil && options.Headers != nil {
+			for key, value := range options.Headers {
+				req.Header.Set(key, value)
+			}
+		}
+
+		// set query params
+		setQuery(req.URL, reqPars)
+		return req, nil
+	}
+
+	req, err := newReq()
 	if err != nil {
 		return err
 	}
-
-	// set headers
-	req.Header.Set("Content-Type", contentTypeHeader)
-
-	if s.Config.AgentTag != "" {
-		req.Header.Set("User-Agent", s.Config.AgentTag)
-	}
-	if options != nil && options.AgentTag != "" {
-		req.Header.Set("User-Agent", options.AgentTag)
-	}
-
-	if s.Config.Headers != nil {
-		for key, value := range s.Config.Headers {
-			req.Header.Set(key, value)
-		}
-	}
-	if options != nil && options.Headers != nil {
-		for key, value := range options.Headers {
-			req.Header.Set(key, value)
-		}
-	}
-
-	// set query params
-	setQuery(req.URL, reqPars)
 
 	// do the actual http call
 	res, err := s.Client.Do(req)
 	if err != nil {
 		return err
+	}
+	if res.StatusCode == http.StatusUnauthorized && s.tokenSource != nil {
+		s.Reset()
+		if !isAuthEndpoint(path) {
+			res.Body.Close()
+			retryReq, reqErr := newReq()
+			if reqErr != nil {
+				return reqErr
+			}
+			res, err = s.Client.Do(retryReq)
+			if err != nil {
+				return err
+			}
+			if res.StatusCode == http.StatusUnauthorized {
+				s.Reset()
+			}
+		}
 	}
 	defer res.Body.Close()
 
@@ -246,4 +311,9 @@ func setQuery(u *url.URL, pars map[string]interface{}) {
 		}
 	}
 	u.RawQuery = q.Encode()
+}
+
+func isAuthEndpoint(path string) bool {
+	trimmed := strings.ToLower(strings.TrimPrefix(path, "/"))
+	return trimmed == "login" || strings.HasPrefix(trimmed, "login/") || trimmed == "logout"
 }

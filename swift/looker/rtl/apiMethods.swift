@@ -55,6 +55,23 @@ open class APIMethods {
         }
     }
 
+    private func isAuthEndpoint(_ path: String) -> Bool {
+        return path.range(of: "^/?(login(/.*)?|logout)$", options: [.regularExpression, .caseInsensitive]) != nil
+    }
+
+    private func invalidateAuthSession() {
+        if let session = self.authSession as? AuthSession {
+            session.invalidateTokens()
+        } else if let session = self.authSession as? IAuthSession {
+            let savedSudoId = session.sudoId
+            session.reset()
+            if !savedSudoId.isEmpty {
+                var mutableSession = session
+                mutableSession.sudoId = savedSudoId
+            }
+        }
+    }
+
     open func authRequest<TSuccess: Codable, TError: Codable>(
         _ method: HttpMethod,
         _ path: String,
@@ -62,22 +79,41 @@ open class APIMethods {
         _ body: Any?,
         _ options: ITransportSettings?
     ) -> SDKResponse<TSuccess, TError> {
-        return self.authSession.transport.request(
+        let authenticator: Authenticator = { props -> URLRequest in
+            do {
+                let auth = try self.authSession.authenticate(props)
+                return auth
+            } catch {
+                print("Auth Error: \(error)")
+                return props
+            }
+        }
+        let response: SDKResponse<TSuccess, TError> = self.authSession.transport.request(
             method,
             path,
             queryParams,
             body,
-            { props -> URLRequest in
-                do {
-                    let auth = try self.authSession.authenticate(props)
-                    return auth
-                } catch {
-                    print("Auth Error: \(error)")
-                    return props
-                }
-            },
+            authenticator,
             options
         )
+        if case .error(let err) = response, err.code == 401 {
+            self.invalidateAuthSession()
+            if !self.isAuthEndpoint(path) && !self.authSession.isAuthenticated() {
+                let retryResponse: SDKResponse<TSuccess, TError> = self.authSession.transport.request(
+                    method,
+                    path,
+                    queryParams,
+                    body,
+                    authenticator,
+                    options
+                )
+                if case .error(let retryErr) = retryResponse, retryErr.code == 401 {
+                    self.invalidateAuthSession()
+                }
+                return retryResponse
+            }
+        }
+        return response
     }
 
     /** Make a GET request */

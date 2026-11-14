@@ -83,5 +83,6 @@ public struct AuthToken: AccessTokenProtocol, Codable {
     public mutating func reset() {
         self.access_token = ""
         self.expires_in = 0
+        self.expiresAt = Self.expiryDate(0)
     }
 }

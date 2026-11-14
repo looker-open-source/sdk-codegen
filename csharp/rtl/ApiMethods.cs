@@ -1,11 +1,17 @@
 using System;
+using System.Net;
 using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Looker.RTL
 {
     public class ApiMethods
     {
+        private static readonly Regex AuthEndpointPattern = new Regex(
+            @"^/?(login(/.*)?|logout)$",
+            RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.Compiled
+        );
         private readonly string _apiPath = "";
         private Authenticator _authenticator;
         public string ApiVersion = Constants.DefaultApiVersion;
@@ -83,6 +89,18 @@ namespace Looker.RTL
         /// <typeparam name="TSuccess">Type of response if the request succeeds</typeparam>
         /// <typeparam name="TError">Type of response if the request fails</typeparam>
         /// <returns>SDKResponse with success or failure</returns>
+        private void InvalidateSession()
+        {
+            if (AuthSession is AuthSession authSession)
+            {
+                authSession.InvalidateTokens();
+            }
+            else
+            {
+                AuthSession?.Reset();
+            }
+        }
+
         public async Task<SdkResponse<TSuccess, TError>> AuthRequest<TSuccess, TError>(
             HttpMethod method,
             string path,
@@ -92,15 +110,35 @@ namespace Looker.RTL
         ) where TSuccess : class where TError : class
         {
             settings = settings.Spread(AuthSession.Settings);
-            path = MakePath(path, settings, _authenticator);
-            return await AuthSession.Transport.Request<TSuccess, TError>(
+            var fullPath = MakePath(path, settings, _authenticator);
+            var response = await AuthSession.Transport.Request<TSuccess, TError>(
                 method,
-                path,
+                fullPath,
                 queryParams,
                 body,
                 _authenticator,
                 settings
             );
+            if (response.StatusCode == HttpStatusCode.Unauthorized && AuthSession != null)
+            {
+                InvalidateSession();
+                if (!AuthEndpointPattern.IsMatch(path) && !AuthSession.IsAuthenticated())
+                {
+                    response = await AuthSession.Transport.Request<TSuccess, TError>(
+                        method,
+                        fullPath,
+                        queryParams,
+                        body,
+                        _authenticator,
+                        settings
+                    );
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        InvalidateSession();
+                    }
+                }
+            }
+            return response;
         }
 
         // TODO delete if we decide the method-specific abstractions are fluff

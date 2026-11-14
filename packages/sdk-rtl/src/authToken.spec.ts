@@ -65,4 +65,39 @@ describe('AccessToken', () => {
     expect(actual.expires_in).toEqual(11);
     expect(actual.isActive()).toEqual(true);
   });
+
+  it('uses UTC epoch milliseconds and is unaffected by DST fall back', () => {
+    // 2026-11-01T05:30:00Z is 01:30:00 EDT (30 mins before DST fall back to EST)
+    const startMs = Date.parse('2026-11-01T05:30:00.000Z');
+    const nowSpy = jest.spyOn(Date, 'now').mockReturnValue(startMs);
+    try {
+      const token = new AuthToken({
+        access_token: 'dst-token',
+        expires_in: 3600,
+        token_type: 'Bearer',
+        refresh_token: 'refresh-1',
+      });
+      // Exact elapsed duration must be (3600 - 10) * 1000 ms = 3,590,000 ms
+      expect(token.expiresAt.getTime() - startMs).toEqual(3590 * 1000);
+      expect(token.isActive()).toEqual(true);
+
+      // Advance 3591 seconds in UTC (past the 06:00:00Z DST fall back boundary)
+      nowSpy.mockReturnValue(startMs + 3591 * 1000);
+      expect(token.isActive()).toEqual(false);
+
+      // Reset clears access_token and expiresAt while keeping refresh_token
+      nowSpy.mockReturnValue(startMs);
+      const activeAgain = new AuthToken({
+        access_token: 'dst-token-2',
+        expires_in: 3600,
+        refresh_token: 'refresh-2',
+      });
+      expect(activeAgain.isActive()).toEqual(true);
+      activeAgain.reset();
+      expect(activeAgain.isActive()).toEqual(false);
+      expect(activeAgain.refresh_token).toEqual('refresh-2');
+    } finally {
+      nowSpy.mockRestore();
+    }
+  });
 });

@@ -135,6 +135,40 @@ class APIMethods:
     def encode_path_param(value: str) -> str:
         return urllib.parse.quote(urllib.parse.unquote(value), safe="")
 
+    _AUTH_ENDPOINT_RE = re.compile(r"^/?(login(/.*)?|logout)$", re.IGNORECASE)
+
+    def _auth_request(
+        self,
+        method: transport.HttpMethod,
+        path: str,
+        query_params: Optional[MutableMapping[str, str]] = None,
+        body: Optional[bytes] = None,
+        transport_options: Optional[transport.TransportOptions] = None,
+    ) -> transport.Response:
+        full_path = self._path(path)
+        response = self.transport.request(
+            method,
+            full_path,
+            query_params=query_params,
+            body=body,
+            authenticator=self.auth.authenticate,
+            transport_options=transport_options,
+        )
+        if not response.ok and response.status_code == 401:
+            self.auth.reset()
+            if not self._AUTH_ENDPOINT_RE.match(path):
+                response = self.transport.request(
+                    method,
+                    full_path,
+                    query_params=query_params,
+                    body=body,
+                    authenticator=self.auth.authenticate,
+                    transport_options=transport_options,
+                )
+                if not response.ok and response.status_code == 401:
+                    self.auth.reset()
+        return response
+
     def get(
         self,
         path: str,
@@ -144,12 +178,11 @@ class APIMethods:
     ) -> TReturn:
         """GET method"""
         params = self._convert_query_params(query_params) if query_params else None
-        response = self.transport.request(
+        response = self._auth_request(
             transport.HttpMethod.GET,
-            self._path(path),
+            path,
             query_params=params,
             body=None,
-            authenticator=self.auth.authenticate,
             transport_options=transport_options,
         )
         return self._return(response, structure)
@@ -197,12 +230,11 @@ class APIMethods:
                 "Content-Type"
             ] = "application/x-www-form-urlencoded"
         serialized = self._get_serialized(body, transport_options)
-        response = self.transport.request(
+        response = self._auth_request(
             transport.HttpMethod.POST,
-            self._path(path),
+            path,
             query_params=params,
             body=serialized,
-            authenticator=self.auth.authenticate,
             transport_options=transport_options,
         )
         return self._return(response, structure)
@@ -226,12 +258,11 @@ class APIMethods:
                 "Content-Type"
             ] = "application/x-www-form-urlencoded"
         serialized = self._get_serialized(body, transport_options)
-        response = self.transport.request(
+        response = self._auth_request(
             transport.HttpMethod.PATCH,
-            self._path(path),
+            path,
             query_params=params,
             body=serialized,
-            authenticator=self.auth.authenticate,
             transport_options=transport_options,
         )
         return self._return(response, structure)
@@ -255,12 +286,11 @@ class APIMethods:
                 "Content-Type"
             ] = "application/x-www-form-urlencoded"
         serialized = self._get_serialized(body, transport_options)
-        response = self.transport.request(
+        response = self._auth_request(
             transport.HttpMethod.PUT,
-            self._path(path),
+            path,
             query_params=params,
             body=serialized,
-            authenticator=self.auth.authenticate,
             transport_options=transport_options,
         )
         return self._return(response, structure)
@@ -274,12 +304,11 @@ class APIMethods:
     ) -> TReturn:
         """DELETE method"""
         params = self._convert_query_params(query_params) if query_params else None
-        response = self.transport.request(
+        response = self._auth_request(
             transport.HttpMethod.DELETE,
-            self._path(path),
+            path,
             query_params=params,
             body=None,
-            authenticator=self.auth.authenticate,
             transport_options=transport_options,
         )
         return self._return(response, structure)

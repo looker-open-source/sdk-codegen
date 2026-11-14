@@ -242,6 +242,8 @@ export interface ISDKErrorResponse<T> {
   ok: false;
   /** The error object returned by the SDK call. */
   error: T;
+  /** Optional HTTP status code of the error response. */
+  statusCode?: number;
 }
 
 /** An error representing an issue in the SDK, like a network or parsing error. */

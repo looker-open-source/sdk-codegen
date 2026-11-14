@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Text.RegularExpressions;
 
 namespace Looker.RTL
@@ -22,9 +23,18 @@ namespace Looker.RTL
     /// </summary>
     public class SdkError : Exception
     {
+        public HttpStatusCode StatusCode { get; set; }
+        public string DocumentationUrl { get; set; }
+
         public SdkError() : base() {}
         
         public SdkError(string message): base(message) {}
+
+        public SdkError(string message, HttpStatusCode statusCode, string documentationUrl = null) : base(message)
+        {
+            StatusCode = statusCode;
+            DocumentationUrl = documentationUrl;
+        }
     }
     
     public struct Constants
