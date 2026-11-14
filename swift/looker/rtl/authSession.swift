@@ -60,7 +60,7 @@ open class AuthSession: IAuthSession {
    open func getToken() throws -> AuthToken {
         if (!self.isAuthenticated()) {
             // this is currently a synchronous call so unblocking
-            return self.login()
+            return self.login(self.sudoId)
         }
         return self.activeToken
     }
@@ -83,10 +83,14 @@ open class AuthSession: IAuthSession {
         return self.activeToken
     }
 
-    open func reset() {
-        self.sudoId = ""
+    open func invalidateTokens() {
         self._authToken.reset()
         self._sudoToken.reset()
+    }
+
+    open func reset() {
+        self.sudoId = ""
+        self.invalidateTokens()
     }
 
     open func isAuthenticated() -> Bool {
@@ -132,7 +136,7 @@ open class AuthSession: IAuthSession {
         }
 
         if (!self._authToken.isActive()) {
-            self.reset()
+            self.invalidateTokens()
             let section = self.settings.readConfig(nil)
             let client_id = ProcessInfo.processInfo.environment[strLookerClientId] ?? section["client_id"]
             let client_secret = ProcessInfo.processInfo.environment[strLookerClientSecret] ?? section["client_secret"]

@@ -30,6 +30,9 @@ import java.nio.charset.StandardCharsets
 
 @Suppress("UNCHECKED_CAST")
 open class APIMethods(val authSession: AuthSession) {
+    companion object {
+        private val AUTH_ENDPOINT_REGEX = Regex("^/?(login(/.*)?|logout)$", RegexOption.IGNORE_CASE)
+    }
 
     val authRequest = authSession::authenticate
 
@@ -41,28 +44,50 @@ open class APIMethods(val authSession: AuthSession) {
         }
     }
 
+    fun isAuthEndpoint(path: String): Boolean =
+        AUTH_ENDPOINT_REGEX.matches(path)
+
+    inline fun <reified T : Any> request(
+        method: HttpMethod,
+        path: String,
+        queryParams: Values = mapOf(),
+        body: Any? = null,
+    ): SDKResponse {
+        var response = authSession.transport.request<T>(method, path, queryParams, body, authRequest)
+        if (response is SDKResponse.SDKErrorResponse<*> && response.statusCode == 401) {
+            authSession.invalidateTokens()
+            if (!isAuthEndpoint(path) && !authSession.isAuthenticated()) {
+                response = authSession.transport.request<T>(method, path, queryParams, body, authRequest)
+                if (response is SDKResponse.SDKErrorResponse<*> && response.statusCode == 401) {
+                    authSession.invalidateTokens()
+                }
+            }
+        }
+        return response
+    }
+
     inline fun <reified T : Any> get(path: String, queryParams: Values = mapOf(), body: Any? = null): SDKResponse {
-        return authSession.transport.request<T>(HttpMethod.GET, path, queryParams, body, authRequest)
+        return request<T>(HttpMethod.GET, path, queryParams, body)
     }
 
     inline fun <reified T : Any> head(path: String, queryParams: Values = mapOf(), body: Any? = null): SDKResponse {
-        return authSession.transport.request<T>(HttpMethod.HEAD, path, queryParams, body, authRequest)
+        return request<T>(HttpMethod.HEAD, path, queryParams, body)
     }
 
     inline fun <reified T : Any> delete(path: String, queryParams: Values = mapOf(), body: Any? = null): SDKResponse {
-        return authSession.transport.request<T>(HttpMethod.DELETE, path, queryParams, body, authRequest)
+        return request<T>(HttpMethod.DELETE, path, queryParams, body)
     }
 
     inline fun <reified T : Any> post(path: String, queryParams: Values = mapOf(), body: Any? = null): SDKResponse {
-        return authSession.transport.request<T>(HttpMethod.POST, path, queryParams, body, authRequest)
+        return request<T>(HttpMethod.POST, path, queryParams, body)
     }
 
     inline fun <reified T : Any> put(path: String, queryParams: Values = mapOf(), body: Any? = null): SDKResponse {
-        return authSession.transport.request<T>(HttpMethod.PUT, path, queryParams, body, authRequest)
+        return request<T>(HttpMethod.PUT, path, queryParams, body)
     }
 
     inline fun <reified T : Any> patch(path: String, queryParams: Values = mapOf(), body: Any? = null): SDKResponse {
-        return authSession.transport.request<T>(HttpMethod.PATCH, path, queryParams, body, authRequest)
+        return request<T>(HttpMethod.PATCH, path, queryParams, body)
     }
 
     fun encodeURI(value: String): String {

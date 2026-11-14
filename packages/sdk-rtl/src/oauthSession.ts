@@ -280,6 +280,11 @@ export class OAuthSession extends AuthSession {
     return this.activeToken.isActive();
   }
 
+  reset(): void {
+    super.reset();
+    this.activeToken.reset();
+  }
+
   async logout() {
     if (this.activeToken.access_token) {
       await this.ok(

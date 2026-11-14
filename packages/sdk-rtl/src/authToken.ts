@@ -44,8 +44,7 @@ export class AuthToken implements IAccessToken {
   isActive() {
     if (!this.access_token) return false;
     if (!this.expiresAt) return false;
-    const now = new Date();
-    return this.expiresAt > now;
+    return this.expiresAt.getTime() > Date.now();
   }
 
   // Assign the token and set its expiration
@@ -58,18 +57,18 @@ export class AuthToken implements IAccessToken {
     if (token.refresh_token) {
       this.refresh_token = token.refresh_token;
     }
-    const exp = new Date();
+    const now = Date.now();
     if (this.access_token && this.expires_in) {
-      exp.setSeconds(exp.getSeconds() + this.expires_in - this.lagTime);
+      this.expiresAt = new Date(now + (this.expires_in - this.lagTime) * 1000);
     } else {
-      exp.setSeconds(exp.getSeconds() - this.lagTime); // set to expire 'lagTime' ago
+      this.expiresAt = new Date(now - this.lagTime * 1000); // set to expire 'lagTime' ago
     }
-    this.expiresAt = exp;
     return this;
   }
 
   reset() {
     this.access_token = '';
     this.expires_in = 0;
+    this.expiresAt = new Date(Date.now() - this.lagTime * 1000);
   }
 }

@@ -31,6 +31,7 @@ import com.google.gson.stream.JsonToken
 import com.google.gson.stream.JsonWriter
 import com.looker.sdk.AccessToken
 import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 data class AuthToken(
     @SerializedName("access_token")
@@ -43,7 +44,7 @@ data class AuthToken(
     var refreshToken: String? = null,
 ) {
 
-    var expiresAt: LocalDateTime = LocalDateTime.now()
+    var expiresAt: LocalDateTime = LocalDateTime.now(ZoneOffset.UTC)
 
     /** Lag time of 10 seconds */
     val lagTime: Long = 10
@@ -57,12 +58,14 @@ data class AuthToken(
     )
 
     init {
-        expiresAt = LocalDateTime.now().plusSeconds(if (expiresIn > 0) expiresIn - lagTime else -lagTime)
+        expiresAt = LocalDateTime.now(ZoneOffset.UTC).plusSeconds(
+            if (accessToken.isNotEmpty() && expiresIn > 0) expiresIn - lagTime else -lagTime,
+        )
     }
 
     fun isActive(): Boolean {
         if (accessToken.isEmpty()) return false
-        return expiresAt > LocalDateTime.now()
+        return expiresAt > LocalDateTime.now(ZoneOffset.UTC)
     }
 
     fun setToken(token: AccessToken): AuthToken {
@@ -74,13 +77,12 @@ data class AuthToken(
             this.refreshToken = token.refresh_token
         }
 
-        val expirationDate = LocalDateTime.now()
-        if (this.accessToken.isNotEmpty() && this.expiresIn > 0L) {
-            expirationDate.plusSeconds(this.expiresIn)
+        val now = LocalDateTime.now(ZoneOffset.UTC)
+        this.expiresAt = if (this.accessToken.isNotEmpty() && this.expiresIn > 0L) {
+            now.plusSeconds(this.expiresIn - lagTime)
         } else {
-            expirationDate.minusSeconds(10)
+            now.minusSeconds(lagTime)
         }
-        this.expiresAt = expirationDate
 
         return this
     }
@@ -88,6 +90,7 @@ data class AuthToken(
     fun reset() { // TODO: Should this just return a blank AuthToken object instead?
         accessToken = ""
         expiresIn = 0
+        expiresAt = LocalDateTime.now(ZoneOffset.UTC).minusSeconds(lagTime)
     }
 }
 

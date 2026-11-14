@@ -227,3 +227,145 @@ def test_api_versioned_url_is_built_properly(
 )
 def test_encode_path_param(api: api_methods.APIMethods, value: str, expected: str):
     assert api.encode_path_param(value) == expected
+
+
+def test_reauthenticates_once_on_401(tmp_path, monkeypatch):
+    for setting in ["BASE_URL", "CLIENT_ID", "CLIENT_SECRET"]:
+        monkeypatch.delenv(f"LOOKERSDK_{setting}", raising=False)
+    ini = tmp_path / "looker.ini"
+    ini.write_text(
+        "[Looker]\n"
+        "base_url=https://host1.looker.com:19999\n"
+        "client_id=test_id\n"
+        "client_secret=test_secret\n"
+    )
+    settings = api_settings.ApiSettings(filename=str(ini), env_prefix="LOOKERSDK")
+
+    login_calls = 0
+    seen_auth_headers = []
+
+    class ReauthMockTransport(transport.Transport):
+        @classmethod
+        def configure(cls, _settings):
+            return cls()
+
+        def request(
+            self,
+            method,
+            path,
+            query_params=None,
+            body=None,
+            authenticator=None,
+            transport_options=None,
+        ):
+            nonlocal login_calls
+            headers = {}
+            if authenticator:
+                headers.update(authenticator(transport_options or {}))
+            if path.endswith("/login"):
+                login_calls += 1
+                payload = json.dumps(
+                    {
+                        "access_token": f"token-{login_calls}",
+                        "token_type": "Bearer",
+                        "expires_in": 3600,
+                    }
+                ).encode("utf-8")
+                return transport.Response(
+                    ok=True,
+                    value=payload,
+                    response_mode=transport.ResponseMode.STRING,
+                    status_code=200,
+                )
+            seen_auth_headers.append(headers.get("Authorization"))
+            if headers.get("Authorization") == "Bearer token-1":
+                return transport.Response(
+                    ok=False,
+                    value=b'{"message": "Requires authentication."}',
+                    response_mode=transport.ResponseMode.STRING,
+                    status_code=401,
+                )
+            return transport.Response(
+                ok=True,
+                value=b"authenticated-ok",
+                response_mode=transport.ResponseMode.STRING,
+                status_code=200,
+            )
+
+    xp = ReauthMockTransport()
+    session = auth_session.AuthSession(settings, xp, serialize.deserialize40, "4.0")
+    sdk = api_methods.APIMethods(
+        session, serialize.deserialize40, serialize.serialize40, xp, "4.0"
+    )
+
+    result = sdk.get("/user", str)
+    assert result == "authenticated-ok"
+    assert login_calls == 2
+    assert seen_auth_headers == ["Bearer token-1", "Bearer token-2"]
+
+
+def test_does_not_loop_on_persistent_401(tmp_path, monkeypatch):
+    for setting in ["BASE_URL", "CLIENT_ID", "CLIENT_SECRET"]:
+        monkeypatch.delenv(f"LOOKERSDK_{setting}", raising=False)
+    ini = tmp_path / "looker.ini"
+    ini.write_text(
+        "[Looker]\n"
+        "base_url=https://host1.looker.com:19999\n"
+        "client_id=test_id\n"
+        "client_secret=test_secret\n"
+    )
+    settings = api_settings.ApiSettings(filename=str(ini), env_prefix="LOOKERSDK")
+
+    api_calls = 0
+    login_calls = 0
+
+    class Always401Transport(transport.Transport):
+        @classmethod
+        def configure(cls, _settings):
+            return cls()
+
+        def request(
+            self,
+            method,
+            path,
+            query_params=None,
+            body=None,
+            authenticator=None,
+            transport_options=None,
+        ):
+            nonlocal api_calls, login_calls
+            if authenticator:
+                authenticator(transport_options or {})
+            if path.endswith("/login"):
+                login_calls += 1
+                payload = json.dumps(
+                    {
+                        "access_token": f"token-{login_calls}",
+                        "token_type": "Bearer",
+                        "expires_in": 3600,
+                    }
+                ).encode("utf-8")
+                return transport.Response(
+                    ok=True,
+                    value=payload,
+                    response_mode=transport.ResponseMode.STRING,
+                    status_code=200,
+                )
+            api_calls += 1
+            return transport.Response(
+                ok=False,
+                value=b'{"message": "Requires authentication."}',
+                response_mode=transport.ResponseMode.STRING,
+                status_code=401,
+            )
+
+    xp = Always401Transport()
+    session = auth_session.AuthSession(settings, xp, serialize.deserialize40, "4.0")
+    sdk = api_methods.APIMethods(
+        session, serialize.deserialize40, serialize.serialize40, xp, "4.0"
+    )
+
+    with pytest.raises(error.SDKError):
+        sdk.get("/user", str)
+    assert api_calls == 2
+    assert not session.is_authenticated

@@ -199,10 +199,12 @@ public func processResponse<TSuccess: Codable, TError: Codable> (_ response: Req
     }
 
     if (!BaseTransport.ok(response.response as! HTTPURLResponse)) {
+        let statusCode = (response.response as! HTTPURLResponse).statusCode
         do {
             fail = try deserialize(data)
+            fail?.code = statusCode
         } catch {
-            fail = SDKError("Error parsing response: \(error): \(data)") as? TError
+            fail = SDKError("Error parsing response: \(error): \(data)", code: statusCode) as? TError
         }
         return SDKResponse.error(fail!)
     }

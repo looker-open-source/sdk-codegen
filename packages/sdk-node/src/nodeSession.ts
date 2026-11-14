@@ -96,7 +96,7 @@ export class NodeSession extends AuthSession {
    */
   async getToken() {
     if (!this.isAuthenticated()) {
-      await this.login();
+      await this.login(this.sudoId || undefined);
     }
     return this.activeToken;
   }
@@ -157,7 +157,8 @@ export class NodeSession extends AuthSession {
     }
 
     if (!this._authToken.isActive()) {
-      this.reset();
+      this._authToken.reset();
+      this._sudoToken.reset();
       // only retain client API3 credentials for the lifetime of the login request
       const section = this.settings.readConfig();
       const clientId = section.client_id;

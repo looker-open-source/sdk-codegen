@@ -153,4 +153,67 @@ class TestAuthSession {
         assertEquals("test_client_id", request["client_id"])
         assertEquals("looker://", request["redirect_uri"])
     }
+
+    @Test
+    fun testApiMethodsReauthenticatesOnceOn401() {
+        val mockSettings = MockSettings(bareMinimum)
+        var loginCount = 0
+        val userAuthHeaders = mutableListOf<String?>()
+
+        val mockHttpTransport = object : HttpTransport() {
+            override fun buildRequest(method: String, url: String): LowLevelHttpRequest {
+                return object : LowLevelHttpRequest() {
+                    private val headers = mutableMapOf<String, String>()
+
+                    override fun addHeader(name: String, value: String) {
+                        headers[name] = value
+                    }
+
+                    override fun execute(): LowLevelHttpResponse {
+                        val isLogin = url.endsWith("/login")
+                        val status = if (isLogin) {
+                            200
+                        } else {
+                            userAuthHeaders.add(headers["Authorization"])
+                            if (headers["Authorization"] == "token token_1") 401 else 200
+                        }
+                        val responseJson = if (isLogin) {
+                            loginCount++
+                            """{"access_token":"token_$loginCount","token_type":"Bearer","expires_in":3600}"""
+                        } else if (status == 401) {
+                            """{"message":"Requires authentication."}"""
+                        } else {
+                            "authenticated-ok"
+                        }
+                        return object : LowLevelHttpResponse() {
+                            override fun getContent(): InputStream =
+                                ByteArrayInputStream(responseJson.toByteArray(Charsets.UTF_8))
+                            override fun getContentEncoding(): String? = null
+                            override fun getContentLength(): Long = responseJson.length.toLong()
+                            override fun getContentType(): String =
+                                if (status == 200 && !isLogin) "text/plain" else "application/json"
+                            override fun getStatusLine(): String = "HTTP/1.1 $status"
+                            override fun getStatusCode(): Int = status
+                            override fun getReasonPhrase(): String = if (status == 200) "OK" else "Unauthorized"
+                            override fun getHeaderCount(): Int = 0
+                            override fun getHeaderName(index: Int): String? = null
+                            override fun getHeaderValue(index: Int): String? = null
+                        }
+                    }
+                }
+            }
+        }
+
+        val mockTransport = object : Transport(mockSettings) {
+            override fun initTransport(options: TransportOptions): HttpTransport = mockHttpTransport
+        }
+
+        val session = AuthSession(mockSettings, mockTransport)
+        val api = com.looker.rtl.APIMethods(session)
+        val result = api.ok<String>(api.get<String>("/user"))
+
+        assertEquals("authenticated-ok", result)
+        assertEquals(2, loginCount)
+        assertEquals(listOf<String?>("token token_1", "token token_2"), userAuthHeaders)
+    }
 }

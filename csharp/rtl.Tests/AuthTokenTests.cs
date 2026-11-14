@@ -69,5 +69,35 @@ namespace sdkrtl.Tests
             Assert.Equal(token.token_type, actual.token_type);
             Assert.True(actual.IsActive());
         }
+
+        [Fact]
+        public void UsesUtcForExpirationTest()
+        {
+            var defaultToken = new AuthToken();
+            Assert.Equal(DateTimeKind.Utc, defaultToken.ExpiresAt.Kind);
+
+            var beforeUtc = DateTime.UtcNow;
+            var activeToken = new AuthToken(new AccessToken
+            {
+                access_token = "utc-token",
+                expires_in = 3600,
+                token_type = "Bearer",
+                refresh_token = "refresh-me"
+            });
+            var afterUtc = DateTime.UtcNow;
+
+            Assert.Equal(DateTimeKind.Utc, activeToken.ExpiresAt.Kind);
+            Assert.InRange(
+                activeToken.ExpiresAt,
+                beforeUtc.AddSeconds(3590),
+                afterUtc.AddSeconds(3590)
+            );
+            Assert.True(activeToken.IsActive());
+
+            activeToken.Reset();
+            Assert.Equal(DateTimeKind.Utc, activeToken.ExpiresAt.Kind);
+            Assert.False(activeToken.IsActive());
+            Assert.Equal("refresh-me", activeToken.refresh_token);
+        }
     }
 }

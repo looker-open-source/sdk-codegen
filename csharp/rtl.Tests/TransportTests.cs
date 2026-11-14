@@ -119,5 +119,52 @@ namespace sdkrtl.Tests
             Assert.Equal("3", actual.string3);
             Assert.Equal(3, actual.num3);
         }
+
+        [Fact]
+        public void ParseUnauthorizedJsonDoesNotDeserializeIntoModelTest()
+        {
+            var payload = @"{""message"":""Requires authentication."",""documentation_url"":""https://docs.looker.com/""}";
+            var resp = new RawResponse
+            {
+                Method = HttpMethod.Post,
+                Body = payload,
+                StatusCode = HttpStatusCode.Unauthorized,
+                StatusMessage = "Unauthorized",
+                ContentType = "application/json"
+            } as IRawResponse;
+
+            var modelResult = Transport.ParseResponse<TestModel, Exception>(resp);
+            Assert.False(modelResult.Ok);
+            Assert.Null(modelResult.Value);
+            Assert.Equal(HttpStatusCode.Unauthorized, modelResult.StatusCode);
+            var sdkError = Assert.IsType<SdkError>(modelResult.Error);
+            Assert.Equal("Requires authentication.", sdkError.Message);
+            Assert.Equal(HttpStatusCode.Unauthorized, sdkError.StatusCode);
+            Assert.Equal("https://docs.looker.com/", sdkError.DocumentationUrl);
+
+            var stringResult = Transport.ParseResponse<string, Exception>(resp);
+            Assert.False(stringResult.Ok);
+            Assert.Null(stringResult.Value);
+            Assert.Equal(HttpStatusCode.Unauthorized, stringResult.StatusCode);
+            Assert.IsType<SdkError>(stringResult.Error);
+        }
+
+        [Fact]
+        public void ParseStringSuccessResponseTest()
+        {
+            var resp = new RawResponse
+            {
+                Method = HttpMethod.Delete,
+                Body = "",
+                StatusCode = HttpStatusCode.NoContent,
+                StatusMessage = "No Content",
+                ContentType = "application/json"
+            } as IRawResponse;
+
+            var result = Transport.ParseResponse<string, SdkError>(resp);
+            Assert.True(result.Ok);
+            Assert.Equal("", result.Value);
+            Assert.Null(result.Error);
+        }
     }
 }

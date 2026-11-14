@@ -86,6 +86,7 @@ class TestAuthToken {
         assertEquals("newType", testToken.tokenType, "Token type should update")
         assertEquals(7200, testToken.expiresIn, "Expires in should update")
         assertEquals("newRefresh", testToken.refreshToken, "Refresh token should update")
+        assertEquals(true, testToken.isActive(), "Updated token should be active")
     }
 
     @Test
@@ -98,5 +99,10 @@ class TestAuthToken {
         assertEquals("newType", testToken.tokenType, "Token type should update")
         assertEquals(7200, testToken.expiresIn, "Expires in should update")
         assertEquals("oldRefreshToken", testToken.refreshToken, "Refresh token should remain the same")
+        assertEquals(true, testToken.isActive(), "Updated token should be active")
+
+        testToken.reset()
+        assertEquals(false, testToken.isActive(), "Reset token should be inactive")
+        assertEquals("oldRefreshToken", testToken.refreshToken, "Reset should preserve refresh token")
     }
 }
