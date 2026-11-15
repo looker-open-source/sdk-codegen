@@ -337,7 +337,8 @@
     "**/@npmcli/map-workspaces/minimatch": "^11.0.1",
     "**/@npmcli/map-workspaces/glob/minimatch": "^11.0.1",
     "**/@npmcli/package-json/glob/minimatch": "^11.0.1",
-    "**/unified-engine/glob/minimatch": "^11.0.1"
+    "**/unified-engine/glob/minimatch": "^11.0.1",
+    "basic-ftp": "^6.2.4"
   },
   "dependencies": {
     "yarn": "^1.22.22",
