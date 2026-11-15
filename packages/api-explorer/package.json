@@ -25,7 +25,7 @@
     "test": "jest",
     "analyze": "export ANALYZE_MODE=static && yarn build",
     "build": "tsc && webpack --config webpack.prod.config.js",
-    "develop": "webpack serve --host=0.0.0.0 --https --allowed-hosts all --config webpack.dev.config.js",
+    "develop": "webpack serve --host=0.0.0.0 --server-type https --allowed-hosts all --config webpack.dev.config.js",
     "docs": "typedoc --mode file --out docs",
     "test:e2e": "yarn jest e2e --config=jest-puppeteer.config.js",
     "watch": "yarn lerna exec --scope @looker/api-explorer --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'",
@@ -66,7 +66,7 @@
     "ts-jest": "^29.0.5",
     "webpack-bundle-analyzer": "^4.4.1",
     "webpack-cli": "5.0.1",
-    "webpack-dev-server": "4.15.1",
+    "webpack-dev-server": "5.2.6",
     "webpack-merge": "^5.7.3"
   },
   "dependencies": {

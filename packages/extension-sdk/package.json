@@ -40,7 +40,6 @@
     "@looker/chatty": "2.3.9",
     "@looker/sdk": "26.24.0",
     "@looker/sdk-rtl": "21.6.8",
-    "deepmerge": "^4.2.2",
     "semver": "^7.3.4"
   },
   "keywords": [
