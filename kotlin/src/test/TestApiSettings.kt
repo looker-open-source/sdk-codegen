@@ -29,25 +29,29 @@ import com.looker.sdk.*
 import com.looker.sdk.ApiSettings
 import org.junit.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 import kotlin.test.assertNull
 
 val mockSDK = "MOCKSDK"
 
-val bareMinimum = """
-[Looker]
-base_url=https://my.looker.com:19999
-""".trimIndent()
+val bareMinimum =
+    """
+    [Looker]
+    base_url=https://my.looker.com:19999
+    """.trimIndent()
 
-val quotedMinimum = """
-[Looker]
-base_url='https://my.looker.com:19999'
-""".trimIndent()
+val quotedMinimum =
+    """
+    [Looker]
+    base_url='https://my.looker.com:19999'
+    """.trimIndent()
 
-val withEnvPrefix = """
-[Looker]
-base_url=https://my.looker.com:19999
-environmentPrefix=$mockSDK
-""".trimIndent()
+val withEnvPrefix =
+    """
+    [Looker]
+    base_url=https://my.looker.com:19999
+    environmentPrefix=$mockSDK
+    """.trimIndent()
 
 val mockId = "IdOverride"
 val mockSecret = "SecretOverride"
@@ -150,5 +154,37 @@ class TestApiSettings {
         assertEquals(DEFAULT_TIMEOUT, settings.timeout)
         assertEquals(mockId, config["client_id"])
         assertEquals(mockSecret, config["client_secret"])
+    }
+
+    @Test
+    fun testApiConfigCommentsAndMultipleSections() {
+        val multiIni =
+            """
+            # Leading comment
+            ; Semicolon comment
+            [Looker]
+            base_url = "https://first.looker.com:19999"
+            client_id = first_id
+
+            [Secondary]
+            base_url = 'https://second.looker.com:19999'
+            client_secret = sec#with#hash
+            """.trimIndent()
+
+        val parsed = apiConfig(multiIni)
+        assertEquals("https://first.looker.com:19999", parsed["Looker"]?.get("base_url"))
+        assertEquals("first_id", parsed["Looker"]?.get("client_id"))
+        assertEquals("https://second.looker.com:19999", parsed["Secondary"]?.get("base_url"))
+        assertEquals("sec#with#hash", parsed["Secondary"]?.get("client_secret"))
+
+        val secondary = ApiSettings.fromIniText(multiIni, "Secondary")
+        assertEquals("https://second.looker.com:19999", secondary.baseUrl)
+    }
+
+    @Test
+    fun testEmptyIniThrowsError() {
+        assertFailsWith<java.lang.Error> {
+            ApiSettings.fromIniText("# only comments\n")
+        }
     }
 }
