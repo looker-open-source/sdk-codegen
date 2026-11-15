@@ -44,7 +44,7 @@ dependencies {
     implementation("com.google.http-client:google-http-client-gson")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
-    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.google.code.gson:gson:2.14.0")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.3.1")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.3.1")
@@ -53,7 +53,7 @@ dependencies {
 
 spotless {
     kotlin {
-        ktlint("0.50.0").setEditorConfigPath("$projectDir/../.editorconfig")
+        ktlint("1.0.1").setEditorConfigPath("$projectDir/../.editorconfig")
     }
 }
 

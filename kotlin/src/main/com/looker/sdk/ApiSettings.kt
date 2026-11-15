@@ -67,13 +67,15 @@ fun apiConfig(contents: String): ApiSections {
 // may lazily load the file data and not store the full, parsed file map in
 // memory long term.
 open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : ConfigurationProvider {
-
     private val keyIapClientId: String = "iap_client_id"
     private val keyIapServiceAccountEmail: String = "iap_service_account_email"
 
     companion object {
         @JvmStatic
-        fun fromIniFile(filename: String = "./looker.ini", section: String = ""): ConfigurationProvider {
+        fun fromIniFile(
+            filename: String = "./looker.ini",
+            section: String = "",
+        ): ConfigurationProvider {
             val file = File(filename)
             return if (!file.exists()) {
                 fromMap(emptyMap())
@@ -84,9 +86,12 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
         }
 
         @JvmStatic
-        fun fromIniText(contents: String, section: String = ""): ConfigurationProvider {
+        fun fromIniText(
+            contents: String,
+            section: String = "",
+        ): ConfigurationProvider {
             val config = apiConfig(contents)
-            val firstSection = if (section.isNotBlank()) section else config.keys.first()
+            val firstSection = if (section.isNotBlank()) section else (config.keys.firstOrNull() ?: "")
 
             val settings = config[firstSection]
             if (settings.isNullOrEmpty()) {
@@ -163,7 +168,10 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
         ).plus(rawMap)
     }
 
-    private fun addSystemProperty(map: MutableMap<String, String>, key: String) {
+    private fun addSystemProperty(
+        map: MutableMap<String, String>,
+        key: String,
+    ) {
         System.getProperty("${environmentPrefix}_${key.uppercase()}").let { value ->
             if (value !== null && value.isNotEmpty()) map[key] = value
         }
