@@ -11,7 +11,7 @@
   "scripts": {
     "analyze": "export ANALYZE_MODE=static && yarn bundle",
     "bundle": "tsc && NODE_OPTIONS=--openssl-legacy-provider webpack --config webpack.prod.config.js",
-    "develop": "webpack serve --hot --allowed-hosts all --port 8080 --https --config webpack.dev.config.js"
+    "develop": "webpack serve --hot --allowed-hosts all --port 8080 --server-type https --config webpack.dev.config.js"
   },
   "dependencies": {
     "@looker/extension-sdk": "26.24.0",
@@ -38,7 +38,7 @@
     "@types/styled-components": "^5.1.26",
     "webpack-bundle-analyzer": "^4.4.1",
     "webpack-cli": "5.0.1",
-    "webpack-dev-server": "5.2.5",
+    "webpack-dev-server": "5.2.6",
     "webpack-merge": "^5.7.3"
   }
 }

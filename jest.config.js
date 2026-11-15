@@ -63,7 +63,7 @@ if (!global.AbortSignal.any) {
 module.exports = {
   automock: false,
   moduleDirectories: ['./node_modules', './packages'],
-  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json', 'node'],
+  moduleFileExtensions: ['js', 'mjs', 'jsx', 'ts', 'tsx', 'json', 'node'],
   moduleNameMapper: {
     '@looker/api-explorer/src/utils':
       '<rootDir>/packages/api-explorer/src/utils',
@@ -84,7 +84,7 @@ module.exports = {
   setupFiles: ['jest-localstorage-mock'],
   testMatch: ['**/?(*.)(spec|test).(ts|js)?(x)'],
   transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
+    '^.+\\.(mjs|js|jsx|ts|tsx)$': 'babel-jest',
   },
   transformIgnorePatterns: [excludeNodeModulesExcept.string],
   testPathIgnorePatterns: ['packages/.*?/lib'],

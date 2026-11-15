@@ -18,7 +18,7 @@
   "author": "Looker",
   "license": "MIT",
   "scripts": {
-    "play": "webpack-dev-server --https --config webpack.dev.config.js",
+    "play": "webpack serve --server-type https --config webpack.dev.config.js",
     "watch": "yarn lerna exec --scope @looker/embed-playground --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'",
     "watch:cjs": "yarn lerna exec --scope @looker/embed-playground --stream 'BABEL_ENV=build_cjs babel src --root-mode upward --out-dir lib --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
@@ -34,16 +34,16 @@
     "@types/react-redux": "^7.1.25",
     "@types/react-router": "^5.1.20",
     "webpack-cli": "5.0.1",
-    "webpack-dev-server": "4.15.1"
+    "webpack-dev-server": "5.2.6"
   },
   "dependencies": {
     "@looker/components": "^5.0.3",
-    "@looker/embed-services": "23.20.1",
-    "@looker/embed-components": "23.20.1",
-    "@looker/extension-utils": "0.1.32",
+    "@looker/embed-services": "26.24.0",
+    "@looker/embed-components": "26.24.0",
+    "@looker/extension-utils": "0.1.69",
     "@looker/redux": "^0.0.1",
-    "@looker/sdk": "23.20.1",
-    "@looker/sdk-rtl": "21.6.1",
+    "@looker/sdk": "26.24.0",
+    "@looker/sdk-rtl": "21.6.8",
     "@styled-icons/material": "^10.47.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",

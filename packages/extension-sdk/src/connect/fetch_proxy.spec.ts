@@ -145,4 +145,27 @@ describe('extension_host_api tests', () => {
       FetchResponseBodyType.text
     );
   });
+
+  it('ignores prototype-poisoning keys when merging init', () => {
+    const fetchProxy = new FetchProxyImpl(mockExtensionSdk as any, undefined, {
+      credentials: 'include',
+      headers: { 'x-safe': '1' },
+    });
+    const maliciousInit = JSON.parse(
+      '{"method":"POST","__proto__":{"polluted":"yes"},"headers":{"__proto__":{"headerPolluted":"yes"},"x-req":"2"}}'
+    );
+    fetchProxy.fetchProxy('https://example.com/posts', maliciousInit);
+    const mergedInit = extensionFetchProxySpy.mock.calls[0][1];
+    expect(mergedInit).toEqual({
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'x-safe': '1',
+        'x-req': '2',
+      },
+    });
+    expect((mergedInit as any).polluted).toBeUndefined();
+    expect((mergedInit.headers as any).headerPolluted).toBeUndefined();
+    expect(({} as any).polluted).toBeUndefined();
+  });
 });
