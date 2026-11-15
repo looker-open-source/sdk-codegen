@@ -36,7 +36,7 @@
     "cross-env": "^7.0.2"
   },
   "devDependencies": {
-    "@openapitools/openapi-generator-cli": "2.7.0",
+    "@openapitools/openapi-generator-cli": "^2.42.1",
     "@types/config": "0.0.36",
     "dotenv": "8.2.0",
     "expect": "29.7.0",
