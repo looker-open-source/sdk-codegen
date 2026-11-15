@@ -151,4 +151,28 @@ class TestApiSettings {
         assertEquals(mockId, config["client_id"])
         assertEquals(mockSecret, config["client_secret"])
     }
+
+    @Test
+    fun testApiConfigCommentsAndMultipleSections() {
+        val multiIni = """
+        # Leading comment
+        ; Semicolon comment
+        [Looker]
+        base_url = "https://first.looker.com:19999"
+        client_id = first_id
+
+        [Secondary]
+        base_url = 'https://second.looker.com:19999'
+        client_secret = sec#with#hash
+        """.trimIndent()
+
+        val parsed = apiConfig(multiIni)
+        assertEquals("https://first.looker.com:19999", parsed["Looker"]?.get("base_url"))
+        assertEquals("first_id", parsed["Looker"]?.get("client_id"))
+        assertEquals("https://second.looker.com:19999", parsed["Secondary"]?.get("base_url"))
+        assertEquals("sec#with#hash", parsed["Secondary"]?.get("client_secret"))
+
+        val secondary = ApiSettings.fromIniText(multiIni, "Secondary")
+        assertEquals("https://second.looker.com:19999", secondary.baseUrl)
+    }
 }

@@ -29,9 +29,7 @@ import com.looker.rtl.DEFAULT_HTTP_TRANSPORT
 import com.looker.rtl.DEFAULT_TIMEOUT
 import com.looker.rtl.asBoolean
 import com.looker.rtl.unQuote
-import org.apache.commons.configuration.HierarchicalINIConfiguration
 import java.io.File
-import java.io.StringReader
 
 /** Structure read from an .INI file */
 typealias ApiSections = Map<String, Map<String, String>>
@@ -40,20 +38,28 @@ typealias ApiSections = Map<String, Map<String, String>>
  * Parse and cleanup something that looks like an .INI file, stripping outermost quotes for values
  */
 fun apiConfig(contents: String): ApiSections {
-    val iniParser = HierarchicalINIConfiguration()
-    iniParser.load(StringReader(contents))
+    val sections = linkedMapOf<String, MutableMap<String, String>>()
+    var currentSection = ""
 
-    return mutableMapOf<String, Map<String, String>>().also { mapToReturn ->
-        iniParser.sections.forEach { section ->
-            mapToReturn[section] = mutableMapOf<String, String>().also { sectionMap ->
-                iniParser.getKeys(section).forEach { key ->
-                    // `key` is fully scoped (e.g. `Looker.<key>`) but we just want the key so
-                    // remove the section prefix before adding to the map.
-                    sectionMap[key.removePrefix("$section.")] = unQuote(iniParser.getString(key))
-                }
-            }
+    contents.lineSequence().forEach { rawLine ->
+        val line = rawLine.trim()
+        if (line.isEmpty() || line.startsWith("#") || line.startsWith(";")) {
+            return@forEach
+        }
+        if (line.startsWith("[") && line.endsWith("]")) {
+            currentSection = line.substring(1, line.length - 1).trim()
+            sections.getOrPut(currentSection) { linkedMapOf() }
+            return@forEach
+        }
+        val delimiterIndex = line.indexOf('=').takeIf { it >= 0 } ?: line.indexOf(':')
+        if (delimiterIndex > 0) {
+            val key = line.substring(0, delimiterIndex).trim()
+            val value = unQuote(line.substring(delimiterIndex + 1).trim())
+            sections.getOrPut(currentSection) { linkedMapOf() }[key] = value
         }
     }
+
+    return sections
 }
 
 // TODO why no @JvmOverloads here?

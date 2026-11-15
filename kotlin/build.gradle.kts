@@ -37,9 +37,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
 
     implementation("io.github.cdimascio:dotenv-kotlin:6.2.2")
-    implementation("org.ini4j:ini4j:0.5.4")
-
-    implementation("commons-configuration:commons-configuration:1.10")
     implementation("com.google.auth:google-auth-library-oauth2-http:1.56.0")
     implementation(platform("com.google.http-client:google-http-client-bom:$googleHttpVersion"))
     implementation("com.google.http-client:google-http-client")
