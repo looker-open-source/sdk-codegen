@@ -11,7 +11,7 @@
     "analyze": "export ANALYZE_MODE=static && yarn bundle",
     "bundle": "tsc && NODE_OPTIONS=--openssl-legacy-provider webpack --config webpack.prod.config.js",
     "deploy": "bin/deploy",
-    "develop": "webpack serve --hot --allowed-hosts all --port 8080 --https --config webpack.dev.config.js",
+    "develop": "webpack serve --hot --allowed-hosts all --port 8080 --server-type https --config webpack.dev.config.js",
     "watch": "yarn lerna exec --scope @looker/extension-api-explorer --stream 'BABEL_ENV=build babel src --root-mode upward --out-dir lib/esm --source-maps --extensions .ts,.tsx --no-comments --watch'"
   },
   "dependencies": {
@@ -42,7 +42,7 @@
     "@types/styled-system": "5.1.13",
     "webpack-bundle-analyzer": "^4.4.1",
     "webpack-cli": "5.0.1",
-    "webpack-dev-server": "4.15.1",
+    "webpack-dev-server": "5.2.6",
     "webpack-merge": "^5.7.3"
   }
 }

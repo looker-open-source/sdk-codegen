@@ -54,8 +54,9 @@ module.exports = merge(base, browser, {
         process.env.API_PROXY_TARGET ||
         process.env.LOOKER_API_EXPLORER_URL ||
         'http://localhost:19999';
-      return {
-        '/api': {
+      return [
+        {
+          context: ['/api'],
           target: proxyTarget,
           changeOrigin: true,
           secure: false,
@@ -64,7 +65,8 @@ module.exports = merge(base, browser, {
             proxyReq.removeHeader('Referer');
           },
         },
-        '/login': {
+        {
+          context: ['/login'],
           target: proxyTarget,
           changeOrigin: true,
           secure: false,
@@ -72,7 +74,7 @@ module.exports = merge(base, browser, {
             proxyReq.removeHeader('Origin');
           },
         },
-      };
+      ];
     })(),
   },
 });

@@ -23,7 +23,6 @@
  SOFTWARE.
 
  */
-import deepmerge from 'deepmerge';
 import type {
   FetchCustomParameters,
   FetchProxy,
@@ -31,6 +30,41 @@ import type {
   FetchResponseBodyType,
 } from './types';
 import type { ExtensionHostApiImpl } from './extension_host_api';
+
+const UNSAFE_MERGE_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
+
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    return false;
+  }
+  const proto = Object.getPrototypeOf(value);
+  return proto === Object.prototype || proto === null;
+}
+
+function safeDeepMerge<T extends Record<string, any>>(target: T, source: T): T {
+  const result: Record<string, unknown> = {};
+  for (const obj of [target, source]) {
+    for (const key of Object.keys(obj)) {
+      if (UNSAFE_MERGE_KEYS.has(key)) {
+        continue;
+      }
+      const nextVal = obj[key];
+      const prevVal = result[key];
+      if (isPlainObject(prevVal) && isPlainObject(nextVal)) {
+        result[key] = safeDeepMerge(prevVal, nextVal);
+      } else if (isPlainObject(nextVal)) {
+        result[key] = safeDeepMerge({}, nextVal);
+      } else if (Array.isArray(prevVal) && Array.isArray(nextVal)) {
+        result[key] = [...prevVal, ...nextVal];
+      } else if (Array.isArray(nextVal)) {
+        result[key] = [...nextVal];
+      } else {
+        result[key] = nextVal;
+      }
+    }
+  }
+  return result as T;
+}
 
 export class FetchProxyImpl implements FetchProxy {
   constructor(
@@ -58,7 +92,7 @@ export class FetchProxyImpl implements FetchProxy {
 
   private getInit(init?: FetchCustomParameters) {
     if (init || this.init) {
-      return deepmerge(this.init || {}, init || {});
+      return safeDeepMerge(this.init || {}, init || {});
     }
     return undefined;
   }
