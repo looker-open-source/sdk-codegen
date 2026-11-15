@@ -75,7 +75,7 @@
     "test:jest": "DOT_ENV_FILE=.env.test jest",
     "test:ext": "yarn jest packages/extension-sdk packages/extension-sdk-react",
     "test:hack": "yarn jest packages/wholly-artifact/src packages/hackathon",
-    "sync": "yarn syncpack fix-mismatches && yarn install && yarn dedupe:dev",
+    "sync": "yarn syncpack fix && yarn install && yarn dedupe:dev",
     "watch": "lerna run --parallel watch",
     "watch:cjs": "lerna run --parallel watch:cjs"
   },
@@ -332,7 +332,7 @@
     "tmp": "^0.2.6",
     "**/remark-mdx/@babel/core": "^7.29.6",
     "d3-color": "^3.1.0",
-    "uuid": ">= 11.1.1",
+    "uuid": "^14.0.0",
     "tar": "^7.5.18",
     "**/@npmcli/map-workspaces/minimatch": "^11.0.1",
     "**/@npmcli/map-workspaces/glob/minimatch": "^11.0.1",

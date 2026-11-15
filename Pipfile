@@ -5,13 +5,16 @@ verify_ssl = true
 
 [dev-packages]
 tox = "*"
-tox-pipenv = "*"
+virtualenv = ">=21.14.9"
+filelock = ">=4.2.1"
+setuptools = ">=84.1.0"
+certifi = ">=2026.10.18"
 
 [packages]
-black = "*"
+black = ">=26.10.1"
 
 [requires]
-python_version = "3.8"
+python_version = "3.13"
 
 [pipenv]
 allow_prereleases = true
