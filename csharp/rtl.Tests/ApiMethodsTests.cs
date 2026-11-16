@@ -303,5 +303,135 @@ namespace sdkrtl.Tests
                 sdk.MakePath("/user", customSettings, req => Task.FromResult(req))
             );
         }
+
+        [Fact]
+        public async Task RenewsExpiredSudoTokenWithApiTokenAndRevertsCleanlyTest()
+        {
+            var sudoCount = 0;
+            var transport = new MockTransport((method, path, req) =>
+            {
+                if (path.EndsWith("/login"))
+                {
+                    return new RawResponse
+                    {
+                        Method = method,
+                        StatusCode = HttpStatusCode.OK,
+                        StatusMessage = "OK",
+                        ContentType = "application/json",
+                        Body = "{\"access_token\":\"admin-token\",\"token_type\":\"Bearer\",\"expires_in\":3600}"
+                    };
+                }
+
+                if (path.EndsWith("/login/5"))
+                {
+                    sudoCount++;
+                    // First sudo token has expires_in=5 (< lagTime=10), so access_token is non-empty but expired
+                    var ttl = sudoCount == 1 ? 5 : 3600;
+                    return new RawResponse
+                    {
+                        Method = method,
+                        StatusCode = HttpStatusCode.OK,
+                        StatusMessage = "OK",
+                        ContentType = "application/json",
+                        Body = $"{{\"access_token\":\"sudo-{sudoCount}\",\"token_type\":\"Bearer\",\"expires_in\":{ttl}}}"
+                    };
+                }
+
+                return new RawResponse
+                {
+                    Method = method,
+                    StatusCode = HttpStatusCode.OK,
+                    StatusMessage = "OK",
+                    ContentType = "application/json",
+                    Body = "\"\""
+                };
+            });
+
+            var settings = new MockSettings();
+            var session = new AuthSession(settings, transport);
+            await session.Login("5");
+            Assert.False(session.IsSudo());
+            Assert.False(session.IsAuthenticated());
+
+            var renewed = await session.GetToken() as IAccessToken;
+            Assert.NotNull(renewed);
+            Assert.Equal("sudo-2", renewed.access_token);
+            Assert.True(session.IsSudo());
+            Assert.Equal("Bearer admin-token", transport.Calls[1].AuthHeader);
+            Assert.Equal("Bearer admin-token", transport.Calls[2].AuthHeader);
+
+            // Repeated Login("5") while active must refresh sudo "5" rather than dropping to admin
+            await session.Login("5");
+            Assert.Equal("5", session.SudoId);
+            Assert.True(session.IsSudo());
+            var activeAfterReLogin = await session.GetToken() as IAccessToken;
+            Assert.Equal("sudo-3", activeAfterReLogin?.access_token);
+
+            // Logout() after sudo token expires clears SudoId without calling DELETE /logout
+            sudoCount = 0;
+            transport.Calls.Clear();
+            var expiredLogoutSession = new AuthSession(settings, transport);
+            await expiredLogoutSession.Login("5");
+            var didServerLogout = await expiredLogoutSession.Logout();
+            Assert.False(didServerLogout);
+            Assert.Null(expiredLogoutSession.SudoId);
+            Assert.True(expiredLogoutSession.IsAuthenticated());
+            var reverted = await expiredLogoutSession.GetToken() as IAccessToken;
+            Assert.Equal("admin-token", reverted?.access_token);
+            Assert.DoesNotContain(transport.Calls, c => c.Path.EndsWith("/logout"));
+        }
+
+        [Fact]
+        public async Task FailedSudoLoginDoesNotEscalateToAdminTokenTest()
+        {
+            var sudoAttempts = 0;
+            var transport = new MockTransport((method, path, _) =>
+            {
+                if (path.EndsWith("/login"))
+                {
+                    return new RawResponse
+                    {
+                        Method = method,
+                        StatusCode = HttpStatusCode.OK,
+                        StatusMessage = "OK",
+                        ContentType = "application/json",
+                        Body = "{\"access_token\":\"admin-token\",\"token_type\":\"Bearer\",\"expires_in\":3600}"
+                    };
+                }
+
+                if (path.EndsWith("/login/999"))
+                {
+                    sudoAttempts++;
+                    return new RawResponse
+                    {
+                        Method = method,
+                        StatusCode = HttpStatusCode.NotFound,
+                        StatusMessage = "Not Found",
+                        ContentType = "application/json",
+                        Body = "{\"message\":\"User not found\"}"
+                    };
+                }
+
+                return new RawResponse
+                {
+                    Method = method,
+                    StatusCode = HttpStatusCode.OK,
+                    StatusMessage = "OK",
+                    ContentType = "application/json",
+                    Body = "{\"id\":\"unexpected\"}"
+                };
+            });
+
+            var settings = new MockSettings();
+            var session = new AuthSession(settings, transport);
+            await Assert.ThrowsAsync<SdkError>(() => session.Login("999"));
+
+            Assert.Equal("999", session.SudoId);
+            Assert.False(session.IsSudo());
+            Assert.False(session.IsAuthenticated());
+
+            await Assert.ThrowsAsync<SdkError>(() => session.Authenticate(new HttpRequestMessage(HttpMethod.Get, "https://mock.looker.com:19999/api/4.0/user")));
+            Assert.Equal(2, sudoAttempts);
+        }
     }
 }

@@ -207,8 +207,10 @@ class AuthSession:
             self._sudo_id = None
             if self.is_sudo_authenticated:
                 self._logout(sudo=True, transport_options=transport_options)
-                if full:
-                    self._logout(transport_options=transport_options)
+            else:
+                self.sudo_token.reset()
+            if full and self.is_authenticated:
+                self._logout(transport_options=transport_options)
 
         elif self.is_authenticated:
             self._logout(transport_options=transport_options)

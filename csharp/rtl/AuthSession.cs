@@ -72,7 +72,7 @@ namespace Looker.RTL
         private AuthToken _authToken = new AuthToken();
         private AuthToken _sudoToken = new AuthToken();
 
-        private AuthToken ActiveToken => _sudoToken.access_token.IsFull() ? _sudoToken : _authToken;
+        private AuthToken ActiveToken => SudoId.IsFull() ? _sudoToken : _authToken;
 
         public IApiSettings Settings { get; set; }
         public ITransport Transport { get; set; }
@@ -112,6 +112,10 @@ namespace Looker.RTL
                 result = await Logout(); // Logout current sudo user
                 _sudoToken.Reset();
             }
+            else
+            {
+                _sudoToken.Reset();
+            }
 
             return result;
         }
@@ -125,9 +129,10 @@ namespace Looker.RTL
         private async Task<object> _login(string sudoId = null)
         {
             await SudoLogout();
-            if (sudoId != SudoId)
+            var targetSudoId = sudoId.IsFull() ? sudoId : null;
+            if (targetSudoId != SudoId)
             {
-                SudoId = sudoId;
+                SudoId = targetSudoId;
             }
 
             if (!_authToken.IsActive())
@@ -152,9 +157,9 @@ namespace Looker.RTL
                 this._authToken.SetToken(apiToken);
             }
 
-            if (sudoId.IsNullOrEmpty()) return this.ActiveToken;
+            if (SudoId.IsNullOrEmpty()) return this.ActiveToken;
             // Now that API user is logged in, login as the Sudo user
-            var token = this.ActiveToken;
+            var token = this._authToken;
 
             async Task<HttpRequestMessage> Auth(HttpRequestMessage request)
             {
@@ -167,7 +172,7 @@ namespace Looker.RTL
                 return await Task.FromResult(request);
             }
 
-            var sudoPath = $"{_apiPath}/login/{SdkUtils.EncodeParam(sudoId)}";
+            var sudoPath = $"{_apiPath}/login/{SdkUtils.EncodeParam(SudoId)}";
             var sudoToken = await Ok(Transport.Request<AccessToken, Exception>(
                 HttpMethod.Post,
                 sudoPath,
@@ -223,7 +228,19 @@ namespace Looker.RTL
         public async Task<bool> Logout()
         {
             var result = false;
-            if (IsAuthenticated())
+            if (SudoId.IsFull())
+            {
+                if (IsSudo())
+                {
+                    result = await this._logout();
+                }
+                else
+                {
+                    SudoId = null;
+                    _sudoToken.Reset();
+                }
+            }
+            else if (IsAuthenticated())
             {
                 result = await this._logout();
             }
@@ -244,13 +261,10 @@ namespace Looker.RTL
 
         public async Task<object> Login(string sudoId = null)
         {
-            if ((sudoId.IsFull() && sudoId != SudoId) || !IsAuthenticated())
+            var targetSudoId = sudoId.IsFull() ? sudoId : null;
+            if (targetSudoId.IsFull() || targetSudoId != SudoId || !IsAuthenticated())
             {
-                await _login(sudoId);
-            }
-            else
-            {
-                await _login();
+                await _login(targetSudoId);
             }
 
             return ActiveToken;

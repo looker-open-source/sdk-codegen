@@ -345,3 +345,52 @@ def test_trailing_slash_base_url_does_not_produce_double_slash_auth_urls(
     )
     auth_url = urllib.parse.urlparse(oauth.create_auth_code_request_url("api", "state"))
     assert auth_url.path == "/auth"
+
+
+def test_expired_sudo_full_logout_logs_out_active_api_token(config_file):
+    settings = api_settings.ApiSettings(filename=config_file, env_prefix="LOOKERSDK")
+    seen_calls = []
+
+    class RecordingTransport(MockTransport):
+        def request(
+            self,
+            method,
+            path,
+            query_params=None,
+            body=None,
+            authenticator=None,
+            transport_options=None,
+        ):
+            seen_calls.append((method, path))
+            return super().request(
+                method,
+                path,
+                query_params=query_params,
+                body=body,
+                authenticator=authenticator,
+                transport_options=transport_options,
+            )
+
+    session = auth.AuthSession(
+        settings, RecordingTransport(), serialize.deserialize40, "4.0"
+    )
+    session.login_user(5)
+    assert session.is_authenticated
+    assert session.is_sudo_authenticated
+
+    # Expire sudo_token while API3 token remains active
+    session.sudo_token.expires_at = (
+        session.sudo_token.expires_at - auth.auth_token.datetime.timedelta(hours=2)
+    )
+    assert not session.is_sudo_authenticated
+    assert session.is_authenticated
+
+    seen_calls.clear()
+    session.logout(full=True)
+
+    assert session._sudo_id is None
+    assert session.sudo_token.access_token == ""
+    assert not session.is_authenticated
+    assert len(seen_calls) == 1
+    assert seen_calls[0][0] == transport.HttpMethod.DELETE
+    assert seen_calls[0][1].endswith("/api/logout")

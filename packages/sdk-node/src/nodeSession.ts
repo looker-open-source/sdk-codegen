@@ -1,26 +1,10 @@
 /*
 
- MIT License
+ Copyright 2022-2026 Google LLC
 
- Copyright (c) 2022 Looker Data Sciences, Inc.
-
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in all
- copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- SOFTWARE.
+ Use of this source code is governed by an MIT-style
+ license that can be found in the LICENSE file or at
+ https://opensource.org/licenses/MIT
 
  */
 
@@ -56,7 +40,7 @@ export class NodeSession extends AuthSession {
    * Abstraction of AuthToken retrieval to support sudo mode
    */
   get activeToken() {
-    if (this._sudoToken.access_token) {
+    if (this.sudoId) {
       return this._sudoToken;
     }
     return this._authToken;
@@ -131,7 +115,14 @@ export class NodeSession extends AuthSession {
    */
   async logout() {
     let result = false;
-    if (this.isAuthenticated()) {
+    if (this.sudoId) {
+      if (this.isSudo()) {
+        result = await this._logout();
+      } else {
+        this.sudoId = '';
+        this._sudoToken.reset();
+      }
+    } else if (this.isAuthenticated()) {
       result = await this._logout();
     }
     return result;
@@ -142,6 +133,8 @@ export class NodeSession extends AuthSession {
     if (this.isSudo()) {
       result = await this.logout(); // Logout the current sudo
       this._sudoToken.reset();
+    } else {
+      this._sudoToken.reset();
     }
     return result;
   }
@@ -151,9 +144,10 @@ export class NodeSession extends AuthSession {
     // for linty freshness, always logout sudo if set
     await this.sudoLogout();
 
-    if (newId !== this.sudoId) {
+    const targetSudoId = newId || '';
+    if (targetSudoId !== this.sudoId) {
       // Assign new requested sudo id
-      this.sudoId = newId || '';
+      this.sudoId = targetSudoId;
     }
 
     if (!this._authToken.isActive()) {
@@ -189,10 +183,10 @@ export class NodeSession extends AuthSession {
 
     if (this.sudoId) {
       // Use the API user auth to sudo
-      const token = this.activeToken;
+      const token = this._authToken;
       const promise = this.transport.request<IAccessToken, IError>(
         strPost,
-        encodeURI(`${this.apiPath}/login/${newId}`),
+        encodeURI(`${this.apiPath}/login/${this.sudoId}`),
         null,
         null,
         // ensure the auth token is included in the sudo request
