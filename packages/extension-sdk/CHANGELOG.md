@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [26.24.1](https://github.com/looker-open-source/sdk-codegen/compare/extension-sdk-v26.24.0...extension-sdk-v26.24.1) (2026-11-16)
+
+
+### Bug Fixes
+
+* **extension-sdk:** replace deepmerge and resolve npm Dependabot alerts ([#1793](https://github.com/looker-open-source/sdk-codegen/issues/1793)) ([a2096d6](https://github.com/looker-open-source/sdk-codegen/commit/a2096d691194ce9f0de65ad9b8977746341221cc))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from 26.24.0 to 26.24.1
+    * @looker/sdk-rtl bumped from 21.6.8 to 21.6.9
+
 ## [26.24.0](https://github.com/looker-open-source/sdk-codegen/compare/extension-sdk-v26.22.0...extension-sdk-v26.24.0) (2026-11-09)
 
 

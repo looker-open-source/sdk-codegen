@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [26.24.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-node-v26.24.0...sdk-node-v26.24.1) (2026-11-16)
+
+
+### Bug Fixes
+
+* **sdk-node:** scope verify_ssl: false to request transport instead of entire process ([#1802](https://github.com/looker-open-source/sdk-codegen/issues/1802)) ([cf856d8](https://github.com/looker-open-source/sdk-codegen/commit/cf856d8507c5741ea0e09564ccc42e6ced8e940d))
+* strip trailing slashes from base_url across SDKs ([#1803](https://github.com/looker-open-source/sdk-codegen/issues/1803)) ([21b6ed1](https://github.com/looker-open-source/sdk-codegen/commit/21b6ed17dc0e18f090ddd965a857c3a133bfbfda))
+* use UTC for token expiration and re-authenticate on 401 across SDKs ([#1787](https://github.com/looker-open-source/sdk-codegen/issues/1787)) ([bd5fc9c](https://github.com/looker-open-source/sdk-codegen/commit/bd5fc9c47b42bc190271f63375e05d32bb921e0f))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from 26.24.0 to 26.24.1
+    * @looker/sdk-rtl bumped from 21.6.8 to 21.6.9
+
 ## [26.24.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-node-v26.22.0...sdk-node-v26.24.0) (2026-11-09)
 
 

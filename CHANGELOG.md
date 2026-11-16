@@ -1,5 +1,17 @@
 # Changelog
 
+## [26.24.1](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v26.24.0...sdk-codegen-all-v26.24.1) (2026-11-16)
+
+
+### Bug Fixes
+
+* **extension-sdk:** replace deepmerge and resolve npm Dependabot alerts ([#1793](https://github.com/looker-open-source/sdk-codegen/issues/1793)) ([a2096d6](https://github.com/looker-open-source/sdk-codegen/commit/a2096d691194ce9f0de65ad9b8977746341221cc))
+* **kotlin:** upgrade Gradle/Kotlin/Guava and replace legacy INI/Maven deps ([#1792](https://github.com/looker-open-source/sdk-codegen/issues/1792)) ([a73fc90](https://github.com/looker-open-source/sdk-codegen/commit/a73fc904ac94fd8d4aa3a090322535cb77c50aaa))
+* **python:** pre-cache Union[str, bytes] in APIMethods._return ([#1804](https://github.com/looker-open-source/sdk-codegen/issues/1804)) ([c0f4e06](https://github.com/looker-open-source/sdk-codegen/commit/c0f4e066b899a89bab14dd9b1ef8fc32446f8695))
+* **sdk-node:** scope verify_ssl: false to request transport instead of entire process ([#1802](https://github.com/looker-open-source/sdk-codegen/issues/1802)) ([cf856d8](https://github.com/looker-open-source/sdk-codegen/commit/cf856d8507c5741ea0e09564ccc42e6ced8e940d))
+* strip trailing slashes from base_url across SDKs ([#1803](https://github.com/looker-open-source/sdk-codegen/issues/1803)) ([21b6ed1](https://github.com/looker-open-source/sdk-codegen/commit/21b6ed17dc0e18f090ddd965a857c3a133bfbfda))
+* use UTC for token expiration and re-authenticate on 401 across SDKs ([#1787](https://github.com/looker-open-source/sdk-codegen/issues/1787)) ([bd5fc9c](https://github.com/looker-open-source/sdk-codegen/commit/bd5fc9c47b42bc190271f63375e05d32bb921e0f))
+
 ## [26.24.0](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-all-v26.22.0...sdk-codegen-all-v26.24.0) (2026-11-09)
 
 
