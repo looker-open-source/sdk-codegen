@@ -49,6 +49,7 @@ TReturn = Optional[Union[str, bytes, serialize.TDeserializeReturn]]
 TQueryParams = MutableMapping[
     str, Union[None, bool, str, int, Sequence[int], Sequence[str], datetime.datetime]
 ]
+_UNION_STR_BYTES = Union[str, bytes]
 
 
 class APIMethods:
@@ -106,7 +107,7 @@ class APIMethods:
             ret = response.value
         else:
             value = response.value.decode(encoding=encoding)
-            if structure == Union[str, bytes] or structure == str or value == "":  # type: ignore
+            if structure == _UNION_STR_BYTES or structure is str or value == "":  # type: ignore
                 ret = value
             else:
                 # ignore type: mypy bug doesn't recognized kwarg
