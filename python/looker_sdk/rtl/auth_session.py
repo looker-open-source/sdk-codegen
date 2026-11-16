@@ -279,7 +279,7 @@ class OAuthSession(AuthSession):
         # but mypy can't follow it
         self.client_id = config_data["client_id"]
         self.redirect_uri = config_data.get("redirect_uri", "")
-        self.looker_url = config_data.get("looker_url", "").rstrip("/")
+        self.looker_url = (config_data.get("looker_url") or "").rstrip("/")
         self.code_verifier = ""
 
     def create_auth_code_request_url(self, scope: str, state: str) -> str:
