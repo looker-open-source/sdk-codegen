@@ -494,6 +494,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     * @looker/sdk-codegen-scripts bumped from 21.5.46 to 21.5.47
     * @looker/sdk-node bumped from 26.18.0 to 26.20.0
 
+## [0.9.93](https://github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.92...api-explorer-v0.9.93) (2026-11-16)
+
+
+### Bug Fixes
+
+* **extension-sdk:** replace deepmerge and resolve npm Dependabot alerts ([#1793](https://github.com/looker-open-source/sdk-codegen/issues/1793)) ([a2096d6](https://github.com/looker-open-source/sdk-codegen/commit/a2096d691194ce9f0de65ad9b8977746341221cc))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/code-editor bumped from 0.1.59 to 0.1.60
+    * @looker/extension-utils bumped from 0.1.69 to 0.1.70
+    * @looker/run-it bumped from 0.9.92 to 0.9.93
+    * @looker/sdk bumped from 26.24.0 to 26.24.1
+    * @looker/sdk-codegen bumped from 26.20.2 to 26.20.3
+    * @looker/sdk-rtl bumped from 21.6.8 to 21.6.9
+  * devDependencies
+    * @looker/sdk-codegen-scripts bumped from 21.5.49 to 21.5.50
+    * @looker/sdk-node bumped from 26.24.0 to 26.24.1
+
 ## [0.9.92](https://github.com/looker-open-source/sdk-codegen/compare/api-explorer-v0.9.91...api-explorer-v0.9.92) (2026-11-09)
 
 

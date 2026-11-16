@@ -351,6 +351,24 @@
     * @looker/sdk-node bumped from 26.18.0 to 26.20.0
     * @looker/sdk-rtl bumped from 21.6.5 to 21.6.6
 
+## [21.5.50](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.5.49...sdk-codegen-scripts-v21.5.50) (2026-11-16)
+
+
+### Bug Fixes
+
+* strip trailing slashes from base_url across SDKs ([#1803](https://github.com/looker-open-source/sdk-codegen/issues/1803)) ([21b6ed1](https://github.com/looker-open-source/sdk-codegen/commit/21b6ed17dc0e18f090ddd965a857c3a133bfbfda))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk bumped from 26.24.0 to 26.24.1
+    * @looker/sdk-codegen bumped from 26.20.2 to 26.20.3
+    * @looker/sdk-codegen-utils bumped from 21.0.39 to 21.0.40
+    * @looker/sdk-node bumped from 26.24.0 to 26.24.1
+    * @looker/sdk-rtl bumped from 21.6.8 to 21.6.9
+
 ## [21.5.49](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-scripts-v21.5.48...sdk-codegen-scripts-v21.5.49) (2026-11-09)
 
 
