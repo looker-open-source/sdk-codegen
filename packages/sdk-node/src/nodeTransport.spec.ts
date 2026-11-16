@@ -129,6 +129,14 @@ describe('NodeTransport TLS verification isolation', () => {
           res.end(payload);
           return;
         }
+        if (url === '/corrupt-gzip') {
+          res.writeHead(200, {
+            'Content-Type': 'application/json',
+            'Content-Encoding': 'gzip',
+          });
+          res.end(Buffer.from('not-a-valid-gzip-payload', 'utf8'));
+          return;
+        }
         if (url === '/redirect-post') {
           res.writeHead(302, { Location: `${httpsBaseUrl}/echo` });
           res.end();
@@ -415,15 +423,38 @@ describe('NodeTransport TLS verification isolation', () => {
     }
   });
 
-  it('supports a custom https.Agent with a trusted CA when verify_ssl is true', async () => {
+  it('supports a custom https.Agent via transport settings, per-request options, or authenticator', async () => {
     const customAgent = new https.Agent({ ca: certPem });
     try {
-      const transport = new NodeTransport({
+      // 1. Configured via constructor ITransportSettings
+      const settingsTransport = new NodeTransport({
+        base_url: httpsBaseUrl,
+        verify_ssl: true,
+        agent: customAgent,
+      } as unknown as ITransportSettings);
+      const settingsRes = await settingsTransport.request<
+        { ok: boolean },
+        Error
+      >('GET', '/ping');
+      expect(settingsRes.ok).toBe(true);
+
+      // 2. Configured via per-request options
+      const perReqTransport = new NodeTransport({
         base_url: httpsBaseUrl,
         verify_ssl: true,
       } as ITransportSettings);
+      const perReqRes = await perReqTransport.request<{ ok: boolean }, Error>(
+        'GET',
+        '/ping',
+        undefined,
+        undefined,
+        undefined,
+        { agent: customAgent }
+      );
+      expect(perReqRes.ok).toBe(true);
 
-      const res = await transport.request<{ ok: boolean }, Error>(
+      // 3. Configured via authenticator callback
+      const authRes = await perReqTransport.request<{ ok: boolean }, Error>(
         'GET',
         '/ping',
         undefined,
@@ -433,12 +464,38 @@ describe('NodeTransport TLS verification isolation', () => {
           return props;
         }
       );
-      expect(res.ok).toBe(true);
-      if (res.ok) {
-        expect(res.value.ok).toBe(true);
-      }
+      expect(authRes.ok).toBe(true);
     } finally {
       customAgent.destroy();
     }
+  });
+
+  it('propagates decompression errors on corrupted compressed streams and honors AbortSignal', async () => {
+    const transport = new NodeTransport({
+      base_url: httpsBaseUrl,
+      verify_ssl: false,
+    } as ITransportSettings);
+
+    const corruptRes = await transport.request<unknown, Error>(
+      'GET',
+      '/corrupt-gzip'
+    );
+    expect(corruptRes.ok).toBe(false);
+
+    await expect(
+      transport.stream(res => res.text(), 'GET', '/corrupt-gzip')
+    ).rejects.toThrow();
+
+    const controller = new AbortController();
+    controller.abort();
+    const abortedRes = await transport.rawRequest(
+      'GET',
+      '/ping',
+      undefined,
+      undefined,
+      undefined,
+      { signal: controller.signal }
+    );
+    expect(abortedRes.ok).toBe(false);
   });
 });

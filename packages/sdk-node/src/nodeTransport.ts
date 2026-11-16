@@ -145,7 +145,6 @@ const getInsecureHttpsAgent = (): https.Agent => {
     insecureHttpsAgent = new https.Agent({
       keepAlive: true,
       scheduling: 'lifo',
-      timeout: 5000,
       rejectUnauthorized: false,
     });
   }
@@ -183,10 +182,13 @@ const createLazyDecoder = (encoding: string): Transform | undefined => {
         decoder.on('data', (d: Buffer) => this.push(d));
         decoder.on('error', err => {
           decoderError = err;
+          this.destroy(err);
         });
       }
       decoder.write(chunk, err => {
-        callback(err ?? decoderError);
+        if (!this.destroyed) {
+          callback(err ?? decoderError);
+        }
       });
     },
     flush(callback) {
@@ -195,10 +197,16 @@ const createLazyDecoder = (encoding: string): Transform | undefined => {
         return;
       }
       if (decoderError) {
-        callback(decoderError);
+        if (!this.destroyed) {
+          callback(decoderError);
+        }
         return;
       }
-      decoder.once('error', err => callback(err));
+      decoder.once('error', err => {
+        if (!this.destroyed) {
+          callback(err);
+        }
+      });
       decoder.once('end', () => callback());
       decoder.end();
     },
@@ -714,6 +722,14 @@ export class NodeTransport extends BaseTransport {
     );
     // don't default to same-origin for NodeJS
     props.credentials = undefined;
+
+    if (mergedOptions.signal && !props.signal) {
+      props.signal = mergedOptions.signal;
+    }
+
+    if (mergedOptions.agent && !props.agent) {
+      props.agent = mergedOptions.agent;
+    }
 
     if (!verifySsl(mergedOptions) && !props.agent) {
       props.agent = getInsecureHttpsAgent();
