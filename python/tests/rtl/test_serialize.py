@@ -214,6 +214,8 @@ class ModelNoRefs2(ml.Model):
 
 
 converter = cattr.Converter()
+if sr.is_sequence is not None and sr.list_structure_factory is not None:
+    converter.register_structure_hook_factory(sr.is_sequence, sr.list_structure_factory)
 translate_keys_structure_hook = functools.partial(
     sr.translate_keys_structure_hook, converter
 )
@@ -800,3 +802,100 @@ def test_serialize_forward_ref_unresolved_model():
         }
     ).encode("utf-8")
     assert sr.serialize40(api_model=model) == expected
+
+
+def test_deserialize40_sequence_returns_list():
+    from looker_sdk.sdk.api40 import models as models40
+
+    int_seq = sr.deserialize40(data="[1, 2, 3]", structure=Sequence[int])
+    assert isinstance(int_seq, list)
+    assert int_seq == [1, 2, 3]
+
+    plan_data = {
+        "id": "1",
+        "title": "Daily Plan",
+        "scheduled_plan_destination": [{"id": "2", "format": "csv"}],
+    }
+    plans = sr.deserialize40(
+        data=json.dumps([plan_data]),
+        structure=Sequence[models40.ScheduledPlan],
+    )
+    assert isinstance(plans, list)
+    assert len(plans) == 1
+    assert plans[0].id == "1"
+    assert isinstance(plans[0].scheduled_plan_destination, list)
+    assert plans[0].scheduled_plan_destination[0].format == "csv"
+
+
+def test_deserialize40_does_not_reregister_hooks(mocker):
+    from looker_sdk.sdk.api40 import models as models40
+
+    payload = json.dumps(
+        {
+            "id": "1",
+            "title": "Plan",
+            "scheduled_plan_destination": [{"id": "2", "format": "csv"}],
+        }
+    )
+    # Warm up converter40 dispatch cache once
+    sr.deserialize40(data=payload, structure=models40.ScheduledPlan)
+
+    structure_func = getattr(sr.converter40, "_structure_func", None)
+    initial_num_fns = (
+        structure_func.get_num_fns()
+        if structure_func is not None and hasattr(structure_func, "get_num_fns")
+        else None
+    )
+    spy = mocker.spy(cattr.Converter, "register_structure_hook_factory")
+
+    for _ in range(50):
+        result = sr.deserialize40(data=payload, structure=models40.ScheduledPlan)
+        assert isinstance(result, models40.ScheduledPlan)
+
+    spy.assert_not_called()
+    if initial_num_fns is not None:
+        assert structure_func.get_num_fns() == initial_num_fns
+    if (
+        structure_func is not None
+        and hasattr(structure_func, "dispatch")
+        and hasattr(structure_func.dispatch, "cache_info")
+    ):
+        assert structure_func.dispatch.cache_info().hits >= 50
+
+
+def test_deserialize40_multithreaded():
+    from concurrent.futures import ThreadPoolExecutor
+    from looker_sdk.sdk.api40 import models as models40
+
+    payload = json.dumps(
+        [
+            {
+                "id": "1",
+                "title": "Plan",
+                "scheduled_plan_destination": [{"id": "2", "format": "csv"}],
+            }
+        ]
+    )
+    structure_func = getattr(sr.converter40, "_structure_func", None)
+    initial_num_fns = (
+        structure_func.get_num_fns()
+        if structure_func is not None and hasattr(structure_func, "get_num_fns")
+        else None
+    )
+
+    def worker(_: int):
+        return sr.deserialize40(
+            data=payload, structure=Sequence[models40.ScheduledPlan]
+        )
+
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        results = list(executor.map(worker, range(200)))
+
+    assert len(results) == 200
+    for res in results:
+        assert isinstance(res, list)
+        assert len(res) == 1
+        assert isinstance(res[0].scheduled_plan_destination, list)
+
+    if initial_num_fns is not None:
+        assert structure_func.get_num_fns() == initial_num_fns

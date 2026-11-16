@@ -73,10 +73,6 @@ def deserialize(
     except json.JSONDecodeError as ex:
         raise DeserializeError(f"Bad json {ex}")
     try:
-        if is_sequence is not None and list_structure_factory is not None:
-            converter.register_structure_hook_factory(
-                is_sequence, list_structure_factory
-            )
         response: TDeserializeReturn = converter.structure(  # type: ignore
             data, structure
         )
@@ -120,6 +116,8 @@ def translate_keys_structure_hook(converter, data, model_type):
 
 
 converter40 = cattr.Converter()
+if is_sequence is not None and list_structure_factory is not None:
+    converter40.register_structure_hook_factory(is_sequence, list_structure_factory)
 deserialize40 = functools.partial(deserialize, converter=converter40)
 serialize40 = functools.partial(serialize, converter=converter40)
 
