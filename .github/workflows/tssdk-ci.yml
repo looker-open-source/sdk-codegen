@@ -105,7 +105,7 @@ jobs:
         if: failure()
 
       - name: Run unit tests
-        run: yarn jest "packages/(extension-sdk|extension-sdk-react|sdk-rtl|sdk)/src" --reporters=default --reporters=jest-junit
+        run: yarn jest "packages/(extension-sdk|extension-sdk-react|sdk-node|sdk-rtl|sdk)/src" --reporters=default --reporters=jest-junit
 
       - name: Delete looker.ini mock
         run: rm looker.ini
