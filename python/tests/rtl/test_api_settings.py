@@ -101,10 +101,10 @@ def test_it_retrieves_section_by_name(config_file, test_section, expected_url):
 
 def test_it_assigns_defaults_to_empty_settings(config_file):
     """ApiSettings assigns defaults to optional settings that are empty in the
-    config file.
+    config file and strips trailing slashes from base_url.
     """
     settings = api_settings.ApiSettings(filename=config_file, section="BARE_MINIMUM")
-    assert settings.base_url == "https://host3.looker.com:19999/"
+    assert settings.base_url == "https://host3.looker.com:19999"
     assert settings.verify_ssl
     data = vars(settings)
     assert "client_id" not in data
@@ -249,3 +249,30 @@ def test_it_unquotes_quoted_env_var_values(monkeypatch):
     assert settings.base_url == "https://host1.looker.com:19999"
     assert settings.verify_ssl is False
     assert settings.timeout == 100
+
+
+@pytest.mark.parametrize(
+    "raw_base_url",
+    [
+        "https://host1.looker.com:19999/",
+        "https://host1.looker.com:19999///",
+        "'https://host1.looker.com:19999/'",
+        '"https://host1.looker.com:19999///"',
+    ],
+)
+def test_it_strips_trailing_slashes_from_base_url(monkeypatch, raw_base_url):
+    """ApiSettings should strip trailing slashes from base_url."""
+    monkeypatch.setenv("LOOKERSDK_BASE_URL", raw_base_url)
+
+    settings = api_settings.ApiSettings(filename="", env_prefix="LOOKERSDK")
+
+    assert settings.base_url == "https://host1.looker.com:19999"
+    assert settings.read_config().get("base_url") == "https://host1.looker.com:19999"
+
+
+def test_slash_only_base_url_is_treated_as_unconfigured(monkeypatch):
+    """ApiSettings should treat a slash-only base_url as unconfigured."""
+    monkeypatch.setenv("LOOKERSDK_BASE_URL", "///")
+
+    with pytest.raises(error.SDKError):
+        api_settings.ApiSettings(filename="", env_prefix="LOOKERSDK").is_configured()

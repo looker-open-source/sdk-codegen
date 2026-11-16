@@ -77,7 +77,7 @@ public struct DefaultSettings : IApiSettings {
 public func ValueSettings(_ values: StringDictionary<String>) -> IApiSettings {
     var defaults = DefaultSettings()
     defaults.api_version = unquote(values[strLookerApiVersion]) ?? defaults.api_version
-    defaults.base_url = unquote(values[strLookerBaseUrl]) ?? defaults.base_url
+    defaults.base_url = stripTrailingSlashes(values[strLookerBaseUrl]) ?? defaults.base_url
     defaults.verify_ssl = defaultBool(unquote(values[strLookerVerifySsl]), true)
     if (values[strLookerTimeout] != nil) {
         defaults.timeout = Int(unquote(values[strLookerTimeout])!)!
@@ -107,7 +107,7 @@ public struct ApiSettings: IApiSettings {
     public init(_ settings: IApiSettings) throws {
         let defaults = DefaultSettings()
         // coerce types to declared types since some paths could have non-conforming settings values
-        self.base_url = unquote(settings.base_url) ?? defaults.base_url
+        self.base_url = stripTrailingSlashes(settings.base_url) ?? defaults.base_url
         self.api_version = unquote(settings.api_version) ?? defaults.api_version
         self.verify_ssl = settings.verify_ssl ?? defaults.verify_ssl
         self.timeout = settings.timeout ?? defaults.timeout

@@ -88,7 +88,14 @@ open class ApiConfig: IApiSettings {
             return [:]
         }
         let config = parseConfig(self.fileName)
-        return config[section ?? self.section] ?? [:]
+        var result = config[section ?? self.section] ?? [:]
+        if let baseUrl = result["base_url"] {
+            result["base_url"] = stripTrailingSlashes(baseUrl)
+        }
+        if let lookerUrl = result["looker_url"] {
+            result["looker_url"] = stripTrailingSlashes(lookerUrl)
+        }
+        return result
     }
 
     public func isConfigured() -> Bool {
@@ -135,9 +142,11 @@ open class ApiConfig: IApiSettings {
         let config = parseConfig(fileName)
         let values = config[section]
         let defaults = DefaultSettings()
-        self.base_url = envVar(strLookerBaseUrl)
+        self.base_url = stripTrailingSlashes(
+            envVar(strLookerBaseUrl)
             ?? values?["base_url"] as String?
             ?? defaults.base_url
+        )
         self.api_version = envVar(strLookerApiVersion)
             ?? values?["api_version"] as String?
             ?? defaults.api_version
@@ -152,7 +161,7 @@ open class ApiConfig: IApiSettings {
 
     public func assign(_ values: IApiSettings) {
         let defaults = DefaultSettings()
-        self.base_url = unquote(values.base_url) ?? defaults.base_url
+        self.base_url = stripTrailingSlashes(values.base_url) ?? defaults.base_url
         self.api_version = unquote(values.api_version) ?? defaults.api_version
         self.headers = values.headers ?? defaults.headers
         self.verify_ssl = values.verify_ssl ?? defaults.verify_ssl

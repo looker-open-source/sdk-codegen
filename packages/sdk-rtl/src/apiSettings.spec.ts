@@ -74,6 +74,16 @@ describe('SDK configuration', () => {
       expect(settings.verify_ssl).toEqual(false);
       expect(settings.timeout).toEqual(30);
     });
+
+    it('strips trailing slashes in ValueSettings', () => {
+      const settings = ValueSettings(
+        {
+          [strLookerBaseUrl]: '"https://my-instance.looker.com///"',
+        },
+        envPrefix
+      );
+      expect(settings.base_url).toEqual('https://my-instance.looker.com');
+    });
   });
 
   describe('ApiSettings', () => {
@@ -105,6 +115,24 @@ describe('SDK configuration', () => {
       };
 
       expect(() => new ApiSettings(values)).toThrow(strBadConfiguration);
+    });
+
+    it('strips trailing slashes during initialization', () => {
+      const settings = new ApiSettings({
+        base_url: 'https://my-instance.looker.com/',
+      });
+      expect(settings.base_url).toEqual('https://my-instance.looker.com');
+
+      const quotedSettings = new ApiSettings({
+        base_url: "'https://my-instance.looker.com///'",
+      });
+      expect(quotedSettings.base_url).toEqual('https://my-instance.looker.com');
+    });
+
+    it('fails when base_url contains only slashes', () => {
+      expect(() => new ApiSettings({ base_url: '///' })).toThrow(
+        strBadConfiguration
+      );
     });
   });
 });

@@ -107,7 +107,7 @@ export class TypescriptGen extends CodeGen {
   methodsPrologue(_indent: string) {
     return `
 import type { ${this.rtlImports()}IAuthSession, ITransportSettings, SDKResponse } from '@looker/sdk-rtl';
-import { APIMethods, encodeParam } from '@looker/sdk-rtl';
+import { APIMethods, encodeParam, stripTrailingSlashes } from '@looker/sdk-rtl';
 /**
  * ${this.warnEditing()}
  *
@@ -123,10 +123,8 @@ export class ${this.packageName} extends APIMethods implements I${
   constructor(authSession: IAuthSession) {
     super(authSession, sdkVersion)
     this.apiVersion = ${this.packageName}.ApiVersion
-    this.apiPath =
-      authSession.settings.base_url === ''
-        ? ''
-        : authSession.settings.base_url + '/api/' + this.apiVersion
+    const baseUrl = stripTrailingSlashes(authSession.settings.base_url)
+    this.apiPath = baseUrl === '' ? '' : baseUrl + '/api/' + this.apiVersion
   }
 
 `;
@@ -222,7 +220,7 @@ export interface I${this.packageName} extends IAPIMethods {
   streamsPrologue(_indent: string): string {
     return `
 import type { ${this.rtlImports()}IAuthSession, ITransportSettings } from '@looker/sdk-rtl';
-import { APIMethods, agentPrefix, encodeParam } from '@looker/sdk-rtl';
+import { APIMethods, agentPrefix, encodeParam, stripTrailingSlashes } from '@looker/sdk-rtl';
 
 /**
  * ${this.warnEditing()}
@@ -236,10 +234,8 @@ export class ${this.packageName}Stream extends APIMethods {
   constructor(authSession: IAuthSession) {
     super(authSession, sdkVersion);
     this.apiVersion = ${this.packageName}Stream.ApiVersion;
-    this.apiPath =
-      authSession.settings.base_url === ''
-        ? ''
-        : authSession.settings.base_url + '/api/' + this.apiVersion;
+    const baseUrl = stripTrailingSlashes(authSession.settings.base_url);
+    this.apiPath = baseUrl === '' ? '' : baseUrl + '/api/' + this.apiVersion;
     authSession.settings.agentTag = agentPrefix + ' Streaming ' + sdkVersion;
   }
 `;

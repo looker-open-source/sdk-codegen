@@ -84,7 +84,7 @@ class OAuthSession(
         this.codeVerifier = base64UrlEncode(this.secureRandom(32))
         val codeChallenge = this.sha256hash(this.codeVerifier)
         val config = this.apiSettings.readConfig()
-        val lookerUrl = config["looker_url"]
+        val lookerUrl = unQuote(config["looker_url"]).trimEnd('/')
         return addQueryParams(
             "$lookerUrl/auth",
             mapOf(

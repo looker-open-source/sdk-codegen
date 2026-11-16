@@ -48,7 +48,8 @@ open class BaseTransport : ITransport  {
 
     public init(_ options: ITransportSettings) {
         self.options = options
-        self.apiPath = "\(options.base_url!)/api/\(options.api_version!)"
+        let baseUrl = stripTrailingSlashes(options.base_url) ?? ""
+        self.apiPath = "\(baseUrl)/api/\(options.api_version!)"
     }
 
     open func request<TSuccess: Codable, TError: Codable> (
@@ -131,6 +132,23 @@ open class BaseTransport : ITransport  {
         return result!
     }
 
+    public func makeUrl(
+        _ path: String,
+        _ queryParams: Values? = nil,
+        _ authenticator: Authenticator? = nil,
+        _ options: ITransportSettings? = nil
+    ) -> String {
+        var fullPath = path
+        if !(fullPath.starts(with: "https:") || fullPath.starts(with: "http:")) {
+            // modify path if it's an API call rather than full path request
+            let base = (authenticator != nil)
+                ? self.apiPath
+                : (stripTrailingSlashes(options?.base_url ?? self.options.base_url) ?? "")
+            fullPath = base + path
+        }
+        return addQueryParams(fullPath, queryParams)
+    }
+
     private func initRequest(
         _ method: HttpMethod,
         _ path: String,
@@ -139,12 +157,7 @@ open class BaseTransport : ITransport  {
         _ authenticator: Authenticator?,
         _ options: ITransportSettings?
     ) -> URLRequest? {
-        var fullPath = path
-        if !(fullPath.starts(with: "https:") || fullPath.starts(with: "http:")) {
-            // modify path if it's an API call rather than full path request
-            fullPath = ((authenticator != nil) ? self.apiPath : (options?.base_url!)!) + path
-        }
-        fullPath = addQueryParams(fullPath, queryParams)
+        let fullPath = self.makeUrl(path, queryParams, authenticator, options)
         let requestPath = URL(string: fullPath)!
         var req = URLRequest(
             url: requestPath,

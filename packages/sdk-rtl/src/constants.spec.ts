@@ -25,7 +25,13 @@
  */
 
 import { TestConfig } from './testUtils';
-import { boolDefault, isFalse, isTrue, unquote } from './constants';
+import {
+  boolDefault,
+  isFalse,
+  isTrue,
+  stripTrailingSlashes,
+  unquote,
+} from './constants';
 import { ResponseMode, responseMode } from './transport';
 
 const config = TestConfig();
@@ -97,6 +103,28 @@ describe('Constants functions', () => {
     expect(unquote('"foo"')).toEqual('foo');
     expect(unquote('foo"')).toEqual('foo"');
     expect(unquote('"foo')).toEqual('"foo');
+  });
+
+  it('stripTrailingSlashes', () => {
+    expect(stripTrailingSlashes('https://my.looker.com:19999/')).toEqual(
+      'https://my.looker.com:19999'
+    );
+    expect(stripTrailingSlashes('https://my.looker.com:19999///')).toEqual(
+      'https://my.looker.com:19999'
+    );
+    expect(stripTrailingSlashes('"https://my.looker.com:19999/"')).toEqual(
+      'https://my.looker.com:19999'
+    );
+    expect(stripTrailingSlashes("'https://my.looker.com:19999///'")).toEqual(
+      'https://my.looker.com:19999'
+    );
+    expect(stripTrailingSlashes('https://my.looker.com:19999')).toEqual(
+      'https://my.looker.com:19999'
+    );
+    expect(stripTrailingSlashes('///')).toEqual('');
+    expect(stripTrailingSlashes('')).toEqual('');
+    expect(stripTrailingSlashes(undefined)).toEqual('');
+    expect(stripTrailingSlashes(null)).toEqual('');
   });
 
   it('string types match', () => {

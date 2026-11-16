@@ -33,6 +33,7 @@ import type {
   Values,
 } from './transport';
 import { StatusCode, agentPrefix, sdkOk } from './transport';
+import { stripTrailingSlashes } from './constants';
 import type { IAuthSession } from './authSession';
 
 /**
@@ -48,10 +49,8 @@ export const functionalSdk = (
 ) => {
   const sdk = new APIMethods(authSession, sdkVersion);
   sdk.apiVersion = apiVersion;
-  sdk.apiPath =
-    authSession.settings.base_url === ''
-      ? ''
-      : authSession.settings.base_url + '/api/' + apiVersion;
+  const baseUrl = stripTrailingSlashes(authSession.settings.base_url);
+  sdk.apiPath = baseUrl === '' ? '' : baseUrl + '/api/' + apiVersion;
   return sdk;
 };
 
@@ -157,7 +156,9 @@ export class APIMethods implements IAPIMethods {
   ) {
     if (path.match(/^(http:\/\/|https:\/\/)/gi)) return path;
     // is this an API-versioned call?
-    const base = authenticator ? this.apiPath : options.base_url;
+    const base = stripTrailingSlashes(
+      authenticator ? this.apiPath : options.base_url
+    );
     return `${base}${path}`; // path was relative
   }
 

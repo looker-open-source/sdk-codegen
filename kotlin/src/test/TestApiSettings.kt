@@ -187,4 +187,25 @@ class TestApiSettings {
             ApiSettings.fromIniText("# only comments\n")
         }
     }
+
+    @Test
+    fun testStripsTrailingSlashesFromBaseUrl() {
+        val trailingSlashIni =
+            """
+            [Looker]
+            base_url = "https://my.looker.com:19999///"
+            """.trimIndent()
+        val settings = ApiSettings.fromIniText(trailingSlashIni)
+        assertEquals("https://my.looker.com:19999", settings.baseUrl)
+        assertEquals("https://my.looker.com:19999", settings.readConfig()["base_url"])
+
+        System.setProperty("${ENVIRONMENT_PREFIX}_BASE_URL", "https://override.looker.com:19999/")
+        try {
+            val envSettings = ApiSettings.fromMap(emptyMap())
+            assertEquals("https://override.looker.com:19999", envSettings.baseUrl)
+            assertEquals("https://override.looker.com:19999", envSettings.readConfig()["base_url"])
+        } finally {
+            System.clearProperty("${ENVIRONMENT_PREFIX}_BASE_URL")
+        }
+    }
 }

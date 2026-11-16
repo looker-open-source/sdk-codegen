@@ -771,3 +771,47 @@ func TestSetQuery(t *testing.T) {
 		}
 	}
 }
+
+func TestTrailingSlashInBaseUrlDoesNotProduceDoubleSlash(t *testing.T) {
+	var seenPaths []string
+	// Use http.HandlerFunc directly rather than ServeMux, since ServeMux redirects "//" paths
+	// whereas Looker servers reject double-slash paths with 403 Forbidden.
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		seenPaths = append(seenPaths, r.Method+" "+r.URL.Path)
+		switch r.URL.Path {
+		case "/api/4.0/login":
+			if r.Method != http.MethodPost {
+				w.WriteHeader(http.StatusMethodNotAllowed)
+				return
+			}
+			w.Header().Set("Content-Type", "application/json")
+			s, _ := json.Marshal(foreverValidTestToken)
+			fmt.Fprint(w, string(s))
+		case "/api/4.0/user":
+			w.WriteHeader(http.StatusOK)
+			fmt.Fprint(w, "ok")
+		default:
+			w.WriteHeader(http.StatusForbidden)
+		}
+	}))
+	defer server.Close()
+
+	session := NewAuthSession(ApiSettings{
+		BaseUrl:      server.URL + "///",
+		ApiVersion:   "4.0",
+		ClientId:     "id",
+		ClientSecret: "secret",
+	})
+
+	var res string
+	if err := session.Do(&res, "GET", "/4.0", "/user", nil, nil, nil); err != nil {
+		t.Fatalf("Do() failed with trailing-slash BaseUrl: %v", err)
+	}
+	if res != "ok" {
+		t.Errorf("unexpected response: got=%q want=%q", res, "ok")
+	}
+	wantPaths := []string{"POST /api/4.0/login", "GET /api/4.0/user"}
+	if !reflect.DeepEqual(seenPaths, wantPaths) {
+		t.Errorf("unexpected request paths: got=%v want=%v", seenPaths, wantPaths)
+	}
+}

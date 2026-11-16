@@ -216,5 +216,27 @@ describe('NodeSettings', () => {
           )
       ).toThrow(/File missing.ini was not found/);
     });
+
+    it('strips trailing slashes from base_url in ini and environment variables', () => {
+      const expectedBaseUrl = 'https://self-signed.looker.com:19999';
+      const iniWithSlash = `
+[Looker]
+base_url=${expectedBaseUrl}/
+client_id=id
+client_secret=secret
+`;
+      const fromIni = new NodeSettings(envPrefix, iniWithSlash);
+      expect(fromIni.base_url).toEqual(expectedBaseUrl);
+
+      const envKey = ApiConfigMap(envPrefix);
+      process.env[envKey.base_url] = `${expectedBaseUrl}///`;
+      try {
+        const fromEnv = new NodeSettings(envPrefix);
+        expect(fromEnv.base_url).toEqual(expectedBaseUrl);
+        expect(fromEnv.readConfig().base_url).toEqual(expectedBaseUrl);
+      } finally {
+        delete process.env[envKey.base_url];
+      }
+    });
   });
 });

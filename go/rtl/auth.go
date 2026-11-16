@@ -89,6 +89,12 @@ func NewAuthSession(config ApiSettings) *AuthSession {
 
 // The transport parameter may override your VerifySSL setting
 func NewAuthSessionWithTransport(config ApiSettings, transport http.RoundTripper) *AuthSession {
+	config.BaseUrl = cleanBaseUrl(config.BaseUrl)
+	apiVersion := strings.Trim(config.ApiVersion, "/")
+	if apiVersion == "" {
+		apiVersion = "4.0"
+	}
+
 	// This transport (Roundtripper) sets
 	// the "x-looker-appid" Header on requests
 	appIdHeaderTransport := &transportWithHeaders{
@@ -99,7 +105,7 @@ func NewAuthSessionWithTransport(config ApiSettings, transport http.RoundTripper
 	oauthConfig := clientcredentials.Config{
 		ClientID:     config.ClientId,
 		ClientSecret: config.ClientSecret,
-		TokenURL:     fmt.Sprintf("%s/api/%s/login", config.BaseUrl, config.ApiVersion),
+		TokenURL:     fmt.Sprintf("%s/api/%s/login", config.BaseUrl, apiVersion),
 		AuthStyle:    oauth2.AuthStyleInParams,
 	}
 
@@ -134,7 +140,14 @@ type Values map[string]interface{}
 func (s *AuthSession) Do(result interface{}, method, ver, path string, reqPars map[string]interface{}, body interface{}, options *ApiSettings) error {
 
 	// prepare URL
-	u := fmt.Sprintf("%s/api%s%s", s.Config.BaseUrl, ver, path)
+	baseUrl := cleanBaseUrl(s.Config.BaseUrl)
+	if !strings.HasPrefix(ver, "/") {
+		ver = "/" + ver
+	}
+	if !strings.HasPrefix(path, "/") {
+		path = "/" + path
+	}
+	u := fmt.Sprintf("%s/api%s%s", baseUrl, ver, path)
 
 	bodyString := ""
 	contentTypeHeader := ""

@@ -115,7 +115,7 @@ open class OAuthSession: AuthSession {
         self.code_verifier = try! self.secureRandom(32).base64Url()
         let code_challenge = self.sha256Hash(self.code_verifier)
         let config = self.settings.readConfig(nil)
-        let looker_url = config["looker_url"]!
+        let looker_url = stripTrailingSlashes(config["looker_url"])!
         let url = addQueryParams("\(looker_url)/auth", [
             "response_type": "code",
             "client_id": config["client_id"],

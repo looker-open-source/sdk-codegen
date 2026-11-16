@@ -137,6 +137,22 @@ func TestNewSettingsFromEnv(t *testing.T) {
 				ClientSecret: "secret",
 			},
 		},
+		{
+			name: "NewSettingsFromEnv() strips quotes and trailing slashes from LOOKERSDK_BASE_URL",
+			env: []pair{
+				{baseUrlEnvKey, `"https://my-instance.looker.com///"`},
+				{clientIdEnvKey, "id"},
+				{clientSecretEnvKey, "secret"},
+			},
+			want: ApiSettings{
+				BaseUrl:      "https://my-instance.looker.com",
+				ApiVersion:   "4.0",
+				VerifySsl:    true,
+				Timeout:      120,
+				ClientId:     "id",
+				ClientSecret: "secret",
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

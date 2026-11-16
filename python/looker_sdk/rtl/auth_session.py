@@ -153,7 +153,7 @@ class AuthSession:
         response = self._ok(
             self.transport.request(
                 transport.HttpMethod.POST,
-                f"{self.settings.base_url}/api/{self.api_version}/login",
+                f"{self.settings.base_url.rstrip('/')}/api/{self.api_version}/login",
                 body=serialized,
                 transport_options=transport_options,
             )
@@ -177,7 +177,7 @@ class AuthSession:
         response = self._ok(
             self.transport.request(
                 transport.HttpMethod.POST,
-                f"{self.settings.base_url}/api/{self.api_version}/login/{self._sudo_id}",
+                f"{self.settings.base_url.rstrip('/')}/api/{self.api_version}/login/{self._sudo_id}",
                 authenticator=authenticator,
                 transport_options=transport_options,
             )
@@ -234,7 +234,7 @@ class AuthSession:
         self._ok(
             self.transport.request(
                 transport.HttpMethod.DELETE,
-                f"{self.settings.base_url}/api/logout",
+                f"{self.settings.base_url.rstrip('/')}/api/logout",
                 authenticator=authenticator,
                 transport_options=transport_options,
             )
@@ -279,7 +279,7 @@ class OAuthSession(AuthSession):
         # but mypy can't follow it
         self.client_id = config_data["client_id"]
         self.redirect_uri = config_data.get("redirect_uri", "")
-        self.looker_url = config_data.get("looker_url", "")
+        self.looker_url = config_data.get("looker_url", "").rstrip("/")
         self.code_verifier = ""
 
     def create_auth_code_request_url(self, scope: str, state: str) -> str:
@@ -294,7 +294,7 @@ class OAuthSession(AuthSession):
             "code_challenge_method": "S256",
             "code_challenge": code_challenge,
         }
-        path = urllib.parse.urljoin(self.looker_url, "auth")
+        path = f"{self.looker_url.rstrip('/')}/auth"
         query = urllib.parse.urlencode(params)
         return f"{path}?{query}"
 
