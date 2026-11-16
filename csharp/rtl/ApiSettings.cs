@@ -29,7 +29,13 @@ namespace Looker.RTL
     /// </summary>
     public class ApiSettings : IApiSettings
     {
-        public string BaseUrl { get; set; }
+        private string _baseUrl;
+
+        public string BaseUrl
+        {
+            get => _baseUrl;
+            set => _baseUrl = value?.Trim('"', '\'', '`').TrimEnd('/');
+        }
         public bool VerifySsl { get; set; } = true;
         public int Timeout { get; set; } = 120;
         public string AgentTag { get; set; }
@@ -78,7 +84,9 @@ namespace Looker.RTL
                 // TODO: figure out how to make section.toDictionary() work
                 foreach (var pair in section)
                 {
-                    result[pair.KeyName] = pair.Value;
+                    result[pair.KeyName] = pair.KeyName == "base_url" || pair.KeyName == "looker_url"
+                        ? pair.Value?.Trim('"', '\'', '`').TrimEnd('/')
+                        : pair.Value;
                 }
             }
             else

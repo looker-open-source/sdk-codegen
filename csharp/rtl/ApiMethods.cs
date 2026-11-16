@@ -37,9 +37,10 @@ namespace Looker.RTL
             AuthSession = authSession;
             ApiVersion = apiVersion;
             AuthSession.Settings.AgentTag = $"{Constants.AgentPrefix} {Constants.LookerVersion}.{ApiVersion}";
-            _apiPath = AuthSession.Settings.BaseUrl.IsNullOrEmpty()
+            var baseUrl = AuthSession.Settings.BaseUrl?.TrimEnd('/');
+            _apiPath = baseUrl.IsNullOrEmpty()
                 ? ""
-                : $"{AuthSession.Settings.BaseUrl}/api/{ApiVersion}";
+                : $"{baseUrl}/api/{ApiVersion}";
         }
 
         // TODO do we need a factory for the various looker versions similar to TypeScript's:
@@ -69,7 +70,7 @@ namespace Looker.RTL
         {
             if (path.StartsWith("http:", StringComparison.InvariantCultureIgnoreCase) ||
                 path.StartsWith("https:", StringComparison.InvariantCultureIgnoreCase)) return path;
-            var root = (authenticator == null ? settings.BaseUrl : _apiPath);
+            var root = (authenticator == null ? settings.BaseUrl : _apiPath)?.TrimEnd('/');
             return $"{root}{path}";
         }
 

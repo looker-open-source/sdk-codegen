@@ -274,7 +274,11 @@ fun customInitializer(
 open class Transport(
     val options: TransportOptions,
 ) {
-    private val apiPath = "${options.baseUrl}/api/${options.apiVersion}"
+    private val baseUrl: String
+        get() = options.baseUrl.trimEnd('/')
+
+    private val apiPath: String
+        get() = "$baseUrl/api/${options.apiVersion}"
 
     /**
      * Create the correct http request path
@@ -296,7 +300,7 @@ open class Transport(
             "" // full path was passed in
         } else {
             if (authenticator === null) {
-                options.baseUrl
+                baseUrl
             } else {
                 apiPath
             }

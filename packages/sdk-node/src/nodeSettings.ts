@@ -33,6 +33,7 @@ import {
   DefaultSettings,
   ValueSettings,
   sdkError,
+  stripTrailingSlashes,
   unquote,
 } from '@looker/sdk-rtl';
 
@@ -104,7 +105,10 @@ export const readEnvConfig = (envPrefix: string) => {
     const envKey = configMap[key];
     if (process.env[envKey] !== undefined) {
       // Value exists. Map environment variable keys to config variable keys
-      const val = unquote(process.env[envKey]);
+      const val =
+        key === 'base_url' || key === 'looker_url'
+          ? stripTrailingSlashes(process.env[envKey])
+          : unquote(process.env[envKey]);
       values[key] = val;
     }
   });
@@ -134,11 +138,14 @@ export const readIniConfig = (
       ...config,
     };
   }
-  // Unquote any quoted configuration values
+  // Unquote any quoted configuration values and strip trailing slashes from URLs
   Object.keys(config).forEach(key => {
     const val = config[key];
     if (typeof val === 'string') {
-      config[key] = unquote(val);
+      config[key] =
+        key === 'base_url' || key === 'looker_url'
+          ? stripTrailingSlashes(val)
+          : unquote(val);
     }
   });
   return config;

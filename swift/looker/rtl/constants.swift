@@ -130,6 +130,14 @@ public func unquote(_ value: String?) -> String? {
     return v
 }
 
+public func stripTrailingSlashes(_ value: String?) -> String? {
+    guard var v = unquote(value) else { return nil }
+    while v.hasSuffix("/") {
+        v.removeLast()
+    }
+    return v
+}
+
 public func isTrue(_ value: String?) -> Bool {
     guard let val = value else { return false }
     return val.bool == true

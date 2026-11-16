@@ -99,4 +99,30 @@ class apiSettingsTests: XCTestCase {
         XCTAssertEqual(settings?.verify_ssl, false)
         XCTAssertEqual(settings?.timeout, 60)
     }
+
+    @available(OSX 10.12, *)
+    func testStripsTrailingSlashesFromBaseUrl() {
+        let valueSettings = ValueSettings([
+            strLookerBaseUrl: "'https://my-instance.looker.com///'"
+        ])
+        XCTAssertEqual(valueSettings.base_url, "https://my-instance.looker.com")
+
+        let apiSettings = try? ApiSettings(
+            DefaultSettings(base_url: "https://my-instance.looker.com/")
+        )
+        XCTAssertEqual(apiSettings?.base_url, "https://my-instance.looker.com")
+
+        let slashOnlySettings = try? ApiSettings(
+            DefaultSettings(base_url: "///")
+        )
+        XCTAssertNil(slashOnlySettings)
+
+        let rawSettings = DefaultSettings(base_url: "https://my-instance.looker.com/")
+        let xp = BaseTransport(rawSettings)
+        XCTAssertEqual(xp.makeUrl("/api/4.0/login"), "https://my-instance.looker.com/api/4.0/login")
+        XCTAssertEqual(
+            xp.makeUrl("/user", nil, { req in req }, rawSettings),
+            "https://my-instance.looker.com/api/4.0/user"
+        )
+    }
 }

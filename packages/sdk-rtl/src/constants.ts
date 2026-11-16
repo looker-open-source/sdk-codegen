@@ -87,6 +87,15 @@ export const unquote = (value: string | undefined | null): string => {
 };
 
 /**
+ * strip surrounding quotes (if uniformly quoted) and trailing slashes from a URL string
+ * @param {string | undefined | null} value URL string to normalize
+ * @returns {string} normalized URL string without trailing slashes
+ */
+export const stripTrailingSlashes = (
+  value: string | undefined | null
+): string => unquote(value).replace(/\/+$/, '');
+
+/**
  * Documented type alias because URL assignment construction is not compatible with API parameters
  */
 export type Url = string;

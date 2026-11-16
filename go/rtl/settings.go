@@ -28,6 +28,17 @@ var defaultSettings ApiSettings = ApiSettings{
 	Timeout:    120,
 }
 
+func cleanBaseUrl(val string) string {
+	if len(val) >= 2 {
+		first := val[0]
+		last := val[len(val)-1]
+		if (first == '"' || first == '\'' || first == '`') && last == first {
+			val = val[1 : len(val)-1]
+		}
+	}
+	return strings.TrimRight(val, "/")
+}
+
 func NewSettingsFromFile(file string, section *string) (ApiSettings, error) {
 	if section == nil {
 		section = &defaultSectionName
@@ -42,6 +53,7 @@ func NewSettingsFromFile(file string, section *string) (ApiSettings, error) {
 	}
 
 	err = cfg.Section(*section).MapTo(&s)
+	s.BaseUrl = cleanBaseUrl(s.BaseUrl)
 	return s, err
 
 }
@@ -50,7 +62,7 @@ func NewSettingsFromEnv() (ApiSettings, error) {
 	settings := defaultSettings
 
 	if v, present := os.LookupEnv(baseUrlEnvKey); present {
-		settings.BaseUrl = v
+		settings.BaseUrl = cleanBaseUrl(v)
 	}
 	if v, present := os.LookupEnv(apiVersionEnvKey); present {
 		settings.ApiVersion = v

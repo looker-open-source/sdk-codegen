@@ -26,7 +26,12 @@
 
 import type { ITransportSettings } from './transport';
 import { agentPrefix, defaultTimeout } from './transport';
-import { boolDefault, isTrue, unquote } from './constants';
+import {
+  boolDefault,
+  isTrue,
+  stripTrailingSlashes,
+  unquote,
+} from './constants';
 
 /** Used for reading configuration name/value pairs */
 export interface IValueSettings {
@@ -121,7 +126,8 @@ export const ValueSettings = (
   const settings = DefaultSettings();
   const envKey = ApiConfigMap(envPrefix);
   settings.base_url =
-    configValue(values, 'base_url', envKey) || settings.base_url;
+    stripTrailingSlashes(configValue(values, 'base_url', envKey)) ||
+    settings.base_url;
   settings.verify_ssl = boolDefault(
     configValue(values, 'verify_ssl', envKey),
     true
@@ -146,7 +152,9 @@ export class ApiSettings implements IApiSettings {
   constructor(settings: Partial<IApiSettings>) {
     // coerce types to declared types since some paths could have non-conforming settings values
     this.base_url =
-      'base_url' in settings ? unquote(settings.base_url) : this.base_url;
+      'base_url' in settings
+        ? stripTrailingSlashes(settings.base_url)
+        : this.base_url;
     this.verify_ssl =
       'verify_ssl' in settings
         ? isTrue(unquote(settings.verify_ssl?.toString()))

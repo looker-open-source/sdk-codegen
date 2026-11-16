@@ -66,6 +66,23 @@ class TestTransport {
     }
 
     @Test
+    fun testTrailingSlashBaseUrlDoesNotProduceDoubleSlash() {
+        val slashOptions =
+            TransportSettings(
+                "$base///",
+                apiVersion,
+                headers = headers,
+                environmentPrefix = ENVIRONMENT_PREFIX,
+            )
+        val slashTransport = Transport(slashOptions)
+        assertEquals("$base/api/4.0/login", slashTransport.makeUrl("/api/4.0/login"))
+        assertEquals(
+            "$base/api/$apiVersion$userPath",
+            slashTransport.makeUrl(userPath, authenticator = mockAuth),
+        )
+    }
+
+    @Test
     fun testFullRequest() {
         val actual = ok<String>(xp.request<String>(HttpMethod.GET, fullPath))
         assertTrue(actual.contains("One SDK to rule them all, and in the codegen bind them"))

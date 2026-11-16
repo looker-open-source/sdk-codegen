@@ -64,7 +64,7 @@ class APIMethods:
     ):
         self.auth = auth
         self.api_path = urllib.parse.urljoin(
-            auth.settings.base_url, f"/api/{api_version}/"
+            auth.settings.base_url.rstrip("/"), f"/api/{api_version}/"
         )
         self.deserialize = deserialize
         self.serialize = serialize

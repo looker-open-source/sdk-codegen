@@ -97,7 +97,7 @@ class ApiSettings(PApiSettings):
             self.verify_ssl = True
         else:
             self.verify_ssl = self._bool(verify_ssl)
-        self.base_url = data.get("base_url", "")
+        self.base_url = (data.get("base_url") or "").rstrip("/")
         self.timeout = int(data.get("timeout", 120))
         self.headers = {"Content-Type": "application/json"}
         self.agent_tag = f"{transport.AGENT_PREFIX}"
@@ -187,7 +187,14 @@ class ApiSettings(PApiSettings):
                 continue
             # Strip quotes from setting values
             elif value.startswith(('"', "'")) or value.endswith(('"', "'")):
-                cleaned[setting] = value.strip("\"'")
+                cleaned_val = value.strip("\"'")
             else:
-                cleaned[setting] = value
+                cleaned_val = value
+
+            if setting in ("base_url", "looker_url"):
+                cleaned_val = cleaned_val.rstrip("/")
+                if not cleaned_val:
+                    continue
+
+            cleaned[setting] = cleaned_val
         return cast(SettingsConfig, cleaned)

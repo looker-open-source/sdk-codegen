@@ -127,7 +127,7 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
 
         // Only replace the current values if new values are provided
         settings[keyBaseUrl].let { value ->
-            baseUrl = unQuote(value ?: baseUrl)
+            baseUrl = unQuote(value ?: baseUrl).trimEnd('/')
         }
 
         settings[keyApiVersion].let { value ->
@@ -157,7 +157,9 @@ open class ApiSettings(val rawReadConfig: () -> Map<String, String>) : Configura
 
     override fun readConfig(): Map<String, String> {
         // Load environment variables and possibly overwrite with explicitly declared map values
-        val rawMap = readEnvironment().plus(rawReadConfig())
+        val rawMap = readEnvironment().plus(rawReadConfig()).toMutableMap()
+        rawMap[keyBaseUrl]?.let { rawMap[keyBaseUrl] = unQuote(it).trimEnd('/') }
+        rawMap["looker_url"]?.let { rawMap["looker_url"] = unQuote(it).trimEnd('/') }
         return mapOf(
             keyBaseUrl to baseUrl,
             keyApiVersion to apiVersion,

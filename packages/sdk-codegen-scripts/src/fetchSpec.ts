@@ -60,10 +60,10 @@ export const specTransport = (props: ISDKConfigProps) => {
 };
 
 const loginUrl = (props: ISDKConfigProps) =>
-  `${props.base_url}/api/${props.api_version}/login`;
+  `${props.base_url.replace(/\/+$/, '')}/api/${props.api_version}/login`;
 
 const logoutUrl = (props: ISDKConfigProps) =>
-  `${props.base_url}/api/${props.api_version}/logout`;
+  `${props.base_url.replace(/\/+$/, '')}/api/${props.api_version}/logout`;
 
 export const supportedVersion = (version: string, versions: any) => {
   if (!('supported_versions' in versions)) {

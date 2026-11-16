@@ -34,6 +34,7 @@ import {
   LookerAppId,
   sdkTimeout,
 } from './transport';
+import { stripTrailingSlashes } from './constants';
 import type {
   Authenticator,
   HttpMethod,
@@ -138,7 +139,7 @@ export abstract class BaseTransport implements ITransport {
     queryParams?: Values
   ) {
     // is this an API-versioned call?
-    const base = options.base_url;
+    const base = stripTrailingSlashes(options.base_url);
     if (!path.match(/^(http:\/\/|https:\/\/)/gi)) {
       path = `${base}${path}`; // path was relative
     }

@@ -31,7 +31,8 @@ import type {
   SDKResponse,
 } from './transport';
 import { StatusCode } from './transport';
-import { APIMethods } from './apiMethods';
+import { APIMethods, functionalSdk } from './apiMethods';
+import { BrowserTransport } from './browserTransport';
 import type { IAuthSession } from './authSession';
 import type { IApiSettings } from './apiSettings';
 import { DefaultSettings } from './apiSettings';
@@ -71,6 +72,25 @@ describe('ApiMethods', () => {
   it('path not prefixed if base url not set', () => {
     const actual = api.makePath('/all_connections', DefaultSettings());
     expect(actual).toEqual(`/all_connections`);
+  });
+
+  it('strips trailing slashes from base_url in makePath, functionalSdk, and BaseTransport.makeUrl', () => {
+    const slashSettings = { base_url: `${hostname}/` } as IApiSettings;
+    const slashSession = { settings: slashSettings } as IAuthSession;
+    const funcSdk = functionalSdk(slashSession, apiVersion, 'mock');
+
+    expect(funcSdk.apiPath).toEqual(`${hostname}/api/${apiVersion}`);
+    expect(funcSdk.makePath('/login', slashSettings)).toEqual(
+      `${hostname}/login`
+    );
+    expect(funcSdk.makePath('/me', slashSettings, mockAuth)).toEqual(
+      `${hostname}/api/${apiVersion}/me`
+    );
+
+    const transport = new BrowserTransport(slashSettings);
+    expect(transport.makeUrl('/api/4.0/login', slashSettings)).toEqual(
+      `${hostname}/api/4.0/login`
+    );
   });
 
   describe('401 Unauthorized handling', () => {

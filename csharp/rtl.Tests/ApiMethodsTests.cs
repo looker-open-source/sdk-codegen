@@ -275,5 +275,33 @@ namespace sdkrtl.Tests
             Assert.Equal(2, userCallCount);
             Assert.False(session.IsAuthenticated());
         }
+
+        [Fact]
+        public void StripsTrailingSlashesInSettingsTransportAndApiMethodsTest()
+        {
+            var apiSettings = new ApiSettings();
+            apiSettings.Load(new Values
+            {
+                { "base_url", "\"https://mock.looker.com:19999///\"" }
+            });
+            Assert.Equal("https://mock.looker.com:19999", apiSettings.BaseUrl);
+            Assert.True(apiSettings.IsConfigured());
+
+            var slashOnly = new ApiSettings { BaseUrl = "///" };
+            Assert.Equal("", slashOnly.BaseUrl);
+            Assert.False(slashOnly.IsConfigured());
+
+            var customSettings = new MockSettings { BaseUrl = "https://mock.looker.com:19999/" };
+            var realTransport = new Transport(customSettings);
+            Assert.Equal("https://mock.looker.com:19999/api/4.0/login", realTransport.MakeUrl("/api/4.0/login"));
+
+            var session = new AuthSession(customSettings, realTransport);
+            var sdk = new ApiMethods(session, "4.0");
+            Assert.Equal("https://mock.looker.com:19999/login", sdk.MakePath("/login", customSettings));
+            Assert.Equal(
+                "https://mock.looker.com:19999/api/4.0/user",
+                sdk.MakePath("/user", customSettings, req => Task.FromResult(req))
+            );
+        }
     }
 }

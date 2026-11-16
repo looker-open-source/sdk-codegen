@@ -280,3 +280,68 @@ def test_oauth_redeem_auth_code(oauth_session):
     assert oauth_session.token.access_token == "anOauthToken"
     assert oauth_session.token.refresh_token == "anOauthRefreshToken"
     assert oauth_session.token.token_type == "Bearer"
+
+
+def test_trailing_slash_base_url_does_not_produce_double_slash_auth_urls(
+    tmp_path, monkeypatch
+):
+    for setting in ["BASE_URL", "CLIENT_ID", "CLIENT_SECRET"]:
+        monkeypatch.delenv(f"LOOKERSDK_{setting}", raising=False)
+    ini = tmp_path / "looker.ini"
+    ini.write_text(
+        "[Looker]\n"
+        "base_url=https://my-instance.looker.com/\n"
+        "client_id=test_id\n"
+        "client_secret=test_secret\n"
+        "looker_url=https://webserver.looker.com:9999///\n"
+        "redirect_uri=https://alice.com/auth\n"
+    )
+    settings = api_settings.ApiSettings(filename=str(ini), env_prefix="LOOKERSDK")
+
+    seen_paths = []
+
+    class RecordingTransport(MockTransport):
+        def request(
+            self,
+            method,
+            path,
+            query_params=None,
+            body=None,
+            authenticator=None,
+            transport_options=None,
+        ):
+            seen_paths.append(path)
+            return super().request(
+                method,
+                path,
+                query_params=query_params,
+                body=body,
+                authenticator=authenticator,
+                transport_options=transport_options,
+            )
+
+    xp = RecordingTransport()
+    session = auth.AuthSession(settings, xp, serialize.deserialize40, "4.0")
+    # Also verify defense-in-depth when custom PApiSettings provides a trailing slash
+    session.settings.base_url = "https://my-instance.looker.com/"
+
+    session.login_user(5)
+    session.logout(full=True)
+
+    assert seen_paths == [
+        "https://my-instance.looker.com/api/4.0/login/5",
+        "https://my-instance.looker.com/api/4.0/login",
+        "https://my-instance.looker.com/api/logout",
+        "https://my-instance.looker.com/api/logout",
+    ]
+
+    oauth = auth.OAuthSession(
+        settings=settings,
+        transport=xp,
+        deserialize=serialize.deserialize40,
+        serialize=serialize.serialize40,
+        crypto=auth.CryptoHash(),
+        version="4.0",
+    )
+    auth_url = urllib.parse.urlparse(oauth.create_auth_code_request_url("api", "state"))
+    assert auth_url.path == "/auth"
