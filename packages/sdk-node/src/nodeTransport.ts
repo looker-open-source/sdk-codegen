@@ -1,34 +1,21 @@
 /*
 
- MIT License
+ Copyright 2022-2026 Google LLC
 
- Copyright (c) 2022 Looker Data Sciences, Inc.
-
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in all
- copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- SOFTWARE.
+ Use of this source code is governed by an MIT-style
+ license that can be found in the LICENSE file or at
+ https://opensource.org/licenses/MIT
 
  */
 
 import nodeCrypto from 'crypto';
 import type * as fs from 'fs';
-
+import * as http from 'http';
+import * as https from 'https';
 import { Buffer } from 'buffer';
-import * as process from 'process';
+import { Readable, Transform } from 'stream';
+import { WritableStream } from 'node:stream/web';
+import * as zlib from 'zlib';
 
 import type {
   Authenticator,
@@ -37,6 +24,7 @@ import type {
   IRawRequest,
   IRawResponse,
   IRequestHeaders,
+  IRequestProps,
   ISDKError,
   ITransportSettings,
   SDKResponse,
@@ -56,9 +44,409 @@ import {
   mergeOptions,
   verifySsl,
 } from '@looker/sdk-rtl';
-import { WritableStream } from 'node:stream/web';
 
 const utf8 = 'utf8';
+const maxRedirects = 20;
+const redirectStatusCodes = new Set([301, 302, 303, 307, 308]);
+const nullBodyStatusCodes = new Set([101, 204, 205, 304]);
+
+let insecureHttpsAgent: https.Agent | undefined;
+
+const hasNativeStreamResponse = (): boolean =>
+  typeof Response === 'function' &&
+  typeof Response.prototype === 'object' &&
+  'body' in Response.prototype;
+
+const readStreamToBuffer = (stream: Readable): Promise<Buffer> =>
+  new Promise((resolve, reject) => {
+    const chunks: Buffer[] = [];
+    stream.on('data', (chunk: Buffer | string) => {
+      chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk));
+    });
+    stream.once('end', () => resolve(Buffer.concat(chunks)));
+    stream.once('error', reject);
+  });
+
+const createStreamResponse = (
+  bodyStream: Readable | null,
+  status: number,
+  statusText: string,
+  headers: Headers,
+  url: string
+): Response => {
+  if (hasNativeStreamResponse()) {
+    const response = new Response(
+      bodyStream
+        ? (Readable.toWeb(bodyStream) as unknown as ReadableStream)
+        : null,
+      { status, statusText, headers }
+    );
+    Object.defineProperty(response, 'url', { value: url, configurable: true });
+    return response;
+  }
+
+  let consumed = false;
+  const consumeBuffer = async (): Promise<Buffer> => {
+    if (consumed) {
+      throw new TypeError('Body has already been consumed.');
+    }
+    consumed = true;
+    if (!bodyStream) {
+      return Buffer.alloc(0);
+    }
+    return readStreamToBuffer(bodyStream);
+  };
+
+  let webBody: ReadableStream | null | undefined;
+  const fallback = {
+    status,
+    statusText,
+    ok: status >= 200 && status <= 299,
+    redirected: false,
+    type: 'basic',
+    url,
+    headers,
+    get bodyUsed() {
+      return consumed;
+    },
+    get body() {
+      if (!bodyStream) return null;
+      if (!webBody) {
+        consumed = true;
+        webBody = Readable.toWeb(bodyStream) as unknown as ReadableStream;
+      }
+      return webBody;
+    },
+    arrayBuffer: async (): Promise<ArrayBuffer> => {
+      const buf = await consumeBuffer();
+      return buf.buffer.slice(
+        buf.byteOffset,
+        buf.byteOffset + buf.byteLength
+      ) as ArrayBuffer;
+    },
+    blob: async (): Promise<Blob> => {
+      const buf = await consumeBuffer();
+      const type = headers.get('content-type') ?? '';
+      return new Blob([buf], { type });
+    },
+    text: async (): Promise<string> => {
+      const buf = await consumeBuffer();
+      return buf.toString(utf8);
+    },
+    json: async (): Promise<any> => {
+      const buf = await consumeBuffer();
+      return JSON.parse(buf.toString(utf8));
+    },
+  };
+  return fallback as unknown as Response;
+};
+const getInsecureHttpsAgent = (): https.Agent => {
+  if (!insecureHttpsAgent) {
+    insecureHttpsAgent = new https.Agent({
+      keepAlive: true,
+      scheduling: 'lifo',
+      timeout: 5000,
+      rejectUnauthorized: false,
+    });
+  }
+  return insecureHttpsAgent;
+};
+
+const createLazyDecoder = (encoding: string): Transform | undefined => {
+  const enc = encoding.trim().toLowerCase();
+  if (enc !== 'gzip' && enc !== 'x-gzip' && enc !== 'deflate' && enc !== 'br') {
+    return undefined;
+  }
+  let decoder: Transform | undefined;
+  let decoderError: Error | null = null;
+  return new Transform({
+    transform(chunk: Buffer, _encoding, callback) {
+      if (chunk.length === 0) {
+        callback();
+        return;
+      }
+      if (!decoder) {
+        if (enc === 'gzip' || enc === 'x-gzip') {
+          decoder = zlib.createGunzip();
+        } else if (enc === 'br') {
+          decoder = zlib.createBrotliDecompress();
+        } else {
+          const isZlibHeader =
+            chunk.length >= 2 &&
+            (chunk[0] & 0x0f) === 0x08 &&
+            chunk[0] >> 4 <= 7 &&
+            ((chunk[0] << 8) | chunk[1]) % 31 === 0;
+          decoder = isZlibHeader
+            ? zlib.createInflate()
+            : zlib.createInflateRaw();
+        }
+        decoder.on('data', (d: Buffer) => this.push(d));
+        decoder.on('error', err => {
+          decoderError = err;
+        });
+      }
+      decoder.write(chunk, err => {
+        callback(err ?? decoderError);
+      });
+    },
+    flush(callback) {
+      if (!decoder) {
+        callback();
+        return;
+      }
+      if (decoderError) {
+        callback(decoderError);
+        return;
+      }
+      decoder.once('error', err => callback(err));
+      decoder.once('end', () => callback());
+      decoder.end();
+    },
+  });
+};
+
+const normalizeRequestBody = async (
+  body: any
+): Promise<{ buffer?: Buffer; stream?: Readable }> => {
+  if (body === undefined || body === null) {
+    return {};
+  }
+  if (typeof body === 'string') {
+    return { buffer: Buffer.from(body, utf8) };
+  }
+  if (body instanceof URLSearchParams) {
+    return { buffer: Buffer.from(body.toString(), utf8) };
+  }
+  if (Buffer.isBuffer(body)) {
+    return { buffer: body };
+  }
+  if (ArrayBuffer.isView(body)) {
+    return {
+      buffer: Buffer.from(body.buffer, body.byteOffset, body.byteLength),
+    };
+  }
+  if (body instanceof ArrayBuffer) {
+    return { buffer: Buffer.from(body) };
+  }
+  if (typeof Blob !== 'undefined' && body instanceof Blob) {
+    return { buffer: Buffer.from(await body.arrayBuffer()) };
+  }
+  if (body instanceof Readable) {
+    return { stream: body };
+  }
+  if (typeof body?.getReader === 'function') {
+    return { stream: Readable.fromWeb(body) };
+  }
+  return { buffer: Buffer.from(String(body), utf8) };
+};
+
+const fetchWithAgent = async (
+  initialUrl: string,
+  init: IRequestProps
+): Promise<Response> => {
+  const signal: AbortSignal | undefined = init.signal;
+  if (signal?.aborted) {
+    throw (
+      signal.reason ??
+      new DOMException('The operation was aborted.', 'AbortError')
+    );
+  }
+
+  let currentUrl = initialUrl;
+  let currentMethod = (init.method || 'GET').toUpperCase();
+  const reqHeaders = new Headers((init.headers ?? {}) as HeadersInit);
+  const normalizedBody = await normalizeRequestBody(init.body);
+  let currentBodyBuffer = normalizedBody.buffer;
+  let currentBodyStream = normalizedBody.stream;
+  const redirectMode: RequestRedirect = init.redirect ?? 'follow';
+
+  for (let redirectCount = 0; ; redirectCount++) {
+    const parsedUrl = new URL(currentUrl);
+    const isHttps = parsedUrl.protocol === 'https:';
+    const isHttp = parsedUrl.protocol === 'http:';
+    if (!isHttps && !isHttp) {
+      throw new TypeError(`Unsupported protocol: ${parsedUrl.protocol}`);
+    }
+
+    const headerRecord: Record<string, string> = {};
+    reqHeaders.forEach((value, key) => {
+      headerRecord[key] = value;
+    });
+    if (!reqHeaders.has('accept-encoding')) {
+      headerRecord['accept-encoding'] = 'br, gzip, deflate';
+    }
+    if (
+      !reqHeaders.has('content-length') &&
+      !reqHeaders.has('transfer-encoding')
+    ) {
+      if (currentBodyBuffer !== undefined) {
+        headerRecord['content-length'] = String(currentBodyBuffer.byteLength);
+      } else if (
+        !currentBodyStream &&
+        (currentMethod === 'POST' ||
+          currentMethod === 'PUT' ||
+          currentMethod === 'PATCH')
+      ) {
+        headerRecord['content-length'] = '0';
+      }
+    }
+
+    const agentProtocol = (init.agent as any)?.protocol;
+    const hopAgent = init.agent
+      ? !agentProtocol || agentProtocol === parsedUrl.protocol
+        ? init.agent
+        : undefined
+      : undefined;
+
+    const requestFn = isHttps ? https.request : http.request;
+    const res = await new Promise<http.IncomingMessage>((resolve, reject) => {
+      const req = requestFn(
+        parsedUrl,
+        {
+          method: currentMethod,
+          headers: headerRecord,
+          agent: hopAgent,
+          signal,
+        },
+        resolve
+      );
+      req.once('error', reject);
+      if (currentBodyStream) {
+        const streamToSend = currentBodyStream;
+        currentBodyStream = undefined;
+        streamToSend.once('error', err => req.destroy(err));
+        streamToSend.pipe(req);
+      } else {
+        if (currentBodyBuffer !== undefined) {
+          req.write(currentBodyBuffer);
+        }
+        req.end();
+      }
+    });
+
+    const statusCode = res.statusCode ?? 200;
+    const location = res.headers.location;
+    if (
+      redirectStatusCodes.has(statusCode) &&
+      typeof location === 'string' &&
+      location.length > 0
+    ) {
+      if (redirectMode === 'error') {
+        res.resume();
+        throw new TypeError(
+          'URI requested responds with a redirect, redirect mode is set to error'
+        );
+      }
+      if (redirectMode === 'follow') {
+        if (redirectCount >= maxRedirects) {
+          res.resume();
+          throw new TypeError(`Redirect count exceeded (${maxRedirects})`);
+        }
+        res.resume();
+        const nextUrl = new URL(location, parsedUrl);
+        if (nextUrl.origin !== parsedUrl.origin) {
+          reqHeaders.delete('authorization');
+          reqHeaders.delete('proxy-authorization');
+          reqHeaders.delete('cookie');
+        }
+        reqHeaders.delete('host');
+        if (
+          (statusCode === 303 && currentMethod !== 'HEAD') ||
+          ((statusCode === 301 || statusCode === 302) &&
+            currentMethod === 'POST')
+        ) {
+          currentMethod = 'GET';
+          currentBodyBuffer = undefined;
+          currentBodyStream = undefined;
+          reqHeaders.delete('content-length');
+          reqHeaders.delete('content-type');
+          reqHeaders.delete('content-encoding');
+          reqHeaders.delete('content-language');
+          reqHeaders.delete('content-location');
+        }
+        currentUrl = nextUrl.toString();
+        continue;
+      }
+    }
+
+    const responseHeaders = new Headers();
+    for (const [key, value] of Object.entries(res.headers)) {
+      if (value === undefined) continue;
+      if (Array.isArray(value)) {
+        if (key.toLowerCase() === 'set-cookie') {
+          value.forEach(cookie => responseHeaders.append(key, cookie));
+        } else {
+          responseHeaders.set(key, value.join(', '));
+        }
+      } else {
+        responseHeaders.set(key, value);
+      }
+    }
+
+    const isNullBody =
+      currentMethod === 'HEAD' || nullBodyStatusCodes.has(statusCode);
+    if (isNullBody) {
+      res.resume();
+      return createStreamResponse(
+        null,
+        statusCode,
+        res.statusMessage ?? '',
+        responseHeaders,
+        currentUrl
+      );
+    }
+
+    let bodyStream: Readable = res;
+    if (signal) {
+      const onAbort = () => {
+        res.destroy(
+          signal.reason ??
+            new DOMException('The operation was aborted.', 'AbortError')
+        );
+      };
+      if (signal.aborted) {
+        onAbort();
+      } else {
+        signal.addEventListener('abort', onAbort, { once: true });
+        res.once('close', () => signal.removeEventListener('abort', onAbort));
+      }
+    }
+
+    const contentEncoding = res.headers['content-encoding'];
+    if (typeof contentEncoding === 'string' && contentEncoding.trim() !== '') {
+      const codings = contentEncoding
+        .split(',')
+        .map(c => c.trim())
+        .filter(Boolean)
+        .reverse();
+      const decoders = codings.map(createLazyDecoder);
+      if (decoders.length > 0 && decoders.every(Boolean)) {
+        for (const decoder of decoders as Transform[]) {
+          const prev = bodyStream;
+          prev.once('error', err => decoder.destroy(err));
+          bodyStream = prev.pipe(decoder);
+        }
+        responseHeaders.delete('content-encoding');
+        responseHeaders.delete('content-length');
+      }
+    }
+
+    return createStreamResponse(
+      bodyStream,
+      statusCode,
+      res.statusMessage ?? '',
+      responseHeaders,
+      currentUrl
+    );
+  }
+};
+
+const executeFetch = (url: string, props: IRequestProps): Promise<Response> => {
+  if (props.agent) {
+    return fetchWithAgent(url, props);
+  }
+  return fetch(url, props as RequestInit);
+};
 
 const asString = (value: any): string => {
   if (value instanceof Buffer) {
@@ -113,10 +501,7 @@ export class NodeTransport extends BaseTransport {
     const maxTries = newOpts.maxTries ?? 1; // MaxTries
     let attempt = 1;
     while (attempt <= maxTries) {
-      const req = fetch(
-        props.url,
-        props as RequestInit // Weird package issues with unresolved imports for RequestInit for node-fetch :(
-      );
+      const req = executeFetch(props.url, props);
 
       const requestStarted = Date.now();
       try {
@@ -298,7 +683,7 @@ export class NodeTransport extends BaseTransport {
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
   ): Promise<TSuccess> {
-    const newOpts = { ...this.options, options };
+    const newOpts = mergeOptions(this.options, options ?? {});
     const requestPath = this.makeUrl(path, newOpts, queryParams);
     const init = await this.initRequest(
       method,
@@ -308,7 +693,7 @@ export class NodeTransport extends BaseTransport {
       newOpts
     );
 
-    const response: Response = await fetch(requestPath, init as RequestInit);
+    const response: Response = await executeFetch(requestPath, init);
     return await callback(response);
   }
 
@@ -319,18 +704,19 @@ export class NodeTransport extends BaseTransport {
     authenticator?: Authenticator,
     options?: Partial<ITransportSettings>
   ) {
+    const mergedOptions = mergeOptions(this.options, options ?? {});
     const props = await super.initRequest(
       method,
       path,
       body,
       authenticator,
-      options
+      mergedOptions
     );
     // don't default to same-origin for NodeJS
     props.credentials = undefined;
 
-    if (!verifySsl(options)) {
-      process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+    if (!verifySsl(mergedOptions) && !props.agent) {
+      props.agent = getInsecureHttpsAgent();
     }
 
     return props;
