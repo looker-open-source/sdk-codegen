@@ -97,7 +97,7 @@ class ApiSettings(PApiSettings):
             self.verify_ssl = True
         else:
             self.verify_ssl = self._bool(verify_ssl)
-        self.base_url = data.get("base_url", "").rstrip("/")
+        self.base_url = (data.get("base_url") or "").rstrip("/")
         self.timeout = int(data.get("timeout", 120))
         self.headers = {"Content-Type": "application/json"}
         self.agent_tag = f"{transport.AGENT_PREFIX}"
