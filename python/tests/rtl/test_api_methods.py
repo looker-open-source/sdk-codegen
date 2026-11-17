@@ -22,6 +22,8 @@
 
 import datetime
 import json
+import operator
+import sys
 from typing import MutableMapping, Optional, Union
 
 import pytest  # type: ignore
@@ -34,6 +36,7 @@ from looker_sdk.rtl import requests_transport
 from looker_sdk.rtl import serialize
 from looker_sdk.rtl import transport
 from looker_sdk.sdk import constants
+from looker_sdk.sdk.api40 import methods as methods40
 from looker_sdk.sdk.api40 import models
 
 
@@ -369,3 +372,123 @@ def test_does_not_loop_on_persistent_401(tmp_path, monkeypatch):
         sdk.get("/user", str)
     assert api_calls == 2
     assert not session.is_authenticated
+
+
+_NON_IDENTICAL_STR_BYTES_UNIONS = [Union[bytes, str]]
+if sys.version_info >= (3, 10):
+    _NON_IDENTICAL_STR_BYTES_UNIONS.extend(
+        [
+            operator.or_(str, bytes),  # type: ignore
+            operator.or_(bytes, str),  # type: ignore
+        ]
+    )
+
+
+@pytest.mark.parametrize("union_structure", _NON_IDENTICAL_STR_BYTES_UNIONS)
+@pytest.mark.parametrize(
+    "raw_body, expected_text",
+    [
+        (b"SELECT users.id FROM users LIMIT 10", "SELECT users.id FROM users LIMIT 10"),
+        (b"id,name\n1,Alice\n2,Bob\n", "id,name\n1,Alice\n2,Bob\n"),
+    ],
+)
+def test_return_plain_text_for_non_identical_union(
+    api: api_methods.APIMethods,
+    union_structure: api_methods.TStructure,
+    raw_body: bytes,
+    expected_text: str,
+):
+    """Regression test for #1705: Union[str, bytes] must compare by equality, not identity."""
+    assert union_structure is not api_methods._UNION_STR_BYTES
+    assert union_structure == api_methods._UNION_STR_BYTES
+
+    actual = api._return(
+        transport.Response(
+            ok=True,
+            value=raw_body,
+            response_mode=transport.ResponseMode.STRING,
+        ),
+        union_structure,
+    )
+    assert actual == expected_text
+
+
+@pytest.mark.parametrize(
+    "result_format, raw_body, expected_text",
+    [
+        (
+            "sql",
+            b"SELECT users.id FROM users LIMIT 10",
+            "SELECT users.id FROM users LIMIT 10",
+        ),
+        ("csv", b"users.id\n1\n2\n", "users.id\n1\n2\n"),
+    ],
+)
+def test_run_inline_query_plain_text_response(
+    tmp_path, monkeypatch, result_format: str, raw_body: bytes, expected_text: str
+):
+    """End-to-end regression test for #1705 through generated Looker40SDK."""
+    for setting in ["BASE_URL", "CLIENT_ID", "CLIENT_SECRET"]:
+        monkeypatch.delenv(f"LOOKERSDK_{setting}", raising=False)
+    ini = tmp_path / "looker.ini"
+    ini.write_text(
+        "[Looker]\n"
+        "base_url=https://host1.looker.com:19999\n"
+        "client_id=test_id\n"
+        "client_secret=test_secret\n"
+    )
+    settings = api_settings.ApiSettings(filename=str(ini), env_prefix="LOOKERSDK")
+
+    class PlainTextQueryTransport(transport.Transport):
+        @classmethod
+        def configure(cls, _settings):
+            return cls()
+
+        def request(
+            self,
+            method,
+            path,
+            query_params=None,
+            body=None,
+            authenticator=None,
+            transport_options=None,
+        ):
+            if authenticator:
+                authenticator(transport_options or {})
+            if path.endswith("/login"):
+                payload = json.dumps(
+                    {
+                        "access_token": "token-1",
+                        "token_type": "Bearer",
+                        "expires_in": 3600,
+                    }
+                ).encode("utf-8")
+                return transport.Response(
+                    ok=True,
+                    value=payload,
+                    response_mode=transport.ResponseMode.STRING,
+                    status_code=200,
+                )
+            return transport.Response(
+                ok=True,
+                value=raw_body,
+                response_mode=transport.ResponseMode.STRING,
+                status_code=200,
+            )
+
+    xp = PlainTextQueryTransport()
+    session = auth_session.AuthSession(settings, xp, serialize.deserialize40, "4.0")
+    sdk = methods40.Looker40SDK(
+        session, serialize.deserialize40, serialize.serialize40, xp, "4.0"
+    )
+
+    result = sdk.run_inline_query(
+        result_format=result_format,
+        body=models.WriteQuery(
+            model="thelook",
+            view="users",
+            fields=["users.id"],
+            limit="10",
+        ),
+    )
+    assert result == expected_text
