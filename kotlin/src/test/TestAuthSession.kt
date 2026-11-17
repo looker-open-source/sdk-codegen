@@ -85,44 +85,61 @@ class TestAuthSession {
         val requests = mutableListOf<Pair<String, String>>()
         val requestHeaders = mutableListOf<Map<String, String>>()
 
-        val mockHttpTransport = object : HttpTransport() {
-            override fun buildRequest(method: String, url: String): LowLevelHttpRequest {
-                return object : LowLevelHttpRequest() {
-                    private val headers = mutableMapOf<String, String>()
+        val mockHttpTransport =
+            object : HttpTransport() {
+                override fun buildRequest(
+                    method: String,
+                    url: String,
+                ): LowLevelHttpRequest {
+                    return object : LowLevelHttpRequest() {
+                        private val headers = mutableMapOf<String, String>()
 
-                    override fun addHeader(name: String, value: String) {
-                        headers[name] = value
-                    }
-
-                    override fun execute(): LowLevelHttpResponse {
-                        requests.add(method to url)
-                        requestHeaders.add(headers.toMap())
-                        val responseJson = if (url.endsWith("/login")) {
-                            """{"access_token":"admin_token","token_type":"Bearer","expires_in":3600}"""
-                        } else {
-                            """{"access_token":"sudo_token","token_type":"Bearer","expires_in":3600}"""
+                        override fun addHeader(
+                            name: String,
+                            value: String,
+                        ) {
+                            headers[name] = value
                         }
-                        return object : LowLevelHttpResponse() {
-                            override fun getContent(): InputStream =
-                                ByteArrayInputStream(responseJson.toByteArray(Charsets.UTF_8))
-                            override fun getContentEncoding(): String? = null
-                            override fun getContentLength(): Long = responseJson.length.toLong()
-                            override fun getContentType(): String = "application/json"
-                            override fun getStatusLine(): String = "HTTP/1.1 200 OK"
-                            override fun getStatusCode(): Int = 200
-                            override fun getReasonPhrase(): String = "OK"
-                            override fun getHeaderCount(): Int = 0
-                            override fun getHeaderName(index: Int): String? = null
-                            override fun getHeaderValue(index: Int): String? = null
+
+                        override fun execute(): LowLevelHttpResponse {
+                            requests.add(method to url)
+                            requestHeaders.add(headers.toMap())
+                            val responseJson =
+                                if (url.endsWith("/login")) {
+                                    """{"access_token":"admin_token","token_type":"Bearer","expires_in":3600}"""
+                                } else {
+                                    """{"access_token":"sudo_token","token_type":"Bearer","expires_in":3600}"""
+                                }
+                            return object : LowLevelHttpResponse() {
+                                override fun getContent(): InputStream = ByteArrayInputStream(responseJson.toByteArray(Charsets.UTF_8))
+
+                                override fun getContentEncoding(): String? = null
+
+                                override fun getContentLength(): Long = responseJson.length.toLong()
+
+                                override fun getContentType(): String = "application/json"
+
+                                override fun getStatusLine(): String = "HTTP/1.1 200 OK"
+
+                                override fun getStatusCode(): Int = 200
+
+                                override fun getReasonPhrase(): String = "OK"
+
+                                override fun getHeaderCount(): Int = 0
+
+                                override fun getHeaderName(index: Int): String? = null
+
+                                override fun getHeaderValue(index: Int): String? = null
+                            }
                         }
                     }
                 }
             }
-        }
 
-        val mockTransport = object : Transport(mockSettings) {
-            override fun initTransport(options: TransportOptions): HttpTransport = mockHttpTransport
-        }
+        val mockTransport =
+            object : Transport(mockSettings) {
+                override fun initTransport(options: TransportOptions): HttpTransport = mockHttpTransport
+            }
 
         val session = AuthSession(mockSettings, mockTransport)
         val token = session.login("user_123")
@@ -160,53 +177,70 @@ class TestAuthSession {
         var loginCount = 0
         val userAuthHeaders = mutableListOf<String?>()
 
-        val mockHttpTransport = object : HttpTransport() {
-            override fun buildRequest(method: String, url: String): LowLevelHttpRequest {
-                return object : LowLevelHttpRequest() {
-                    private val headers = mutableMapOf<String, String>()
+        val mockHttpTransport =
+            object : HttpTransport() {
+                override fun buildRequest(
+                    method: String,
+                    url: String,
+                ): LowLevelHttpRequest {
+                    return object : LowLevelHttpRequest() {
+                        private val headers = mutableMapOf<String, String>()
 
-                    override fun addHeader(name: String, value: String) {
-                        headers[name] = value
-                    }
+                        override fun addHeader(
+                            name: String,
+                            value: String,
+                        ) {
+                            headers[name] = value
+                        }
 
-                    override fun execute(): LowLevelHttpResponse {
-                        val isLogin = url.endsWith("/login")
-                        val status = if (isLogin) {
-                            200
-                        } else {
-                            userAuthHeaders.add(headers["Authorization"])
-                            if (headers["Authorization"] == "token token_1") 401 else 200
-                        }
-                        val responseJson = if (isLogin) {
-                            loginCount++
-                            """{"access_token":"token_$loginCount","token_type":"Bearer","expires_in":3600}"""
-                        } else if (status == 401) {
-                            """{"message":"Requires authentication."}"""
-                        } else {
-                            "authenticated-ok"
-                        }
-                        return object : LowLevelHttpResponse() {
-                            override fun getContent(): InputStream =
-                                ByteArrayInputStream(responseJson.toByteArray(Charsets.UTF_8))
-                            override fun getContentEncoding(): String? = null
-                            override fun getContentLength(): Long = responseJson.length.toLong()
-                            override fun getContentType(): String =
-                                if (status == 200 && !isLogin) "text/plain" else "application/json"
-                            override fun getStatusLine(): String = "HTTP/1.1 $status"
-                            override fun getStatusCode(): Int = status
-                            override fun getReasonPhrase(): String = if (status == 200) "OK" else "Unauthorized"
-                            override fun getHeaderCount(): Int = 0
-                            override fun getHeaderName(index: Int): String? = null
-                            override fun getHeaderValue(index: Int): String? = null
+                        override fun execute(): LowLevelHttpResponse {
+                            val isLogin = url.endsWith("/login")
+                            val status =
+                                if (isLogin) {
+                                    200
+                                } else {
+                                    userAuthHeaders.add(headers["Authorization"])
+                                    if (headers["Authorization"] == "token token_1") 401 else 200
+                                }
+                            val responseJson =
+                                if (isLogin) {
+                                    loginCount++
+                                    """{"access_token":"token_$loginCount","token_type":"Bearer","expires_in":3600}"""
+                                } else if (status == 401) {
+                                    """{"message":"Requires authentication."}"""
+                                } else {
+                                    "authenticated-ok"
+                                }
+                            return object : LowLevelHttpResponse() {
+                                override fun getContent(): InputStream = ByteArrayInputStream(responseJson.toByteArray(Charsets.UTF_8))
+
+                                override fun getContentEncoding(): String? = null
+
+                                override fun getContentLength(): Long = responseJson.length.toLong()
+
+                                override fun getContentType(): String = if (status == 200 && !isLogin) "text/plain" else "application/json"
+
+                                override fun getStatusLine(): String = "HTTP/1.1 $status"
+
+                                override fun getStatusCode(): Int = status
+
+                                override fun getReasonPhrase(): String = if (status == 200) "OK" else "Unauthorized"
+
+                                override fun getHeaderCount(): Int = 0
+
+                                override fun getHeaderName(index: Int): String? = null
+
+                                override fun getHeaderValue(index: Int): String? = null
+                            }
                         }
                     }
                 }
             }
-        }
 
-        val mockTransport = object : Transport(mockSettings) {
-            override fun initTransport(options: TransportOptions): HttpTransport = mockHttpTransport
-        }
+        val mockTransport =
+            object : Transport(mockSettings) {
+                override fun initTransport(options: TransportOptions): HttpTransport = mockHttpTransport
+            }
 
         val session = AuthSession(mockSettings, mockTransport)
         val api = com.looker.rtl.APIMethods(session)
@@ -215,5 +249,117 @@ class TestAuthSession {
         assertEquals("authenticated-ok", result)
         assertEquals(2, loginCount)
         assertEquals(listOf<String?>("token token_1", "token token_2"), userAuthHeaders)
+    }
+
+    @Test
+    fun testExpiredSudoTokenRenewalAndFailedSudoIsolation() {
+        val mockSettings = MockSettings(bareMinimum)
+        var sudoLoginCount = 0
+        val sudoAuthHeaders = mutableListOf<String?>()
+        val logoutAuthHeaders = mutableListOf<String?>()
+
+        val mockHttpTransport =
+            object : HttpTransport() {
+                override fun buildRequest(
+                    method: String,
+                    url: String,
+                ): LowLevelHttpRequest {
+                    return object : LowLevelHttpRequest() {
+                        private val headers = mutableMapOf<String, String>()
+
+                        override fun addHeader(
+                            name: String,
+                            value: String,
+                        ) {
+                            headers[name] = value
+                        }
+
+                        override fun execute(): LowLevelHttpResponse {
+                            val (status, responseJson) =
+                                when {
+                                    url.endsWith("/login") ->
+                                        200 to """{"access_token":"admin_token","token_type":"Bearer","expires_in":3600}"""
+                                    url.endsWith("/login/5") -> {
+                                        sudoLoginCount++
+                                        sudoAuthHeaders.add(headers["Authorization"])
+                                        // First sudo token has expires_in=5 (< lagTime=10), so accessToken is populated but expired
+                                        val ttl = if (sudoLoginCount == 1) 5 else 3600
+                                        200 to """{"access_token":"sudo_token_$sudoLoginCount","token_type":"Bearer","expires_in":$ttl}"""
+                                    }
+                                    url.endsWith("/login/999") -> {
+                                        sudoAuthHeaders.add(headers["Authorization"])
+                                        404 to """{"message":"User not found"}"""
+                                    }
+                                    url.endsWith("/logout") -> {
+                                        logoutAuthHeaders.add(headers["Authorization"])
+                                        200 to ""
+                                    }
+                                    else -> 200 to "ok"
+                                }
+                            return object : LowLevelHttpResponse() {
+                                override fun getContent(): InputStream = ByteArrayInputStream(responseJson.toByteArray(Charsets.UTF_8))
+
+                                override fun getContentEncoding(): String? = null
+
+                                override fun getContentLength(): Long = responseJson.length.toLong()
+
+                                override fun getContentType(): String = "application/json"
+
+                                override fun getStatusLine(): String = "HTTP/1.1 $status"
+
+                                override fun getStatusCode(): Int = status
+
+                                override fun getReasonPhrase(): String = if (status == 200) "OK" else "Error"
+
+                                override fun getHeaderCount(): Int = 0
+
+                                override fun getHeaderName(index: Int): String? = null
+
+                                override fun getHeaderValue(index: Int): String? = null
+                            }
+                        }
+                    }
+                }
+            }
+
+        val mockTransport =
+            object : Transport(mockSettings) {
+                override fun initTransport(options: TransportOptions): HttpTransport = mockHttpTransport
+            }
+
+        // 1. Expired sudoToken while authToken is active must renew using admin_token (not expired sudo_token_1)
+        val session = AuthSession(mockSettings, mockTransport)
+        session.login("5")
+        assertFalse(session.isSudo())
+        assertFalse(session.isAuthenticated())
+
+        val renewed = session.getToken()
+        assertEquals("sudo_token_2", renewed.accessToken)
+        assertTrue(session.isSudo())
+        assertEquals(listOf<String?>("token admin_token", "token admin_token"), sudoAuthHeaders)
+
+        // 2. logout() after sudoToken expires clears sudoId without calling DELETE /logout
+        sudoLoginCount = 0
+        val logoutSession = AuthSession(mockSettings, mockTransport)
+        logoutSession.login("5")
+        assertFalse(logoutSession.logout())
+        assertEquals("", logoutSession.sudoId)
+        assertTrue(logoutSession.isAuthenticated())
+        assertEquals("admin_token", logoutSession.activeToken().accessToken)
+        assertTrue(logoutAuthHeaders.isEmpty())
+
+        // 3. Failed sudo login (/login/999 -> 404) must not leave session authenticated with admin_token
+        val failedSudoSession = AuthSession(mockSettings, mockTransport)
+        var threw = false
+        try {
+            failedSudoSession.login("999")
+        } catch (_: Error) {
+            threw = true
+        }
+        assertTrue(threw)
+        assertEquals("999", failedSudoSession.sudoId)
+        assertFalse(failedSudoSession.isSudo())
+        assertFalse(failedSudoSession.isAuthenticated())
+        assertEquals("", failedSudoSession.activeToken().accessToken)
     }
 }

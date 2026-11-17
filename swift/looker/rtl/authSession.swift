@@ -44,7 +44,7 @@ open class AuthSession: IAuthSession {
     public var transport: ITransport
     public var activeToken: AuthToken {
         get {
-            if (!self._sudoToken.access_token.isEmpty) {
+            if (!self.sudoId.isEmpty) {
                 return self._sudoToken
             }
             return self._authToken
@@ -60,13 +60,14 @@ open class AuthSession: IAuthSession {
    open func getToken() throws -> AuthToken {
         if (!self.isAuthenticated()) {
             // this is currently a synchronous call so unblocking
-            return self.login(self.sudoId)
+            return try self._login(self.sudoId)
         }
         return self.activeToken
     }
 
     /// sets the default auth token and resets any value for the sudo token
     open func setToken(_ token: AccessToken) -> AuthToken {
+        self.sudoId = ""
         self._sudoToken.reset()
         let _ = self._authToken.setToken(token)
         return self.activeToken
@@ -77,7 +78,7 @@ open class AuthSession: IAuthSession {
     }
 
     open func login(_ sudoId: String = "") -> AuthToken {
-        if (sudoId != self.sudoId || !self.isAuthenticated()) {
+        if (!sudoId.isEmpty || sudoId != self.sudoId || !self.isAuthenticated()) {
             _ = try? self._login(sudoId)
         }
         return self.activeToken
@@ -108,7 +109,14 @@ open class AuthSession: IAuthSession {
 
     open func logout() -> Bool {
         var result = false
-        if (self.isAuthenticated()) {
+        if (!self.sudoId.isEmpty) {
+            if (self.isSudo()) {
+                result = self._logout()
+            } else {
+                self.sudoId = ""
+                self._sudoToken.reset()
+            }
+        } else if (self.isAuthenticated()) {
             result = self._logout()
         }
         return result
@@ -151,16 +159,16 @@ open class AuthSession: IAuthSession {
                 nil,
                 nil
             )
-            let token = try? self.ok(response)
-            _ = self._authToken.setToken(token!)
+            let token = try self.ok(response)
+            _ = self._authToken.setToken(token)
         }
 
         if (!self.sudoId.isEmpty) {
-            let token = self.activeToken
+            let token = self._authToken
             let response : SDKResponse<AccessToken, SDKError> = self.transport.request(
                 HttpMethod.POST,
                 // Don't set Api path here since authenticator presence will cause it to be added in request
-                "/login/\(newId)",
+                "/login/\(self.sudoId)",
                 nil,
                 nil,
                 { props -> URLRequest in
@@ -170,8 +178,8 @@ open class AuthSession: IAuthSession {
                 },
                 self.settings
             )
-            let sudoToken = try? self.ok(response)
-            _ = self._sudoToken.setToken(sudoToken!)
+            let sudoToken = try self.ok(response)
+            _ = self._sudoToken.setToken(sudoToken)
         }
         return self.activeToken
     }
@@ -180,6 +188,8 @@ open class AuthSession: IAuthSession {
         var result = false
         if (self.isSudo()) {
             result = self.logout()
+            self._sudoToken.reset()
+        } else {
             self._sudoToken.reset()
         }
         return result

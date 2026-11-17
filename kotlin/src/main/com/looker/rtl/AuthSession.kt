@@ -48,7 +48,7 @@ open class AuthSession(
 
     /** Abstraction of AuthToken retrieval to support sudo mode */
     fun activeToken(): AuthToken {
-        if (sudoToken.accessToken.isNotEmpty()) {
+        if (sudoId.isNotBlank()) {
             return sudoToken
         }
         return authToken
@@ -216,6 +216,14 @@ open class AuthSession(
      * user.
      */
     fun logout(): Boolean {
+        if (sudoId.isNotBlank()) {
+            if (isSudo()) {
+                return doLogout()
+            }
+            sudoId = ""
+            sudoToken.reset()
+            return false
+        }
         if (isAuthenticated()) {
             return doLogout()
         }
@@ -229,6 +237,8 @@ open class AuthSession(
         if (isSudo()) {
             result = logout()
             sudoToken.reset()
+        } else {
+            sudoToken.reset()
         }
         return result
     }
@@ -240,6 +250,7 @@ open class AuthSession(
         }
 
         if (!authToken.isActive()) {
+            invalidateTokens()
             val apiPath = "/api/${apiSettings.apiVersion}"
             val client_id = "client_id"
             val client_secret = "client_secret"
@@ -299,11 +310,11 @@ open class AuthSession(
         }
 
         if (sudoId.isNotBlank()) {
-            val token = activeToken()
+            val token = authToken
             val sudoToken =
                 transport.request<AuthToken>(
                     HttpMethod.POST,
-                    "/login/$newId",
+                    "/login/$sudoId",
                     authenticator = { requestSettings ->
                         val headers = requestSettings.headers.toMutableMap()
                         fetchIapToken()?.let { iapToken ->
