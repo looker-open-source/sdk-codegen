@@ -25,8 +25,7 @@
  */
 
 import type { ChattyHostConnection, Options } from '@looker/chatty';
-import intersects from 'semver/ranges/intersects';
-import { logError } from '../util';
+import { logError, semverIntersects } from '../util';
 import type {
   VisualizationDataReceivedCallback,
   VisualizationSDK,
@@ -576,7 +575,10 @@ export class ExtensionHostApiImpl implements ExtensionHostApi {
     const lookerVersion = this._lookerHostData
       ? this._lookerHostData.lookerVersion || '7.0'
       : '7.0';
-    if (!this._lookerHostData || !intersects(version, lookerVersion, true)) {
+    if (
+      !this._lookerHostData ||
+      !semverIntersects(version, lookerVersion, true)
+    ) {
       return `Extension requires Looker version ${version}, got ${lookerVersion}`;
     }
     return undefined;

@@ -30,6 +30,7 @@ import {
   EXTENSION_SDK_VERSION,
   ExtensionHostApiImpl,
 } from './extension_host_api';
+import { semverIntersects } from '../util';
 import { ApiVersion, ExtensionNotificationType, MountPoint } from './types';
 import type { ExtensionInitializeMessage } from './types';
 
@@ -931,5 +932,52 @@ describe('extension_host_api tests', () => {
       payload: { failureMessage: 'Oh No!' },
       type: 'RENDERED',
     });
+  });
+
+  it('evaluates semver range intersections across loose, strict, and prerelease modes', () => {
+    expect(semverIntersects('>=6.24.0', '6.25.00004168', true)).toBe(true);
+    expect(() => semverIntersects('>=6.24.0', '6.25.00004168')).toThrow(
+      TypeError
+    );
+    expect(semverIntersects('>=7.13', '7.12', true)).toBe(false);
+    expect(semverIntersects('>=7.12', '7.12', true)).toBe(true);
+    expect(semverIntersects('^22.8.0', '22.9.1', true)).toBe(true);
+    expect(semverIntersects('^22.8.0', '23.0.0', true)).toBe(false);
+    expect(semverIntersects('^0.0.3', '0.0.3', true)).toBe(true);
+    expect(semverIntersects('^0.0.3', '0.0.4', true)).toBe(false);
+    expect(semverIntersects('~7.6.1', '7.6.9', true)).toBe(true);
+    expect(semverIntersects('~7.6.1', '7.7.0', true)).toBe(false);
+    expect(semverIntersects('7.0 - 7.10 || >=21.0', '21.3', true)).toBe(true);
+    expect(semverIntersects('7.0 - 7.10 || >=21.0', '8.0', true)).toBe(false);
+    expect(semverIntersects('>7.12.3', '<7.12.4', true)).toBe(true);
+    expect(semverIntersects('>7.12.4', '<=7.12.4', true)).toBe(false);
+    // Prerelease tuple gating
+    expect(semverIntersects('>=7.11.0', '7.11.1-alpha.1', true)).toBe(false);
+    expect(
+      semverIntersects('>=7.11.0', '7.11.1-alpha.1', {
+        loose: true,
+        includePrerelease: true,
+      })
+    ).toBe(true);
+    expect(
+      semverIntersects('>=7.11', '7.11.0-alpha.1', {
+        loose: true,
+        includePrerelease: true,
+      })
+    ).toBe(true);
+    expect(semverIntersects('>=7.11.0-alpha.1', '7.11.0-alpha.2', true)).toBe(
+      true
+    );
+    expect(semverIntersects('^7.11.0-alpha.1', '7.11.0', true)).toBe(true);
+    expect(
+      semverIntersects('^7.11.0-alpha.1', '7.11.0-alpha.2', {
+        loose: true,
+        includePrerelease: true,
+      })
+    ).toBe(true);
+    expect(semverIntersects('>=7.11.0-alpha.1', '7.12.0-alpha.1', true)).toBe(
+      false
+    );
+    expect(() => semverIntersects('invalid', '7.0.0', true)).toThrow(TypeError);
   });
 });

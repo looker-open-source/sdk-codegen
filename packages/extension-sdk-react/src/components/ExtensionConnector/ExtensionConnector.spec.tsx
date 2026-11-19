@@ -24,7 +24,7 @@
 
  */
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import type {
   ExtensionHostApi,
   ExtensionHostConfiguration,
@@ -53,14 +53,17 @@ type ConnectExtensionHostFunc = (
 
 let tileHostDataChangedCb: TileHostDataChangedCallback | undefined;
 let visualizationDataReceivedCb: VisualizationDataReceivedCallback | undefined;
+let hostChangedRouteCb: ((route: string, routeState?: any) => void) | undefined;
 
 jest.mock('@looker/extension-sdk', () => {
   const connectExtensionHost: ConnectExtensionHostFunc = ({
     visualizationDataReceivedCallback,
     tileHostDataChangedCallback,
+    hostChangedRoute,
   }) => {
     tileHostDataChangedCb = tileHostDataChangedCallback;
     visualizationDataReceivedCb = visualizationDataReceivedCallback;
+    hostChangedRouteCb = hostChangedRoute;
     return mockFailConnection
       ? Promise.reject(new Error('Extension failed to load'))
       : Promise.resolve(mockHost);
@@ -239,5 +242,31 @@ describe('ExtensionConnector component', () => {
         queryResponse: { data: [], fields: {}, pivots: [] },
       },
     });
+  });
+
+  it('propagates hostChangedRoute and shallow-clones routeState in onRouteChange', async () => {
+    const onRouteChange = jest.fn();
+    render(
+      <ExtensionConnector
+        contextData={getContextData()}
+        updateContextData={updateContextData}
+        connectedCallback={connectedCallback}
+        unloadedCallback={unloadedCallback}
+        onRouteChange={onRouteChange}
+      >
+        <MockExtension />
+      </ExtensionConnector>
+    );
+    expect(await screen.findByText('Mock Extension')).toBeInTheDocument();
+    const stateObj = { filter: 'active', items: [1, 2] };
+    act(() => {
+      hostChangedRouteCb!('/reports?tab=1', stateObj);
+    });
+    expect(await screen.findByText('/reports')).toBeInTheDocument();
+    expect(onRouteChange).toHaveBeenLastCalledWith('/reports?tab=1', stateObj);
+    const passedState =
+      onRouteChange.mock.calls[onRouteChange.mock.calls.length - 1][1];
+    expect(passedState).toEqual(stateObj);
+    expect(passedState).not.toBe(stateObj);
   });
 });
