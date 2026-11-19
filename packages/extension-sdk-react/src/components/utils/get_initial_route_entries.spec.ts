@@ -63,4 +63,27 @@ describe('getInitialRouteEntries', () => {
       },
     ]);
   });
+
+  it('parses hash and strips bare ? or # markers', () => {
+    expect(
+      getInitialRouteEntries({
+        route: '/abcd/wxyz?test=1234#section-2',
+      })
+    ).toEqual([
+      {
+        pathname: '/abcd/wxyz',
+        search: '?test=1234',
+        hash: '#section-2',
+        state: undefined,
+      },
+    ]);
+    expect(getInitialRouteEntries({ route: '/abcd?#' })).toEqual([
+      {
+        pathname: '/abcd',
+        search: '',
+        hash: '',
+        state: undefined,
+      },
+    ]);
+  });
 });

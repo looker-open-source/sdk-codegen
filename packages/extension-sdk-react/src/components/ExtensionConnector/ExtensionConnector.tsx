@@ -24,7 +24,6 @@
 
  */
 
-import isEqual from 'lodash/isEqual';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import type {
@@ -36,6 +35,7 @@ import { connectExtensionHost } from '@looker/extension-sdk';
 import { ErrorMessage } from '../ErrorMessage';
 import { RouteChangeListener } from '../RouteChangeListener';
 import { getInitialRouteEntries } from '../utils/get_initial_route_entries';
+import { deepEqual } from '../utils/object_utils';
 import { setupClosePopoversListener } from '../utils/setup_close_popovers';
 import type { ExtensionConnectorProps, RouteData } from './types';
 
@@ -80,7 +80,7 @@ export const ExtensionConnector: React.FC<ExtensionConnectorProps> = ({
       const route = _route.startsWith('/') ? _route : '/' + _route;
       if (
         route !== hostRouteData.route ||
-        !isEqual(routeState, hostRouteData.routeState)
+        !deepEqual(routeState, hostRouteData.routeState)
       ) {
         setHostRouteData({ route, routeState });
         updateContextData({
