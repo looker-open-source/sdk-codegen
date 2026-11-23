@@ -113,6 +113,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   * devDependencies
     * @looker/sdk-codegen-utils bumped from 21.0.33 to 21.0.34
 
+## [26.20.3](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v26.20.2...sdk-codegen-v26.20.3) (2026-11-23)
+
+
+### Bug Fixes
+
+* strip trailing slashes from base_url across SDKs ([#1803](https://github.com/looker-open-source/sdk-codegen/issues/1803)) ([21b6ed1](https://github.com/looker-open-source/sdk-codegen/commit/21b6ed17dc0e18f090ddd965a857c3a133bfbfda))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/sdk-rtl bumped from 21.6.8 to 21.6.9
+  * devDependencies
+    * @looker/sdk-codegen-utils bumped from 21.0.39 to 21.0.40
+
 ## [26.20.2](https://github.com/looker-open-source/sdk-codegen/compare/sdk-codegen-v26.20.1...sdk-codegen-v26.20.2) (2026-11-09)
 
 
