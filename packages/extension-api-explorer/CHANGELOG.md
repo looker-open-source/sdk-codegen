@@ -499,6 +499,26 @@
     * @looker/sdk bumped from 26.18.0 to 26.20.0
     * @looker/sdk-codegen bumped from 26.18.0 to 26.20.0
 
+## [22.21.50](https://github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v22.21.49...extension-api-explorer-v22.21.50) (2026-11-23)
+
+
+### Bug Fixes
+
+* **extension-sdk:** replace deepmerge and resolve npm Dependabot alerts ([#1793](https://github.com/looker-open-source/sdk-codegen/issues/1793)) ([a2096d6](https://github.com/looker-open-source/sdk-codegen/commit/a2096d691194ce9f0de65ad9b8977746341221cc))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/api-explorer bumped from 0.9.92 to 0.9.93
+    * @looker/extension-sdk bumped from 26.24.0 to 26.24.1
+    * @looker/extension-sdk-react bumped from 26.24.0 to 26.24.1
+    * @looker/extension-utils bumped from 0.1.69 to 0.1.70
+    * @looker/run-it bumped from 0.9.92 to 0.9.93
+    * @looker/sdk bumped from 26.24.0 to 26.24.1
+    * @looker/sdk-codegen bumped from 26.20.2 to 26.20.3
+
 ## [22.21.49](https://github.com/looker-open-source/sdk-codegen/compare/extension-api-explorer-v22.21.48...extension-api-explorer-v22.21.49) (2026-11-09)
 
 

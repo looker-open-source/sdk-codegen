@@ -352,6 +352,22 @@
     * @looker/extension-sdk-react bumped from 26.18.0 to 26.20.0
     * @looker/sdk bumped from 26.18.0 to 26.20.0
 
+## [1.0.50](https://github.com/looker-open-source/sdk-codegen/compare/extension-playground-v1.0.49...extension-playground-v1.0.50) (2026-11-23)
+
+
+### Bug Fixes
+
+* **extension-sdk:** replace deepmerge and resolve npm Dependabot alerts ([#1793](https://github.com/looker-open-source/sdk-codegen/issues/1793)) ([a2096d6](https://github.com/looker-open-source/sdk-codegen/commit/a2096d691194ce9f0de65ad9b8977746341221cc))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * @looker/extension-sdk bumped from 26.24.0 to 26.24.1
+    * @looker/extension-sdk-react bumped from 26.24.0 to 26.24.1
+    * @looker/sdk bumped from 26.24.0 to 26.24.1
+
 ## [1.0.49](https://github.com/looker-open-source/sdk-codegen/compare/extension-playground-v1.0.48...extension-playground-v1.0.49) (2026-11-09)
 
 

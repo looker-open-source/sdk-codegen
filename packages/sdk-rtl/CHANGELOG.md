@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [21.6.9](https://github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.6.8...sdk-rtl-v21.6.9) (2026-11-23)
+
+
+### Bug Fixes
+
+* strip trailing slashes from base_url across SDKs ([#1803](https://github.com/looker-open-source/sdk-codegen/issues/1803)) ([21b6ed1](https://github.com/looker-open-source/sdk-codegen/commit/21b6ed17dc0e18f090ddd965a857c3a133bfbfda))
+* use UTC for token expiration and re-authenticate on 401 across SDKs ([#1787](https://github.com/looker-open-source/sdk-codegen/issues/1787)) ([bd5fc9c](https://github.com/looker-open-source/sdk-codegen/commit/bd5fc9c47b42bc190271f63375e05d32bb921e0f))
+
 ## [21.6.8](https://github.com/looker-open-source/sdk-codegen/compare/sdk-rtl-v21.6.7...sdk-rtl-v21.6.8) (2026-11-09)
 
 
