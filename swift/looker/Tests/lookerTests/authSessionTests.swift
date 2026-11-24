@@ -76,4 +76,52 @@ class authSessionTests: XCTestCase {
 
     }
 
+    func testLoginSudoLogsInApiUserFirst() {
+        struct MockSettings: IApiSettings {
+            var base_url: String? = "https://mock.looker.com:19999"
+            var api_version: String? = defaultApiVersion
+            var verify_ssl: Bool? = true
+            var timeout: Int? = defaultTimeout
+            var headers: Headers?
+            var encoding: String?
+            func isConfigured() -> Bool { return true }
+            func readConfig(_ section: String? = nil) -> IApiSection {
+                return ["client_id": "test_id", "client_secret": "test_secret"]
+            }
+        }
+
+        class MockTransport: ITransport {
+            var calls: [String] = []
+            var authHeaders: [String] = []
+
+            func request<TSuccess: Codable, TError: Codable>(
+                _ method: HttpMethod,
+                _ path: String,
+                _ queryParams: Values?,
+                _ body: Any?,
+                _ authenticator: Authenticator?,
+                _ options: ITransportSettings?
+            ) -> SDKResponse<TSuccess, TError> {
+                var req = URLRequest(url: URL(string: "https://mock.looker.com:19999\(path)")!)
+                if let auth = authenticator {
+                    req = auth(req)
+                }
+                calls.append("\(method.rawValue) \(path)")
+                authHeaders.append(req.value(forHTTPHeaderField: "Authorization") ?? "")
+                let accessToken = path.hasSuffix("/login/5") ? "sudo" : "api"
+                let tok = AccessToken(access_token: accessToken, token_type: "Bearer", expires_in: 3600)
+                return .success(tok as! TSuccess)
+            }
+        }
+
+        let xp = MockTransport()
+        let session = AuthSession(MockSettings(), xp)
+        let token = session.login("5")
+        XCTAssertEqual(["POST /api/\(defaultApiVersion)/login", "POST /login/5"], xp.calls)
+        XCTAssertEqual(["", "Bearer api"], xp.authHeaders)
+        XCTAssertTrue(session.isSudo())
+        XCTAssertEqual("5", session.sudoId)
+        XCTAssertEqual("sudo", token.access_token)
+    }
+
 }
