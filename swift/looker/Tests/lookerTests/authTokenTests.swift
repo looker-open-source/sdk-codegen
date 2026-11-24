@@ -129,4 +129,90 @@ class authTokenTests: XCTestCase {
         XCTAssertEqual(2, xp.loginCount)
         XCTAssertEqual(["Bearer token-1", "Bearer token-2"], xp.authHeaders)
     }
+
+    @available(OSX 10.15, *)
+    func testExpiredSudoTokenRenewalAndFailedSudoIsolation() {
+        struct MockSettings: IApiSettings {
+            var base_url: String? = "https://mock.looker.com:19999"
+            var api_version: String? = defaultApiVersion
+            var verify_ssl: Bool? = true
+            var timeout: Int? = defaultTimeout
+            var headers: Headers?
+            var encoding: String?
+            func isConfigured() -> Bool { return true }
+            func readConfig(_ section: String? = nil) -> IApiSection {
+                return ["client_id": "test_id", "client_secret": "test_secret"]
+            }
+        }
+
+        class MockSudoTransport: ITransport {
+            var sudoCount = 0
+            var sudoAuthHeaders: [String] = []
+            var logoutCalled = false
+
+            func request<TSuccess: Codable, TError: Codable>(
+                _ method: HttpMethod,
+                _ path: String,
+                _ queryParams: Values?,
+                _ body: Any?,
+                _ authenticator: Authenticator?,
+                _ options: ITransportSettings?
+            ) -> SDKResponse<TSuccess, TError> {
+                var req = URLRequest(url: URL(string: "https://mock.looker.com:19999\(path)")!)
+                if let auth = authenticator {
+                    req = auth(req)
+                }
+                if path.hasSuffix("/login") {
+                    let tok = AccessToken(access_token: "admin-token", token_type: "Bearer", expires_in: 3600)
+                    return .success(tok as! TSuccess)
+                }
+                if path == "/login/5" {
+                    sudoCount += 1
+                    sudoAuthHeaders.append(req.value(forHTTPHeaderField: "Authorization") ?? "")
+                    let ttl: Int64 = sudoCount == 1 ? 5 : 3600
+                    let tok = AccessToken(access_token: "sudo-\(sudoCount)", token_type: "Bearer", expires_in: ttl)
+                    return .success(tok as! TSuccess)
+                }
+                if path == "/login/999" {
+                    sudoAuthHeaders.append(req.value(forHTTPHeaderField: "Authorization") ?? "")
+                    return .error(SDKError("Not found", code: 404) as! TError)
+                }
+                if path == "/logout" {
+                    logoutCalled = true
+                    return .success(Voidable() as! TSuccess)
+                }
+                return .success("ok" as! TSuccess)
+            }
+        }
+
+        let xp = MockSudoTransport()
+        let session = AuthSession(MockSettings(), xp)
+        _ = session.login("5")
+        XCTAssertFalse(session.isSudo())
+        XCTAssertFalse(session.isAuthenticated())
+
+        let renewed = try? session.getToken()
+        XCTAssertEqual("sudo-2", renewed?.access_token)
+        XCTAssertTrue(session.isSudo())
+        XCTAssertEqual(["Bearer admin-token", "Bearer admin-token"], xp.sudoAuthHeaders)
+
+        // logout() after sudo token expires clears sudoId without calling DELETE /logout
+        xp.sudoCount = 0
+        let logoutSession = AuthSession(MockSettings(), xp)
+        _ = logoutSession.login("5")
+        XCTAssertFalse(logoutSession.logout())
+        XCTAssertEqual("", logoutSession.sudoId)
+        XCTAssertTrue(logoutSession.isAuthenticated())
+        XCTAssertEqual("admin-token", logoutSession.activeToken.access_token)
+        XCTAssertFalse(xp.logoutCalled)
+
+        // Failed sudo login does not crash or fall back to admin token
+        let failedSession = AuthSession(MockSettings(), xp)
+        let failedTok = failedSession.login("999")
+        XCTAssertEqual("999", failedSession.sudoId)
+        XCTAssertFalse(failedSession.isSudo())
+        XCTAssertFalse(failedSession.isAuthenticated())
+        XCTAssertEqual("", failedTok.access_token)
+        XCTAssertThrowsError(try failedSession.getToken())
+    }
 }
