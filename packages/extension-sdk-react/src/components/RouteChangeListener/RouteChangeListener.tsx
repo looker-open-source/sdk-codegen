@@ -27,7 +27,7 @@
 import React, { useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import type { ExtensionHostApi } from '@looker/extension-sdk';
-import clone from 'lodash/clone';
+import { shallowClone } from '../utils/object_utils';
 import type { RouteChangeListenerProps } from './types';
 
 export const RouteChangeListener: React.FC<RouteChangeListenerProps> = ({
@@ -45,7 +45,10 @@ export const RouteChangeListener: React.FC<RouteChangeListenerProps> = ({
       onPathnameChange(location.pathname);
     }
     if (onRouteChange) {
-      onRouteChange(location.pathname + location.search, clone(location.state));
+      onRouteChange(
+        location.pathname + location.search,
+        shallowClone(location.state)
+      );
     }
     (extensionHost as ExtensionHostApi).clientRouteChanged(
       location.pathname + location.search,
