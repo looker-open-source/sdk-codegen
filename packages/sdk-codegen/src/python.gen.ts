@@ -159,7 +159,8 @@ ${this.hooks.join('\n')}
     if (!args || args.length === 0) return this.nullStr;
     const hash: string[] = [];
     for (const arg of args) {
-      hash.push(`"${arg}": ${arg}`);
+      const paramName = this.pythonKeywords.has(arg) ? `${arg}_` : arg;
+      hash.push(`"${arg}": ${paramName}`);
     }
     return `{${hash.join(this.dataStructureDelimiter)}}`;
   }
@@ -249,9 +250,13 @@ ${this.hooks.join('\n')}
     }
     const mapped = this.typeMapMethods(type);
     const paramType = param.required ? mapped.name : `Optional[${mapped.name}]`;
+    let paramName = param.name;
+    if (this.pythonKeywords.has(paramName)) {
+      paramName = paramName + '_';
+    }
     return (
       this.commentHeader(indent, describeParam(param)) +
-      `${indent}${param.name}: ${paramType}` +
+      `${indent}${paramName}: ${paramType}` +
       (param.required ? '' : ` = ${mapped.default}`)
     );
   }
@@ -372,7 +377,10 @@ ${this.hooks.join('\n')}
 
   httpArgs(callerIndent: string, method: IMethod): string {
     const currIndent = this.bumper(callerIndent);
-    const body = method.bodyArg ? method.bodyArg : this.nullStr;
+    let body = method.bodyArg ? method.bodyArg : this.nullStr;
+    if (method.bodyArg && this.pythonKeywords.has(body)) {
+      body = body + '_';
+    }
     const query = method.queryArgs.length
       ? this.argGroup('', method.queryArgs)
       : this.nullStr;
@@ -405,6 +413,11 @@ ${this.hooks.join('\n')}
     }
     args = this.argFill(args, `${currIndent}structure=${returnType}`);
     let endpoint = `"${method.endpoint}"`;
+    for (const param of method.pathParams) {
+      if (this.pythonKeywords.has(param.name)) {
+        endpoint = endpoint.split(`{${param.name}}`).join(`{${param.name}_}`);
+      }
+    }
     if (/\{\w+\}/.test(endpoint)) {
       // avoid flake8: f-string is missing placeholders
       endpoint = `f${endpoint}`;
@@ -438,7 +451,11 @@ ${this.hooks.join('\n')}
     if (pathParams.length > 0) {
       for (const param of pathParams) {
         if (param.doEncode()) {
-          encodings += `${indent}${param.name} = self.encode_path_param(${param.name})\n`;
+          let paramName = param.name;
+          if (this.pythonKeywords.has(paramName)) {
+            paramName = paramName + '_';
+          }
+          encodings += `${indent}${paramName} = self.encode_path_param(${paramName})\n`;
         }
       }
     }
