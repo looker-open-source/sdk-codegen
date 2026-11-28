@@ -135,6 +135,130 @@ sr.converter.register_structure_hook(
     });
   });
 
+  describe('keyword-named method parameters', () => {
+    const keywordModel = specToModel({
+      openapi: '3.0.0',
+      info: { title: 'Keyword parameter API', version: '1.0.0' },
+      paths: {
+        '/rig_widget': {
+          get: {
+            operationId: 'rig_widget',
+            tags: ['Rig'],
+            parameters: [
+              {
+                name: 'from',
+                in: 'query',
+                required: false,
+                schema: { type: 'string' },
+              },
+              {
+                name: 'limit',
+                in: 'query',
+                required: false,
+                schema: { type: 'integer', format: 'int64' },
+              },
+            ],
+            responses: {
+              '200': {
+                description: 'Rig widget',
+                content: {
+                  'application/json': {
+                    schema: { $ref: '#/components/schemas/RigWidget' },
+                  },
+                },
+              },
+            },
+          },
+        },
+        '/rig_path/{from}': {
+          get: {
+            operationId: 'rig_path',
+            tags: ['Rig'],
+            parameters: [
+              {
+                name: 'from',
+                in: 'path',
+                required: true,
+                schema: { type: 'string' },
+              },
+            ],
+            responses: {
+              '200': {
+                description: 'Rig widget',
+                content: {
+                  'application/json': {
+                    schema: { $ref: '#/components/schemas/RigWidget' },
+                  },
+                },
+              },
+            },
+          },
+        },
+        '/rig_body': {
+          post: {
+            operationId: 'rig_body',
+            tags: ['Rig'],
+            parameters: [
+              {
+                name: 'from',
+                in: 'body',
+                required: true,
+                schema: { type: 'string' },
+              },
+            ],
+            responses: {
+              '200': {
+                description: 'Rig widget',
+                content: {
+                  'application/json': {
+                    schema: { $ref: '#/components/schemas/RigWidget' },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      components: {
+        schemas: {
+          RigWidget: {
+            type: 'object',
+            properties: {
+              from: { type: 'string' },
+              name: { type: 'string' },
+            },
+          },
+        },
+      },
+    } as any);
+    const keywordGen = new PythonGen(keywordModel);
+
+    it('translates a keyword-named query parameter', () => {
+      const method = keywordModel.methods.rig_widget;
+      const actual = keywordGen.declareMethod(indent, method);
+      expect(actual).toContain('from_: Optional[str] = None');
+      expect(actual).toContain('query_params={"from": from_');
+      expect(actual).not.toContain('from: Optional');
+    });
+
+    it('translates a keyword-named path parameter', () => {
+      const method = keywordModel.methods.rig_path;
+      const actual = keywordGen.declareMethod(indent, method);
+      expect(actual).toContain('from_: str');
+      expect(actual).toContain('from_ = self.encode_path_param(from_)');
+      expect(actual).toContain('path=f"/rig_path/{from_}"');
+    });
+
+    it('translates a keyword-named body parameter', () => {
+      const method = keywordModel.methods.rig_body;
+      const actual = keywordGen.declareMethod(indent, method);
+      expect(actual).toContain('from_: str');
+      expect(actual).toContain('body=from_');
+      expect(actual).not.toContain('from: str');
+      expect(actual).not.toContain('body=from,');
+    });
+  });
+
   describe('args locations', () => {
     it('path and query args', () => {
       const method = apiTestModel.methods.run_query;
